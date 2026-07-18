@@ -1,21 +1,22 @@
 import Dexie, { type Table } from "dexie";
 
-export interface Task {
+export interface Note {
   id: string; // UUID
   title: string;
-  description?: string;
-  is_completed: boolean;
+  content?: string;
+  color: "yellow" | "pink" | "blue" | "green" | "purple";
   updated_at: string; // ISO String
+  device_id: string | null; // null for global, string for private
   _status?: "synced" | "pending-insert" | "pending-update" | "pending-delete";
 }
 
 class OffOnSyncDB extends Dexie {
-  tasks!: Table<Task>;
+  notes!: Table<Note>;
 
   constructor() {
     super("OffOnSyncDB");
-    this.version(1).stores({
-      tasks: "id, title, is_completed, updated_at, _status"
+    this.version(3).stores({
+      notes: "id, title, color, updated_at, device_id, _status"
     });
   }
 }
