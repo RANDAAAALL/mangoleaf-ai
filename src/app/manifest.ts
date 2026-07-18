@@ -1,0 +1,25 @@
+import type { MetadataRoute } from "next";
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: "Off On Sync",
+    short_name: "OffOnSync",
+    description: "A Progressive Web App powered by Next.js, Bun, and Serwist.",
+    start_url: "/",
+    display: "standalone",
+    background_color: "#0f172a", // Slate 900
+    theme_color: "#0f172a",
+    icons: [
+      {
+        src: "/icon-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        src: "/icon-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+  };
+}
