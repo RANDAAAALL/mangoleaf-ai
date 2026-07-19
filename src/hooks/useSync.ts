@@ -252,7 +252,7 @@ export function useSync() {
     }
   }, [isOnline, deviceId, sync]);
 
-  // Setup Supabase Realtime channel connection when online
+  // Setup validated Supabase Realtime WebSocket listener
   useEffect(() => {
     if (!isOnline || !deviceId) {
       if (subscriptionRef.current) {
@@ -276,20 +276,46 @@ export function useSync() {
               return;
             }
 
+            // Validation Check: See if it exists locally in IndexedDB
             const local = await db.notes.get(newRecord.id);
-            if (local && local._status !== "synced") return;
 
-            await db.notes.put({
-              id: newRecord.id,
-              title: newRecord.title,
-              content: newRecord.content,
-              color: newRecord.color,
-              updated_at: newRecord.updated_at,
-              device_id: newRecord.device_id,
-              _status: "synced",
-            });
+            if (!local) {
+              // 1. If it DOES NOT exist locally, fetch it fresh from Supabase to validate
+              const { data: verifiedRecord, error } = await supabase
+                .from("notes")
+                .select("*")
+                .eq("id", newRecord.id)
+                .single();
+
+              if (!error && verifiedRecord) {
+                await db.notes.add({
+                  id: verifiedRecord.id,
+                  title: verifiedRecord.title,
+                  content: verifiedRecord.content,
+                  color: verifiedRecord.color as any,
+                  updated_at: verifiedRecord.updated_at,
+                  device_id: verifiedRecord.device_id,
+                  _status: "synced",
+                });
+              }
+            } else {
+              // 2. If it ALREADY exists, protect local offline edits (pending sync)
+              if (local._status === "synced") {
+                // Only overwrite if the incoming server update is newer than our local cache
+                if (new Date(newRecord.updated_at) > new Date(local.updated_at)) {
+                  await db.notes.update(newRecord.id, {
+                    title: newRecord.title,
+                    content: newRecord.content,
+                    color: newRecord.color,
+                    updated_at: newRecord.updated_at,
+                    device_id: newRecord.device_id,
+                  });
+                }
+              }
+            }
           } else if (eventType === "DELETE") {
             const local = await db.notes.get(oldRecord.id);
+            // Only delete locally if it was already synced (protects offline deletes from colliding)
             if (local && local._status === "synced") {
               await db.notes.delete(oldRecord.id);
             }
