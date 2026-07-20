@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db, type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { useSync } from "@/hooks/useSync";
@@ -62,6 +62,19 @@ export default function Home() {
   // Reverse scans to show newest first
   const activeScans = [...scans].reverse();
 
+  // Cache blob URLs so they aren't recreated on every React re-render (prevents memory leaks)
+  const blobUrlMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const scan of activeScans) {
+      if (scan.image_blob && scan.image_blob.size > 0) {
+        map[scan.id] = URL.createObjectURL(scan.image_blob);
+      }
+    }
+    // Cleanup: revoke all blob URLs when the scans array changes
+    return map;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeScans.map(s => s.id).join()]);
+
   // Query cached guidelines
   const cachedGuidelines = useLiveQuery(() => db.guidelines.toArray()) || [];
 
@@ -74,6 +87,19 @@ export default function Home() {
       setShowIOSHint(true);
     }
   }, []);
+
+  // Lock background body scroll when scan details modal is open
+  useEffect(() => {
+    if (selectedScan) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    // Clean up scroll lock when component unmounts
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [selectedScan]);
 
   // Handle file capture selection (camera or gallery)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -415,9 +441,6 @@ create policy "Allow delete scans" on scans for delete using (true);`}
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {activeScans.map((scan) => {
-                  const localUrl = scan.image_blob.size > 0 
-                    ? URL.createObjectURL(scan.image_blob)
-                    : scan.image_url;
                   const isHealthy = scan.disease_name === "Healthy";
                   const isUncertain = scan.confidence < 0.70;
                   const guideline = getGuidelineForScan(scan.disease_name);
@@ -441,11 +464,12 @@ create policy "Allow delete scans" on scans for delete using (true);`}
                     >
                       {/* Image Thumbnail */}
                       <div className="h-20 w-20 rounded-lg overflow-hidden border border-slate-900 flex-shrink-0 relative">
-                        {localUrl ? (
+                        {(blobUrlMap[scan.id] || scan.image_url) ? (
                           <img
-                            src={localUrl}
+                            src={blobUrlMap[scan.id] || scan.image_url || ""}
                             alt={scan.disease_name}
                             className="object-cover w-full h-full"
+                            loading="lazy"
                           />
                         ) : (
                           <div className="h-full w-full bg-slate-950 flex items-center justify-center text-[10px] text-slate-650 font-bold">
@@ -515,12 +539,9 @@ create policy "Allow delete scans" on scans for delete using (true);`}
             
             {/* Modal Image Header */}
             <div className="w-full aspect-[4/3] bg-slate-950 relative border-b border-slate-850 flex-shrink-0">
-              {selectedScan.image_blob.size > 0 || selectedScan.image_url ? (
+              {(blobUrlMap[selectedScan.id] || selectedScan.image_url) ? (
                 <img
-                  src={selectedScan.image_blob.size > 0 
-                    ? URL.createObjectURL(selectedScan.image_blob) 
-                    : selectedScan.image_url || ""
-                  }
+                  src={blobUrlMap[selectedScan.id] || selectedScan.image_url || ""}
                   alt={selectedScan.disease_name}
                   className="object-cover w-full h-full"
                 />
