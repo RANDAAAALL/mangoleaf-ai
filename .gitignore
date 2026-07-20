@@ -40,3 +40,18 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 progress.md
+images
+scratch_manuscript_draft.txt
+
+# scratch folder
+/scratch/
+
+# temp communication images
+/public/cooked.png
+/public/actual_cooked.png
+/public/this_is_seems_bad_i_guess.png
+/public/which_of_these_need_to_download.png
+/public/what_is_this_on_step_5.png
+/public/this_is_step_6.png
+/public/whats_next.png
+/public/mango_dataset.png
