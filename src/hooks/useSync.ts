@@ -241,12 +241,14 @@ export function useSync() {
       return;
     }
 
+    console.log("🔌 Subscribing to Supabase Realtime guidelines channel...");
     const channel = supabase
       .channel("supabase-realtime-guidelines")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "guidelines" },
         async (payload: any) => {
+          console.log("⚡ Realtime Postgres change detected:", payload);
           const { eventType, new: newRecord, old: oldRecord } = payload;
 
           if (eventType === "INSERT" || eventType === "UPDATE") {

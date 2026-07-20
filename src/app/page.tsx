@@ -6,6 +6,8 @@ import { db, type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { useSync } from "@/hooks/useSync";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
 import * as tf from "@tensorflow/tfjs";
+import { CLASSES, FALLBACK_GUIDELINES } from "@/lib/constants";
+import { loadMangoModel, predictMangoDisease } from "@/lib/classifier";
 
 export default function Home() {
   const {
@@ -27,22 +29,17 @@ export default function Home() {
 
   // Load the compiled MobileNetV3-Large TensorFlow.js model on browser startup
   useEffect(() => {
-    async function loadModel() {
+    async function initModel() {
       try {
-        console.log("Initializing TensorFlow.js...");
-        await tf.ready();
-        
-        // Load model.json from the Next.js public directory as a compiled Graph Model
-        const loadedModel = await tf.loadGraphModel("/model/model.json");
+        const loadedModel = await loadMangoModel();
         setModel(loadedModel);
         setIsModelLoading(false);
-        console.log("TensorFlow.js model loaded successfully!");
       } catch (err) {
-        console.error("Error loading TensorFlow.js model from public folder:", err);
+        console.error("Error loading TensorFlow.js model:", err);
         setIsModelLoading(false);
       }
     }
-    loadModel();
+    initModel();
   }, []);
 
   // Active scan state
@@ -105,67 +102,18 @@ export default function Home() {
 
       setScanningProgress(45);
 
-      // 2. Perform tensor calculations wrapped in tf.tidy to prevent WebGL memory leaks
-      const results = tf.tidy(() => {
-        // Convert the image element into a raw 3D tensor [height, width, RGB channels]
-        const tensor = tf.browser.fromPixels(img);
-
-        // Resize the image to 224 x 224 pixels (what MobileNetV3 expects)
-        const resized = tf.image.resizeBilinear(tensor, [224, 224]);
-
-        // Add a batch dimension to make it [1, 224, 224, 3] and cast to float
-        // Note: MobileNetV3's internal layer automatically handles pixel division (normalization)
-        const batched = resized.cast("float32").expandDims(0);
-
-        // Execute prediction
-        const prediction = model.predict(batched) as tf.Tensor;
-        
-        // Extract raw array data
-        return prediction.dataSync();
-      });
+      // 2. Perform prediction using our modularized helper utility
+      const { diseaseName, confidence } = await predictMangoDisease(model, img);
 
       setScanningProgress(80);
-
-      // 3. Map result indices to corresponding disease labels (alphabetical order matches Keras generator)
-      // 0: anthracnose
-      // 1: bacterial_black_spot
-      // 2: bacterial_canker
-      // 3: healthy
-      // 4: mango_scab
-      // 5: sooty_mold
-      const classes = [
-        "Anthracnose",
-        "Bacterial Black Spot",
-        "Bacterial Canker",
-        "Healthy",
-        "Mango Scab",
-        "Sooty Mold"
-      ];
-
-      // Find the class index with the highest probability score
-      let maxIndex = 0;
-      let maxProb = 0;
-      for (let i = 0; i < results.length; i++) {
-        if (results[i] > maxProb) {
-          maxProb = results[i];
-          maxIndex = i;
-        }
-      }
-
-      const confidence = parseFloat(maxProb.toFixed(2));
-
-      // Enforce the 70% threshold check from the capstone manuscript
-      const diseaseName = confidence >= 0.70
-        ? classes[maxIndex]
-        : "Uncertain / Unrecognized";
 
       // Clean up temporary image object URL
       URL.revokeObjectURL(img.src);
 
-      // 4. Save the diagnostic log (with raw photo Blob) to the local scan history
+      // 3. Save the diagnostic log (with raw photo Blob) to the local scan history
       await createScan(diseaseName, confidence, selectedFile);
 
-      // Reset selection state
+      // Reset active selections
       setSelectedFile(null);
       setPreviewUrl(null);
       setIsScanning(false);
@@ -200,41 +148,8 @@ export default function Home() {
       };
     }
 
-    // 2. Default hardcoded fallback guidelines (BAFS standards) if guidelines table is empty
-    const fallbacks: Record<string, { en: string; bis: string; color: DiseaseGuideline["color"] }> = {
-      "anthracnose": {
-        en: "Clean orchard layout. Prune dead branches to improve airflow. Apply copper-based fungicides during flowering and early fruit stages. Avoid overhead irrigation.",
-        bis: "Limpyohan ang uma. Putlon ang mga patay nga sanga aron mosulod ang hangin ug kahayag. Pag-spray og copper-based fungicide sa pagpamulak ug paglinghod sa prutas. Likayi ang overhead irrigation.",
-        color: "yellow",
-      },
-      "sooty_mold": {
-        en: "Mold grows on insect honeydew. Control sap-sucking pests (leafhoppers, mealybugs) by spraying neem oil or soap solutions. Prune canopy to reduce humidity.",
-        bis: "Ang agup-op nagatubo tungod sa hugaw sa insekto. Kontrola ang mga peste (leafhoppers, bugot) pinaagi sa pag-spray og neem oil o sabon. Putlon ang mga sanga aron dili kaayo umog.",
-        color: "purple",
-      },
-      "bacterial_canker": {
-        en: "Bacterial leaves caking. Prune and burn infected shoots immediately. Apply copper hydroxide sprays during rainy seasons. Disinfect pruning tools with bleach.",
-        bis: "Sakit sa dahon tungod sa bakterya. Putlon ug sunugon dayon ang mga naapektuhang sanga. Mag-spray og copper hydroxide panahon sa ting-ulan. Limpyohan ang mga gamit gamit ang bleach.",
-        color: "pink",
-      },
-      "bacterial_black_spot": {
-        en: "Bacterial fruit skin spots. Avoid picking fruit during wet weather. Remove infected green fruit from trees to check spread. Windbreaks help minimize disease entry.",
-        bis: "Itom nga kabahong sa prutas. Likayi ang pag-ani kung basa ang panahon. Kuhaa ang mga natakdan nga prutas aron dili makatabok sa uban. Ang mga Windbreaker makapugong sa sakit.",
-        color: "pink",
-      },
-      "mango_scab": {
-        en: "Corky scab spots on green fruit. Spray copper fungicides or benomyl at bud break and early bloom. Clean up and burn leaf debris beneath trees.",
-        bis: "Garot o ulat sa linghod nga prutas. Mag-spray og copper fungicides o benomyl samtang gamay pa ang bulak. Hipuson ug sunugon ang mga nangahulog nga dahon sa ilalom sa kahoy.",
-        color: "blue",
-      },
-      "healthy": {
-        en: "Excellent! The mango tissue displays normal pigmentation and morphology. Maintain regular watering, balanced NPK fertilization, and monitor insect counts.",
-        bis: "Maayo kaayo! Himsog ang dahon ug prutas sa mangga. Padayona ang ensaktong pagbisbis, pag-abono og NPK, ug bantayan kanunay ang mga insekto.",
-        color: "green",
-      },
-    };
-
-    return fallbacks[key] || {
+    // 2. Default fallback guidelines loaded from constants
+    return FALLBACK_GUIDELINES[key] || {
       en: "No specific guidelines downloaded yet. Keep the mango leaves dry, prune infected twigs, and avoid overhead sprinkler watering.",
       bis: "Wala pay nadownload nga guidelines. Padayon nga pama-un ang mga dahon, putlon ang mga naapektuhang sanga, ug likayi ang pagbisbis nga magbasa sa dahon.",
       color: "yellow",
