@@ -186,6 +186,42 @@ export default function Home() {
     return getGuidelineForScan(diseaseName).color;
   };
 
+  // --- Full-Screen Startup Splash (while AI model loads) ---
+  if (isModelLoading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-6 px-6">
+        {/* Spinning loader ring */}
+        <div className="relative">
+          <div className="h-16 w-16 rounded-full border-4 border-slate-800 border-t-teal-400 animate-spin" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-lg">🥭</span>
+          </div>
+        </div>
+
+        {/* App title */}
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-emerald-400 via-teal-400 to-sky-400 bg-clip-text text-transparent">
+            MangoLeaf AI
+          </span>
+        </div>
+
+        {/* Loading status text */}
+        {/* <div className="flex flex-col items-center gap-3 mt-2">
+          <div className="flex items-center gap-2.5 text-xs text-teal-400 font-semibold animate-pulse">
+            <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            Initializing On-Device AI Engine...
+          </div>
+          <p className="text-[10px] text-slate-600 text-center max-w-xs leading-relaxed">
+            Loading MobileNetV3 model and compiling GPU shaders for real-time leaf diagnosis.
+          </p>
+        </div> */}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans pb-16">
       
@@ -287,15 +323,8 @@ export default function Home() {
             </h2>
 
             <div className="flex flex-col gap-4">
-              {isModelLoading ? (
-                <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-center">
-                  <span className="text-xs text-teal-400 font-bold animate-pulse">
-                    🤖 Initializing TensorFlow.js Model...
-                  </span>
-                </div>
-              ) : (
-                /* Dual Image Capture Buttons */
-                <div className="grid grid-cols-2 gap-3">
+              {/* Dual Image Capture Buttons */}
+              <div className="grid grid-cols-2 gap-3">
                   {/* 1. HTML5 back camera capture picker */}
                   <input
                     type="file"
@@ -334,7 +363,6 @@ export default function Home() {
                     Choose Gallery
                   </label>
                 </div>
-              )}
 
               {/* Photo Preview & AI Trigger */}
               {previewUrl && (
@@ -344,9 +372,38 @@ export default function Home() {
                     <img
                       src={previewUrl}
                       alt="Captured Preview"
-                      className="object-cover w-full h-full"
+                      className={`object-cover w-full h-full transition-all duration-300 ${isScanning ? "brightness-50 scale-105" : ""}`}
                     />
                     <div className="absolute inset-4 border-2 border-dashed border-teal-500/40 rounded-lg pointer-events-none" />
+                    
+                    {/* Scanning overlay on top of the image */}
+                    {isScanning && (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-slate-950/60 backdrop-blur-sm">
+                        <div className="relative">
+                          <div className="h-12 w-12 rounded-full border-4 border-slate-700 border-t-teal-400 animate-spin" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-sm">🔬</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-center gap-1.5">
+                          <span className="text-xs font-bold text-teal-400 animate-pulse">
+                            {scanningProgress < 30
+                              ? "Loading image..."
+                              : scanningProgress < 60
+                              ? "Running AI classification..."
+                              : scanningProgress < 90
+                              ? "Saving diagnosis..."
+                              : "Finishing up..."}
+                          </span>
+                          <div className="w-32 bg-slate-800 h-1 rounded-full overflow-hidden">
+                            <div
+                              className="bg-teal-400 h-full rounded-full transition-all duration-500 ease-out"
+                              style={{ width: `${scanningProgress}%` }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {!isScanning ? (
@@ -354,19 +411,11 @@ export default function Home() {
                       onClick={runDiagnosis}
                       className="w-full py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-slate-950 font-bold rounded-xl shadow-md transition-all text-xs cursor-pointer"
                     >
-                      Run AI Diagnosis
+                      🔬 Run AI Diagnosis
                     </button>
                   ) : (
-                    <div className="w-full flex flex-col gap-2 items-center text-xs">
-                      <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
-                        <div
-                          className="bg-teal-500 h-full transition-all duration-200"
-                          style={{ width: `${scanningProgress}%` }}
-                        />
-                      </div>
-                      <span className="text-teal-400 font-semibold animate-pulse">
-                        Tensorflow.js running inference...
-                      </span>
+                    <div className="w-full py-2.5 bg-slate-900 border border-slate-800 text-teal-400 font-bold rounded-xl text-center text-xs animate-pulse">
+                      Analyzing leaf tissue...
                     </div>
                   )}
                 </div>

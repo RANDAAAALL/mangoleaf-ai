@@ -144,7 +144,7 @@ export function useSync() {
               id: rScan.id,
               disease_name: rScan.disease_name,
               confidence: rScan.confidence,
-              image_blob: new Blob(), // Empty placeholder for synced remote scans
+              image_blob: new Blob(), 
               image_url: rScan.image_url,
               updated_at: rScan.updated_at,
               device_id: rScan.device_id,
