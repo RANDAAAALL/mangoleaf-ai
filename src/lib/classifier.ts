@@ -12,6 +12,12 @@ export interface DiagnosisResult {
  */
 export async function loadMangoModel(): Promise<tf.GraphModel> {
   console.log("🤖 Initializing TensorFlow.js engine...");
+  
+  // OPTIMIZATION: Force GPU to use 16-bit float textures.
+  // This halves GPU memory usage on phones and perfectly matches our Float16 quantized model.
+  // NOTE: If you ever encounter rendering/GPU issues on very old devices, you can remove or comment out this line.
+  tf.env().set("WEBGL_FORCE_F16_TEXTURES", true);
+
   await tf.ready();
   
   const modelPath = "/model/model.json";
