@@ -6,7 +6,10 @@
     "dev": "bun --bun next dev --webpack",
     "build": "bun --bun next build --webpack",
     "start": "bun --bun next start",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "video:preview": "remotion preview src/remotion/index.ts",
+    "video:render": "remotion render src/remotion/index.ts MangoLeafPromo out/mangoleaf_ai_promo.mp4"
   },
   "dependencies": {
     "@serwist/next": "^9.5.11",
@@ -20,14 +23,18 @@
     "serwist": "^9.5.11"
   },
   "devDependencies": {
+    "@remotion/cli": "^4.0.496",
+    "@remotion/media-utils": "^4.0.496",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
+    "remotion": "^4.0.496",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "zod": "4.3.6"
   },
   "ignoreScripts": [
     "sharp",

@@ -1,24 +1,28 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { db, type ScanRecord, type DiseaseGuideline } from "@/lib/db";
+import { db, type ScanRecord } from "@/lib/db";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
 export function useSync() {
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [syncError, setSyncError] = useState<string | null>(null);
-  const [deviceId, setDeviceId] = useState<string>("");
-  const subscriptionRef = useRef<RealtimeChannel | null>(null);
-
-  // Initialize device ID from localStorage and handle online tracking
-  useEffect(() => {
+  
+  // Initialize device ID lazily from localStorage
+  const [deviceId] = useState<string>(() => {
+    if (typeof window === "undefined") return "";
     let id = localStorage.getItem("device_id");
     if (!id) {
       id = crypto.randomUUID();
       localStorage.setItem("device_id", id);
     }
-    setDeviceId(id);
+    return id;
+  });
 
+  const subscriptionRef = useRef<RealtimeChannel | null>(null);
+
+  // Handle online tracking
+  useEffect(() => {
     setIsOnline(navigator.onLine);
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -102,8 +106,9 @@ export function useSync() {
           }
         }
       }
-    } catch (err: any) {
-      console.error("Error flushing scans mutations:", err.message);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error("Error flushing scans mutations:", msg);
     }
   }, []);
 
@@ -144,7 +149,7 @@ export function useSync() {
               id: rScan.id,
               disease_name: rScan.disease_name,
               confidence: rScan.confidence,
-              image_blob: new Blob(), 
+              image_blob: new Blob(), // Empty placeholder for synced remote scans
               image_url: rScan.image_url,
               updated_at: rScan.updated_at,
               device_id: rScan.device_id,
@@ -153,9 +158,10 @@ export function useSync() {
           }
         }
       }
-    } catch (err: any) {
-      console.error("Error pulling remote changes:", err.message);
-      setSyncError(err.message);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error("Error pulling remote changes:", msg);
+      setSyncError(msg);
     }
   }, [deviceId]);
 
@@ -169,8 +175,9 @@ export function useSync() {
     try {
       await flushLocalMutations();
       await pullRemoteChanges();
-    } catch (err: any) {
-      setSyncError(err.message);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setSyncError(msg);
     } finally {
       setIsSyncing(false);
     }
@@ -227,7 +234,10 @@ export function useSync() {
   // Auto-sync when network reconnects or device ID loads
   useEffect(() => {
     if (isOnline && deviceId) {
-      sync();
+      const timer = setTimeout(() => {
+        sync();
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [isOnline, deviceId, sync]);
 
@@ -247,20 +257,18 @@ export function useSync() {
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "guidelines" },
-        async (payload: any) => {
+        async (payload: { eventType: string; new: Record<string, unknown>; old: Record<string, unknown> }) => {
           console.log("⚡ Realtime Postgres change detected:", payload);
-          const { eventType, new: newRecord, old: oldRecord } = payload;
+          const { eventType, new: newRecord } = payload;
 
           if (eventType === "INSERT" || eventType === "UPDATE") {
             await db.guidelines.put({
-              id: newRecord.id,
-              disease_name: newRecord.disease_name,
-              guidelines_en: newRecord.guidelines_en,
-              guidelines_bis: newRecord.guidelines_bis,
-              color: newRecord.color,
+              id: String(newRecord.id),
+              disease_name: String(newRecord.disease_name),
+              guidelines_en: String(newRecord.guidelines_en),
+              guidelines_bis: String(newRecord.guidelines_bis),
+              color: (newRecord.color as "yellow" | "pink" | "blue" | "green" | "purple") || "yellow",
             });
-          } else if (eventType === "DELETE") {
-            await db.guidelines.delete(oldRecord.id);
           }
         }
       )

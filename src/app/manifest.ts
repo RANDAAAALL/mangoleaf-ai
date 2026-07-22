@@ -4,9 +4,9 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Off On Sync",
-    short_name: "OffOnSync",
-    description: "A Progressive Web App powered by Next.js, Bun, and Serwist.",
+    name: "MangoLeaf AI",
+    short_name: "MangoLeafAI",
+    description: "Offline-First Mango Leaf Disease Diagnostic PWA powered by TensorFlow.js and Supabase.",
     start_url: "/",
     display: "standalone",
     background_color: "#0f172a", // Slate 900
