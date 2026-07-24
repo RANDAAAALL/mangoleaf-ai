@@ -7,7 +7,7 @@ import { useSync } from "@/hooks/useSync";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
 import * as tf from "@tensorflow/tfjs";
 import { FALLBACK_GUIDELINES } from "@/lib/constants";
-import { loadMangoModel, predictMangoDisease } from "@/lib/classifier";
+import { loadMangoModel, predictMangoDisease, compressImageForStorage } from "@/lib/classifier";
 
 // Modular UI Components
 import { SplashScreen } from "@/components/SplashScreen";
@@ -64,11 +64,11 @@ export default function Home() {
     db.scans
       .filter((scan) => scan._status !== "pending-delete")
       .sortBy("updated_at")
-  ) || [];
+  );
   
-  const activeScans = useMemo(() => [...scans].reverse(), [scans]);
+  const activeScans = useMemo(() => (scans ? [...scans].reverse() : []), [scans]);
 
-  // Cache blob URLs to avoid memory leaks on re-renders
+  const activeScanIds = activeScans.map((s) => s.id).join(",");
   const blobUrlMap = useMemo(() => {
     const map: Record<string, string> = {};
     for (const scan of activeScans) {
@@ -78,7 +78,7 @@ export default function Home() {
     }
     return map;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeScans.map((s) => s.id).join()]);
+  }, [activeScanIds]);
 
   // Query cached guidelines
   const cachedGuidelines = useLiveQuery(() => db.guidelines.toArray()) || [];
@@ -120,10 +120,15 @@ export default function Home() {
 
       setScanningProgress(45);
       const { diseaseName, confidence } = await predictMangoDisease(model, img);
-      setScanningProgress(80);
+      
+      setScanningProgress(75);
+      // Compress photo to lightweight ~200KB JPEG before saving to IndexedDB & cloud storage
+      const storageBlob = await compressImageForStorage(img, 1000, 0.80);
+
+      setScanningProgress(90);
       URL.revokeObjectURL(img.src);
 
-      await createScan(diseaseName, confidence, selectedFile);
+      await createScan(diseaseName, confidence, storageBlob);
 
       setSelectedFile(null);
       setPreviewUrl(null);

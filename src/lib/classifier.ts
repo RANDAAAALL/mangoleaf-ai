@@ -110,3 +110,45 @@ export async function predictMangoDisease(
     confidence
   };
 }
+
+/**
+ * Efficiently compresses a high-resolution camera photo to a max dimension of 1000px
+ * at 80% JPEG quality before storing in IndexedDB or uploading to Supabase Storage.
+ * Reduces raw 6MB-12MB photos down to ~150KB-250KB (30x size reduction) while preserving visual clarity.
+ */
+export async function compressImageForStorage(
+  imgElement: HTMLImageElement,
+  maxDimension: number = 1000,
+  quality: number = 0.80
+): Promise<Blob> {
+  let width = imgElement.naturalWidth || imgElement.width;
+  let height = imgElement.naturalHeight || imgElement.height;
+
+  if (width > maxDimension || height > maxDimension) {
+    if (width > height) {
+      height = Math.round((height * maxDimension) / width);
+      width = maxDimension;
+    } else {
+      width = Math.round((width * maxDimension) / height);
+      height = maxDimension;
+    }
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d")!;
+  ctx.drawImage(imgElement, 0, 0, width, height);
+
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (blob) resolve(blob);
+        else reject(new Error("Canvas blob compression failed"));
+      },
+      "image/jpeg",
+      quality
+    );
+  });
+}
+

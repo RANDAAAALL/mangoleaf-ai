@@ -4,7 +4,10 @@ import { db, type ScanRecord } from "@/lib/db";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
 export function useSync() {
-  const [isOnline, setIsOnline] = useState<boolean>(true);
+  const [isOnline, setIsOnline] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    return navigator.onLine;
+  });
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [syncError, setSyncError] = useState<string | null>(null);
   
@@ -23,7 +26,6 @@ export function useSync() {
 
   // Handle online tracking
   useEffect(() => {
-    setIsOnline(navigator.onLine);
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 

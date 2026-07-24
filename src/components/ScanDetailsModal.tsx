@@ -1,4 +1,4 @@
-import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
+import { type ScanRecord } from "@/lib/db";
 
 interface ScanDetailsModalProps {
   scan: ScanRecord;

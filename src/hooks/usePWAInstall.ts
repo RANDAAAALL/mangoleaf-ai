@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
+
 export function usePWAInstall() {
-  const [installPrompt, setInstallPrompt] = useState<any>(null);
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState<boolean>(false);
 
   useEffect(() => {
@@ -9,8 +14,8 @@ export function usePWAInstall() {
     const checkStandalone = () => {
       const isStandalone =
         window.matchMedia("(display-mode: standalone)").matches ||
-        (window.navigator as any).standalone === true;
-      setIsInstalled(isStandalone);
+        (window.navigator as unknown as Record<string, unknown>).standalone === true;
+      setIsInstalled(Boolean(isStandalone));
     };
 
     checkStandalone();
@@ -18,7 +23,7 @@ export function usePWAInstall() {
     // Capture the PWA install prompt event
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setInstallPrompt(e);
+      setInstallPrompt(e as BeforeInstallPromptEvent);
     };
 
     // Capture successful installation event
@@ -40,7 +45,7 @@ export function usePWAInstall() {
     if (!installPrompt) return;
     
     // Trigger the native browser install prompt
-    installPrompt.prompt();
+    await installPrompt.prompt();
     const { outcome } = await installPrompt.userChoice;
     
     if (outcome === "accepted") {
@@ -50,7 +55,7 @@ export function usePWAInstall() {
   };
 
   return {
-    showInstallButton: !!installPrompt && !isInstalled,
+    showInstallButton: Boolean(installPrompt) && !isInstalled,
     installApp,
     isInstalled,
   };

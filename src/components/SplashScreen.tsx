@@ -1,8 +1,4 @@
-interface SplashScreenProps {
-  // Can add props if needed in the future
-}
-
-export function SplashScreen({}: SplashScreenProps) {
+export function SplashScreen() {
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-6 px-6">
       {/* Spinning loader ring */}
@@ -24,7 +20,7 @@ export function SplashScreen({}: SplashScreenProps) {
       </div>
 
       {/* Loading status text */}
-      {/* <div className="flex flex-col items-center gap-3 mt-2">
+       {/* <div className="flex flex-col items-center gap-3 mt-2">
         <div className="flex items-center gap-2.5 text-xs text-teal-400 font-semibold animate-pulse">
           <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -35,7 +31,7 @@ export function SplashScreen({}: SplashScreenProps) {
         <p className="text-[10px] text-slate-600 text-center max-w-xs leading-relaxed">
           Loading MobileNetV3 model and compiling GPU shaders for real-time leaf diagnosis.
         </p>
-      </div> */}
+      </div>  */}
     </div>
   );
 }

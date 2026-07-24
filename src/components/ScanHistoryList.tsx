@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { ScanCard } from "./ScanCard";
 
@@ -9,6 +10,8 @@ interface ScanHistoryListProps {
   onDeleteScan: (id: string) => void;
 }
 
+const INITIAL_LIMIT = 20;
+
 export function ScanHistoryList({
   scans,
   blobUrlMap,
@@ -16,6 +19,11 @@ export function ScanHistoryList({
   onSelectScan,
   onDeleteScan,
 }: ScanHistoryListProps) {
+  const [displayLimit, setDisplayLimit] = useState<number>(INITIAL_LIMIT);
+
+  const visibleScans = scans.slice(0, displayLimit);
+  const hasMore = scans.length > displayLimit;
+
   return (
     <div className="bg-slate-900/30 border border-slate-850 p-6 rounded-2xl shadow-xl flex flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -37,18 +45,31 @@ export function ScanHistoryList({
           Scan History is empty. Snap a photo of a mango leaf or fruit to run a diagnosis!
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {scans.map((scan) => (
-            <ScanCard
-              key={scan.id}
-              scan={scan}
-              imageUrl={blobUrlMap[scan.id] || scan.image_url}
-              guidelineColor={getGuidelineColor(scan.disease_name)}
-              onSelect={onSelectScan}
-              onDelete={onDeleteScan}
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {visibleScans.map((scan) => (
+              <ScanCard
+                key={scan.id}
+                scan={scan}
+                imageUrl={blobUrlMap[scan.id] || scan.image_url}
+                guidelineColor={getGuidelineColor(scan.disease_name)}
+                onSelect={onSelectScan}
+                onDelete={onDeleteScan}
+              />
+            ))}
+          </div>
+
+          {hasMore && (
+            <div className="flex justify-center pt-2">
+              <button
+                onClick={() => setDisplayLimit((prev) => prev + 20)}
+                className="text-xs font-bold px-5 py-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-teal-400 rounded-xl transition-all shadow-md cursor-pointer"
+              >
+                Show More Scans ({scans.length - displayLimit} remaining)
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
