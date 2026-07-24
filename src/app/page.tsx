@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db, type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { useSync } from "@/hooks/useSync";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
-import * as tf from "@tensorflow/tfjs";
+import type * as tf from "@tensorflow/tfjs";
 import { FALLBACK_GUIDELINES } from "@/lib/constants";
 import { loadMangoModel, predictMangoDisease, compressImageForStorage } from "@/lib/classifier";
 
@@ -14,9 +14,14 @@ import { SplashScreen } from "@/components/SplashScreen";
 import { Header } from "@/components/Header";
 import { DeviceProfileCard } from "@/components/DeviceProfileCard";
 import { DiagnosticScanner } from "@/components/DiagnosticScanner";
-import { SqlSchemaCard } from "@/components/SqlSchemaCard";
 import { ScanHistoryList } from "@/components/ScanHistoryList";
-import { ScanDetailsModal } from "@/components/ScanDetailsModal";
+import dynamic from 'next/dynamic';
+const ScanDetailsModal = dynamic(() => import('@/components/ScanDetailsModal').then(mod => ({ default: mod.ScanDetailsModal })));
+const SqlSchemaCard = dynamic(() => import('@/components/SqlSchemaCard').then(mod => ({ default: mod.SqlSchemaCard })));
+
+// Module-level flag: persists across React remounts, network reconnections,
+// and useSync state updates. Ensures splash screen shows only ONCE per session.
+let hasInitialized = false;
 
 export default function Home() {
   const {
@@ -32,14 +37,18 @@ export default function Home() {
 
   // TensorFlow.js model states
   const [model, setModel] = useState<tf.GraphModel | null>(null);
-  const [isModelLoading, setIsModelLoading] = useState<boolean>(true);
+  const [isModelLoading, setIsModelLoading] = useState<boolean>(!hasInitialized);
 
   // Load MobileNetV3 model on startup
   useEffect(() => {
+    // Skip re-loading if model was already initialized in a previous mount
+    if (hasInitialized) return;
+
     async function initModel() {
       try {
         const loadedModel = await loadMangoModel();
         setModel(loadedModel);
+        hasInitialized = true;
       } catch (err) {
         console.error("Error loading TensorFlow.js model:", err);
       } finally {
@@ -62,13 +71,14 @@ export default function Home() {
   // Query local active scans (exclude pending-delete)
   const scans = useLiveQuery(() =>
     db.scans
-      .filter((scan) => scan._status !== "pending-delete")
+      .where("_status").notEqual("pending-delete")
       .sortBy("updated_at")
   );
   
   const activeScans = useMemo(() => (scans ? [...scans].reverse() : []), [scans]);
 
   const activeScanIds = activeScans.map((s) => s.id).join(",");
+
   const blobUrlMap = useMemo(() => {
     const map: Record<string, string> = {};
     for (const scan of activeScans) {
@@ -80,8 +90,25 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeScanIds]);
 
+  // Revoke old Blob URLs when blobUrlMap changes or component unmounts
+  useEffect(() => {
+    const urls = Object.values(blobUrlMap);
+    return () => {
+      urls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [blobUrlMap]);
+
   // Query cached guidelines
-  const cachedGuidelines = useLiveQuery(() => db.guidelines.toArray()) || [];
+  const cachedGuidelines = useLiveQuery(() => db.guidelines.toArray(), []);
+
+  // Stable guideline lookup map for useCallback dependency
+  const guidelineMap = useMemo(() => {
+    const map: Record<string, DiseaseGuideline> = {};
+    for (const g of (cachedGuidelines || [])) {
+      map[g.id] = g;
+    }
+    return map;
+  }, [cachedGuidelines]);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -96,15 +123,16 @@ export default function Home() {
   }, [selectedScan]);
 
   // Handle photo capture / selection
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
     setSelectedFile(file);
     setPreviewUrl(URL.createObjectURL(file));
-  };
+  }, [previewUrl]);
 
   // Run AI diagnosis
-  const runDiagnosis = async () => {
+  const runDiagnosis = useCallback(async () => {
     if (!selectedFile || !model) return;
 
     setIsScanning(true);
@@ -130,29 +158,27 @@ export default function Home() {
 
       await createScan(diseaseName, confidence, storageBlob);
 
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
       setSelectedFile(null);
       setPreviewUrl(null);
       setIsScanning(false);
       setScanningProgress(0);
 
-      const latestScans = await db.scans.toArray();
-      if (latestScans.length > 0) {
-        const newest = latestScans.reduce((prev, current) =>
-          new Date(prev.updated_at) > new Date(current.updated_at) ? prev : current
-        );
-        setSelectedScan(newest);
+      const newestScan = await db.scans.orderBy('updated_at').last();
+      if (newestScan) {
+        setSelectedScan(newestScan);
       }
     } catch (err) {
       console.error("AI classification error:", err);
       setIsScanning(false);
       setScanningProgress(0);
     }
-  };
+  }, [selectedFile, model, previewUrl, createScan]);
 
   // Retrieve guideline for a disease
-  const getGuidelineForScan = (diseaseName: string): { en: string; bis: string; color: DiseaseGuideline["color"] } => {
+  const getGuidelineForScan = useCallback((diseaseName: string): { en: string; bis: string; color: DiseaseGuideline["color"] } => {
     const key = diseaseName.toLowerCase().replace(/\s+/g, "_");
-    const matched = cachedGuidelines.find((g) => g.id === key);
+    const matched = guidelineMap[key];
 
     if (matched) {
       return {
@@ -169,7 +195,7 @@ export default function Home() {
         color: "yellow",
       }
     );
-  };
+  }, [guidelineMap]);
 
   if (isModelLoading) {
     return <SplashScreen />;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 interface DiagnosticScannerProps {
   previewUrl: string | null;
@@ -8,7 +8,7 @@ interface DiagnosticScannerProps {
   onRunDiagnosis: () => void;
 }
 
-export function DiagnosticScanner({
+export const DiagnosticScanner = memo(function DiagnosticScanner({
   previewUrl,
   isScanning,
   scanningProgress,
@@ -39,7 +39,7 @@ export function DiagnosticScanner({
           />
           <label
             htmlFor="camera-picker"
-            className="cursor-pointer bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-bold py-3 px-4 rounded-xl shadow-md text-center flex flex-col items-center justify-center gap-1.5 hover:scale-103 active:scale-98 transition-all text-xs"
+            className="cursor-pointer bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-bold py-3 px-4 rounded-xl shadow-md text-center flex flex-col items-center justify-center gap-1.5 hover:scale-103 active:scale-98 transition-transform text-xs"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -58,7 +58,7 @@ export function DiagnosticScanner({
           />
           <label
             htmlFor="gallery-picker"
-            className="cursor-pointer bg-slate-900 border border-slate-800 hover:bg-slate-850 hover:border-slate-700 text-slate-200 font-bold py-3 px-4 rounded-xl shadow-md text-center flex flex-col items-center justify-center gap-1.5 hover:scale-103 active:scale-98 transition-all text-xs"
+            className="cursor-pointer bg-slate-900 border border-slate-800 hover:bg-slate-850 hover:border-slate-700 text-slate-200 font-bold py-3 px-4 rounded-xl shadow-md text-center flex flex-col items-center justify-center gap-1.5 hover:scale-103 active:scale-98 transition-transform text-xs"
           >
             <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -75,7 +75,7 @@ export function DiagnosticScanner({
               <img
                 src={previewUrl}
                 alt="Captured Preview"
-                className={`object-cover w-full h-full transition-all duration-300 ${isScanning ? "brightness-50 scale-105" : ""}`}
+                className={`object-cover w-full h-full transition-transform duration-300 ${isScanning ? "brightness-50 scale-105" : ""}`}
               />
               <div className="absolute inset-4 border-2 border-dashed border-teal-500/40 rounded-lg pointer-events-none" />
               
@@ -100,7 +100,7 @@ export function DiagnosticScanner({
                     </span>
                     <div className="w-32 bg-slate-800 h-1 rounded-full overflow-hidden">
                       <div
-                        className="bg-teal-400 h-full rounded-full transition-all duration-500 ease-out"
+                        className="bg-teal-400 h-full rounded-full transition-colors duration-500 ease-out"
                         style={{ width: `${scanningProgress}%` }}
                       />
                     </div>
@@ -112,7 +112,7 @@ export function DiagnosticScanner({
             {!isScanning ? (
               <button
                 onClick={onRunDiagnosis}
-                className="w-full py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-slate-950 font-bold rounded-xl shadow-md transition-all text-xs cursor-pointer"
+                className="w-full py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-slate-950 font-bold rounded-xl shadow-md transition-colors text-xs cursor-pointer"
               >
                 🔬 Run AI Diagnosis
               </button>
@@ -126,4 +126,4 @@ export function DiagnosticScanner({
       </div>
     </div>
   );
-}
+});

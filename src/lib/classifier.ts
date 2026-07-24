@@ -6,33 +6,57 @@ export interface DiagnosisResult {
   confidence: number;
 }
 
+// Module-level singleton cache: ensures the model is loaded & warmed only ONCE
+// across all component mounts, remounts, and network reconnection events.
+let cachedModel: tf.GraphModel | null = null;
+let loadingPromise: Promise<tf.GraphModel> | null = null;
+let sharedCanvas: HTMLCanvasElement | null = null;
+
 /**
  * Loads the compiled TensorFlow.js Graph Model from the public directory
  * and runs a dummy prediction warmup to compile WebGL shaders in the background.
+ * Uses a module-level singleton cache so the model is only loaded once.
  */
 export async function loadMangoModel(): Promise<tf.GraphModel> {
-  console.log("🤖 Initializing TensorFlow.js engine...");
-  
-  // OPTIMIZATION: Force GPU to use 16-bit float textures.
-  // This halves GPU memory usage on phones and perfectly matches our Float16 quantized model.
-  // NOTE: If you ever encounter rendering/GPU issues on very old devices, you can remove or comment out this line.
-  tf.env().set("WEBGL_FORCE_F16_TEXTURES", true);
+  // Return cached model instantly if already loaded
+  if (cachedModel) {
+    console.log("⚡ Model already cached — returning instantly.");
+    return cachedModel;
+  }
 
-  await tf.ready();
-  
-  const modelPath = "/model/model.json";
-  const model = await tf.loadGraphModel(modelPath);
-  console.log("💾 Graph model JSON loaded from assets.");
+  // Prevent duplicate concurrent loads (e.g. React StrictMode double-mount)
+  if (loadingPromise) {
+    console.log("⏳ Model load already in progress — awaiting...");
+    return loadingPromise;
+  }
 
-  // Run a dummy warmup to force compile WebGL shaders on device startup
-  console.log("⚡ Warming up GPU WebGL shaders...");
-  tf.tidy(() => {
-    const dummyTensor = tf.zeros([1, 224, 224, 3]);
-    model.predict(dummyTensor);
-  });
-  console.log("✨ GPU model warmup complete.");
+  loadingPromise = (async () => {
+    console.log("🤖 Initializing TensorFlow.js engine...");
 
-  return model;
+    // OPTIMIZATION: Force GPU to use 16-bit float textures.
+    // This halves GPU memory usage on phones and perfectly matches our Float16 quantized model.
+    // NOTE: If you ever encounter rendering/GPU issues on very old devices, you can remove or comment out this line.
+    tf.env().set("WEBGL_FORCE_F16_TEXTURES", true);
+
+    await tf.ready();
+
+    const modelPath = "/model/model.json";
+    const model = await tf.loadGraphModel(modelPath);
+    console.log("💾 Graph model JSON loaded from assets.");
+
+    // Run a dummy warmup to force compile WebGL shaders on device startup
+    console.log("⚡ Warming up GPU WebGL shaders...");
+    tf.tidy(() => {
+      const dummyTensor = tf.zeros([1, 224, 224, 3]);
+      model.predict(dummyTensor);
+    });
+    console.log("✨ GPU model warmup complete.");
+
+    cachedModel = model;
+    return model;
+  })();
+
+  return loadingPromise;
 }
 
 /**
@@ -45,13 +69,15 @@ function downscaleToCanvas(
   imgElement: HTMLImageElement,
   targetSize: number = 224
 ): HTMLCanvasElement {
-  const canvas = document.createElement("canvas");
-  canvas.width = targetSize;
-  canvas.height = targetSize;
-  const ctx = canvas.getContext("2d")!;
+  if (!sharedCanvas) {
+    sharedCanvas = document.createElement("canvas");
+  }
+  sharedCanvas.width = targetSize;
+  sharedCanvas.height = targetSize;
+  const ctx = sharedCanvas.getContext("2d", { alpha: false })!;
   // drawImage handles bilinear scaling natively in the browser engine
   ctx.drawImage(imgElement, 0, 0, targetSize, targetSize);
-  return canvas;
+  return sharedCanvas;
 }
 
 /**
@@ -98,7 +124,7 @@ export async function predictMangoDisease(
     }
   }
 
-  const confidence = parseFloat(maxProb.toFixed(2));
+  const confidence = Math.round(maxProb * 100) / 100;
 
   // Enforce the 70% threshold check from capstone specifications
   const diseaseName = confidence >= 0.70
@@ -137,7 +163,7 @@ export async function compressImageForStorage(
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
-  const ctx = canvas.getContext("2d")!;
+  const ctx = canvas.getContext("2d", { alpha: false })!;
   ctx.drawImage(imgElement, 0, 0, width, height);
 
   return new Promise<Blob>((resolve, reject) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { db, type ScanRecord } from "@/lib/db";
 import type { RealtimeChannel } from "@supabase/supabase-js";
@@ -42,7 +42,7 @@ export function useSync() {
   const flushLocalMutations = useCallback(async () => {
     try {
       const pendingScans = await db.scans
-        .filter((scan) => scan._status !== undefined && scan._status !== "synced")
+        .where('_status').anyOf(['pending-insert', 'pending-delete'])
         .toArray();
 
       if (pendingScans.length === 0) return;
@@ -125,15 +125,14 @@ export function useSync() {
 
       if (guidelinesError) throw guidelinesError;
       if (remoteGuidelines) {
-        for (const rGuideline of remoteGuidelines) {
-          await db.guidelines.put({
-            id: rGuideline.id,
-            disease_name: rGuideline.disease_name,
-            guidelines_en: rGuideline.guidelines_en,
-            guidelines_bis: rGuideline.guidelines_bis,
-            color: rGuideline.color,
-          });
-        }
+        const guidelinesToPut = remoteGuidelines.map(rGuideline => ({
+          id: rGuideline.id,
+          disease_name: rGuideline.disease_name,
+          guidelines_en: rGuideline.guidelines_en,
+          guidelines_bis: rGuideline.guidelines_bis,
+          color: rGuideline.color,
+        }));
+        await db.guidelines.bulkPut(guidelinesToPut);
       }
 
       // 2. Pull own Scans to restore local history
@@ -144,10 +143,11 @@ export function useSync() {
 
       if (scansError) throw scansError;
       if (remoteScans) {
+        const scansToPut: ScanRecord[] = [];
         for (const rScan of remoteScans) {
           const local = await db.scans.get(rScan.id);
           if (!local) {
-            await db.scans.add({
+            scansToPut.push({
               id: rScan.id,
               disease_name: rScan.disease_name,
               confidence: rScan.confidence,
@@ -158,6 +158,9 @@ export function useSync() {
               _status: "synced",
             });
           }
+        }
+        if (scansToPut.length > 0) {
+          await db.scans.bulkPut(scansToPut);
         }
       }
     } catch (err: unknown) {
@@ -286,7 +289,7 @@ export function useSync() {
     };
   }, [isOnline, deviceId]);
 
-  return {
+  return useMemo(() => ({
     isOnline,
     isSyncing,
     syncError,
@@ -294,5 +297,5 @@ export function useSync() {
     createScan,
     deleteScan,
     triggerSync: sync,
-  };
+  }), [isOnline, isSyncing, syncError, deviceId, createScan, deleteScan, sync]);
 }

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { type ScanRecord } from "@/lib/db";
 
 interface ScanDetailsModalProps {
@@ -9,7 +10,7 @@ interface ScanDetailsModalProps {
   onClose: () => void;
 }
 
-export function ScanDetailsModal({
+export const ScanDetailsModal = memo(function ScanDetailsModal({
   scan,
   imageUrl,
   language,
@@ -114,4 +115,4 @@ export function ScanDetailsModal({
       </div>
     </div>
   );
-}
+});

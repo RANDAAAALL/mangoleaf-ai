@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 
 interface ScanCardProps {
@@ -8,7 +9,15 @@ interface ScanCardProps {
   onDelete: (id: string) => void;
 }
 
-export function ScanCard({
+  const cardBorderColors = {
+    yellow: "border-amber-800/40 hover:border-amber-700/60 bg-amber-950/5",
+    pink: "border-rose-800/40 hover:border-rose-700/60 bg-rose-950/5",
+    blue: "border-sky-800/40 hover:border-sky-700/60 bg-sky-950/5",
+    green: "border-emerald-800/40 hover:border-emerald-700/60 bg-emerald-950/5",
+    purple: "border-purple-800/40 hover:border-purple-700/60 bg-purple-950/5",
+  };
+
+export const ScanCard = memo(function ScanCard({
   scan,
   imageUrl,
   guidelineColor,
@@ -18,18 +27,10 @@ export function ScanCard({
   const isHealthy = scan.disease_name === "Healthy";
   const isUncertain = scan.confidence < 0.70;
 
-  const cardBorderColors = {
-    yellow: "border-amber-800/40 hover:border-amber-700/60 bg-amber-950/5",
-    pink: "border-rose-800/40 hover:border-rose-700/60 bg-rose-950/5",
-    blue: "border-sky-800/40 hover:border-sky-700/60 bg-sky-950/5",
-    green: "border-emerald-800/40 hover:border-emerald-700/60 bg-emerald-950/5",
-    purple: "border-purple-800/40 hover:border-purple-700/60 bg-purple-950/5",
-  };
-
   return (
     <div
       onClick={() => onSelect(scan)}
-      className={`p-4 rounded-xl border backdrop-blur-sm cursor-pointer flex gap-4 transition-all duration-300 ${
+      className={`p-4 rounded-xl border bg-slate-900/95 cursor-pointer flex gap-4 transition-colors duration-300 ${
         cardBorderColors[guidelineColor]
       }`}
     >
@@ -97,4 +98,4 @@ export function ScanCard({
       </div>
     </div>
   );
-}
+});

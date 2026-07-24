@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo, useMemo } from "react";
 import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { ScanCard } from "./ScanCard";
 
@@ -12,7 +12,7 @@ interface ScanHistoryListProps {
 
 const INITIAL_LIMIT = 20;
 
-export function ScanHistoryList({
+export const ScanHistoryList = memo(function ScanHistoryList({
   scans,
   blobUrlMap,
   getGuidelineColor,
@@ -21,7 +21,7 @@ export function ScanHistoryList({
 }: ScanHistoryListProps) {
   const [displayLimit, setDisplayLimit] = useState<number>(INITIAL_LIMIT);
 
-  const visibleScans = scans.slice(0, displayLimit);
+  const visibleScans = useMemo(() => scans.slice(0, displayLimit), [scans, displayLimit]);
   const hasMore = scans.length > displayLimit;
 
   return (
@@ -73,4 +73,4 @@ export function ScanHistoryList({
       )}
     </div>
   );
-}
+});
