@@ -7,7 +7,7 @@ import { useSync } from "@/hooks/useSync";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
 import type * as tf from "@tensorflow/tfjs";
 import { FALLBACK_GUIDELINES } from "@/lib/constants";
-import { loadMangoModel, predictMangoDisease, compressImageForStorage } from "@/lib/classifier";
+import { loadMangoModel, predictMangoDisease, compressImageForStorage, computeImageHash } from "@/lib/classifier";
 
 // Modular UI Components
 import { SplashScreen } from "@/components/SplashScreen";
@@ -139,6 +139,22 @@ export default function Home() {
     setScanningProgress(15);
 
     try {
+      // 1. Compute SHA-256 binary hash to check for duplicate gallery photos
+      const imageHash = await computeImageHash(selectedFile);
+
+      // 2. Search local database for existing duplicate scan
+      const existingScan = await db.scans.where("image_hash").equals(imageHash).first();
+      if (existingScan) {
+        console.log("⚡ Duplicate photo detected — opening existing scan report.");
+        setSelectedScan(existingScan);
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        setSelectedFile(null);
+        setPreviewUrl(null);
+        setIsScanning(false);
+        setScanningProgress(0);
+        return;
+      }
+
       const img = new Image();
       img.src = URL.createObjectURL(selectedFile);
       await new Promise((resolve, reject) => {
@@ -156,7 +172,7 @@ export default function Home() {
       setScanningProgress(90);
       URL.revokeObjectURL(img.src);
 
-      await createScan(diseaseName, confidence, storageBlob);
+      await createScan(diseaseName, confidence, storageBlob, imageHash);
 
       if (previewUrl) URL.revokeObjectURL(previewUrl);
       setSelectedFile(null);

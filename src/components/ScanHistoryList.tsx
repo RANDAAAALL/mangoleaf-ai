@@ -1,4 +1,4 @@
-import { useState, memo, useMemo } from "react";
+import { useState, memo, useMemo, useRef, useEffect, useCallback } from "react";
 import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { ScanCard } from "./ScanCard";
 
@@ -10,7 +10,7 @@ interface ScanHistoryListProps {
   onDeleteScan: (id: string) => void;
 }
 
-const INITIAL_LIMIT = 20;
+const BATCH_SIZE = 20;
 
 export const ScanHistoryList = memo(function ScanHistoryList({
   scans,
@@ -19,10 +19,33 @@ export const ScanHistoryList = memo(function ScanHistoryList({
   onSelectScan,
   onDeleteScan,
 }: ScanHistoryListProps) {
-  const [displayLimit, setDisplayLimit] = useState<number>(INITIAL_LIMIT);
+  const [displayLimit, setDisplayLimit] = useState<number>(BATCH_SIZE);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const visibleScans = useMemo(() => scans.slice(0, displayLimit), [scans, displayLimit]);
   const hasMore = scans.length > displayLimit;
+
+  // Auto-load more cards when the sentinel element enters the viewport (infinite scroll)
+  const loadMore = useCallback(() => {
+    setDisplayLimit((prev) => prev + BATCH_SIZE);
+  }, []);
+
+  useEffect(() => {
+    const sentinel = loadMoreRef.current;
+    if (!sentinel || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { rootMargin: "200px" } // Start loading 200px before the user reaches the bottom
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasMore, loadMore]);
 
   return (
     <div className="bg-slate-900/30 border border-slate-850 p-6 rounded-2xl shadow-xl flex flex-col gap-4">
@@ -59,14 +82,12 @@ export const ScanHistoryList = memo(function ScanHistoryList({
             ))}
           </div>
 
+          {/* Invisible sentinel element: triggers auto-load when scrolled into view */}
           {hasMore && (
-            <div className="flex justify-center pt-2">
-              <button
-                onClick={() => setDisplayLimit((prev) => prev + 20)}
-                className="text-xs font-bold px-5 py-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-teal-400 rounded-xl transition-all shadow-md cursor-pointer"
-              >
-                Show More Scans ({scans.length - displayLimit} remaining)
-              </button>
+            <div ref={loadMoreRef} className="flex justify-center pt-2">
+              <span className="text-xs text-slate-600 italic">
+                Loading more scans...
+              </span>
             </div>
           )}
         </>

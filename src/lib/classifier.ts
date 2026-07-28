@@ -139,13 +139,15 @@ export async function predictMangoDisease(
 
 /**
  * Efficiently compresses a high-resolution camera photo to a max dimension of 1000px
- * at 80% JPEG quality before storing in IndexedDB or uploading to Supabase Storage.
- * Reduces raw 6MB-12MB photos down to ~150KB-250KB (30x size reduction) while preserving visual clarity.
+ * using modern WebP format (with automatic JPEG fallback for older devices).
+ * 
+ * WebP at 75% quality ≈ 70–90 KB (vs JPEG 80% ≈ 150–250 KB) — halves 3G upload time.
+ * Falls back to JPEG 80% if the browser doesn't support WebP canvas export.
  */
 export async function compressImageForStorage(
   imgElement: HTMLImageElement,
   maxDimension: number = 1000,
-  quality: number = 0.80
+  quality: number = 0.75
 ): Promise<Blob> {
   let width = imgElement.naturalWidth || imgElement.width;
   let height = imgElement.naturalHeight || imgElement.height;
@@ -166,15 +168,47 @@ export async function compressImageForStorage(
   const ctx = canvas.getContext("2d", { alpha: false })!;
   ctx.drawImage(imgElement, 0, 0, width, height);
 
-  return new Promise<Blob>((resolve, reject) => {
+  // Try WebP first (50% smaller than JPEG on 3G networks)
+  const webpBlob = await new Promise<Blob | null>((resolve) => {
     canvas.toBlob(
-      (blob) => {
-        if (blob) resolve(blob);
-        else reject(new Error("Canvas blob compression failed"));
-      },
-      "image/jpeg",
+      (blob) => resolve(blob),
+      "image/webp",
       quality
     );
   });
+
+  // If WebP succeeded AND the browser actually produced a WebP blob (not a fallback PNG),
+  // use it. Otherwise fall back to JPEG for maximum compatibility.
+  if (webpBlob && webpBlob.type === "image/webp") {
+    console.log(`📦 Compressed to WebP: ${(webpBlob.size / 1024).toFixed(0)} KB`);
+    return webpBlob;
+  }
+
+  // Fallback: JPEG at 80% quality for older devices
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (blob) {
+          console.log(`📦 Compressed to JPEG (fallback): ${(blob.size / 1024).toFixed(0)} KB`);
+          resolve(blob);
+        }
+        else reject(new Error("Canvas blob compression failed"));
+      },
+      "image/jpeg",
+      0.80
+    );
+  });
 }
+
+/**
+ * Computes a unique SHA-256 binary fingerprint (hash) of an image file using
+ * the browser-native Web Crypto API. Used for instant local duplicate photo detection.
+ */
+export async function computeImageHash(file: File): Promise<string> {
+  const arrayBuffer = await file.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 

@@ -24,6 +24,9 @@ export function useSync() {
 
   const subscriptionRef = useRef<RealtimeChannel | null>(null);
 
+  // Sync lock: prevents concurrent sync operations from stacking on slow 3G networks
+  const isSyncingRef = useRef<boolean>(false);
+
   // Handle online tracking
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -53,17 +56,34 @@ export function useSync() {
 
           // 1. If not uploaded yet, upload binary Blob to Supabase Storage Bucket
           if (!uploadedUrl) {
-            const fileName = `${scan.id}.jpg`;
-            const { error: uploadError } = await supabase.storage
-              .from("scans")
-              .upload(fileName, scan.image_blob, {
-                contentType: "image/jpeg",
-                upsert: true,
-              });
+            // Dynamic file extension based on compressed format (WebP or JPEG fallback)
+            const isWebP = scan.image_blob.type === "image/webp";
+            const fileName = `${scan.id}.${isWebP ? "webp" : "jpg"}`;
 
-            if (uploadError) {
-              console.error("Error uploading image file:", uploadError.message);
-              continue; // Skip database row insertion if image upload fails
+            // 3G Safety: Abort upload if it takes longer than 10 seconds
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10_000);
+
+            try {
+              const { error: uploadError } = await supabase.storage
+                .from("scans")
+                .upload(fileName, scan.image_blob, {
+                  contentType: scan.image_blob.type || "image/jpeg",
+                  upsert: true,
+                  // @ts-expect-error -- Supabase JS v2 supports signal via fetch options
+                  signal: controller.signal,
+                });
+
+              clearTimeout(timeoutId);
+
+              if (uploadError) {
+                console.error("Error uploading image file:", uploadError.message);
+                continue; // Skip database row insertion if image upload fails
+              }
+            } catch (_abortErr) {
+              clearTimeout(timeoutId);
+              console.warn("⏱️ Upload timed out on slow 3G — will retry next sync.");
+              continue; // Skip this scan, it stays as pending-insert for next retry
             }
 
             // 2. Fetch the uploaded file's public URL
@@ -77,6 +97,7 @@ export function useSync() {
             disease_name: scan.disease_name,
             confidence: scan.confidence,
             image_url: uploadedUrl,
+            image_hash: scan.image_hash || null,
             device_id: scan.device_id,
             updated_at: scan.updated_at,
           });
@@ -100,9 +121,8 @@ export function useSync() {
           if (!dbError || dbError.code === "PGRST116") {
             // Delete from local IndexedDB
             await db.scans.delete(scan.id);
-            // Optionally clean up storage bucket
-            const fileName = `${scan.id}.jpg`;
-            await supabase.storage.from("scans").remove([fileName]);
+            // Clean up storage bucket (try both WebP and JPEG extensions)
+            await supabase.storage.from("scans").remove([`${scan.id}.webp`, `${scan.id}.jpg`]);
           } else {
             console.error("Error deleting scan record row:", dbError.message);
           }
@@ -153,6 +173,7 @@ export function useSync() {
               confidence: rScan.confidence,
               image_blob: new Blob(), // Empty placeholder for synced remote scans
               image_url: rScan.image_url,
+              image_hash: rScan.image_hash || undefined,
               updated_at: rScan.updated_at,
               device_id: rScan.device_id,
               _status: "synced",
@@ -174,6 +195,13 @@ export function useSync() {
   const sync = useCallback(async () => {
     if (!navigator.onLine) return;
 
+    // 3G Safety: Prevent concurrent sync operations from stacking
+    if (isSyncingRef.current) {
+      console.log("🔒 Sync already in progress — skipping duplicate trigger.");
+      return;
+    }
+
+    isSyncingRef.current = true;
     setIsSyncing(true);
     setSyncError(null);
 
@@ -185,12 +213,13 @@ export function useSync() {
       setSyncError(msg);
     } finally {
       setIsSyncing(false);
+      isSyncingRef.current = false;
     }
   }, [flushLocalMutations, pullRemoteChanges]);
 
   // Create a new scan record (saved locally first, retries sync if online)
   const createScan = useCallback(
-    async (diseaseName: string, confidence: number, imageBlob: Blob) => {
+    async (diseaseName: string, confidence: number, imageBlob: Blob, imageHash?: string) => {
       const scanId = crypto.randomUUID();
       const timestamp = new Date().toISOString();
 
@@ -200,6 +229,7 @@ export function useSync() {
         confidence: confidence,
         image_blob: imageBlob,
         image_url: null,
+        image_hash: imageHash,
         updated_at: timestamp,
         device_id: deviceId,
         _status: "pending-insert",

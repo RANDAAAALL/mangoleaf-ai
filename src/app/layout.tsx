@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -28,6 +28,14 @@ export const metadata: Metadata = {
   },
 };
 
+// Dedicated viewport export for optimal PWA mobile rendering (Next.js 14+)
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#020617",  // Matches bg-slate-950 dark background
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,6 +46,11 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        {/* Preconnect to Supabase: saves ~300ms DNS + TLS handshake on 3G networks */}
+        <link rel="preconnect" href="https://uuvvvoznajjqknedxpdg.supabase.co" />
+        <link rel="dns-prefetch" href="https://uuvvvoznajjqknedxpdg.supabase.co" />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

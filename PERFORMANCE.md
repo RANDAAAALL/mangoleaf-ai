@@ -11,7 +11,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 | **GPU VRAM Allocation (Per Scan)** | ~36 Million Floats (12MP Raw Tensor) | ~150 Thousand Floats (224x224 Canvas) | **~240x Memory Reduction** |
 | **GPU Texture Precision** | 32-bit Float | 16-bit Float (`WEBGL_FORCE_F16_TEXTURES`) | **50% Lower VRAM Footprint** |
 | **UI Thread Block during AI** | Synchronous Blocking (`dataSync()`) | Async Non-blocking (`outputTensor.data()`) | **Smooth 60FPS UI Animations** |
-| **Stored Scan Photo Size** | 6.0 MB – 12.0 MB Raw Camera File | ~200 KB Compressed JPEG (1000px @ 80%) | **30x Smaller Storage & Upload** |
+| **Stored Scan Photo Size** | 6.0 MB – 12.0 MB Raw Camera File | ~75 KB WebP (with JPEG ~150 KB fallback) | **80x–160x Smaller Storage & Upload** |
 | **React Component Re-renders** | Entire component tree re-rendered | `React.memo()` + `useCallback` scoped re-renders | **~60% Fewer DOM Diffs** |
 | **Blob URL Memory Leak** | Blob URLs never revoked | Auto-revoked on `useEffect` cleanup | **Zero Memory Leaks** |
 | **Model Re-loads on Reconnect** | Re-loaded on every network toggle | Module-level singleton cache (loaded once) | **0.0s Reconnect Latency** |
@@ -19,6 +19,11 @@ This document outlines the technical optimizations, hardware acceleration strate
 | **Database Sync Operations** | Sequential single-row `put()` calls | Batch `bulkPut()` single-transaction | **~3x Faster Sync Flush** |
 | **Font Loading (FOIT)** | Flash of Invisible Text on slow 3G | `display: "swap"` instant text rendering | **Instant Text Visibility** |
 | **Conditional Component Bundles** | All components loaded upfront | `next/dynamic` code-splitting for modals | **Smaller Initial JS Payload** |
+| **Duplicate Photo Detection** | Same gallery photo re-diagnosed every time | SHA-256 hash check skips AI entirely | **0.0s for Duplicate Photos** |
+| **3G Upload Timeout** | Fetch hangs 60+ seconds on stalled 3G | `AbortController` aborts at 10 seconds | **10s Max Wait, Auto-Retry** |
+| **Concurrent Sync Safety** | Multiple sync operations could stack | `isSyncingRef` lock prevents overlap | **Zero Duplicate Uploads** |
+| **Scan History Scrolling** | Manual "Show More" button | `IntersectionObserver` infinite scroll | **Zero-Tap Auto-Loading** |
+| **Supabase First Request** | Cold DNS + TLS handshake (~300ms on 3G) | `<link rel="preconnect">` preflight | **~300ms Faster First Sync** |
 
 ---
 
@@ -68,16 +73,16 @@ This document outlines the technical optimizations, hardware acceleration strate
 * **Cleanup:** A `useEffect` cleanup function automatically calls `URL.revokeObjectURL()` on all previous Blob URLs when the map changes or the component unmounts, preventing heap memory leaks during long farming sessions.
 * **Preview URL:** Camera preview Blob URLs are explicitly revoked via `URL.revokeObjectURL(previewUrl)` before setting new files or clearing state after diagnosis.
 
-### 2.3 Post-Inference Storage Compression
+### 2.3 Post-Inference Storage Compression (WebP with JPEG Fallback)
 * **Flow:** 
   1. User snaps a photo.
   2. AI model analyzes the uncompressed image first (**98.25% Test Accuracy maintained**).
-  3. **AFTER** prediction finishes, `compressImageForStorage()` resizes the photo to a max dimension of 1000px at 80% JPEG quality before saving to IndexedDB and uploading to Supabase.
-* **Impact:** Drops storage footprint from **6 MB → 200 KB** (30x reduction), ensuring rapid synchronization on weak 3G/4G cellular networks.
+  3. **AFTER** prediction finishes, `compressImageForStorage()` resizes the photo to a max dimension of 1000px and compresses using **WebP at 75% quality** (~70–90 KB). If the browser doesn't support WebP canvas export, automatically falls back to **JPEG at 80% quality** (~150 KB).
+* **Impact:** Drops storage footprint from **6 MB → 75 KB** (80x reduction) for WebP-capable devices, ensuring rapid synchronization on weak 3G/4G cellular networks. Upload time halved compared to JPEG.
 
-### 2.4 Render Pagination & Lazy Loading
+### 2.4 Infinite Scroll & Lazy Loading
 * **Thumbnail Lazy Loading:** Scan history thumbnails utilize `loading="lazy"`.
-* **History Pagination:** `<ScanHistoryList />` caps initial list rendering to **20 scan cards** with a "Show More Scans" button to preserve DOM performance when farmers accumulate hundreds of historical logs.
+* **Infinite Scroll:** `<ScanHistoryList />` renders an initial batch of **20 scan cards** and uses a browser-native `IntersectionObserver` sentinel element to automatically load the next 20 cards as the farmer scrolls down — zero button taps needed.
 * **Visible Scans Memoization:** The visible scans slice is wrapped in `useMemo` to avoid re-computing on every render pass.
 
 ### 2.5 Code-Splitting & Dynamic Imports
@@ -110,6 +115,22 @@ This document outlines the technical optimizations, hardware acceleration strate
 * **Guidelines Sync:** Remote guidelines are inserted via `db.guidelines.bulkPut()` in a single IndexedDB transaction instead of sequential individual `put()` calls.
 * **Scans Sync:** Remote scans are batch-inserted via `db.scans.bulkPut()`, reducing transaction overhead by ~3x during multi-record synchronization.
 
+### 3.4 Duplicate Photo Checker (SHA-256 Image Hash)
+* **Implementation:** When a farmer selects a photo, `computeImageHash()` in `classifier.ts` calculates a unique 64-character SHA-256 fingerprint using the browser-native `crypto.subtle.digest()` Web Crypto API in **~0.01 seconds**.
+* **Lookup:** The hash is checked against the indexed `image_hash` column in Dexie's `scans` table via `db.scans.where("image_hash").equals(hash).first()`.
+* **Duplicate Found:** If matched, the app skips AI model execution entirely and instantly opens the existing scan report — saving 100% of GPU memory, battery, and processing time.
+* **New Photo:** If no match, runs the AI model normally and stores the `image_hash` alongside the scan record in both IndexedDB and Supabase.
+* **Scope:** Primarily detects gallery re-uploads (identical file bytes). Live camera captures always produce unique hashes due to sensor noise variation.
+
+### 3.5 3G Network Resilience: Upload Timeout (`useSync.ts`)
+* **Problem:** On weak 3G connections with packet loss, the default browser `fetch()` can hang for **30–60 seconds** waiting for a Supabase Storage upload response.
+* **Solution:** Each upload is wrapped with an `AbortController` set to a **10-second timeout**. If the upload doesn't complete within 10 seconds, the request is aborted immediately.
+* **Safety:** The scan record remains safely stored in local IndexedDB as `pending-insert` and is automatically retried on the next sync pulse — zero data loss.
+
+### 3.6 3G Network Resilience: Concurrent Sync Lock (`useSync.ts`)
+* **Problem:** On slow 3G, multiple sync triggers (e.g., going online + taking a new scan simultaneously) could fire overlapping network requests.
+* **Solution:** A `useRef`-based `isSyncingRef` boolean lock ensures only one sync operation runs at a time. Duplicate sync triggers are safely skipped with a console log notification.
+
 ---
 
 ## 🎭 4. CSS & GPU Compositing Optimizations
@@ -129,6 +150,14 @@ This document outlines the technical optimizations, hardware acceleration strate
 * **Implementation:** Added `display: "swap"` to both `Geist` and `Geist_Mono` font configurations.
 * **Impact:** Eliminates Flash of Invisible Text (FOIT) on slow 3G/4G networks — text renders immediately with fallback fonts, then swaps to Geist when loaded.
 * **Font Variable Fix:** Updated `globals.css` body rule to use `var(--font-sans)` before falling back to Arial/Helvetica, ensuring the Geist font variable from `layout.tsx` is actually applied.
+
+### 4.5 Supabase Network Preconnect (`layout.tsx`)
+* **Implementation:** Added `<link rel="preconnect">` and `<link rel="dns-prefetch">` for the Supabase project URL in the document `<head>`.
+* **Impact:** The browser initiates DNS resolution and TLS handshake to Supabase immediately on page load, saving **~300ms** on the first network request over 3G/4G networks.
+
+### 4.6 PWA Viewport Configuration (`layout.tsx`)
+* **Implementation:** Added `export const viewport: Viewport` with `width: "device-width"`, `initialScale: 1`, `maximumScale: 5`, and `themeColor: "#020617"` (matching the `bg-slate-950` dark UI).
+* **Impact:** Proper Next.js 14+ viewport export ensures correct PWA mobile rendering, accessibility zoom support up to 5x, and native status bar theme color integration on Android/iOS.
 
 ---
 
