@@ -1,129 +1,204 @@
-import React, { memo } from "react";
+import React, { useEffect, memo } from "react";
+import { translations, type Language } from "@/lib/translations";
+import { Icon } from "@/components/Icon";
 
 interface DiagnosticScannerProps {
   previewUrl: string | null;
   isScanning: boolean;
   scanningProgress: number;
+  language: Language;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRunDiagnosis: () => void;
+  onCancelPreview: () => void;
 }
 
 export const DiagnosticScanner = memo(function DiagnosticScanner({
   previewUrl,
   isScanning,
   scanningProgress,
+  language,
   onFileChange,
   onRunDiagnosis,
+  onCancelPreview,
 }: DiagnosticScannerProps) {
-  return (
-    <div className="bg-slate-900/30 border border-slate-850 p-6 rounded-2xl shadow-xl backdrop-blur-sm">
-      <h2 className="text-lg font-bold mb-4 bg-gradient-to-r from-slate-100 to-slate-350 bg-clip-text text-transparent flex items-center gap-2">
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
-        </span>
-        Diagnostic Scanner
-      </h2>
+  const t = translations[language];
 
-      <div className="flex flex-col gap-4">
-        {/* Dual Image Capture Buttons */}
-        <div className="grid grid-cols-2 gap-3">
-          {/* 1. HTML5 back camera capture picker */}
+  // Lock body & html scroll when photo preview / AI scanning overlay is active
+  useEffect(() => {
+    if (previewUrl) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [previewUrl]);
+
+  return (
+    <div className="relative">
+      {/* DESKTOP VERSION (Single Card: Upload Photo) */}
+      <div className="hidden md:block bg-[#277839] text-white p-12 rounded-[2.5rem] shadow-xl relative overflow-hidden">
+        {/* Subtle Leaf Decorative Background Graphic */}
+        <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none translate-x-12 translate-y-12">
+          <svg
+            className="w-96 h-96 fill-current text-white"
+            viewBox="0 0 24 24"
+          >
+            <path d="M17.8 2.8C11.4 3.1 6.3 8.3 6 14.7c-.2 4.1 1.7 7.8 4.7 9.8 1.1.7 2.4-1 1.7-2.1-1.8-2.7-1.4-6.4 1.1-8.9 2.7-2.7 7.1-2.7 9.8 0 1.1 1.1 2.8-.2 2.1-1.3-1.9-3.3-4.7-6-7.6-9.4z" />
+          </svg>
+        </div>
+
+        <div className="max-w-2xl flex flex-col items-start gap-5 relative z-10">
+          {/* Main Hero Header (Dedicated Desktop Wording) */}
+          <h2 className="text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+            {t.desktopHeroHeadline}
+          </h2>
+
+          <p className="text-sm lg:text-base text-emerald-100 font-medium leading-relaxed max-w-xl">
+            {t.desktopHeroSubtitle}
+          </p>
+
+          {/* Desktop Upload Photo Button */}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onFileChange}
+            id="desktop-photo-picker"
+            className="hidden"
+          />
+          <label
+            htmlFor="desktop-photo-picker"
+            className="cursor-pointer px-8 py-3.5 bg-white text-[#277839] hover:bg-[#eef8eb] font-extrabold rounded-2xl transition-all shadow-md flex items-center gap-2.5 text-base mt-2 active:scale-98"
+          >
+            <Icon name="upload" size={20} strokeWidth={2.5} />
+            <span>{t.browseFilesBtn}</span>
+          </label>
+        </div>
+      </div>
+
+      {/* MOBILE VERSION (2 Cards: Take Photo & Upload Photo) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+        {/* Mobile Card 1: Take Photo */}
+        <div className="bg-[#277839] text-white p-6 rounded-3xl shadow-md flex flex-col items-center justify-center text-center gap-4">
+          <div className="h-16 w-16 rounded-full bg-[#a6f2b1] flex items-center justify-center text-[#1b5e28] shadow-sm">
+            <Icon name="camera" size={32} fill="#1b5e28" />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <h3 className="text-xl font-bold tracking-tight">
+              {t.takePhotoBtn}
+            </h3>
+            <p className="text-xs text-emerald-100 font-medium leading-tight max-w-[220px]">
+              {t.takePhotoSubtext}
+            </p>
+          </div>
+
           <input
             type="file"
             accept="image/*"
             capture="environment"
             onChange={onFileChange}
-            id="camera-picker"
+            id="mobile-camera-picker"
             className="hidden"
           />
           <label
-            htmlFor="camera-picker"
-            className="cursor-pointer bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-bold py-3 px-4 rounded-xl shadow-md text-center flex flex-col items-center justify-center gap-1.5 hover:scale-103 active:scale-98 transition-transform text-xs"
+            htmlFor="mobile-camera-picker"
+            className="cursor-pointer w-full py-3 bg-white text-[#277839] font-bold rounded-xl shadow-xs text-center text-xs flex items-center justify-center active:scale-98 transition-transform mt-1"
           >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            Take Photo
+            <span>{t.snapCameraBtn}</span>
           </label>
+        </div>
 
-          {/* 2. Photo Gallery upload picker */}
+        {/* Mobile Card 2: Upload Photo (Uses original gallery icon, text-only button) */}
+        <div className="bg-[#f59e2b] text-[#2c1806] p-6 rounded-3xl shadow-md flex flex-col items-center justify-center text-center gap-4">
+          <div className="h-16 w-16 rounded-full bg-[#3d2008] flex items-center justify-center text-white shadow-sm">
+            <Icon name="gallery" size={30} strokeWidth={2.5} />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <h3 className="text-xl font-bold tracking-tight text-[#2c1806]">
+              {t.uploadPhotoBtn}
+            </h3>
+            <p className="text-xs text-[#523012] font-medium leading-tight max-w-[220px]">
+              {t.uploadPhotoSubtext}
+            </p>
+          </div>
+
           <input
             type="file"
             accept="image/*"
             onChange={onFileChange}
-            id="gallery-picker"
+            id="mobile-gallery-picker"
             className="hidden"
           />
           <label
-            htmlFor="gallery-picker"
-            className="cursor-pointer bg-slate-900 border border-slate-800 hover:bg-slate-850 hover:border-slate-700 text-slate-200 font-bold py-3 px-4 rounded-xl shadow-md text-center flex flex-col items-center justify-center gap-1.5 hover:scale-103 active:scale-98 transition-transform text-xs"
+            htmlFor="mobile-gallery-picker"
+            className="cursor-pointer w-full py-3 bg-[#3d2008] text-white font-bold rounded-xl shadow-xs text-center text-xs flex items-center justify-center active:scale-98 transition-transform"
           >
-            <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            Choose Gallery
+            <span>{t.openGalleryBtn}</span>
           </label>
         </div>
+      </div>
 
-        {/* Photo Preview & AI Trigger */}
-        {previewUrl && (
-          <div className="mt-2 border border-slate-850 bg-slate-950 p-4 rounded-2xl flex flex-col gap-4 items-center">
-            <div className="relative w-full aspect-square overflow-hidden rounded-xl border border-slate-900">
-              {/* Render standard square thumbnail preview of the captured photo */}
+      {/* Floating Active Photo Preview & AI Scanning Overlay Modal */}
+      {previewUrl && (
+        <div className="fixed inset-0 z-50 bg-black/60 md:backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-[#e2ebd9] rounded-3xl p-6 max-w-sm w-full flex flex-col items-center gap-5 shadow-2xl text-center">
+            <h3 className="text-lg font-bold text-[#143519]">
+              {isScanning ? t.runningAI : t.takePhotoBtn}
+            </h3>
+
+            {/* Photo Thumbnail */}
+            <div className="relative w-48 h-48 rounded-2xl overflow-hidden border-2 border-[#277839] shadow-md">
               <img
                 src={previewUrl}
-                alt="Captured Preview"
-                className={`object-cover w-full h-full transition-transform duration-300 ${isScanning ? "brightness-50 scale-105" : ""}`}
+                alt="Preview"
+                className="w-full h-full object-cover"
               />
-              <div className="absolute inset-4 border-2 border-dashed border-teal-500/40 rounded-lg pointer-events-none" />
-              
-              {/* Scanning overlay on top of the image */}
               {isScanning && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-slate-950/60 backdrop-blur-sm">
-                  <div className="relative">
-                    <div className="h-12 w-12 rounded-full border-4 border-slate-700 border-t-teal-400 animate-spin" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-sm">🔬</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center gap-1.5">
-                    <span className="text-xs font-bold text-teal-400 animate-pulse">
-                      {scanningProgress < 30
-                        ? "Loading image..."
-                        : scanningProgress < 60
-                        ? "Running AI classification..."
-                        : scanningProgress < 90
-                        ? "Saving diagnosis..."
-                        : "Finishing up..."}
-                    </span>
-                    <div className="w-32 bg-slate-800 h-1 rounded-full overflow-hidden">
-                      <div
-                        className="bg-teal-400 h-full rounded-full transition-colors duration-500 ease-out"
-                        style={{ width: `${scanningProgress}%` }}
-                      />
-                    </div>
-                  </div>
+                <div className="absolute inset-0 bg-[#277839]/30 backdrop-blur-xs flex items-center justify-center">
+                  <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin" />
                 </div>
               )}
             </div>
 
-            {!isScanning ? (
-              <button
-                onClick={onRunDiagnosis}
-                className="w-full py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-slate-950 font-bold rounded-xl shadow-md transition-colors text-xs cursor-pointer"
-              >
-                🔬 Run AI Diagnosis
-              </button>
+            {/* Scanning Progress Bar */}
+            {isScanning ? (
+              <div className="w-full flex flex-col gap-2">
+                <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                  <div
+                    className="bg-[#277839] h-full transition-all duration-300 rounded-full"
+                    style={{ width: `${scanningProgress}%` }}
+                  />
+                </div>
+                <span className="text-xs font-semibold text-[#526856]">
+                  {t.runningAI} ({scanningProgress}%)
+                </span>
+              </div>
             ) : (
-              <div className="w-full py-2.5 bg-slate-900 border border-slate-800 text-teal-400 font-bold rounded-xl text-center text-xs animate-pulse">
-                Analyzing leaf tissue...
+              /* Action Buttons Container (Responsive stacking on mobile, no text squishing!) */
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full pt-1">
+                <button
+                  onClick={onRunDiagnosis}
+                  className="w-full py-3 bg-[#277839] text-white hover:bg-[#1f622d] font-extrabold rounded-xl text-xs transition-colors shadow-md cursor-pointer order-1 sm:order-2"
+                >
+                  {t.runDiagnosisBtn}
+                </button>
+                <button
+                  onClick={onCancelPreview}
+                  className="w-full py-2.5 bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold rounded-xl text-xs transition-colors cursor-pointer order-2 sm:order-1"
+                >
+                  {t.cancelBtn}
+                </button>
               </div>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 });

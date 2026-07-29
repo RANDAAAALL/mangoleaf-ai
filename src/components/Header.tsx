@@ -1,80 +1,249 @@
+import React, { useState, useEffect, memo } from "react";
+import { translations, type Language } from "@/lib/translations";
+import { Logo } from "@/components/Logo";
+import { Icon } from "@/components/Icon";
+
 interface HeaderProps {
-  isOnline: boolean;
-  isSyncing: boolean;
   showInstallButton: boolean;
+  language: Language;
+  activeTab?: "home" | "history" | "about";
+  onTabChange?: (tab: "home" | "history" | "about") => void;
+  onLanguageChange: (lang: Language) => void;
   onInstall: () => void;
-  onSync: () => void;
 }
 
-export function Header({
-  isOnline,
-  isSyncing,
+export const Header = memo(function Header({
   showInstallButton,
+  language,
+  activeTab = "home",
+  onTabChange,
+  onLanguageChange,
   onInstall,
-  onSync,
 }: HeaderProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const t = translations[language];
+
+  // Lock background body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [isMobileMenuOpen]);
+
+  const toggleLanguage = () => {
+    onLanguageChange(language === "en" ? "bis" : "en");
+  };
+
+  const handleNavClick = (tab: "home" | "history" | "about") => {
+    onTabChange?.(tab);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <div className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-emerald-400 via-teal-400 to-sky-400 bg-clip-text text-transparent">
+    <header
+      className={`sticky top-0 z-50 border-b border-[#e1ebd7] transition-colors ${
+        isMobileMenuOpen ? "bg-[#f6faf1]" : "bg-[#f6faf1]/95 backdrop-blur-md"
+      }`}
+    >
+      {/* Top Header Bar: Logo + Brand + Close Button (Always crisp 100% opacity, z-50) */}
+      <div className="relative z-50 max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4 bg-[#f6faf1]">
+        {/* Brand Logo */}
+        <div
+          onClick={() => handleNavClick("home")}
+          className="flex items-center gap-2.5 cursor-pointer"
+        >
+          <Logo width={24} height={24} />
+          <span className="text-xl font-bold tracking-tight text-[#173a1d] font-sans">
             MangoLeaf AI
           </span>
-          <span className="text-[10px] uppercase font-extrabold tracking-widest px-2.5 py-0.5 bg-slate-900 rounded-full border border-slate-800 text-slate-500">
-            Offline-First PWA
-          </span>
         </div>
 
-        <div className="flex items-center gap-4">
-          {showInstallButton && (
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-6">
+          <nav className="flex items-center gap-8 text-sm font-semibold text-[#3b523f]">
             <button
-              onClick={onInstall}
-              className="text-xs px-3.5 py-1.5 bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 font-extrabold rounded-full hover:scale-105 active:scale-98 transition-all shadow-md shadow-emerald-500/10 cursor-pointer"
-            >
-              📥 Install App
-            </button>
-          )}
-
-          {isSyncing ? (
-            <div className="flex items-center gap-2 text-xs text-teal-400 bg-teal-950/20 border border-teal-900/40 px-3.5 py-1 rounded-full font-semibold">
-              <svg className="animate-spin h-5 w-5 text-teal-400" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-              </svg>
-              Syncing Database...
-            </div>
-          ) : (
-            <button
-              onClick={onSync}
-              disabled={!isOnline}
-              className={`text-xs px-3.5 py-1 rounded-full border flex items-center gap-1.5 font-semibold transition-all cursor-pointer ${
-                isOnline
-                  ? "bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800 hover:border-slate-750"
-                  : "bg-slate-950/40 border-slate-950 text-slate-600 cursor-not-allowed"
+              onClick={() => handleNavClick("home")}
+              className={`hover:text-[#277839] transition-colors cursor-pointer ${
+                activeTab === "home" ? "text-[#277839] font-bold" : ""
               }`}
             >
-              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89H18.24" />
-              </svg>
-              Sync
+              {t.navHome}
             </button>
-          )}
+            <button
+              onClick={() => handleNavClick("about")}
+              className={`hover:text-[#277839] transition-colors cursor-pointer ${
+                activeTab === "about" ? "text-[#277839] font-bold" : ""
+              }`}
+            >
+              {t.navAbout}
+            </button>
+            <button
+              onClick={() => handleNavClick("history")}
+              className={`hover:text-[#277839] transition-colors cursor-pointer ${
+                activeTab === "history" ? "text-[#277839] font-bold" : ""
+              }`}
+            >
+              {t.navHistory}
+            </button>
+          </nav>
 
-          <div
-            className={`flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold tracking-wide border shadow-sm transition-all duration-300 ${
-              isOnline
-                ? "bg-emerald-950/30 border-emerald-900/50 text-emerald-400"
-                : "bg-amber-950/30 border-amber-900/50 text-amber-400"
-            }`}
-          >
-            <span className="relative flex h-2 w-2">
-              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isOnline ? "bg-emerald-400" : "bg-amber-400"}`}></span>
-              <span className={`relative inline-flex rounded-full h-2 w-2 ${isOnline ? "bg-emerald-500" : "bg-amber-500"}`}></span>
-            </span>
-            {isOnline ? "ONLINE" : "OFFLINE"}
+          <div className="flex items-center gap-3">
+            {showInstallButton && (
+              <button
+                onClick={onInstall}
+                className="text-xs px-3.5 py-2 bg-[#277839] text-white font-bold rounded-xl hover:bg-[#1f622d] transition-colors shadow-sm cursor-pointer flex items-center gap-1.5"
+              >
+                <Icon name="install" size={16} fill="#ffffff" />
+
+                {t.installApp}
+              </button>
+            )}
+
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-white border border-[#1b3d20] rounded-xl text-xs font-bold text-[#1b3d20] hover:bg-[#f0f7eb] transition-all cursor-pointer shadow-xs"
+            >
+              <Icon name="language" size={16} fill="#1b3d20" />
+
+              <span>{language === "en" ? "EN/BIS" : "BIS/EN"}</span>
+            </button>
           </div>
         </div>
+
+        {/* Mobile Hamburger / Close Button */}
+        <div className="flex items-center md:hidden">
+          <button
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            aria-label="Toggle Navigation Menu"
+            className="p-2 bg-white border border-[#d2e2c4] rounded-xl text-[#173a1d] hover:bg-[#f0f7eb] transition-colors cursor-pointer shadow-xs"
+          >
+            {isMobileMenuOpen ? (
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
-    </div>
+
+      {/* Floating Mobile Drawer & Backdrop */}
+      {isMobileMenuOpen && (
+        <>
+          {/* Backdrop overlay starting BELOW header (z-30) */}
+          <div
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="fixed inset-0 top-[60px] bg-black/40 backdrop-blur-xs z-30 md:hidden"
+          />
+
+          {/* Drawer Box attached directly below top bar (top-full, z-40) */}
+          <div className="absolute top-full left-0 right-0 bg-[#f6faf1] border-b border-[#cce0be] px-6 py-6 flex flex-col gap-4 shadow-2xl rounded-b-3xl z-40 md:hidden animate-in slide-in-from-top duration-200">
+            <nav className="flex flex-col gap-2.5 font-semibold text-sm">
+              <button
+                onClick={() => handleNavClick("home")}
+                className={`text-left py-3 px-4 rounded-2xl transition-colors cursor-pointer flex items-center gap-3 ${
+                  activeTab === "home"
+                    ? "bg-[#277839] text-white font-bold shadow-sm"
+                    : "bg-white border border-[#d2e2c4] text-[#173a1d] hover:bg-[#eef8eb]"
+                }`}
+              >
+                <Icon
+                  name="home"
+                  size={18}
+                  fill={activeTab === "home" ? "#ffffff" : "#277839"}
+                />
+                <span>{t.navHome}</span>
+              </button>
+
+              <button
+                onClick={() => handleNavClick("about")}
+                className={`text-left py-3 px-4 rounded-2xl transition-colors cursor-pointer flex items-center gap-3 ${
+                  activeTab === "about"
+                    ? "bg-[#277839] text-white font-bold shadow-sm"
+                    : "bg-white border border-[#d2e2c4] text-[#173a1d] hover:bg-[#eef8eb]"
+                }`}
+              >
+                <Icon
+                  name="about"
+                  size={18}
+                  fill={activeTab === "about" ? "#ffffff" : "#277839"}
+                />
+                <span>{t.navAbout}</span>
+              </button>
+
+              <button
+                onClick={() => handleNavClick("history")}
+                className={`text-left py-3 px-4 rounded-2xl transition-colors cursor-pointer flex items-center gap-3 ${
+                  activeTab === "history"
+                    ? "bg-[#277839] text-white font-bold shadow-sm"
+                    : "bg-white border border-[#d2e2c4] text-[#173a1d] hover:bg-[#eef8eb]"
+                }`}
+              >
+                <Icon
+                  name="history"
+                  size={18}
+                  fill={activeTab === "history" ? "#ffffff" : "#277839"}
+                />
+                <span>{t.navHistory}</span>
+              </button>
+            </nav>
+
+            <div className="pt-3 border-t border-[#d2e2c4] flex flex-col gap-2.5">
+              {showInstallButton && (
+                <button
+                  onClick={() => {
+                    onInstall();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full py-3 bg-[#277839] text-white font-bold rounded-2xl text-xs flex items-center justify-center gap-2 shadow-sm"
+                >
+                  <Icon name="install" size={16} fill="#ffffff" />
+                  <span>{t.installApp}</span>
+                </button>
+              )}
+
+              <button
+                onClick={toggleLanguage}
+                className="w-full py-3 bg-white border border-[#1b3d20] text-[#173a1d] font-bold rounded-2xl text-xs flex items-center justify-center gap-2 shadow-xs"
+              >
+                <Icon name="language" size={16} fill="#1b3d20" />
+                <span>
+                  Language:{" "}
+                  {language === "en" ? "English (EN)" : "Bisaya (BIS)"}
+                </span>
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+    </header>
   );
-}
+});

@@ -1,100 +1,143 @@
-import { memo } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
+import { translations, type Language } from "@/lib/translations";
 
 interface ScanCardProps {
   scan: ScanRecord;
-  imageUrl: string | null;
+  imageBlob: Blob | null;
+  imageUrlFallback: string | null;
   guidelineColor: DiseaseGuideline["color"];
+  language: Language;
   onSelect: (scan: ScanRecord) => void;
   onDelete: (id: string) => void;
 }
 
-  const cardBorderColors = {
-    yellow: "border-amber-800/40 hover:border-amber-700/60 bg-amber-950/5",
-    pink: "border-rose-800/40 hover:border-rose-700/60 bg-rose-950/5",
-    blue: "border-sky-800/40 hover:border-sky-700/60 bg-sky-950/5",
-    green: "border-emerald-800/40 hover:border-emerald-700/60 bg-emerald-950/5",
-    purple: "border-purple-800/40 hover:border-purple-700/60 bg-purple-950/5",
-  };
+// Badge color mapping matching Figma design
+const getBadgeStyles = (diseaseName: string) => {
+  const name = diseaseName.toLowerCase();
+  if (name.includes("healthy")) {
+    return "bg-[#dcfce7] text-[#15803d] border-[#bbf7d0]";
+  }
+  if (name.includes("anthracnose") || name.includes("canker") || name.includes("black")) {
+    return "bg-[#ffe4e6] text-[#be123c] border-[#fecdd3]";
+  }
+  if (name.includes("sooty")) {
+    return "bg-[#fce7f3] text-[#9d174d] border-[#fbcfe8]";
+  }
+  if (name.includes("scab")) {
+    return "bg-[#ffedd5] text-[#c2410c] border-[#fed7aa]";
+  }
+  return "bg-slate-100 text-slate-700 border-slate-200";
+};
+
+// Formats timestamp into human readable relative time
+function formatTimeAgo(isoString: string, language: Language): string {
+  const t = translations[language];
+  try {
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffMins < 1) return t.justNow;
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours} ${diffHours === 1 ? "hour" : "hours"} ago`;
+    if (diffDays === 1) return t.yesterday;
+    if (diffDays < 7) return `${diffDays} days ago`;
+
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  } catch {
+    return t.justNow;
+  }
+}
 
 export const ScanCard = memo(function ScanCard({
   scan,
-  imageUrl,
-  guidelineColor,
+  imageBlob,
+  imageUrlFallback,
+  language,
   onSelect,
   onDelete,
 }: ScanCardProps) {
-  const isHealthy = scan.disease_name === "Healthy";
-  const isUncertain = scan.confidence < 0.70;
+  const t = translations[language];
+  const badgeClass = getBadgeStyles(scan.disease_name);
+  const timeAgoText = formatTimeAgo(scan.updated_at, language);
+  const isFruit = scan.disease_name.toLowerCase().includes("scab") || scan.disease_name.toLowerCase().includes("black");
+  const scanTypeLabel = isFruit ? t.fruitScanLabel : t.leafScanLabel;
+
+  const [localBlobUrl, setLocalBlobUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (imageBlob && imageBlob.size > 0) {
+      const url = URL.createObjectURL(imageBlob);
+      setLocalBlobUrl(url);
+      return () => URL.revokeObjectURL(url);
+    }
+    setLocalBlobUrl(null);
+  }, [imageBlob]);
+
+  const displayUrl = localBlobUrl || imageUrlFallback;
 
   return (
-    <div
-      onClick={() => onSelect(scan)}
-      className={`p-4 rounded-xl border bg-slate-900/95 cursor-pointer flex gap-4 transition-colors duration-300 ${
-        cardBorderColors[guidelineColor]
-      }`}
-    >
-      {/* Image Thumbnail */}
-      <div className="h-20 w-20 rounded-lg overflow-hidden border border-slate-900 flex-shrink-0 relative">
-        {imageUrl ? (
+    <div className="bg-white border border-[#e2ebd9] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col group">
+      {/* Top Image Box with Badge */}
+      <div className="relative aspect-[4/3] bg-[#f0f5eb] overflow-hidden">
+        {displayUrl ? (
           <img
-            src={imageUrl}
+            src={displayUrl}
             alt={scan.disease_name}
-            className="object-cover w-full h-full"
             loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
           />
         ) : (
-          <div className="h-full w-full bg-slate-950 flex items-center justify-center text-[10px] text-slate-650 font-bold">
-            Missing
+          <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center text-[#738a77] text-xs font-semibold bg-[#eef5e9]">
+            <svg className="h-8 w-8 mb-1 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span>{t.noImageOffline}</span>
           </div>
         )}
+
+        {/* Floating Disease Badge */}
+        <div className="absolute top-3 right-3">
+          <span className={`text-[10px] uppercase font-extrabold px-2.5 py-1 rounded-full border shadow-xs ${badgeClass}`}>
+            {scan.disease_name}
+          </span>
+        </div>
       </div>
 
-      {/* Diagnostic details */}
-      <div className="flex flex-col justify-between flex-1 min-w-0">
-        <div className="flex flex-col gap-0.5">
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-sm font-extrabold tracking-tight truncate text-slate-100">
-              {scan.disease_name}
+      {/* Card Info Content */}
+      <div className="p-5 flex flex-col gap-3 flex-1 justify-between">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex flex-col gap-0.5">
+            <h4 className="text-base font-bold text-[#143519]">
+              {scanTypeLabel}
+            </h4>
+            <span className="text-xs text-[#627a66] font-medium">
+              {timeAgoText}
             </span>
-
-            {/* Sync Status Badge */}
-            {scan._status === "synced" ? (
-              <span className="text-[7.5px] font-bold px-1.5 py-0.5 bg-emerald-950/40 border border-emerald-900/40 text-emerald-400 rounded">
-                Cloud
-              </span>
-            ) : (
-              <span className="text-[7.5px] font-bold px-1.5 py-0.5 bg-teal-950/40 border border-teal-900/40 text-teal-400 rounded animate-pulse">
-                Local
-              </span>
-            )}
           </div>
 
-          {/* Confidence level badge */}
-          <span
-            className={`text-[10px] font-bold ${
-              isUncertain ? "text-rose-400" : isHealthy ? "text-emerald-400" : "text-amber-400"
-            }`}
-          >
-            Confidence: {Math.round(scan.confidence * 100)}%
-          </span>
-        </div>
-
-        {/* Date and Delete actions */}
-        <div className="flex items-center justify-between text-[10px] border-t border-slate-900 pt-2 mt-1">
-          <span className="text-slate-500 font-mono">
-            {new Date(scan.updated_at).toLocaleDateString()}
-          </span>
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(scan.id);
-            }}
-            className="text-rose-500 hover:text-rose-400 font-bold cursor-pointer"
+            onClick={() => onDelete(scan.id)}
+            title="Delete scan log"
+            className="text-slate-300 hover:text-rose-600 transition-colors p-1"
           >
-            Delete
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
           </button>
         </div>
+
+        {/* Details Button */}
+        <button
+          onClick={() => onSelect(scan)}
+          className="w-full py-2 bg-white border border-[#277839] hover:bg-[#277839] hover:text-white text-[#277839] font-bold rounded-xl text-xs transition-colors shadow-xs cursor-pointer text-center mt-1"
+        >
+          {t.detailsBtn}
+        </button>
       </div>
     </div>
   );

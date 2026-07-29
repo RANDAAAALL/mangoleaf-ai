@@ -1,26 +1,25 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db, type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { useSync } from "@/hooks/useSync";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
 import type * as tf from "@tensorflow/tfjs";
 import { FALLBACK_GUIDELINES } from "@/lib/constants";
-import { loadMangoModel, predictMangoDisease, compressImageForStorage, computeImageHash } from "@/lib/classifier";
+import { translations, type Language } from "@/lib/translations";
 
-// Modular UI Components
+// Modular UI Components matching Figma Design System
 import { SplashScreen } from "@/components/SplashScreen";
 import { Header } from "@/components/Header";
-import { DeviceProfileCard } from "@/components/DeviceProfileCard";
 import { DiagnosticScanner } from "@/components/DiagnosticScanner";
+import { InfoCalloutCard } from "@/components/InfoCalloutCard";
+import { LegalModal } from "@/components/LegalModal";
 import { ScanHistoryList } from "@/components/ScanHistoryList";
+import { Footer } from "@/components/Footer";
 import dynamic from 'next/dynamic';
 const ScanDetailsModal = dynamic(() => import('@/components/ScanDetailsModal').then(mod => ({ default: mod.ScanDetailsModal })));
-const SqlSchemaCard = dynamic(() => import('@/components/SqlSchemaCard').then(mod => ({ default: mod.SqlSchemaCard })));
 
-// Module-level flag: persists across React remounts, network reconnections,
-// and useSync state updates. Ensures splash screen shows only ONCE per session.
 let hasInitialized = false;
 
 export default function Home() {
@@ -35,17 +34,20 @@ export default function Home() {
 
   const { showInstallButton, installApp } = usePWAInstall();
 
+  // Navigation tab state ("home" | "history" | "about")
+  const [activeTab, setActiveTab] = useState<"home" | "history" | "about">("home");
+
   // TensorFlow.js model states
   const [model, setModel] = useState<tf.GraphModel | null>(null);
   const [isModelLoading, setIsModelLoading] = useState<boolean>(!hasInitialized);
 
   // Load MobileNetV3 model on startup
   useEffect(() => {
-    // Skip re-loading if model was already initialized in a previous mount
     if (hasInitialized) return;
 
     async function initModel() {
       try {
+        const { loadMangoModel } = await import("@/lib/classifier");
         const loadedModel = await loadMangoModel();
         setModel(loadedModel);
         hasInitialized = true;
@@ -58,50 +60,66 @@ export default function Home() {
     initModel();
   }, []);
 
-  // Active scan state
+  // Active scan & modal state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  // Refs to stabilize runDiagnosis callback (#7 — avoid re-creating on every state change)
+  const selectedFileRef = useRef(selectedFile);
+  const previewUrlRef = useRef(previewUrl);
+  useEffect(() => {
+    selectedFileRef.current = selectedFile;
+    previewUrlRef.current = previewUrl;
+  }, [selectedFile, previewUrl]);
   const [isScanning, setIsScanning] = useState(false);
   const [scanningProgress, setScanningProgress] = useState(0);
+  const [legalModalType, setLegalModalType] = useState<"privacy" | "terms" | null>(null);
 
-  // History detail modal state
+  // Global language state initialized from actual localStorage ("bis" default)
   const [selectedScan, setSelectedScan] = useState<ScanRecord | null>(null);
-  const [modalLanguage, setModalLanguage] = useState<"en" | "bis">("bis");
+  const [language, setLanguageState] = useState<Language>(() => {
+    if (typeof window === "undefined") return "bis";
+    const saved = localStorage.getItem("preferred_language");
+    return saved === "en" || saved === "bis" ? saved : "bis";
+  });
 
-  // Query local active scans (exclude pending-delete)
-  const scans = useLiveQuery(() =>
+  // Persistent language change handler
+  const setLanguage = useCallback((newLang: Language) => {
+    setLanguageState(newLang);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("preferred_language", newLang);
+    }
+  }, []);
+
+  const t = translations[language];
+
+  // Query local active scans
+  const scansQuery = useLiveQuery(() =>
     db.scans
       .where("_status").notEqual("pending-delete")
       .sortBy("updated_at")
-  );
-  
-  const activeScans = useMemo(() => (scans ? [...scans].reverse() : []), [scans]);
+      .then(results => results.reverse())
+  , []);
+  const activeScans = useMemo(() => scansQuery ?? [], [scansQuery]);
 
-  const activeScanIds = activeScans.map((s) => s.id).join(",");
-
-  const blobUrlMap = useMemo(() => {
-    const map: Record<string, string> = {};
-    for (const scan of activeScans) {
-      if (scan.image_blob && scan.image_blob.size > 0) {
-        map[scan.id] = URL.createObjectURL(scan.image_blob);
-      }
+  const selectedScanImageUrl = useMemo(() => {
+    if (selectedScan?.image_blob && selectedScan.image_blob.size > 0) {
+      return URL.createObjectURL(selectedScan.image_blob);
     }
-    return map;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeScanIds]);
+    return selectedScan?.image_url || null;
+  }, [selectedScan]);
 
-  // Revoke old Blob URLs when blobUrlMap changes or component unmounts
   useEffect(() => {
-    const urls = Object.values(blobUrlMap);
     return () => {
-      urls.forEach(url => URL.revokeObjectURL(url));
+      if (selectedScanImageUrl && selectedScanImageUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(selectedScanImageUrl);
+      }
     };
-  }, [blobUrlMap]);
+  }, [selectedScanImageUrl]);
 
   // Query cached guidelines
   const cachedGuidelines = useLiveQuery(() => db.guidelines.toArray(), []);
 
-  // Stable guideline lookup map for useCallback dependency
   const guidelineMap = useMemo(() => {
     const map: Record<string, DiseaseGuideline> = {};
     for (const g of (cachedGuidelines || [])) {
@@ -110,17 +128,20 @@ export default function Home() {
     return map;
   }, [cachedGuidelines]);
 
-  // Lock body scroll when modal is open
+  // Lock body & html scroll when scan details modal or legal modal is open
   useEffect(() => {
-    if (selectedScan) {
-      document.body.classList.add("overflow-hidden");
+    if (selectedScan || legalModalType) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
-      document.body.classList.remove("overflow-hidden");
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
     return () => {
-      document.body.classList.remove("overflow-hidden");
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
-  }, [selectedScan]);
+  }, [selectedScan, legalModalType]);
 
   // Handle photo capture / selection
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,23 +152,34 @@ export default function Home() {
     setPreviewUrl(URL.createObjectURL(file));
   }, [previewUrl]);
 
-  // Run AI diagnosis
+  // Cancel preview selection
+  const handleCancelPreview = useCallback(() => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setSelectedFile(null);
+    setPreviewUrl(null);
+  }, [previewUrl]);
+
+  // Run AI diagnosis (uses refs for selectedFile/previewUrl to keep dependency list stable)
   const runDiagnosis = useCallback(async () => {
-    if (!selectedFile || !model) return;
+    const file = selectedFileRef.current;
+    const preview = previewUrlRef.current;
+    if (!file || !model) return;
 
     setIsScanning(true);
     setScanningProgress(15);
 
     try {
-      // 1. Compute SHA-256 binary hash to check for duplicate gallery photos
-      const imageHash = await computeImageHash(selectedFile);
+      const { predictMangoDisease, compressImageForStorage, computeImageHash } = await import("@/lib/classifier");
+
+      // 1. Compute SHA-256 hash to check for duplicate gallery photos
+      const imageHash = await computeImageHash(file);
 
       // 2. Search local database for existing duplicate scan
       const existingScan = await db.scans.where("image_hash").equals(imageHash).first();
       if (existingScan) {
         console.log("⚡ Duplicate photo detected — opening existing scan report.");
         setSelectedScan(existingScan);
-        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        if (preview) URL.revokeObjectURL(preview);
         setSelectedFile(null);
         setPreviewUrl(null);
         setIsScanning(false);
@@ -156,7 +188,7 @@ export default function Home() {
       }
 
       const img = new Image();
-      img.src = URL.createObjectURL(selectedFile);
+      img.src = URL.createObjectURL(file);
       await new Promise((resolve, reject) => {
         img.onload = resolve;
         img.onerror = reject;
@@ -166,15 +198,15 @@ export default function Home() {
       const { diseaseName, confidence } = await predictMangoDisease(model, img);
       
       setScanningProgress(75);
-      // Compress photo to lightweight ~200KB JPEG before saving to IndexedDB & cloud storage
-      const storageBlob = await compressImageForStorage(img, 1000, 0.80);
+      // Compress photo using WebP format (75% quality, ~75KB) before saving
+      const storageBlob = await compressImageForStorage(img, 1000, 0.75);
 
       setScanningProgress(90);
       URL.revokeObjectURL(img.src);
 
       await createScan(diseaseName, confidence, storageBlob, imageHash);
 
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
       setSelectedFile(null);
       setPreviewUrl(null);
       setIsScanning(false);
@@ -189,7 +221,7 @@ export default function Home() {
       setIsScanning(false);
       setScanningProgress(0);
     }
-  }, [selectedFile, model, previewUrl, createScan]);
+  }, [model, createScan]);
 
   // Retrieve guideline for a disease
   const getGuidelineForScan = useCallback((diseaseName: string): { en: string; bis: string; color: DiseaseGuideline["color"] } => {
@@ -213,59 +245,132 @@ export default function Home() {
     );
   }, [guidelineMap]);
 
+  // Stabilized props for ScanHistoryList memo (#4)
+  const getGuidelineColor = useCallback(
+    (diseaseName: string) => getGuidelineForScan(diseaseName).color,
+    [getGuidelineForScan]
+  );
+  const handleViewAllHistory = useCallback(() => setActiveTab("history"), []);
+  const homeScans = useMemo(() => activeScans.slice(0, 4), [activeScans]);
+
   if (isModelLoading) {
     return <SplashScreen />;
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans pb-16">
-      {/* Header Navigation */}
-      <Header
-        isOnline={isOnline}
-        isSyncing={isSyncing}
-        showInstallButton={showInstallButton}
-        onInstall={installApp}
-        onSync={triggerSync}
-      />
+    <div className="min-h-screen bg-[#f6faf1] text-[#143519] font-sans flex flex-col justify-between">
+      <div>
+        {/* Figma Top Navigation Bar */}
+        <Header
+          showInstallButton={showInstallButton}
+          language={language}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          onLanguageChange={setLanguage}
+          onInstall={installApp}
+        />
 
-      {/* Main Grid Layout */}
-      <div className="max-w-7xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left Area: Camera & Guidelines Reference */}
-        <div className="lg:col-span-4 flex flex-col gap-6">
-          <DeviceProfileCard deviceId={deviceId} />
-          <DiagnosticScanner
-            previewUrl={previewUrl}
-            isScanning={isScanning}
-            scanningProgress={scanningProgress}
-            onFileChange={handleFileChange}
-            onRunDiagnosis={runDiagnosis}
-          />
-          <SqlSchemaCard />
-        </div>
+        {/* Main Content Area */}
+        <main className="max-w-7xl mx-auto px-6 py-8 flex flex-col gap-10">
+          {activeTab === "home" && (
+            <>
+              {/* Dual Scan Cards Section */}
+              <DiagnosticScanner
+                previewUrl={previewUrl}
+                isScanning={isScanning}
+                scanningProgress={scanningProgress}
+                language={language}
+                onFileChange={handleFileChange}
+                onRunDiagnosis={runDiagnosis}
+                onCancelPreview={handleCancelPreview}
+              />
 
-        {/* Right Area: Scan History */}
-        <div className="lg:col-span-8 flex flex-col gap-6">
-          <ScanHistoryList
-            scans={activeScans}
-            blobUrlMap={blobUrlMap}
-            getGuidelineColor={(diseaseName) => getGuidelineForScan(diseaseName).color}
-            onSelectScan={setSelectedScan}
-            onDeleteScan={deleteScan}
-          />
-        </div>
+              {/* Informational Tip Banner */}
+              <InfoCalloutCard language={language} />
+
+              {/* Recent Scans (Limited to 4 items on Home Screen) */}
+              <ScanHistoryList
+                scans={homeScans}
+                language={language}
+                getGuidelineColor={getGuidelineColor}
+                onSelectScan={setSelectedScan}
+                onDeleteScan={deleteScan}
+                onViewAllHistory={handleViewAllHistory}
+                isFullHistoryPage={false}
+              />
+            </>
+          )}
+
+          {activeTab === "history" && (
+            <ScanHistoryList
+              scans={activeScans}
+              language={language}
+              getGuidelineColor={getGuidelineColor}
+              onSelectScan={setSelectedScan}
+              onDeleteScan={deleteScan}
+              isFullHistoryPage={true}
+            />
+          )}
+
+          {activeTab === "about" && (
+            <div className="bg-white border border-[#e2ebd9] p-6 sm:p-8 rounded-3xl shadow-xs flex flex-col gap-6 max-w-4xl mx-auto">
+              <h2 className="text-2xl font-bold text-[#143519]">{t.aboutTitle}</h2>
+              <p
+                lang={language === "en" ? "en" : "ceb"}
+                className="text-sm text-[#3b523f] leading-relaxed text-justify [text-justify:inter-word] break-words hyphens-auto"
+              >
+                {t.aboutDesc}
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <div className="p-5 bg-[#f6faf1] rounded-2xl border border-[#e2ebd9] flex flex-col gap-2">
+                  <h4 className="font-bold text-[#143519] text-base">{t.aiEngineTitle}</h4>
+                  <p
+                    lang={language === "en" ? "en" : "ceb"}
+                    className="text-xs text-[#526856] leading-relaxed text-justify [text-justify:inter-word] break-words hyphens-auto"
+                  >
+                    {t.aiEngineDesc}
+                  </p>
+                </div>
+                <div className="p-5 bg-[#f6faf1] rounded-2xl border border-[#e2ebd9] flex flex-col gap-2">
+                  <h4 className="font-bold text-[#143519] text-base">{t.offlineSyncTitle}</h4>
+                  <p
+                    lang={language === "en" ? "en" : "ceb"}
+                    className="text-xs text-[#526856] leading-relaxed text-justify [text-justify:inter-word] break-words hyphens-auto"
+                  >
+                    {t.offlineSyncDesc}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </main>
       </div>
 
       {/* Selected Scan Details Modal */}
       {selectedScan && (
         <ScanDetailsModal
           scan={selectedScan}
-          imageUrl={blobUrlMap[selectedScan.id] || selectedScan.image_url}
-          language={modalLanguage}
+          imageUrl={selectedScanImageUrl}
+          language={language}
           guidelineText={getGuidelineForScan(selectedScan.disease_name)}
-          onLanguageChange={setModalLanguage}
+          onLanguageChange={setLanguage}
           onClose={() => setSelectedScan(null)}
         />
       )}
+
+      {/* Legal Privacy Policy & Terms of Service Modal */}
+      <LegalModal
+        type={legalModalType}
+        language={language}
+        onClose={() => setLegalModalType(null)}
+      />
+
+      {/* Footer */}
+      <Footer
+        language={language}
+        onOpenPrivacy={() => setLegalModalType("privacy")}
+        onOpenTerms={() => setLegalModalType("terms")}
+      />
     </div>
   );
 }
