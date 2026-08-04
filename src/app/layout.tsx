@@ -5,23 +5,40 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-  display: 'swap',
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-  display: 'swap',
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Off On Sync",
-  description: "A high-performance Progressive Web App built with Next.js, Bun, and Serwist.",
+  title: "MangoLeaf AI",
+  description:
+    "Offline-First Mango Leaf Disease Diagnostic PWA powered by TensorFlow.js and Supabase.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "OffOnSync",
+    title: "MangoLeaf AI",
+  },
+  icons: {
+    icon: [
+      { url: "/icons/svg/icon.svg", type: "image/svg+xml" },
+      {
+        url: "/icons/png/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "/icons/png/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
+    ],
+    apple: "/icons/png/apple-touch-icon.png",
   },
   formatDetection: {
     telephone: false,
@@ -33,7 +50,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#020617",  // Matches bg-slate-950 dark background
+  themeColor: "#277839",
 };
 
 export default function RootLayout({
@@ -48,8 +65,14 @@ export default function RootLayout({
     >
       <head>
         {/* Preconnect to Supabase: saves ~300ms DNS + TLS handshake on 3G networks */}
-        <link rel="preconnect" href="https://uuvvvoznajjqknedxpdg.supabase.co" />
-        <link rel="dns-prefetch" href="https://uuvvvoznajjqknedxpdg.supabase.co" />
+        <link
+          rel="preconnect"
+          href="https://uuvvvoznajjqknedxpdg.supabase.co"
+        />
+        <link
+          rel="dns-prefetch"
+          href="https://uuvvvoznajjqknedxpdg.supabase.co"
+        />
       </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
