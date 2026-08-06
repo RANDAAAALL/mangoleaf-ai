@@ -148,7 +148,7 @@ export const ScanHistoryList = memo(function ScanHistoryList({
 
       {/* Text-Only Empty State (when 0 scans exist on device) */}
       {!hasUserScans ? (
-        <div className="bg-white border border-dashed border-[#d2e2c4] p-6 sm:p-12 rounded-3xl text-center flex flex-col items-center justify-center gap-2 shadow-xs">
+        <div className="bg-[#eaf3e5] border border-[#d3e3ca] p-6 sm:p-12 rounded-3xl text-center flex flex-col items-center justify-center gap-2 shadow-xs">
           <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-[#f0f7eb] border border-[#d2e2c4] flex items-center justify-center text-[#277839] mb-1 shrink-0">
             <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -186,7 +186,7 @@ export const ScanHistoryList = memo(function ScanHistoryList({
             disabled={currentPage === 1}
             className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${
               currentPage === 1
-                ? "bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed"
+                ? "bg-[#eaf3e5] border border-[#d3e3ca] cursor-not-allowed"
                 : "bg-white border-[#d2e2c4] text-[#143519] hover:bg-[#f0f7eb] cursor-pointer"
             }`}
           >
@@ -224,7 +224,7 @@ export const ScanHistoryList = memo(function ScanHistoryList({
             disabled={currentPage === totalPages}
             className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${
               currentPage === totalPages
-                ? "bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed"
+                ? "bg-[#eaf3e5] border border-[#d3e3ca] text-slate-400 cursor-not-allowed"
                 : "bg-white border-[#d2e2c4] text-[#143519] hover:bg-[#f0f7eb] cursor-pointer"
             }`}
           >
