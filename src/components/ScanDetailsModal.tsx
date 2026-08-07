@@ -122,15 +122,89 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
                 </div>
               </div>
 
-              {/* Guidelines Text Block (Justified inter-word typography with hyphenation) */}
+              {/* Guidelines Text Block (Structured Section Cards) */}
               <div
                 lang={language === "en" ? "en" : "ceb"}
-                className="text-xs sm:text-sm text-[#1b3d20] leading-relaxed font-normal bg-[#f6faf1] p-4 sm:p-5 rounded-2xl border border-[#e2ebd9] whitespace-pre-line text-justify [text-justify:inter-word] break-words hyphens-auto max-h-[260px] overflow-y-auto shadow-inner"
+                className="flex flex-col gap-3 max-h-[320px] overflow-y-auto pr-1 text-left"
               >
-                {(language === "en" ? guidelineText.en : guidelineText.bis)
-                  .replace(/[ \t]+/g, " ")
-                  .replace(/\n[ \t]+/g, "\n")
-                  .trim()}
+                {(() => {
+                  const rawText = (language === "en" ? guidelineText.en : guidelineText.bis)
+                    .replace(/[ \t]+/g, " ")
+                    .replace(/\n[ \t]+/g, "\n")
+                    .trim();
+
+                  const paragraphs = rawText.split(/\n\n+/);
+
+                  return paragraphs.map((para, idx) => {
+                    const trimmed = para.trim();
+                    if (!trimmed) return null;
+
+                    // 1. Source Citation Footer
+                    if (trimmed.startsWith("(Source:") || trimmed.startsWith("(Tinubdan:")) {
+                      return (
+                        <div
+                          key={idx}
+                          className="mt-1 text-[11px] font-medium italic text-[#3f5e44] bg-[#eaf3e4] border border-[#d2e2c7] px-3.5 py-2 rounded-xl flex items-center gap-1.5"
+                        >
+                          <span className="not-italic text-xs">📖</span>
+                          <span>{trimmed.replace(/^\(|\)$/g, "")}</span>
+                        </div>
+                      );
+                    }
+
+                    // 2. Headed Sections (e.g. "Chemical Control:", "Kultural nga Pagdumala:")
+                    const colonIdx = trimmed.indexOf(":");
+                    if (colonIdx > 0 && colonIdx < 40) {
+                      const title = trimmed.slice(0, colonIdx).trim();
+                      const body = trimmed.slice(colonIdx + 1).trim();
+
+                      const lowerTitle = title.toLowerCase();
+
+                      let icon = "📋";
+                      let badgeBg = "bg-[#edf5e8] text-[#1e4823] border-[#d2e2c8]";
+
+                      if (lowerTitle.includes("chemical") || lowerTitle.includes("kemikal") || lowerTitle.includes("tambal")) {
+                        icon = "🧪";
+                        badgeBg = "bg-[#e5f4e3] text-[#1b5622] border-[#c0e4bc]";
+                      } else if (lowerTitle.includes("cultural") || lowerTitle.includes("kultural")) {
+                        icon = "🌿";
+                        badgeBg = "bg-[#f5f7e6] text-[#4d5917] border-[#e2e7c0]";
+                      } else if (lowerTitle.includes("insect") || lowerTitle.includes("insekto")) {
+                        icon = "🐛";
+                        badgeBg = "bg-[#f4edf9] text-[#552773] border-[#dec7ed]";
+                      } else if (lowerTitle.includes("post-harvest") || lowerTitle.includes("pagkahuman")) {
+                        icon = "📦";
+                        badgeBg = "bg-[#eaf4f8] text-[#1c4e63] border-[#c2e1ed]";
+                      }
+
+                      return (
+                        <div
+                          key={idx}
+                          className="bg-[#f7faf4] border border-[#e2ebd9] p-3.5 sm:p-4 rounded-2xl flex flex-col gap-1.5 shadow-2xs transition-all"
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs">{icon}</span>
+                            <span className={`text-[11px] font-extrabold uppercase tracking-wide px-2.5 py-0.5 rounded-md border ${badgeBg}`}>
+                              {title}
+                            </span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-[#1b3d20] leading-relaxed font-normal text-left pl-0.5">
+                            {body}
+                          </p>
+                        </div>
+                      );
+                    }
+
+                    // 3. Fallback Standard Paragraph
+                    return (
+                      <div key={idx} className="bg-[#f7faf4] border border-[#e2ebd9] p-3.5 sm:p-4 rounded-2xl">
+                        <p className="text-xs sm:text-sm text-[#1b3d20] leading-relaxed font-normal text-left">
+                          {trimmed}
+                        </p>
+                      </div>
+                    );
+                  });
+                })()}
               </div>
             </div>
           </div>
