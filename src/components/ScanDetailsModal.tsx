@@ -60,7 +60,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
           </div>
         </div>
 
-        {/* Right Column: Diagnostic Report & Pre-Treatment Guidelines */}
+        {/* Right Column: Diagnostic Report & Treatment Guidelines */}
         <div className="p-6 sm:p-8 flex flex-col justify-between overflow-y-auto min-h-0 gap-5 bg-white">
           <div className="flex flex-col gap-5">
             {/* Header: Title (Full Width) */}
@@ -93,7 +93,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
               {/* Guidelines Section Header & Language Toggle */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <span className="text-xs font-black text-[#143519] uppercase tracking-wider flex items-center gap-1.5">
-                  <span>📋</span>
+                 
                   <span>{t.preTreatmentGuidelines}</span>
                 </span>
 
@@ -122,86 +122,48 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
                 </div>
               </div>
 
-              {/* Guidelines Text Block (Structured Section Cards) */}
+              {/* Guidelines Text Block */}
               <div
                 lang={language === "en" ? "en" : "ceb"}
-                className="flex flex-col gap-3 max-h-[320px] overflow-y-auto pr-1 text-left"
+                className="bg-[#f7faf4] border border-[#e2ebd9] rounded-2xl p-4 sm:p-5 max-h-[320px] overflow-y-auto"
               >
                 {(() => {
                   const rawText = (language === "en" ? guidelineText.en : guidelineText.bis)
-                    .replace(/[ \t]+/g, " ")
-                    .replace(/\n[ \t]+/g, "\n")
+                    .replace(/\(Source:.*?\)/gi, "")
+                    .replace(/\(Tinubdan:.*?\)/gi, "")
                     .trim();
 
-                  const paragraphs = rawText.split(/\n\n+/);
+                  const paragraphs = rawText
+                    .split(/\n\s*\n+/)
+                    .map((p) => p.trim())
+                    .filter(Boolean);
 
                   return paragraphs.map((para, idx) => {
-                    const trimmed = para.trim();
-                    if (!trimmed) return null;
-
-                    // 1. Source Citation Footer
-                    if (trimmed.startsWith("(Source:") || trimmed.startsWith("(Tinubdan:")) {
-                      return (
-                        <div
-                          key={idx}
-                          className="mt-1 text-[11px] font-medium italic text-[#3f5e44] bg-[#eaf3e4] border border-[#d2e2c7] px-3.5 py-2 rounded-xl flex items-center gap-1.5"
-                        >
-                          <span className="not-italic text-xs">📖</span>
-                          <span>{trimmed.replace(/^\(|\)$/g, "")}</span>
-                        </div>
-                      );
-                    }
-
-                    // 2. Headed Sections (e.g. "Chemical Control:", "Kultural nga Pagdumala:")
-                    const colonIdx = trimmed.indexOf(":");
-                    if (colonIdx > 0 && colonIdx < 40) {
-                      const title = trimmed.slice(0, colonIdx).trim();
-                      const body = trimmed.slice(colonIdx + 1).trim();
-
-                      const lowerTitle = title.toLowerCase();
-
-                      let icon = "📋";
-                      let badgeBg = "bg-[#edf5e8] text-[#1e4823] border-[#d2e2c8]";
-
-                      if (lowerTitle.includes("chemical") || lowerTitle.includes("kemikal") || lowerTitle.includes("tambal")) {
-                        icon = "🧪";
-                        badgeBg = "bg-[#e5f4e3] text-[#1b5622] border-[#c0e4bc]";
-                      } else if (lowerTitle.includes("cultural") || lowerTitle.includes("kultural")) {
-                        icon = "🌿";
-                        badgeBg = "bg-[#f5f7e6] text-[#4d5917] border-[#e2e7c0]";
-                      } else if (lowerTitle.includes("insect") || lowerTitle.includes("insekto")) {
-                        icon = "🐛";
-                        badgeBg = "bg-[#f4edf9] text-[#552773] border-[#dec7ed]";
-                      } else if (lowerTitle.includes("post-harvest") || lowerTitle.includes("pagkahuman")) {
-                        icon = "📦";
-                        badgeBg = "bg-[#eaf4f8] text-[#1c4e63] border-[#c2e1ed]";
-                      }
+                    const colonIdx = para.indexOf(":");
+                    if (colonIdx > 0 && colonIdx < 55) {
+                      const headerPart = para.slice(0, colonIdx + 1);
+                      const bodyPart = para.slice(colonIdx + 1);
 
                       return (
-                        <div
+                        <p
                           key={idx}
-                          className="bg-[#f7faf4] border border-[#e2ebd9] p-3.5 sm:p-4 rounded-2xl flex flex-col gap-1.5 shadow-2xs transition-all"
+                          className={`text-xs sm:text-[13px] text-[#2d4a32] leading-relaxed text-justify ${idx > 0 ? "mt-3.5" : ""}`}
                         >
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-xs">{icon}</span>
-                            <span className={`text-[11px] font-extrabold uppercase tracking-wide px-2.5 py-0.5 rounded-md border ${badgeBg}`}>
-                              {title}
-                            </span>
-                          </div>
-                          <p className="text-xs sm:text-sm text-[#1b3d20] leading-relaxed font-normal text-left pl-0.5">
-                            {body}
-                          </p>
-                        </div>
-                      );
-                    }
-
-                    // 3. Fallback Standard Paragraph
-                    return (
-                      <div key={idx} className="bg-[#f7faf4] border border-[#e2ebd9] p-3.5 sm:p-4 rounded-2xl">
-                        <p className="text-xs sm:text-sm text-[#1b3d20] leading-relaxed font-normal text-left">
-                          {trimmed}
+                          <span className="font-extrabold text-[#113a17] tracking-tight">
+                            {headerPart}
+                          </span>
+                          {bodyPart}
                         </p>
-                      </div>
+                      );
+                    }
+
+                    return (
+                      <p
+                        key={idx}
+                        className={`text-xs sm:text-[13px] text-[#2d4a32] leading-relaxed text-justify ${idx > 0 ? "mt-3.5" : ""}`}
+                      >
+                        {para}
+                      </p>
                     );
                   });
                 })()}

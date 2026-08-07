@@ -2,6 +2,7 @@ import { useState, memo, useMemo } from "react";
 import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { ScanCard } from "./ScanCard";
 import { translations, type Language } from "@/lib/translations";
+import { Icon } from "./Icon";
 
 interface ScanHistoryListProps {
   scans: ScanRecord[];
@@ -16,7 +17,10 @@ interface ScanHistoryListProps {
 const ITEMS_PER_PAGE = 6;
 
 // Helper to generate truncated pagination range (e.g., [1, 2, 3, '...', 10])
-function getPaginationRange(current: number, total: number): (number | string)[] {
+function getPaginationRange(
+  current: number,
+  total: number,
+): (number | string)[] {
   if (total <= 7) {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
@@ -52,15 +56,22 @@ export const ScanHistoryList = memo(function ScanHistoryList({
   const filteredScans = useMemo(() => {
     if (!isFullHistoryPage) return scans;
     return scans.filter((scan) => {
-      const matchesSearch = scan.disease_name.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesFilter = filterCategory === "all" || scan.disease_name.toLowerCase().includes(filterCategory.toLowerCase());
+      const matchesSearch = scan.disease_name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesFilter =
+        filterCategory === "all" ||
+        scan.disease_name.toLowerCase().includes(filterCategory.toLowerCase());
       return matchesSearch && matchesFilter;
     });
   }, [scans, searchQuery, filterCategory, isFullHistoryPage]);
 
   // Pagination calculation
   const totalPages = Math.ceil(filteredScans.length / ITEMS_PER_PAGE) || 1;
-  const paginationRange = useMemo(() => getPaginationRange(currentPage, totalPages), [currentPage, totalPages]);
+  const paginationRange = useMemo(
+    () => getPaginationRange(currentPage, totalPages),
+    [currentPage, totalPages],
+  );
 
   const visibleScans = useMemo(() => {
     if (!isFullHistoryPage) {
@@ -106,8 +117,18 @@ export const ScanHistoryList = memo(function ScanHistoryList({
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
             {/* Search bar */}
             <div className="relative w-full sm:w-64">
-              <svg className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#738a77]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <svg
+                className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#738a77]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
               </svg>
               <input
                 type="text"
@@ -149,19 +170,19 @@ export const ScanHistoryList = memo(function ScanHistoryList({
       {/* Text-Only Empty State (when 0 scans exist on device) */}
       {!hasUserScans ? (
         <div className="bg-[#eaf3e5] border border-[#d3e3ca] p-6 sm:p-12 rounded-3xl text-center flex flex-col items-center justify-center gap-2 shadow-xs">
-          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-[#f0f7eb] border border-[#d2e2c4] flex items-center justify-center text-[#277839] mb-1 shrink-0">
-            <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
-          </div>
-          <h4 className="text-sm sm:text-base font-bold text-[#143519]">{t.noScanHistoryTitle}</h4>
-          <p className="text-xs text-[#526856] italic max-w-md">
+          <Icon name="history" size={27} />
+          <h4 className="text-sm sm:text-base font-bold text-[#143519]">
+            {t.noScanHistoryTitle}
+          </h4>
+          <p className="text-xs text-[#526856] max-w-md">
             {t.noScanHistoryText}
           </p>
         </div>
       ) : (
         /* Responsive Grid for Scans (Max 6 per page on History Screen [3 cols x 2 rows], Max 4 on Home Screen [4 cols]) */
-        <div className={`grid gap-4 sm:gap-6 ${!isFullHistoryPage ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}>
+        <div
+          className={`grid gap-4 sm:gap-6 ${!isFullHistoryPage ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}
+        >
           {visibleScans.map((scan) => (
             <ScanCard
               key={scan.id}
@@ -197,7 +218,10 @@ export const ScanHistoryList = memo(function ScanHistoryList({
           {paginationRange.map((item, idx) => {
             if (typeof item === "string") {
               return (
-                <span key={`ellipsis-${idx}`} className="px-1.5 py-1 text-xs text-[#738a77] font-bold select-none">
+                <span
+                  key={`ellipsis-${idx}`}
+                  className="px-1.5 py-1 text-xs text-[#738a77] font-bold select-none"
+                >
                   ...
                 </span>
               );

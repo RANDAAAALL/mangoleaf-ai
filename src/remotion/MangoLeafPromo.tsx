@@ -355,7 +355,7 @@ function Scene4SyncAndGuidelines() {
             Bilingual Treatment Care
           </h3>
           <p style={{ fontSize: 18, color: "#94a3b8", lineHeight: 1.6, margin: 0 }}>
-            Includes certified BAFS pre-treatment action plans available in both English and Bisaya for local accessibility.
+            Includes certified BAFS treatment action plans available in both English and Bisaya for local accessibility.
           </p>
         </div>
       </div>

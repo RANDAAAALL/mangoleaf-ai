@@ -56,7 +56,7 @@ export const translations = {
     diagnosisPrefix: "Diagnosis:",
     scannedOnPrefix: "Scanned on",
     scorePrefix: "Score:",
-    preTreatmentGuidelines: "Pre-treatment Guidelines",
+    preTreatmentGuidelines: "Treatment Guidelines",
     closeDetailsBtn: "Close details",
     noImageOffline: "No Image Available Offline",
     
