@@ -1,6 +1,6 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
-This document outlines the technical optimizations, hardware acceleration strategies, memory management budgets, and React re-render controls implemented in **MangoLeaf AI** (`off-on-sync`) to ensure seamless execution on low-end mobile devices and offline agricultural environments.
+This document outlines the technical optimizations, hardware acceleration strategies, memory management budgets, and React re-render controls implemented in **MangoLeaf AI** (`mangoleaf-ai`) to ensure seamless execution on low-end mobile devices and offline agricultural environments.
 
 ---
 

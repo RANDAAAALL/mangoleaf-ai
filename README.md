@@ -1,90 +1,84 @@
-# 🥭 MangoLeaf AI — Offline-First PWA for Mango Leaf & Fruit Disease Diagnosis
+# MangoLeaf AI
 
-**MangoLeaf AI** is a Progressive Web Application (PWA) designed to empower Filipino farmers with real-time, on-device AI diagnostics for mango leaf and fruit diseases. Built with an offline-first architecture, the application executes computer vision inference directly inside the mobile browser without requiring an active internet connection.
+MangoLeaf AI is an offline-first progressive web application for identifying possible diseases affecting mango leaves and fruit. It is designed for farmers who need a clear, mobile-friendly way to capture or upload a photo, review an AI-assisted result, and keep a local history of scans.
 
----
+## Features
 
-## 🌟 Key Features
+- Capture a new photo or upload an existing leaf or fruit image.
+- Run on-device image classification with TensorFlow.js and WebGL when available.
+- Review the detected condition, confidence score, and treatment guidance.
+- Switch treatment guidance between English and Cebuano/Bisaya.
+- Save scan records and compressed images locally with IndexedDB.
+- Detect duplicate uploads with SHA-256 image hashing.
+- Synchronize records with Supabase when a connection is available.
+- Continue using core scan-history and diagnostic features in offline conditions.
 
-- **⚡ On-Device AI Classification:** Powered by MobileNetV3 (WebGL-accelerated TensorFlow.js) for instant offline disease diagnosis with 98.25% test accuracy.
-- **📴 Offline-First IndexedDB Storage:** All scan logs, diagnostic reports, and compressed leaf photos are saved locally using Dexie.js so farmers can work in remote fields.
-- **🌐 Automatic Cloud Synchronization:** Seamlessly syncs local records with Supabase Storage and Database whenever network connectivity is restored.
-- **🇵🇭 Dual Language Support (Bilingual):** Instant toggle between **English** and **Cebuano / Bisaya** across all UI elements, diagnostic reports, and management guidelines.
-- **🛡️ Research-Grounded Legal Protection:** Built-in Privacy Policy & Terms of Service modals compliant with RA 10173 (Data Privacy Act), RA 8293 (IP Code), and DOST-PCAARRD / BAFS guidelines.
-- **🖼️ Duplicate Photo Detection:** Uses Web Crypto SHA-256 image hashing to instantly detect duplicate gallery uploads and return existing diagnostic reports in ~0.01s.
-- **🎨 Premium UI System:** Modern organic light-green aesthetic matching Figma designs, fully responsive across desktop, tablet, and mobile browsers.
+## Technology
 
----
+- Next.js 16 and React 19
+- Bun
+- TypeScript and Tailwind CSS
+- TensorFlow.js
+- Dexie / IndexedDB
+- Supabase
+- Serwist PWA service worker
 
-## 🛠️ Technology Stack
+## Requirements
 
-- **Framework:** Next.js 16 (App Router, React 19)
-- **Runtime & Package Manager:** Bun (`bun`)
-- **Styling:** Tailwind CSS (Vanilla CSS design system)
-- **AI / Machine Learning:** TensorFlow.js (`@tensorflow/tfjs`) with WebGL shader optimization
-- **Offline Storage:** Dexie.js (IndexedDB wrapper)
-- **Backend & Cloud Sync:** Supabase (PostgreSQL + Object Storage)
-- **PWA Service Worker:** Serwist (`@serwist/next`) with CacheFirst offline model pre-caching
-- **Icons & Typography:** Reusable SVG Icon System, Geist Sans font family
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-Ensure you have [Bun](https://bun.sh) installed on your system.
+Install [Bun](https://bun.sh), then confirm it is available:
 
 ```bash
 bun --version
 ```
 
-### Installation
+## Local setup
 
-1. **Clone the repository:**
+1. Clone the repository and enter the project directory.
+
    ```bash
-   git clone https://github.com/RANDAAAALL/off-on-sync.git
-   cd off-on-sync
+   git clone https://github.com/RANDAAAALL/mangoleaf-ai.git
+   cd mangoleaf-ai
    ```
 
-2. **Install dependencies:**
+2. Install dependencies.
+
    ```bash
    bun install
    ```
 
-3. **Set up Environment Variables:**
-   Create a `.env.local` file in the root directory:
+3. Create `.env.local` in the project root.
+
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   NEXT_PUBLIC_APP_VERSION=0.1.0
+   NEXT_PUBLIC_MODEL_VERSION=model-v2.0.0
    ```
 
-4. **Run Development Server:**
+4. Start the development server.
+
    ```bash
    bun run dev
    ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
----
+   Open `http://localhost:3000` in a browser.
 
-## 📜 Development Commands
+## Commands
 
-| Command | Action |
-|---|---|
-| `bun run dev` | Starts the Next.js development server with hot reloading |
-| `bun run build` | Builds the production bundle & compiles the PWA service worker |
-| `bun run start` | Serves the production build locally |
-| `bun run typecheck` | Runs TypeScript type checking (`tsc --noEmit`) |
-| `bun run lint` | Runs ESLint code quality checks |
+| Command | Description |
+| --- | --- |
+| `bun run dev` | Start the local development server. |
+| `bun run build` | Build the production application and service worker. |
+| `bun run start` | Start the production server. |
+| `bun run typecheck` | Run TypeScript checks without emitting files. |
+| `bun run lint` | Run ESLint. |
 
----
+## Notes
 
-## 📊 Performance & Specifications
+MangoLeaf AI provides AI-assisted classifications and treatment guidance. Results should be treated as a field-support tool and considered alongside visual inspection and appropriate local agricultural advice.
 
-For comprehensive technical documentation on GPU WebGL optimizations, memory management budgets, image compression pipelines, and React render optimizations, see [PERFORMANCE.md](./PERFORMANCE.md).
+For implementation and performance details, see [PERFORMANCE.md](./PERFORMANCE.md).
 
----
+## License and data use
 
-## 📄 License & Compliance
-
-Developed under Republic Act No. 8293 (Intellectual Property Code of the Philippines) and Republic Act No. 10173 (Data Privacy Act of 2012). Treatment guidelines are derived from official DOST-PCAARRD and BAFS agricultural standards.
+The application is developed for use in the Philippine agricultural context. Operators are responsible for configuring their deployment, privacy notices, data handling, and treatment guidance to meet applicable requirements, including the Data Privacy Act of 2012.

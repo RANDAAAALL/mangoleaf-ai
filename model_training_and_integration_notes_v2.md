@@ -2,6 +2,8 @@
 
 This document records the step-by-step development, dataset pre-balancing, two-stage fine-tuning, and performance evaluation for **Trial 2** of the on-device image classification model completed on **July 25, 2026**.
 
+Notebook provenance: this report corresponds to the Trial 2 workflow. Keep `MangoLeaf_AI_Training_v1.ipynb` as the Trial 1 baseline, use `MangoLeaf_AI_Training_v2.ipynb` as the current retraining template, and copy it to a new versioned notebook before the next dataset update.
+
 ---
 
 ## 📋 Development Timeline & Architecture Overview
@@ -100,6 +102,4 @@ The compiled web AI engine is **11.51 MB total**, split into 3 binary weight sha
 * **Code-Splitting (`src/app/page.tsx`):** `ScanDetailsModal` and `SqlSchemaCard` are dynamically imported via `next/dynamic`, reducing initial JavaScript payload.
 * **Font Optimization (`src/app/layout.tsx`):** `display: "swap"` prevents Flash of Invisible Text on slow networks.
 * **Production Build Verification:** `bun run typecheck`, `bun run lint`, and `bun run build` completed with **0 errors and 0 warnings**.
-* **Full optimization specifications:** See [PERFORMANCE.md](file:///C:/Users/My%20Pc/Desktop/pwa-projects/off-on-sync/PERFORMANCE.md) for the complete optimization matrix.
-
-
+* **Full optimization specifications:** See [PERFORMANCE.md](./PERFORMANCE.md) for the complete optimization matrix.
