@@ -74,12 +74,19 @@ This file tracks the project work from the first committed implementation throug
 - Added a model and release versioning policy.
 - Corrected stale documentation references that still pointed to the previous project name.
 
-### August 13, 2026: Capture flow refinement and v0.2.0 release
+### August 13, 2026: Capture flow refinement (v0.2.0) and title-clarity patch (v0.2.1)
+
+**v0.2.0 — published as a GitHub Release**
 
 - Reworked the photo confirmation modal: replaced the Cancel button with a Retake action that reopens the same source the farmer used (camera or gallery), so a poor shot can be redone in one tap without backing out.
 - Added a pre-diagnosis photo quality reminder under the modal title in English and Bisaya, covering both leaf and fruit: "Make sure the leaf or fruit is clear and in the center. If it's blurry or dark, take another photo."
-- Recorded the picker source on selection so Retake reopens the correct input; preserved existing Blob URL cleanup and the on-device scan pipeline. Verified with `bun run typecheck`.
+- Recorded the picker source on selection so Retake reopens the correct input; preserved existing Blob URL cleanup and the on-device scan pipeline.
 - Bumped the app release from v0.1.0 to v0.2.0 (feature update before final evaluation) via `NEXT_PUBLIC_APP_VERSION`. Model version unchanged at model-v2.0.0 (no retraining).
+
+**v0.2.1 — patch**
+
+- Renamed the confirmation modal title from "Take Photo" to a neutral "Review Photo" / "Susiha ang Litrato", since the photo is already captured or selected at that step (accurate for camera, gallery, and desktop upload alike). This shipped after v0.2.0 was already published, so it is tracked as a patch release.
+- Bumped `NEXT_PUBLIC_APP_VERSION` to 0.2.1. Verified with `bun run typecheck` and `bun run lint` (0 errors).
 
 ## Current Notebook Decision
 

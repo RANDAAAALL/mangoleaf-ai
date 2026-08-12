@@ -52,7 +52,7 @@ bun --version
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   NEXT_PUBLIC_APP_VERSION=0.2.0
+   NEXT_PUBLIC_APP_VERSION=0.2.1
    NEXT_PUBLIC_MODEL_VERSION=model-v2.0.0
    ```
 

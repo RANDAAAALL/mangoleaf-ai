@@ -149,7 +149,7 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
         <div className="fixed inset-0 z-50 bg-black/60 md:backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white border border-[#e2ebd9] rounded-3xl p-6 max-w-sm w-full flex flex-col items-center gap-5 shadow-2xl text-center">
             <h3 className="text-lg font-bold text-[#143519]">
-              {isScanning ? t.runningAI : t.takePhotoBtn}
+              {isScanning ? t.runningAI : t.reviewPhotoTitle}
             </h3>
 
             {/* Photo quality reminder (hidden while scanning) */}
