@@ -61,7 +61,7 @@ Since the GitHub sidebar currently shows no published releases, the project has 
 The PWA footer reads these public build values:
 
 ```env
-NEXT_PUBLIC_APP_VERSION=0.1.0
+NEXT_PUBLIC_APP_VERSION=0.2.0
 NEXT_PUBLIC_MODEL_VERSION=model-v2.0.0
 ```
 
@@ -75,7 +75,7 @@ From the project root:
 git status
 git add .
 git commit -m "docs: update progress and model versioning"
-git tag -a v0.1.0 -m "MangoLeaf AI pre-field-evaluation milestone"
+git tag -a v0.2.0 -m "MangoLeaf AI v0.2.0 — in-modal retake and capture-quality guidance"
 git push origin master --follow-tags
 ```
 

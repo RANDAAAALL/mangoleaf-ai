@@ -9,7 +9,7 @@ interface DiagnosticScannerProps {
   language: Language;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRunDiagnosis: () => void;
-  onCancelPreview: () => void;
+  onRetake: () => void;
 }
 
 export const DiagnosticScanner = memo(function DiagnosticScanner({
@@ -19,7 +19,7 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
   language,
   onFileChange,
   onRunDiagnosis,
-  onCancelPreview,
+  onRetake,
 }: DiagnosticScannerProps) {
   const t = translations[language];
 
@@ -152,6 +152,13 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
               {isScanning ? t.runningAI : t.takePhotoBtn}
             </h3>
 
+            {/* Photo quality reminder (hidden while scanning) */}
+            {!isScanning && (
+              <p className="text-xs text-[#526856] font-medium leading-relaxed -mt-2 max-w-[280px]">
+                {t.photoCheckHint}
+              </p>
+            )}
+
             {/* Photo Thumbnail */}
             <div className="relative w-48 h-48 rounded-2xl overflow-hidden border-2 border-[#277839] shadow-md">
               <img
@@ -189,10 +196,11 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
                   {t.runDiagnosisBtn}
                 </button>
                 <button
-                  onClick={onCancelPreview}
-                  className="w-full py-2.5 bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold rounded-xl text-xs transition-colors cursor-pointer order-2 sm:order-1"
+                  onClick={onRetake}
+                  className="w-full py-2.5 bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold rounded-xl text-xs transition-colors cursor-pointer order-2 sm:order-1 flex items-center justify-center gap-1.5"
                 >
-                  {t.cancelBtn}
+                  <Icon name="camera" size={16} fill="currentColor" />
+                  <span>{t.retakeBtn}</span>
                 </button>
               </div>
             )}

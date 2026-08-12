@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: August 11, 2026
+Last updated: August 13, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -73,6 +73,13 @@ This file tracks the project work from the first committed implementation throug
 - Refreshed the manuscript draft from the supplied July 24 DOCX.
 - Added a model and release versioning policy.
 - Corrected stale documentation references that still pointed to the previous project name.
+
+### August 13, 2026: Capture flow refinement and v0.2.0 release
+
+- Reworked the photo confirmation modal: replaced the Cancel button with a Retake action that reopens the same source the farmer used (camera or gallery), so a poor shot can be redone in one tap without backing out.
+- Added a pre-diagnosis photo quality reminder under the modal title in English and Bisaya, covering both leaf and fruit: "Make sure the leaf or fruit is clear and in the center. If it's blurry or dark, take another photo."
+- Recorded the picker source on selection so Retake reopens the correct input; preserved existing Blob URL cleanup and the on-device scan pipeline. Verified with `bun run typecheck`.
+- Bumped the app release from v0.1.0 to v0.2.0 (feature update before final evaluation) via `NEXT_PUBLIC_APP_VERSION`. Model version unchanged at model-v2.0.0 (no retraining).
 
 ## Current Notebook Decision
 

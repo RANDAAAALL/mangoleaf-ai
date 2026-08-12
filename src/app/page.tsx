@@ -143,20 +143,32 @@ export default function Home() {
     };
   }, [selectedScan, legalModalType]);
 
+  // Remember which picker (camera / gallery / desktop) was used, so "Retake" reopens the same source
+  const lastPickerIdRef = useRef<string | null>(null);
+
   // Handle photo capture / selection
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    lastPickerIdRef.current = e.target.id;
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     setSelectedFile(file);
     setPreviewUrl(URL.createObjectURL(file));
   }, [previewUrl]);
 
-  // Cancel preview selection
-  const handleCancelPreview = useCallback(() => {
+  // Retake — clear the current preview and immediately reopen the same photo source
+  const handleRetake = useCallback(() => {
+    const pickerId = lastPickerIdRef.current;
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     setSelectedFile(null);
     setPreviewUrl(null);
+    if (pickerId) {
+      const input = document.getElementById(pickerId) as HTMLInputElement | null;
+      if (input) {
+        input.value = ""; // reset so re-selecting the same file still triggers onChange
+        input.click();    // synchronous — preserves the user-activation needed to open the camera
+      }
+    }
   }, [previewUrl]);
 
   // Run AI diagnosis (uses refs for selectedFile/previewUrl to keep dependency list stable)
@@ -282,7 +294,7 @@ export default function Home() {
                 language={language}
                 onFileChange={handleFileChange}
                 onRunDiagnosis={runDiagnosis}
-                onCancelPreview={handleCancelPreview}
+                onRetake={handleRetake}
               />
 
               {/* Informational Tip Banner */}

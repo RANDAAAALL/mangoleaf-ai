@@ -28,7 +28,9 @@ export const translations = {
     savingDiagnosis: "Saving diagnosis...",
     finishingUp: "Finishing up...",
     runDiagnosisBtn: "Run AI Diagnosis",
+    retakeBtn: "Retake",
     cancelBtn: "Cancel",
+    photoCheckHint: "Make sure the leaf or fruit is clear and in the center. If it's blurry or dark, take another photo.",
     analyzingTissue: "Analyzing mango leaf tissue...",
     
     // Info Callout Card
@@ -102,7 +104,9 @@ export const translations = {
     savingDiagnosis: "Nagsave sa diagnosis...",
     finishingUp: "Naghuman na...",
     runDiagnosisBtn: "Sugdan ang Diagnosis",
+    retakeBtn: "Kuhaa Pag-usab",
     cancelBtn: "I-kansela",
+    photoCheckHint: "Siguroha nga klaro ug anaa sa tunga ang dahon o bunga. Kung hanap o ngitngit, pagkuha og laing litrato.",
     analyzingTissue: "Nagsusi sa dahon sa mangga...",
     
     // Info Callout Card

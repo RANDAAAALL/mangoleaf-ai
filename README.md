@@ -5,6 +5,7 @@ MangoLeaf AI is an offline-first progressive web application for identifying pos
 ## Features
 
 - Capture a new photo or upload an existing leaf or fruit image.
+- Retake a photo in one tap from the confirmation view, guided by a quality reminder to keep the leaf or fruit clear, centered, and well-lit.
 - Run on-device image classification with TensorFlow.js and WebGL when available.
 - Review the detected condition, confidence score, and treatment guidance.
 - Switch treatment guidance between English and Cebuano/Bisaya.
@@ -51,7 +52,7 @@ bun --version
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   NEXT_PUBLIC_APP_VERSION=0.1.0
+   NEXT_PUBLIC_APP_VERSION=0.2.0
    NEXT_PUBLIC_MODEL_VERSION=model-v2.0.0
    ```
 
