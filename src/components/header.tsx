@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from "react";
 import { translations, type Language } from "@/lib/translations";
-import { Logo } from "@/components/Logo";
-import { Icon } from "@/components/Icon";
+import { Logo } from "@/components/logo";
+import { Icon } from "@/components/icon";
 
 interface HeaderProps {
   showInstallButton: boolean;

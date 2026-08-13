@@ -9,6 +9,7 @@ export interface ScanRecord {
   image_hash?: string;     // Unique SHA-256 binary hash of the photo for duplicate prevention
   updated_at: string;      // ISO Timestamp
   device_id: string;       // Unique mobile/browser device ID
+  // Tracks whether the local record matches Supabase or still needs a sync action.
   _status?: "synced" | "pending-insert" | "pending-delete";
 }
 

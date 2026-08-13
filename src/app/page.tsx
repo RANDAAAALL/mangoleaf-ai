@@ -10,16 +10,19 @@ import { FALLBACK_GUIDELINES } from "@/lib/constants";
 import { translations, type Language } from "@/lib/translations";
 
 // Modular UI Components matching Figma Design System
-import { SplashScreen } from "@/components/SplashScreen";
-import { Header } from "@/components/Header";
-import { DiagnosticScanner } from "@/components/DiagnosticScanner";
-import { InfoCalloutCard } from "@/components/InfoCalloutCard";
-import { LegalModal } from "@/components/LegalModal";
-import { ScanHistoryList } from "@/components/ScanHistoryList";
-import { Footer } from "@/components/Footer";
+import { SplashScreen } from "@/components/splash-screen";
+import { Header } from "@/components/header";
+import { DiagnosticScanner } from "@/components/diagnostic-scanner";
+import { InfoCalloutCard } from "@/components/info-callout-card";
+import { LegalModal } from "@/components/legal-modal";
+import { ScanHistoryList } from "@/components/scan-history-list";
+import { Footer } from "@/components/footer";
 import dynamic from 'next/dynamic';
-const ScanDetailsModal = dynamic(() => import('@/components/ScanDetailsModal').then(mod => ({ default: mod.ScanDetailsModal })));
 
+// Load the details modal only when it is needed to keep the initial bundle smaller.
+const ScanDetailsModal = dynamic(() => import('@/components/scan-details-modal').then(mod => ({ default: mod.ScanDetailsModal })));
+
+// Survives client remounts so the model is not initialized twice in one browser session.
 let hasInitialized = false;
 
 export default function Home() {

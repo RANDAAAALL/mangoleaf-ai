@@ -1,5 +1,59 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
+# MangoLeaf AI Agent Instructions
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
+## Next.js 16 source of truth
+
+This repository uses Next.js 16.2.10. APIs, conventions, and file structure may differ from older Next.js versions. Before changing Next.js code or configuration, read the relevant installed guide under `node_modules/next/dist/docs/` and follow current deprecation notices.
+
+## Project context
+
+- The main application is an offline-first static-export PWA under `src/`.
+- Browser-side diagnosis uses TensorFlow.js model assets from `public/model/`.
+- Dexie/IndexedDB is the local source of truth; Supabase provides synchronization, Storage, and guideline updates.
+- Serwist generates `public/sw.js` from `src/sw.ts` during builds.
+
+## Conventions
+
+- Use lowercase kebab-case filenames for components and ordinary multiword modules, such as `legal-modal.tsx`, `scan-details-modal.tsx`, and `app-version.ts`.
+- Use camelCase filenames for custom hooks, such as `useSync.ts` and `usePWAInstall.ts`, with matching `useSomething` exports.
+- Keep React component exports in PascalCase.
+- Use the `@/*` alias for imports from `src/` when practical.
+- Keep `README.md`, `SETUP.md`, and `AGENTS.md` at the repository root. Put other detailed project documentation in `docs/`.
+- Update documentation when setup, architecture, environment variables, model versions, or release behavior changes.
+- Do not manually edit generated files: `public/sw.js`, `.next/`, `out/`, `next-env.d.ts`, or `*.tsbuildinfo`.
+- Do not commit `.env.local` or other secret-bearing environment files.
+- Preserve unrelated user changes and untracked work.
+
+## Documentation maintenance
+
+Every implementation task must include a documentation-impact review before it is considered complete. Update the documents affected by the change in the same task; do not postpone known documentation updates to a later commit.
+
+| Change made | Documentation or metadata to review and update |
+| --- | --- |
+| Installation steps, prerequisites, Supabase resources, commands, or environment variables | `SETUP.md`, `.env.example`, and the README quick start when relevant |
+| Application layers, data flow, storage, synchronization, service worker, deployment model, or important directories | `docs/ARCHITECTURE.md` |
+| User-visible feature, workflow, important fix, milestone, or completed project task | `docs/PROGRESS.md` |
+| Performance behavior, caching, bundle loading, image processing, inference, memory, or network optimization | `docs/PERFORMANCE.md` |
+| App version, model version, release process, tags, or notebook-version policy | `docs/MODEL_VERSIONING.md`, `.env.example`, `package.json`, and other displayed version references |
+| Model training, dataset, class mapping, evaluation metrics, or exported model files | The applicable file under `docs/model-training/`, `docs/MODEL_VERSIONING.md`, and `docs/PROGRESS.md` |
+| File or directory rename | All imports, scripts, configuration, Markdown links, project trees, and documentation references to the old path |
+| New long-lived convention or recurring agent workflow | `AGENTS.md` |
+
+Use these rules when maintaining documentation:
+
+- Keep historical entries intact; add a new dated or versioned entry instead of rewriting past results as if they happened differently.
+- Update only documents affected by the change. Do not create progress noise for formatting-only edits, comment-only clarification, or generated-file changes unless they affect project behavior or maintenance instructions.
+- Ensure examples describe the current repository and installed dependency versions rather than generic templates.
+- Check local Markdown links and search for stale filenames or version labels after moving or renaming files.
+- If no documentation update is needed, explicitly confirm that the documentation-impact review was completed in the final handoff.
+
+## Verification before commit
+
+Run these commands in order and require all three to pass:
+
+```bash
+bun run typecheck
+bun run lint
+bun run build
+```
+
+The build uses webpack and creates a static export in `out/`. Treat build failures, service-worker generation failures, type errors, and lint errors as blockers before committing.

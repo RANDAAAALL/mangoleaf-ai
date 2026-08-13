@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 
+// Non-standard Chromium event captured before the browser displays its install UI.
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+/** Exposes whether installation is available and triggers the saved browser prompt. */
 export function usePWAInstall() {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState<boolean>(false);

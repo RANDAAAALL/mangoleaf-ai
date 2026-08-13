@@ -1,85 +1,75 @@
 # MangoLeaf AI
 
-MangoLeaf AI is an offline-first progressive web application for identifying possible diseases affecting mango leaves and fruit. It is designed for farmers who need a clear, mobile-friendly way to capture or upload a photo, review an AI-assisted result, and keep a local history of scans.
+MangoLeaf AI is an offline-first progressive web application that helps identify possible diseases affecting mango leaves and fruit. Classification runs in the browser with TensorFlow.js, scans are stored locally in IndexedDB, and pending records synchronize with Supabase when connectivity is available.
 
 ## Features
 
-- Capture a new photo or upload an existing leaf or fruit image.
-- Retake a photo in one tap from the confirmation view, guided by a quality reminder to keep the leaf or fruit clear, centered, and well-lit.
-- Run on-device image classification with TensorFlow.js and WebGL when available.
-- Review the detected condition, confidence score, and treatment guidance.
+- Capture a photo or upload an existing mango leaf or fruit image.
+- Run on-device classification with a six-class TensorFlow.js Graph Model.
+- Review the predicted condition, confidence score, and treatment guidance.
 - Switch treatment guidance between English and Cebuano/Bisaya.
-- Save scan records and compressed images locally with IndexedDB.
-- Detect duplicate uploads with SHA-256 image hashing.
-- Synchronize records with Supabase when a connection is available.
-- Continue using core scan-history and diagnostic features in offline conditions.
+- Keep a local scan history that remains available offline.
+- Detect duplicate images with SHA-256 hashing.
+- Compress stored images to WebP with a JPEG fallback.
+- Synchronize scan records and treatment guidelines with Supabase.
+- Install the app on supported devices as a PWA.
 
 ## Technology
 
-- Next.js 16 and React 19
-- Bun
-- TypeScript and Tailwind CSS
+- Next.js 16 App Router and React 19
+- Bun and TypeScript
+- Tailwind CSS 4
 - TensorFlow.js
 - Dexie / IndexedDB
-- Supabase
-- Serwist PWA service worker
+- Supabase Database, Storage, and Realtime
+- Serwist service worker
 
-## Requirements
+## Quick start
 
-Install [Bun](https://bun.sh), then confirm it is available:
+Install dependencies, copy the environment template, and start the development server:
 
 ```bash
-bun --version
+bun install
+cp .env.example .env.local
+bun run dev
 ```
 
-## Local setup
+Then open `http://localhost:3000`.
 
-1. Clone the repository and enter the project directory.
+The Supabase values in `.env.local` must be replaced before cloud synchronization will work. See [SETUP.md](./SETUP.md) for the complete local setup, Supabase requirements, static-export notes, and pre-commit checks.
 
-   ```bash
-   git clone https://github.com/RANDAAAALL/mangoleaf-ai.git
-   cd mangoleaf-ai
-   ```
+## Documentation
 
-2. Install dependencies.
-
-   ```bash
-   bun install
-   ```
-
-3. Create `.env.local` in the project root.
-
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   NEXT_PUBLIC_APP_VERSION=0.2.1
-   NEXT_PUBLIC_MODEL_VERSION=model-v2.0.0
-   ```
-
-4. Start the development server.
-
-   ```bash
-   bun run dev
-   ```
-
-   Open `http://localhost:3000` in a browser.
+- [Setup guide](./SETUP.md)
+- [Architecture](./docs/ARCHITECTURE.md)
+- [Performance and optimization notes](./docs/PERFORMANCE.md)
+- [Development progress](./docs/PROGRESS.md)
+- [Model and release versioning](./docs/MODEL_VERSIONING.md)
+- [Trial 1 model report](./docs/model-training/TRIAL_1.md)
+- [Trial 2 model report](./docs/model-training/TRIAL_2.md)
 
 ## Commands
 
 | Command | Description |
 | --- | --- |
-| `bun run dev` | Start the local development server. |
-| `bun run build` | Build the production application and service worker. |
-| `bun run start` | Start the production server. |
+| `bun run dev` | Start the Next.js development server with webpack. |
 | `bun run typecheck` | Run TypeScript checks without emitting files. |
-| `bun run lint` | Run ESLint. |
+| `bun run lint` | Run ESLint across the repository. |
+| `bun run build` | Create the production static export and service worker. |
+| `bun run start` | Run `next start`; this is not the deployment path while `output: "export"` is enabled. |
 
-## Notes
+Before committing, run these checks in order:
 
-MangoLeaf AI provides AI-assisted classifications and treatment guidance. Results should be treated as a field-support tool and considered alongside visual inspection and appropriate local agricultural advice.
+```bash
+bun run typecheck
+bun run lint
+bun run build
+```
 
-For implementation and performance details, see [PERFORMANCE.md](./PERFORMANCE.md).
+## Important note
+
+MangoLeaf AI provides AI-assisted classifications and treatment guidance. It is a field-support tool, not a substitute for expert diagnosis, laboratory testing, or locally appropriate agricultural advice.
 
 ## License and data use
 
-The application is developed for use in the Philippine agricultural context. Operators are responsible for configuring their deployment, privacy notices, data handling, and treatment guidance to meet applicable requirements, including the Data Privacy Act of 2012.
+The application is developed for use in the Philippine agricultural context. Deployment operators are responsible for privacy notices, data handling, treatment guidance, and compliance with applicable requirements, including the Data Privacy Act of 2012.

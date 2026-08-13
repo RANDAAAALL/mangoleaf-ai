@@ -1,8 +1,8 @@
 import { useState, memo, useMemo } from "react";
 import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
-import { ScanCard } from "./ScanCard";
+import { ScanCard } from "./scan-card";
 import { translations, type Language } from "@/lib/translations";
-import { Icon } from "./Icon";
+import { Icon } from "./icon";
 
 interface ScanHistoryListProps {
   scans: ScanRecord[];

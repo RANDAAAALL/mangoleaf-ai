@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { translations, type Language } from "@/lib/translations";
-import { Logo } from "@/components/Logo";
-import { modelVersion, pwaVersion } from "@/lib/appVersion";
+import { Logo } from "@/components/logo";
+import { modelVersion, pwaVersion } from "@/lib/app-version";
 
 interface FooterProps {
   language: Language;

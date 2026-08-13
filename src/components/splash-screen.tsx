@@ -1,5 +1,5 @@
 import React from "react";
-import { Logo } from "@/components/Logo";
+import { Logo } from "@/components/logo";
 
 export function SplashScreen() {
   return (
@@ -35,4 +35,3 @@ export function SplashScreen() {
     </div>
   );
 }
-

@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "next-bun-pwa",
+      "name": "mangoleaf-ai",
       "dependencies": {
         "@serwist/next": "^9.5.11",
         "@supabase/supabase-js": "^2.110.7",

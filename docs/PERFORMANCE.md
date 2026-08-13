@@ -69,9 +69,9 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ## 🎨 2. Frontend React Architecture & DOM Optimizations
 
-### 2.1 Per-Card Blob URL Management (`ScanCard.tsx`)
+### 2.1 Per-Card Blob URL Management (`scan-card.tsx`)
 * **Problem:** Maintaining a centralized `blobUrlMap` in `page.tsx` meant adding or deleting a single scan caused all Blob ObjectURLs across the entire history list to be revoked and regenerated, causing visible image flickering and memory spikes.
-* **Solution:** Blob URL creation is scoped directly inside `ScanCard.tsx` using a local `useEffect` linked to `imageBlob`.
+* **Solution:** Blob URL creation is scoped directly inside `scan-card.tsx` using a local `useEffect` linked to `imageBlob`.
 * **Cleanup:** Each `ScanCard` revokes its own `ObjectURL` upon unmounting or when the scan blob changes, ensuring zero image flickering and zero heap memory leaks.
 
 ### 2.2 Modular Component Refactoring & `React.memo()` Memoization
@@ -84,7 +84,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 * **Impact:** Eliminates in-memory `[...scans].reverse()` array copying and re-allocation on every render.
 
 ### 2.4 Mobile Overlay Backdrop Blur Removal
-* **Implementation:** Replaced heavy `backdrop-blur-md` on mobile full-screen overlays with lightweight `bg-black/60 md:backdrop-blur-sm` in `DiagnosticScanner.tsx`, `ScanDetailsModal.tsx`, and `LegalModal.tsx`.
+* **Implementation:** Replaced heavy `backdrop-blur-md` on mobile full-screen overlays with lightweight `bg-black/60 md:backdrop-blur-sm` in `diagnostic-scanner.tsx`, `scan-details-modal.tsx`, and `legal-modal.tsx`.
 * **Impact:** Budget Android devices (e.g., Redmi, Galaxy A series) render modal transitions smoothly at 60FPS without GPU shader composite bottlenecking.
 
 ### 2.5 Post-Inference Storage Compression (WebP with JPEG Fallback)
@@ -138,7 +138,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ## 🎭 4. CSS & GPU Compositing Optimizations
 
-### 4.1 Solid Backgrounds on Scroll List Cards (`ScanCard.tsx`)
+### 4.1 Solid Backgrounds on Scroll List Cards (`scan-card.tsx`)
 * **Change:** Replaced `backdrop-blur-sm` (expensive GPU filter on every card) with solid `bg-slate-900/95` background.
 * **Impact:** Eliminates severe GPU rasterization lag during fast scrolling on budget smartphones.
 

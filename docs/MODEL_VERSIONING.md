@@ -52,16 +52,18 @@ Use semantic versioning for the PWA:
 ```text
 v0.1.0  first public pre-field-evaluation milestone
 v0.2.0  feature update before final evaluation
+v0.2.1  confirmation-modal title clarity patch
+v0.2.2  repository documentation and filename-organization patch
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
 
-Since the GitHub sidebar currently shows no published releases, the project has not yet published a formal release. That is normal. It only means no GitHub Release has been created from a Git tag yet.
+The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work in this change is the `v0.2.2` patch. The model remains `model-v2.0.0` because no model assets, class mapping, or training results changed.
 
 The PWA footer reads these public build values:
 
 ```env
-NEXT_PUBLIC_APP_VERSION=0.2.1
+NEXT_PUBLIC_APP_VERSION=0.2.2
 NEXT_PUBLIC_MODEL_VERSION=model-v2.0.0
 ```
 
@@ -73,11 +75,14 @@ From the project root:
 
 ```bash
 git status
-git add .
-git commit -m "docs: update progress and model versioning"
-git tag -a v0.2.1 -m "MangoLeaf AI v0.2.1 — confirmation modal retitled to Review Photo"
+git add -u
+git add SETUP.md docs src/components src/lib/app-version.ts src/lib/supabase-client.ts
+git commit -m "chore: organize documentation and source filenames"
+git tag -a v0.2.2 -m "MangoLeaf AI v0.2.2 - repository organization patch"
 git push origin master --follow-tags
 ```
+
+Review `git status` before committing to confirm that only intended project files are staged.
 
 Then open GitHub:
 

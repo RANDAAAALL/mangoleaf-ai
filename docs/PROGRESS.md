@@ -34,7 +34,7 @@ This file tracks the project work from the first committed implementation throug
 - Used MobileNetV3-Large with two-stage fine-tuning.
 - Reported Trial 2 test performance: 98.25% accuracy and 0.0541 test loss.
 - Exported the model as a TensorFlow.js Graph Model with 3 weight shards, approximately 11.51 MB total.
-- Added `model_training_and_integration_notes_v2.md` as the current model report.
+- Added `docs/model-training/TRIAL_2.md` as the current model report.
 
 ### July 28, 2026: Reliability and performance pass
 
@@ -87,6 +87,14 @@ This file tracks the project work from the first committed implementation throug
 
 - Renamed the confirmation modal title from "Take Photo" to a neutral "Review Photo" / "Susiha ang Litrato", since the photo is already captured or selected at that step (accurate for camera, gallery, and desktop upload alike). This shipped after v0.2.0 was already published, so it is tracked as a patch release.
 - Bumped `NEXT_PUBLIC_APP_VERSION` to 0.2.1. Verified with `bun run typecheck` and `bun run lint` (0 errors).
+
+**v0.2.2 — repository organization patch**
+
+- Organized detailed engineering and model-training documents under `docs/`, while keeping `README.md`, `SETUP.md`, and `AGENTS.md` at the repository root.
+- Added `docs/ARCHITECTURE.md` and documented the current project structure and application data flow.
+- Renamed component and multiword library files to lowercase kebab-case; custom hook filenames remain camelCase.
+- Added focused explanatory comments around non-obvious model-loading, synchronization, PWA-installation, version-label, and database-status behavior without changing application functionality.
+- Bumped the application and package version to `0.2.2`. The model remains `model-v2.0.0` because no model files or training results changed.
 
 ## Current Notebook Decision
 

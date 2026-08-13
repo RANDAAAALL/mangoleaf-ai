@@ -6,4 +6,5 @@ const supabaseAnonKey =
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 
   "your-anon-key";
 
+// Shared browser client; authorization must be enforced by Supabase RLS policies.
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

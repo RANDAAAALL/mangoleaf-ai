@@ -1,8 +1,12 @@
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase-client";
 import { db, type ScanRecord } from "@/lib/db";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
+/**
+ * Keeps scan data local-first and reconciles pending changes with Supabase
+ * whenever the browser is online.
+ */
 export function useSync() {
   const [isOnline, setIsOnline] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
@@ -22,6 +26,7 @@ export function useSync() {
     return id;
   });
 
+  // Retain the active Realtime channel so it can be removed on disconnect or unmount.
   const subscriptionRef = useRef<RealtimeChannel | null>(null);
 
   // Sync lock: prevents concurrent sync operations from stacking on slow 3G networks
