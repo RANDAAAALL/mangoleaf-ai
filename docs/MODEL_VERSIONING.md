@@ -63,11 +63,11 @@ The project history records `v0.2.0` as a published release and `v0.2.1` as the 
 The PWA footer reads these public build values:
 
 ```env
-NEXT_PUBLIC_APP_VERSION=0.2.2
-NEXT_PUBLIC_MODEL_VERSION=model-v2.0.0
+NEXT_PUBLIC_APP_VERSION=v0.2.2
+NEXT_PUBLIC_MODEL_VERSION=v2.0.0
 ```
 
-If the variables are not set, the app falls back to `v0.1.0` and `model-v2.0.0`. These values are public and safe to expose because they are version labels, not secrets.
+If the variables are not set, the app falls back to `v0.2.2` and `v2.0.0`. These values are public and safe to expose because they are version labels, not secrets.
 
 ## Creating a GitHub Release
 

@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: August 13, 2026
+Last updated: August 15, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -95,6 +95,12 @@ This file tracks the project work from the first committed implementation throug
 - Renamed component and multiword library files to lowercase kebab-case; custom hook filenames remain camelCase.
 - Added focused explanatory comments around non-obvious model-loading, synchronization, PWA-installation, version-label, and database-status behavior without changing application functionality.
 - Bumped the application and package version to `0.2.2`. The model remains `model-v2.0.0` because no model files or training results changed.
+
+### August 15, 2026: Version display label normalization
+
+- Normalized version display labels across `.env.example`, `src/lib/app-version.ts`, and `docs/MODEL_VERSIONING.md` to use explicit `v`-prefixes directly (`v0.2.2`, `v2.0.0`).
+- Removed redundant string prefix check from `src/lib/app-version.ts`.
+
 
 ## Current Notebook Decision
 
