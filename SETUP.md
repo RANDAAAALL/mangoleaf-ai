@@ -42,8 +42,8 @@ Configure these values in `.env.local`:
 | --- | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | For cloud sync | Supabase project API URL. |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | For cloud sync | Supabase browser-safe anonymous key. |
-| `NEXT_PUBLIC_APP_VERSION` | Recommended | Version label displayed in the footer, such as `0.2.2`. |
-| `NEXT_PUBLIC_MODEL_VERSION` | Recommended | Model label displayed in the footer, such as `model-v2.0.0`. |
+| `NEXT_PUBLIC_APP_VERSION` | Recommended | Version label displayed in the footer, such as `v0.2.3`. |
+| `NEXT_PUBLIC_MODEL_VERSION` | Recommended | Model label displayed in the footer, such as `v2.0.0`. |
 
 The client also accepts `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` as a fallback key name, but `.env.example` uses `NEXT_PUBLIC_SUPABASE_ANON_KEY` as the canonical project convention.
 

@@ -54,20 +54,21 @@ v0.1.0  first public pre-field-evaluation milestone
 v0.2.0  feature update before final evaluation
 v0.2.1  confirmation-modal title clarity patch
 v0.2.2  repository documentation and filename-organization patch
+v0.2.3  collapsible home-screen scan-flow guide
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
 
-The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work in this change is the `v0.2.2` patch. The model remains `model-v2.0.0` because no model assets, class mapping, or training results changed.
+The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work is the `v0.2.2` patch. `v0.2.3` adds the collapsible home-screen scan-flow guide. The model remains `model-v2.0.0` because no model assets, class mapping, or training results changed.
 
 The PWA footer reads these public build values:
 
 ```env
-NEXT_PUBLIC_APP_VERSION=v0.2.2
+NEXT_PUBLIC_APP_VERSION=v0.2.3
 NEXT_PUBLIC_MODEL_VERSION=v2.0.0
 ```
 
-If the variables are not set, the app falls back to `v0.2.2` and `v2.0.0`. These values are public and safe to expose because they are version labels, not secrets.
+If the variables are not set, the app falls back to `v0.2.3` and `v2.0.0`. These values are public and safe to expose because they are version labels, not secrets.
 
 ## Creating a GitHub Release
 
@@ -76,9 +77,9 @@ From the project root:
 ```bash
 git status
 git add -u
-git add SETUP.md docs src/components src/lib/app-version.ts src/lib/supabase-client.ts
-git commit -m "chore: organize documentation and source filenames"
-git tag -a v0.2.2 -m "MangoLeaf AI v0.2.2 - repository organization patch"
+git add package.json .env.example SETUP.md docs/MODEL_VERSIONING.md docs/PROGRESS.md src/app/page.tsx src/components/how-it-works-card.tsx src/lib/app-version.ts src/lib/translations.ts
+git commit -m "feat: add collapsible scan-flow guide"
+git tag -a v0.2.3 -m "MangoLeaf AI v0.2.3 - collapsible scan-flow guide"
 git push origin master --follow-tags
 ```
 

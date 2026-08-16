@@ -39,7 +39,7 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
   }, [previewUrl]);
 
   return (
-    <div className="relative">
+    <div className="relative mb-10">
       {/* DESKTOP VERSION (Single Card: Upload Photo) */}
       <div className="hidden md:block bg-[#277839] text-white p-12 rounded-[2.5rem] shadow-xl relative overflow-hidden">
         {/* Subtle Leaf Decorative Background Graphic */}

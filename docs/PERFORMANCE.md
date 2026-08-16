@@ -75,8 +75,8 @@ This document outlines the technical optimizations, hardware acceleration strate
 * **Cleanup:** Each `ScanCard` revokes its own `ObjectURL` upon unmounting or when the scan blob changes, ensuring zero image flickering and zero heap memory leaks.
 
 ### 2.2 Modular Component Refactoring & `React.memo()` Memoization
-* **Structure:** Scoped UI into isolated components (`SplashScreen`, `Header`, `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `ScanDetailsModal`, `LegalModal`, `Footer`, `InfoCalloutCard`).
-* **Memoization:** `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `ScanDetailsModal`, `Header`, `NavIcon`, `Logo`, `Footer`, and `InfoCalloutCard` are wrapped in `React.memo()` to prevent unnecessary re-renders when parent state changes.
+* **Structure:** Scoped UI into isolated components (`SplashScreen`, `Header`, `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `ScanDetailsModal`, `LegalModal`, `Footer`, `HowItWorksCard`).
+* **Memoization:** `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `ScanDetailsModal`, `Header`, `NavIcon`, `Logo`, `Footer`, and `HowItWorksCard` are wrapped in `React.memo()` to prevent unnecessary re-renders when parent state changes.
 * **Stable Callbacks & Refs:** `getGuidelineColor`, `handleViewAllHistory`, and `setLanguage` are wrapped in `useCallback`. `selectedFileRef` and `previewUrlRef` stabilize `runDiagnosis` callback identity across state changes.
 
 ### 2.3 Dexie Reverse Query Optimization (`page.tsx`)

@@ -13,7 +13,7 @@ import { translations, type Language } from "@/lib/translations";
 import { SplashScreen } from "@/components/splash-screen";
 import { Header } from "@/components/header";
 import { DiagnosticScanner } from "@/components/diagnostic-scanner";
-import { InfoCalloutCard } from "@/components/info-callout-card";
+import { HowItWorksCard } from "@/components/how-it-works-card";
 import { LegalModal } from "@/components/legal-modal";
 import { ScanHistoryList } from "@/components/scan-history-list";
 import { Footer } from "@/components/footer";
@@ -275,7 +275,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#f6faf1] text-[#143519] font-sans flex flex-col justify-between">
       <div>
-        {/* Figma Top Navigation Bar */}
+        {/* Top Navigation Bar */}
         <Header
           showInstallButton={showInstallButton}
           language={language}
@@ -286,9 +286,12 @@ export default function Home() {
         />
 
         {/* Main Content Area */}
-        <main className="max-w-7xl mx-auto px-6 py-8 flex flex-col gap-10">
+        <main className="max-w-7xl mx-auto px-6 py-8 flex flex-col">
           {activeTab === "home" && (
             <>
+               {/* How It Works Banner */}
+              <HowItWorksCard language={language} />
+
               {/* Dual Scan Cards Section */}
               <DiagnosticScanner
                 previewUrl={previewUrl}
@@ -299,9 +302,6 @@ export default function Home() {
                 onRunDiagnosis={runDiagnosis}
                 onRetake={handleRetake}
               />
-
-              {/* Informational Tip Banner */}
-              <InfoCalloutCard language={language} />
 
               {/* Recent Scans (Limited to 4 items on Home Screen) */}
               <ScanHistoryList

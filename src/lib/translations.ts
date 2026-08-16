@@ -34,9 +34,9 @@ export const translations = {
     photoCheckHint: "Make sure the leaf or fruit is clear and in the center. If it's blurry or dark, take another photo.",
     analyzingTissue: "Analyzing mango leaf tissue...",
     
-    // Info Callout Card
-    didYouKnowTitle: "Did you know?",
-    didYouKnowDesc: "Scanning leaves in bright, indirect sunlight provides the highest diagnostic accuracy. Avoid deep shadows for better results.",
+    // How It Works Card
+    HowItWorksTitle: "How it works?",
+    HowItWorksDesc: "1. Take a clear photo of mango leaf or fruit in daylight. Avoid dark shadows. \n2. AI will analyze the image. \n3. Get instant diagnostic results and treatment guidelines.",
     
     // Scan History Section
     recentScansTitle: "Recent Scans",
@@ -111,9 +111,9 @@ export const translations = {
     photoCheckHint: "Siguroha nga klaro ug anaa sa tunga ang dahon o bunga. Kung hanap o ngitngit, pagkuha og laing litrato.",
     analyzingTissue: "Nagsusi sa dahon sa mangga...",
     
-    // Info Callout Card
-    didYouKnowTitle: "Kahibalo ba ka?",
-    didYouKnowDesc: "Ang pag-scan sa mga dahon ilalom sa hayag apan dili direkta nga adlaw naghatag og pinakamaayo nga resulta sa diagnosis. Likayi ang ngitngit nga landong.",
+    // How It Works Card
+    HowItWorksTitle: "Unsaon ni pag-gamit?",
+    HowItWorksDesc: "1. Pagkuhag klaro nga litrato dahon sa mangga o bunga samtang buntag. Likayi ang ngitngit. \n\n2. I-analisar sa AI ang pikyur. \n\n3. I-display dayon sa AI ang resulta sa diagnosis ug mga pamaagi sa pagtambay.",
     
     // Scan History Section
     recentScansTitle: "Bag-ong Scan",

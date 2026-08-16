@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: August 15, 2026
+Last updated: August 16, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -100,6 +100,16 @@ This file tracks the project work from the first committed implementation throug
 
 - Normalized version display labels across `.env.example`, `src/lib/app-version.ts`, and `docs/MODEL_VERSIONING.md` to use explicit `v`-prefixes directly (`v0.2.2`, `v2.0.0`).
 - Removed redundant string prefix check from `src/lib/app-version.ts`.
+
+### August 16, 2026: Collapsible scan-flow guide
+
+- Replaced the home-screen information callout with an expanded-by-default, collapsible **How it works** guide.
+- Kept the three scan steps localized in English and Bisaya, rendered as a semantic ordered list, and added accessible expanded-state controls.
+
+**v0.2.3 â€” release preparation**
+
+- Bumped the PWA and package version to `v0.2.3` / `0.2.3` for the collapsible scan-flow guide release.
+- Kept model version `v2.0.0`; no model assets, classes, training data, or evaluation results changed.
 
 
 ## Current Notebook Decision
