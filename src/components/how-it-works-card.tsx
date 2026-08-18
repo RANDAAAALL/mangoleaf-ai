@@ -18,7 +18,7 @@ export const HowItWorksCard = memo(function HowItWorksCard({
     .filter(Boolean);
 
   return (
-    <section className="bg-[#eaf3e5] border border-[#d3e3ca] p-5 sm:p-6 rounded-3xl shadow-xs transition-colors mb-5 sm:mb-8">
+    <section className="w-full bg-[#eaf3e5] border border-[#d3e3ca] p-5 sm:p-6 rounded-3xl shadow-xs transition-colors mb-5 sm:mb-8">
       <button
         type="button"
         className="w-full flex items-center gap-3 text-left"
@@ -62,8 +62,7 @@ export const HowItWorksCard = memo(function HowItWorksCard({
       {isOpen && (
         <ol
           id={contentId}
-          className="mt-4 pl-5 space-y-2 text-xs sm:text-[13px] text-[#3b523f] leading-relaxed list-decimal"
-        >
+        className="mt-4 p-1 space-y-2 text-xs sm:text-[13px] text-[#3b523f] text-justify leading-relaxed list-decimal list-inside">
           {steps.map((step) => (
             <li key={step} lang={language === "en" ? "en" : "ceb"}>
               {step}

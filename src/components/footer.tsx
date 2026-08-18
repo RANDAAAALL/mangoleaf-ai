@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { translations, type Language } from "@/lib/translations";
 import { Logo } from "@/components/logo";
-import { modelVersion, pwaVersion } from "@/lib/app-version";
+import { modelVersion } from "@/lib/constants";
 
 interface FooterProps {
   language: Language;
@@ -31,7 +31,7 @@ export const Footer = memo(function Footer({
         <div className="flex flex-col gap-1 text-xs text-[#526856]">
           <p>{t.footerCopyright}</p>
           <p className="font-medium text-[#66786a]">
-            PWA {pwaVersion} / Model {modelVersion}
+            PWA {process.env.NEXT_PUBLIC_APP_VERSION} / Model {modelVersion}
           </p>
         </div>
 

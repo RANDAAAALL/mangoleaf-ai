@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: August 16, 2026
+Last updated: August 18, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -109,6 +109,28 @@ This file tracks the project work from the first committed implementation throug
 **v0.2.3 â€” release preparation**
 
 - Bumped the PWA and package version to `v0.2.3` / `0.2.3` for the collapsible scan-flow guide release.
+- Kept model version `v2.0.0`; no model assets, classes, training data, or evaluation results changed.
+
+### August 18, 2026: Version labels sourced from package.json
+
+- Made `package.json` the single source of the footer app version. `next.config.ts` now reads its `version` field and injects `NEXT_PUBLIC_APP_VERSION` through the `env` block, so a release requires bumping one number instead of also editing `.env.local` and the hosting dashboard.
+- Removed `src/lib/app-version.ts`. Its fallback logic was unreachable once the version was injected at build time, and its `package.json` import placed the whole manifest in the client module graph.
+- Moved the model label to a `modelVersion` constant in `src/lib/constants.ts`. Placing it in `classifier.ts` would have made the footer transitively depend on TensorFlow.js just to print a string.
+- Removed `NEXT_PUBLIC_APP_VERSION` and `NEXT_PUBLIC_MODEL_VERSION` from `.env.local` and `.env.example`. The stale `.env.local` value was `v0.2.2` and had been silently overriding the real release version.
+- Added `src/env.d.ts` to type `NEXT_PUBLIC_APP_VERSION` as a required string.
+- Verified against the production build: the compiled footer chunk contains the injected version literal, and the name `NEXT_PUBLIC_APP_VERSION` no longer appears in any emitted JavaScript.
+- Added `.vercel` to `.gitignore` for Vercel CLI output.
+- Recorded a `AGENTS.md` convention against reintroducing version labels as environment variables.
+
+**Corrected the `v0.2.3` tag**
+
+- The `v0.2.3` tag pointed to commit `175d7dd`, which predated an amend and did not contain `src/components/how-it-works-card.tsx`. Because `src/app/page.tsx` at that commit imported the component, a checkout of the tag could not build.
+- Moved the tag to the corrected commit `50514f8`, which contains the component. The superseded commit was `175d7ddc4094ea84139b0526bfa1abd6265a40a9`.
+
+**v0.2.4 — version-label sourcing and scan-guide layout patch**
+
+- Refined the **How it works** step list: full-width section, `list-inside` markers, and justified body text.
+- Bumped the PWA and package version to `v0.2.4` / `0.2.4`, which is now derived from `package.json` rather than an environment variable.
 - Kept model version `v2.0.0`; no model assets, classes, training data, or evaluation results changed.
 
 

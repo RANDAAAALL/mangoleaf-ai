@@ -42,8 +42,11 @@ Configure these values in `.env.local`:
 | --- | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | For cloud sync | Supabase project API URL. |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | For cloud sync | Supabase browser-safe anonymous key. |
-| `NEXT_PUBLIC_APP_VERSION` | Recommended | Version label displayed in the footer, such as `v0.2.3`. |
-| `NEXT_PUBLIC_MODEL_VERSION` | Recommended | Model label displayed in the footer, such as `v2.0.0`. |
+
+Version labels are not environment variables. The footer app version is derived
+from the `version` field in `package.json` by `next.config.ts`, and the model
+label is the `modelVersion` constant in `src/lib/constants.ts`. See
+`docs/MODEL_VERSIONING.md`.
 
 The client also accepts `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` as a fallback key name, but `.env.example` uses `NEXT_PUBLIC_SUPABASE_ANON_KEY` as the canonical project convention.
 

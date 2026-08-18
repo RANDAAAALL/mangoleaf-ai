@@ -13,7 +13,7 @@ This repository uses Next.js 16.2.10. APIs, conventions, and file structure may 
 
 ## Conventions
 
-- Use lowercase kebab-case filenames for components and ordinary multiword modules, such as `legal-modal.tsx`, `scan-details-modal.tsx`, and `app-version.ts`.
+- Use lowercase kebab-case filenames for components and ordinary multiword modules, such as `legal-modal.tsx`, `scan-details-modal.tsx`, and `supabase-client.ts`.
 - Use camelCase filenames for custom hooks, such as `useSync.ts` and `usePWAInstall.ts`, with matching `useSomething` exports.
 - Keep React component exports in PascalCase.
 - Use the `@/*` alias for imports from `src/` when practical.
@@ -21,6 +21,7 @@ This repository uses Next.js 16.2.10. APIs, conventions, and file structure may 
 - Update documentation when setup, architecture, environment variables, model versions, or release behavior changes.
 - Do not manually edit generated files: `public/sw.js`, `.next/`, `out/`, `next-env.d.ts`, or `*.tsbuildinfo`.
 - Do not commit `.env.local` or other secret-bearing environment files.
+- Do not turn version labels into environment variables. The app version comes from the `version` field in `package.json` via the `env` block in `next.config.ts`, and the model label is the `modelVersion` constant in `src/lib/constants.ts`. Keep both out of `.env.local`, `.env.example`, and hosting dashboard settings so a stale override cannot display the wrong version.
 - Preserve unrelated user changes and untracked work.
 
 ## Documentation maintenance
@@ -33,7 +34,7 @@ Every implementation task must include a documentation-impact review before it i
 | Application layers, data flow, storage, synchronization, service worker, deployment model, or important directories | `docs/ARCHITECTURE.md` |
 | User-visible feature, workflow, important fix, milestone, or completed project task | `docs/PROGRESS.md` |
 | Performance behavior, caching, bundle loading, image processing, inference, memory, or network optimization | `docs/PERFORMANCE.md` |
-| App version, model version, release process, tags, or notebook-version policy | `docs/MODEL_VERSIONING.md`, `.env.example`, `package.json`, and other displayed version references |
+| App version, model version, release process, tags, or notebook-version policy | `docs/MODEL_VERSIONING.md`, `package.json`, `src/lib/constants.ts`, and other displayed version references |
 | Model training, dataset, class mapping, evaluation metrics, or exported model files | The applicable file under `docs/model-training/`, `docs/MODEL_VERSIONING.md`, and `docs/PROGRESS.md` |
 | File or directory rename | All imports, scripts, configuration, Markdown links, project trees, and documentation references to the old path |
 | New long-lived convention or recurring agent workflow | `AGENTS.md` |

@@ -55,29 +55,44 @@ v0.2.0  feature update before final evaluation
 v0.2.1  confirmation-modal title clarity patch
 v0.2.2  repository documentation and filename-organization patch
 v0.2.3  collapsible home-screen scan-flow guide
+v0.2.4  version-label sourcing and scan-guide layout patch
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
 
-The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work is the `v0.2.2` patch. `v0.2.3` adds the collapsible home-screen scan-flow guide. The model remains `model-v2.0.0` because no model assets, class mapping, or training results changed.
+The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work is the `v0.2.2` patch. `v0.2.3` adds the collapsible home-screen scan-flow guide. `v0.2.4` moves version-label sourcing into the build configuration and refines the scan-guide list layout. The model remains `model-v2.0.0` because no model assets, class mapping, or training results changed.
 
-The PWA footer reads these public build values:
+The `v0.2.3` tag was originally created on a commit that predated an amend and was missing `src/components/how-it-works-card.tsx`, so a checkout of that tag could not build. The tag was moved to the corrected commit `50514f8` on August 18, 2026. The superseded commit was `175d7ddc4094ea84139b0526bfa1abd6265a40a9`. Create tags only after the release commit is final to avoid repeating this.
 
-```env
-NEXT_PUBLIC_APP_VERSION=v0.2.3
-NEXT_PUBLIC_MODEL_VERSION=v2.0.0
-```
+The PWA footer reads two version labels, and neither is an environment variable.
 
-If the variables are not set, the app falls back to `v0.2.3` and `v2.0.0`. These values are public and safe to expose because they are version labels, not secrets.
+| Label | Source | Bump when |
+| --- | --- | --- |
+| App version | `version` field in `package.json`, injected as `NEXT_PUBLIC_APP_VERSION` by the `env` block in `next.config.ts` | Any app release |
+| Model version | `modelVersion` constant in `src/lib/constants.ts` | The assets in `public/model/` are replaced |
+
+Both values are baked into the bundle as literal strings at build time, so a
+version change requires a rebuild. Neither can be overridden by `.env.local`, a
+shell variable, or a hosting dashboard variable, which is deliberate: a stale
+override would silently display the wrong version. Do not add
+`NEXT_PUBLIC_APP_VERSION` or `NEXT_PUBLIC_MODEL_VERSION` to `.env.local` or to
+the Vercel project settings. These values are public and safe to expose because
+they are version labels, not secrets.
+
+`src/env.d.ts` declares `NEXT_PUBLIC_APP_VERSION` as a required string so usage
+sites do not need a non-null assertion. It is a declaration, not a runtime
+guarantee; if the `env` block in `next.config.ts` is removed, the footer renders
+an empty label with no type error.
 
 ## Creating a GitHub Release
 
-From the project root:
+From the project root. Bump the `version` field in `package.json` first, because
+the footer label is derived from it:
 
 ```bash
 git status
 git add -u
-git add package.json .env.example SETUP.md docs/MODEL_VERSIONING.md docs/PROGRESS.md src/app/page.tsx src/components/how-it-works-card.tsx src/lib/app-version.ts src/lib/translations.ts
+git add package.json
 git commit -m "feat: add collapsible scan-flow guide"
 git tag -a v0.2.3 -m "MangoLeaf AI v0.2.3 - collapsible scan-flow guide"
 git push origin master --follow-tags

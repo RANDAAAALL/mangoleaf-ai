@@ -47,12 +47,12 @@ mangoleaf-ai/
 |   |   |-- usePWAInstall.ts        # PWA installation prompt state and actions
 |   |   `-- useSync.ts              # IndexedDB and Supabase synchronization
 |   |-- lib/
-|   |   |-- app-version.ts          # Public app and model version labels
 |   |   |-- classifier.ts           # Model loading, inference, hashing, compression
-|   |   |-- constants.ts            # Model classes and fallback guidance
+|   |   |-- constants.ts            # Model classes, fallback guidance, model version label
 |   |   |-- db.ts                   # Dexie database schema and record types
 |   |   |-- supabase-client.ts      # Browser-side Supabase client
 |   |   `-- translations.ts         # English and Cebuano/Bisaya interface text
+|   |-- env.d.ts                    # Types for build-time injected public env values
 |   `-- sw.ts                       # Serwist source configuration
 |-- docs/                           # Detailed engineering and project history
 |   |-- model-training/             # Trial 1 and Trial 2 training reports
@@ -124,7 +124,7 @@ Supabase is therefore a synchronization and recovery layer; IndexedDB remains th
 
 ### PWA and offline caching
 
-`src/sw.ts` configures Serwist. It precaches the generated application assets, claims active clients, and applies a `CacheFirst` strategy to `/model/*`. `next.config.ts` integrates Serwist, disables it during development, and enables static export.
+`src/sw.ts` configures Serwist. It precaches the generated application assets, claims active clients, and applies a `CacheFirst` strategy to `/model/*`. `next.config.ts` integrates Serwist, disables it during development, and enables static export. It also reads the `version` field from `package.json` and injects it as `NEXT_PUBLIC_APP_VERSION`, which Next replaces with a literal string at build time wherever the code references it. Because the site is a static export, every public value must be baked in during the build; nothing is resolved at runtime. See `docs/MODEL_VERSIONING.md`.
 
 ## Data flow for a scan
 

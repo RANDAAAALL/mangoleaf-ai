@@ -1,5 +1,9 @@
 import { type DiseaseGuideline } from "./db";
 
+// Label for the model assets in public/model/.
+// are replaced by a retraining cycle. See docs/MODEL_VERSIONING.md.
+export const modelVersion = "v2.0.0";
+
 // The 6 standard Carabao Mango classes in alphabetical order matching Keras exports
 export const CLASSES = [
   "Anthracnose",

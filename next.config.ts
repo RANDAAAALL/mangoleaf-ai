@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { version } from "./package.json";
 import withSerwistInit from "@serwist/next";
 
 const withSerwist = withSerwistInit({
@@ -12,6 +13,11 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = {
   output: "export",
+  env: {
+    // Sourced from package.json "version" so the footer label always matches
+    // the committed release. Override only for one-off preview builds.
+    NEXT_PUBLIC_APP_VERSION: `v${version}`,
+  },
   images: {
     unoptimized: true,
   }
