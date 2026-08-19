@@ -42,7 +42,12 @@ mangoleaf-ai/
 |   |   |-- layout.tsx              # Root document, metadata, fonts, and viewport
 |   |   |-- manifest.ts             # Installable PWA manifest
 |   |   `-- page.tsx                # Main client-side application coordinator
-|   |-- components/                 # Reusable interface components
+|   |-- components/                 # Reusable interface components, grouped by role
+|   |   |-- brand/                  # Application logo and icon set
+|   |   |-- layout/                 # Navigation bar, footer, and splash screen
+|   |   |-- modal/                  # Legal and scan-details dialogs
+|   |   |-- scan/                   # Scan controls, result card, history list, guide
+|   |   `-- tab/                    # Home, history, and about screen content
 |   |-- hooks/
 |   |   |-- usePWAInstall.ts        # PWA installation prompt state and actions
 |   |   `-- useSync.ts              # IndexedDB and Supabase synchronization
@@ -50,6 +55,8 @@ mangoleaf-ai/
 |   |   |-- classifier.ts           # Model loading, inference, hashing, compression
 |   |   |-- constants.ts            # Model classes, fallback guidance, model version label
 |   |   |-- db.ts                   # Dexie database schema and record types
+|   |   |-- format-time-ago.ts      # Relative timestamp formatting for scan cards
+|   |   |-- get-badge-styles.ts     # Disease-name to badge color class mapping
 |   |   |-- supabase-client.ts      # Browser-side Supabase client
 |   |   `-- translations.ts         # English and Cebuano/Bisaya interface text
 |   |-- env.d.ts                    # Types for build-time injected public env values
@@ -83,7 +90,34 @@ This is a single Next.js application rather than separate frontend and backend f
 
 ### User interface
 
-Reusable UI lives in `src/components/`. Filenames use lowercase kebab-case, while exported React components remain PascalCase. For example, `scan-details-modal.tsx` exports `ScanDetailsModal`.
+Reusable UI lives in `src/components/`. Filenames use lowercase kebab-case, while exported React components remain PascalCase. For example, `modal/scan-details-modal.tsx` exports `ScanDetailsModal`. Components wrapped in `React.memo()` name the inner function after the export so React DevTools and stack traces show the real component name.
+
+Components are grouped into subfolders by the role they play rather than kept in one flat directory:
+
+| Folder | Contents | Role |
+| --- | --- | --- |
+| `brand/` | `logo.tsx`, `icon.tsx` | Identity marks and the shared icon set |
+| `layout/` | `navbar.tsx`, `footer.tsx`, `splash-screen.tsx` | Application frame around screen content |
+| `modal/` | `legal-modal.tsx`, `scan-details-modal.tsx` | Overlay dialogs |
+| `scan/` | `diagnostic-scanner.tsx`, `scan-card.tsx`, `scan-history-list.tsx`, `how-it-works-card.tsx` | Diagnosis feature surface |
+| `tab/` | `home-tab.tsx`, `history-tab.tsx`, `about-tab.tsx` | One component per navigation tab |
+
+The three tab components are the boundary between `page.tsx` and screen content. `page.tsx` owns all state and handlers, and renders exactly one of `HomeTab`, `HistoryTab`, or `AboutTab` per active tab. Adding a screen means adding a tab component and one branch in `page.tsx`, not editing shared markup.
+
+Grouping is by role, not by which tab uses a file. `scan/scan-history-list.tsx` is rendered by both `HistoryTab` in full and by `HomeTab` as a four-item preview, so it belongs to the scan feature rather than to either tab. Folders group files for navigation and do not define access boundaries.
+
+Use the `@/components/...` path alias for imports across folders, and relative `./` paths only within the same folder, so a file can be moved without rewriting unrelated paths.
+
+### Presentation helpers
+
+Two pure formatting functions in `src/lib/` are kept out of the components that render them so the component files stay markup-only:
+
+- `format-time-ago.ts` turns a scan's ISO `updated_at` into a relative label. It reads every string from `translations.ts`, including the `{n}` count templates for minutes, hours, and days and the `monthsShort` abbreviations used for dates older than a week, so the label is fully localized in both languages. Month names come from `translations.ts` rather than `toLocaleDateString` because browsers have no reliable Cebuano/Bisaya month data. An unparseable timestamp returns the `justNow` label instead of falling through to a `NaN` date.
+- `get-badge-styles.ts` maps a disease name to the Tailwind badge classes for its severity color. It matches on substrings, so an unrecognized class name falls back to neutral slate styling rather than throwing.
+
+Both are imported by `scan/scan-card.tsx`. Neither imports React, so both can be called from any component or tested directly.
+
+When adding a relative-time string, add it to both the `en` and `bis` objects in `translations.ts` and use the `{n}` placeholder for any number. Cebuano/Bisaya does not inflect nouns for plurals, so only English needs separate singular and plural forms.
 
 ### On-device AI pipeline
 

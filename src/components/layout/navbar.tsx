@@ -1,9 +1,9 @@
-import React, { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo } from "react";
 import { translations, type Language } from "@/lib/translations";
-import { Logo } from "@/components/logo";
-import { Icon } from "@/components/icon";
+import { Logo } from "@/components/brand/logo";
+import { Icon } from "@/components/brand/icon";
 
-interface HeaderProps {
+interface NavbarProps {
   showInstallButton: boolean;
   language: Language;
   activeTab?: "home" | "history" | "about";
@@ -12,14 +12,14 @@ interface HeaderProps {
   onInstall: () => void;
 }
 
-export const Header = memo(function Header({
+export const Navbar = memo(function Navbar({
   showInstallButton,
   language,
   activeTab = "home",
   onTabChange,
   onLanguageChange,
   onInstall,
-}: HeaderProps) {
+}: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const t = translations[language];
 

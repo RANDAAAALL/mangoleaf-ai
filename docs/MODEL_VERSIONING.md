@@ -56,11 +56,12 @@ v0.2.1  confirmation-modal title clarity patch
 v0.2.2  repository documentation and filename-organization patch
 v0.2.3  collapsible home-screen scan-flow guide
 v0.2.4  version-label sourcing and scan-guide layout patch
+v0.2.5  localized scan history and UI reorganization
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
 
-The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work is the `v0.2.2` patch. `v0.2.3` adds the collapsible home-screen scan-flow guide. `v0.2.4` moves version-label sourcing into the build configuration and refines the scan-guide list layout. The model remains `model-v2.0.0` because no model assets, class mapping, or training results changed.
+The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work is the `v0.2.2` patch. `v0.2.3` adds the collapsible home-screen scan-flow guide. `v0.2.4` moves version-label sourcing into the build configuration and refines the scan-guide list layout. `v0.2.5` localizes scan-history dates in English and Bisaya and reorganizes the UI components. The model remains `model-v2.0.0` because no model assets, class mapping, or training results changed.
 
 The `v0.2.3` tag was originally created on a commit that predated an amend and was missing `src/components/how-it-works-card.tsx`, so a checkout of that tag could not build. The tag was moved to the corrected commit `50514f8` on August 18, 2026. The superseded commit was `175d7ddc4094ea84139b0526bfa1abd6265a40a9`. Create tags only after the release commit is final to avoid repeating this.
 
@@ -93,8 +94,8 @@ the footer label is derived from it:
 git status
 git add -u
 git add package.json
-git commit -m "feat: add collapsible scan-flow guide"
-git tag -a v0.2.3 -m "MangoLeaf AI v0.2.3 - collapsible scan-flow guide"
+git commit -m "feat(app): localize scan history and reorganize UI"
+git tag -a v0.2.5 -m "MangoLeaf AI v0.2.5 - localized scan history and UI reorganization"
 git push origin master --follow-tags
 ```
 

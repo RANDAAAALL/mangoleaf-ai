@@ -1,6 +1,6 @@
 import React, { useEffect, memo } from "react";
 import { translations, type Language } from "@/lib/translations";
-import { Icon } from "@/components/icon";
+import { Icon } from "@/components/brand/icon";
 
 interface DiagnosticScannerProps {
   previewUrl: string | null;

@@ -1,6 +1,8 @@
 import React, { memo, useState, useEffect } from "react";
 import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { translations, type Language } from "@/lib/translations";
+import { getBadgeStyles } from "@/lib/get-badge-styles";
+import { formatTimeAgo } from "@/lib/format-time-ago";
 
 interface ScanCardProps {
   scan: ScanRecord;
@@ -10,47 +12,6 @@ interface ScanCardProps {
   language: Language;
   onSelect: (scan: ScanRecord) => void;
   onDelete: (id: string) => void;
-}
-
-// Badge color mapping matching Figma design
-const getBadgeStyles = (diseaseName: string) => {
-  const name = diseaseName.toLowerCase();
-  if (name.includes("healthy")) {
-    return "bg-[#dcfce7] text-[#15803d] border-[#bbf7d0]";
-  }
-  if (name.includes("anthracnose") || name.includes("canker") || name.includes("black")) {
-    return "bg-[#ffe4e6] text-[#be123c] border-[#fecdd3]";
-  }
-  if (name.includes("sooty")) {
-    return "bg-[#fce7f3] text-[#9d174d] border-[#fbcfe8]";
-  }
-  if (name.includes("scab")) {
-    return "bg-[#ffedd5] text-[#c2410c] border-[#fed7aa]";
-  }
-  return "bg-slate-100 text-slate-700 border-slate-200";
-};
-
-// Formats timestamp into human readable relative time
-function formatTimeAgo(isoString: string, language: Language): string {
-  const t = translations[language];
-  try {
-    const date = new Date(isoString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    if (diffMins < 1) return t.justNow;
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours} ${diffHours === 1 ? "hour" : "hours"} ago`;
-    if (diffDays === 1) return t.yesterday;
-    if (diffDays < 7) return `${diffDays} days ago`;
-
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  } catch {
-    return t.justNow;
-  }
 }
 
 export const ScanCard = memo(function ScanCard({

@@ -20,18 +20,18 @@ let sharedCanvas: HTMLCanvasElement | null = null;
 export async function loadMangoModel(): Promise<tf.GraphModel> {
   // Return cached model instantly if already loaded
   if (cachedModel) {
-    console.log("⚡ Model already cached — returning instantly.");
+    console.log("---Model already cached — returning instantly.---");
     return cachedModel;
   }
 
   // Prevent duplicate concurrent loads (e.g. React StrictMode double-mount)
   if (loadingPromise) {
-    console.log("⏳ Model load already in progress — awaiting...");
+    console.log("---Model load already in progress — awaiting...---");
     return loadingPromise;
   }
 
   loadingPromise = (async () => {
-    console.log("🤖 Initializing TensorFlow.js engine...");
+    console.log("---Initializing TensorFlow.js engine...---");
 
     // OPTIMIZATION: Force GPU to use 16-bit float textures.
     // This halves GPU memory usage on phones and perfectly matches our Float16 quantized model.
@@ -42,15 +42,15 @@ export async function loadMangoModel(): Promise<tf.GraphModel> {
 
     const modelPath = "/model/model.json";
     const model = await tf.loadGraphModel(modelPath);
-    console.log("💾 Graph model JSON loaded from assets.");
+    console.log("---Graph model JSON loaded from assets.---");
 
     // Run a dummy warmup to force compile WebGL shaders on device startup
-    console.log("⚡ Warming up GPU WebGL shaders...");
+    console.log("---Warming up GPU WebGL shaders...---");
     tf.tidy(() => {
       const dummyTensor = tf.zeros([1, 224, 224, 3]);
       model.predict(dummyTensor);
     });
-    console.log("✨ GPU model warmup complete.");
+    console.log("---GPU model warmup complete.---");
 
     cachedModel = model;
     return model;
@@ -180,7 +180,7 @@ export async function compressImageForStorage(
   // If WebP succeeded AND the browser actually produced a WebP blob (not a fallback PNG),
   // use it. Otherwise fall back to JPEG for maximum compatibility.
   if (webpBlob && webpBlob.type === "image/webp") {
-    console.log(`📦 Compressed to WebP: ${(webpBlob.size / 1024).toFixed(0)} KB`);
+    console.log(`---Compressed to WebP: ${(webpBlob.size / 1024).toFixed(0)} KB---`);
     return webpBlob;
   }
 
@@ -189,7 +189,7 @@ export async function compressImageForStorage(
     canvas.toBlob(
       (blob) => {
         if (blob) {
-          console.log(`📦 Compressed to JPEG (fallback): ${(blob.size / 1024).toFixed(0)} KB`);
+          console.log(`---Compressed to JPEG (fallback): ${(blob.size / 1024).toFixed(0)} KB---`);
           resolve(blob);
         }
         else reject(new Error("Canvas blob compression failed"));

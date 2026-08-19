@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: August 18, 2026
+Last updated: August 19, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -131,6 +131,33 @@ This file tracks the project work from the first committed implementation throug
 
 - Refined the **How it works** step list: full-width section, `list-inside` markers, and justified body text.
 - Bumped the PWA and package version to `v0.2.4` / `0.2.4`, which is now derived from `package.json` rather than an environment variable.
+- Kept model version `v2.0.0`; no model assets, classes, training data, or evaluation results changed.
+
+### August 19, 2026: Tab extraction and component reorganization
+
+- Split the three inline `activeTab` branches out of `src/app/page.tsx` into `tab/home-tab.tsx`, `tab/history-tab.tsx`, and `tab/about-tab.tsx`. `page.tsx` still owns every piece of state and every handler and now renders one tab component per branch, so screen markup and application state are no longer edited in the same file.
+- Moved the four-item home preview slice into `HomeTab`. `page.tsx` passes the full scan array and the tab decides how much of it to show.
+- `AboutTab` reads `translations[language]` itself, which removed the last use of a shared `t` binding in `page.tsx`.
+- Grouped `src/components/` into five subfolders by role instead of one flat directory: `brand/`, `layout/`, `modal/`, `scan/`, and `tab/`. Every folder holds at least two files and follows a single naming scheme.
+- Placed `scan-history-list.tsx` under `scan/` rather than with either tab, because it is rendered in full by `HistoryTab` and as a four-item preview by `HomeTab`. Grouping by role instead of by consuming tab avoids giving shared components an arbitrary owner.
+- Renamed `header.tsx` to `layout/navbar.tsx` and its export from `Header` to `Navbar` to match how the component is described in the interface.
+- Named the inner function of every `memo(...)` wrapper after its export. `Navbar` had kept `function Header`, which made React DevTools and stack traces report the old name.
+- Deleted `device-profile-card.tsx` and `sql-schema-card.tsx`. Neither was imported anywhere; both were left over from early development scaffolding.
+- Removed the unused `AppIcon` and `NavIcon` aliases from `brand/icon.tsx`. Both re-exported `Icon` for backward compatibility with a call site that no longer exists.
+- Extracted `formatTimeAgo` and `getBadgeStyles` from `scan-card.tsx` into `src/lib/format-time-ago.ts` and `src/lib/get-badge-styles.ts`. Both are pure functions with no React import, so they can be tested without rendering a component.
+- Moved component imports onto the `@/components/...` alias for cross-folder references, keeping relative `./` paths only for same-folder imports.
+- Replaced emoji prefixes in `console.log` diagnostics with plain `---` delimiters so log output stays readable in terminals and device logs that do not render emoji. The Realtime handler now passes its `payload` as a separate console argument instead of concatenating it into the message string, which had been logging `[object Object]`.
+- Removed the trailing arrow glyphs from the `viewAllHistory` and `viewAllHistoryShort` translation strings so the label text carries no decoration, and dropped the now-inert `gap-1` from both view-all buttons, which each hold a single child after the arrow was removed.
+- Fully localized relative scan times. `formatTimeAgo` previously returned `justNow` and `yesterday` from `translations.ts` but hardcoded English for its minute, hour, and day branches and formatted absolute dates with `en-US`, so a farmer using Bisaya saw entries such as "3 days ago" and "Aug 19, 2026". Added `minutesAgo`, `hourAgo`, `hoursAgo`, `daysAgo`, and a `monthsShort` array to both languages.
+- Used `{n}` placeholder templates for the counted labels so plural rules stay inside `translations.ts`. English keeps separate singular and plural hour forms; Cebuano/Bisaya does not inflect the noun, so one form covers every count.
+- Built absolute dates from the translated `monthsShort` array instead of `toLocaleDateString`, because browsers have no reliable Cebuano/Bisaya month data and would silently fall back to English.
+- Added an explicit `Number.isNaN(date.getTime())` guard to `formatTimeAgo`. An unparseable timestamp made every comparison false and reached the absolute-date branch, which rendered `NaN`; the surrounding `try`/`catch` never fired because `new Date()` returns an invalid date rather than throwing.
+- Verified with `bun run typecheck`, `bun run lint`, and `bun run build`. Lint reports the same five pre-existing unused-variable warnings as before the reorganization.
+
+**v0.2.5 — localized scan history and UI reorganization**
+
+- Bumped the PWA and package version to `v0.2.5` / `0.2.5`.
+- Shipped localized relative and absolute scan-history dates in English and Bisaya alongside the component reorganization.
 - Kept model version `v2.0.0`; no model assets, classes, training data, or evaluation results changed.
 
 

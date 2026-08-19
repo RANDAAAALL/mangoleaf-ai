@@ -43,8 +43,8 @@ export const translations = {
     scanHistoryTitle: "Scan History",
     searchPlaceholder: "Search scans...",
     filterAll: "≡ Filter All",
-    viewAllHistory: "View All History →",
-    viewAllHistoryShort: "View All →",
+    viewAllHistory: "View All History",
+    viewAllHistoryShort: "View All",
     noScanHistoryTitle: "No Scan History Yet",
     noScanHistoryText: "No previous scans recorded on this device. Upload or take a photo above to run your first diagnosis!",
     
@@ -54,7 +54,14 @@ export const translations = {
     detailsBtn: "Details",
     justNow: "Just now",
     yesterday: "Yesterday",
-    
+    // Relative-time templates. {n} is replaced with the number by formatTimeAgo.
+    minutesAgo: "{n}m ago",
+    hourAgo: "1 hour ago",
+    hoursAgo: "{n} hours ago",
+    daysAgo: "{n} days ago",
+    // Month abbreviations for absolute scan dates older than a week.
+    monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+
     // Scan Details Modal
     diagnosisPrefix: "Diagnosis:",
     scannedOnPrefix: "Scanned on",
@@ -120,8 +127,8 @@ export const translations = {
     scanHistoryTitle: "Mga nangaging Scan",
     searchPlaceholder: "Pangitaa ang scan...",
     filterAll: "≡ I-filter Tanan",
-    viewAllHistory: "Tan-awa Tanan nga History →",
-    viewAllHistoryShort: "Tan-awa Tanan →",
+    viewAllHistory: "Tan-awa Tanan ang History",
+    viewAllHistoryShort: "Tan-awa Tanan",
     noScanHistoryTitle: "Wala pay Nangaging Scan",
     noScanHistoryText: "Wala pay nangaging scan nga nakarecord sa kini nga device. Pag-upload o paglitrato og dahon o bunga sa ibabaw aron masugdan ang pag-scan!",
     
@@ -131,7 +138,15 @@ export const translations = {
     detailsBtn: "Detalye",
     justNow: "Karon lang",
     yesterday: "Gahapon",
-    
+    // Relative-time templates. {n} is replaced with the number by formatTimeAgo.
+    // Cebuano/Bisaya does not inflect the noun for plurals, so one form covers all counts.
+    minutesAgo: "{n} minuto ang milabay",
+    hourAgo: "1 oras ang milabay",
+    hoursAgo: "{n} oras ang milabay",
+    daysAgo: "{n} adlaw ang milabay",
+    // Month abbreviations for absolute scan dates older than a week.
+    monthsShort: ["Ene", "Peb", "Mar", "Abr", "May", "Hun", "Hul", "Ago", "Sep", "Okt", "Nob", "Dis"],
+
     // Scan Details Modal
     diagnosisPrefix: "Diagnosis:",
     scannedOnPrefix: "Na-scan niadtong",

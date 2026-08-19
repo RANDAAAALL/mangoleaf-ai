@@ -75,8 +75,9 @@ This document outlines the technical optimizations, hardware acceleration strate
 * **Cleanup:** Each `ScanCard` revokes its own `ObjectURL` upon unmounting or when the scan blob changes, ensuring zero image flickering and zero heap memory leaks.
 
 ### 2.2 Modular Component Refactoring & `React.memo()` Memoization
-* **Structure:** Scoped UI into isolated components (`SplashScreen`, `Header`, `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `ScanDetailsModal`, `LegalModal`, `Footer`, `HowItWorksCard`).
-* **Memoization:** `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `ScanDetailsModal`, `Header`, `NavIcon`, `Logo`, `Footer`, and `HowItWorksCard` are wrapped in `React.memo()` to prevent unnecessary re-renders when parent state changes.
+* **Structure:** Scoped UI into isolated components (`SplashScreen`, `Navbar`, `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `ScanDetailsModal`, `LegalModal`, `Footer`, `HowItWorksCard`), grouped into `src/components/` subfolders by role: `brand/`, `layout/`, `modal/`, `scan/`, and `tab/`.
+* **Per-Tab Components:** `HomeTab`, `HistoryTab`, and `AboutTab` replace the inline `activeTab` branches previously in `page.tsx`. Only the active tab's subtree is mounted, so switching tabs unmounts the other two instead of keeping all three in the render output.
+* **Memoization:** `HomeTab`, `HistoryTab`, `AboutTab`, `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `ScanDetailsModal`, `LegalModal`, `Navbar`, `Icon`, `Logo`, `Footer`, and `HowItWorksCard` are wrapped in `React.memo()` to prevent unnecessary re-renders when parent state changes. `SplashScreen` is not memoized because it renders once before the model finishes loading and is then replaced.
 * **Stable Callbacks & Refs:** `getGuidelineColor`, `handleViewAllHistory`, and `setLanguage` are wrapped in `useCallback`. `selectedFileRef` and `previewUrlRef` stabilize `runDiagnosis` callback identity across state changes.
 
 ### 2.3 Dexie Reverse Query Optimization (`page.tsx`)

@@ -1,6 +1,6 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import { translations, type Language } from "@/lib/translations";
-import { Logo } from "@/components/logo";
+import { Logo } from "@/components/brand/logo";
 import { modelVersion } from "@/lib/constants";
 
 interface FooterProps {
@@ -22,9 +22,7 @@ export const Footer = memo(function Footer({
         {/* Brand Logo */}
         <div className="flex items-center gap-2">
           <Logo width={22} height={22} />
-          <span className="text-lg font-bold text-[#143519]">
-            MangoLeaf AI
-          </span>
+          <span className="text-lg font-bold text-[#143519]">MangoLeaf AI</span>
         </div>
 
         {/* Text Details */}

@@ -94,7 +94,7 @@ The compiled web AI engine is **11.51 MB total**, split into 3 binary weight sha
 * **3G Upload Resilience (`src/hooks/useSync.ts`):** 10-second `AbortController` timeout prevents stalled 3G uploads from hanging, safely retaining pending items in IndexedDB for automatic retries. Added `isSyncingRef` lock guard to prevent concurrent sync operations from stacking.
 * **WebP Storage Compression (`src/lib/classifier.ts`):** Post-diagnosis compression uses WebP at 75% quality (~75 KB, 50% smaller than JPEG) with automatic JPEG fallback for older devices.
 * **React.memo Component Memoization:** `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, and `ScanDetailsModal` are wrapped in `React.memo()` to prevent unnecessary re-renders during AI scan progress updates.
-* **Infinite Scroll (`src/components/scan-history-list.tsx`):** Replaced manual pagination button with `IntersectionObserver` auto-loading sentinel element for zero-tap scrolling.
+* **Infinite Scroll (`src/components/scan/scan-history-list.tsx`):** Replaced manual pagination button with `IntersectionObserver` auto-loading sentinel element for zero-tap scrolling.
 * **Supabase Preconnect (`src/app/layout.tsx`):** Added `<link rel="preconnect">` and `<link rel="dns-prefetch">` for Supabase domain to save ~300ms DNS+TLS handshake on 3G networks.
 * **PWA Viewport Export (`src/app/layout.tsx`):** Next.js 14+ `export const viewport` with theme color `#020617` matching dark UI and 5x accessibility zoom support.
 * **Blob URL Auto-Revocation (`src/app/page.tsx`):** `useEffect` cleanup automatically revokes old `URL.createObjectURL()` references, preventing browser heap memory leaks during long farming sessions.

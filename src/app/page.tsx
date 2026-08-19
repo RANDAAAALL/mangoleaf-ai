@@ -7,42 +7,43 @@ import { useSync } from "@/hooks/useSync";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
 import type * as tf from "@tensorflow/tfjs";
 import { FALLBACK_GUIDELINES } from "@/lib/constants";
-import { translations, type Language } from "@/lib/translations";
+import { type Language } from "@/lib/translations";
 
 // Modular UI Components matching Figma Design System
-import { SplashScreen } from "@/components/splash-screen";
-import { Header } from "@/components/header";
-import { DiagnosticScanner } from "@/components/diagnostic-scanner";
-import { HowItWorksCard } from "@/components/how-it-works-card";
-import { LegalModal } from "@/components/legal-modal";
-import { ScanHistoryList } from "@/components/scan-history-list";
-import { Footer } from "@/components/footer";
-import dynamic from 'next/dynamic';
+import { SplashScreen } from "@/components/layout/splash-screen";
+import { Navbar } from "@/components/layout/navbar";
+import { HomeTab } from "@/components/tab/home-tab";
+import { HistoryTab } from "@/components/tab/history-tab";
+import { AboutTab } from "@/components/tab/about-tab";
+import { LegalModal } from "@/components/modal/legal-modal";
+import { Footer } from "@/components/layout/footer";
+import dynamic from "next/dynamic";
 
 // Load the details modal only when it is needed to keep the initial bundle smaller.
-const ScanDetailsModal = dynamic(() => import('@/components/scan-details-modal').then(mod => ({ default: mod.ScanDetailsModal })));
+const ScanDetailsModal = dynamic(() =>
+  import("@/components/modal/scan-details-modal").then((mod) => ({
+    default: mod.ScanDetailsModal,
+  })),
+);
 
 // Survives client remounts so the model is not initialized twice in one browser session.
 let hasInitialized = false;
 
 export default function Home() {
-  const {
-    isOnline,
-    isSyncing,
-    deviceId,
-    createScan,
-    deleteScan,
-    triggerSync,
-  } = useSync();
+  const { isOnline, isSyncing, deviceId, createScan, deleteScan, triggerSync } =
+    useSync();
 
   const { showInstallButton, installApp } = usePWAInstall();
 
   // Navigation tab state ("home" | "history" | "about")
-  const [activeTab, setActiveTab] = useState<"home" | "history" | "about">("home");
+  const [activeTab, setActiveTab] = useState<"home" | "history" | "about">(
+    "home",
+  );
 
   // TensorFlow.js model states
   const [model, setModel] = useState<tf.GraphModel | null>(null);
-  const [isModelLoading, setIsModelLoading] = useState<boolean>(!hasInitialized);
+  const [isModelLoading, setIsModelLoading] =
+    useState<boolean>(!hasInitialized);
 
   // Load MobileNetV3 model on startup
   useEffect(() => {
@@ -76,7 +77,9 @@ export default function Home() {
   }, [selectedFile, previewUrl]);
   const [isScanning, setIsScanning] = useState(false);
   const [scanningProgress, setScanningProgress] = useState(0);
-  const [legalModalType, setLegalModalType] = useState<"privacy" | "terms" | null>(null);
+  const [legalModalType, setLegalModalType] = useState<
+    "privacy" | "terms" | null
+  >(null);
 
   // Global language state initialized from actual localStorage ("bis" default)
   const [selectedScan, setSelectedScan] = useState<ScanRecord | null>(null);
@@ -94,15 +97,16 @@ export default function Home() {
     }
   }, []);
 
-  const t = translations[language];
-
   // Query local active scans
-  const scansQuery = useLiveQuery(() =>
-    db.scans
-      .where("_status").notEqual("pending-delete")
-      .sortBy("updated_at")
-      .then(results => results.reverse())
-  , []);
+  const scansQuery = useLiveQuery(
+    () =>
+      db.scans
+        .where("_status")
+        .notEqual("pending-delete")
+        .sortBy("updated_at")
+        .then((results) => results.reverse()),
+    [],
+  );
   const activeScans = useMemo(() => scansQuery ?? [], [scansQuery]);
 
   const selectedScanImageUrl = useMemo(() => {
@@ -114,7 +118,7 @@ export default function Home() {
 
   useEffect(() => {
     return () => {
-      if (selectedScanImageUrl && selectedScanImageUrl.startsWith('blob:')) {
+      if (selectedScanImageUrl && selectedScanImageUrl.startsWith("blob:")) {
         URL.revokeObjectURL(selectedScanImageUrl);
       }
     };
@@ -125,7 +129,7 @@ export default function Home() {
 
   const guidelineMap = useMemo(() => {
     const map: Record<string, DiseaseGuideline> = {};
-    for (const g of (cachedGuidelines || [])) {
+    for (const g of cachedGuidelines || []) {
       map[g.id] = g;
     }
     return map;
@@ -150,14 +154,17 @@ export default function Home() {
   const lastPickerIdRef = useRef<string | null>(null);
 
   // Handle photo capture / selection
-  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    lastPickerIdRef.current = e.target.id;
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-    setSelectedFile(file);
-    setPreviewUrl(URL.createObjectURL(file));
-  }, [previewUrl]);
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      lastPickerIdRef.current = e.target.id;
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      setSelectedFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    },
+    [previewUrl],
+  );
 
   // Retake — clear the current preview and immediately reopen the same photo source
   const handleRetake = useCallback(() => {
@@ -166,10 +173,12 @@ export default function Home() {
     setSelectedFile(null);
     setPreviewUrl(null);
     if (pickerId) {
-      const input = document.getElementById(pickerId) as HTMLInputElement | null;
+      const input = document.getElementById(
+        pickerId,
+      ) as HTMLInputElement | null;
       if (input) {
         input.value = ""; // reset so re-selecting the same file still triggers onChange
-        input.click();    // synchronous — preserves the user-activation needed to open the camera
+        input.click(); // synchronous — preserves the user-activation needed to open the camera
       }
     }
   }, [previewUrl]);
@@ -184,15 +193,21 @@ export default function Home() {
     setScanningProgress(15);
 
     try {
-      const { predictMangoDisease, compressImageForStorage, computeImageHash } = await import("@/lib/classifier");
+      const { predictMangoDisease, compressImageForStorage, computeImageHash } =
+        await import("@/lib/classifier");
 
       // 1. Compute SHA-256 hash to check for duplicate gallery photos
       const imageHash = await computeImageHash(file);
 
       // 2. Search local database for existing duplicate scan
-      const existingScan = await db.scans.where("image_hash").equals(imageHash).first();
+      const existingScan = await db.scans
+        .where("image_hash")
+        .equals(imageHash)
+        .first();
       if (existingScan) {
-        console.log("⚡ Duplicate photo detected — opening existing scan report.");
+        console.log(
+          "---Duplicate photo detected — opening existing scan report.---",
+        );
         setSelectedScan(existingScan);
         if (preview) URL.revokeObjectURL(preview);
         setSelectedFile(null);
@@ -211,7 +226,7 @@ export default function Home() {
 
       setScanningProgress(45);
       const { diseaseName, confidence } = await predictMangoDisease(model, img);
-      
+
       setScanningProgress(75);
       // Compress photo using WebP format (75% quality, ~75KB) before saving
       const storageBlob = await compressImageForStorage(img, 1000, 0.75);
@@ -227,7 +242,7 @@ export default function Home() {
       setIsScanning(false);
       setScanningProgress(0);
 
-      const newestScan = await db.scans.orderBy('updated_at').last();
+      const newestScan = await db.scans.orderBy("updated_at").last();
       if (newestScan) {
         setSelectedScan(newestScan);
       }
@@ -239,34 +254,38 @@ export default function Home() {
   }, [model, createScan]);
 
   // Retrieve guideline for a disease
-  const getGuidelineForScan = useCallback((diseaseName: string): { en: string; bis: string; color: DiseaseGuideline["color"] } => {
-    const key = diseaseName.toLowerCase().replace(/\s+/g, "_");
-    const matched = guidelineMap[key];
+  const getGuidelineForScan = useCallback(
+    (
+      diseaseName: string,
+    ): { en: string; bis: string; color: DiseaseGuideline["color"] } => {
+      const key = diseaseName.toLowerCase().replace(/\s+/g, "_");
+      const matched = guidelineMap[key];
 
-    if (matched) {
-      return {
-        en: matched.guidelines_en,
-        bis: matched.guidelines_bis,
-        color: matched.color,
-      };
-    }
-
-    return (
-      FALLBACK_GUIDELINES[key] || {
-        en: "No specific guidelines downloaded yet. Keep the mango leaves dry, prune infected twigs, and avoid overhead sprinkler watering.",
-        bis: "Wala pay nadownload nga guidelines. Padayon nga pama-un ang mga dahon, putlon ang mga naapektuhang sanga, ug likayi ang pagbisbis nga magbasa sa dahon.",
-        color: "yellow",
+      if (matched) {
+        return {
+          en: matched.guidelines_en,
+          bis: matched.guidelines_bis,
+          color: matched.color,
+        };
       }
-    );
-  }, [guidelineMap]);
+
+      return (
+        FALLBACK_GUIDELINES[key] || {
+          en: "No specific guidelines downloaded yet. Keep the mango leaves dry, prune infected twigs, and avoid overhead sprinkler watering.",
+          bis: "Wala pay nadownload nga guidelines. Padayon nga pama-un ang mga dahon, putlon ang mga naapektuhang sanga, ug likayi ang pagbisbis nga magbasa sa dahon.",
+          color: "yellow",
+        }
+      );
+    },
+    [guidelineMap],
+  );
 
   // Stabilized props for ScanHistoryList memo (#4)
   const getGuidelineColor = useCallback(
     (diseaseName: string) => getGuidelineForScan(diseaseName).color,
-    [getGuidelineForScan]
+    [getGuidelineForScan],
   );
   const handleViewAllHistory = useCallback(() => setActiveTab("history"), []);
-  const homeScans = useMemo(() => activeScans.slice(0, 4), [activeScans]);
 
   if (isModelLoading) {
     return <SplashScreen />;
@@ -276,7 +295,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#f6faf1] text-[#143519] font-sans flex flex-col justify-between">
       <div>
         {/* Top Navigation Bar */}
-        <Header
+        <Navbar
           showInstallButton={showInstallButton}
           language={language}
           activeTab={activeTab}
@@ -287,77 +306,37 @@ export default function Home() {
 
         {/* Main Content Area */}
         <main className="max-w-7xl mx-auto px-6 py-8 flex flex-col">
+          {/* Home Tab */}
           {activeTab === "home" && (
-            <>
-               {/* How It Works Banner */}
-              <HowItWorksCard language={language} />
-
-              {/* Dual Scan Cards Section */}
-              <DiagnosticScanner
-                previewUrl={previewUrl}
-                isScanning={isScanning}
-                scanningProgress={scanningProgress}
-                language={language}
-                onFileChange={handleFileChange}
-                onRunDiagnosis={runDiagnosis}
-                onRetake={handleRetake}
-              />
-
-              {/* Recent Scans (Limited to 4 items on Home Screen) */}
-              <ScanHistoryList
-                scans={homeScans}
-                language={language}
-                getGuidelineColor={getGuidelineColor}
-                onSelectScan={setSelectedScan}
-                onDeleteScan={deleteScan}
-                onViewAllHistory={handleViewAllHistory}
-                isFullHistoryPage={false}
-              />
-            </>
+            <HomeTab
+              scans={activeScans}
+              language={language}
+              previewUrl={previewUrl}
+              isScanning={isScanning}
+              scanningProgress={scanningProgress}
+              getGuidelineColor={getGuidelineColor}
+              onFileChange={handleFileChange}
+              onRunDiagnosis={runDiagnosis}
+              onRetake={handleRetake}
+              onSelectScan={setSelectedScan}
+              onDeleteScan={deleteScan}
+              onViewAllHistory={handleViewAllHistory}
+            />
           )}
 
+          {/* History Tab */}
           {activeTab === "history" && (
-            <ScanHistoryList
+            <HistoryTab
               scans={activeScans}
               language={language}
               getGuidelineColor={getGuidelineColor}
               onSelectScan={setSelectedScan}
               onDeleteScan={deleteScan}
-              isFullHistoryPage={true}
             />
           )}
 
-          {activeTab === "about" && (
-            <div className="bg-white border border-[#e2ebd9] p-6 sm:p-8 rounded-3xl shadow-xs flex flex-col gap-6 max-w-4xl mx-auto">
-              <h2 className="text-2xl font-bold text-[#143519]">{t.aboutTitle}</h2>
-              <p
-                lang={language === "en" ? "en" : "ceb"}
-                className="text-sm text-[#3b523f] leading-relaxed text-justify [text-justify:inter-word] break-words hyphens-auto"
-              >
-                {t.aboutDesc}
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                <div className="p-5 bg-[#f6faf1] rounded-2xl border border-[#e2ebd9] flex flex-col gap-2">
-                  <h4 className="font-bold text-[#143519] text-base">{t.aiEngineTitle}</h4>
-                  <p
-                    lang={language === "en" ? "en" : "ceb"}
-                    className="text-xs text-[#526856] leading-relaxed text-justify [text-justify:inter-word] break-words hyphens-auto"
-                  >
-                    {t.aiEngineDesc}
-                  </p>
-                </div>
-                <div className="p-5 bg-[#f6faf1] rounded-2xl border border-[#e2ebd9] flex flex-col gap-2">
-                  <h4 className="font-bold text-[#143519] text-base">{t.offlineSyncTitle}</h4>
-                  <p
-                    lang={language === "en" ? "en" : "ceb"}
-                    className="text-xs text-[#526856] leading-relaxed text-justify [text-justify:inter-word] break-words hyphens-auto"
-                  >
-                    {t.offlineSyncDesc}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* About Tab */}
+          {activeTab === "about" && <AboutTab language={language} />}
         </main>
       </div>
 

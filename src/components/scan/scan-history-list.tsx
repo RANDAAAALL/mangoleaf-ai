@@ -2,7 +2,7 @@ import { useState, memo, useMemo } from "react";
 import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { ScanCard } from "./scan-card";
 import { translations, type Language } from "@/lib/translations";
-import { Icon } from "./icon";
+import { Icon } from "@/components/brand/icon";
 
 interface ScanHistoryListProps {
   scans: ScanRecord[];
@@ -105,7 +105,7 @@ export const ScanHistoryList = memo(function ScanHistoryList({
           {!isFullHistoryPage && onViewAllHistory && (
             <button
               onClick={onViewAllHistory}
-              className="text-xs font-bold text-[#277839] hover:underline flex items-center gap-1 cursor-pointer shrink-0 sm:hidden"
+              className="text-xs font-bold text-[#277839] hover:underline flex items-center cursor-pointer shrink-0 sm:hidden"
             >
               <span>{t.viewAllHistoryShort}</span>
             </button>
@@ -159,7 +159,7 @@ export const ScanHistoryList = memo(function ScanHistoryList({
           onViewAllHistory && (
             <button
               onClick={onViewAllHistory}
-              className="hidden sm:flex text-xs font-bold text-[#277839] items-center gap-1 cursor-pointer shrink-0"
+              className="hidden sm:flex text-xs font-bold text-[#277839] items-center cursor-pointer shrink-0"
             >
               <span>{t.viewAllHistory}</span>
             </button>

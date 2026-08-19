@@ -87,7 +87,7 @@ export function useSync() {
               }
             } catch (_abortErr) {
               clearTimeout(timeoutId);
-              console.warn("⏱️ Upload timed out on slow 3G — will retry next sync.");
+              console.warn("---Upload timed out on slow 3G — will retry next sync.---");
               continue; // Skip this scan, it stays as pending-insert for next retry
             }
 
@@ -202,7 +202,7 @@ export function useSync() {
 
     // 3G Safety: Prevent concurrent sync operations from stacking
     if (isSyncingRef.current) {
-      console.log("🔒 Sync already in progress — skipping duplicate trigger.");
+      console.log("---Sync already in progress — skipping duplicate trigger.---");
       return;
     }
 
@@ -291,14 +291,14 @@ export function useSync() {
       return;
     }
 
-    console.log("🔌 Subscribing to Supabase Realtime guidelines channel...");
+    console.log("---Subscribing to Supabase Realtime guidelines channel...---");
     const channel = supabase
       .channel("supabase-realtime-guidelines")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "guidelines" },
         async (payload: { eventType: string; new: Record<string, unknown>; old: Record<string, unknown> }) => {
-          console.log("⚡ Realtime Postgres change detected:", payload);
+          console.log("---Realtime Postgres change detected---", payload);
           const { eventType, new: newRecord } = payload;
 
           if (eventType === "INSERT" || eventType === "UPDATE") {

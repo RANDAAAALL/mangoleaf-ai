@@ -15,13 +15,17 @@ This repository uses Next.js 16.2.10. APIs, conventions, and file structure may 
 
 - Use lowercase kebab-case filenames for components and ordinary multiword modules, such as `legal-modal.tsx`, `scan-details-modal.tsx`, and `supabase-client.ts`.
 - Use camelCase filenames for custom hooks, such as `useSync.ts` and `usePWAInstall.ts`, with matching `useSomething` exports.
-- Keep React component exports in PascalCase.
+- Keep React component exports in PascalCase, and give the inner function of a `memo(...)` wrapper the same name as the export so React DevTools and stack traces show the real component name.
+- Group new components into the existing `src/components/` subfolders by screen area. Do not add files directly to `src/components/`. The folders exist for navigation and do not restrict imports; a component used by more than one area may be imported across folders.
+- Keep `src/app/page.tsx` limited to state, handlers, and tab selection. Screen markup belongs in a tab component under the matching folder.
 - Use the `@/*` alias for imports from `src/` when practical.
+- Prefer `@/components/...` over relative `../` paths for cross-folder component imports so files survive being moved.
 - Keep `README.md`, `SETUP.md`, and `AGENTS.md` at the repository root. Put other detailed project documentation in `docs/`.
 - Update documentation when setup, architecture, environment variables, model versions, or release behavior changes.
 - Do not manually edit generated files: `public/sw.js`, `.next/`, `out/`, `next-env.d.ts`, or `*.tsbuildinfo`.
 - Do not commit `.env.local` or other secret-bearing environment files.
 - Do not turn version labels into environment variables. The app version comes from the `version` field in `package.json` via the `env` block in `next.config.ts`, and the model label is the `modelVersion` constant in `src/lib/constants.ts`. Keep both out of `.env.local`, `.env.example`, and hosting dashboard settings so a stale override cannot display the wrong version.
+- Keep every user-facing string in `src/lib/translations.ts` with an entry in both the `en` and `bis` objects. Do not hardcode English in a component or helper, and do not rely on `toLocaleDateString` or other `Intl` formatting for Cebuano/Bisaya output, because browsers have no reliable locale data for it. Use `{n}` placeholder templates for counted labels so plural rules stay in the translation file.
 - Preserve unrelated user changes and untracked work.
 
 ## Documentation maintenance

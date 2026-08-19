@@ -90,7 +90,3 @@ export const Icon = memo(function Icon({
     </svg>
   );
 });
-
-// Aliases for compatibility
-export const AppIcon = Icon;
-export const NavIcon = Icon;
