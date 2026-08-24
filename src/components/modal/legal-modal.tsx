@@ -116,7 +116,7 @@ export const LegalModal = memo(function LegalModal({
                 <strong>1. Sakop sa Paggamit:</strong> Ang MangoLeaf AI gidisenyo alang sa mga mag-uuma sa mangga sa Pilipinas aron makatabang sa pag-diagnose sa pre-harvest nga sakit sa dahon ug prutas sa Carabao Mango (<em>Mangifera indica L.</em>).
               </p>
               <p>
-                <strong>2. AI Confidence Threshold (70% Minimum):</strong> Ang mga resulta gi-generate pinaagi sa MobileNetV3 model alang sa 6 ka klase (Anthracnose, Sooty Mold, Bacterial Canker, Bacterial Black Spot, Mango Scab, ug Healthy). Adunay 70% minimum threshold aron malikayan ang sayop nga diagnosis.
+                <strong>2. AI Confidence Threshold sa Diagnosis:</strong> Ang mga resulta gi-generate pinaagi sa MobileNetV3 model alang sa 6 ka klase (Anthracnose, Sooty Mold, Bacterial Canker, Bacterial Black Spot, Mango Scab, ug Healthy). Gipatuman ang minimum nga 70% confidence threshold, uban sa prediction-margin ug entropy criteria nga gi-calibrate gamit ang mga nakalaan nga out-of-scope nga mga hulagway. Ang mga resulta nga dili makapasar sa bisan asa niining tulo kay markahan isip &apos;Uncertain&apos;.
               </p>
               <p>
                 <strong>3. Pahinumdom sa Pagtambal:</strong> Ang tanang gabay sa pagtambal gikan sa mga opisyal nga giya sa DOST-PCAARRD ug BAFS. Nagserbisyo kini isip tambag sa pag-atiman ug dili puli sa opisyal nga konsultasyon sa kapunongan sa agrikultura.
