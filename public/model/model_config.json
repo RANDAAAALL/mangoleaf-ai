@@ -1,0 +1,28 @@
+{
+  "modelVersion": "model-v2.1.1",
+  "trial": "2.1",
+  "classes": ["anthracnose","bacterial_black_spot","bacterial_canker","healthy","mango_scab","sooty_mold"],
+  "inputSize": [224, 224],
+  "pixelRange": "0-255 raw, MobileNetV3 rescales internally",
+  "temperature": 0.754966,
+  "temperatureFoldedIntoWeights": true,
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": 0.55,
+    "entropyThreshold": 0.3,
+    "note": "margin and entropy fitted on 84 out-of-scope images; rejection rate 51.2% measured on 84 held-out images"
+  },
+  "rejection": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": 0.55,
+    "entropyThreshold": 0.3,
+    "tuneRetention": 0.952,
+    "tuneRejection": 0.5119,
+    "reportRejection": 0.5119,
+    "accuracyOnAccepted": 0.9924,
+    "oodTuneCount": 84,
+    "oodReportCount": 84,
+    "float16WorstCaseRejection": 0.488,
+    "float16WorstCaseRetention": 0.945
+  }
+}

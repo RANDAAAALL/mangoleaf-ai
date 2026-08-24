@@ -6,11 +6,72 @@ export interface DiagnosisResult {
   confidence: number;
 }
 
+/**
+ * The 70% minimum confidence rule is a fixed specification, not a tuned value,
+ * so it lives in code rather than in model_config.json. If a future config file
+ * disagrees with it, the code value wins and a warning is logged.
+ */
+const CONFIDENCE_THRESHOLD = 0.70;
+
+/** Optional extra rejection thresholds, fitted in the training notebook. */
+interface ModelConfigThresholds {
+  /** Minimum gap between the top two probabilities. null = check disabled. */
+  marginThreshold: number | null;
+  /** Maximum normalized entropy, 0 to 1. null = check disabled. */
+  entropyThreshold: number | null;
+}
+
 // Module-level singleton cache: ensures the model is loaded & warmed only ONCE
 // across all component mounts, remounts, and network reconnection events.
 let cachedModel: tf.GraphModel | null = null;
 let loadingPromise: Promise<tf.GraphModel> | null = null;
 let sharedCanvas: HTMLCanvasElement | null = null;
+
+// Both null until model_config.json is read, which means only the confidence
+// check runs. That is the correct default: the notebook exports null for these
+// two whenever no out-of-scope image set was available to fit them against.
+let thresholds: ModelConfigThresholds = {
+  marginThreshold: null,
+  entropyThreshold: null,
+};
+
+/**
+ * Reads the rejection thresholds exported alongside the model weights.
+ * Never throws. A missing, malformed, or offline config leaves both optional
+ * thresholds null, which disables those two checks and keeps the 70% rule.
+ */
+async function loadModelConfig(): Promise<void> {
+  try {
+    const response = await fetch("/model/model_config.json");
+    if (!response.ok) {
+      console.log("---No model_config.json — using the 70% check only.---");
+      return;
+    }
+    const config = await response.json();
+
+    const margin = config?.thresholds?.marginThreshold;
+    const entropy = config?.thresholds?.entropyThreshold;
+    thresholds = {
+      marginThreshold: typeof margin === "number" ? margin : null,
+      entropyThreshold: typeof entropy === "number" ? entropy : null,
+    };
+
+    const configured = config?.thresholds?.confidenceThreshold;
+    if (typeof configured === "number" && configured !== CONFIDENCE_THRESHOLD) {
+      console.warn(
+        `---model_config.json asks for a ${configured} confidence threshold, ` +
+          `but ${CONFIDENCE_THRESHOLD} is fixed by specification. Using ${CONFIDENCE_THRESHOLD}.---`,
+      );
+    }
+
+    console.log(
+      `---Model config loaded: margin=${thresholds.marginThreshold}, ` +
+        `entropy=${thresholds.entropyThreshold} (null means the check is off).---`,
+    );
+  } catch {
+    console.log("---model_config.json unreadable — using the 70% check only.---");
+  }
+}
 
 /**
  * Loads the compiled TensorFlow.js Graph Model from the public directory
@@ -34,14 +95,28 @@ export async function loadMangoModel(): Promise<tf.GraphModel> {
     console.log("---Initializing TensorFlow.js engine...---");
 
     // OPTIMIZATION: Force GPU to use 16-bit float textures.
-    // This halves GPU memory usage on phones and perfectly matches our Float16 quantized model.
+    // This halves GPU texture memory on phones. It is independent of the weight
+    // file format: tfjs decodes the Float16 shards back to float32 in JavaScript
+    // before upload, so this flag is what actually keeps weights at 16 bits on the
+    // GPU. The Float16 export (5.88 MB instead of 11.51 MB) is a download saving.
     // NOTE: If you ever encounter rendering/GPU issues on very old devices, you can remove or comment out this line.
     tf.env().set("WEBGL_FORCE_F16_TEXTURES", true);
 
     await tf.ready();
 
+    // Fetch the weights and the threshold config concurrently rather than in
+    // sequence. The config is only 567 bytes, but on a rural 3G first load a
+    // sequential request costs an extra round trip before the GPU warmup can
+    // start. Nothing reads the thresholds until the first prediction, so there
+    // is no ordering requirement between the two.
     const modelPath = "/model/model.json";
-    const model = await tf.loadGraphModel(modelPath);
+    const [model] = await Promise.all([
+      tf.loadGraphModel(modelPath),
+      // Deliberately non-fatal: if this file is missing or unreachable the
+      // classifier keeps the hardcoded confidence check and skips the optional
+      // margin and entropy checks, so a config problem can never block a scan.
+      loadModelConfig(),
+    ]);
     console.log("---Graph model JSON loaded from assets.---");
 
     // Run a dummy warmup to force compile WebGL shaders on device startup
@@ -82,7 +157,9 @@ function downscaleToCanvas(
 
 /**
  * Preprocesses an image element and performs on-device WebGL inference
- * using the provided Graph Model. Enforces the 70% confidence threshold.
+ * using the provided Graph Model. Returns "Uncertain / Unrecognized" when the
+ * prediction fails the 70% confidence rule, or the optional margin and entropy
+ * rules when model_config.json supplies them.
  *
  * Optimization notes:
  * - Camera photos are pre-downscaled to 224x224 via Canvas before tensor conversion
@@ -114,22 +191,55 @@ export async function predictMangoDisease(
   const results = await outputTensor.data();
   outputTensor.dispose();
 
-  // Find the class index with the highest probability score
+  // Find the top two class probabilities in a single pass. The runner-up is
+  // needed for the margin check below.
   let maxIndex = 0;
-  let maxProb = 0;
+  let maxProb = -1;
+  let secondProb = -1;
   for (let i = 0; i < results.length; i++) {
-    if (results[i] > maxProb) {
-      maxProb = results[i];
+    const p = results[i];
+    if (p > maxProb) {
+      secondProb = maxProb;
+      maxProb = p;
       maxIndex = i;
+    } else if (p > secondProb) {
+      secondProb = p;
     }
   }
 
+  const margin = maxProb - secondProb;
+
+  // Normalized Shannon entropy: 0 when one class takes everything, 1 when all six
+  // are equally likely. Dividing by log(number of classes) is what makes the value
+  // comparable to the threshold the training notebook fits.
+  let entropy = 0;
+  for (let i = 0; i < results.length; i++) {
+    const p = results[i];
+    if (p > 0) entropy -= p * Math.log(p);
+  }
+  const normalizedEntropy = entropy / Math.log(results.length);
+
+  // Compare the RAW probability, never a rounded one. Rounding first would let
+  // 0.695 clear a 0.70 gate, silently lowering the real threshold to 69.5%.
+  const meetsConfidence = maxProb >= CONFIDENCE_THRESHOLD;
+  const meetsMargin =
+    thresholds.marginThreshold === null || margin >= thresholds.marginThreshold;
+  const meetsEntropy =
+    thresholds.entropyThreshold === null ||
+    normalizedEntropy <= thresholds.entropyThreshold;
+
+  // Round for display only, after every check has already run on the raw value.
   const confidence = Math.round(maxProb * 100) / 100;
 
-  // Enforce the 70% threshold check from capstone specifications
-  const diseaseName = confidence >= 0.70
-    ? CLASSES[maxIndex]
-    : "Uncertain / Unrecognized";
+  const accepted = meetsConfidence && meetsMargin && meetsEntropy;
+  if (!accepted) {
+    console.log(
+      `---Rejected: confidence=${maxProb.toFixed(4)} margin=${margin.toFixed(4)} ` +
+        `entropy=${normalizedEntropy.toFixed(4)}---`,
+    );
+  }
+
+  const diseaseName = accepted ? CLASSES[maxIndex] : "Uncertain / Unrecognized";
 
   return {
     diseaseName,
