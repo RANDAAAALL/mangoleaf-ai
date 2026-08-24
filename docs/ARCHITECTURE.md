@@ -4,37 +4,21 @@
 
 MangoLeaf AI is a client-heavy, offline-first Next.js 16 application. The browser is the primary runtime: it loads the TensorFlow.js model, performs image classification, stores scan records in IndexedDB, and queues synchronization work. Supabase adds backup, image hosting, and shared treatment-guideline updates when the device is online.
 
-```text
-Camera or gallery image
-        |
-        v
-Browser preprocessing and SHA-256 duplicate check
-        |
-        v
-TensorFlow.js Graph Model (on-device inference)
-        |
-        v
-Dexie / IndexedDB (local-first scan record)
-        |
-        +---- offline: retain pending mutation
-        |
-        `---- online: Supabase Storage + Database sync
-
-Supabase guidelines ----> Realtime/pull sync ----> IndexedDB ----> UI
-Serwist service worker -> caches app assets and /model/* for repeat/offline use
-```
+![MangoLeaf AI Architecture](../public/images/mangoleaf-architecture.svg)
 
 ## Project structure
 
-The tree below highlights the files and directories that define the application. Generated directories such as `.next/` and `out/` are intentionally omitted.
+The tree below highlights the files and directories that define the application. Generated directories such as `.next/` and `out/` are intentionally omitted. A few listed files are marked local only, meaning they are gitignored working notes that are not part of a fresh clone.
 
 ```text
 mangoleaf-ai/
 |-- public/                         # Files served directly from the site root
-|   |-- icons/
-|   |   |-- png/                    # PWA, favicon, and Apple touch icons
-|   |   `-- svg/                    # Vector application and favicon icons
-|   |-- model/                      # TensorFlow.js model JSON and weight shards
+|   |-- images/
+|   |   |-- icons/
+|   |   |   |-- png/                # PWA, favicon, and Apple touch icons
+|   |   |   `-- svg/                # Vector application and favicon icons
+|   |   `-- mangoleaf-architecture.svg  # Diagram embedded by this document
+|   |-- model/                      # TensorFlow.js model JSON, weight shards, and model_config.json
 |   `-- sw.js                       # Generated Serwist service worker; do not edit
 |-- src/                            # Application source code
 |   |-- app/                        # Next.js App Router entry points
@@ -62,13 +46,16 @@ mangoleaf-ai/
 |   |-- env.d.ts                    # Types for build-time injected public env values
 |   `-- sw.ts                       # Serwist source configuration
 |-- docs/                           # Detailed engineering and project history
-|   |-- model-training/             # Trial 1 and Trial 2 training reports
+|   |-- model-training/             # Trial 1, Trial 2, and Trial 2.1 training reports
 |   |-- ARCHITECTURE.md             # This architecture reference
+|   |-- MANUSCRIPT_MODIFICATIONS.md # Manuscript corrections traced to measured results (local only, gitignored)
 |   |-- MODEL_VERSIONING.md         # App, model, notebook, and release versioning
 |   |-- PERFORMANCE.md              # Performance decisions and measurements
 |   `-- PROGRESS.md                 # Development timeline and current baseline
 |-- MangoLeaf_AI_Training_v1.ipynb  # Historical Trial 1 notebook
-|-- MangoLeaf_AI_Training_v2.ipynb  # Current retraining template
+|-- MangoLeaf_AI_Training_v2.ipynb  # Historical Trial 2 notebook
+|-- MangoLeaf_AI_Training_v2.1.ipynb              # Current retraining template, outputs cleared
+|-- MangoLeaf_AI_Training_v2_1_Post_Training.ipynb # Completed Trial 2.1 run, do not rerun
 |-- .env.example                    # Public environment-variable template
 |-- AGENTS.md                       # Repository instructions for coding agents
 |-- README.md                       # Project overview and quick start
@@ -159,6 +146,14 @@ Supabase is therefore a synchronization and recovery layer; IndexedDB remains th
 ### PWA and offline caching
 
 `src/sw.ts` configures Serwist. It precaches the generated application assets, claims active clients, and applies a `CacheFirst` strategy to `/model/*`. `next.config.ts` integrates Serwist, disables it during development, and enables static export. It also reads the `version` field from `package.json` and injects it as `NEXT_PUBLIC_APP_VERSION`, which Next replaces with a literal string at build time wherever the code references it. Because the site is a static export, every public value must be baked in during the build; nothing is resolved at runtime. See `docs/MODEL_VERSIONING.md`.
+
+The precache manifest that Serwist generates covers the build output *and every file under `public/`*. Anything added to `public/` is therefore downloaded to each installed device during service-worker installation, whether or not the application ever requests it. Keep assets that only documentation uses out of `public/` unless they also have to be reachable at a site URL.
+
+### Static assets
+
+Application images live under `public/images/`, with the icon set in `public/images/icons/png/` and `public/images/icons/svg/`. The PNG icons are not decorative: `src/app/manifest.ts` declares the 192x192 and 512x512 files as `maskable`, and browsers refuse to offer the install prompt when a declared icon of at least 192x192 cannot be fetched. `src/app/layout.tsx` points the favicon and Apple touch icon at the same tree. Renaming or moving this directory means updating both files and rebuilding.
+
+These files must stay tracked in git. `.gitignore` patterns that could match them need a leading slash so they stay anchored to the repository root; a bare pattern such as `images` matches a directory of that name at *any* depth and silently excludes `public/images/`. Such a mistake does not surface in `git status`, because ignored paths are not reported as untracked, and it cannot be undone with a negation such as `!public/images/`, because git never descends into a directory that a parent pattern has excluded. The symptom appears only after a fresh clone or a deployment build: no favicon, and an uninstallable PWA.
 
 ## Data flow for a scan
 
