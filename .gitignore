@@ -41,13 +41,14 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Scratch image folders. These patterns must stay anchored with a leading slash.
-/video/.media/images/
-
-scratch_manuscript_draft.txt
+# documentation
+/docs/MANUSCRIPT_MODIFICATIONS.md
+docs/EMAIL_DISPATCH_WORKFLOW.md
 
 # scratch folder
 /scratch/
+
+# scripts folder
 /scripts/
 
 # temp communication images
@@ -59,13 +60,6 @@ scratch_manuscript_draft.txt
 /public/this_is_step_6.png
 /public/whats_next.png
 /public/mango_dataset.png
-model_training_and_integration_notes.md
-docs/EMAIL_DISPATCH_WORKFLOW.md
-docs/*draft*
-scripts/send_dispatch.py
 
-.vercel
-
-/docs/MANUSCRIPT_MODIFICATIONS.md
+# video folder
 /video
-/gradcam_fig.png

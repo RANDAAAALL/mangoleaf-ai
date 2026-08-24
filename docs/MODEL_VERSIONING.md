@@ -4,20 +4,21 @@ This file records how to version the application, model, and training notebooks 
 
 ## Training Notebooks
 
-Keep the existing notebooks.
+All notebooks live in `notebooks/` at the repository root. Keep every one of them.
 
 | File | Role | Recommendation |
 | --- | --- | --- |
-| `MangoLeaf_AI_Training_v1.ipynb` | Trial 1 baseline | Keep as historical evidence. Do not use it as the next active training file. |
-| `MangoLeaf_AI_Training_v2.ipynb` | Trial 2 | Keep as historical evidence. Superseded as the template by v2.1. |
-| `MangoLeaf_AI_Training_v2.1.ipynb` | **Trial 2.1 and current retraining template** | Use this as the basis for the next retraining cycle, but copy it first. Outputs are cleared. |
-| `MangoLeaf_AI_Training_v2_1_Post_Training.ipynb` | Trial 2.1 completed run | Keep as historical evidence. All cell outputs preserved, including the metrics quoted in the manuscript. Do not rerun. |
+| `notebooks/MangoLeaf_AI_Training_v1.ipynb` | Trial 1 baseline | Keep as historical evidence. Do not use it as the next active training file. |
+| `notebooks/MangoLeaf_AI_Training_v2.ipynb` | Trial 2 | Keep as historical evidence. Superseded as the template by v2.1. |
+| `notebooks/MangoLeaf_AI_Training_v2.1.ipynb` | **Trial 2.1 and current retraining template** | Use this as the basis for the next retraining cycle, but copy it first. Outputs are cleared. |
+| `notebooks/MangoLeaf_AI_Training_v2_1_Post_Training.ipynb` | Trial 2.1 completed run | Keep as historical evidence. All cell outputs preserved, including the metrics quoted in the manuscript. Do not rerun. |
+| `notebooks/MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb` | Margin and entropy fitting for `model-v2.1.1` | Keep as historical evidence. Fitted against the Trial 2.1 resume bundle with no retraining. |
 
-For the next dataset update, copy `MangoLeaf_AI_Training_v2.1.ipynb` into a new notebook instead of overwriting a completed run. Pick the name by what actually changes:
+For the next dataset update, copy `notebooks/MangoLeaf_AI_Training_v2.1.ipynb` into a new notebook in the same folder instead of overwriting a completed run. Pick the name by what actually changes:
 
 ```text
-MangoLeaf_AI_Training_v2.2.ipynb   same six classes, same architecture, new or expanded dataset
-MangoLeaf_AI_Training_v3.ipynb     the class list or the architecture changes
+notebooks/MangoLeaf_AI_Training_v2.2.ipynb   same six classes, same architecture, new or expanded dataset
+notebooks/MangoLeaf_AI_Training_v3.ipynb     the class list or the architecture changes
 ```
 
 Each completed training notebook should record:

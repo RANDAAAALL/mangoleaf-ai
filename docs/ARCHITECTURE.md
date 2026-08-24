@@ -52,10 +52,12 @@ mangoleaf-ai/
 |   |-- MODEL_VERSIONING.md         # App, model, notebook, and release versioning
 |   |-- PERFORMANCE.md              # Performance decisions and measurements
 |   `-- PROGRESS.md                 # Development timeline and current baseline
-|-- MangoLeaf_AI_Training_v1.ipynb  # Historical Trial 1 notebook
-|-- MangoLeaf_AI_Training_v2.ipynb  # Historical Trial 2 notebook
-|-- MangoLeaf_AI_Training_v2.1.ipynb              # Current retraining template, outputs cleared
-|-- MangoLeaf_AI_Training_v2_1_Post_Training.ipynb # Completed Trial 2.1 run, do not rerun
+|-- notebooks/                      # Colab notebooks, one per training trial
+|   |-- MangoLeaf_AI_Training_v1.ipynb                     # Historical Trial 1
+|   |-- MangoLeaf_AI_Training_v2.ipynb                     # Historical Trial 2
+|   |-- MangoLeaf_AI_Training_v2.1.ipynb                   # Retraining template, outputs cleared
+|   |-- MangoLeaf_AI_Training_v2_1_Post_Training.ipynb     # Completed Trial 2.1 run, do not rerun
+|   `-- MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb # Margin and entropy fitting, no retraining
 |-- .env.example                    # Public environment-variable template
 |-- AGENTS.md                       # Repository instructions for coding agents
 |-- README.md                       # Project overview and quick start

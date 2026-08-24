@@ -254,7 +254,7 @@ Five of the six classes were accepted during the session. **`mango_scab` was not
 
 ## Current Notebook Decision
 
-Keep all three training notebooks, and keep the two Trial 2.1 files separate.
+Keep all three training notebooks, and keep the two Trial 2.1 files separate. All notebooks live in `notebooks/` at the repository root, moved there from the root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle. The filenames below are unchanged.
 
 - `MangoLeaf_AI_Training_v1.ipynb` is the Trial 1 baseline and historical proof of the first training approach.
 - `MangoLeaf_AI_Training_v2.ipynb` is the Trial 2 record. It is no longer the retraining template, because it lacks perceptual-hash deduplication, class weighting, the BatchNorm freeze, temperature calibration, and the resume-artifact export.
