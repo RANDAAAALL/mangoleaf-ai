@@ -14,12 +14,14 @@ All notebooks live in `notebooks/` at the repository root. Keep every one of the
 | `notebooks/MangoLeaf_AI_Training_v2_1_Post_Training.ipynb` | Trial 2.1 completed run | Keep as historical evidence. All cell outputs preserved, including the metrics quoted in the manuscript. Do not rerun. |
 | `notebooks/MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb` | Margin and entropy fitting for `model-v2.1.1` | Keep as historical evidence. Fitted against the Trial 2.1 resume bundle with no retraining. |
 
-For the next dataset update, copy `notebooks/MangoLeaf_AI_Training_v2.1.ipynb` into a new notebook in the same folder instead of overwriting a completed run. Pick the name by what actually changes:
+For the next dataset update, copy `notebooks/MangoLeaf_AI_Training_v2.1.ipynb` into a new notebook in the same folder instead of overwriting a completed run. Name the notebook after the model version it produces, so a notebook filename and its exported model always agree:
 
 ```text
-notebooks/MangoLeaf_AI_Training_v2.2.ipynb   same six classes, same architecture, new or expanded dataset
-notebooks/MangoLeaf_AI_Training_v3.ipynb     the class list or the architecture changes
+notebooks/MangoLeaf_AI_Training_v2.2.ipynb   same images, changed training procedure only
+notebooks/MangoLeaf_AI_Training_v3.ipynb     new or expanded dataset, new classes, or a new architecture
 ```
+
+A new dataset is a major change, so the next retraining cycle produces `notebooks/MangoLeaf_AI_Training_v3.ipynb`, `model-v3.0.0`, and `docs/model-training/TRIAL_3.md`. The next section explains why.
 
 Each completed training notebook should record:
 
@@ -46,10 +48,18 @@ model-v1.0.0  Trial 1 baseline
 model-v2.0.0  Trial 2 MobileNetV3-Large Graph Model
 model-v2.1.0  Trial 2.1 deduplicated pool, temperature-calibrated, Float16 (superseded before release, never committed)
 model-v2.1.1  Trial 2.1 weights plus fitted margin and entropy rejection thresholds
-model-v3.0.0  Next retraining cycle with new datasets
+model-v3.0.0  Next retraining cycle with new datasets, notebook `v3`, report `TRIAL_3.md`
 ```
 
-Use a major model version when the dataset, class mapping, architecture, or evaluation baseline materially changes.
+Choose the level by what the change does to the previous test accuracy, because a version label exists to tell one deployed artifact from another and the accuracy figure is what the manuscript quotes:
+
+| Level | Meaning | Test accuracy is | Example |
+| --- | --- | --- | --- |
+| Patch | No retraining. Configuration only, fitted against weights that already exist. | Unchanged. The same weights produce the same predictions. | `v2.1.0` to `v2.1.1`, margin and entropy fitted on the existing resume bundle |
+| Minor | Retrained on the same source images with a changed procedure. | Comparable but not identical. Report both numbers and explain the difference. | `v2.0.0` to `v2.1.0`, deduplication and temperature calibration on the Trial 2 pool |
+| Major | New or expanded dataset, a changed class list, or a different architecture. | Not comparable. The test set itself is different, so the old figure describes a different measurement. | `v1.0.0` to `v2.0.0`, and the next cycle when the new dataset arrives |
+
+New images make the version major even when the six classes and the architecture are untouched, because they land in a new 70/15/15 split and therefore a new test set. `97.12%` was measured on 417 specific images; an accuracy measured on a different set is not a higher or lower version of that number, it is a different number. Recalibration follows for the same reason: the temperature and both fitted thresholds are properties of one set of weights, so all three are refitted rather than carried over.
 
 Trial 2.1 is a minor version rather than a major one: the architecture, the six-class mapping, and the 70/15/15 split are unchanged. What changed is that the pool was deduplicated before splitting, so the evaluation baseline moved from 98.25% to a comparable-but-not-identical 97.12%. The two numbers are measured on different test sets and should never be presented as a regression.
 
