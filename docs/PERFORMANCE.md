@@ -11,6 +11,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 | **Initial JS Payload (TFJS Engine)** | Eagerly imported in main bundle (~1.5MB) | Dynamic `import()` inside `useEffect` & event handlers | **~1.5MB lighter initial load, instant FCP** |
 | **GPU VRAM Allocation (Per Scan)** | ~36 Million Floats (12MP Raw Tensor) | ~150 Thousand Floats (224x224 Canvas) | **~240x Memory Reduction** |
 | **GPU Texture Precision** | 32-bit Float | 16-bit Float (`WEBGL_FORCE_F16_TEXTURES`) | **50% Lower VRAM Footprint** |
+| **Model Download Size (First Load)** | 11.51 MB float32, 3 shards | 5.88 MB Float16, 2 shards | **48.9% Smaller First Load** |
 | **UI Thread Block during AI** | Synchronous Blocking (`dataSync()`) | Async Non-blocking (`outputTensor.data()`) | **Smooth 60FPS UI Animations** |
 | **Stored Scan Photo Size** | 6.0 MB – 12.0 MB Raw Camera File | ~75 KB WebP (with JPEG ~150 KB fallback) | **80x–160x Smaller Storage & Upload** |
 | **Blob URL Memory & Render Lifecycle** | Central map regenerated ALL URLs on 1 scan change | Per-card `useEffect` ObjectURL creation & auto-cleanup | **Zero image flicker, zero heap leaks** |
@@ -42,7 +43,8 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ### 1.3 WebGL 16-Bit Float Textures
 * **Implementation:** `tf.env().set("WEBGL_FORCE_F16_TEXTURES", true)` is executed prior to model initialization.
-* **Rationale:** The MobileNetV3 model was exported using Float16 quantization (`--quantize_float16`). Forcing WebGL textures to 16-bit precision matches the neural network weights perfectly with zero loss of accuracy while halving GPU texture memory allocation.
+* **Rationale:** Halves GPU texture memory allocation on phones. This flag is independent of the weight file format: TensorFlow.js decodes the Float16 shards back to float32 in JavaScript before uploading them to the GPU, so the flag is what actually keeps weights at 16 bits on the device. Measured cost of 16-bit weights was zero — a probe that cast every weight to float16 and back changed **0 of 417** test predictions.
+* **Separate benefit of the Float16 export (`--quantize_float16`):** a smaller download, 5.88 MB against 11.51 MB. It does not change inference speed or GPU memory.
 
 ### 1.4 Asynchronous Non-Blocking Inference & Garbage Collection
 * **Implementation:** Output tensors are extracted via `await outputTensor.data()` instead of synchronous `dataSync()`.
@@ -91,7 +93,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 ### 2.5 Post-Inference Storage Compression (WebP with JPEG Fallback)
 * **Flow:** 
   1. User snaps a photo.
-  2. AI model analyzes the uncompressed image first (**98.25% Test Accuracy maintained**).
+  2. AI model analyzes the uncompressed image first (**97.12% Test Accuracy maintained**).
   3. **AFTER** prediction finishes, `compressImageForStorage()` resizes the photo to a max dimension of 1000px and compresses using **WebP at 75% quality** (~70–90 KB). If the browser doesn't support WebP canvas export, automatically falls back to **JPEG at 80% quality** (~150 KB).
 * **Impact:** Drops storage footprint from **6 MB → 75 KB** (80x reduction) for WebP-capable devices, ensuring rapid synchronization on weak 3G/4G cellular networks. Upload time halved compared to JPEG.
 
@@ -108,8 +110,10 @@ This document outlines the technical optimizations, hardware acceleration strate
 ## 🌐 3. PWA Offline Infrastructure & Network Caching
 
 ### 3.1 Service Worker Model Pre-Caching (`sw.ts`)
-* **Strategy:** Implemented a dedicated `CacheFirst` runtime caching rule for all `/model/*` routes (`model.json` and binary weight shards `group1-shard1of3.bin`, `group1-shard2of3.bin`, `group1-shard3of3.bin`) in Serwist.
+* **Strategy:** Implemented a dedicated `CacheFirst` runtime caching rule for all `/model/*` routes (`model.json`, the binary weight shards `group1-shard1of2.bin` and `group1-shard2of2.bin`, and `model_config.json`) in Serwist.
 * **Impact:** Guarantees that even if the smartphone is rebooted in complete Airplane Mode, the AI model loads instantly from browser `CacheStorage`.
+* **Versioned cache name:** the cache is named `mangoleaf-model-cache-v2-1-1`. `CacheFirst` never revalidates and `model.json` keeps the same URL across model versions, so the name is bumped whenever the files in `public/model/` are replaced. An `activate` handler deletes superseded model caches so the old weights do not occupy device storage forever.
+* **The precache is the real update mechanism.** Every file under `public/` also enters the Serwist precache manifest with a content-revision hash, and `PrecacheRoute` registers ahead of `runtimeCaching`, so the router matches the precache first and the `CacheFirst` rule above never actually fires for `/model/*`. Replaced weights get a new revision hash and are refetched on the next activation on their own. The cache-name bump is defence in depth, which also means an empty `mangoleaf-model-cache-v2-1-1` on a device is normal rather than a fault; verify updates against the precache manifest in the generated `public/sw.js`.
 
 ### 3.2 High-Capacity Offline Database (Dexie.js / IndexedDB)
 * **Storage Layer:** Binary photo Blobs and scan metadata are persisted locally using Dexie.js (IndexedDB).
@@ -164,4 +168,6 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ## 📌 Accuracy & Integrity Guarantee
 
-> **Note on AI Accuracy:** All storage, compression, UI rendering, database, and CSS optimizations operate independently of the neural network math. The AI model receives uncompressed tensor inputs first, preserving the **98.25% test classification accuracy** validated during Trial 2 model training.
+> **Note on AI Accuracy:** All storage, compression, UI rendering, database, and CSS optimizations operate independently of the neural network math. The AI model receives uncompressed tensor inputs first, preserving the **97.12% test classification accuracy** validated during Trial 2.1 model training.
+>
+> Trial 2.1 reports a lower figure than Trial 2's 98.25%, and that is the intended outcome rather than a regression. Trial 2's test set contained near-duplicate copies of its own training images, so part of that score measured memorization. Perceptual-hash deduplication removed the duplicates before splitting, and 97.12% is what the model scores on images it has genuinely never seen. See [model-training/TRIAL_2_1.md](model-training/TRIAL_2_1.md).

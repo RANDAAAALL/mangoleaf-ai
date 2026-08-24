@@ -1,4 +1,7 @@
-# MangoLeaf AI
+<div style="display: flex; align-items: center; justify-content: center; gap: 8.5px"> <img src="./public/images/icons/svg/favicon.svg" alt="mangoleaf-ai icon" width="50"> <span style="font-size: 2.3em"> MangoLeaf AI </span>
+</div>
+
+<br/>
 
 MangoLeaf AI is an offline-first progressive web application that helps identify possible diseases affecting mango leaves and fruit. Classification runs in the browser with TensorFlow.js, scans are stored locally in IndexedDB, and pending records synchronize with Supabase when connectivity is available.
 
@@ -45,18 +48,19 @@ The Supabase values in `.env.local` must be replaced before cloud synchronizatio
 - [Performance and optimization notes](./docs/PERFORMANCE.md)
 - [Development progress](./docs/PROGRESS.md)
 - [Model and release versioning](./docs/MODEL_VERSIONING.md)
-- [Trial 1 model report](./docs/model-training/TRIAL_1.md)
-- [Trial 2 model report](./docs/model-training/TRIAL_2.md)
+- [Trial 2.1 model report (current shipping model)](./docs/model-training/TRIAL_2_1.md)
+- [Trial 2 model report (superseded)](./docs/model-training/TRIAL_2.md)
+- [Trial 1 model report (superseded)](./docs/model-training/TRIAL_1.md)
 
 ## Commands
 
-| Command | Description |
-| --- | --- |
-| `bun run dev` | Start the Next.js development server with webpack. |
-| `bun run typecheck` | Run TypeScript checks without emitting files. |
-| `bun run lint` | Run ESLint across the repository. |
-| `bun run build` | Create the production static export and service worker. |
-| `bun run start` | Run `next start`; this is not the deployment path while `output: "export"` is enabled. |
+| Command             | Description                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| `bun run dev`       | Start the Next.js development server with webpack.                                     |
+| `bun run typecheck` | Run TypeScript checks without emitting files.                                          |
+| `bun run lint`      | Run ESLint across the repository.                                                      |
+| `bun run build`     | Create the production static export and service worker.                                |
+| `bun run start`     | Run `next start`; this is not the deployment path while `output: "export"` is enabled. |
 
 Before committing, run these checks in order:
 

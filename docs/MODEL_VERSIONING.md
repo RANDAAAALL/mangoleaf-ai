@@ -9,12 +9,15 @@ Keep the existing notebooks.
 | File | Role | Recommendation |
 | --- | --- | --- |
 | `MangoLeaf_AI_Training_v1.ipynb` | Trial 1 baseline | Keep as historical evidence. Do not use it as the next active training file. |
-| `MangoLeaf_AI_Training_v2.ipynb` | Trial 2 and current retraining template | Use this as the basis for the next retraining cycle, but copy it first. |
+| `MangoLeaf_AI_Training_v2.ipynb` | Trial 2 | Keep as historical evidence. Superseded as the template by v2.1. |
+| `MangoLeaf_AI_Training_v2.1.ipynb` | **Trial 2.1 and current retraining template** | Use this as the basis for the next retraining cycle, but copy it first. Outputs are cleared. |
+| `MangoLeaf_AI_Training_v2_1_Post_Training.ipynb` | Trial 2.1 completed run | Keep as historical evidence. All cell outputs preserved, including the metrics quoted in the manuscript. Do not rerun. |
 
-For the next dataset update, create a new notebook instead of overwriting the completed run:
+For the next dataset update, copy `MangoLeaf_AI_Training_v2.1.ipynb` into a new notebook instead of overwriting a completed run. Pick the name by what actually changes:
 
 ```text
-MangoLeaf_AI_Training_v3.ipynb
+MangoLeaf_AI_Training_v2.2.ipynb   same six classes, same architecture, new or expanded dataset
+MangoLeaf_AI_Training_v3.ipynb     the class list or the architecture changes
 ```
 
 Each completed training notebook should record:
@@ -40,10 +43,38 @@ Recommended model version names:
 ```text
 model-v1.0.0  Trial 1 baseline
 model-v2.0.0  Trial 2 MobileNetV3-Large Graph Model
+model-v2.1.0  Trial 2.1 deduplicated pool, temperature-calibrated, Float16 (superseded before release, never committed)
+model-v2.1.1  Trial 2.1 weights plus fitted margin and entropy rejection thresholds
 model-v3.0.0  Next retraining cycle with new datasets
 ```
 
 Use a major model version when the dataset, class mapping, architecture, or evaluation baseline materially changes.
+
+Trial 2.1 is a minor version rather than a major one: the architecture, the six-class mapping, and the 70/15/15 split are unchanged. What changed is that the pool was deduplicated before splitting, so the evaluation baseline moved from 98.25% to a comparable-but-not-identical 97.12%. The two numbers are measured on different test sets and should never be presented as a regression.
+
+**Why `model-v2.1.0` is listed but skipped.** The Trial 2.1 export was swapped into `public/model/` on August 23, 2026 and labelled `v2.1.0`, but it was never committed and never installed on any device. The next day, out-of-scope images were collected and the margin and entropy thresholds were fitted against the same resume bundle, which rewrote `model_config.json` without retraining. The weight shards are byte-identical between the two states; the only differences are the two threshold values, the version constant, and the cache name. The label became `v2.1.1` and the `v2.1.0` state was never released.
+
+A version label exists to tell one deployed client from another. Because `v2.1.0` never reached a client, nothing was skipped in any sense that matters, and reconstructing a commit for it would permanently bake the dead cache name `mangoleaf-model-cache-v2-1` into history having never served a byte. `model_config.json` already records the distinction correctly: `"trial": "2.1"` identifies the weights, `"modelVersion": "model-v2.1.1"` identifies the configuration revision. Thresholds and weights are one calibrated artifact, since `0.55` and `0.30` were fitted on the softmax outputs of exactly those weights, so they belong in a single commit.
+
+**Swapping the weights in `public/model/` requires three coupled changes.** Doing any one alone leaves the app in a wrong state:
+
+1. Copy the new files in and **delete every stale shard the new export does not overwrite**. Shard filenames encode the total count, so an export with fewer shards than the previous one leaves orphans behind: Trial 2.1 ships `group1-shard1of2.bin` and `group1-shard2of2.bin`, which do not overwrite Trial 2's three `of3` files. Copy `model_config.json` in alongside them, and check that its `classes` array matches the order of `CLASSES` in `src/lib/constants.ts`. A class-order mismatch mislabels every prediction without raising any error.
+2. Bump `modelVersion` in `src/lib/constants.ts`, which is what the footer displays.
+3. Bump the runtime cache name in `src/sw.ts`, and add the previous name to `OUTDATED_MODEL_CACHES` so the superseded weights are deleted from the device instead of sitting there forever. The Serwist `CacheFirst` rule for `/model/*` never revalidates and `model.json` keeps the same URL across model versions, so **an already-installed PWA will keep serving the previous model's weights from cache indefinitely and silently** until the cache name changes.
+
+The Trial 2.1 swap completed all three across August 23 and 24, 2026: `public/model/` holds 2 shards plus `model_config.json`, `modelVersion` is `v2.1.1`, and the runtime cache is `mangoleaf-model-cache-v2-1-1` with both `mangoleaf-model-cache` and `mangoleaf-model-cache-v2-1` listed for eviction. Verify a future swap the same way that one was verified: run `bun run build`, then check the generated `public/sw.js` for the new cache name and confirm its precache manifest lists the new shard filenames and no old ones.
+
+**The precache is what actually invalidates a replaced model, not the cache name.** Every file under `public/` enters the Serwist precache manifest with a content-revision hash, and `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `CacheFirst` rule for `/model/*` never fires. A changed shard therefore gets a changed revision hash and is refetched on the next service-worker activation regardless of the cache name. Serwist's own `activate` handler also evicts precache entries that are absent from the current manifest, which is what removes the deleted `of3` shards. Step 3 above is still worth doing as defence in depth, but do not treat a `CacheStorage` inspection as the verification: `mangoleaf-model-cache-v2-1-1` can legitimately be empty on a correctly updated device.
+
+Two details make that inspection easy to get wrong. `public/sw.js` is minified, and its precache entries use single-quoted keys, so a search for `"url"` finds nothing; search for `'url':` instead. On Windows the generated paths also use backslash separators, as in `/model\group1-shard1of2.bin`, so a grep for `/model/group1-shard1of2.bin` returns no match even when the entry is present and correct. The backslashes are harmless, because the WHATWG URL parser treats a backslash as a path separator for HTTP URLs and Serwist derives every cache key through `new URL()`; a Linux build of the same commit simply emits forward slashes. This command lists the entries on either platform:
+
+```bash
+grep -o "'url':'[^']*'" public/sw.js | grep -v _next/static
+```
+
+Finally, confirm the new weight files are actually visible to git with `git status --short public/model/` before committing. Files that a `.gitignore` pattern excludes are not reported as untracked, so a swap can look complete in the working tree while committing nothing. See the static asset notes in `docs/ARCHITECTURE.md` for how an unanchored pattern caused exactly this with the icon directory.
+
+A model swap does not by itself require an app version bump, because the two version labels are independent. It does require a rebuild and a redeploy, since both labels are baked into the bundle as literal strings at build time.
 
 ## App Releases
 
@@ -61,7 +92,7 @@ v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
 
-The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work is the `v0.2.2` patch. `v0.2.3` adds the collapsible home-screen scan-flow guide. `v0.2.4` moves version-label sourcing into the build configuration and refines the scan-guide list layout. `v0.2.5` localizes scan-history dates in English and Bisaya and reorganizes the UI components. The model remains `model-v2.0.0` because no model assets, class mapping, or training results changed.
+The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work is the `v0.2.2` patch. `v0.2.3` adds the collapsible home-screen scan-flow guide. `v0.2.4` moves version-label sourcing into the build configuration and refines the scan-guide list layout. `v0.2.5` localizes scan-history dates in English and Bisaya and reorganizes the UI components. The model stayed at `model-v2.0.0` through all of those because no model assets, class mapping, or training results changed. The Trial 2.1 swap on August 23, 2026 and the threshold fitting on August 24, 2026 together moved the model to `model-v2.1.1` without an app release of its own; the next app release ships it.
 
 The `v0.2.3` tag was originally created on a commit that predated an amend and was missing `src/components/how-it-works-card.tsx`, so a checkout of that tag could not build. The tag was moved to the corrected commit `50514f8` on August 18, 2026. The superseded commit was `175d7ddc4094ea84139b0526bfa1abd6265a40a9`. Create tags only after the release commit is final to avoid repeating this.
 
@@ -113,8 +144,8 @@ Then open GitHub:
 For a model-only milestone, use a model tag instead:
 
 ```bash
-git tag -a model-v2.0.0 -m "Trial 2 MobileNetV3-Large TFJS Graph Model"
-git push origin model-v2.0.0
+git tag -a model-v2.1.1 -m "Trial 2.1 deduplicated, temperature-calibrated, Float16 TFJS Graph Model with fitted rejection thresholds"
+git push origin model-v2.1.1
 ```
 
 Do not attach large raw datasets to GitHub Releases unless the dataset license and file size are appropriate. Keep release notes focused on what changed, what was tested, and what should be treated as the current baseline.

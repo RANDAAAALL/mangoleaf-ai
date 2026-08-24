@@ -2,7 +2,9 @@
 
 This document records the step-by-step development, dataset pre-balancing, two-stage fine-tuning, and performance evaluation for **Trial 2** of the on-device image classification model completed on **July 25, 2026**.
 
-Notebook provenance: this report corresponds to the Trial 2 workflow. Keep `MangoLeaf_AI_Training_v1.ipynb` as the Trial 1 baseline, use `MangoLeaf_AI_Training_v2.ipynb` as the current retraining template, and copy it to a new versioned notebook before the next dataset update.
+Notebook provenance: this report corresponds to the Trial 2 workflow recorded in `MangoLeaf_AI_Training_v2.ipynb`. That notebook is historical evidence only. The retraining template is now `MangoLeaf_AI_Training_v2.1.ipynb`; copy it to a new versioned notebook before the next dataset update.
+
+> **Superseded by [TRIAL_2_1.md](TRIAL_2_1.md), August 22, 2026.** Trial 2.1 found that 4,308 of these 5,329 images have a pixel-level near-identical twin elsewhere in the pool, because two of the source repositories had already been augmented by Roboflow. A random file-level split therefore placed copies of the same physical leaf in both the training and the test set, so the **98.25%** below is partly a measure of memorization. On a deduplicated pool of 2,762 unique images the same architecture scores **97.12%**. Trial 2's numbers remain valid as a record of what was run; they should not be quoted as the model's generalization accuracy. The active retraining template is now `MangoLeaf_AI_Training_v2.1.ipynb`.
 
 ---
 
@@ -11,7 +13,7 @@ Notebook provenance: this report corresponds to the Trial 2 workflow. Keep `Mang
 ```mermaid
 graph TD
     A["Combined Dataset Pool<br>(5,329 Total Raw Images)"] --> B["Automated 70/15/15 Stratified Split<br>(3,730 Train / 798 Val / 801 Test)"]
-    B --> C["Minority Fruit Class 3x Pre-Augmentation<br>(Bacterial Black Spot & Mango Scab 3x)"]
+    B --> C["Minority Fruit Class 3x Pre-Augmentation<br>(Bacterial Black Spot, Mango Scab & Healthy 3x)"]
     C --> D["Two-Stage Fine-Tuning MobileNetV3<br>(Stage 1: 5 Epochs @ 1e-3 | Stage 2: 10 Epochs @ 1e-5)"]
     D --> E["Test Set Evaluation<br>(Reached 98.25% Test Accuracy / 0.0541 Loss)"]
     E --> F["TensorFlow.js Graph Model Export<br>(Compiled 11.51 MB / 3 Weight Shards)"]
@@ -45,9 +47,23 @@ graph TD
 ---
 
 ### Phase 2: Minority Fruit Class 3x Pre-Augmentation
-* **Action:** To prevent class imbalance bias between abundant leaf classes (~800 photos) and smaller fruit disease classes (~210 photos), a **3x pre-augmentation step** using `ImageDataGenerator.flow()` was applied to `bacterial_black_spot` and `mango_scab` training folders prior to model initialization.
-* **Healthy Class Merging:** `healthy_leaf` (837 photos) and `healthy_fruit` (210 photos) were merged into a single `healthy` classification category (1,047 photos).
-* **Dynamic Training Augmentation:** During the 15 training epochs, real-time spatial transformations (rotation up to 30°, zoom up to 20%, horizontal flipping) processed **46,500 total augmented exposures** in RAM.
+* **Healthy Class Merging:** `healthy_leaf` (837 photos) and `healthy_fruit` (210 photos) were merged into a single `healthy` classification category (1,047 photos) before the pre-augmentation step below.
+* **Action:** A **3x pre-augmentation step** using `ImageDataGenerator.flow()` (rotation up to 30°, zoom up to 20%, horizontal flipping, `fill_mode='nearest'`) wrote 2 extra copies of every file in the `bacterial_black_spot`, `mango_scab`, and `healthy` **training** folders, tripling each of them. Files already carrying the `aug3x` prefix were excluded from the listing, so the pass did not compound. Validation and test folders were untouched.
+* **Resulting Training Set:** 3,730 raw training images became **6,664** on disk.
+
+  | Training Class | Before | After |
+  | :--- | :---: | :---: |
+  | `anthracnose` | 824 | 824 |
+  | `bacterial_canker` | 836 | 836 |
+  | `sooty_mold` | 603 | 603 |
+  | `healthy` | 1,047 | **3,141** |
+  | `bacterial_black_spot` | 210 | **630** |
+  | `mango_scab` | 210 | **630** |
+  | **TOTAL** | **3,730** | **6,664** |
+
+* **No Real-Time Augmentation:** Trial 2 fed `image_dataset_from_directory` straight into `model.fit` with no augmentation layer and no `.map()` stage, so **all** augmentation was the on-disk pass above. Across 15 epochs the model saw 6,664 x 15 = **99,960 image presentations**, every one of them read from a file rather than transformed in RAM.
+
+> **Amendment, August 23, 2026.** Two claims in this phase were corrected against the `MangoLeaf_AI_Training_v2.ipynb` source while preparing [TRIAL_2_1.md](TRIAL_2_1.md). The pre-augmentation was previously described as covering `bacterial_black_spot` and `mango_scab` only; the notebook's `fruit_targets` list also contains `healthy`, which was the **largest** class at 1,047 images, so the step did not balance the classes the way the original text implied. The phase was also previously described as applying real-time in-RAM transformations totalling 46,500 augmented exposures; the notebook contains no real-time augmentation, and 46,500 is not reproducible from any combination of the split counts and epoch count. The metrics in Phase 3 are unaffected, since only the description was wrong, not the run.
 
 ---
 

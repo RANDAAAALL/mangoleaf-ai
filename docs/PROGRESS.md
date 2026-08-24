@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: August 19, 2026
+Last updated: August 23, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -34,7 +34,7 @@ This file tracks the project work from the first committed implementation throug
 - Used MobileNetV3-Large with two-stage fine-tuning.
 - Reported Trial 2 test performance: 98.25% accuracy and 0.0541 test loss.
 - Exported the model as a TensorFlow.js Graph Model with 3 weight shards, approximately 11.51 MB total.
-- Added `docs/model-training/TRIAL_2.md` as the current model report.
+- Added `docs/model-training/TRIAL_2.md` as the report for that run. It was the shipping model until Trial 2.1 superseded it on August 22, 2026.
 
 ### July 28, 2026: Reliability and performance pass
 
@@ -160,29 +160,104 @@ This file tracks the project work from the first committed implementation throug
 - Shipped localized relative and absolute scan-history dates in English and Bisaya alongside the component reorganization.
 - Kept model version `v2.0.0`; no model assets, classes, training data, or evaluation results changed.
 
+### August 22-23, 2026: Trial 2.1 retraining, temperature calibration, and model swap
+
+Retrained the classifier to resolve a leakage problem discovered in Trial 2's dataset. Full report in [model-training/TRIAL_2_1.md](model-training/TRIAL_2_1.md).
+
+**Why the retrain happened.** Trial 2's 5,329-image pool was assembled from local field photos and two open repositories, and the open repositories had already been augmented by Roboflow. Rotated, flipped, and re-encoded copies of the same physical leaf therefore sat in the same folder, and a random file-level split scattered those copies across train, validation, and test. 4,308 of the 5,329 images had a distance-0 perceptual-hash twin somewhere in the pool, so part of Trial 2's 98.25% measured memorization rather than generalization.
+
+**Dataset.** Deduplicated with `imagehash.phash` computed over all 8 dihedral variants of each image, taking the lexicographic minimum as the canonical key so that a rotation or a mirror maps to the same hash. Greedy per-folder selection at `PHASH_DISTANCE = 5` left 2,762 unique images from 5,329, removing 2,567 across 1,777 duplicate groups, a 48.2% redundancy rate. `bacterial_black_spot` and `mango_scab` lost only 4 and 9 images because they are original field photography that Roboflow never inflated; every other class shrank by roughly 60%.
+
+**Split.** Stratified 70/15/15 as stated in the manuscript, seed fixed: 1,930 train, 415 validation, 417 test. Zero exact-duplicate leakage. 5 near-duplicate pairs straddle two splits, all cross-folder and therefore carrying different labels, which per-folder deduplication cannot remove by construction. A further 49 cross-label pairs, all `anthracnose` against `healthy`, indicate mislabeling in the source data and are recorded for hand inspection before any v3 run.
+
+**Training.** MobileNetV3-Large, two-stage fine-tuning. Replaced Trial 2's on-disk minority-class file duplication with `compute_class_weight('balanced')`, because duplicated files would have re-entered the very problem the trial exists to solve. Stage 2 explicitly freezes all 46 BatchNormalization layers, leaving 80 trainable weight tensors. That freeze is the fix for Trial 2's fine-tuning collapse, where accuracy fell from 0.9735 at the end of stage 1 to 0.8535 at the first stage-2 epoch because unfreezing the base also let the BatchNorm layers overwrite ImageNet's population statistics from small batches.
+
+**Results.** 97.12% test accuracy (405 of 417 correct, 12 errors) and 0.0768 test loss, with a 95% Wilson score interval of roughly 95.0% to 98.3%. Every one of the 12 errors involves `bacterial_black_spot` or `mango_scab`, the two smallest training classes at 207 and 203 images and genuinely similar in appearance. The other four classes are perfect. A dedicated diagnostic ruled out residual leakage as the explanation for those perfect scores: the classes scoring 1.0000 have the *fewest* nearby training images, which is the inverse of the leakage pattern.
+
+**Calibration.** Fitted a single scalar temperature `T = 0.754966` on the validation logits by minimizing negative log-likelihood, then folded it into the final Dense layer as `W/T` and `b/T`. Accuracy is identical to six decimal places because argmax is invariant to division by a positive constant. Because `T < 1.0` the model was underconfident, so folding *raises* confidence, which makes the fixed 70% floor a weaker out-of-scope rejector rather than a stronger one.
+
+**Export.** TensorFlow.js Graph Model with Float16 quantization: 5.88 MB across 2 weight shards, down from 11.51 MB across 3. Verified by walking the shard bytes against the `weightsManifest` rather than trusting the file size: 199 of 199 float-valued tensors quantized, no `inf` or `NaN` anywhere. Comparing the two `model.json` files node by node found zero op-count differences (461 nodes, 62 convolutions, 2,970,642 weight scalars in both), so inference cost on device is unchanged and the whole 5.63 MB saving is a transfer saving.
+
+**App changes.** Swapped `public/model/`, deleting the three stale `of3` shards and adding `model_config.json`. Bumped `modelVersion` in `constants.ts`, renamed the Serwist runtime cache, and added an `activate` handler that deletes superseded model caches, without which an already-installed PWA would have served the Trial 2 weights indefinitely and silently. The labels written that day were `v2.1.0` and `mangoleaf-model-cache-v2-1`. Both were superseded the following day by `v2.1.1` and `mangoleaf-model-cache-v2-1-1`, before anything was committed, so neither label ever reached a device. In `classifier.ts`, the confidence check now compares the raw probability instead of a two-decimal rounding that let `0.695` clear a `0.70` gate, and optional margin and normalized-entropy checks read from `model_config.json`, fetched in parallel with the weights. Deleted the unreferenced `_fix_conv.py` from the repository root; it had never been git-tracked and carried a `sysconfig.get_paths()["purelib"]` path bug that would have silently no-opped in Colab.
+
+**Known gap at the time.** `marginThreshold` and `entropyThreshold` shipped as `null` in `model_config.json` because no out-of-scope image set existed to fit them against. Only the 70% floor ran, and at 97.2% mean top-1 confidence it rejected almost nothing, so a photograph of something that is not a mango leaf still received a confident disease label. This is structural to a six-class softmax rather than a regression. **Closed on August 24, 2026** by the threshold-fitting run below; both values are now fitted and active.
+
+- Verified with `bun run typecheck`, `bun run lint`, and `bun run build`, all exiting 0. Confirmed the generated `public/sw.js` carries the new cache name and lists exactly two weight shards.
+- Not committed on the day of the swap. Committing adds 5.88 MB of binaries to git history permanently, on top of Trial 2's 11.51 MB. The model shipped instead as part of the v2.1.1 commit described below, so the intermediate `v2.1.0` state has no commit of its own.
+
+
+### August 23, 2026: Static asset move and a gitignore anchoring fix
+
+`public/icons/` was moved to `public/images/icons/`, and `public/images/mangoleaf-architecture.svg` was added as the diagram embedded by `docs/ARCHITECTURE.md`. All six URL references were repointed correctly, three in `src/app/layout.tsx` and two in `src/app/manifest.ts`, plus the image link in `ARCHITECTURE.md`.
+
+The move exposed a latent `.gitignore` defect. The file carried a bare `images` pattern, written for a root scratch folder that is now empty. A pattern with no slash matches a directory of that name at any depth, so the moved icon tree became invisible to git the moment it was renamed. The old `public/icons/**` paths remained tracked and were staged as deletions, while none of the eight replacement files could be added. A commit in that state would have produced a repository with no icon files at all: no favicon, no Apple touch icon, and no 192x192 or 512x512 `maskable` PWA icons. Because `manifest.ts` declares those two and browsers require a declared icon of at least 192x192 to be fetchable, the deployed application would have been uninstallable.
+
+Two properties of git made this hard to notice. Ignored paths are not listed as untracked, so `git status` showed only the deletions and never mentioned the new directory. A negation such as `!public/images/` would not have helped either, because git does not descend into a directory that a parent pattern has already excluded, so the offending pattern itself had to change.
+
+The bare `images` was replaced with an anchored `/images/` plus an explicit `/video/.media/images/`, which preserves the previous effect on the video production assets while leaving `public/images/` tracked. Verified with `git check-ignore -v`, which now reports nothing for the icon files and still reports the video media, and with `git status --short public/`, which now lists `public/images/` as untracked and therefore addable.
+
+Two observations recorded while inspecting the generated service worker, neither a defect:
+
+- The Serwist precache manifest covers every file under `public/`, so the 12 KB architecture diagram is now downloaded to each installed device even though only the documentation uses it. Moving it to `docs/` would remove it from the manifest.
+- Precache URLs generated on Windows contain backslash separators, for example `/images\icons\png\icon-192x192.png`. These resolve correctly, because the WHATWG URL parser treats a backslash as a path separator for HTTP URLs and Serwist derives every cache key through `new URL()`. A Linux build of the same commit emits forward slashes, so the two produce a noisy diff of an identical service worker.
+
+
+### August 24, 2026: out-of-scope threshold fitting and model v2.1.1
+
+168 out-of-scope photographs were collected and fitted against the Trial 2.1 resume bundle. **No retraining occurred**, and the weight files are byte-identical to the August 23 export; only `model_config.json` changed. The work is recorded in `MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb`.
+
+**Split.** The 168 images were split in half by a fixed seed: 84 for fitting the thresholds and 84 held back for reporting, so the reported rejection rate is measured on images the thresholds never saw.
+
+**Fitted values.** Margin threshold `0.55`, entropy threshold `0.30`, both selected to keep in-distribution retention at or above 95% on the 417-image test set. Measured results: **95.2% retention** (397 of 417 test images still accepted) and **51.2% out-of-scope rejection** (43 of 84 reporting images rejected). Accuracy on the accepted subset rises to **99.24%**, because the checks remove three quarters of the model's 12 errors. The 95% binomial confidence interval on the rejection rate is roughly 40.5% to 61.9%, since 84 images is a small sample; quote the interval alongside the point estimate.
+
+**The 70% confidence floor was not tuned.** It is a fixed manuscript specification cited to [31]. Only margin and entropy were fitted.
+
+**Float16 safety band, measured rather than borrowed.** The thresholds are fitted on float32 weights in Colab and shipped as float16, so the conversion shift matters. Measuring per-signal on the reporting set gave a worst-case shift of `0.010638` for entropy and `0.053285` for margin. Scaling by 1.489 to account for `WEBGL_FORCE_F16_TEXTURES` activation quantization gives `0.015841` and `0.079346`. Both fitted thresholds sit further than that from their decision boundaries. This supersedes the earlier blanket advice to leave a 0.05 band, which came from the top-1 confidence shift of `0.040207` and was the wrong quantity for these two signals.
+
+**App changes.** `model_config.json` rewritten with the fitted thresholds, `modelVersion` bumped to `v2.1.1` in `constants.ts`, runtime cache renamed to `mangoleaf-model-cache-v2-1-1`, and both `mangoleaf-model-cache` and `mangoleaf-model-cache-v2-1` listed in `OUTDATED_MODEL_CACHES` for eviction. The confidence badge in `scan-details-modal.tsx` is now hidden on `Uncertain / Unrecognized` results, where a percentage would have implied a confidence in a rejection. The English terms text in `legal-modal.tsx` was updated to name all three gates.
+
+**Field evidence from four rejected phone scans.** Confidence rejected nothing and margin rejected nothing; entropy rejected all four. Every one of them cleared the 70% floor at 0.7720, 0.8467, and 0.8501, and every one cleared the 0.55 margin at 0.5962, 0.7626, and 0.7617. A 70%-only build would have labelled sky, gourds, and avocados as mango diseases at 77% to 85% displayed confidence. Two caveats: one scan's entropy of `0.3096` clears the `0.30` line by only `0.0096`, which is inside the `0.0158` scaled float16 band, so it is not robust evidence; and a photograph of lemons returned `Healthy` at 100%, a genuine closed-set miss and one of the roughly 48.8% that slips through. Fixing that case needs a seventh class or an open-set method, both out of scope for v2.1.1.
+
+**Still open.** The phone session was a development build with Fast Refresh present, so the service worker and precache paths were never exercised. Production-build verification on a physical phone remains outstanding.
+
 
 ## Current Notebook Decision
 
-Keep both training notebooks for now.
+Keep all three training notebooks, and keep the two Trial 2.1 files separate.
 
-- `MangoLeaf_AI_Training_v1.ipynb` should be treated as the Trial 1 baseline and historical proof of the first training approach.
-- `MangoLeaf_AI_Training_v2.ipynb` should be treated as the canonical retraining template for the next dataset update.
-- For the next retraining cycle, copy the current notebook into a new versioned notebook, such as `MangoLeaf_AI_Training_v3.ipynb`, then update the dataset, metrics, and export notes there. Do not overwrite a completed training run without recording what changed.
+- `MangoLeaf_AI_Training_v1.ipynb` is the Trial 1 baseline and historical proof of the first training approach.
+- `MangoLeaf_AI_Training_v2.ipynb` is the Trial 2 record. It is no longer the retraining template, because it lacks perceptual-hash deduplication, class weighting, the BatchNorm freeze, temperature calibration, and the resume-artifact export.
+- `MangoLeaf_AI_Training_v2.1.ipynb` is the **clean retraining template**, 33 code cells with outputs cleared. Copy this one for the next cycle.
+- `MangoLeaf_AI_Training_v2_1_Post_Training.ipynb` is the completed Trial 2.1 run with every output preserved. It is the manuscript evidence file: it holds the 97.12% figure, the per-class report, the confusion matrix, `T = 0.754966`, and the Float16 verification that the manuscript quotes. **Do not rerun any cell in it.** Rerunning overwrites the numbers the manuscript cites.
+- For the next retraining cycle, copy `MangoLeaf_AI_Training_v2.1.ipynb` to a new versioned notebook: `v2.2` if the six classes and the architecture stay the same, `v3` if either changes. Then update the dataset, metrics, and export notes there. Do not overwrite a completed training run without recording what changed.
+- The template's final cell writes the resume bundle to Drive: the calibrated `.keras` file at roughly 35 MB, `y_prob_cal.npy`, `y_true.npy`, and `resume_info.json`. That cell is not optional. Without it the trained weights are lost when the Colab session ends, and thresholds fitted after a fresh retrain would not match the weights already shipped in the app.
 
 ## Current Model Baseline
 
 - Architecture: MobileNetV3-Large
-- Runtime format: TensorFlow.js Graph Model
+- Runtime format: TensorFlow.js Graph Model, Float16 quantized
 - Classes: six output classes after healthy leaf and healthy fruit are merged into one `healthy` class
-- Current documented training run: Trial 2, July 25, 2026
-- Current documented test result: 98.25% accuracy and 0.0541 test loss
-- Current documented export size: approximately 11.51 MB across 3 weight shards
+- Current documented training run: Trial 2.1, August 22, 2026
+- Current documented test result: 97.12% accuracy and 0.0768 test loss on 417 deduplicated test images
+- Current documented export size: 5.88 MB across 2 weight shards, plus `model_config.json`
+- Current app model version label: `v2.1.1`
+- Calibration: temperature `T = 0.754966` folded into the final Dense layer
+- Rejection: three gates, all active. Fixed 70% confidence floor, fitted margin threshold `0.55`, fitted normalized-entropy threshold `0.30`. Measured 95.2% in-distribution retention and 51.2% out-of-scope rejection on 84 held-out non-mango images, with a 95% confidence interval of roughly 40.5% to 61.9%.
+
+Trial 2's 98.25% is superseded, not beaten. The lower Trial 2.1 figure is the honest one, because near-duplicate images were removed before splitting. Do not present Trial 2.1 as more accurate than Trial 2.
 
 ## Next Work
 
-- Freeze the next dataset snapshot before retraining.
-- Create a new versioned notebook for the next model run.
+- Fill the measured rejection numbers into the manuscript's future Results chapter. Quote 51.2% (43 of 84 held-out images) together with its 40.5% to 61.9% confidence interval, and lead with the two stronger framings: three quarters of the model's errors are caught, and accuracy on accepted predictions rises to 99.24%. Never quote a rate computed from a handful of phone scans.
+- Apply the modifications recorded in [MANUSCRIPT_MODIFICATIONS.md](MANUSCRIPT_MODIFICATIONS.md) to the manuscript draft.
+- Test the swapped model on a **production build** on a physical phone: confirm the footer reads `v2.1.1`, that the console prints real margin and entropy values rather than `null`, that a non-mango photograph returns `Uncertain / Unrecognized`, and that at least one real scan per class is still accepted. Verify caching against the **precache manifest** in the generated `public/sw.js`, not against `CacheStorage` contents: every `/model/*` file is in the Serwist precache, which registers ahead of `runtimeCaching`, so the `CacheFirst` route never fires and `mangoleaf-model-cache-v2-1-1` can legitimately be empty. The precache revision hash is what actually invalidates a replaced model; the cache-name bump is defensive only.
+- Decide whether the Trial 2.1 record gets a v2.1.1 addendum or its own `TRIAL_2_1_1.md`. No retraining happened, so an addendum is the more honest option.
+- Export `"Uncertain / Unrecognized"` as a shared constant. The literal is currently duplicated between `src/lib/classifier.ts` and `src/components/modal/scan-details-modal.tsx`, where a typo in either copy would silently show a confidence badge on a rejection.
+- Update the Bisaya terms text in `src/components/modal/legal-modal.tsx`, which still names only the 70% threshold while the English text names all three gates.
+- Inspect the 49 cross-label near-duplicate pairs by hand before any v3 run. Every one is `anthracnose` against `healthy`, so one label in each pair is wrong.
+- Consider raising `STAGE2_EPOCHS` above 10 for a v2.2 run. Validation loss was still improving at the final stage-2 epoch, so training stopped early rather than converging.
+- Collect more `bacterial_black_spot` and `mango_scab` field photographs. They are the two smallest training classes and they account for all 12 test errors.
+- Freeze the next dataset snapshot before retraining, and split by physical leaf group rather than by file if the new data again contains multiple photographs of one leaf.
 - Record class counts, split seed, augmentation plan, metrics, confusion matrix, model size, and export checksum for every new run.
 - Re-run `bun run typecheck`, `bun run lint`, and `bun run build` before publishing a new app release.
-- Review the manuscript for consistency with the latest implementation, especially model export format, confidence threshold language, and the exact leaf/fruit disease scope.
 - Prepare GitHub Releases for app milestones and separate model milestones.
