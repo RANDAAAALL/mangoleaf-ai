@@ -25,7 +25,6 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
     <div className="fixed inset-0 z-50 bg-black/60 md:backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
       {/* Modal Card Container: 2 Columns on Desktop (md:grid-cols-2), 1 Column Stack on Mobile */}
       <div className="bg-white border border-[#e2ebd9] rounded-3xl w-full max-w-md md:max-w-4xl overflow-hidden shadow-2xl flex flex-col md:grid md:grid-cols-2 max-h-[92vh] my-auto relative">
-        
         {/* Floating Close Button (Top-Right of Modal on Mobile & Desktop) */}
         <button
           onClick={onClose}
@@ -45,8 +44,18 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center text-[#738a77] font-bold text-sm p-6 text-center">
-              <svg className="h-10 w-10 mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              <svg
+                className="h-10 w-10 mb-2 opacity-50"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.5"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
               </svg>
               <span>{t.noImageOffline}</span>
             </div>
@@ -72,7 +81,8 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
               {/* Sub-header: Timestamp + Score Badge Row */}
               <div className="flex items-center justify-between gap-2 flex-wrap pt-0.5">
                 <span className="text-xs font-semibold text-[#526856]">
-                  {t.scannedOnPrefix} {new Date(scan.updated_at).toLocaleString("en-US", {
+                  {t.scannedOnPrefix}{" "}
+                  {new Date(scan.updated_at).toLocaleString("en-US", {
                     month: "short",
                     day: "numeric",
                     year: "numeric",
@@ -82,9 +92,11 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
                 </span>
 
                 {/* AI Confidence Score Badge */}
-                <span className="text-xs font-extrabold px-3 py-1 bg-[#e5f5e0] border border-[#c3e6ba] text-[#1b5e28] rounded-full shadow-xs">
-                  {t.scorePrefix} {Math.round(scan.confidence * 100)}%
-                </span>
+                {scan.disease_name !== "Uncertain / Unrecognized" && (
+                  <span className="text-xs font-extrabold px-3 py-1 bg-[#e5f5e0] border border-[#c3e6ba] text-[#1b5e28] rounded-full shadow-xs">
+                    {t.scorePrefix} {Math.round(scan.confidence * 100)}%
+                  </span>
+                )}
               </div>
             </div>
 
@@ -93,7 +105,6 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
               {/* Guidelines Section Header & Language Toggle */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <span className="text-xs font-black text-[#143519] uppercase tracking-wider flex items-center gap-1.5">
-                 
                   <span>{t.preTreatmentGuidelines}</span>
                 </span>
 
@@ -128,7 +139,9 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
                 className="bg-[#f7faf4] border border-[#e2ebd9] rounded-2xl p-4 sm:p-5 max-h-[320px] overflow-y-auto"
               >
                 {(() => {
-                  const rawText = (language === "en" ? guidelineText.en : guidelineText.bis)
+                  const rawText = (
+                    language === "en" ? guidelineText.en : guidelineText.bis
+                  )
                     .replace(/\(Source:.*?\)/gi, "")
                     .replace(/\(Tinubdan:.*?\)/gi, "")
                     .trim();
@@ -181,7 +194,6 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
             </button>
           </div>
         </div>
-
       </div>
     </div>
   );
