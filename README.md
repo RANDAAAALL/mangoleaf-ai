@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="./public/images/icons/svg/favicon.svg" alt="mangoleaf-ai icon" width="50"><br/>
+  <img src="./public/images/icons/svg/favicon.svg" alt="mangoleaf-ai icon" width="80"><br/>
   MangoLeaf AI
 </h1>
 

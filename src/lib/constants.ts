@@ -15,6 +15,11 @@ export const CLASSES = [
   "Sooty Mold"
 ];
 
+// Stored in ScanRecord.disease_name when a scan fails any of the three rejection
+// gates in classifier.ts: confidence, prediction margin, or entropy. It is not a
+// class, so UI that reads a real prediction must compare against this first.
+export const UNCERTAIN_LABEL = "Uncertain / Unrecognized";
+
 // Verified treatment guidelines based on BAFS GAP (PNS/BAFPS 45:2009) [19], Dofuor et al. (2023) [6], Sossah et al. (2024) [7], and Pham et al. (2025) [8]
 export const FALLBACK_GUIDELINES: Record<string, { en: string; bis: string; color: DiseaseGuideline["color"] }> = {
   "anthracnose": {

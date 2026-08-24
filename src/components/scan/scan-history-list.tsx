@@ -2,6 +2,7 @@ import { useState, memo, useMemo } from "react";
 import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { ScanCard } from "./scan-card";
 import { translations, type Language } from "@/lib/translations";
+import { UNCERTAIN_LABEL } from "@/lib/constants";
 import { Icon } from "@/components/brand/icon";
 
 interface ScanHistoryListProps {
@@ -152,6 +153,9 @@ export const ScanHistoryList = memo(function ScanHistoryList({
               <option value="scab">Mango Scab</option>
               <option value="canker">Bacterial Canker</option>
               <option value="black">Bacterial Black Spot</option>
+              {/* Rejected scans. Not a class, so it is listed last and matched on
+                  the one word no real class name contains. */}
+              <option value="uncertain">{UNCERTAIN_LABEL}</option>
             </select>
           </div>
         ) : (

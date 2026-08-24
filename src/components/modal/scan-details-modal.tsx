@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { type ScanRecord } from "@/lib/db";
 import { translations, type Language } from "@/lib/translations";
+import { UNCERTAIN_LABEL } from "@/lib/constants";
 
 interface ScanDetailsModalProps {
   scan: ScanRecord;
@@ -92,7 +93,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
                 </span>
 
                 {/* AI Confidence Score Badge */}
-                {scan.disease_name !== "Uncertain / Unrecognized" && (
+                {scan.disease_name !== UNCERTAIN_LABEL && (
                   <span className="text-xs font-extrabold px-3 py-1 bg-[#e5f5e0] border border-[#c3e6ba] text-[#1b5e28] rounded-full shadow-xs">
                     {t.scorePrefix} {Math.round(scan.confidence * 100)}%
                   </span>

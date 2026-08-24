@@ -11,7 +11,7 @@ export const AboutTab = memo(function AboutTab({ language }: AboutTabProps) {
 
   return (
     <div className="bg-white border border-[#e2ebd9] p-6 sm:p-8 rounded-3xl shadow-xs flex flex-col gap-6 mx-auto">
-      <h2 className="text-2xl font-bold text-[#143519]">{t.aboutTitle}</h2>
+      <h2 className="text-2xl font-bold text-[#143519] text-center">{t.aboutTitle}</h2>
       <p
         lang={contentLang}
         className="text-sm text-[#3b523f] leading-relaxed text-justify [text-justify:inter-word] break-words hyphens-auto"

@@ -1,5 +1,5 @@
 import * as tf from "@tensorflow/tfjs";
-import { CLASSES } from "./constants";
+import { CLASSES, UNCERTAIN_LABEL } from "./constants";
 
 export interface DiagnosisResult {
   diseaseName: string;
@@ -157,7 +157,7 @@ function downscaleToCanvas(
 
 /**
  * Preprocesses an image element and performs on-device WebGL inference
- * using the provided Graph Model. Returns "Uncertain / Unrecognized" when the
+ * using the provided Graph Model. Returns UNCERTAIN_LABEL when the
  * prediction fails the 70% confidence rule, or the optional margin and entropy
  * rules when model_config.json supplies them.
  *
@@ -239,7 +239,7 @@ export async function predictMangoDisease(
     );
   }
 
-  const diseaseName = accepted ? CLASSES[maxIndex] : "Uncertain / Unrecognized";
+  const diseaseName = accepted ? CLASSES[maxIndex] : UNCERTAIN_LABEL;
 
   return {
     diseaseName,

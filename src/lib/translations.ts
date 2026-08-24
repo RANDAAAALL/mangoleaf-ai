@@ -49,8 +49,6 @@ export const translations = {
     noScanHistoryText: "No previous scans recorded on this device. Upload or take a photo above to run your first diagnosis!",
     
     // Card & Scan Labels
-    leafScanLabel: "Leaf Scan",
-    fruitScanLabel: "Fruit Scan",
     detailsBtn: "Details",
     justNow: "Just now",
     yesterday: "Yesterday",
@@ -133,8 +131,6 @@ export const translations = {
     noScanHistoryText: "Wala pay nangaging scan nga nakarecord sa kini nga device. Pag-upload o paglitrato og dahon o bunga sa ibabaw aron masugdan ang pag-scan!",
     
     // Card & Scan Labels
-    leafScanLabel: "Scan sa Dahon",
-    fruitScanLabel: "Scan sa Bunga",
     detailsBtn: "Detalye",
     justNow: "Karon lang",
     yesterday: "Gahapon",
