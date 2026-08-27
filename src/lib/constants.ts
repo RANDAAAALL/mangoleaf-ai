@@ -2,8 +2,10 @@ import { type DiseaseGuideline } from "./db";
 
 // Label for the model assets in public/model/. Bump this whenever those files
 // are replaced by a retraining cycle. See docs/MODEL_VERSIONING.md.
-// Trial 2.1: deduplicated pool, temperature-calibrated, Float16 quantized.
-export const modelVersion = "v2.1.1";
+// Trial 3: deduplicated pool, temperature-calibrated, exported at float32. The
+// WebGL backend uploads the weights into half-float textures regardless, so the
+// larger download buys no accuracy on phones but costs nothing on WASM either.
+export const modelVersion = "v3.0.0";
 
 // The 6 standard Carabao Mango classes in alphabetical order matching Keras exports
 export const CLASSES = [

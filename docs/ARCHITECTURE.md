@@ -46,7 +46,7 @@ mangoleaf-ai/
 |   |-- env.d.ts                    # Types for build-time injected public env values
 |   `-- sw.ts                       # Serwist source configuration
 |-- docs/                           # Detailed engineering and project history
-|   |-- model-training/             # Trial 1, Trial 2, and Trial 2.1 training reports
+|   |-- model-training/             # Trial 1, Trial 2, Trial 2.1, and Trial 3 training reports
 |   |-- ARCHITECTURE.md             # This architecture reference
 |   |-- MANUSCRIPT_MODIFICATIONS.md # Manuscript corrections traced to measured results (local only, gitignored)
 |   |-- MODEL_VERSIONING.md         # App, model, notebook, and release versioning

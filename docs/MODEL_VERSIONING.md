@@ -10,18 +10,24 @@ All notebooks live in `notebooks/` at the repository root. Keep every one of the
 | --- | --- | --- |
 | `notebooks/MangoLeaf_AI_Training_v1.ipynb` | Trial 1 baseline | Keep as historical evidence. Do not use it as the next active training file. |
 | `notebooks/MangoLeaf_AI_Training_v2.ipynb` | Trial 2 | Keep as historical evidence. Superseded as the template by v2.1. |
-| `notebooks/MangoLeaf_AI_Training_v2.1.ipynb` | **Trial 2.1 and current retraining template** | Use this as the basis for the next retraining cycle, but copy it first. Outputs are cleared. |
+| `notebooks/MangoLeaf_AI_Training_v2.1.ipynb` | Trial 2.1 clean template | Keep as historical evidence. Superseded as the template by v3. Outputs are cleared. |
 | `notebooks/MangoLeaf_AI_Training_v2_1_Post_Training.ipynb` | Trial 2.1 completed run | Keep as historical evidence. All cell outputs preserved, including the metrics quoted in the manuscript. Do not rerun. |
 | `notebooks/MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb` | Margin and entropy fitting for `model-v2.1.1` | Keep as historical evidence. Fitted against the Trial 2.1 resume bundle with no retraining. |
+| `notebooks/MangoLeaf_AI_Training_v3.ipynb` | **Trial 3 and current retraining template** | **Missing from disk as of August 27, 2026.** Never committed, so git cannot restore it. Re-download from Colab. Use this as the basis for the next retraining cycle, but copy it first. |
+| `notebooks/MangoLeaf_AI_Training_v3_Post_Training.ipynb` | Trial 3 completed run, manuscript evidence | **Missing from disk as of August 27, 2026.** Never committed. Re-download from Colab. Do not rerun: it holds the figures and tables the manuscript cites. |
+| `notebooks/MangoLeaf_AI_Threshold_Fitting_v3.ipynb` | Margin and entropy fitting for `model-v3.0.0` | **Missing from disk as of August 27, 2026.** Never committed. Re-download from Colab. Nine code cells; outputs cleared. |
+| `notebooks/MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb` | Trial 3 threshold fitting, completed run | **Missing from disk as of August 27, 2026.** Never committed. Re-download from Colab. Cell 9 is the record of why the margin is `0.40`. |
 
-For the next dataset update, copy `notebooks/MangoLeaf_AI_Training_v2.1.ipynb` into a new notebook in the same folder instead of overwriting a completed run. Name the notebook after the model version it produces, so a notebook filename and its exported model always agree:
+**All ten notebooks were deleted from `notebooks/` at some point on August 26 or 27, 2026.** The five Trial 1 through 2.1 files were committed and are restored with `git checkout -- notebooks/`. The five Trial 3 files were never committed, are matched by no `.gitignore` pattern, and are absent from the Recycle Bin and from every other directory in the user profile, so git cannot recover them; the Colab copies in Google Drive are the only surviving originals. Commit the Trial 3 notebooks as soon as they are re-downloaded. The numbers they contain are recorded in [TRIAL_3.md](model-training/TRIAL_3.md) and in `public/model/model_config.json`, so no measurement was lost, but the evidence files themselves were.
+
+For the next dataset update, copy `notebooks/MangoLeaf_AI_Training_v3.ipynb` into a new notebook in the same folder instead of overwriting a completed run. Name the notebook after the model version it produces, so a notebook filename and its exported model always agree:
 
 ```text
-notebooks/MangoLeaf_AI_Training_v2.2.ipynb   same images, changed training procedure only
-notebooks/MangoLeaf_AI_Training_v3.ipynb     new or expanded dataset, new classes, or a new architecture
+notebooks/MangoLeaf_AI_Training_v3.1.ipynb   same images, changed training procedure only
+notebooks/MangoLeaf_AI_Training_v4.ipynb     new or expanded dataset, new classes, or a new architecture
 ```
 
-A new dataset is a major change, so the next retraining cycle produces `notebooks/MangoLeaf_AI_Training_v3.ipynb`, `model-v3.0.0`, and `docs/model-training/TRIAL_3.md`. The next section explains why.
+A new dataset is a major change, so the next retraining cycle after Trial 3 produces `notebooks/MangoLeaf_AI_Training_v4.ipynb`, `model-v4.0.0`, and `docs/model-training/TRIAL_4.md`. Trial 3 itself followed this rule: a new image pool made it `model-v3.0.0` with [TRIAL_3.md](model-training/TRIAL_3.md) as its report. The next section explains why.
 
 Each completed training notebook should record:
 
@@ -48,7 +54,7 @@ model-v1.0.0  Trial 1 baseline
 model-v2.0.0  Trial 2 MobileNetV3-Large Graph Model
 model-v2.1.0  Trial 2.1 deduplicated pool, temperature-calibrated, Float16 (superseded before release, never committed)
 model-v2.1.1  Trial 2.1 weights plus fitted margin and entropy rejection thresholds
-model-v3.0.0  Next retraining cycle with new datasets, notebook `v3`, report `TRIAL_3.md`
+model-v3.0.0  Trial 3 new dataset pool, recalibrated temperature, float32 export, refitted margin and entropy thresholds
 ```
 
 Choose the level by what the change does to the previous test accuracy, because a version label exists to tell one deployed artifact from another and the accuracy figure is what the manuscript quotes:
@@ -75,7 +81,11 @@ A version label exists to tell one deployed client from another. Because `v2.1.0
 
 The Trial 2.1 swap completed all three across August 23 and 24, 2026: `public/model/` holds 2 shards plus `model_config.json`, `modelVersion` is `v2.1.1`, and the runtime cache is `mangoleaf-model-cache-v2-1-1` with both `mangoleaf-model-cache` and `mangoleaf-model-cache-v2-1` listed for eviction. Verify a future swap the same way that one was verified: run `bun run build`, then check the generated `public/sw.js` for the new cache name and confirm its precache manifest lists the new shard filenames and no old ones.
 
-**The precache is what actually invalidates a replaced model, not the cache name.** Every file under `public/` enters the Serwist precache manifest with a content-revision hash, and `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `CacheFirst` rule for `/model/*` never fires. A changed shard therefore gets a changed revision hash and is refetched on the next service-worker activation regardless of the cache name. Serwist's own `activate` handler also evicts precache entries that are absent from the current manifest, which is what removes the deleted `of3` shards. Step 3 above is still worth doing as defence in depth, but do not treat a `CacheStorage` inspection as the verification: `mangoleaf-model-cache-v2-1-1` can legitimately be empty on a correctly updated device.
+The Trial 3 swap on August 27, 2026 completed all three the same way, and the shard count reversed direction: Trial 3 ships `group1-shard1of3.bin` through `group1-shard3of3.bin`, which do not overwrite Trial 2.1's two `of2` files. Both `of2` shards were deleted by hand before the build. This is the second time the orphan trap has appeared and the second time it pointed the other way, so never assume the new export has more shards than the old one — list the directory after copying.
+
+**A fourth change is needed whenever the test accuracy moves: the user-facing copy.** `aiEngineDesc` in `src/lib/translations.ts` states the diagnostic accuracy in the About tab, in both the `en` and `bis` blocks, and it is the only accuracy figure the app shows anyone. It said `98.25%` — Trial 2's leakage-inflated number — from Trial 2 until August 27, 2026, straight through the entire Trial 2.1 cycle, because the three steps above cover the weights, the version constant, and the cache name and none of them touches copy. Grep for the outgoing figure across `src/` before committing a swap; a stale claim in two languages is worse than a stale cache name, because a cache name is invisible and a printed accuracy is a promise to a farmer.
+
+ Every file under `public/` enters the Serwist precache manifest with a content-revision hash, and `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `CacheFirst` rule for `/model/*` never fires. A changed shard therefore gets a changed revision hash and is refetched on the next service-worker activation regardless of the cache name. Serwist's own `activate` handler also evicts precache entries that are absent from the current manifest, which is what removes the deleted `of3` shards. Step 3 above is still worth doing as defence in depth, but do not treat a `CacheStorage` inspection as the verification: `mangoleaf-model-cache-v2-1-1` can legitimately be empty on a correctly updated device.
 
 Two details make that inspection easy to get wrong. `public/sw.js` is minified, and its precache entries use single-quoted keys, so a search for `"url"` finds nothing; search for `'url':` instead. On Windows the generated paths also use backslash separators, as in `/model\group1-shard1of2.bin`, so a grep for `/model/group1-shard1of2.bin` returns no match even when the entry is present and correct. The backslashes are harmless, because the WHATWG URL parser treats a backslash as a path separator for HTTP URLs and Serwist derives every cache key through `new URL()`; a Linux build of the same commit simply emits forward slashes. This command lists the entries on either platform:
 
@@ -101,11 +111,12 @@ v0.2.4  version-label sourcing and scan-guide layout patch
 v0.2.5  localized scan history and UI reorganization
 v0.2.6  Trial 2.1 model and three-gate rejection ship to the app
 v0.2.7  organ-label removal and a filter for rejected scans
+v0.3.0  Trial 3 model ships to the app
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
 
-The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work is the `v0.2.2` patch. `v0.2.3` adds the collapsible home-screen scan-flow guide. `v0.2.4` moves version-label sourcing into the build configuration and refines the scan-guide list layout. `v0.2.5` localizes scan-history dates in English and Bisaya and reorganizes the UI components. The model stayed at `model-v2.0.0` through all of those because no model assets, class mapping, or training results changed. The Trial 2.1 swap on August 23, 2026 and the threshold fitting on August 24, 2026 together moved the model to `model-v2.1.1` without an app release of their own. `v0.2.6` is the app release that ships them: the Trial 2.1 weights, the folded temperature `T = 0.754966`, and the fitted margin and entropy thresholds. Its tag sits on commit `e493009`, and `model-v2.1.1` on commit `9b31c7b`. `v0.2.7` removes the leaf-versus-fruit label from the scan card and adds a history filter for rejected scans; the model is untouched, so it stays `model-v2.1.1`.
+The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work is the `v0.2.2` patch. `v0.2.3` adds the collapsible home-screen scan-flow guide. `v0.2.4` moves version-label sourcing into the build configuration and refines the scan-guide list layout. `v0.2.5` localizes scan-history dates in English and Bisaya and reorganizes the UI components. The model stayed at `model-v2.0.0` through all of those because no model assets, class mapping, or training results changed. The Trial 2.1 swap on August 23, 2026 and the threshold fitting on August 24, 2026 together moved the model to `model-v2.1.1` without an app release of their own. `v0.2.6` is the app release that ships them: the Trial 2.1 weights, the folded temperature `T = 0.754966`, and the fitted margin and entropy thresholds. Its tag sits on commit `e493009`, and `model-v2.1.1` on commit `9b31c7b`. `v0.2.7` removes the leaf-versus-fruit label from the scan card and adds a history filter for rejected scans; the model is untouched, so it stays `model-v2.1.1`. `v0.3.0` ships Trial 3: a new dataset pool, the recalibrated temperature `T = 1.188751`, and refitted thresholds of margin `0.40` and entropy `0.40`. It is a minor app release carrying a major model bump to `model-v3.0.0`, which is normal — the two labels are independent, and the new test set makes the model change major regardless of how small the app diff is.
 
 The `v0.2.3` tag was originally created on a commit that predated an amend and was missing `src/components/how-it-works-card.tsx`, so a checkout of that tag could not build. The tag was moved to the corrected commit `50514f8` on August 18, 2026. The superseded commit was `175d7ddc4094ea84139b0526bfa1abd6265a40a9`. Create tags only after the release commit is final to avoid repeating this.
 
@@ -157,8 +168,8 @@ Then open GitHub:
 For a model-only milestone, use a model tag instead:
 
 ```bash
-git tag -a model-v2.1.1 -m "Trial 2.1 deduplicated, temperature-calibrated, Float16 TFJS Graph Model with fitted rejection thresholds"
-git push origin model-v2.1.1
+git tag -a model-v3.0.0 -m "Trial 3 new dataset pool, temperature-calibrated, float32 TFJS Graph Model with refitted rejection thresholds"
+git push origin model-v3.0.0
 ```
 
 Do not attach large raw datasets to GitHub Releases unless the dataset license and file size are appropriate. Keep release notes focused on what changed, what was tested, and what should be treated as the current baseline.

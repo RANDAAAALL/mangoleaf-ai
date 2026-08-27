@@ -48,7 +48,8 @@ The Supabase values in `.env.local` must be replaced before cloud synchronizatio
 - [Performance and optimization notes](./docs/PERFORMANCE.md)
 - [Development progress](./docs/PROGRESS.md)
 - [Model and release versioning](./docs/MODEL_VERSIONING.md)
-- [Trial 2.1 model report (current shipping model)](./docs/model-training/TRIAL_2_1.md)
+- [Trial 3 model report (current shipping model)](./docs/model-training/TRIAL_3.md)
+- [Trial 2.1 model report (superseded)](./docs/model-training/TRIAL_2_1.md)
 - [Trial 2 model report (superseded)](./docs/model-training/TRIAL_2.md)
 - [Trial 1 model report (superseded)](./docs/model-training/TRIAL_1.md)
 

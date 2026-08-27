@@ -93,7 +93,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 ### 2.5 Post-Inference Storage Compression (WebP with JPEG Fallback)
 * **Flow:** 
   1. User snaps a photo.
-  2. AI model analyzes the uncompressed image first (**97.12% Test Accuracy maintained**).
+  2. AI model analyzes the uncompressed image first (**97.46% Test Accuracy maintained**).
   3. **AFTER** prediction finishes, `compressImageForStorage()` resizes the photo to a max dimension of 1000px and compresses using **WebP at 75% quality** (~70–90 KB). If the browser doesn't support WebP canvas export, automatically falls back to **JPEG at 80% quality** (~150 KB).
 * **Impact:** Drops storage footprint from **6 MB → 75 KB** (80x reduction) for WebP-capable devices, ensuring rapid synchronization on weak 3G/4G cellular networks. Upload time halved compared to JPEG.
 
@@ -168,6 +168,6 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ## 📌 Accuracy & Integrity Guarantee
 
-> **Note on AI Accuracy:** All storage, compression, UI rendering, database, and CSS optimizations operate independently of the neural network math. The AI model receives uncompressed tensor inputs first, preserving the **97.12% test classification accuracy** validated during Trial 2.1 model training.
+> **Note on AI Accuracy:** All storage, compression, UI rendering, database, and CSS optimizations operate independently of the neural network math. The AI model receives uncompressed tensor inputs first, preserving the **97.46% test classification accuracy** validated during Trial 3 model training.
 >
-> Trial 2.1 reports a lower figure than Trial 2's 98.25%, and that is the intended outcome rather than a regression. Trial 2's test set contained near-duplicate copies of its own training images, so part of that score measured memorization. Perceptual-hash deduplication removed the duplicates before splitting, and 97.12% is what the model scores on images it has genuinely never seen. See [model-training/TRIAL_2_1.md](model-training/TRIAL_2_1.md).
+> The three trial figures are not a trend line. Trial 2 scored 98.25% on a test set that contained near-duplicate copies of its own training images, so part of that score measured memorization. Perceptual-hash deduplication removed the duplicates before splitting, which is why Trial 2.1's 97.12% on 417 images is the honest figure rather than a regression. Trial 3 then changed the image pool, so its 97.46% is measured on a different 393-image test set again. Each number describes its own test set and none of them is a higher or lower version of another. See [model-training/TRIAL_3.md](model-training/TRIAL_3.md) for the current model and [model-training/TRIAL_2_1.md](model-training/TRIAL_2_1.md) for the deduplication work.

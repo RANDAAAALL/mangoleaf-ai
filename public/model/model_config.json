@@ -1,28 +1,35 @@
 {
-  "modelVersion": "model-v2.1.1",
-  "trial": "2.1",
+  "modelVersion": "model-v3.0.0",
+  "trial": "3",
   "classes": ["anthracnose","bacterial_black_spot","bacterial_canker","healthy","mango_scab","sooty_mold"],
   "inputSize": [224, 224],
   "pixelRange": "0-255 raw, MobileNetV3 rescales internally",
-  "temperature": 0.754966,
+  "temperature": 1.188751,
   "temperatureFoldedIntoWeights": true,
+  "weightPrecision": "float32 in the shards; the WebGL backend uploads them into half-float textures at runtime, so the deployed arithmetic is 16-bit either way",
   "thresholds": {
     "confidenceThreshold": 0.7,
-    "marginThreshold": 0.55,
-    "entropyThreshold": 0.3,
-    "note": "margin and entropy fitted on 84 out-of-scope images; rejection rate 51.2% measured on 84 held-out images"
+    "marginThreshold": 0.4,
+    "entropyThreshold": 0.4,
+    "note": "margin and entropy fitted on 84 out-of-scope images; rejection rate 70.2% measured on 84 held-out images"
   },
   "rejection": {
     "confidenceThreshold": 0.7,
-    "marginThreshold": 0.55,
-    "entropyThreshold": 0.3,
-    "tuneRetention": 0.952,
-    "tuneRejection": 0.5119,
-    "reportRejection": 0.5119,
-    "accuracyOnAccepted": 0.9924,
+    "marginThreshold": 0.4,
+    "entropyThreshold": 0.4,
+    "tuneRetention": 0.9517,
+    "tuneRejection": 0.869,
+    "reportRejection": 0.7024,
+    "accuracyOnAccepted": 0.992,
     "oodTuneCount": 84,
     "oodReportCount": 84,
-    "float16WorstCaseRejection": 0.488,
-    "float16WorstCaseRetention": 0.945
+    "marginSelection": "selected among 88 tied (margin, entropy) pairs spanning margin 0.00 to 0.43; 0.40 taken from the band-aware refit, which holds 95.2% retention under the measured half-float band where 0.43 falls to 94.1%",
+    "halfFloatBandRetention": 0.9517,
+    "halfFloatBandRejection": 0.6786,
+    "halfFloatBandConfidenceShift": 0.013899,
+    "halfFloatScaledRetention": 0.9364,
+    "halfFloatScaledRejection": 0.619,
+    "halfFloatScaledNote": "the scaled figures multiply the measured shift by 3.055x to reach the 0.042463 confidence shift reported in the training notebook; that shift was measured on a model whose expanded_conv_depthwise_bn variance had overflowed to inf. The converter folds BatchNorm into the preceding convolution, and the largest weight in the deployed graph is 117.53 against a half-float ceiling of 65504, so no overflow occurs on the phone. The scaled figures are therefore a loose upper bound, not a measurement.",
+    "largestDeployedWeight": 117.5306
   }
 }
