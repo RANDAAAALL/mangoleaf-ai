@@ -52,7 +52,7 @@ export const BottomNav = memo(function BottomNav({
       className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#e2ebd9] md:hidden"
       style={{ paddingBottom: "max(0.25rem, env(safe-area-inset-bottom))" }}
     >
-      <div className="max-w-lg mx-auto flex items-end justify-around px-1 h-16">
+      <div className="max-w-lg mx-auto flex items-end justify-around p-1 h-16">
         <NavItem
           icon="home"
           label={t.navHome}
