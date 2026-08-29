@@ -355,6 +355,7 @@ Retrained the classifier on a new image pool and shipped it. Full report in [mod
 - Model version stays `v3.0.0`. Nothing in `public/model/`, the class mapping, the thresholds, or the inference path changed, so no model tag belongs to this release and `model-v3.0.0` still describes the shipped weights.
 - Regenerated `public/sw.js` with `bun run build`. The source edit changed the `_next/static` chunk hashes embedded in the precache manifest, so the committed service worker had gone stale the moment the padding changed. The regenerated manifest still precaches all five Trial 3 model files as three `of3` shards with no `of2` orphans, and the runtime cache is still `mangoleaf-model-cache-v3-0-0` with the three superseded names listed for eviction.
 - Release verification passes: `bun run typecheck`, `bun run lint`, and `bun run build`.
+- One annotated tag was created: `v0.4.1` on the release commit `b652b4a`, with the message "MangoLeaf AI v0.4.1 - bottom-navigation padding patch". No model tag, for the reason above.
 
 ## Current Notebook Decision
 
