@@ -288,7 +288,7 @@ Retrained the classifier on a new image pool and shipped it. Full report in [mod
 
 **Provenance closed.** All four SHA-256 checksums in `run_record.json` match the files in `public/model/` exactly, which proves the shipped weights are the same artifact the thresholds were fitted on.
 
-**All ten notebooks were deleted from `notebooks/`.** The five Trial 1 through 2.1 files were committed and restore with `git checkout -- notebooks/`. The four Trial 3 files were never committed, are matched by no `.gitignore` pattern, and are absent from the Recycle Bin and from every other directory in the user profile, so git cannot recover them. The Colab copies in Google Drive are the only surviving originals. Every number they held survives in `run_record.json`, in `figures/per_class_metrics.csv`, in `public/model/model_config.json`, and in TRIAL_3.md, so no measurement was lost, but the evidence files themselves were. Commit them the moment they are re-downloaded.
+**All nine notebooks were deleted from `notebooks/`.** The five Trial 1 through 2.1 files were committed and were restored with `git checkout -- notebooks/`; all five are back on disk and tracked. The four Trial 3 files were never committed, are matched by no `.gitignore` pattern, and are absent from the Recycle Bin and from every other directory in the user profile, so git cannot recover them. The Colab copies in Google Drive are the only surviving originals. Every number they held survives in `run_record.json`, in `figures/per_class_metrics.csv`, in `public/model/model_config.json`, and in TRIAL_3.md, so no measurement was lost, but the evidence files themselves were. Commit them the moment they are re-downloaded.
 
 **v0.3.0 — Trial 3 model ships to the app**
 
@@ -300,7 +300,7 @@ Retrained the classifier on a new image pool and shipped it. Full report in [mod
 - The app bump is minor while the model bump is major. That is normal: the only source diff is version strings and a cache name, but the new image pool produced a new test set, which makes the model change major regardless of how small the app diff is.
 - Two annotated tags were created and pushed, both on the release commit `f73f0b8`: `model-v3.0.0` and `v0.3.0`. They share a commit because the weights, the thresholds, and the version bumps landed together, which is correct — thresholds and weights are one calibrated artifact. Only `v0.3.0` gets a GitHub Release, following the pattern set by `model-v2.0.0` and `model-v2.1.1`, which are bare provenance tags.
 
-### August 28, 2026: Mobile navigation polish
+### August 28, 2026: About tab rebuild, result-colour system, and mobile navigation polish
 
 - Rebuilt the existing About tab as a mobile-first product story: field motivation, offline/on-device/sync capabilities, the verified 97.46% Trial 3 model-accuracy showcase, research-to-application timeline, and scan-sheet CTAs. It intentionally does not repeat Home tab scan steps, condition lists, or recent scans.
 - Replaced per-disease presentation colors with one red disease treatment (`bg-red-100`, `#FF2C2C` text and dots); the healthy treatment remains green. Removed the now-unused `color` field from the Supabase and IndexedDB guideline shape, cached fallback data, synchronization flow, and scan-history props.
@@ -337,12 +337,21 @@ Retrained the classifier on a new image pool and shipped it. Full report in [mod
 - Bumped the PWA and package version to `v0.4.0` / `0.4.0` for the reviewed mobile field-experience redesign, six-condition presentation refinement, component cleanup, and synchronization reliability work.
 - Model version stays `v3.0.0`. No files in `public/model/`, model class mapping, rejection thresholds, or inference logic changed; Trial 3 remains the 97.46% documented model baseline.
 - Release verification passes: `bun run typecheck`, `bun run lint`, and `bun run build`. The regenerated service-worker manifest still precaches all five Trial 3 model files.
+- One annotated tag was created and pushed: `v0.4.0` on the release commit `af3474d`, with the message "MangoLeaf AI v0.4.0 - mobile field experience and resilient offline sync". No model tag belongs to this release, because `public/model/` is untouched and `model-v3.0.0` still describes the shipped weights.
+- The GitHub Release "MangoLeaf AI v0.4.0" was published on August 29, 2026 and is the current Latest release. It is the eleventh published Release, and like the ten before it, from `v0.1.0` onward, it sits on a `v0.*` app tag. No model tag has ever had a Release page.
+
+### August 29, 2026: post-release bottom-navigation padding tweak
+
+- Changed the bottom navigation's inner flex row from `px-1` to `p-1` in `src/components/layout/bottom-nav.tsx`, adding 0.25rem of vertical padding to the row. The `<nav>` element's own `paddingBottom: max(0.25rem, env(safe-area-inset-bottom))` is unchanged, so on a device with a home-bar inset the two paddings stack and the fixed `h-16` row loses 0.5rem of content height.
+- **Uncommitted and unreleased at the time of writing, and it lands after the `v0.4.0` tag.** `package.json` still reads `0.4.0`, so shipping this needs either a `v0.4.1` patch bump or folding into the next release. It also invalidates the committed `public/sw.js`: any source edit changes the `_next/static` chunk hashes embedded in the precache manifest, so the file has to be regenerated by `bun run build` and recommitted alongside the change.
 
 
+
+## Current Notebook Decision
 
 Keep every training notebook, and keep each trial's clean template separate from its completed run. All notebooks live in `notebooks/` at the repository root, moved there from the root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle. The filenames below are unchanged.
 
-**All ten were deleted from disk on August 26 or 27, 2026.** The five Trial 1 through 2.1 files were committed and restore with `git checkout -- notebooks/`. The four Trial 3 files were never committed and git cannot recover them; re-download from Colab and commit immediately. See the notebook table in [MODEL_VERSIONING.md](MODEL_VERSIONING.md) for per-file recovery status.
+**All nine were deleted from disk on August 26 or 27, 2026.** The five Trial 1 through 2.1 files were committed and have been restored with `git checkout -- notebooks/`; all five are back on disk and tracked. The four Trial 3 files were never committed and git cannot recover them; re-download from Colab and commit immediately. See the notebook table in [MODEL_VERSIONING.md](MODEL_VERSIONING.md) for per-file recovery status.
 
 - `MangoLeaf_AI_Training_v1.ipynb` is the Trial 1 baseline and historical proof of the first training approach.
 - `MangoLeaf_AI_Training_v2.ipynb` is the Trial 2 record. It is no longer a retraining template, because it lacks perceptual-hash deduplication, class weighting, the BatchNorm freeze, temperature calibration, and the resume-artifact export.
@@ -350,6 +359,7 @@ Keep every training notebook, and keep each trial's clean template separate from
 - `MangoLeaf_AI_Training_v2_1_Post_Training.ipynb` is the completed Trial 2.1 run with every output preserved. It holds the 97.12% figure, its per-class report, its confusion matrix, and `T = 0.754966`. **Do not rerun any cell in it.**
 - `MangoLeaf_AI_Training_v3.ipynb` is the **current clean retraining template**. Copy this one for the next cycle.
 - `MangoLeaf_AI_Training_v3_Post_Training.ipynb` is the completed Trial 3 run and the current manuscript evidence file: it holds the 97.46% figure, the per-class report, the confusion matrix, and `T = 1.188751`. **Do not rerun any cell in it.** Rerunning overwrites the numbers the manuscript cites.
+- `MangoLeaf_AI_Threshold_Fitting_v3.ipynb` is the Trial 3 threshold-fitting template, nine code cells with outputs cleared. Copy this one to refit thresholds against a future resume bundle.
 - `MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb` is the completed Trial 3 threshold refit. Its cell 9 is the record of why the margin is `0.40` rather than `0.43` or `0.00`.
 - For the next retraining cycle, copy `MangoLeaf_AI_Training_v3.ipynb` to a new versioned notebook named after the model version it produces. A new or expanded dataset is a major change; reserve `v3.1` for a retrain on the same images with a changed procedure. See `docs/MODEL_VERSIONING.md` for the full rule. Do not overwrite a completed training run without recording what changed.
 - The template's final cell writes the resume bundle to Drive: the calibrated `.keras` file at roughly 35 MB, `y_prob_cal.npy`, `y_true.npy`, and `resume_info.json`. That cell is not optional. Without it the trained weights are lost when the Colab session ends, and thresholds fitted after a fresh retrain would not match the weights already shipped in the app.
@@ -371,10 +381,10 @@ Trial 2's 98.25%, Trial 2.1's 97.12%, and Trial 3's 97.46% are three measurement
 
 ## Next Work
 
-- **Recover the four Trial 3 notebooks from Colab and commit them.** They were never committed and git cannot restore them. This is the only outstanding item with a real risk of permanent loss: the numbers survive in `run_record.json` and TRIAL_3.md, but the evidence files do not exist anywhere except Google Drive. Also run `git checkout -- notebooks/` to restore the five committed Trial 1 through 2.1 files.
+- **Recover the four Trial 3 notebooks from Colab and commit them.** They were never committed and git cannot restore them. This is the only outstanding item with a real risk of permanent loss: the numbers survive in `run_record.json` and TRIAL_3.md, but the evidence files do not exist anywhere except Google Drive. The five committed Trial 1 through 2.1 files were already restored with `git checkout -- notebooks/` and need no further action.
 - **Test v0.4.0 on a production build on a physical phone.** The phone needs the deployed HTTPS URL, because a LAN address such as `http://192.168.x.x:3000` is not a secure context and registers no service worker. Confirm footer reads `v0.4.0` and `v3.0.0`, console prints `margin=0.4, entropy=0.4`, a non-mango photograph returns `Uncertain / Unrecognized`, and at least one real scan per class is accepted. Verify all five `/model/*` entries in generated `public/sw.js`'s precache manifest.
 - **Accept one real `mango_scab` photograph on a production build.** It is the weakest class at 0.9014 F1, it is involved in 6 of the 10 test errors, and it lost 66 unique images between trials. This was already the outstanding gap after Trial 2.1 and it has become more urgent, not less.
-- **Create the GitHub Release for `v0.4.0` after its annotated app tag is pushed.** `model-v3.0.0` remains the current model provenance tag; no new model tag belongs in this release.
+- **Ship or drop the uncommitted `p-1` bottom-navigation tweak.** It sits in the working tree after the `v0.4.0` tag, so it needs a `v0.4.1` patch bump or folding into the next release, plus a regenerated `public/sw.js`. Check it on a device first: the added vertical padding stacks with the `<nav>` element's own safe-area `paddingBottom` inside a fixed `h-16` row.
 - **Update the manuscript's Results figures to Trial 3.** Every measured number changed: 97.46% on 393 images, `T = 1.188751`, margin `0.40`, entropy `0.40`, and 70.24% out-of-scope rejection (59 of 84 held-out images) with its 60.5% to 80.0% confidence interval. Lead with accuracy on accepted predictions rising to 99.20%. Never quote the 86.90% tune-half rejection rate, and never quote the `85.7%` figure that appears in Section D of the refit cell, which is also a tune-half number. Never quote a rate computed from a handful of phone scans.
 - **Apply the modifications recorded in [MANUSCRIPT_MODIFICATIONS.md](MANUSCRIPT_MODIFICATIONS.md)**, which is still written against Trial 2.1 throughout and needs a Trial 3 revision pass of its own.
 - **Hand-inspect the 49 cross-label duplicate pairs.** All are `anthracnose` against `healthy`, one label in each pair is wrong, and the count has now survived two trials unchanged because the inspection keeps being deferred. It is the largest known threat to the headline accuracy figure.
@@ -384,10 +394,12 @@ Trial 2's 98.25%, Trial 2.1's 97.12%, and Trial 3's 97.46% are three measurement
 - **Decide whether to keep tracking `public/sw.js`.** It is a generated file whose precache manifest embeds the `_next/static` chunk hashes and the injected app version, so it goes stale on any source or version change and has to be regenerated and recommitted alongside it.
 - **Optional: re-export at float16.** It would halve the download from 11.33 MB to 5.94 MB with no accuracy cost on the WebGL path, and the overflow analysis shows it is safe. It needs another Colab run and another provenance verification, which is why it was skipped.
 
-- Inspect the 49 cross-label near-duplicate pairs by hand before any v3 run. Every one is `anthracnose` against `healthy`, so one label in each pair is wrong.
-- Consider raising `STAGE2_EPOCHS` above 10 for a v2.2 run. Validation loss was still improving at the final stage-2 epoch, so training stopped early rather than converging.
-- Collect more `bacterial_black_spot` and `mango_scab` field photographs. They are the two smallest training classes and they account for all 12 test errors.
+## Standing Rules
+
+These are not tasks to close. They apply to every future retraining cycle and every future app release.
+
 - Freeze the next dataset snapshot before retraining, and split by physical leaf group rather than by file if the new data again contains multiple photographs of one leaf.
-- Record class counts, split seed, augmentation plan, metrics, confusion matrix, model size, and export checksum for every new run.
+- Record class counts, split seed, augmentation plan, metrics, confusion matrix, model size, and export checksum for every new run. Keep writing `run_record.json` and `figures/per_class_metrics.csv` outside the notebook, because those two files are what made the lost Trial 3 notebooks survivable.
 - Re-run `bun run typecheck`, `bun run lint`, and `bun run build` before publishing a new app release.
-- Publish the GitHub Releases for `v0.2.6` and `v0.2.7`. Both annotated tags are pushed, but a tag is only a named pointer into history; the Releases page is a separate layer and the only one of the three that appears in the repository sidebar. Repository, then Releases, then Draft a new release, then select the existing tag rather than creating one. Keep preparing separate releases for app milestones and model milestones.
+- Only app tags get a GitHub Release. Every published Release in this repository sits on a `v0.*` tag; model tags stay bare provenance markers. Draft a release by selecting the pushed tag rather than creating one, so a tag never points at an unfinished commit.
+- Grep `src/` for the outgoing accuracy figure whenever a model swap changes the test accuracy. `aiEngineDesc` in `src/lib/translations.ts` is the only accuracy claim the app shows anyone, and it went two model versions stale before anyone noticed.
