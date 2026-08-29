@@ -286,7 +286,9 @@ Search the minified `public/sw.js` for `'url':'` with single quotes, not `"url":
 * **Phone verification on production.** Open the console on `https://mangoleaf-ai.vercel.app` and confirm `Model config loaded: margin=0.4, entropy=0.4` with neither value `null`, then photograph something that is not a mango and confirm it returns *Uncertain*. Not yet done — the deploy has not happened.
 * **Accept one real `mango_scab` photograph on a production build.** It is the weakest class at 0.9014 F1, it is involved in 6 of the 10 test errors, and it lost 66 images between trials. It was already the outstanding gap after Trial 2.1.
 * **Commit the four Trial 3 notebooks** as soon as they are re-downloaded from Colab.
-* **Re-tag.** `model-v3.0.0` and `v0.3.0` both need annotated tags once the release commit is final.
+* **Current tags.** `model-v3.0.0` and `v0.3.0` are annotated provenance tags on the finalized Trial 3 release commit.
+
+**Release-status update, August 29, 2026.** Both annotated Trial 3 tags were created and pushed on `f73f0b8`. The subsequent `v0.4.0` application release does not alter or replace `model-v3.0.0`.
 
 ---
 

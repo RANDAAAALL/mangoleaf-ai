@@ -11,7 +11,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 | **Initial JS Payload (TFJS Engine)** | Eagerly imported in main bundle (~1.5MB) | Dynamic `import()` inside `useEffect` & event handlers | **~1.5MB lighter initial load, instant FCP** |
 | **GPU VRAM Allocation (Per Scan)** | ~36 Million Floats (12MP Raw Tensor) | ~150 Thousand Floats (224x224 Canvas) | **~240x Memory Reduction** |
 | **GPU Texture Precision** | 32-bit Float | 16-bit Float (`WEBGL_FORCE_F16_TEXTURES`) | **50% Lower VRAM Footprint** |
-| **Model Download Size (First Load)** | 11.51 MB float32, 3 shards | 5.88 MB Float16, 2 shards | **48.9% Smaller First Load** |
+| **Model Download Size (First Load)** | Uncached model fetch | 11.53 MB Trial 3 float32 model precached in 3 shards | **No repeat download after install** |
 | **UI Thread Block during AI** | Synchronous Blocking (`dataSync()`) | Async Non-blocking (`outputTensor.data()`) | **Smooth 60FPS UI Animations** |
 | **Stored Scan Photo Size** | 6.0 MB – 12.0 MB Raw Camera File | ~75 KB WebP (with JPEG ~150 KB fallback) | **80x–160x Smaller Storage & Upload** |
 | **Blob URL Memory & Render Lifecycle** | Central map regenerated ALL URLs on 1 scan change | Per-card `useEffect` ObjectURL creation & auto-cleanup | **Zero image flicker, zero heap leaks** |
@@ -22,9 +22,9 @@ This document outlines the technical optimizations, hardware acceleration strate
 | **Database Sync Operations** | Sequential single-row `put()` calls | Batch `bulkPut()` single-transaction | **~3x Faster Sync Flush** |
 | **Font Loading (FOIT)** | Flash of Invisible Text on slow 3G | `display: "swap"` instant text rendering | **Instant Text Visibility** |
 | **Conditional Component Bundles** | All components loaded upfront | `next/dynamic` code-splitting for heavy modals | **Smaller Initial JS Payload** |
-| **Duplicate Photo Detection** | Same gallery photo re-diagnosed every time | SHA-256 Web Crypto hash check skips AI entirely | **0.0s for Duplicate Photos** |
-| **3G Upload Timeout** | Fetch hangs 60+ seconds on stalled 3G | `AbortController` aborts at 10 seconds | **10s Max Wait, Auto-Retry** |
-| **Concurrent Sync Safety** | Multiple sync operations could stack | `isSyncingRef` lock prevents overlap | **Zero Duplicate Uploads** |
+| **Duplicate Photo Detection** | Same gallery photo re-diagnosed every time | SHA-256 Web Crypto hash check skips AI entirely | **No model inference for duplicates** |
+| **3G Upload Timeout** | Stalled Storage upload holds sync job | Per-request `AbortController` aborts after 10 seconds | **10s max, exponential retry** |
+| **Concurrent Sync Safety** | Sync triggers could overlap or miss new work | Lock queues one follow-up sync | **No overlapping uploads, no missed mutation** |
 | **Supabase First Request** | Cold DNS + TLS handshake (~300ms on 3G) | `<link rel="preconnect">` preflight | **~300ms Faster First Sync** |
 
 ---
@@ -43,8 +43,8 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ### 1.3 WebGL 16-Bit Float Textures
 * **Implementation:** `tf.env().set("WEBGL_FORCE_F16_TEXTURES", true)` is executed prior to model initialization.
-* **Rationale:** Halves GPU texture memory allocation on phones. This flag is independent of the weight file format: TensorFlow.js decodes the Float16 shards back to float32 in JavaScript before uploading them to the GPU, so the flag is what actually keeps weights at 16 bits on the device. Measured cost of 16-bit weights was zero — a probe that cast every weight to float16 and back changed **0 of 417** test predictions.
-* **Separate benefit of the Float16 export (`--quantize_float16`):** a smaller download, 5.88 MB against 11.51 MB. It does not change inference speed or GPU memory.
+* **Rationale:** Halves GPU texture memory allocation on phones. Trial 3 deliberately ships float32 weights, but this WebGL setting uploads them to half-float textures on supported devices. The model file, class mapping, thresholds, and model accuracy are not changed at runtime.
+* **Download trade-off:** Trial 3 remains 11.53 MB across three shards. A separately verified float16 export could reduce transfer size, but it is not shipped; no model artifact was modified in this optimization pass.
 
 ### 1.4 Asynchronous Non-Blocking Inference & Garbage Collection
 * **Implementation:** Output tensors are extracted via `await outputTensor.data()` instead of synchronous `dataSync()`.
@@ -77,10 +77,10 @@ This document outlines the technical optimizations, hardware acceleration strate
 * **Cleanup:** Each `ScanCard` revokes its own `ObjectURL` upon unmounting or when the scan blob changes, ensuring zero image flickering and zero heap memory leaks.
 
 ### 2.2 Modular Component Refactoring & `React.memo()` Memoization
-* **Structure:** Scoped UI into isolated components (`SplashScreen`, `Navbar`, `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `ScanDetailsModal`, `LegalModal`, `Footer`, `HowItWorksCard`), grouped into `src/components/` subfolders by role: `brand/`, `layout/`, `modal/`, `scan/`, and `tab/`.
+* **Structure:** Scoped UI into isolated components (`SplashScreen`, `TopHeader`, `BottomNav`, `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `HowItWorksSteps`, `DiseaseCoverageCard`, `ScanDetailsModal`, `LegalModal`, `Footer`), grouped into `src/components/` subfolders by role: `brand/`, `layout/`, `modal/`, `scan/`, and `tab/`.
 * **Per-Tab Components:** `HomeTab`, `HistoryTab`, and `AboutTab` replace the inline `activeTab` branches previously in `page.tsx`. Only the active tab's subtree is mounted, so switching tabs unmounts the other two instead of keeping all three in the render output.
-* **Memoization:** `HomeTab`, `HistoryTab`, `AboutTab`, `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `ScanDetailsModal`, `LegalModal`, `Navbar`, `Icon`, `Logo`, `Footer`, and `HowItWorksCard` are wrapped in `React.memo()` to prevent unnecessary re-renders when parent state changes. `SplashScreen` is not memoized because it renders once before the model finishes loading and is then replaced.
-* **Stable Callbacks & Refs:** `getGuidelineColor`, `handleViewAllHistory`, and `setLanguage` are wrapped in `useCallback`. `selectedFileRef` and `previewUrlRef` stabilize `runDiagnosis` callback identity across state changes.
+* **Memoization:** `HomeTab`, `HistoryTab`, `AboutTab`, `DiagnosticScanner`, `ScanCard`, `ScanHistoryList`, `HowItWorksSteps`, `DiseaseCoverageCard`, `ScanDetailsModal`, `LegalModal`, `TopHeader`, `BottomNav`, `Icon`, `Logo`, and `Footer` are wrapped in `React.memo()` to prevent unnecessary re-renders when parent state changes. `SplashScreen` is not memoized because it renders once before the model finishes loading and is then replaced.
+* **Stable Callbacks & Refs:** `handleViewAllHistory` and `setLanguage` are wrapped in `useCallback`. `selectedFileRef` and `previewUrlRef` stabilize `runDiagnosis` callback identity across state changes.
 
 ### 2.3 Dexie Reverse Query Optimization (`page.tsx`)
 * **Implementation:** IndexedDB query fetches active scans sorted descending directly at the query level using `db.scans.where("_status").notEqual("pending-delete").sortBy("updated_at").then(results => results.reverse())`.
@@ -110,10 +110,10 @@ This document outlines the technical optimizations, hardware acceleration strate
 ## 🌐 3. PWA Offline Infrastructure & Network Caching
 
 ### 3.1 Service Worker Model Pre-Caching (`sw.ts`)
-* **Strategy:** Implemented a dedicated `CacheFirst` runtime caching rule for all `/model/*` routes (`model.json`, the binary weight shards `group1-shard1of2.bin` and `group1-shard2of2.bin`, and `model_config.json`) in Serwist.
+* **Strategy:** Serwist precaches all five `/model/*` files: `model.json`, `model_config.json`, and `group1-shard1of3.bin` through `group1-shard3of3.bin`. The `CacheFirst` runtime rule remains as defence in depth.
 * **Impact:** Guarantees that even if the smartphone is rebooted in complete Airplane Mode, the AI model loads instantly from browser `CacheStorage`.
-* **Versioned cache name:** the cache is named `mangoleaf-model-cache-v2-1-1`. `CacheFirst` never revalidates and `model.json` keeps the same URL across model versions, so the name is bumped whenever the files in `public/model/` are replaced. An `activate` handler deletes superseded model caches so the old weights do not occupy device storage forever.
-* **The precache is the real update mechanism.** Every file under `public/` also enters the Serwist precache manifest with a content-revision hash, and `PrecacheRoute` registers ahead of `runtimeCaching`, so the router matches the precache first and the `CacheFirst` rule above never actually fires for `/model/*`. Replaced weights get a new revision hash and are refetched on the next activation on their own. The cache-name bump is defence in depth, which also means an empty `mangoleaf-model-cache-v2-1-1` on a device is normal rather than a fault; verify updates against the precache manifest in the generated `public/sw.js`.
+* **Versioned cache name:** `mangoleaf-model-cache-v3-0-0`. The cache label is bumped whenever `public/model/` changes, and activation deletes superseded model caches so old weights do not occupy device storage forever.
+* **The precache is the real update mechanism.** Public files receive content-revision hashes in Serwist's precache manifest, which is matched before runtime caching. Replaced weights therefore refetch on next activation. An empty runtime model cache is normal; verify updates in generated `public/sw.js`.
 
 ### 3.2 High-Capacity Offline Database (Dexie.js / IndexedDB)
 * **Storage Layer:** Binary photo Blobs and scan metadata are persisted locally using Dexie.js (IndexedDB).
@@ -122,22 +122,23 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ### 3.3 Batch Database Operations (`useSync.ts`)
 * **Guidelines Sync:** Remote guidelines are inserted via `db.guidelines.bulkPut()` in a single IndexedDB transaction instead of sequential individual `put()` calls.
-* **Scans Sync:** Remote scans are batch-inserted via `db.scans.bulkPut()`, reducing transaction overhead by ~3x during multi-record synchronization.
+* **Scans Sync:** Remote scans are checked with one `db.scans.bulkGet()` and inserted through `db.scans.bulkPut()`, avoiding one IndexedDB request per restored history row.
 
 ### 3.4 Duplicate Photo Checker (SHA-256 Image Hash)
-* **Implementation:** When a farmer selects a photo, `computeImageHash()` in `classifier.ts` calculates a unique 64-character SHA-256 fingerprint using the browser-native `crypto.subtle.digest()` Web Crypto API in **~0.01 seconds**.
+* **Implementation:** When a farmer selects a photo, `computeImageHash()` in `classifier.ts` calculates a unique 64-character SHA-256 fingerprint through browser-native asynchronous Web Crypto. Its time depends on original photo size, but it does not run TensorFlow.js.
 * **Lookup:** The hash is checked against the indexed `image_hash` column in Dexie's `scans` table via `db.scans.where("image_hash").equals(hash).first()`.
 * **Duplicate Found:** If matched, the app skips AI model execution entirely and instantly opens the existing scan report — saving 100% of GPU memory, battery, and processing time.
 * **New Photo:** If no match, runs the AI model normally and stores the `image_hash` alongside the scan record in both IndexedDB and Supabase.
 
-### 3.5 3G Network Resilience: Upload Timeout (`useSync.ts`)
+### 3.5 3G Network Resilience: Upload Timeout (`supabase-client.ts`, `useSync.ts`)
 * **Problem:** On weak 3G connections with packet loss, the default browser `fetch()` can hang for **30–60 seconds** waiting for a Supabase Storage upload response.
-* **Solution:** Each upload is wrapped with an `AbortController` set to a **10-second timeout**. If the upload doesn't complete within 10 seconds, the request is aborted immediately.
-* **Safety:** The scan record remains safely stored in local IndexedDB as `pending-insert` and is automatically retried on the next sync pulse — zero data loss.
+* **Solution:** A Supabase client fetch wrapper applies a real `AbortController` timeout only to writes into Storage's `scans` bucket. Storage's `upload()` options do not accept a signal, so this cancellation happens at its underlying fetch layer. The retry delays are 10 seconds, 30 seconds, 60 seconds, then every 5 minutes while online.
+* **Safety:** The scan record remains `pending-insert` in IndexedDB. A successful blob upload stores its public URL locally before row insertion, so a later metadata failure retries only that small row instead of re-uploading photo bytes.
 
 ### 3.6 3G Network Resilience: Concurrent Sync Lock (`useSync.ts`)
 * **Problem:** On slow 3G, multiple sync triggers (e.g., going online + taking a new scan simultaneously) could fire overlapping network requests.
-* **Solution:** A `useRef`-based `isSyncingRef` boolean lock ensures only one sync operation runs at a time. Duplicate sync triggers are safely skipped with a console log notification.
+* **Solution:** A `useRef`-based `isSyncingRef` lock allows one sync at a time. A trigger arriving during active work queues exactly one follow-up pass, which prevents overlap without losing a new local mutation.
+* **Mobile background recovery:** Returning the PWA to the foreground clears a throttled retry timer and starts a fresh online sync immediately.
 
 ---
 

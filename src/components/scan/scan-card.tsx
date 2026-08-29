@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from "react";
-import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
+import { type ScanRecord } from "@/lib/db";
 import { translations, type Language } from "@/lib/translations";
 import { getBadgeStyles } from "@/lib/get-badge-styles";
 import { formatTimeAgo } from "@/lib/format-time-ago";
@@ -8,7 +8,6 @@ interface ScanCardProps {
   scan: ScanRecord;
   imageBlob: Blob | null;
   imageUrlFallback: string | null;
-  guidelineColor: DiseaseGuideline["color"];
   language: Language;
   onSelect: (scan: ScanRecord) => void;
   onDelete: (id: string) => void;

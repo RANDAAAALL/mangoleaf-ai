@@ -3,6 +3,8 @@ import { supabase } from "@/lib/supabase-client";
 import { db, type ScanRecord } from "@/lib/db";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
+const SYNC_RETRY_DELAYS_MS = [10_000, 30_000, 60_000, 300_000];
+
 /**
  * Keeps scan data local-first and reconciles pending changes with Supabase
  * whenever the browser is online.
@@ -12,8 +14,6 @@ export function useSync() {
     if (typeof window === "undefined") return true;
     return navigator.onLine;
   });
-  const [isSyncing, setIsSyncing] = useState<boolean>(false);
-  const [syncError, setSyncError] = useState<string | null>(null);
   
   // Initialize device ID lazily from localStorage
   const [deviceId] = useState<string>(() => {
@@ -31,6 +31,37 @@ export function useSync() {
 
   // Sync lock: prevents concurrent sync operations from stacking on slow 3G networks
   const isSyncingRef = useRef<boolean>(false);
+  const syncRequestedRef = useRef(false);
+  const retryAttemptRef = useRef(0);
+  const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const syncRef = useRef<() => Promise<void>>(async () => {});
+
+  const clearScheduledRetry = useCallback(() => {
+    if (retryTimerRef.current !== null) {
+      clearTimeout(retryTimerRef.current);
+      retryTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleRetry = useCallback(() => {
+    if (
+      typeof navigator === "undefined" ||
+      !navigator.onLine ||
+      retryTimerRef.current !== null
+    ) {
+      return;
+    }
+
+    const delay =
+      SYNC_RETRY_DELAYS_MS[
+        Math.min(retryAttemptRef.current, SYNC_RETRY_DELAYS_MS.length - 1)
+      ];
+    retryAttemptRef.current += 1;
+    retryTimerRef.current = setTimeout(() => {
+      retryTimerRef.current = null;
+      void syncRef.current();
+    }, delay);
+  }, []);
 
   // Handle online tracking
   useEffect(() => {
@@ -47,13 +78,13 @@ export function useSync() {
   }, []);
 
   // Flush local pending changes (Upload Images to Storage, then Insert DB Rows)
-  const flushLocalMutations = useCallback(async () => {
+  const flushLocalMutations = useCallback(async (): Promise<boolean> => {
     try {
       const pendingScans = await db.scans
         .where('_status').anyOf(['pending-insert', 'pending-delete'])
         .toArray();
 
-      if (pendingScans.length === 0) return;
+      if (pendingScans.length === 0) return false;
 
       for (const scan of pendingScans) {
         if (scan._status === "pending-insert") {
@@ -65,28 +96,19 @@ export function useSync() {
             const isWebP = scan.image_blob.type === "image/webp";
             const fileName = `${scan.id}.${isWebP ? "webp" : "jpg"}`;
 
-            // 3G Safety: Abort upload if it takes longer than 10 seconds
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 10_000);
-
             try {
               const { error: uploadError } = await supabase.storage
                 .from("scans")
                 .upload(fileName, scan.image_blob, {
                   contentType: scan.image_blob.type || "image/jpeg",
                   upsert: true,
-                  // @ts-expect-error -- Supabase JS v2 supports signal via fetch options
-                  signal: controller.signal,
                 });
-
-              clearTimeout(timeoutId);
 
               if (uploadError) {
                 console.error("Error uploading image file:", uploadError.message);
                 continue; // Skip database row insertion if image upload fails
               }
-            } catch (_abortErr) {
-              clearTimeout(timeoutId);
+            } catch {
               console.warn("---Upload timed out on slow 3G — will retry next sync.---");
               continue; // Skip this scan, it stays as pending-insert for next retry
             }
@@ -94,6 +116,10 @@ export function useSync() {
             // 2. Fetch the uploaded file's public URL
             const { data } = supabase.storage.from("scans").getPublicUrl(fileName);
             uploadedUrl = data.publicUrl;
+
+            // Preserve a successful binary upload before inserting its metadata.
+            // Retrying a later row-insert failure then sends no duplicate image bytes.
+            await db.scans.update(scan.id, { image_url: uploadedUrl });
           }
 
           // 3. Insert the text log row in the Supabase Database table
@@ -133,20 +159,25 @@ export function useSync() {
           }
         }
       }
+
+      return (await db.scans
+        .where('_status').anyOf(['pending-insert', 'pending-delete'])
+        .count()) > 0;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error("Error flushing scans mutations:", msg);
+      return true;
     }
   }, []);
 
   // Pull latest data from Supabase (Guidelines & Scan History restoration)
-  const pullRemoteChanges = useCallback(async () => {
-    if (!deviceId) return;
+  const pullRemoteChanges = useCallback(async (): Promise<boolean> => {
+    if (!deviceId) return true;
     try {
       // 1. Pull the pre-written guidelines from Supabase
       const { data: remoteGuidelines, error: guidelinesError } = await supabase
         .from("guidelines")
-        .select("*");
+        .select("id,disease_name,guidelines_en,guidelines_bis");
 
       if (guidelinesError) throw guidelinesError;
       if (remoteGuidelines) {
@@ -155,7 +186,6 @@ export function useSync() {
           disease_name: rGuideline.disease_name,
           guidelines_en: rGuideline.guidelines_en,
           guidelines_bis: rGuideline.guidelines_bis,
-          color: rGuideline.color,
         }));
         await db.guidelines.bulkPut(guidelinesToPut);
       }
@@ -163,16 +193,18 @@ export function useSync() {
       // 2. Pull own Scans to restore local history
       const { data: remoteScans, error: scansError } = await supabase
         .from("scans")
-        .select("*")
+        .select("id,disease_name,confidence,image_url,image_hash,updated_at,device_id")
         .eq("device_id", deviceId);
 
       if (scansError) throw scansError;
       if (remoteScans) {
-        const scansToPut: ScanRecord[] = [];
-        for (const rScan of remoteScans) {
-          const local = await db.scans.get(rScan.id);
-          if (!local) {
-            scansToPut.push({
+        const localScans = await db.scans.bulkGet(
+          remoteScans.map((scan) => scan.id),
+        );
+        const scansToPut: ScanRecord[] = remoteScans.flatMap((rScan, index) =>
+          localScans[index]
+            ? []
+            : [{
               id: rScan.id,
               disease_name: rScan.disease_name,
               confidence: rScan.confidence,
@@ -182,17 +214,17 @@ export function useSync() {
               updated_at: rScan.updated_at,
               device_id: rScan.device_id,
               _status: "synced",
-            });
-          }
-        }
+            }],
+        );
         if (scansToPut.length > 0) {
           await db.scans.bulkPut(scansToPut);
         }
       }
+      return true;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error("Error pulling remote changes:", msg);
-      setSyncError(msg);
+      return false;
     }
   }, [deviceId]);
 
@@ -202,25 +234,61 @@ export function useSync() {
 
     // 3G Safety: Prevent concurrent sync operations from stacking
     if (isSyncingRef.current) {
+      syncRequestedRef.current = true;
       console.log("---Sync already in progress — skipping duplicate trigger.---");
       return;
     }
 
     isSyncingRef.current = true;
-    setIsSyncing(true);
-    setSyncError(null);
+
+    let needsRetry = false;
 
     try {
-      await flushLocalMutations();
-      await pullRemoteChanges();
+      const hasPendingMutations = await flushLocalMutations();
+      const pulledRemoteChanges = await pullRemoteChanges();
+      needsRetry = hasPendingMutations || !pulledRemoteChanges;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      setSyncError(msg);
+      console.error("Error synchronizing data:", msg);
+      needsRetry = true;
     } finally {
-      setIsSyncing(false);
       isSyncingRef.current = false;
+
+      if (syncRequestedRef.current && navigator.onLine) {
+        syncRequestedRef.current = false;
+        setTimeout(() => void syncRef.current(), 0);
+      } else if (needsRetry) {
+        scheduleRetry();
+      } else {
+        retryAttemptRef.current = 0;
+        clearScheduledRetry();
+      }
     }
-  }, [flushLocalMutations, pullRemoteChanges]);
+  }, [clearScheduledRetry, flushLocalMutations, pullRemoteChanges, scheduleRetry]);
+
+  useEffect(() => {
+    syncRef.current = sync;
+  }, [sync]);
+
+  useEffect(() => {
+    return clearScheduledRetry;
+  }, [clearScheduledRetry]);
+
+  // Background timers are throttled on mobile. Reconcile immediately when the
+  // user returns to an online app instead of waiting for a delayed retry timer.
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== "visible" || !navigator.onLine) return;
+      clearScheduledRetry();
+      retryAttemptRef.current = 0;
+      void sync();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [clearScheduledRetry, sync]);
 
   // Create a new scan record (saved locally first, retries sync if online)
   const createScan = useCallback(
@@ -243,7 +311,7 @@ export function useSync() {
       await db.scans.add(newScan);
 
       if (navigator.onLine) {
-        sync();
+        void sync();
       }
     },
     [sync, deviceId]
@@ -264,7 +332,7 @@ export function useSync() {
         });
 
         if (navigator.onLine) {
-          sync();
+          void sync();
         }
       }
     },
@@ -273,13 +341,19 @@ export function useSync() {
 
   // Auto-sync when network reconnects or device ID loads
   useEffect(() => {
-    if (isOnline && deviceId) {
+    if (!isOnline) {
+      clearScheduledRetry();
+      return;
+    }
+
+    if (deviceId) {
+      retryAttemptRef.current = 0;
       const timer = setTimeout(() => {
-        sync();
+        void sync();
       }, 0);
       return () => clearTimeout(timer);
     }
-  }, [isOnline, deviceId, sync]);
+  }, [clearScheduledRetry, isOnline, deviceId, sync]);
 
   // Real-time WebSocket connection to listen to database guidelines updates
   useEffect(() => {
@@ -299,7 +373,7 @@ export function useSync() {
         { event: "*", schema: "public", table: "guidelines" },
         async (payload: { eventType: string; new: Record<string, unknown>; old: Record<string, unknown> }) => {
           console.log("---Realtime Postgres change detected---", payload);
-          const { eventType, new: newRecord } = payload;
+          const { eventType, new: newRecord, old: oldRecord } = payload;
 
           if (eventType === "INSERT" || eventType === "UPDATE") {
             await db.guidelines.put({
@@ -307,8 +381,9 @@ export function useSync() {
               disease_name: String(newRecord.disease_name),
               guidelines_en: String(newRecord.guidelines_en),
               guidelines_bis: String(newRecord.guidelines_bis),
-              color: (newRecord.color as "yellow" | "pink" | "blue" | "green" | "purple") || "yellow",
             });
+          } else if (eventType === "DELETE") {
+            await db.guidelines.delete(String(oldRecord.id));
           }
         }
       )
@@ -325,12 +400,8 @@ export function useSync() {
   }, [isOnline, deviceId]);
 
   return useMemo(() => ({
-    isOnline,
-    isSyncing,
-    syncError,
-    deviceId,
     createScan,
     deleteScan,
     triggerSync: sync,
-  }), [isOnline, isSyncing, syncError, deviceId, createScan, deleteScan, sync]);
+  }), [createScan, deleteScan, sync]);
 }

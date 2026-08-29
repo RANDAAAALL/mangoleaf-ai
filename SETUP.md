@@ -83,8 +83,7 @@ create table public.guidelines (
   id text primary key,
   disease_name text not null,
   guidelines_en text not null,
-  guidelines_bis text not null,
-  color text not null default 'yellow'
+  guidelines_bis text not null
 );
 ```
 

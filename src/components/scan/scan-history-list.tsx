@@ -1,5 +1,5 @@
 import { useState, memo, useMemo } from "react";
-import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
+import { type ScanRecord } from "@/lib/db";
 import { ScanCard } from "./scan-card";
 import { translations, type Language } from "@/lib/translations";
 import { UNCERTAIN_LABEL } from "@/lib/constants";
@@ -8,7 +8,6 @@ import { Icon } from "@/components/brand/icon";
 interface ScanHistoryListProps {
   scans: ScanRecord[];
   language: Language;
-  getGuidelineColor: (diseaseName: string) => DiseaseGuideline["color"];
   onSelectScan: (scan: ScanRecord) => void;
   onDeleteScan: (id: string) => void;
   onViewAllHistory?: () => void;
@@ -40,7 +39,6 @@ function getPaginationRange(
 export const ScanHistoryList = memo(function ScanHistoryList({
   scans,
   language,
-  getGuidelineColor,
   onSelectScan,
   onDeleteScan,
   onViewAllHistory,
@@ -98,8 +96,12 @@ export const ScanHistoryList = memo(function ScanHistoryList({
       {/* Responsive Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Row 1 / Left: Title */}
-        <div className="flex items-center justify-between w-full sm:w-auto">
-          <h3 className="text-xl sm:text-2xl font-black text-[#143519] tracking-tight">
+        <div className="flex items-center justify-between w-full">
+          <h3
+            className={`text-xl sm:text-2xl font-black text-[#143519] tracking-tight ${
+              isFullHistoryPage ? "w-full text-center sm:text-left" : ""
+            }`}
+          >
             {isFullHistoryPage ? t.scanHistoryTitle : t.recentScansTitle}
           </h3>
 
@@ -141,22 +143,36 @@ export const ScanHistoryList = memo(function ScanHistoryList({
             </div>
 
             {/* Filter selector */}
-            <select
-              value={filterCategory}
-              onChange={handleFilterChange}
-              className="w-full sm:w-auto py-2.5 sm:py-2 px-3 bg-white border border-[#d2e2c4] rounded-xl text-xs font-semibold text-[#143519] focus:outline-none focus:border-[#277839] transition-colors shadow-xs cursor-pointer"
-            >
-              <option value="all">{t.filterAll}</option>
-              <option value="anthracnose">Anthracnose</option>
-              <option value="healthy">Healthy</option>
-              <option value="sooty">Sooty Mold</option>
-              <option value="scab">Mango Scab</option>
-              <option value="canker">Bacterial Canker</option>
-              <option value="black">Bacterial Black Spot</option>
-              {/* Rejected scans. Not a class, so it is listed last and matched on
-                  the one word no real class name contains. */}
-              <option value="uncertain">{UNCERTAIN_LABEL}</option>
-            </select>
+            <div className="relative w-full sm:w-auto">
+              <select
+                value={filterCategory}
+                onChange={handleFilterChange}
+                className="w-full appearance-none py-2.5 pl-3 pr-11 sm:py-2 bg-white border border-[#d2e2c4] rounded-xl text-xs font-semibold text-[#143519] focus:outline-none focus:border-[#277839] transition-colors shadow-xs cursor-pointer"
+              >
+                <option value="all">{t.filterAll}</option>
+                <option value="anthracnose">Anthracnose</option>
+                <option value="healthy">Healthy</option>
+                <option value="sooty">Sooty Mold</option>
+                <option value="scab">Mango Scab</option>
+                <option value="canker">Bacterial Canker</option>
+                <option value="black">Bacterial Black Spot</option>
+                {/* Rejected scans. Not a class, so it is listed last and matched on
+                    the one word no real class name contains. */}
+                <option value="uncertain">{UNCERTAIN_LABEL}</option>
+              </select>
+              <svg
+                aria-hidden="true"
+                className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#277839]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+              >
+                <path d="m7 10 5 5 5-5" />
+              </svg>
+            </div>
           </div>
         ) : (
           /* View All History link on Home Screen (Desktop view) */
@@ -194,7 +210,6 @@ export const ScanHistoryList = memo(function ScanHistoryList({
               imageBlob={scan.image_blob || null}
               imageUrlFallback={scan.image_url}
               language={language}
-              guidelineColor={getGuidelineColor(scan.disease_name)}
               onSelect={onSelectScan}
               onDelete={onDeleteScan}
             />

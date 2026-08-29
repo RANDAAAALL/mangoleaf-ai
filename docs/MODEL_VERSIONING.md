@@ -112,11 +112,12 @@ v0.2.5  localized scan history and UI reorganization
 v0.2.6  Trial 2.1 model and three-gate rejection ship to the app
 v0.2.7  organ-label removal and a filter for rejected scans
 v0.3.0  Trial 3 model ships to the app
+v0.4.0  mobile field-experience redesign and resilient scan synchronization
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
 
-The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work is the `v0.2.2` patch. `v0.2.3` adds the collapsible home-screen scan-flow guide. `v0.2.4` moves version-label sourcing into the build configuration and refines the scan-guide list layout. `v0.2.5` localizes scan-history dates in English and Bisaya and reorganizes the UI components. The model stayed at `model-v2.0.0` through all of those because no model assets, class mapping, or training results changed. The Trial 2.1 swap on August 23, 2026 and the threshold fitting on August 24, 2026 together moved the model to `model-v2.1.1` without an app release of their own. `v0.2.6` is the app release that ships them: the Trial 2.1 weights, the folded temperature `T = 0.754966`, and the fitted margin and entropy thresholds. Its tag sits on commit `e493009`, and `model-v2.1.1` on commit `9b31c7b`. `v0.2.7` removes the leaf-versus-fruit label from the scan card and adds a history filter for rejected scans; the model is untouched, so it stays `model-v2.1.1`. `v0.3.0` ships Trial 3: a new dataset pool, the recalibrated temperature `T = 1.188751`, and refitted thresholds of margin `0.40` and entropy `0.40`. It is a minor app release carrying a major model bump to `model-v3.0.0`, which is normal — the two labels are independent, and the new test set makes the model change major regardless of how small the app diff is. Both of its tags sit on commit `f73f0b8`, because the weights, the thresholds, and the version bumps landed together.
+The project history records `v0.2.0` as a published release and `v0.2.1` as the following title-clarity patch. The repository-organization work is the `v0.2.2` patch. `v0.2.3` adds the collapsible home-screen scan-flow guide. `v0.2.4` moves version-label sourcing into the build configuration and refines the scan-guide list layout. `v0.2.5` localizes scan history and reorganizes UI components. The model stayed at `model-v2.0.0` through all of those because no model assets, class mapping, or training results changed. The Trial 2.1 swap on August 23, 2026 and threshold fitting on August 24, 2026 together moved the model to `model-v2.1.1` without an app release of their own. `v0.2.6` ships them: Trial 2.1 weights, folded temperature `T = 0.754966`, and fitted rejection thresholds. `v0.2.7` removes the organ label from scan cards and adds a rejected-scan filter; its model stays `model-v2.1.1`. `v0.3.0` ships Trial 3 and its model bump to `model-v3.0.0`. `v0.4.0` redesigns the mobile field experience and makes local-first synchronization retry-safe; model assets, class mapping, thresholds, and the 97.46% Trial 3 result remain unchanged. It has an app tag only, not a new model tag.
 
 The `v0.2.3` tag was originally created on a commit that predated an amend and was missing `src/components/how-it-works-card.tsx`, so a checkout of that tag could not build. The tag was moved to the corrected commit `50514f8` on August 18, 2026. The superseded commit was `175d7ddc4094ea84139b0526bfa1abd6265a40a9`. Create tags only after the release commit is final to avoid repeating this.
 
@@ -147,10 +148,10 @@ the footer label is derived from it:
 
 ```bash
 git status
-git add -u
-git add package.json
-git commit -m "feat(app): localize scan history and reorganize UI"
-git tag -a v0.2.5 -m "MangoLeaf AI v0.2.5 - localized scan history and UI reorganization"
+git add -A
+git diff --cached --check
+git commit -m "feat(app): ship v0.4.0 field experience"
+git tag -a v0.4.0 -m "MangoLeaf AI v0.4.0 - mobile field experience and resilient offline sync"
 git push origin master --follow-tags
 ```
 

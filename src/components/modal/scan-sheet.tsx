@@ -1,0 +1,286 @@
+"use client";
+
+import { useEffect, useRef, useState, memo, useCallback } from "react";
+import { translations, type Language } from "@/lib/translations";
+import { Icon } from "@/components/brand/icon";
+
+interface ScanSheetProps {
+  isOpen: boolean;
+  language: Language;
+  onClose: () => void;
+}
+
+const DISMISS_THRESHOLD_PX = 80;
+const EXIT_MS = 220;
+const SNAP_MS = 220;
+
+export const ScanSheet = memo(function ScanSheet({
+  isOpen,
+  language,
+  onClose,
+}: ScanSheetProps) {
+  const t = translations[language];
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const dragHandleRef = useRef<HTMLDivElement>(null);
+  const [shouldRender, setShouldRender] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [enterAnimationDone, setEnterAnimationDone] = useState(false);
+  const [isDismissing, setIsDismissing] = useState(false);
+  const [dragY, setDragY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartY = useRef(0);
+  const dragYRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const dismissTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      setDragY(0);
+      dragYRef.current = 0;
+      setIsDismissing(false);
+      setEnterAnimationDone(false);
+      const frame = requestAnimationFrame(() => setIsVisible(true));
+      const enterTimer = window.setTimeout(
+        () => setEnterAnimationDone(true),
+        280,
+      );
+      return () => {
+        cancelAnimationFrame(frame);
+        window.clearTimeout(enterTimer);
+      };
+    }
+
+    setIsVisible(false);
+    const timer = window.setTimeout(() => {
+      setShouldRender(false);
+      setIsDismissing(false);
+      setDragY(0);
+      dragYRef.current = 0;
+    }, EXIT_MS);
+    return () => window.clearTimeout(timer);
+  }, [isOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (dismissTimerRef.current !== null) {
+        window.clearTimeout(dismissTimerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!shouldRender) return;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [shouldRender]);
+
+  const handleCamera = () => {
+    const input = document.getElementById(
+      "scan-camera-input",
+    ) as HTMLInputElement | null;
+    if (input) {
+      input.value = "";
+      input.click();
+    }
+    onClose();
+  };
+
+  const handleGallery = () => {
+    const input = document.getElementById(
+      "scan-gallery-input",
+    ) as HTMLInputElement | null;
+    if (input) {
+      input.value = "";
+      input.click();
+    }
+    onClose();
+  };
+
+  const handleDragStart = useCallback((clientY: number) => {
+    if (dismissTimerRef.current !== null) {
+      window.clearTimeout(dismissTimerRef.current);
+      dismissTimerRef.current = null;
+      setIsDismissing(false);
+    }
+
+    setEnterAnimationDone(true);
+    dragStartY.current = clientY - dragYRef.current;
+    isDraggingRef.current = true;
+    setIsDragging(true);
+  }, []);
+
+  const handleDragMove = useCallback((clientY: number) => {
+    if (!isDraggingRef.current) return;
+    const delta = clientY - dragStartY.current;
+    const nextY = Math.max(0, delta);
+    dragYRef.current = nextY;
+    setDragY(nextY);
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    setIsDragging(false);
+
+    const current = dragYRef.current;
+    if (current > DISMISS_THRESHOLD_PX) {
+      const sheetHeight = sheetRef.current?.offsetHeight ?? 320;
+      setIsDismissing(true);
+      dragYRef.current = sheetHeight;
+      setDragY(sheetHeight);
+      dismissTimerRef.current = window.setTimeout(() => {
+        dismissTimerRef.current = null;
+        onClose();
+      }, SNAP_MS);
+      return;
+    }
+
+    dragYRef.current = 0;
+    setDragY(0);
+  }, [onClose]);
+
+  const handleDragStartRef = useRef(handleDragStart);
+  const handleDragMoveRef = useRef(handleDragMove);
+  const handleDragEndRef = useRef(handleDragEnd);
+  handleDragStartRef.current = handleDragStart;
+  handleDragMoveRef.current = handleDragMove;
+  handleDragEndRef.current = handleDragEnd;
+
+  useEffect(() => {
+    const handle = dragHandleRef.current;
+    if (!handle || !shouldRender) return;
+
+    const onTouchStart = (event: TouchEvent) => {
+      event.preventDefault();
+      handleDragStartRef.current(event.touches[0].clientY);
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      event.preventDefault();
+      handleDragMoveRef.current(event.touches[0].clientY);
+    };
+
+    const onTouchEnd = () => {
+      handleDragEndRef.current();
+    };
+
+    handle.addEventListener("touchstart", onTouchStart, { passive: false });
+    handle.addEventListener("touchmove", onTouchMove, { passive: false });
+    handle.addEventListener("touchend", onTouchEnd);
+    handle.addEventListener("touchcancel", onTouchEnd);
+
+    return () => {
+      handle.removeEventListener("touchstart", onTouchStart);
+      handle.removeEventListener("touchmove", onTouchMove);
+      handle.removeEventListener("touchend", onTouchEnd);
+      handle.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, [shouldRender]);
+
+  if (!shouldRender) return null;
+
+  const useInlineTransform = dragY > 0 || isDragging || isDismissing;
+  const sheetTransform = useInlineTransform
+    ? `translateY(${dragY}px)`
+    : undefined;
+
+  const sheetMotionClass =
+    useInlineTransform
+      ? ""
+      : !isVisible
+        ? "sheet-exit"
+        : !enterAnimationDone
+          ? "sheet-enter"
+          : "";
+
+  return (
+    <>
+      <div
+        onClick={onClose}
+        className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-xs ${
+          isVisible ? "backdrop-enter" : "backdrop-exit"
+        }`}
+        style={{
+          opacity:
+            dragY > 0 || isDismissing
+              ? Math.max(0, 1 - dragY / 280)
+              : undefined,
+          transition: isDragging ? "none" : `opacity ${SNAP_MS}ms ease-out`,
+        }}
+      />
+
+      <div
+        ref={sheetRef}
+        className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl touch-none ${sheetMotionClass}`}
+        style={{
+          paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))",
+          transform: sheetTransform,
+          transition: isDragging ? "none" : `transform ${SNAP_MS}ms ease-out`,
+        }}
+      >
+        <div
+          ref={dragHandleRef}
+          className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing touch-none select-none"
+          onMouseDown={(e) => handleDragStart(e.clientY)}
+          onMouseMove={(e) => {
+            if (e.buttons === 1) handleDragMove(e.clientY);
+          }}
+          onMouseUp={handleDragEnd}
+        >
+          <div className="w-10 h-1.5 bg-[#d2e2c4] rounded-full" />
+        </div>
+
+        <div className="px-6 pb-4 flex flex-col gap-4 touch-auto">
+          <h3 className="text-lg font-bold text-[#143519] text-center">
+            {t.scanSheetTitle}
+          </h3>
+
+          <div className="grid grid-rows-2 gap-3">
+            <button
+              onClick={handleCamera}
+              className="flex flex-col items-center gap-3 p-5 bg-[#277839] text-white rounded-2xl shadow-md cursor-pointer active:scale-[0.97] transition-transform"
+            >
+              <div className="h-12 w-12 rounded-full bg-[#a6f2b1] flex items-center justify-center">
+                <Icon name="camera" size={24} fill="#1b5e28" />
+              </div>
+              <div className="flex flex-col items-center gap-0.5">
+                <span className="text-sm font-bold">{t.takePhotoBtn}</span>
+                <span className="text-[10px] text-emerald-100 leading-tight text-center">
+                  {t.scanSheetCameraDesc}
+                </span>
+              </div>
+            </button>
+
+            <button
+              onClick={handleGallery}
+              className="flex flex-col items-center gap-3 p-5 bg-[#f59e2b] text-[#2c1806] rounded-2xl shadow-md cursor-pointer active:scale-[0.97] transition-transform"
+            >
+              <div className="h-12 w-12 rounded-full bg-[#3d2008] flex items-center justify-center">
+                <Icon name="gallery" size={22} strokeWidth={2.5} color="white" />
+              </div>
+              <div className="flex flex-col items-center gap-0.5">
+                <span className="text-sm font-bold">{t.uploadPhotoBtn}</span>
+                <span className="text-[10px] text-[#523012] leading-tight text-center">
+                  {t.scanSheetGalleryDesc}
+                </span>
+              </div>
+            </button>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="w-full py-3 bg-slate-100 text-slate-600 font-bold rounded-xl text-sm cursor-pointer hover:bg-slate-200 transition-colors"
+          >
+            {t.cancelBtn}
+          </button>
+        </div>
+      </div>
+    </>
+  );
+});

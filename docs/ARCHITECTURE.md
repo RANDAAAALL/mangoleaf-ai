@@ -86,9 +86,9 @@ Components are grouped into subfolders by the role they play rather than kept in
 | Folder | Contents | Role |
 | --- | --- | --- |
 | `brand/` | `logo.tsx`, `icon.tsx` | Identity marks and the shared icon set |
-| `layout/` | `navbar.tsx`, `footer.tsx`, `splash-screen.tsx` | Application frame around screen content |
+| `layout/` | `top-header.tsx`, `bottom-nav.tsx`, `footer.tsx`, `splash-screen.tsx` | Application frame around screen content |
 | `modal/` | `legal-modal.tsx`, `scan-details-modal.tsx` | Overlay dialogs |
-| `scan/` | `diagnostic-scanner.tsx`, `scan-card.tsx`, `scan-history-list.tsx`, `how-it-works-card.tsx` | Diagnosis feature surface |
+| `scan/` | `diagnostic-scanner.tsx`, `scan-card.tsx`, `scan-history-list.tsx`, `how-it-works-steps.tsx`, `disease-coverage-card.tsx` | Diagnosis feature surface |
 | `tab/` | `home-tab.tsx`, `history-tab.tsx`, `about-tab.tsx` | One component per navigation tab |
 
 The three tab components are the boundary between `page.tsx` and screen content. `page.tsx` owns all state and handlers, and renders exactly one of `HomeTab`, `HistoryTab`, or `AboutTab` per active tab. Adding a screen means adding a tab component and one branch in `page.tsx`, not editing shared markup.
@@ -102,7 +102,7 @@ Use the `@/components/...` path alias for imports across folders, and relative `
 Two pure formatting functions in `src/lib/` are kept out of the components that render them so the component files stay markup-only:
 
 - `format-time-ago.ts` turns a scan's ISO `updated_at` into a relative label. It reads every string from `translations.ts`, including the `{n}` count templates for minutes, hours, and days and the `monthsShort` abbreviations used for dates older than a week, so the label is fully localized in both languages. Month names come from `translations.ts` rather than `toLocaleDateString` because browsers have no reliable Cebuano/Bisaya month data. An unparseable timestamp returns the `justNow` label instead of falling through to a `NaN` date.
-- `get-badge-styles.ts` maps a disease name to the Tailwind badge classes for its severity color. It matches on substrings, so an unrecognized class name falls back to neutral slate styling rather than throwing.
+- `get-badge-styles.ts` maps a disease name to the shared red disease-badge classes or the green healthy-badge classes. It matches on substrings, so an unrecognized class name falls back to neutral slate styling rather than throwing.
 
 Both are imported by `scan/scan-card.tsx`. Neither imports React, so both can be called from any component or tested directly.
 
@@ -126,7 +126,7 @@ The model assets are committed under `public/model/` and contain six output clas
 `src/lib/db.ts` defines the Dexie database `MangoLeafDB` with two stores:
 
 - `scans`: image blobs, predictions, sync metadata, timestamps, and device ownership.
-- `guidelines`: cached English and Cebuano/Bisaya treatment guidance.
+- `guidelines`: cached English and Cebuano/Bisaya treatment guidance. Disease and healthy presentation colors are fixed in the client, not stored in Supabase.
 
 New scans are written locally first. This allows diagnosis and history features to keep working without a network connection.
 
@@ -141,7 +141,7 @@ New scans are written locally first. This allows diagnosis and history features 
 - Pulls the current device's remote scans for history restoration.
 - Pulls and caches treatment guidelines.
 - Subscribes to Realtime changes for the `guidelines` table.
-- Uses a sync lock and a 10-second upload timeout for slow connections.
+- Uses a sync lock with one queued follow-up pass, a real 10-second Storage upload timeout, exponential retry while online, and an immediate retry when the app returns to foreground.
 
 Supabase is therefore a synchronization and recovery layer; IndexedDB remains the immediate source used by the UI.
 

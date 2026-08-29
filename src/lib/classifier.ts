@@ -95,10 +95,9 @@ export async function loadMangoModel(): Promise<tf.GraphModel> {
     console.log("---Initializing TensorFlow.js engine...---");
 
     // OPTIMIZATION: Force GPU to use 16-bit float textures.
-    // This halves GPU texture memory on phones. It is independent of the weight
-    // file format: tfjs decodes the Float16 shards back to float32 in JavaScript
-    // before upload, so this flag is what actually keeps weights at 16 bits on the
-    // GPU. The Float16 export (5.88 MB instead of 11.51 MB) is a download saving.
+    // This halves GPU texture memory on phones. Trial 3 ships float32 weight
+    // shards, while this WebGL setting stores the deployed weights in half-float
+    // textures on supported devices. The model artifact is never altered here.
     // NOTE: If you ever encounter rendering/GPU issues on very old devices, you can remove or comment out this line.
     tf.env().set("WEBGL_FORCE_F16_TEXTURES", true);
 
@@ -320,5 +319,4 @@ export async function computeImageHash(file: File): Promise<string> {
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
-
 

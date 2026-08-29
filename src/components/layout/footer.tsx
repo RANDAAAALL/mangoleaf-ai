@@ -17,7 +17,7 @@ export const Footer = memo(function Footer({
   const t = translations[language];
 
   return (
-    <footer className="border-t border-[#e2ebd9] bg-[#edf4e8]/60 mt-16 py-12 text-center transition-colors">
+    <footer className="border-t border-[#e2ebd9] bg-[#edf4e8]/60 mt-16 pt-12 pb-28 md:pb-12 text-center transition-colors">
       <div className="max-w-7xl mx-auto px-6 flex flex-col items-center gap-4">
         {/* Brand Logo */}
         <div className="flex items-center gap-2">
@@ -33,18 +33,20 @@ export const Footer = memo(function Footer({
           </p>
         </div>
 
-        {/* Legal Links */}
-        <div className="flex items-center gap-4 text-xs text-[#425946] font-medium pt-1">
+        {/* Legal Links — extra bottom space on mobile so bottom nav does not cover links */}
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-xs text-[#425946] font-medium pt-1 max-w-xs sm:max-w-none mx-auto">
           <button
             onClick={onOpenPrivacy}
-            className="hover:text-[#277839] transition-colors cursor-pointer"
+            className="hover:text-[#277839] transition-colors cursor-pointer whitespace-normal text-center leading-snug"
           >
             {t.privacyPolicy}
           </button>
-          <span>•</span>
+          <span className="text-[#738a77]" aria-hidden="true">
+            •
+          </span>
           <button
             onClick={onOpenTerms}
-            className="hover:text-[#277839] transition-colors cursor-pointer"
+            className="hover:text-[#277839] transition-colors cursor-pointer whitespace-normal text-center leading-snug"
           >
             {t.termsOfService}
           </button>

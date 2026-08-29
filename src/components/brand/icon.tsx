@@ -8,7 +8,11 @@ export type IconName =
   | "language"
   | "camera"
   | "upload"
-  | "gallery";
+  | "gallery"
+  | "leaf"
+  | "fruit"
+  | "check"
+  | "scan";
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   name: IconName;
@@ -36,6 +40,57 @@ export const Icon = memo(function Icon({
   strokeWidth = 2,
   ...props
 }: IconProps) {
+  if (name === "scan") {
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+        {...props}
+      >
+        <path d="M2 7V2h5M17 2h5v5M22 17v5h-5M7 22H2v-5" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    );
+  }
+
+  if (name === "leaf" || name === "fruit" || name === "check") {
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+        {...props}
+      >
+        {name === "leaf" ? (
+          <>
+            <path d="M20 4C12 4 5 7.5 5 14c0 3.5 2.5 6 6 6 6.5 0 9-7 9-16Z" />
+            <path d="M4 20c3-4 6-6 11-9" />
+          </>
+        ) : name === "fruit" ? (
+          <>
+            <path d="M12 21a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z" />
+            <path d="M12 7c0-2 1-3.5 3.5-4M14.5 3H18" />
+          </>
+        ) : (
+          <path d="m5 12 4.5 4.5L19 7" />
+        )}
+      </svg>
+    );
+  }
+
   if (name === "upload") {
     return (
       <svg

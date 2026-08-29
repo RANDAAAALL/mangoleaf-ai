@@ -11,11 +11,14 @@ import { type Language } from "@/lib/translations";
 
 // Modular UI Components matching Figma Design System
 import { SplashScreen } from "@/components/layout/splash-screen";
-import { Navbar } from "@/components/layout/navbar";
+import { TopHeader } from "@/components/layout/top-header";
+import { BottomNav } from "@/components/layout/bottom-nav";
 import { HomeTab } from "@/components/tab/home-tab";
 import { HistoryTab } from "@/components/tab/history-tab";
 import { AboutTab } from "@/components/tab/about-tab";
 import { LegalModal } from "@/components/modal/legal-modal";
+import { ScanSheet } from "@/components/modal/scan-sheet";
+import { DiagnosticScanner } from "@/components/scan/diagnostic-scanner";
 import { Footer } from "@/components/layout/footer";
 import dynamic from "next/dynamic";
 
@@ -29,16 +32,16 @@ const ScanDetailsModal = dynamic(() =>
 // Survives client remounts so the model is not initialized twice in one browser session.
 let hasInitialized = false;
 
+type AppTab = "home" | "history" | "about";
+
 export default function Home() {
-  const { isOnline, isSyncing, deviceId, createScan, deleteScan, triggerSync } =
-    useSync();
+  const { createScan, deleteScan } = useSync();
 
   const { showInstallButton, installApp } = usePWAInstall();
 
   // Navigation tab state ("home" | "history" | "about")
-  const [activeTab, setActiveTab] = useState<"home" | "history" | "about">(
-    "home",
-  );
+  const [activeTab, setActiveTab] = useState<AppTab>("home");
+  const prevTabRef = useRef<AppTab>("home");
 
   // TensorFlow.js model states
   const [model, setModel] = useState<tf.GraphModel | null>(null);
@@ -80,6 +83,7 @@ export default function Home() {
   const [legalModalType, setLegalModalType] = useState<
     "privacy" | "terms" | null
   >(null);
+  const [isScanSheetOpen, setIsScanSheetOpen] = useState(false);
 
   // Global language state initialized from actual localStorage ("bis" default)
   const [selectedScan, setSelectedScan] = useState<ScanRecord | null>(null);
@@ -191,6 +195,7 @@ export default function Home() {
 
     setIsScanning(true);
     setScanningProgress(15);
+    let inferenceImageUrl: string | null = null;
 
     try {
       const { predictMangoDisease, compressImageForStorage, computeImageHash } =
@@ -218,10 +223,11 @@ export default function Home() {
       }
 
       const img = new Image();
-      img.src = URL.createObjectURL(file);
+      inferenceImageUrl = URL.createObjectURL(file);
       await new Promise((resolve, reject) => {
         img.onload = resolve;
         img.onerror = reject;
+        img.src = inferenceImageUrl!;
       });
 
       setScanningProgress(45);
@@ -232,7 +238,6 @@ export default function Home() {
       const storageBlob = await compressImageForStorage(img, 1000, 0.75);
 
       setScanningProgress(90);
-      URL.revokeObjectURL(img.src);
 
       await createScan(diseaseName, confidence, storageBlob, imageHash);
 
@@ -250,6 +255,10 @@ export default function Home() {
       console.error("AI classification error:", err);
       setIsScanning(false);
       setScanningProgress(0);
+    } finally {
+      if (inferenceImageUrl) {
+        URL.revokeObjectURL(inferenceImageUrl);
+      }
     }
   }, [model, createScan]);
 
@@ -257,7 +266,7 @@ export default function Home() {
   const getGuidelineForScan = useCallback(
     (
       diseaseName: string,
-    ): { en: string; bis: string; color: DiseaseGuideline["color"] } => {
+    ): { en: string; bis: string } => {
       const key = diseaseName.toLowerCase().replace(/\s+/g, "_");
       const matched = guidelineMap[key];
 
@@ -265,7 +274,6 @@ export default function Home() {
         return {
           en: matched.guidelines_en,
           bis: matched.guidelines_bis,
-          color: matched.color,
         };
       }
 
@@ -273,19 +281,23 @@ export default function Home() {
         FALLBACK_GUIDELINES[key] || {
           en: "No specific guidelines downloaded yet. Keep the mango leaves dry, prune infected twigs, and avoid overhead sprinkler watering.",
           bis: "Wala pay nadownload nga guidelines. Padayon nga pama-un ang mga dahon, putlon ang mga naapektuhang sanga, ug likayi ang pagbisbis nga magbasa sa dahon.",
-          color: "yellow",
         }
       );
     },
     [guidelineMap],
   );
 
-  // Stabilized props for ScanHistoryList memo (#4)
-  const getGuidelineColor = useCallback(
-    (diseaseName: string) => getGuidelineForScan(diseaseName).color,
-    [getGuidelineForScan],
+  const handleTabChange = useCallback((tab: AppTab) => {
+    if (tab === prevTabRef.current) return;
+    prevTabRef.current = tab;
+    setActiveTab(tab);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const handleViewAllHistory = useCallback(
+    () => handleTabChange("history"),
+    [handleTabChange],
   );
-  const handleViewAllHistory = useCallback(() => setActiveTab("history"), []);
 
   if (isModelLoading) {
     return <SplashScreen />;
@@ -294,51 +306,85 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#f6faf1] text-[#143519] font-sans flex flex-col justify-between">
       <div>
-        {/* Top Navigation Bar */}
-        <Navbar
-          showInstallButton={showInstallButton}
+        {/* Top Header: mobile = minimal logo, desktop = full nav */}
+        <TopHeader
           language={language}
+          showInstallButton={showInstallButton}
           activeTab={activeTab}
-          onTabChange={setActiveTab}
+          onTabChange={handleTabChange}
           onLanguageChange={setLanguage}
           onInstall={installApp}
+          onLogoClick={() => handleTabChange("home")}
         />
 
-        {/* Main Content Area */}
-        <main className="max-w-7xl mx-auto px-6 py-8 flex flex-col">
-          {/* Home Tab */}
-          {activeTab === "home" && (
-            <HomeTab
-              scans={activeScans}
-              language={language}
-              previewUrl={previewUrl}
-              isScanning={isScanning}
-              scanningProgress={scanningProgress}
-              getGuidelineColor={getGuidelineColor}
-              onFileChange={handleFileChange}
-              onRunDiagnosis={runDiagnosis}
-              onRetake={handleRetake}
-              onSelectScan={setSelectedScan}
-              onDeleteScan={deleteScan}
-              onViewAllHistory={handleViewAllHistory}
-            />
-          )}
+        {/* Hidden file inputs for scan sheet + retake flow */}
+        <input
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={handleFileChange}
+          id="scan-camera-input"
+          className="hidden"
+        />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          id="scan-gallery-input"
+          className="hidden"
+        />
 
-          {/* History Tab */}
-          {activeTab === "history" && (
-            <HistoryTab
-              scans={activeScans}
-              language={language}
-              getGuidelineColor={getGuidelineColor}
-              onSelectScan={setSelectedScan}
-              onDeleteScan={deleteScan}
-            />
-          )}
+        {/* Main Content Area — extra bottom padding for bottom nav */}
+        <main className="max-w-7xl mx-auto px-6 py-8 pb-28 md:pb-8 flex flex-col">
+          <div key={activeTab} className="tab-panel-fade-in flex flex-col">
+            {activeTab === "home" && (
+              <HomeTab
+                scans={activeScans}
+                language={language}
+                onSelectScan={setSelectedScan}
+                onDeleteScan={deleteScan}
+                onViewAllHistory={handleViewAllHistory}
+              />
+            )}
 
-          {/* About Tab */}
-          {activeTab === "about" && <AboutTab language={language} />}
+            {activeTab === "history" && (
+              <HistoryTab
+                scans={activeScans}
+                language={language}
+                onSelectScan={setSelectedScan}
+                onDeleteScan={deleteScan}
+              />
+            )}
+
+            {activeTab === "about" && (
+              <AboutTab
+                language={language}
+                onScanPress={() => setIsScanSheetOpen(true)}
+              />
+            )}
+          </div>
         </main>
       </div>
+
+      {/* Scan Sheet (bottom sheet triggered by center FAB) */}
+      <ScanSheet
+        isOpen={isScanSheetOpen}
+        language={language}
+        onClose={() => setIsScanSheetOpen(false)}
+      />
+
+      {/* Photo Preview & AI Scanning Overlay (from DiagnosticScanner) */}
+      {previewUrl && (
+        <DiagnosticScanner
+          previewUrl={previewUrl}
+          isScanning={isScanning}
+          scanningProgress={scanningProgress}
+          language={language}
+          onFileChange={handleFileChange}
+          onRunDiagnosis={runDiagnosis}
+          onRetake={handleRetake}
+        />
+      )}
 
       {/* Selected Scan Details Modal */}
       {selectedScan && (
@@ -364,6 +410,15 @@ export default function Home() {
         language={language}
         onOpenPrivacy={() => setLegalModalType("privacy")}
         onOpenTerms={() => setLegalModalType("terms")}
+      />
+
+      {/* Bottom Navigation Bar */}
+      <BottomNav
+        activeTab={activeTab}
+        language={language}
+        onTabChange={handleTabChange}
+        onScanPress={() => setIsScanSheetOpen(true)}
+        onLanguageToggle={() => setLanguage(language === "en" ? "bis" : "en")}
       />
     </div>
   );

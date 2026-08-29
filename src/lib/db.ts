@@ -18,7 +18,6 @@ export interface DiseaseGuideline {
   disease_name: string;    // e.g. "Anthracnose"
   guidelines_en: string;   // English pre-written treatment rules
   guidelines_bis: string;  // Bisaya pre-written treatment rules
-  color: "yellow" | "pink" | "blue" | "green" | "purple";
 }
 
 class MangoLeafDB extends Dexie {

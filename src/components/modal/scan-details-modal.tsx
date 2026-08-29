@@ -2,6 +2,7 @@ import { memo } from "react";
 import { type ScanRecord } from "@/lib/db";
 import { translations, type Language } from "@/lib/translations";
 import { UNCERTAIN_LABEL } from "@/lib/constants";
+import { getBadgeStyles } from "@/lib/get-badge-styles";
 
 interface ScanDetailsModalProps {
   scan: ScanRecord;
@@ -21,6 +22,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
   onClose,
 }: ScanDetailsModalProps) {
   const t = translations[language];
+  const badgeClass = getBadgeStyles(scan.disease_name);
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 md:backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
@@ -64,23 +66,38 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
 
           {/* Floating Disease Badge on Photo */}
           <div className="absolute bottom-3 left-3 pointer-events-none">
-            <span className="text-[11px] font-black uppercase px-3 py-1 bg-[#143519]/85 backdrop-blur-md text-white rounded-full shadow-sm tracking-wide">
+            <span
+              className={`text-[11px] font-black uppercase px-2 py-1  ${badgeClass} backdrop-blur-md rounded-full shadow-sm tracking-wide`}
+            >
               {scan.disease_name}
             </span>
+          </div>
+
+          <div className="absolute bottom-3 right-3 pointer-events-none">
+            {/* AI Confidence Score Badge */}
+            {scan.disease_name !== UNCERTAIN_LABEL && (
+              <span
+                className={`text-[11px] font-black uppercase px-2 py-1 ${badgeClass} backdrop-blur-md rounded-full shadow-sm tracking-wide`}
+              >
+                {Math.round(scan.confidence * 100)}%
+              </span>
+            )}
           </div>
         </div>
 
         {/* Right Column: Diagnostic Report & Treatment Guidelines */}
-        <div className="p-6 sm:p-8 flex flex-col justify-between overflow-y-auto min-h-0 gap-5 bg-white">
-          <div className="flex flex-col gap-5">
+        <div className="p-4 sm:p-8 flex flex-col justify-between overflow-y-auto min-h-0 gap-5 bg-white">
+          <div className="flex flex-col gap-3.5">
+
             {/* Header: Title (Full Width) */}
-            <div className="flex flex-col gap-2 pr-10">
-              <h3 className="text-xl sm:text-2xl font-black tracking-tight text-[#143519] leading-snug">
+            {/* <div className="flex flex-col gap-2 pr-10"> */}
+            <div className="flex justify-center">
+              {/* <h3 className="text-xl sm:text-2xl font-black tracking-tight text-[#143519] leading-snug">
                 {t.diagnosisPrefix} {scan.disease_name}
-              </h3>
+              </h3> */}
 
               {/* Sub-header: Timestamp + Score Badge Row */}
-              <div className="flex items-center justify-between gap-2 flex-wrap pt-0.5">
+              {/* <div className="flex items-center justify-between gap-2 flex-wrap pt-0.5"> */}
                 <span className="text-xs font-semibold text-[#526856]">
                   {t.scannedOnPrefix}{" "}
                   {new Date(scan.updated_at).toLocaleString("en-US", {
@@ -93,24 +110,24 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
                 </span>
 
                 {/* AI Confidence Score Badge */}
-                {scan.disease_name !== UNCERTAIN_LABEL && (
+                {/* {scan.disease_name !== UNCERTAIN_LABEL && (
                   <span className="text-xs font-extrabold px-3 py-1 bg-[#e5f5e0] border border-[#c3e6ba] text-[#1b5e28] rounded-full shadow-xs">
                     {t.scorePrefix} {Math.round(scan.confidence * 100)}%
                   </span>
-                )}
-              </div>
+                )} */}
+              {/* </div> */}
             </div>
 
             {/* Treatment Guidelines Section */}
             <div className="border-t border-[#e2ebd9] pt-4 flex flex-col gap-3">
               {/* Guidelines Section Header & Language Toggle */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex flex-col justify-center items-center sm:flex-row sm:items-center sm:justify-between gap-2">
                 <span className="text-xs font-black text-[#143519] uppercase tracking-wider flex items-center gap-1.5">
                   <span>{t.preTreatmentGuidelines}</span>
                 </span>
 
                 {/* Language Switcher Toggle */}
-                <div className="flex items-center gap-1 bg-[#f0f7eb] border border-[#d2e2c4] p-1 rounded-xl self-start sm:self-auto">
+                <div className="flex items-center justify-center sm:justify-start gap-1 bg-[#f0f7eb] border border-[#d2e2c4] p-1 rounded-xl sm:self-auto">
                   <button
                     onClick={() => onLanguageChange("bis")}
                     className={`text-[11px] font-extrabold px-3 py-1 rounded-lg transition-colors cursor-pointer ${

@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: August 27, 2026
+Last updated: August 29, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -300,6 +300,44 @@ Retrained the classifier on a new image pool and shipped it. Full report in [mod
 - The app bump is minor while the model bump is major. That is normal: the only source diff is version strings and a cache name, but the new image pool produced a new test set, which makes the model change major regardless of how small the app diff is.
 - Two annotated tags were created and pushed, both on the release commit `f73f0b8`: `model-v3.0.0` and `v0.3.0`. They share a commit because the weights, the thresholds, and the version bumps landed together, which is correct — thresholds and weights are one calibrated artifact. Only `v0.3.0` gets a GitHub Release, following the pattern set by `model-v2.0.0` and `model-v2.1.1`, which are bare provenance tags.
 
+### August 28, 2026: Mobile navigation polish
+
+- Rebuilt the existing About tab as a mobile-first product story: field motivation, offline/on-device/sync capabilities, the verified 97.46% Trial 3 model-accuracy showcase, research-to-application timeline, and scan-sheet CTAs. It intentionally does not repeat Home tab scan steps, condition lists, or recent scans.
+- Replaced per-disease presentation colors with one red disease treatment (`bg-red-100`, `#FF2C2C` text and dots); the healthy treatment remains green. Removed the now-unused `color` field from the Supabase and IndexedDB guideline shape, cached fallback data, synchronization flow, and scan-history props.
+- Changed disease result badges to solid `#FF2C2C` with white text after review; healthy result badges remain green.
+- Removed `public.guidelines.color` after application readers stopped using it. Existing guideline text and all six rows were preserved.
+- Synced every bundled offline fallback guideline byte-for-byte with its corresponding Supabase `public.guidelines` row, including the stored line breaks and color labels. Supabase remains the source of truth for these records.
+- Fixed footer legal links hidden behind the fixed bottom navigation bar on mobile by adding `pb-28` clearance and allowing the Privacy Policy / Terms of Service row to wrap for longer Bisaya labels.
+- Added shared CSS motion utilities in `src/app/globals.css` for tab content fade-slide, scan-sheet slide-up/down, and backdrop fade.
+- `ScanSheet` now animates open and closed, and the drag handle supports swipe-down-to-dismiss past an 80px threshold.
+- Bottom navigation tab switches use a short fade-slide transition and scroll the page back to the top.
+- Fixed scan-sheet swipe dismiss calling parent `setState` inside a `setDragY` updater, which triggered React's cross-component render warning.
+- Tab content and bottom-nav items now slide by direction: Home → About → History moves left-to-right; reverse moves right-to-left. Scan FAB and language toggle excluded.
+- Simplified tab switches to fade-only content transitions; bottom-nav active scale and sliding green dot removed.
+- Scan sheet swipe now animates smoothly on partial release and on dismiss, without replaying the open animation or sticking mid-drag.
+- Fixed swipe-dismiss snap-back: dismiss no longer resets `dragY` before close, and `isDismissing` blocks `sheet-enter` from replaying while the sheet slides off screen.
+- Later refined the Home coverage panel to use neutral disease-list dots instead of red disease pills, reducing visual noise while keeping solid red result badges in scan cards.
+
+### August 29, 2026: Component consolidation
+
+- Merged the active visual home layout into `tab/home-tab.tsx`; removed the temporary `home-tab-v2.tsx` name so the app has one canonical Home tab component.
+- Promoted reusable Leaf, Fruit, and Check SVGs into the shared `brand/icon.tsx` icon registry. `disease-coverage-card.tsx` now consumes those icons instead of defining local SVG components.
+- Removed unreferenced legacy `layout/navbar.tsx` and `scan/how-it-works-card.tsx` after confirming current routing uses `TopHeader`, `BottomNav`, and `HowItWorksSteps`.
+- Audited `translations.ts` against source usage and removed stale scanner-progress, legacy how-it-works paragraph, legacy hero labels, disease-count, and footer-subtitle entries. Existing explanatory comments were preserved.
+
+### August 29, 2026: Offline synchronization reliability pass
+
+- Corrected the Storage upload timeout so it reaches the fetch call actually used by Supabase JS. A stalled upload now aborts after 10 seconds rather than holding the synchronization lock.
+- Pending scans retry with bounded exponential delays while online. A sync trigger that arrives during active work queues one follow-up pass, so a newly saved local scan is not missed.
+- Stored a completed image URL locally before inserting its metadata row, avoiding an unnecessary re-upload if only the database request fails. Remote history restoration now uses a batched IndexedDB existence lookup, and guideline deletes also propagate through Realtime.
+- Confirmed the current model artifact, class order, thresholds, and inference source are unchanged. All four shipped Trial 3 checksums still match the model-training record, so the documented 97.46% test accuracy is unchanged.
+
+### August 29, 2026: v0.4.0 release preparation
+
+- Bumped the PWA and package version to `v0.4.0` / `0.4.0` for the reviewed mobile field-experience redesign, six-condition presentation refinement, component cleanup, and synchronization reliability work.
+- Model version stays `v3.0.0`. No files in `public/model/`, model class mapping, rejection thresholds, or inference logic changed; Trial 3 remains the 97.46% documented model baseline.
+- Release verification passes: `bun run typecheck`, `bun run lint`, and `bun run build`. The regenerated service-worker manifest still precaches all five Trial 3 model files.
+
 
 
 Keep every training notebook, and keep each trial's clean template separate from its completed run. All notebooks live in `notebooks/` at the repository root, moved there from the root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle. The filenames below are unchanged.
@@ -325,7 +363,7 @@ Keep every training notebook, and keep each trial's clean template separate from
 - Current documented training run: Trial 3, August 26, 2026
 - Current documented test result: 97.46% accuracy and 0.0686 test loss on 393 deduplicated test images, 95% Wilson interval roughly 95.4% to 98.6%
 - Current documented export size: 11.53 MB total across 3 weight shards plus `model.json`, of which 11.33 MB is weights, plus `model_config.json`
-- Current app model version label: `v3.0.0`, app version `v0.3.0`
+- Current app model version label: `v3.0.0`, app version `v0.4.0`
 - Calibration: temperature `T = 1.188751` folded into the final Dense layer. `T > 1`, so the model was overconfident and folding lowers confidence, which strengthens the 70% floor.
 - Rejection: three gates, all active. Fixed 70% confidence floor, selected margin threshold `0.40`, fitted normalized-entropy threshold `0.40`. Measured 95.17% in-distribution retention, 70.24% out-of-scope rejection on 84 held-out non-mango images with a 95% confidence interval of roughly 60.5% to 80.0%, and 99.20% accuracy on accepted predictions.
 
@@ -334,9 +372,9 @@ Trial 2's 98.25%, Trial 2.1's 97.12%, and Trial 3's 97.46% are three measurement
 ## Next Work
 
 - **Recover the four Trial 3 notebooks from Colab and commit them.** They were never committed and git cannot restore them. This is the only outstanding item with a real risk of permanent loss: the numbers survive in `run_record.json` and TRIAL_3.md, but the evidence files do not exist anywhere except Google Drive. Also run `git checkout -- notebooks/` to restore the five committed Trial 1 through 2.1 files.
-- **Test the swapped model on a production build on a physical phone.** The phone half needs the **deployed HTTPS URL**, because a LAN address such as `http://192.168.x.x:3000` is not a secure context and registers no service worker at all. Confirm the footer reads `v0.3.0` and `v3.0.0`, that the console prints `margin=0.4, entropy=0.4` rather than `null`, that a non-mango photograph returns `Uncertain / Unrecognized`, and that at least one real scan per class is still accepted. Verify caching against the **precache manifest** in the generated `public/sw.js`, not against `CacheStorage` contents: every `/model/*` file is in the Serwist precache, which registers ahead of `runtimeCaching`, so the `CacheFirst` route never fires and `mangoleaf-model-cache-v3-0-0` can legitimately be empty. The precache revision hash is what actually invalidates a replaced model; the cache-name bump is defensive only.
+- **Test v0.4.0 on a production build on a physical phone.** The phone needs the deployed HTTPS URL, because a LAN address such as `http://192.168.x.x:3000` is not a secure context and registers no service worker. Confirm footer reads `v0.4.0` and `v3.0.0`, console prints `margin=0.4, entropy=0.4`, a non-mango photograph returns `Uncertain / Unrecognized`, and at least one real scan per class is accepted. Verify all five `/model/*` entries in generated `public/sw.js`'s precache manifest.
 - **Accept one real `mango_scab` photograph on a production build.** It is the weakest class at 0.9014 F1, it is involved in 6 of the 10 test errors, and it lost 66 unique images between trials. This was already the outstanding gap after Trial 2.1 and it has become more urgent, not less.
-- **Publish the GitHub Release for `v0.3.0`.** Both tags are already pushed on commit `f73f0b8`. Only the app tag gets a Release; `model-v3.0.0` stays a bare provenance tag, matching `model-v2.0.0` and `model-v2.1.1`.
+- **Create the GitHub Release for `v0.4.0` after its annotated app tag is pushed.** `model-v3.0.0` remains the current model provenance tag; no new model tag belongs in this release.
 - **Update the manuscript's Results figures to Trial 3.** Every measured number changed: 97.46% on 393 images, `T = 1.188751`, margin `0.40`, entropy `0.40`, and 70.24% out-of-scope rejection (59 of 84 held-out images) with its 60.5% to 80.0% confidence interval. Lead with accuracy on accepted predictions rising to 99.20%. Never quote the 86.90% tune-half rejection rate, and never quote the `85.7%` figure that appears in Section D of the refit cell, which is also a tune-half number. Never quote a rate computed from a handful of phone scans.
 - **Apply the modifications recorded in [MANUSCRIPT_MODIFICATIONS.md](MANUSCRIPT_MODIFICATIONS.md)**, which is still written against Trial 2.1 throughout and needs a Trial 3 revision pass of its own.
 - **Hand-inspect the 49 cross-label duplicate pairs.** All are `anthracnose` against `healthy`, one label in each pair is wrong, and the count has now survived two trials unchanged because the inspection keeps being deferred. It is the largest known threat to the headline accuracy figure.
