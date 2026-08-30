@@ -87,3 +87,23 @@ body {
 .tab-panel-fade-in {
   animation: tab-fade-in 0.22s ease-out forwards;
 }
+
+/* Respect the operating-system setting: iOS "Reduce Motion" and the Android
+   "Remove animations" developer option both report prefers-reduced-motion.
+   Durations are collapsed rather than set to none, because .sheet-exit and the
+   other exit animations rely on animation-fill-mode: forwards to hold their end
+   state. animation: none would discard that end state and leave the bottom
+   sheet sitting on screen instead of translated off it. Dragging the sheet is
+   unaffected: the drag writes transform directly on each touchmove, so it is
+   not a transition and still tracks the finger. Only the snap-back, the
+   dismiss, and the fades become instant. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

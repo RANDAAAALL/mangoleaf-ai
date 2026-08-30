@@ -1,6 +1,6 @@
 {
   "name": "mangoleaf-ai",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "private": true,
   "scripts": {
     "dev": "bun --bun next dev --webpack",

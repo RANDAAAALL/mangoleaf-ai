@@ -21,6 +21,7 @@ export const ScanSheet = memo(function ScanSheet({
 }: ScanSheetProps) {
   const t = translations[language];
   const sheetRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
   const dragHandleRef = useRef<HTMLDivElement>(null);
   const [shouldRender, setShouldRender] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -32,6 +33,10 @@ export const ScanSheet = memo(function ScanSheet({
   const dragYRef = useRef(0);
   const isDraggingRef = useRef(false);
   const dismissTimerRef = useRef<number | null>(null);
+  const mouseListenersRef = useRef<{
+    move: (e: MouseEvent) => void;
+    up: () => void;
+  } | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -65,6 +70,11 @@ export const ScanSheet = memo(function ScanSheet({
     return () => {
       if (dismissTimerRef.current !== null) {
         window.clearTimeout(dismissTimerRef.current);
+      }
+      if (mouseListenersRef.current) {
+        window.removeEventListener("mousemove", mouseListenersRef.current.move);
+        window.removeEventListener("mouseup", mouseListenersRef.current.up);
+        mouseListenersRef.current = null;
       }
     };
   }, []);
@@ -120,13 +130,29 @@ export const ScanSheet = memo(function ScanSheet({
     const delta = clientY - dragStartY.current;
     const nextY = Math.max(0, delta);
     dragYRef.current = nextY;
-    setDragY(nextY);
+
+    // Direct DOM manipulation — zero React re-renders during drag
+    if (sheetRef.current) {
+      sheetRef.current.style.transform = `translateY(${nextY}px)`;
+    }
+    if (backdropRef.current) {
+      backdropRef.current.style.opacity = String(
+        Math.max(0, 1 - nextY / 280),
+      );
+    }
   }, []);
 
   const handleDragEnd = useCallback(() => {
     if (!isDraggingRef.current) return;
     isDraggingRef.current = false;
     setIsDragging(false);
+
+    // Clean up window-level mouse listeners
+    if (mouseListenersRef.current) {
+      window.removeEventListener("mousemove", mouseListenersRef.current.move);
+      window.removeEventListener("mouseup", mouseListenersRef.current.up);
+      mouseListenersRef.current = null;
+    }
 
     const current = dragYRef.current;
     if (current > DISMISS_THRESHOLD_PX) {
@@ -170,24 +196,40 @@ export const ScanSheet = memo(function ScanSheet({
       handleDragEndRef.current();
     };
 
+    const onMouseDown = (event: MouseEvent) => {
+      handleDragStartRef.current(event.clientY);
+
+      const onMouseMove = (e: MouseEvent) =>
+        handleDragMoveRef.current(e.clientY);
+      const onMouseUp = () => {
+        handleDragEndRef.current();
+      };
+
+      mouseListenersRef.current = { move: onMouseMove, up: onMouseUp };
+      window.addEventListener("mousemove", onMouseMove);
+      window.addEventListener("mouseup", onMouseUp);
+    };
+
     handle.addEventListener("touchstart", onTouchStart, { passive: false });
     handle.addEventListener("touchmove", onTouchMove, { passive: false });
     handle.addEventListener("touchend", onTouchEnd);
     handle.addEventListener("touchcancel", onTouchEnd);
+    handle.addEventListener("mousedown", onMouseDown);
 
     return () => {
       handle.removeEventListener("touchstart", onTouchStart);
       handle.removeEventListener("touchmove", onTouchMove);
       handle.removeEventListener("touchend", onTouchEnd);
       handle.removeEventListener("touchcancel", onTouchEnd);
+      handle.removeEventListener("mousedown", onMouseDown);
     };
   }, [shouldRender]);
 
   if (!shouldRender) return null;
 
-  const useInlineTransform = dragY > 0 || isDragging || isDismissing;
+  const useInlineTransform = isDragging || isDismissing || dragY > 0;
   const sheetTransform = useInlineTransform
-    ? `translateY(${dragY}px)`
+    ? `translateY(${isDragging ? dragYRef.current : dragY}px)`
     : undefined;
 
   const sheetMotionClass =
@@ -202,13 +244,15 @@ export const ScanSheet = memo(function ScanSheet({
   return (
     <>
       <div
+        ref={backdropRef}
         onClick={onClose}
-        className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-xs ${
+        className={`fixed inset-0 z-50 bg-black/40 md:backdrop-blur-xs ${
           isVisible ? "backdrop-enter" : "backdrop-exit"
         }`}
         style={{
-          opacity:
-            dragY > 0 || isDismissing
+          opacity: isDragging
+            ? Math.max(0, 1 - dragYRef.current / 280)
+            : isDismissing || dragY > 0
               ? Math.max(0, 1 - dragY / 280)
               : undefined,
           transition: isDragging ? "none" : `opacity ${SNAP_MS}ms ease-out`,
@@ -217,7 +261,7 @@ export const ScanSheet = memo(function ScanSheet({
 
       <div
         ref={sheetRef}
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl touch-none ${sheetMotionClass}`}
+        className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl touch-none will-change-transform ${sheetMotionClass}`}
         style={{
           paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))",
           transform: sheetTransform,
@@ -227,11 +271,6 @@ export const ScanSheet = memo(function ScanSheet({
         <div
           ref={dragHandleRef}
           className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing touch-none select-none"
-          onMouseDown={(e) => handleDragStart(e.clientY)}
-          onMouseMove={(e) => {
-            if (e.buttons === 1) handleDragMove(e.clientY);
-          }}
-          onMouseUp={handleDragEnd}
         >
           <div className="w-10 h-1.5 bg-[#d2e2c4] rounded-full" />
         </div>

@@ -84,6 +84,7 @@ export default function Home() {
     "privacy" | "terms" | null
   >(null);
   const [isScanSheetOpen, setIsScanSheetOpen] = useState(false);
+  const closeScanSheet = useCallback(() => setIsScanSheetOpen(false), []);
 
   // Global language state initialized from actual localStorage ("bis" default)
   const [selectedScan, setSelectedScan] = useState<ScanRecord | null>(null);
@@ -370,7 +371,7 @@ export default function Home() {
       <ScanSheet
         isOpen={isScanSheetOpen}
         language={language}
-        onClose={() => setIsScanSheetOpen(false)}
+        onClose={closeScanSheet}
       />
 
       {/* Photo Preview & AI Scanning Overlay (from DiagnosticScanner) */}
