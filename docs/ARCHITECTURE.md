@@ -28,8 +28,8 @@ mangoleaf-ai/
 |   |   `-- page.tsx                # Main client-side application coordinator
 |   |-- components/                 # Reusable interface components, grouped by role
 |   |   |-- brand/                  # Application logo and icon set
-|   |   |-- layout/                 # Navigation bar, footer, and splash screen
-|   |   |-- modal/                  # Legal and scan-details dialogs
+|   |   |-- layout/                 # Top header, navigation bar, footer, and splash screen
+|   |   |-- modal/                  # Legal dialog, scan-details dialog, scan bottom sheet
 |   |   |-- scan/                   # Scan controls, result card, history list, guide
 |   |   `-- tab/                    # Home, history, and about screen content
 |   |-- hooks/
@@ -48,16 +48,22 @@ mangoleaf-ai/
 |-- docs/                           # Detailed engineering and project history
 |   |-- model-training/             # Trial 1, Trial 2, Trial 2.1, and Trial 3 training reports
 |   |-- ARCHITECTURE.md             # This architecture reference
+|   |-- EMAIL_DISPATCH_WORKFLOW.md  # Adviser and panel correspondence notes (local only, gitignored)
 |   |-- MANUSCRIPT_MODIFICATIONS.md # Manuscript corrections traced to measured results (local only, gitignored)
 |   |-- MODEL_VERSIONING.md         # App, model, notebook, and release versioning
 |   |-- PERFORMANCE.md              # Performance decisions and measurements
 |   `-- PROGRESS.md                 # Development timeline and current baseline
-|-- notebooks/                      # Colab notebooks, one per training trial
-|   |-- MangoLeaf_AI_Training_v1.ipynb                     # Historical Trial 1
-|   |-- MangoLeaf_AI_Training_v2.ipynb                     # Historical Trial 2
-|   |-- MangoLeaf_AI_Training_v2.1.ipynb                   # Retraining template, outputs cleared
-|   |-- MangoLeaf_AI_Training_v2_1_Post_Training.ipynb     # Completed Trial 2.1 run, do not rerun
-|   `-- MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb # Margin and entropy fitting, no retraining
+|-- notebooks/                      # Colab notebooks; several per trial, all kept
+|   |-- MangoLeaf_AI_Training_v1.ipynb                      # Historical Trial 1
+|   |-- MangoLeaf_AI_Training_v2.ipynb                      # Historical Trial 2
+|   |-- MangoLeaf_AI_Training_v2.1.ipynb                    # Trial 2.1 template, outputs cleared
+|   |-- MangoLeaf_AI_Training_v2_1_Post_Training.ipynb      # Completed Trial 2.1 run, do not rerun
+|   |-- MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb # Trial 2.1 margin and entropy fitting, no retraining
+|   |-- MangoLeaf_AI_Training_v3.ipynb                      # Current retraining template, 34 cells, outputs cleared
+|   |-- MangoLeaf_AI_Training_v3_1st_to_8th_Cells_Results.ipynb # Partial Trial 3 run, data-preparation cells only
+|   |-- MangoLeaf_AI_Training_v3_Post_Training.ipynb        # Completed Trial 3 run, manuscript evidence, do not rerun
+|   |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb             # Trial 3 threshold template, 8 cells, outputs cleared
+|   `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb     # Trial 3 fitting run; cell 9 settles the margin at 0.40
 |-- .env.example                    # Public environment-variable template
 |-- AGENTS.md                       # Repository instructions for coding agents
 |-- README.md                       # Project overview and quick start
@@ -87,13 +93,15 @@ Components are grouped into subfolders by the role they play rather than kept in
 | --- | --- | --- |
 | `brand/` | `logo.tsx`, `icon.tsx` | Identity marks and the shared icon set |
 | `layout/` | `top-header.tsx`, `bottom-nav.tsx`, `footer.tsx`, `splash-screen.tsx` | Application frame around screen content |
-| `modal/` | `legal-modal.tsx`, `scan-details-modal.tsx` | Overlay dialogs |
+| `modal/` | `legal-modal.tsx`, `scan-details-modal.tsx`, `scan-sheet.tsx` | Overlay dialogs and sheets |
 | `scan/` | `diagnostic-scanner.tsx`, `scan-card.tsx`, `scan-history-list.tsx`, `how-it-works-steps.tsx`, `disease-coverage-card.tsx` | Diagnosis feature surface |
 | `tab/` | `home-tab.tsx`, `history-tab.tsx`, `about-tab.tsx` | One component per navigation tab |
 
 The three tab components are the boundary between `page.tsx` and screen content. `page.tsx` owns all state and handlers, and renders exactly one of `HomeTab`, `HistoryTab`, or `AboutTab` per active tab. Adding a screen means adding a tab component and one branch in `page.tsx`, not editing shared markup.
 
 Grouping is by role, not by which tab uses a file. `scan/scan-history-list.tsx` is rendered by both `HistoryTab` in full and by `HomeTab` as a four-item preview, so it belongs to the scan feature rather than to either tab. Folders group files for navigation and do not define access boundaries.
+
+`modal/scan-sheet.tsx` is the sharper case of the same rule: it is a dismissible bottom sheet, so it is grouped with the overlays even though its content is the camera-or-gallery choice that starts a scan. It is also the one component that reaches outside React to drive another file's markup. `page.tsx` renders two hidden `<input type="file">` elements carrying the ids `scan-camera-input` and `scan-gallery-input`, and the sheet calls `document.getElementById` on those ids and clicks the input directly, because a file picker only opens from a real user gesture on the input itself. **Renaming or removing either id breaks image selection silently:** the lookup returns `null`, the sheet still closes, and nothing reports an error. Keep the ids and the sheet in step, and keep both inputs mounted whenever the sheet can be opened.
 
 Use the `@/components/...` path alias for imports across folders, and relative `./` paths only within the same folder, so a file can be moved without rewriting unrelated paths.
 
@@ -112,14 +120,26 @@ When adding a relative-time string, add it to both the `en` and `bis` objects in
 
 `src/lib/classifier.ts` owns the browser inference flow:
 
-1. Load `/model/model.json` with `tf.loadGraphModel`.
+1. Load `/model/model.json` with `tf.loadGraphModel`, fetching `/model/model_config.json` concurrently for the rejection thresholds.
 2. Cache and warm the model once per browser session.
 3. Downscale the image to `224 x 224` with a shared canvas.
 4. Run TensorFlow.js inference and dispose temporary tensors.
-5. Return the highest-probability class when confidence is at least 70%; otherwise return `Uncertain / Unrecognized`.
+5. Apply three rejection gates and return the highest-probability class only if all three pass; otherwise return `Uncertain / Unrecognized`.
 6. Compress the image for storage and calculate a SHA-256 hash for duplicate detection.
 
-The model assets are committed under `public/model/` and contain six output classes defined in `src/lib/constants.ts`.
+**Rejection is three gates, not one, and all three must pass.** A prediction is accepted only when `meetsConfidence && meetsMargin && meetsEntropy`:
+
+| Gate | Test | Source | Current value |
+| --- | --- | --- | --- |
+| Confidence | Top-1 probability at least the threshold | Hardcoded `CONFIDENCE_THRESHOLD` | `0.70`, fixed |
+| Margin | Top-1 minus top-2 probability at least the threshold | `model_config.json` | `0.40` |
+| Entropy | Normalized Shannon entropy at most the threshold | `model_config.json` | `0.40` |
+
+The confidence floor is hardcoded and deliberately not configurable. It is a manuscript specification cited to [31], so a `model_config.json` that asks for a different value is refused: the classifier logs a warning and keeps `0.70`. Margin and entropy are the opposite: both start `null`, and `null` disables that gate. A missing or malformed config therefore degrades to the confidence gate alone rather than blocking a scan, which is why a device can run on one gate without any visible error. The console line `Model config loaded: margin=..., entropy=...` printed at startup is the only way to tell from the app which gates are live, and it is what the production phone checks in `docs/PROGRESS.md` look for.
+
+Entropy is normalized by `Math.log(results.length)` so it stays on a 0-to-1 scale comparable to the fitted threshold regardless of class count. Confidence is compared before rounding; the rounded value is returned for display only, because comparing the rounded number would let `0.695` clear a `0.70` gate and silently lower the real floor to 69.5%.
+
+The model assets are committed under `public/model/` and contain six output classes defined in `src/lib/constants.ts`. Both fitted thresholds are properties of one specific set of weights, so `model_config.json` is replaced together with the shards and never carried across a model swap. See `docs/MODEL_VERSIONING.md`.
 
 ### Local persistence
 
@@ -147,9 +167,11 @@ Supabase is therefore a synchronization and recovery layer; IndexedDB remains th
 
 ### PWA and offline caching
 
-`src/sw.ts` configures Serwist. It precaches the generated application assets, claims active clients, and applies a `CacheFirst` strategy to `/model/*`. `next.config.ts` integrates Serwist, disables it during development, and enables static export. It also reads the `version` field from `package.json` and injects it as `NEXT_PUBLIC_APP_VERSION`, which Next replaces with a literal string at build time wherever the code references it. Because the site is a static export, every public value must be baked in during the build; nothing is resolved at runtime. See `docs/MODEL_VERSIONING.md`.
+`src/sw.ts` configures Serwist. It precaches the generated application assets, claims active clients, applies a `CacheFirst` strategy to `/model/*`, and adds its own `activate` handler that deletes every superseded model cache listed in `OUTDATED_MODEL_CACHES`. `next.config.ts` integrates Serwist, disables it during development, and enables static export. It also reads the `version` field from `package.json` and injects it as `NEXT_PUBLIC_APP_VERSION`, which Next replaces with a literal string at build time wherever the code references it. Because the site is a static export, every public value must be baked in during the build; nothing is resolved at runtime. See `docs/MODEL_VERSIONING.md`.
 
 The precache manifest that Serwist generates covers the build output *and every file under `public/`*. Anything added to `public/` is therefore downloaded to each installed device during service-worker installation, whether or not the application ever requests it. Keep assets that only documentation uses out of `public/` unless they also have to be reachable at a site URL.
+
+**That manifest, not the `CacheFirst` rule, is what actually updates the model.** `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `/model/*` rule never fires in practice. Every file under `public/model/` carries a content-revision hash in the manifest, so a changed weight shard is refetched on the next service-worker activation regardless of the cache name, and Serwist's own `activate` handler evicts precache entries missing from the current manifest. The `MODEL_CACHE` bump and the `OUTDATED_MODEL_CACHES` eviction are therefore defence in depth whose real payoff is reclaiming several megabytes of superseded weights, not the update mechanism. Do not treat an inspection of `CacheStorage` as verification: the current `mangoleaf-model-cache-v3-0-0` can legitimately be empty on a correctly updated device.
 
 ### Static assets
 
