@@ -280,10 +280,16 @@ export const ScanSheet = memo(function ScanSheet({
             {t.scanSheetTitle}
           </h3>
 
-          <div className="grid grid-rows-2 gap-3">
+          {/* Auto rows, not grid-rows-2: the camera card is md:hidden, and an
+              explicit second row would still reserve its gap on desktop. */}
+          <div className="grid gap-3">
+            {/* Camera capture is mobile-only. A desktop browser ignores
+                capture="environment", so this card would open the same file
+                dialog as Upload Photo while implying a camera. The input itself
+                stays mounted in page.tsx for the retake flow. */}
             <button
               onClick={handleCamera}
-              className="flex flex-col items-center gap-3 p-5 bg-[#277839] text-white rounded-2xl shadow-md cursor-pointer active:scale-[0.97] transition-transform"
+              className="md:hidden flex flex-col items-center gap-3 p-5 bg-[#277839] text-white rounded-2xl shadow-md cursor-pointer active:scale-[0.97] transition-transform"
             >
               <div className="h-12 w-12 rounded-full bg-[#a6f2b1] flex items-center justify-center">
                 <Icon name="camera" size={24} fill="#1b5e28" />

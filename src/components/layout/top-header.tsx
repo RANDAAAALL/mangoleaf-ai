@@ -11,6 +11,7 @@ interface TopHeaderProps {
   onLanguageChange: (lang: Language) => void;
   onInstall: () => void;
   onLogoClick: () => void;
+  onScanPress: () => void;
 }
 
 export const TopHeader = memo(function TopHeader({
@@ -21,6 +22,7 @@ export const TopHeader = memo(function TopHeader({
   onLanguageChange,
   onInstall,
   onLogoClick,
+  onScanPress,
 }: TopHeaderProps) {
   const t = translations[language];
 
@@ -61,6 +63,16 @@ export const TopHeader = memo(function TopHeader({
               }`}
             >
               {t.navHome}
+            </button>
+            {/* Scan is an action, not a tab: it opens the scan sheet, so it
+                deliberately has no active state. On mobile the same action is
+                the bottom-navigation FAB, which is why this nav is the only
+                place it appears on desktop. */}
+            <button
+              onClick={onScanPress}
+              className="hover:text-[#277839] transition-colors cursor-pointer"
+            >
+              {t.navScan}
             </button>
             <button
               onClick={() => onTabChange("about")}

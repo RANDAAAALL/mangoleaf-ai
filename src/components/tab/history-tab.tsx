@@ -8,6 +8,7 @@ interface HistoryTabProps {
   language: Language;
   onSelectScan: (scan: ScanRecord) => void;
   onDeleteScan: (id: string) => void;
+  onScanPress: () => void;
 }
 
 export const HistoryTab = memo(function HistoryTab({
@@ -15,6 +16,7 @@ export const HistoryTab = memo(function HistoryTab({
   language,
   onSelectScan,
   onDeleteScan,
+  onScanPress,
 }: HistoryTabProps) {
   return (
     <ScanHistoryList
@@ -22,6 +24,7 @@ export const HistoryTab = memo(function HistoryTab({
       language={language}
       onSelectScan={onSelectScan}
       onDeleteScan={onDeleteScan}
+      onScanPress={onScanPress}
       isFullHistoryPage={true}
     />
   );

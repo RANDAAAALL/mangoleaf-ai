@@ -11,6 +11,7 @@ interface ScanHistoryListProps {
   onSelectScan: (scan: ScanRecord) => void;
   onDeleteScan: (id: string) => void;
   onViewAllHistory?: () => void;
+  onScanPress?: () => void;
   isFullHistoryPage?: boolean;
 }
 
@@ -42,6 +43,7 @@ export const ScanHistoryList = memo(function ScanHistoryList({
   onSelectScan,
   onDeleteScan,
   onViewAllHistory,
+  onScanPress,
   isFullHistoryPage = false,
 }: ScanHistoryListProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -197,6 +199,19 @@ export const ScanHistoryList = memo(function ScanHistoryList({
           <p className="text-xs text-[#526856] max-w-md">
             {t.noScanHistoryText}
           </p>
+          {/* Desktop-only way out of the empty state. The scan FAB lives in the
+              bottom navigation, which is md:hidden, so without this a desktop
+              visitor with no scans has nothing here to click. */}
+          {onScanPress && (
+            <button
+              type="button"
+              onClick={onScanPress}
+              className="mt-2 hidden md:inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#277839] px-5 py-2.5 text-sm font-extrabold text-white shadow-sm transition-colors hover:bg-[#1f622d] active:scale-98"
+            >
+              <Icon name="scan" size={18} strokeWidth={2.5} />
+              {t.aboutScanLeafCta}
+            </button>
+          )}
         </div>
       ) : (
         /* Responsive Grid for Scans (Max 6 per page on History Screen [3 cols x 2 rows], Max 4 on Home Screen [4 cols]) */

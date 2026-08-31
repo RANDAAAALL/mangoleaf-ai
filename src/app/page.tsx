@@ -85,6 +85,7 @@ export default function Home() {
   >(null);
   const [isScanSheetOpen, setIsScanSheetOpen] = useState(false);
   const closeScanSheet = useCallback(() => setIsScanSheetOpen(false), []);
+  const openScanSheet = useCallback(() => setIsScanSheetOpen(true), []);
 
   // Global language state initialized from actual localStorage ("bis" default)
   const [selectedScan, setSelectedScan] = useState<ScanRecord | null>(null);
@@ -316,6 +317,7 @@ export default function Home() {
           onLanguageChange={setLanguage}
           onInstall={installApp}
           onLogoClick={() => handleTabChange("home")}
+          onScanPress={openScanSheet}
         />
 
         {/* Hidden file inputs for scan sheet + retake flow */}
@@ -345,6 +347,7 @@ export default function Home() {
                 onSelectScan={setSelectedScan}
                 onDeleteScan={deleteScan}
                 onViewAllHistory={handleViewAllHistory}
+                onScanPress={openScanSheet}
               />
             )}
 
@@ -354,14 +357,12 @@ export default function Home() {
                 language={language}
                 onSelectScan={setSelectedScan}
                 onDeleteScan={deleteScan}
+                onScanPress={openScanSheet}
               />
             )}
 
             {activeTab === "about" && (
-              <AboutTab
-                language={language}
-                onScanPress={() => setIsScanSheetOpen(true)}
-              />
+              <AboutTab language={language} onScanPress={openScanSheet} />
             )}
           </div>
         </main>
@@ -418,7 +419,7 @@ export default function Home() {
         activeTab={activeTab}
         language={language}
         onTabChange={handleTabChange}
-        onScanPress={() => setIsScanSheetOpen(true)}
+        onScanPress={openScanSheet}
         onLanguageToggle={() => setLanguage(language === "en" ? "bis" : "en")}
       />
     </div>

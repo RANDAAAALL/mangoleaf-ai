@@ -13,6 +13,7 @@ interface HomeTabProps {
   onSelectScan: (scan: ScanRecord) => void;
   onDeleteScan: (id: string) => void;
   onViewAllHistory: () => void;
+  onScanPress: () => void;
 }
 
 export const HomeTab = memo(function HomeTab({
@@ -21,6 +22,7 @@ export const HomeTab = memo(function HomeTab({
   onSelectScan,
   onDeleteScan,
   onViewAllHistory,
+  onScanPress,
 }: HomeTabProps) {
   const homeScans = useMemo(() => scans.slice(0, HOME_PREVIEW_COUNT), [scans]);
 
@@ -34,6 +36,7 @@ export const HomeTab = memo(function HomeTab({
         onSelectScan={onSelectScan}
         onDeleteScan={onDeleteScan}
         onViewAllHistory={onViewAllHistory}
+        onScanPress={onScanPress}
         isFullHistoryPage={false}
       />
     </>
