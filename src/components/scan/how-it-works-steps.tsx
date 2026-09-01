@@ -34,14 +34,14 @@ export const HowItWorksSteps = memo(function HowItWorksSteps({
       <h3 className="text-xl sm:text-2xl text-center sm:text-left font-bold text-[#143519] mb-3.5">
         {t.HowItWorksTitle}
       </h3>
-      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-stretch gap-1 sm:gap-2">
         {steps.map((step, i) => {
           const style = STEP_STYLES[i];
           return (
             <Fragment key={step.title}>
               {i > 0 && (
                 <div
-                  className="flex justify-center shrink-0 py-0.5 sm:py-0 sm:px-0.5"
+                  className="flex justify-center items-center shrink-0 py-0.5 sm:py-0 sm:px-0.5"
                   aria-hidden="true"
                 >
                   <Icon

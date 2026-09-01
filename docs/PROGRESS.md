@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: September 1, 2026
+Last updated: September 2, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -424,6 +424,17 @@ The first two bullets were written earlier and sat between the August 28 and Aug
 - Model version stays `v3.0.0`. Nothing in `public/model/`, the class mapping, the thresholds, or the inference path changed.
 - **Not tested on a phone.** The `sm:text-[12px]` step needs a real device at a real width, and the three step icons and both arrows need a look at their rendered size now that the size comes from a prop rather than a class. This release joins the combined phone-test item below.
 
+### September 2, 2026: v0.4.5 equal-height How it works cards
+
+- **The three How it works step cards are now equal height on a wide row.** `src/components/scan/how-it-works-steps.tsx` changed `sm:items-center` to `sm:items-stretch` on the row wrapper, so each card fills the row's height instead of shrink-wrapping its own text. The three step descriptions differ in length, so before this they sat side by side at three different heights.
+- **The arrow wrapper gained `items-center` in the same edit, and it is not optional.** `items-stretch` on the row applies to the arrow wrappers as well as the cards, so without it each arrow would be stretched to the full row height and pinned to the top of it, level with the step-number badges rather than with the middles of the cards. The two class changes are one fix, not two.
+- Mobile is unaffected. The stacked layout is `flex-col`, whose cross axis already stretches by default, and the row change is `sm:`-prefixed.
+- Bumped the PWA and package version to `v0.4.5` / `0.4.5`, and regenerated `public/sw.js` with `bun run build`. Two class names make this the smallest release in the project after `v0.4.1`'s single padding class, and it earns a label for the same reason that one did: the footer is the only place a phone can be asked what it is running, so shipping changed markup under an unchanged label makes that answer useless.
+- **It could not be folded into `v0.4.4` instead.** That tag was already pushed to origin, and moving a published tag is the mistake recorded in [MODEL_VERSIONING.md](MODEL_VERSIONING.md) for `v0.2.3`, which was tagged on a pre-amend commit that could not build and had to be moved on August 18, 2026. A two-line diff is not worth repeating it.
+- Model version stays `v3.0.0`. Nothing in `public/model/`, the class mapping, the thresholds, or the inference path changed.
+- Release verification passes: `bun run typecheck`, `bun run lint`, and `bun run build`.
+- **Not tested on a phone.** This one is specifically a wide-row change, so the check that matters is a tablet or a landscape phone rather than portrait. It joins the combined phone-test item below.
+
 ## Current Notebook Decision
 
 Keep every training notebook, and keep each trial's clean template separate from its completed run. All notebooks live in `notebooks/` at the repository root, moved there from the root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle. The filenames below are unchanged.
@@ -451,7 +462,7 @@ Keep every training notebook, and keep each trial's clean template separate from
 - Current documented training run: Trial 3, August 26, 2026
 - Current documented test result: 97.46% accuracy and 0.0686 test loss on 393 deduplicated test images, 95% Wilson interval roughly 95.4% to 98.6%
 - Current documented export size: 11.53 MB total across 3 weight shards plus `model.json`, of which 11.33 MB is weights, plus `model_config.json`
-- Current app model version label: `v3.0.0`, app version `v0.4.4`
+- Current app model version label: `v3.0.0`, app version `v0.4.5`
 - Calibration: temperature `T = 1.188751` folded into the final Dense layer. `T > 1`, so the model was overconfident and folding lowers confidence, which strengthens the 70% floor.
 - Rejection: three gates, all active. Fixed 70% confidence floor, selected margin threshold `0.40`, fitted normalized-entropy threshold `0.40`. Measured 95.17% in-distribution retention, 70.24% out-of-scope rejection on 84 held-out non-mango images with a 95% confidence interval of roughly 60.5% to 80.0%, and 99.20% accuracy on accepted predictions.
 
@@ -459,14 +470,12 @@ Trial 2's 98.25%, Trial 2.1's 97.12%, and Trial 3's 97.46% are three measurement
 
 ## Next Work
 
-- **Test `v0.4.2`, `v0.4.3`, and `v0.4.4` together on a production build on a physical phone.** None of the three has been on a device, so one session covers all three. The `v0.4.1` footer was confirmed on the live deployment on August 31, 2026, but that was a footer check only, and `v0.4.0` on August 29, 2026 remains the last build to pass all four checks. The phone needs the deployed HTTPS URL, because a LAN address such as `http://192.168.x.x:3000` is not a secure context and registers no service worker. Confirm the footer reads `v0.4.4` and `v3.0.0` first: everything below is invisible until the new service worker has actually activated, so a phone still showing an older version proves nothing about this build. Then check, in order:
+- **Test `v0.4.2`, `v0.4.3`, `v0.4.4`, and `v0.4.5` together on a production build on a physical phone.** None of the four has been on a device, so one session covers all of them. The `v0.4.1` footer was confirmed on the live deployment on August 31, 2026, but that was a footer check only, and `v0.4.0` on August 29, 2026 remains the last build to pass all four checks. The phone needs the deployed HTTPS URL, because a LAN address such as `http://192.168.x.x:3000` is not a secure context and registers no service worker. Confirm the footer reads `v0.4.5` and `v3.0.0` first: everything below is invisible until the new service worker has actually activated, so a phone still showing an older version proves nothing about this build. Then check, in order:
   - **"Take Photo" must still be present in the scan sheet.** This is the one regression `v0.4.3` could introduce, and it is invisible on every desktop screen the change was developed and verified on. An emulated 390px viewport showed both cards, but only a real device proves the card is there and that tapping it opens the camera rather than the gallery.
   - **Read both scan-sheet card descriptions.** `v0.4.4` raises them to `sm:text-[12px]` at 40rem and above, so a phone held in portrait should still show the 10px size and a tablet or a landscape phone the larger one. Both must stay legible and neither may wrap into the card's icon.
   - **Look at the three How it works step icons and the two arrows.** `v0.4.4` moved them into the shared registry and their size now comes from a `size` prop rather than a `w-7 h-7` class. They should be visually unchanged; a different rendered size means the prop and the class were not equivalent after all.
+  - **Turn the phone landscape, or use a tablet, and look at the How it works row.** `v0.4.5` makes the three cards equal height there. All three bottom edges must line up, and both arrows must sit vertically centred between the cards rather than riding at the top of the row. An arrow pinned to the top means the `items-center` on its wrapper was lost and `items-stretch` is reaching it.
   - Drag the scan sheet down and release below the threshold. It must track the finger smoothly and snap back, not stick where it was released. The snap-back is the path most exposed by the switch to direct DOM writes, because it depends on React clearing the imperative `transform` on the drag-end render.
-  - Drag past the threshold and confirm the sheet dismisses rather than freezing part-way down.
-  - Confirm the backdrop still dims the screen on the phone. The blur is deliberately gone there; the dim is not.
-  - Enable iOS "Reduce Motion" or the Android "Remove animations" option, then open and close the sheet. It must appear and disappear instantly and must not remain on screen after closing. A sheet left visible would mean the collapsed animation duration lost the `forwards` end state, which is the specific failure the `0.01ms` value is written to avoid.
   - Drag past the threshold and confirm the sheet dismisses rather than freezing part-way down.
   - Confirm the backdrop still dims the screen on the phone. The blur is deliberately gone there; the dim is not.
   - Enable iOS "Reduce Motion" or the Android "Remove animations" option, then open and close the sheet. It must appear and disappear instantly and must not remain on screen after closing. A sheet left visible would mean the collapsed animation duration lost the `forwards` end state, which is the specific failure the `0.01ms` value is written to avoid.
