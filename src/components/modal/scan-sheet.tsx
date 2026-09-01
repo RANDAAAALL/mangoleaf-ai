@@ -296,7 +296,7 @@ export const ScanSheet = memo(function ScanSheet({
               </div>
               <div className="flex flex-col items-center gap-0.5">
                 <span className="text-sm font-bold">{t.takePhotoBtn}</span>
-                <span className="text-[10px] text-emerald-100 leading-tight text-center">
+                <span className="text-[10px] sm:text-[12px] text-emerald-100 leading-tight text-center">
                   {t.scanSheetCameraDesc}
                 </span>
               </div>
@@ -311,7 +311,7 @@ export const ScanSheet = memo(function ScanSheet({
               </div>
               <div className="flex flex-col items-center gap-0.5">
                 <span className="text-sm font-bold">{t.uploadPhotoBtn}</span>
-                <span className="text-[10px] text-[#523012] leading-tight text-center">
+                <span className="text-[10px] sm:text-[12px] text-[#523012] leading-tight text-center">
                   {t.scanSheetGalleryDesc}
                 </span>
               </div>

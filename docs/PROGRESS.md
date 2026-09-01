@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: August 29, 2026
+Last updated: September 1, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -316,7 +316,6 @@ Retrained the classifier on a new image pool and shipped it. Full report in [mod
 - Simplified tab switches to fade-only content transitions; bottom-nav active scale and sliding green dot removed.
 - Scan sheet swipe now animates smoothly on partial release and on dismiss, without replaying the open animation or sticking mid-drag.
 - Fixed swipe-dismiss snap-back: dismiss no longer resets `dragY` before close, and `isDismissing` blocks `sheet-enter` from replaying while the sheet slides off screen.
-- Later refined the Home coverage panel to use neutral disease-list dots instead of red disease pills, reducing visual noise while keeping solid red result badges in scan cards.
 
 ### August 29, 2026: Component consolidation
 
@@ -407,6 +406,24 @@ The app was built mobile-first, and three desktop gaps followed from that. All t
 - Model version stays `v3.0.0`.
 - **Not tested on a phone.** The browser checks above ran on a desktop Chrome with an emulated viewport, which exercises the CSS but not a real device. The `v0.4.2` work is in the same position, which is why the two share one phone-test item below.
 
+### September 1, 2026: v0.4.4 shared icon registry and scan-sheet label sizes
+
+The first two bullets were written earlier and sat between the August 28 and August 29 entries higher in this file. They are moved here unchanged so the timeline stays in order, and the icon work below continues them.
+
+- Added SVG next arrows between the three home-screen How it works step cards in `how-it-works-steps.tsx`. Desktop shows right-pointing arrows; mobile stacks cards with down-pointing arrows between them.
+- Later refined the Home coverage panel to use neutral disease-list dots instead of red disease pills, reducing visual noise while keeping solid red result badges in scan cards.
+- **Promoted all four of that file's local SVG components into the shared `brand/icon.tsx` registry,** following the precedent set on August 29, 2026 for the Leaf, Fruit, and Check icons. `CameraStepIcon`, `AIStepIcon`, `ResultsStepIcon`, and `StepNextArrow` are gone, and `how-it-works-steps.tsx` now renders `<Icon name={...} />` and contains no `<svg>` markup at all. The four new `IconName` values are `camera-outline`, `sparkle`, `clipboard-check`, and `arrow-right`.
+- The four shapes went in as one `STROKE_24_SHAPES` map plus a single render branch rather than four `if (name === ...)` branches, because all four share the same 24x24 stroke wrapper that the existing `scan`, `leaf`, `upload`, and `gallery` branches each repeat. Those existing branches were deliberately left alone: they are shipping icons, and folding them into the map would widen the diff to every icon in the app for no user-visible gain.
+- **The viewfinder is named `camera-outline`, not `camera`, because `camera` already exists** as a filled FontAwesome glyph on a 640x640 viewBox. The two are different weights on different coordinate systems and are not interchangeable, so they are two registry entries rather than one name with a variant.
+- Sizing moved from a `w-7 h-7` class inside each SVG to the registry's `size` prop, which writes `width` and `height` directly: `size={28}` for the three step icons and `size={24}` for the arrow, the exact pixel equivalents of `w-7 h-7` and `w-6 h-6`.
+- **Fixed a latent class collision while moving the arrow.** `StepNextArrow` hardcoded `text-[#738a77]` in its own className and then appended the caller's, so its only call site put that default and its own `text-[#296b11]` on one element as two competing `text-[...]` utilities, resolved by stylesheet order rather than by intent. Registry icons carry no colour of their own and inherit `currentColor`, so the call site's colour is now the only one present. The six other files that use `text-[#738a77]` are unaffected, and that colour is still in the built stylesheet because of them.
+- Verified in the built output rather than asserted: all four new path strings appear in `out/_next/static/chunks/app/page-*.js`. Worth recording for future checks: `Select-String -Path 'out/_next/static/chunks/*.js'` finds none of them and looks like a failure, because that glob is not recursive and the page chunk sits one level down in `chunks/app/`. Use a recursive `Get-ChildItem -Recurse` when searching the export for emitted markup.
+- Verification passes: `bun run typecheck`, `bun run lint`, and `bun run build`. That build regenerated `public/sw.js`, as any source change requires.
+- **The scan sheet's two card descriptions grow one step on wider screens,** from `text-[10px]` to `text-[10px] sm:text-[12px]` in `src/components/modal/scan-sheet.tsx`. This is the only user-visible change in the release: 10px is hard to read once the sheet has the width to afford more. It is unrelated to the icon work above, was already in the working tree when the icons were moved, and ships in the same commit because `public/sw.js` cannot describe one of the two changes without the other.
+- Bumped the PWA and package version to `v0.4.4` / `0.4.4`, and regenerated `public/sw.js` with `bun run build`. The icon move produces identical pixels, which is exactly why the label matters: nothing on screen tells a tester whether they are holding the registry build or the pre-registry one. `v0.4.2` is the precedent, and the standing rule in [MODEL_VERSIONING.md](MODEL_VERSIONING.md) is that two builds must never share a version label.
+- Model version stays `v3.0.0`. Nothing in `public/model/`, the class mapping, the thresholds, or the inference path changed.
+- **Not tested on a phone.** The `sm:text-[12px]` step needs a real device at a real width, and the three step icons and both arrows need a look at their rendered size now that the size comes from a prop rather than a class. This release joins the combined phone-test item below.
+
 ## Current Notebook Decision
 
 Keep every training notebook, and keep each trial's clean template separate from its completed run. All notebooks live in `notebooks/` at the repository root, moved there from the root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle. The filenames below are unchanged.
@@ -434,7 +451,7 @@ Keep every training notebook, and keep each trial's clean template separate from
 - Current documented training run: Trial 3, August 26, 2026
 - Current documented test result: 97.46% accuracy and 0.0686 test loss on 393 deduplicated test images, 95% Wilson interval roughly 95.4% to 98.6%
 - Current documented export size: 11.53 MB total across 3 weight shards plus `model.json`, of which 11.33 MB is weights, plus `model_config.json`
-- Current app model version label: `v3.0.0`, app version `v0.4.3`
+- Current app model version label: `v3.0.0`, app version `v0.4.4`
 - Calibration: temperature `T = 1.188751` folded into the final Dense layer. `T > 1`, so the model was overconfident and folding lowers confidence, which strengthens the 70% floor.
 - Rejection: three gates, all active. Fixed 70% confidence floor, selected margin threshold `0.40`, fitted normalized-entropy threshold `0.40`. Measured 95.17% in-distribution retention, 70.24% out-of-scope rejection on 84 held-out non-mango images with a 95% confidence interval of roughly 60.5% to 80.0%, and 99.20% accuracy on accepted predictions.
 
@@ -442,8 +459,10 @@ Trial 2's 98.25%, Trial 2.1's 97.12%, and Trial 3's 97.46% are three measurement
 
 ## Next Work
 
-- **Test `v0.4.2` and `v0.4.3` together on a production build on a physical phone.** Neither has been on a device, so one session covers both. The `v0.4.1` footer was confirmed on the live deployment on August 31, 2026, but that was a footer check only, and `v0.4.0` on August 29, 2026 remains the last build to pass all four checks. The phone needs the deployed HTTPS URL, because a LAN address such as `http://192.168.x.x:3000` is not a secure context and registers no service worker. Confirm the footer reads `v0.4.3` and `v3.0.0` first: everything below is invisible until the new service worker has actually activated, so a phone still showing an older version proves nothing about this build. Then check, in order:
+- **Test `v0.4.2`, `v0.4.3`, and `v0.4.4` together on a production build on a physical phone.** None of the three has been on a device, so one session covers all three. The `v0.4.1` footer was confirmed on the live deployment on August 31, 2026, but that was a footer check only, and `v0.4.0` on August 29, 2026 remains the last build to pass all four checks. The phone needs the deployed HTTPS URL, because a LAN address such as `http://192.168.x.x:3000` is not a secure context and registers no service worker. Confirm the footer reads `v0.4.4` and `v3.0.0` first: everything below is invisible until the new service worker has actually activated, so a phone still showing an older version proves nothing about this build. Then check, in order:
   - **"Take Photo" must still be present in the scan sheet.** This is the one regression `v0.4.3` could introduce, and it is invisible on every desktop screen the change was developed and verified on. An emulated 390px viewport showed both cards, but only a real device proves the card is there and that tapping it opens the camera rather than the gallery.
+  - **Read both scan-sheet card descriptions.** `v0.4.4` raises them to `sm:text-[12px]` at 40rem and above, so a phone held in portrait should still show the 10px size and a tablet or a landscape phone the larger one. Both must stay legible and neither may wrap into the card's icon.
+  - **Look at the three How it works step icons and the two arrows.** `v0.4.4` moved them into the shared registry and their size now comes from a `size` prop rather than a `w-7 h-7` class. They should be visually unchanged; a different rendered size means the prop and the class were not equivalent after all.
   - Drag the scan sheet down and release below the threshold. It must track the finger smoothly and snap back, not stick where it was released. The snap-back is the path most exposed by the switch to direct DOM writes, because it depends on React clearing the imperative `transform` on the drag-end render.
   - Drag past the threshold and confirm the sheet dismisses rather than freezing part-way down.
   - Confirm the backdrop still dims the screen on the phone. The blur is deliberately gone there; the dim is not.
@@ -465,7 +484,7 @@ Trial 2's 98.25%, Trial 2.1's 97.12%, and Trial 3's 97.46% are three measurement
   - Also patch the training notebook's cell 32 to skip the overflowing variance tensor before casting, though that is now largely moot: the converter folds the tensor away and the deployed graph has 557× headroom.
   - One previously recorded defect could not be checked from the repository. Markdown cell 0 was said to document `tune/` and `report/` subfolders that do not exist, but the notebook states both already exist in Drive and nothing here can see Drive. Verify it in Colab before acting on it.
 - **Decide whether to keep tracking `public/sw.js`.** It is a generated file whose precache manifest embeds the `_next/static` chunk hashes, so it goes stale on any source change and has to be regenerated and recommitted alongside it. It does not carry the app version literal, which lives only in the page bundle; the chunk hashes alone are what make it go stale.
-- **Optional: re-export at float16.** It would halve the download from 11.33 MB to 5.94 MB with no accuracy cost on the WebGL path, and the overflow analysis shows it is safe. It needs another Colab run and another provenance verification, which is why it was skipped.
+- **Optional: re-export at float16.** It would halve the weight download from 11.33 MB to 5.67 MB with no accuracy cost on the WebGL path, and the overflow analysis shows it is safe. The earlier wording paired 11.33 MB with 5.94 MB, which mixes units: the shards hold 11,882,568 bytes, so the pair is either 11.33 MiB and 5.67 MiB or 11.88 MB and 5.94 MB, and this file uses MiB everywhere else. Cell 32 of `MangoLeaf_AI_Training_v3_Post_Training.ipynb` measured the cost directly and found none: identical 0.974555 test accuracy at both precisions, 0 of 393 predicted classes changed, and 0 images crossing the 70% gate differently. Note that cell 3 of the same notebook comments that float16 "costs a little accuracy", which cell 32 disproves and which should be corrected alongside the other notebook defects above. It needs another Colab run and another provenance verification, which is why it was skipped.
 
 ## Standing Rules
 

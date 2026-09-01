@@ -17,6 +17,7 @@ This repository uses Next.js 16.2.10. APIs, conventions, and file structure may 
 - Use camelCase filenames for custom hooks, such as `useSync.ts` and `usePWAInstall.ts`, with matching `useSomething` exports.
 - Keep React component exports in PascalCase, and give the inner function of a `memo(...)` wrapper the same name as the export so React DevTools and stack traces show the real component name.
 - Group new components into the existing `src/components/` subfolders by screen area. Do not add files directly to `src/components/`. The folders exist for navigation and do not restrict imports; a component used by more than one area may be imported across folders.
+- Put a reusable SVG in `src/components/brand/icon.tsx` as a new `IconName` entry instead of defining a local `<svg>` component in the file that first needs it. Let it inherit `currentColor` and take its dimensions from the `size` prop rather than hardcoding a fill or a `w-* h-*` class, so one call site cannot fix a colour or a size for every future caller.
 - Keep `src/app/page.tsx` limited to state, handlers, and tab selection. Screen markup belongs in a tab component under the matching folder.
 - Use the `@/*` alias for imports from `src/` when practical.
 - Prefer `@/components/...` over relative `../` paths for cross-folder component imports so files survive being moved.
