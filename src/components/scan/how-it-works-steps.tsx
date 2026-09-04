@@ -7,14 +7,15 @@ interface HowItWorksStepsProps {
 }
 
 const STEP_STYLES: {
+  border?: string;
   bg: string;
   text: string;
   numBg: string;
   icon: IconName;
 }[] = [
-  { bg: "bg-[#277839]", text: "text-white", numBg: "bg-white/20", icon: "camera-outline" },
-  { bg: "bg-[#f59e2b]", text: "text-[#2c1806]", numBg: "bg-black/10", icon: "sparkle" },
-  { bg: "bg-[#2563eb]", text: "text-white", numBg: "bg-white/20", icon: "clipboard-check" },
+  { border: "border border-[#cfe2c8]", bg: "bg-[#edf6e9]", text: "text-[#143519]", numBg: "bg-[#277839]", icon: "camera-outline" },
+  { border: "border border-[#cfe2c8]", bg: "bg-[#edf6e9]", text: "text-[#143519]", numBg: "bg-[#277839]", icon: "sparkle" },
+  { border: "border border-[#cfe2c8]", bg: "bg-[#edf6e9]", text: "text-[#143519]", numBg: "bg-[#277839]", icon: "clipboard-check" },
 ];
 
 export const HowItWorksSteps = memo(function HowItWorksSteps({
@@ -53,11 +54,11 @@ export const HowItWorksSteps = memo(function HowItWorksSteps({
                 </div>
               )}
               <div
-                className={`${style.bg} ${style.text} p-4 rounded-2xl shadow-sm flex items-start gap-3 flex-1 min-w-0`}
+                className={`${style.border} ${style.bg} ${style.text} p-4 rounded-2xl shadow-sm flex items-start gap-3.5 flex-1 min-w-0`}
               >
                 {/* Step number badge */}
                 <div
-                  className={`${style.numBg} w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-black text-sm`}
+                  className={`${style.numBg} w-8 h-8 text-white/90 rounded-full flex items-center justify-center shrink-0 font-bold text-sm`}
                 >
                   {i + 1}
                 </div>
@@ -69,7 +70,7 @@ export const HowItWorksSteps = memo(function HowItWorksSteps({
                   </div>
                   <p
                     lang={contentLang}
-                    className="text-xs leading-relaxed opacity-90"
+                    className="text-[#223d27] text-xs leading-relaxed opacity-90"
                   >
                     {step.desc}
                   </p>

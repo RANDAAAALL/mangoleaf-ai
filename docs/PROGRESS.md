@@ -435,6 +435,19 @@ The first two bullets were written earlier and sat between the August 28 and Aug
 - Release verification passes: `bun run typecheck`, `bun run lint`, and `bun run build`.
 - **Not tested on a phone.** This one is specifically a wide-row change, so the check that matters is a tablet or a landscape phone rather than portrait. It joins the combined phone-test item below.
 
+### September 2, 2026: v0.4.6 unified How it works card styling
+
+- **The three How it works step cards now share one pale green card instead of three solid fills.** `src/components/scan/how-it-works-steps.tsx` replaced the green, amber, and blue cards with `bg-[#edf6e9]`, a `border-[#cfe2c8]` hairline, and `text-[#143519]` copy on all three. Three saturated fills read as three unrelated states rather than three steps of one flow, and they put more colour weight in the section than the scan call to action above it. The numbered badges now carry the sequence.
+- The badge keeps `bg-[#277839]` on every step and gained an explicit `text-white/90`. It needs one. The old amber and blue cards supplied the badge's numeral colour through the card's own `text` class, so on a light card that inherited colour would have left the numeral nearly invisible against the dark green circle.
+- **Step descriptions moved to `text-[#223d27]`, and the class they replaced never worked.** The first attempt was `t-[#526856]`, which is not a Tailwind utility: there is no `t` namespace, so the arbitrary-value syntax matched nothing, Tailwind emitted no rule, and the descriptions silently inherited `text-[#143519]` from the card. It is a class of typo the build cannot catch, because an unknown utility is not an error in Tailwind, only a no-op. `border-t-[#277839]` in `splash-screen.tsx` is the valid form of the same shape and is what makes the typo look plausible.
+- `opacity-90` stays on the descriptions because the final colour can afford it. `#223d27` on `#edf6e9` measures 10.75:1, and 8.06:1 composited at 90% opacity, past AAA for the size. `#526856` would not have survived it: 5.46:1 at full opacity but 4.41:1 composited, under the 4.5:1 floor for 12px text. Check a text colour at its composited value, not its declared one.
+- Also removed the commented-out copy of the old three-colour palette and a stray colour comment left over from the restyle. Both are recoverable from `441ee89`. Smaller changes: `gap-3` to `gap-3.5` between badge and text, and the numeral from `font-black` to `font-bold`.
+- Bumped the PWA and package version to `v0.4.6` / `0.4.6`, and regenerated `public/sw.js` with `bun run build`. This is the most visible change since `v0.4.3` and is nowhere near the borderline `v0.4.5` sat on.
+- Recorded the `v0.4.5` tag commit `441ee89` in [MODEL_VERSIONING.md](MODEL_VERSIONING.md), which the usual follow-up commit missed.
+- Model version stays `v3.0.0`. Nothing in `public/model/`, the class mapping, the thresholds, or the inference path changed.
+- Release verification passes: `bun run typecheck`, `bun run lint`, and `bun run build`.
+- **Not tested on a phone.** It joins the combined phone-test item below.
+
 ## Current Notebook Decision
 
 Keep every training notebook, and keep each trial's clean template separate from its completed run. All notebooks live in `notebooks/` at the repository root, moved there from the root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle. The filenames below are unchanged.
@@ -462,7 +475,7 @@ Keep every training notebook, and keep each trial's clean template separate from
 - Current documented training run: Trial 3, August 26, 2026
 - Current documented test result: 97.46% accuracy and 0.0686 test loss on 393 deduplicated test images, 95% Wilson interval roughly 95.4% to 98.6%
 - Current documented export size: 11.53 MB total across 3 weight shards plus `model.json`, of which 11.33 MB is weights, plus `model_config.json`
-- Current app model version label: `v3.0.0`, app version `v0.4.5`
+- Current app model version label: `v3.0.0`, app version `v0.4.6`
 - Calibration: temperature `T = 1.188751` folded into the final Dense layer. `T > 1`, so the model was overconfident and folding lowers confidence, which strengthens the 70% floor.
 - Rejection: three gates, all active. Fixed 70% confidence floor, selected margin threshold `0.40`, fitted normalized-entropy threshold `0.40`. Measured 95.17% in-distribution retention, 70.24% out-of-scope rejection on 84 held-out non-mango images with a 95% confidence interval of roughly 60.5% to 80.0%, and 99.20% accuracy on accepted predictions.
 
@@ -470,11 +483,12 @@ Trial 2's 98.25%, Trial 2.1's 97.12%, and Trial 3's 97.46% are three measurement
 
 ## Next Work
 
-- **Test `v0.4.2`, `v0.4.3`, `v0.4.4`, and `v0.4.5` together on a production build on a physical phone.** None of the four has been on a device, so one session covers all of them. The `v0.4.1` footer was confirmed on the live deployment on August 31, 2026, but that was a footer check only, and `v0.4.0` on August 29, 2026 remains the last build to pass all four checks. The phone needs the deployed HTTPS URL, because a LAN address such as `http://192.168.x.x:3000` is not a secure context and registers no service worker. Confirm the footer reads `v0.4.5` and `v3.0.0` first: everything below is invisible until the new service worker has actually activated, so a phone still showing an older version proves nothing about this build. Then check, in order:
+- **Test `v0.4.2`, `v0.4.3`, `v0.4.4`, `v0.4.5`, and `v0.4.6` together on a production build on a physical phone.** None of the five has been on a device, so one session covers all of them. The `v0.4.1` footer was confirmed on the live deployment on August 31, 2026, but that was a footer check only, and `v0.4.0` on August 29, 2026 remains the last build to pass all four checks. The phone needs the deployed HTTPS URL, because a LAN address such as `http://192.168.x.x:3000` is not a secure context and registers no service worker. Confirm the footer reads `v0.4.6` and `v3.0.0` first: everything below is invisible until the new service worker has actually activated, so a phone still showing an older version proves nothing about this build. Then check, in order:
   - **"Take Photo" must still be present in the scan sheet.** This is the one regression `v0.4.3` could introduce, and it is invisible on every desktop screen the change was developed and verified on. An emulated 390px viewport showed both cards, but only a real device proves the card is there and that tapping it opens the camera rather than the gallery.
   - **Read both scan-sheet card descriptions.** `v0.4.4` raises them to `sm:text-[12px]` at 40rem and above, so a phone held in portrait should still show the 10px size and a tablet or a landscape phone the larger one. Both must stay legible and neither may wrap into the card's icon.
   - **Look at the three How it works step icons and the two arrows.** `v0.4.4` moved them into the shared registry and their size now comes from a `size` prop rather than a `w-7 h-7` class. They should be visually unchanged; a different rendered size means the prop and the class were not equivalent after all.
   - **Turn the phone landscape, or use a tablet, and look at the How it works row.** `v0.4.5` makes the three cards equal height there. All three bottom edges must line up, and both arrows must sit vertically centred between the cards rather than riding at the top of the row. An arrow pinned to the top means the `items-center` on its wrapper was lost and `items-stretch` is reaching it.
+  - **Read the three How it works step descriptions in daylight.** `v0.4.6` puts them at `text-[#223d27]` with `opacity-90` on a `bg-[#edf6e9]` card, measured at 8.06:1. The measurement is a calculation, not a field test: outdoors on a mango farm, with a bright screen and no shade, it is the pale card rather than the text colour that is most likely to wash out. If the row is hard to read there, the card fill is the thing to darken, not the copy.
   - Drag the scan sheet down and release below the threshold. It must track the finger smoothly and snap back, not stick where it was released. The snap-back is the path most exposed by the switch to direct DOM writes, because it depends on React clearing the imperative `transform` on the drag-end render.
   - Drag past the threshold and confirm the sheet dismisses rather than freezing part-way down.
   - Confirm the backdrop still dims the screen on the phone. The blur is deliberately gone there; the dim is not.
