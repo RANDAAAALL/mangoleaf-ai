@@ -22,6 +22,7 @@ This repository uses Next.js 16.2.10. APIs, conventions, and file structure may 
 - Use the `@/*` alias for imports from `src/` when practical.
 - Prefer `@/components/...` over relative `../` paths for cross-folder component imports so files survive being moved.
 - Keep `README.md`, `SETUP.md`, and `AGENTS.md` at the repository root. Put other detailed project documentation in `docs/`.
+- Treat `video/` as a separate project that happens to share this repository. It is a HyperFrames composition for the promotional video, with its own `package.json`, its own dependency tree, and its own `AGENTS.md`, which you should read before changing anything inside it. Nothing in it is imported by `src/` or copied into the static export. Run its scripts from inside `video/`, never from the root, and leave its `hyperframes` version pinned so renders reproduce. Commit the composition, its assets, and its lockfile, but never `video/node_modules`. Keep rendered output to one current file rather than adding a new cut alongside the old ones: video files cannot be diffed, so each one is stored whole and a later deletion does not shrink history.
 - Update documentation when setup, architecture, environment variables, model versions, or release behavior changes.
 - Do not manually edit generated files: `public/sw.js`, `.next/`, `out/`, `next-env.d.ts`, or `*.tsbuildinfo`.
 - Do not commit `.env.local` or other secret-bearing environment files.

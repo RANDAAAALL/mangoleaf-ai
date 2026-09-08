@@ -61,5 +61,7 @@ docs/EMAIL_DISPATCH_WORKFLOW.md
 /public/whats_next.png
 /public/mango_dataset.png
 
-# video folder
-/video
+# video composition project
+# The composition, its source assets, and the rendered MP4 are tracked.
+# Dependencies are not: reinstall them from video/bun.lock.
+/video/node_modules

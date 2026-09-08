@@ -72,6 +72,15 @@ mangoleaf-ai/
 |       |-- MangoLeaf_AI_Training_v3_Post_Training.ipynb    # Completed Trial 3 run, manuscript evidence, do not rerun
 |       |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb         # Trial 3 threshold template, 8 cells, outputs cleared
 |       `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb # Trial 3 fitting run; cell 9 settles the margin at 0.40
+|-- video/                           # Promotional video, a separate HyperFrames project
+|   |-- assets/                      # Render inputs: screenshots, voice-over, music
+|   |-- index.html                   # Root composition and timeline
+|   |-- index.motion.json            # Motion and keyframe definitions
+|   |-- hyperframes.json             # Composition paths and media settings
+|   |-- meta.json                    # Composition id and name
+|   |-- package.json                 # Pinned hyperframes CLI scripts
+|   |-- AGENTS.md                    # HyperFrames instructions for coding agents
+|   `-- mangoleaf_ad_video_modernized.mp4 # Rendered output
 |-- .env.example                    # Public environment-variable template
 |-- AGENTS.md                       # Repository instructions for coding agents
 |-- README.md                       # Project overview and quick start
@@ -82,6 +91,8 @@ mangoleaf-ai/
 ```
 
 This is a single Next.js application rather than separate frontend and backend folders. Browser code owns diagnosis and local storage, while Supabase is an external synchronization service.
+
+`video/` is the one directory that is not part of the application. It is a self-contained HyperFrames composition project for the promotional video, with its own `package.json`, its own dependency tree, and its own `AGENTS.md`. Nothing in it is imported by `src/`, and nothing in it reaches a device: `public/` is the only directory a static export copies verbatim, so the composition, the voice-over, and the rendered MP4 are absent from `out/` and from the service worker's precache manifest. The `static-video-assets` runtime cache in `public/sw.js` is unrelated to it and matches only `.mp4` and `.webm` files the app itself requests. Treat the two projects as neighbours that share a repository and nothing else; running `bun install` at the root does not install the video project's dependencies, and `bun run build` does not render the video.
 
 ## Application layers
 
