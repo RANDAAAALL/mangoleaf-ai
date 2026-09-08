@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-  <video src="https://github.com/user-attachments/assets/bfcb051e-052a-4a5a-8513-556f681adec1" poster="https://raw.githubusercontent.com/RANDAAAALL/mangoleaf-ai/master/video/assets/images/poster.jpg" width="760" controls></video>
+  <video src="https://github.com/user-attachments/assets/bfcb051e-052a-4a5a-8513-556f681adec1" poster="https://github.com/user-attachments/assets/814cadf6-20d8-45fc-a17a-5863cca5c9db" width="760" controls></video>
 </p>
 
 MangoLeaf AI is an offline-first progressive web application that helps identify possible diseases affecting mango leaves and fruit. Classification runs in the browser with TensorFlow.js, scans are stored locally in IndexedDB, and pending records synchronize with Supabase when connectivity is available.
