@@ -1,0 +1,11 @@
+Class,Precision,Recall,F1-score,Support
+anthracnose,0.9733,1.0000,0.9865,73
+bacterial_black_spot,0.9524,0.8889,0.9195,45
+bacterial_canker,1.0000,1.0000,1.0000,74
+healthy,0.9890,0.9783,0.9836,92
+mango_scab,0.8649,0.9412,0.9014,34
+sooty_mold,1.0000,0.9867,0.9933,75
+
+Overall accuracy,0.9746,,,393
+Macro Avg,0.9633,0.9658,0.9641,393
+Weighted Avg,0.9753,0.9746,0.9746,393

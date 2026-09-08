@@ -47,23 +47,31 @@ mangoleaf-ai/
 |   `-- sw.ts                       # Serwist source configuration
 |-- docs/                           # Detailed engineering and project history
 |   |-- model-training/             # Trial 1, Trial 2, Trial 2.1, and Trial 3 training reports
+|   |   |-- trials/                 # One report card per trial (TRIAL_v1.md … TRIAL_v3.md)
+|   |   |-- figures/                # Per-trial training/tuning figures, one folder per trial
+|   |   |-- artifacts/             # Per-trial run_record.json and model_config.json evidence
+|   |   `-- (per-trial dirs above echo the notebooks/ folder-per-trial layout)
 |   |-- ARCHITECTURE.md             # This architecture reference
 |   |-- EMAIL_DISPATCH_WORKFLOW.md  # Adviser and panel correspondence notes (local only, gitignored)
 |   |-- MANUSCRIPT_MODIFICATIONS.md # Manuscript corrections traced to measured results (local only, gitignored)
 |   |-- MODEL_VERSIONING.md         # App, model, notebook, and release versioning
 |   |-- PERFORMANCE.md              # Performance decisions and measurements
 |   `-- PROGRESS.md                 # Development timeline and current baseline
-|-- notebooks/                      # Colab notebooks; several per trial, all kept
-|   |-- MangoLeaf_AI_Training_v1.ipynb                      # Historical Trial 1
-|   |-- MangoLeaf_AI_Training_v2.ipynb                      # Historical Trial 2
-|   |-- MangoLeaf_AI_Training_v2.1.ipynb                    # Trial 2.1 template, outputs cleared
-|   |-- MangoLeaf_AI_Training_v2_1_Post_Training.ipynb      # Completed Trial 2.1 run, do not rerun
-|   |-- MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb # Trial 2.1 margin and entropy fitting, no retraining
-|   |-- MangoLeaf_AI_Training_v3.ipynb                      # Current retraining template, 34 cells, outputs cleared
-|   |-- MangoLeaf_AI_Training_v3_1st_to_8th_Cells_Results.ipynb # Partial Trial 3 run, data-preparation cells only
-|   |-- MangoLeaf_AI_Training_v3_Post_Training.ipynb        # Completed Trial 3 run, manuscript evidence, do not rerun
-|   |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb             # Trial 3 threshold template, 8 cells, outputs cleared
-|   `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb     # Trial 3 fitting run; cell 9 settles the margin at 0.40
+|-- notebooks/                      # Colab notebooks, one folder per trial; all kept
+|   |-- v1/
+|   |   `-- MangoLeaf_AI_Training_v1.ipynb                  # Historical Trial 1
+|   |-- v2/
+|   |   `-- MangoLeaf_AI_Training_v2.ipynb                  # Historical Trial 2
+|   |-- v2.1/
+|   |   |-- MangoLeaf_AI_Training_v2.1.ipynb                # Trial 2.1 template, outputs cleared
+|   |   |-- MangoLeaf_AI_Training_v2_1_Post_Training.ipynb  # Completed Trial 2.1 run, do not rerun
+|   |   `-- MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb # Trial 2.1 margin and entropy fitting, no retraining
+|   `-- v3/
+|       |-- MangoLeaf_AI_Training_v3.ipynb                  # Current retraining template, 34 cells, outputs cleared
+|       |-- MangoLeaf_AI_Training_v3_1st_to_8th_Cells_Results.ipynb # Partial Trial 3 run, data-preparation cells only
+|       |-- MangoLeaf_AI_Training_v3_Post_Training.ipynb    # Completed Trial 3 run, manuscript evidence, do not rerun
+|       |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb         # Trial 3 threshold template, 8 cells, outputs cleared
+|       `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb # Trial 3 fitting run; cell 9 settles the margin at 0.40
 |-- .env.example                    # Public environment-variable template
 |-- AGENTS.md                       # Repository instructions for coding agents
 |-- README.md                       # Project overview and quick start

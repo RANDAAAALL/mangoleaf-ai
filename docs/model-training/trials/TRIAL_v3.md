@@ -2,9 +2,9 @@
 
 This document records the expanded dataset pool, class-weighted two-stage fine-tuning, temperature calibration, three-gate rejection fitting, and float32 export for **Trial 3** of the on-device image classification model, completed on **August 26, 2026** and shipped to the app on **August 27, 2026**.
 
-Notebook provenance: the clean template is `MangoLeaf_AI_Training_v3.ipynb`, the completed run with all outputs preserved is `MangoLeaf_AI_Training_v3_Post_Training.ipynb`, and the threshold refit is `MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb`. **All three were deleted from `notebooks/` before they were ever committed and must be re-downloaded from Colab.** See the notebook table in [MODEL_VERSIONING.md](../MODEL_VERSIONING.md) for the recovery status. Every number in this report is independently sourced from `run_record.json` and from direct inspection of the shipped weight files, so no measurement depended on the lost notebooks.
+Notebook provenance: the clean template is `notebooks/v3/MangoLeaf_AI_Training_v3.ipynb`, the completed run with all outputs preserved is `notebooks/v3/MangoLeaf_AI_Training_v3_Post_Training.ipynb`, and the threshold refit is `notebooks/v3/MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb`. **All three were deleted from `notebooks/` before they were ever committed and must be re-downloaded from Colab.** See the notebook table in [MODEL_VERSIONING.md](../../MODEL_VERSIONING.md) for the recovery status. Every number in this report is independently sourced from `run_record.json` and from direct inspection of the shipped weight files, so no measurement depended on the lost notebooks.
 
-Trial 3 reports **97.46%** test accuracy against Trial 2.1's **97.12%**. Those two numbers are measured on different test sets — 393 images against 417 — and must never be presented as an improvement. Trial 2.1 remains recorded in [TRIAL_2_1.md](TRIAL_2_1.md); this trial supersedes it as the shipping model.
+Trial 3 reports **97.46%** test accuracy against Trial 2.1's **97.12%**. Those two numbers are measured on different test sets — 393 images against 417 — and must never be presented as an improvement. Trial 2.1 remains recorded in [TRIAL_v2_1.md](TRIAL_v2_1.md); this trial supersedes it as the shipping model.
 
 ---
 
@@ -44,7 +44,7 @@ Redundancy is 48.9%, essentially identical to Trial 2.1's 48.2%, which is expect
 | Cross-label duplicate pairs | 49 | **Not resolved.** The same image appears under two labels, so one label is wrong. |
 | Near-duplicate pairs straddling two splits | 5 | **Not resolvable by this method.** All are cross-folder, so the two images carry different labels and per-folder deduplication cannot remove them by construction. |
 
-Both figures are unchanged from Trial 2.1, which means the hand inspection that TRIAL_2_1.md flagged as required before a v3 run **did not happen**. The 49 cross-label pairs are all `anthracnose` against `healthy`. They inflate test accuracy by an unmeasured amount. This is the single largest known threat to the headline number and belongs in Limitations.
+Both figures are unchanged from Trial 2.1, which means the hand inspection that TRIAL_v2_1.md flagged as required before a v3 run **did not happen**. The 49 cross-label pairs are all `anthracnose` against `healthy`. They inflate test accuracy by an unmeasured amount. This is the single largest known threat to the headline number and belongs in Limitations.
 
 ### Phase 2: Stratified Split
 
@@ -294,7 +294,7 @@ Search the minified `public/sw.js` for `'url':'` with single quotes, not `"url":
 
 ## ⚠️ Limitations
 
-1. **49 unresolved cross-label duplicate pairs**, all `anthracnose` against `healthy`. The same image carries two different labels, so one is wrong. TRIAL_2_1.md flagged hand inspection as required before this trial; it did not happen. Test accuracy is inflated by an unmeasured amount, and the single `healthy` → `anthracnose` error may be a labelling artifact.
+1. **49 unresolved cross-label duplicate pairs**, all `anthracnose` against `healthy`. The same image carries two different labels, so one is wrong. TRIAL_v2_1.md flagged hand inspection as required before this trial; it did not happen. Test accuracy is inflated by an unmeasured amount, and the single `healthy` → `anthracnose` error may be a labelling artifact.
 2. **5 near-duplicate pairs straddle two splits.** All are cross-folder and therefore cross-label, so per-folder deduplication cannot remove them by construction.
 3. **`mango_scab` has only 225 unique images**, down from 291, and 34 in the test set. Every per-class figure for it rests on 34 images and has a very wide interval.
 4. **Out-of-scope rejection rests on 84 held-out images.** The 70.24% rate carries a 95% interval of 60.5% to 80.0%. The 168-image pool came from one flat folder, so it does not represent the variety of things a grower might photograph.

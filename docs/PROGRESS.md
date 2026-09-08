@@ -34,7 +34,7 @@ This file tracks the project work from the first committed implementation throug
 - Used MobileNetV3-Large with two-stage fine-tuning.
 - Reported Trial 2 test performance: 98.25% accuracy and 0.0541 test loss.
 - Exported the model as a TensorFlow.js Graph Model with 3 weight shards, approximately 11.51 MB total.
-- Added `docs/model-training/TRIAL_2.md` as the report for that run. It was the shipping model until Trial 2.1 superseded it on August 22, 2026.
+- Added `docs/model-training/trials/TRIAL_v2.md` as the report for that run. It was the shipping model until Trial 2.1 superseded it on August 22, 2026.
 
 ### July 28, 2026: Reliability and performance pass
 
@@ -162,7 +162,7 @@ This file tracks the project work from the first committed implementation throug
 
 ### August 22-23, 2026: Trial 2.1 retraining, temperature calibration, and model swap
 
-Retrained the classifier to resolve a leakage problem discovered in Trial 2's dataset. Full report in [model-training/TRIAL_2_1.md](model-training/TRIAL_2_1.md).
+Retrained the classifier to resolve a leakage problem discovered in Trial 2's dataset. Full report in [model-training/trials/TRIAL_v2_1.md](model-training/trials/TRIAL_v2_1.md).
 
 **Why the retrain happened.** Trial 2's 5,329-image pool was assembled from local field photos and two open repositories, and the open repositories had already been augmented by Roboflow. Rotated, flipped, and re-encoded copies of the same physical leaf therefore sat in the same folder, and a random file-level split scattered those copies across train, validation, and test. 4,308 of the 5,329 images had a distance-0 perceptual-hash twin somewhere in the pool, so part of Trial 2's 98.25% measured memorization rather than generalization.
 
@@ -266,11 +266,11 @@ Five of the six classes were accepted during the session. **`mango_scab` was not
 
 ### August 26-27, 2026: Trial 3 retraining, threshold refit, and the v0.3.0 release
 
-Retrained the classifier on a new image pool and shipped it. Full report in [model-training/TRIAL_3.md](model-training/TRIAL_3.md).
+Retrained the classifier on a new image pool and shipped it. Full report in [model-training/trials/TRIAL_v3.md](model-training/trials/TRIAL_v3.md).
 
 **Dataset.** A new snapshot of 5,098 raw images. Perceptual-hash deduplication reran with the Trial 2.1 settings unchanged, `phash` over 8 dihedral variants at distance 5, and removed 2,495 redundant files across 1,714 duplicate groups, leaving 2,603 unique. Redundancy at 48.9% is essentially identical to Trial 2.1's 48.2%, which is expected because the same Roboflow-augmented repositories dominate both pools. Split 70/15/15 stratified at seed 42: 1,819 train, 391 validation, 393 test.
 
-**Two data defects carried forward unfixed.** 49 cross-label duplicate pairs, all `anthracnose` against `healthy`, and 5 near-duplicate pairs straddling two splits. Both counts are unchanged from Trial 2.1, which means the hand inspection that TRIAL_2_1.md flagged as required before a v3 run did not happen. The cross-label pairs inflate test accuracy by an unmeasured amount and are the largest known threat to the headline figure.
+**Two data defects carried forward unfixed.** 49 cross-label duplicate pairs, all `anthracnose` against `healthy`, and 5 near-duplicate pairs straddling two splits. Both counts are unchanged from Trial 2.1, which means the hand inspection that TRIAL_v2_1.md flagged as required before a v3 run did not happen. The cross-label pairs inflate test accuracy by an unmeasured amount and are the largest known threat to the headline figure.
 
 **`mango_scab` shrank.** It fell from 291 unique images to 225, so its loss weight rose to 1.931 and it is now the smallest class by a wide margin. It is also the weakest, at 0.9014 F1 on 34 test images. Restoring that class is the highest-value dataset action before any Trial 4.
 
@@ -288,7 +288,7 @@ Retrained the classifier on a new image pool and shipped it. Full report in [mod
 
 **Provenance closed.** All four SHA-256 checksums in `run_record.json` match the files in `public/model/` exactly, which proves the shipped weights are the same artifact the thresholds were fitted on.
 
-**All nine notebooks were deleted from `notebooks/`.** The five Trial 1 through 2.1 files were committed and were restored with `git checkout -- notebooks/`; all five are back on disk and tracked. The four Trial 3 files were never committed, are matched by no `.gitignore` pattern, and are absent from the Recycle Bin and from every other directory in the user profile, so git cannot recover them. The Colab copies in Google Drive are the only surviving originals. Every number they held survives in `run_record.json`, in `figures/per_class_metrics.csv`, in `public/model/model_config.json`, and in TRIAL_3.md, so no measurement was lost, but the evidence files themselves were. Commit them the moment they are re-downloaded.
+**All nine notebooks were deleted from `notebooks/`.** The five Trial 1 through 2.1 files were committed and were restored with `git checkout -- notebooks/`; all five are back on disk and tracked. The four Trial 3 files were never committed, are matched by no `.gitignore` pattern, and are absent from the Recycle Bin and from every other directory in the user profile, so git cannot recover them. The Colab copies in Google Drive are the only surviving originals. Every number they held survives in `run_record.json`, in `figures/per_class_metrics.csv`, in `public/model/model_config.json`, and in TRIAL_v3.md, so no measurement was lost, but the evidence files themselves were. Commit them the moment they are re-downloaded.
 
 **v0.3.0 — Trial 3 model ships to the app**
 
@@ -450,7 +450,7 @@ The first two bullets were written earlier and sat between the August 28 and Aug
 
 ## Current Notebook Decision
 
-Keep every training notebook, and keep each trial's clean template separate from its completed run. All notebooks live in `notebooks/` at the repository root, moved there from the root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle. The filenames below are unchanged.
+Keep every training notebook, and keep each trial's clean template separate from its completed run. All notebooks live in `notebooks/`, grouped one folder per trial, moved there from the root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle. The trial folders were added on September 8, 2026. The filenames below are unchanged.
 
 **All ten were deleted from disk on August 26 or 27, 2026, and all ten are now committed.** The five Trial 1 through 2.1 files were tracked at the time and were restored with `git checkout -- notebooks/`. The five Trial 3 files had never been committed and git could not recover them; they were recovered from Google Drive and committed on August 30, 2026. See the notebook table in [MODEL_VERSIONING.md](MODEL_VERSIONING.md) for per-file status.
 
@@ -463,7 +463,7 @@ Keep every training notebook, and keep each trial's clean template separate from
 - `MangoLeaf_AI_Training_v3_Post_Training.ipynb` is the completed Trial 3 run and the current manuscript evidence file: all 34 code cells carry outputs, including the 97.46% figure, the 0.0686 test loss, the per-class report, the confusion matrix, and `T = 1.188751`. **Do not rerun any cell in it.** Rerunning overwrites the numbers the manuscript cites.
 - `MangoLeaf_AI_Threshold_Fitting_v3.ipynb` is the Trial 3 threshold-fitting template, **eight** code cells with outputs cleared. Copy this one to refit thresholds against a future resume bundle.
 - `MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb` is the completed Trial 3 threshold refit, nine code cells all carrying outputs. Its cell 9 is the record of why the margin is `0.40` rather than `0.43` or `0.00`. The ninth cell was added during the run, which is why the file has one more code cell than the template it came from.
-- For the next retraining cycle, copy `MangoLeaf_AI_Training_v3.ipynb` to a new versioned notebook named after the model version it produces. A new or expanded dataset is a major change; reserve `v3.1` for a retrain on the same images with a changed procedure. See `docs/MODEL_VERSIONING.md` for the full rule. Do not overwrite a completed training run without recording what changed.
+- For the next retraining cycle, copy `MangoLeaf_AI_Training_v3.ipynb` to a new versioned notebook named after the model version it produces and placed in the matching trial folder (`notebooks/v4/` for the next major dataset). A new or expanded dataset is a major change; reserve `v3.1` for a retrain on the same images with a changed procedure. See `docs/MODEL_VERSIONING.md` for the full rule. Do not overwrite a completed training run without recording what changed.
 - The template's final cell writes the resume bundle to Drive: the calibrated `.keras` file at roughly 35 MB, `y_prob_cal.npy`, `y_true.npy`, and `resume_info.json`. That cell is not optional. Without it the trained weights are lost when the Colab session ends, and thresholds fitted after a fresh retrain would not match the weights already shipped in the app.
 - The Trial 3 run also wrote `run_record.json` and `figures/per_class_metrics.csv` outside the notebook. Those two files are what made the lost notebooks survivable, because every quoted number could be recovered from them and checked against the shipped weights. Keep writing them on every future run.
 

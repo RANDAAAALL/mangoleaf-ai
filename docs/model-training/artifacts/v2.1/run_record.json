@@ -1,0 +1,212 @@
+{
+  "trial": "2.1",
+  "notebook": "MangoLeaf_AI_Training_v2.1.ipynb",
+  "datasetSource": "/content/drive/MyDrive/mango_dataset",
+  "splitSeed": 42,
+  "duplicateScan": {
+    "enabled": true,
+    "phashDistance": 5,
+    "imagesScanned": 5329,
+    "duplicateGroups": 1777,
+    "redundantRemoved": 2567,
+    "crossLabelPairs": 49,
+    "nearDuplicateLeakagePairs": 5,
+    "corruptFiles": 0
+  },
+  "splitCounts": {
+    "anthracnose": {
+      "train": 333,
+      "val": 72,
+      "test": 72
+    },
+    "bacterial_black_spot": {
+      "train": 207,
+      "val": 44,
+      "test": 45
+    },
+    "bacterial_canker": {
+      "train": 343,
+      "val": 74,
+      "test": 74
+    },
+    "healthy": {
+      "train": 499,
+      "val": 107,
+      "test": 108
+    },
+    "mango_scab": {
+      "train": 203,
+      "val": 44,
+      "test": 44
+    },
+    "sooty_mold": {
+      "train": 345,
+      "val": 74,
+      "test": 74
+    }
+  },
+  "classWeights": {
+    "anthracnose": 0.966,
+    "bacterial_black_spot": 1.5539,
+    "bacterial_canker": 0.9378,
+    "healthy": 0.6446,
+    "mango_scab": 1.5846,
+    "sooty_mold": 0.9324
+  },
+  "augmentation": {
+    "appliedAt": "tf.data pipeline, live, every epoch",
+    "rotationDegrees": 30,
+    "flip": "horizontal_and_vertical",
+    "zoom": 0.2,
+    "brightness": 0.2,
+    "shear": 0.2
+  },
+  "architecture": "MobileNetV3-Large + GAP + Dropout(0.2) + Dense(6) + Softmax",
+  "stages": [
+    {
+      "stage": 1,
+      "epochs": 5,
+      "lr": 0.001,
+      "baseFrozen": true
+    },
+    {
+      "stage": 2,
+      "epochs": 10,
+      "lr": 1e-05,
+      "baseFrozen": false,
+      "batchNormFrozen": true
+    }
+  ],
+  "metrics": {
+    "testAccuracy": 0.9712,
+    "testLoss": 0.0768,
+    "bestValLoss": 0.068,
+    "bestValEpoch": 15
+  },
+  "perClass": {
+    "anthracnose": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 72.0
+    },
+    "bacterial_black_spot": {
+      "precision": 0.9047619047619048,
+      "recall": 0.8444444444444444,
+      "f1-score": 0.8735632183908046,
+      "support": 45.0
+    },
+    "bacterial_canker": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 74.0
+    },
+    "healthy": {
+      "precision": 1.0,
+      "recall": 0.9907407407407407,
+      "f1-score": 0.9953488372093023,
+      "support": 108.0
+    },
+    "mango_scab": {
+      "precision": 0.8333333333333334,
+      "recall": 0.9090909090909091,
+      "f1-score": 0.8695652173913043,
+      "support": 44.0
+    },
+    "sooty_mold": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 74.0
+    },
+    "accuracy": 0.9712230215827338,
+    "macro avg": {
+      "precision": 0.9563492063492064,
+      "recall": 0.9573793490460157,
+      "f1-score": 0.9564128788319018,
+      "support": 417.0
+    },
+    "weighted avg": {
+      "precision": 0.9721365764531232,
+      "recall": 0.9712230215827338,
+      "f1-score": 0.9713882225693242,
+      "support": 417.0
+    }
+  },
+  "confusionMatrix": [
+    [
+      72,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      38,
+      0,
+      0,
+      7,
+      0
+    ],
+    [
+      0,
+      0,
+      74,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      107,
+      1,
+      0
+    ],
+    [
+      0,
+      4,
+      0,
+      0,
+      40,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      74
+    ]
+  ],
+  "calibration": {
+    "temperature": 0.754966,
+    "valNllBefore": 0.068039,
+    "valNllAfter": 0.064846
+  },
+  "rejection": null,
+  "export": {
+    "format": "TensorFlow.js Graph Model via tf_saved_model",
+    "quantizeFloat16": true,
+    "files": {
+      "group1-shard1of2.bin": {
+        "bytes": 4194304,
+        "sha256": "8029d7f7424eaeb1a643c4bf087733b3704df827c436fd855b3844df75994d96"
+      },
+      "group1-shard2of2.bin": {
+        "bytes": 1747080,
+        "sha256": "0cba42ff165268de5914bc0a22f0b50d300fe22748054b8a1c3ab395f886a908"
+      },
+      "model.json": {
+        "bytes": 225001,
+        "sha256": "0e059e2c2b9b03a885783ddb9cffda13bde8158dbdb4bb95ac98c118f3e034c2"
+      }
+    },
+    "totalBytes": 6166385
+  }
+}

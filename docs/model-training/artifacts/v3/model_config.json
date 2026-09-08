@@ -1,0 +1,30 @@
+{
+  "modelVersion": "model-v3.0.0",
+  "trial": "3",
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "inputSize": [
+    224,
+    224
+  ],
+  "pixelRange": "0-255 raw, MobileNetV3 rescales internally",
+  "temperature": 1.188751,
+  "temperatureFoldedIntoWeights": true,
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": 0.0,
+    "entropyThreshold": 0.4,
+    "tuneRetention": 0.9517,
+    "tuneRejection": 0.869,
+    "reportRejection": 0.7024,
+    "accuracyOnAccepted": 0.992,
+    "oodTuneCount": 84,
+    "oodReportCount": 84
+  }
+}

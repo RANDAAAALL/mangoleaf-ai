@@ -1,0 +1,226 @@
+{
+  "trial": "3",
+  "notebook": "MangoLeaf_AI_Training_v3.ipynb",
+  "datasetSource": "/content/drive/MyDrive/mango_dataset_v3",
+  "splitSeed": 42,
+  "duplicateScan": {
+    "enabled": true,
+    "phashDistance": 5,
+    "imagesScanned": 5098,
+    "duplicateGroups": 1714,
+    "redundantRemoved": 2495,
+    "crossLabelPairs": 49,
+    "nearDuplicateLeakagePairs": 5,
+    "corruptFiles": 0
+  },
+  "splitCounts": {
+    "anthracnose": {
+      "train": 339,
+      "val": 73,
+      "test": 73
+    },
+    "bacterial_black_spot": {
+      "train": 207,
+      "val": 44,
+      "test": 45
+    },
+    "bacterial_canker": {
+      "train": 343,
+      "val": 74,
+      "test": 74
+    },
+    "healthy": {
+      "train": 424,
+      "val": 91,
+      "test": 92
+    },
+    "mango_scab": {
+      "train": 157,
+      "val": 34,
+      "test": 34
+    },
+    "sooty_mold": {
+      "train": 349,
+      "val": 75,
+      "test": 75
+    }
+  },
+  "classWeights": {
+    "anthracnose": 0.8943,
+    "bacterial_black_spot": 1.4646,
+    "bacterial_canker": 0.8839,
+    "healthy": 0.715,
+    "mango_scab": 1.931,
+    "sooty_mold": 0.8687
+  },
+  "augmentation": {
+    "appliedAt": "tf.data pipeline, live, every epoch",
+    "rotationDegrees": 30,
+    "flip": "horizontal_and_vertical",
+    "zoom": 0.2,
+    "brightness": 0.2,
+    "shear": 0.2
+  },
+  "architecture": "MobileNetV3-Large + GAP + Dropout(0.2) + Dense(6) + Softmax",
+  "stages": [
+    {
+      "stage": 1,
+      "epochs": 5,
+      "lr": 0.001,
+      "baseFrozen": true
+    },
+    {
+      "stage": 2,
+      "epochs": 10,
+      "lr": 1e-05,
+      "baseFrozen": false,
+      "batchNormFrozen": true
+    }
+  ],
+  "metrics": {
+    "testAccuracy": 0.9746,
+    "testLoss": 0.0686,
+    "bestValLoss": 0.0982,
+    "bestValEpoch": 15
+  },
+  "perClass": {
+    "anthracnose": {
+      "precision": 0.9733333333333334,
+      "recall": 1.0,
+      "f1-score": 0.9864864864864865,
+      "support": 73.0
+    },
+    "bacterial_black_spot": {
+      "precision": 0.9523809523809523,
+      "recall": 0.8888888888888888,
+      "f1-score": 0.9195402298850575,
+      "support": 45.0
+    },
+    "bacterial_canker": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 74.0
+    },
+    "healthy": {
+      "precision": 0.989010989010989,
+      "recall": 0.9782608695652174,
+      "f1-score": 0.9836065573770492,
+      "support": 92.0
+    },
+    "mango_scab": {
+      "precision": 0.8648648648648649,
+      "recall": 0.9411764705882353,
+      "f1-score": 0.9014084507042254,
+      "support": 34.0
+    },
+    "sooty_mold": {
+      "precision": 1.0,
+      "recall": 0.9866666666666667,
+      "f1-score": 0.9932885906040269,
+      "support": 75.0
+    },
+    "accuracy": 0.9745547073791349,
+    "macro avg": {
+      "precision": 0.9632650232650232,
+      "recall": 0.9658321492848346,
+      "f1-score": 0.9640550525094742,
+      "support": 393.0
+    },
+    "weighted avg": {
+      "precision": 0.9753305154831874,
+      "recall": 0.9745547073791349,
+      "f1-score": 0.9746289026877234,
+      "support": 393.0
+    }
+  },
+  "confusionMatrix": [
+    [
+      73,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      40,
+      0,
+      1,
+      4,
+      0
+    ],
+    [
+      0,
+      0,
+      74,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      90,
+      1,
+      0
+    ],
+    [
+      0,
+      2,
+      0,
+      0,
+      32,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      74
+    ]
+  ],
+  "calibration": {
+    "temperature": 1.188751,
+    "valNllBefore": 0.098212,
+    "valNllAfter": 0.096231
+  },
+  "rejection": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": 0.0,
+    "entropyThreshold": 0.4,
+    "tuneRetention": 0.9517,
+    "tuneRejection": 0.869,
+    "reportRejection": 0.7024,
+    "accuracyOnAccepted": 0.992,
+    "oodTuneCount": 84,
+    "oodReportCount": 84
+  },
+  "export": {
+    "format": "TensorFlow.js Graph Model via tf_saved_model",
+    "quantizeFloat16": false,
+    "files": {
+      "group1-shard1of3.bin": {
+        "bytes": 4194304,
+        "sha256": "1d9eade4ac8ca3bf12a2ec75f7af714f6ef61af209d94dd40c47626484378567"
+      },
+      "group1-shard2of3.bin": {
+        "bytes": 4194304,
+        "sha256": "3301dcfeae24f8bf18a6304d80c0b59fce025c9730540a57268c4c250bbe4557"
+      },
+      "group1-shard3of3.bin": {
+        "bytes": 3493960,
+        "sha256": "42cbb4016660e1187664ff72028ded4611cb70aa6d27b165a1e6f395b863d1d0"
+      },
+      "model.json": {
+        "bytes": 211565,
+        "sha256": "5ca24ce28fa31cdf88cf6f98d1dc14a20f5a46be8ffdfeaeaae119f4d153bfe9"
+      }
+    },
+    "totalBytes": 12094133
+  }
+}

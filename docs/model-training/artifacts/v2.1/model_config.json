@@ -1,0 +1,25 @@
+{
+  "modelVersion": "model-v2.1.0",
+  "trial": "2.1",
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "inputSize": [
+    224,
+    224
+  ],
+  "pixelRange": "0-255 raw, MobileNetV3 rescales internally",
+  "temperature": 0.754966,
+  "temperatureFoldedIntoWeights": true,
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": null,
+    "entropyThreshold": null,
+    "note": "out-of-scope set not available; only the 70% confidence check is calibrated"
+  }
+}

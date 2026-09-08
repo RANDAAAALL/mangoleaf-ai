@@ -2,7 +2,7 @@
 
 This document records the dataset deduplication, class-weighted two-stage fine-tuning, temperature calibration, and Float16 export for **Trial 2.1** of the on-device image classification model, completed on **August 22, 2026**.
 
-Notebook provenance: the clean template is `MangoLeaf_AI_Training_v2.1.ipynb` and the completed run with all outputs preserved is `MangoLeaf_AI_Training_v2_1_Post_Training.ipynb`. Trial 2 remains recorded in [TRIAL_2.md](TRIAL_2.md); this trial supersedes it as the shipping model.
+Notebook provenance: the clean template is `notebooks/v2.1/MangoLeaf_AI_Training_v2.1.ipynb` and the completed run with all outputs preserved is `notebooks/v2.1/MangoLeaf_AI_Training_v2_1_Post_Training.ipynb`. Trial 2 remains recorded in [TRIAL_v2.md](TRIAL_v2.md); this trial supersedes it as the shipping model.
 
 Trial 2.1 reports a **lower** test accuracy than Trial 2 (97.12% against 98.25%) and that is the point of the trial. Trial 2's test set contained near-duplicate copies of its own training images, so part of its score measured memorization rather than generalization. Removing the duplicates removed that inflation.
 
@@ -258,7 +258,7 @@ Class order in `model_config.json` was checked against `CLASSES` in `src/lib/con
 
 **August 24, 2026. No retraining occurred.** The margin and entropy thresholds were fitted against the resume bundle saved by the Trial 2.1 run, so they match the weights already in `public/model/` exactly. The weight shards are byte-identical to the August 23 export; only `model_config.json`, `src/lib/constants.ts`, and `src/sw.ts` changed. This is an addendum rather than a new trial file precisely because no training happened.
 
-Notebook: `MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb`, cells 4 through 9.
+Notebook: `notebooks/v2.1/MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb`, cells 4 through 9.
 
 ### Why the thresholds are needed
 

@@ -4,33 +4,33 @@ This file records how to version the application, model, and training notebooks 
 
 ## Training Notebooks
 
-All notebooks live in `notebooks/` at the repository root. Keep every one of them.
+All notebooks live under `notebooks/`, grouped one folder per trial. Keep every one of them.
 
 | File | Role | Recommendation |
 | --- | --- | --- |
-| `notebooks/MangoLeaf_AI_Training_v1.ipynb` | Trial 1 baseline | Keep as historical evidence. Do not use it as the next active training file. |
-| `notebooks/MangoLeaf_AI_Training_v2.ipynb` | Trial 2 | Keep as historical evidence. Superseded as the template by v2.1. |
-| `notebooks/MangoLeaf_AI_Training_v2.1.ipynb` | Trial 2.1 clean template | Keep as historical evidence. Superseded as the template by v3. Outputs are cleared. |
-| `notebooks/MangoLeaf_AI_Training_v2_1_Post_Training.ipynb` | Trial 2.1 completed run | Keep as historical evidence. All cell outputs preserved, including the metrics quoted in the manuscript. Do not rerun. |
-| `notebooks/MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb` | Margin and entropy fitting for `model-v2.1.1` | Keep as historical evidence. Fitted against the Trial 2.1 resume bundle with no retraining. |
-| `notebooks/MangoLeaf_AI_Training_v3.ipynb` | **Trial 3 and current retraining template** | Recovered and committed August 30, 2026. 34 code cells; outputs cleared. Use this as the basis for the next retraining cycle, but copy it first. |
-| `notebooks/MangoLeaf_AI_Training_v3_1st_to_8th_Cells_Results.ipynb` | Trial 3 partial run, cells 1 to 8 only | Recovered and committed August 30, 2026. 34 code cells of which the first 8 carry outputs: the data-preparation half, covering the deduplication counts, class counts, and the 70/15/15 split that produced the 393-image test set. Superseded as evidence by the completed run below, which reran the same cells. |
-| `notebooks/MangoLeaf_AI_Training_v3_Post_Training.ipynb` | Trial 3 completed run, manuscript evidence | Recovered and committed August 30, 2026. All 34 code cells carry outputs, including 97.46%, 0.0686 test loss, and `T = 1.188751`. Do not rerun: it holds the figures and tables the manuscript cites. |
-| `notebooks/MangoLeaf_AI_Threshold_Fitting_v3.ipynb` | Margin and entropy fitting for `model-v3.0.0` | Recovered and committed August 30, 2026. Eight code cells; outputs cleared. |
-| `notebooks/MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb` | Trial 3 threshold fitting, completed run | Recovered and committed August 30, 2026. Nine code cells, all with outputs. Cell 9 is the record of why the margin is `0.40`. |
+| `notebooks/v1/MangoLeaf_AI_Training_v1.ipynb` | Trial 1 baseline | Keep as historical evidence. Do not use it as the next active training file. |
+| `notebooks/v2/MangoLeaf_AI_Training_v2.ipynb` | Trial 2 | Keep as historical evidence. Superseded as the template by v2.1. |
+| `notebooks/v2.1/MangoLeaf_AI_Training_v2.1.ipynb` | Trial 2.1 clean template | Keep as historical evidence. Superseded as the template by v3. Outputs are cleared. |
+| `notebooks/v2.1/MangoLeaf_AI_Training_v2_1_Post_Training.ipynb` | Trial 2.1 completed run | Keep as historical evidence. All cell outputs preserved, including the metrics quoted in the manuscript. Do not rerun. |
+| `notebooks/v2.1/MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb` | Margin and entropy fitting for `model-v2.1.1` | Keep as historical evidence. Fitted against the Trial 2.1 resume bundle with no retraining. |
+| `notebooks/v3/MangoLeaf_AI_Training_v3.ipynb` | **Trial 3 and current retraining template** | Recovered and committed August 30, 2026. 34 code cells; outputs cleared. Use this as the basis for the next retraining cycle, but copy it first. |
+| `notebooks/v3/MangoLeaf_AI_Training_v3_1st_to_8th_Cells_Results.ipynb` | Trial 3 partial run, cells 1 to 8 only | Recovered and committed August 30, 2026. 34 code cells of which the first 8 carry outputs: the data-preparation half, covering the deduplication counts, class counts, and the 70/15/15 split that produced the 393-image test set. Superseded as evidence by the completed run below, which reran the same cells. |
+| `notebooks/v3/MangoLeaf_AI_Training_v3_Post_Training.ipynb` | Trial 3 completed run, manuscript evidence | Recovered and committed August 30, 2026. All 34 code cells carry outputs, including 97.46%, 0.0686 test loss, and `T = 1.188751`. Do not rerun: it holds the figures and tables the manuscript cites. |
+| `notebooks/v3/MangoLeaf_AI_Threshold_Fitting_v3.ipynb` | Margin and entropy fitting for `model-v3.0.0` | Recovered and committed August 30, 2026. Eight code cells; outputs cleared. |
+| `notebooks/v3/MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb` | Trial 3 threshold fitting, completed run | Recovered and committed August 30, 2026. Nine code cells, all with outputs. Cell 9 is the record of why the margin is `0.40`. |
 
-**All ten notebooks were deleted from `notebooks/` at some point on August 26 or 27, 2026, and all ten are now committed.** The five Trial 1 through 2.1 files were committed at the time and were restored with `git checkout -- notebooks/`. The five Trial 3 files had never been committed, were matched by no `.gitignore` pattern, and were absent from the Recycle Bin and from every other directory in the user profile, so git could not recover them; the Colab copies in Google Drive were the only surviving originals. They were recovered from Drive and committed on August 30, 2026, which closes the only outstanding item in this project that carried a real risk of permanent loss. The numbers they contain were already recorded in [TRIAL_3.md](model-training/TRIAL_3.md) and in `public/model/model_config.json`, so no measurement had been lost even while the files were gone, but the evidence files themselves existed in one place only for three days.
+**All ten notebooks were deleted from `notebooks/` at some point on August 26 or 27, 2026, and all ten are now committed.** The five Trial 1 through 2.1 files were committed at the time and were restored with `git checkout -- notebooks/`. The five Trial 3 files had never been committed, were matched by no `.gitignore` pattern, and were absent from the Recycle Bin and from every other directory in the user profile, so git could not recover them; the Colab copies in Google Drive were the only surviving originals. They were recovered from Drive and committed on August 30, 2026, which closes the only outstanding item in this project that carried a real risk of permanent loss. The numbers they contain were already recorded in [TRIAL_v3.md](model-training/trials/TRIAL_v3.md) and in `public/model/model_config.json`, so no measurement had been lost even while the files were gone, but the evidence files themselves existed in one place only for three days.
 
 **The lesson is the one this table now enforces: commit a notebook the day it runs, not the day the trial is written up.** Every file in the paragraph above that survived was survivable because it was tracked, and every file that nearly did not was untracked. A completed training run is evidence, and evidence that exists in one Google Drive is not backed up. `MangoLeaf_AI_Training_v3_1st_to_8th_Cells_Results.ipynb` had additionally never appeared in any document, so it could have been lost without anyone noticing it was missing.
 
-For the next dataset update, copy `notebooks/MangoLeaf_AI_Training_v3.ipynb` into a new notebook in the same folder instead of overwriting a completed run. Name the notebook after the model version it produces, so a notebook filename and its exported model always agree:
+For the next dataset update, copy `notebooks/v3/MangoLeaf_AI_Training_v3.ipynb` into a new trial folder instead of overwriting a completed run. Name the notebook after the model version it produces, so a notebook filename and its exported model always agree:
 
 ```text
-notebooks/MangoLeaf_AI_Training_v3.1.ipynb   same images, changed training procedure only
-notebooks/MangoLeaf_AI_Training_v4.ipynb     new or expanded dataset, new classes, or a new architecture
+notebooks/v3.1/MangoLeaf_AI_Training_v3.1.ipynb   same images, changed training procedure only
+notebooks/v4/MangoLeaf_AI_Training_v4.ipynb       new or expanded dataset, new classes, or a new architecture
 ```
 
-A new dataset is a major change, so the next retraining cycle after Trial 3 produces `notebooks/MangoLeaf_AI_Training_v4.ipynb`, `model-v4.0.0`, and `docs/model-training/TRIAL_4.md`. Trial 3 itself followed this rule: a new image pool made it `model-v3.0.0` with [TRIAL_3.md](model-training/TRIAL_3.md) as its report. The next section explains why.
+A new dataset is a major change, so the next retraining cycle after Trial 3 produces `notebooks/v4/MangoLeaf_AI_Training_v4.ipynb`, `model-v4.0.0`, and `docs/model-training/trials/TRIAL_v4.md`. Trial 3 itself followed this rule: a new image pool made it `model-v3.0.0` with [TRIAL_v3.md](model-training/trials/TRIAL_v3.md) as its report. The next section explains why.
 
 Each completed training notebook should record:
 

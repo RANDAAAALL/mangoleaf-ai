@@ -2,9 +2,9 @@
 
 This document records the step-by-step development, dataset pre-balancing, two-stage fine-tuning, and performance evaluation for **Trial 2** of the on-device image classification model completed on **July 25, 2026**.
 
-Notebook provenance: this report corresponds to the Trial 2 workflow recorded in `MangoLeaf_AI_Training_v2.ipynb`. That notebook is historical evidence only. The retraining template is now `MangoLeaf_AI_Training_v2.1.ipynb`; copy it to a new versioned notebook before the next dataset update.
+Notebook provenance: this report corresponds to the Trial 2 workflow recorded in `notebooks/v2/MangoLeaf_AI_Training_v2.ipynb`. That notebook is historical evidence only. The retraining template is now `notebooks/v2.1/MangoLeaf_AI_Training_v2.1.ipynb`; copy it to a new versioned notebook before the next dataset update.
 
-> **Superseded by [TRIAL_2_1.md](TRIAL_2_1.md), August 22, 2026.** Trial 2.1 found that 4,308 of these 5,329 images have a pixel-level near-identical twin elsewhere in the pool, because two of the source repositories had already been augmented by Roboflow. A random file-level split therefore placed copies of the same physical leaf in both the training and the test set, so the **98.25%** below is partly a measure of memorization. On a deduplicated pool of 2,762 unique images the same architecture scores **97.12%**. Trial 2's numbers remain valid as a record of what was run; they should not be quoted as the model's generalization accuracy. The active retraining template is now `MangoLeaf_AI_Training_v2.1.ipynb`.
+> **Superseded by [TRIAL_v2_1.md](TRIAL_v2_1.md), August 22, 2026.** Trial 2.1 found that 4,308 of these 5,329 images have a pixel-level near-identical twin elsewhere in the pool, because two of the source repositories had already been augmented by Roboflow. A random file-level split therefore placed copies of the same physical leaf in both the training and the test set, so the **98.25%** below is partly a measure of memorization. On a deduplicated pool of 2,762 unique images the same architecture scores **97.12%**. Trial 2's numbers remain valid as a record of what was run; they should not be quoted as the model's generalization accuracy. The active retraining template is now `MangoLeaf_AI_Training_v2.1.ipynb`.
 
 ---
 
@@ -63,7 +63,7 @@ graph TD
 
 * **No Real-Time Augmentation:** Trial 2 fed `image_dataset_from_directory` straight into `model.fit` with no augmentation layer and no `.map()` stage, so **all** augmentation was the on-disk pass above. Across 15 epochs the model saw 6,664 x 15 = **99,960 image presentations**, every one of them read from a file rather than transformed in RAM.
 
-> **Amendment, August 23, 2026.** Two claims in this phase were corrected against the `MangoLeaf_AI_Training_v2.ipynb` source while preparing [TRIAL_2_1.md](TRIAL_2_1.md). The pre-augmentation was previously described as covering `bacterial_black_spot` and `mango_scab` only; the notebook's `fruit_targets` list also contains `healthy`, which was the **largest** class at 1,047 images, so the step did not balance the classes the way the original text implied. The phase was also previously described as applying real-time in-RAM transformations totalling 46,500 augmented exposures; the notebook contains no real-time augmentation, and 46,500 is not reproducible from any combination of the split counts and epoch count. The metrics in Phase 3 are unaffected, since only the description was wrong, not the run.
+> **Amendment, August 23, 2026.** Two claims in this phase were corrected against the `MangoLeaf_AI_Training_v2.ipynb` source while preparing [TRIAL_v2_1.md](TRIAL_v2_1.md). The pre-augmentation was previously described as covering `bacterial_black_spot` and `mango_scab` only; the notebook's `fruit_targets` list also contains `healthy`, which was the **largest** class at 1,047 images, so the step did not balance the classes the way the original text implied. The phase was also previously described as applying real-time in-RAM transformations totalling 46,500 augmented exposures; the notebook contains no real-time augmentation, and 46,500 is not reproducible from any combination of the split counts and epoch count. The metrics in Phase 3 are unaffected, since only the description was wrong, not the run.
 
 ---
 
@@ -118,4 +118,4 @@ The compiled web AI engine is **11.51 MB total**, split into 3 binary weight sha
 * **Code-Splitting (`src/app/page.tsx`):** `ScanDetailsModal` and `SqlSchemaCard` are dynamically imported via `next/dynamic`, reducing initial JavaScript payload.
 * **Font Optimization (`src/app/layout.tsx`):** `display: "swap"` prevents Flash of Invisible Text on slow networks.
 * **Production Build Verification:** `bun run typecheck`, `bun run lint`, and `bun run build` completed with **0 errors and 0 warnings**.
-* **Full optimization specifications:** See [PERFORMANCE.md](../PERFORMANCE.md) for the complete optimization matrix.
+* **Full optimization specifications:** See [PERFORMANCE.md](../../PERFORMANCE.md) for the complete optimization matrix.
