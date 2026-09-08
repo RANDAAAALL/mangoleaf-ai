@@ -73,7 +73,7 @@ mangoleaf-ai/
 |       |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb         # Trial 3 threshold template, 8 cells, outputs cleared
 |       `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb # Trial 3 fitting run; cell 9 settles the margin at 0.40
 |-- video/                           # Promotional video, a separate HyperFrames project
-|   |-- assets/                      # Render inputs plus the README poster frame
+|   |-- assets/                      # Render inputs plus the thumbnail still
 |   |-- index.html                   # Root composition and timeline
 |   |-- index.motion.json            # Motion and keyframe definitions
 |   |-- hyperframes.json             # Composition paths and media settings
