@@ -80,7 +80,7 @@ mangoleaf-ai/
 |   |-- meta.json                    # Composition id and name
 |   |-- package.json                 # Pinned hyperframes CLI scripts
 |   |-- AGENTS.md                    # HyperFrames instructions for coding agents
-|   `-- mangoleaf_ad_video_modernized.mp4 # Rendered output
+|   `-- MangoLeafAI-walkthrough.mp4    # Rendered output
 |-- .env.example                    # Public environment-variable template
 |-- AGENTS.md                       # Repository instructions for coding agents
 |-- README.md                       # Project overview and quick start
