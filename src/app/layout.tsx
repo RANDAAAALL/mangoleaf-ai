@@ -45,7 +45,8 @@ export const metadata: Metadata = {
   },
 };
 
-// Dedicated viewport export for optimal PWA mobile rendering (Next.js 14+)
+// Separate from metadata since Next.js 14. maximumScale is 5, not 1, so pinch
+// zoom still works: a farmer inspecting a lesion needs it.
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,

@@ -8,7 +8,7 @@ Trial 2.1 reports a **lower** test accuracy than Trial 2 (97.12% against 98.25%)
 
 ---
 
-## 📋 Development Timeline & Architecture Overview
+## Development Timeline & Architecture Overview
 
 ```mermaid
 graph TD
@@ -23,7 +23,7 @@ graph TD
 
 ---
 
-## 🔍 Step-by-Step Trial 2.1 Chronicles
+## Step-by-Step Trial 2.1 Chronicles
 
 ### Phase 1: Perceptual-Hash Deduplication
 
@@ -33,7 +33,7 @@ Trial 2's dataset was pooled from local field photos and two open repositories, 
 * **Grouping:** pairwise Hamming distances, then greedy selection inside each source folder so every survivor is further than the threshold from every other survivor in that folder.
 * **Threshold:** `PHASH_DISTANCE = 5`, chosen from the nearest-neighbour distance table below.
 
-#### 📊 Nearest-Neighbour Distance Distribution (5,329 images)
+#### Nearest-Neighbour Distance Distribution (5,329 images)
 
 | Distance | Images | Cumulative | Interpretation |
 | :---: | :---: | :---: | :--- |
@@ -48,7 +48,7 @@ Trial 2's dataset was pooled from local field photos and two open repositories, 
 
 4,308 of 5,329 images have a distance-0 twin. That single number is why Trial 2's test score was inflated.
 
-#### 📊 Removal by Source Folder
+#### Removal by Source Folder
 
 | Source Folder | Raw Images | Redundant | Unique Kept |
 | :--- | :---: | :---: | :---: |
@@ -114,7 +114,7 @@ The BatchNormalization freeze is the fix for Trial 2's fine-tuning collapse. In 
 * **Best validation loss:** **0.0680**, at the final stage-2 epoch
 * **95% Wilson score interval:** roughly **95.0% to 98.3%** on 417 images
 
-#### 📋 Trial 2.1 Classification Report & F1-Scores
+#### Trial 2.1 Classification Report & F1-Scores
 
 | Target Disease Class | Precision | Recall | F1-Score | Test Samples |
 | :--- | :---: | :---: | :---: | :---: |
@@ -168,7 +168,7 @@ A single scalar temperature `T` was fitted on the validation logits by minimizin
 
 ---
 
-## 📁 Final Deliverables & File Sizes
+## Final Deliverables & File Sizes
 
 Exported as a TensorFlow.js **graph model** with **Float16 quantization**. The Keras 3 `InputLayer` serialization defect blocks the direct Keras path, so the route is `model.export()` to SavedModel, then `tensorflowjs_converter --input_format=tf_saved_model`, loaded in the app with `tf.loadGraphModel`.
 
@@ -229,7 +229,7 @@ The probe also found 1 weight of 3,002,118 above the float16 maximum of 65,504. 
 
 ---
 
-## 🛠️ PWA Integration Notes
+## PWA Integration Notes
 
 All three changes below are **applied** in the working tree as of August 23, 2026, verified by `typecheck`, `lint`, and `build` all exiting 0, and by inspecting the generated `public/sw.js`.
 
@@ -243,7 +243,7 @@ Class order in `model_config.json` was checked against `CLASSES` in `src/lib/con
 
 ---
 
-## ⚠️ Open Items Before the v3 Run
+## Open Items Before the v3 Run
 
 1. ~~**Fit the margin and entropy thresholds.**~~ **Done on August 24, 2026** without retraining. Margin `0.55`, entropy `0.30`. See the addendum below.
 2. ~~**Leave a safety band of at least 0.05.**~~ **Superseded.** That figure was the worst-case top-1 *confidence* shift, which is the wrong quantity for these two signals. The shift was measured per signal instead: `0.010638` for entropy and `0.053285` for margin, scaled by 1.489 to `0.015841` and `0.079346` to account for `WEBGL_FORCE_F16_TEXTURES` activation quantization.
@@ -254,7 +254,7 @@ Class order in `model_config.json` was checked against `CLASSES` in `src/lib/con
 
 ---
 
-# 📎 Addendum — Model v2.1.1: Out-of-Scope Rejection Thresholds
+# Addendum — Model v2.1.1: Out-of-Scope Rejection Thresholds
 
 **August 24, 2026. No retraining occurred.** The margin and entropy thresholds were fitted against the resume bundle saved by the Trial 2.1 run, so they match the weights already in `public/model/` exactly. The weight shards are byte-identical to the August 23 export; only `model_config.json`, `src/lib/constants.ts`, and `src/sw.ts` changed. This is an addendum rather than a new trial file precisely because no training happened.
 

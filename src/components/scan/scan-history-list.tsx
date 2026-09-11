@@ -17,7 +17,9 @@ interface ScanHistoryListProps {
 
 const ITEMS_PER_PAGE = 6;
 
-// Helper to generate truncated pagination range (e.g., [1, 2, 3, '...', 10])
+// Builds the page numbers to show. Up to 7 pages all fit, so they are listed in
+// full. Past that, the first and last page always stay visible and the run in
+// between collapses to "...", e.g. [1, '...', 5, 6, 7, '...', 20].
 function getPaginationRange(
   current: number,
   total: number,
@@ -53,7 +55,8 @@ export const ScanHistoryList = memo(function ScanHistoryList({
   const t = translations[language];
   const hasUserScans = scans.length > 0;
 
-  // Filter & search logic
+  // Search and filter apply on the History tab only. On Home the list is short
+  // enough that neither control is shown.
   const filteredScans = useMemo(() => {
     if (!isFullHistoryPage) return scans;
     return scans.filter((scan) => {
@@ -67,7 +70,8 @@ export const ScanHistoryList = memo(function ScanHistoryList({
     });
   }, [scans, searchQuery, filterCategory, isFullHistoryPage]);
 
-  // Pagination calculation
+  // Floor of 1: an empty result set would otherwise make totalPages 0, and
+  // getPaginationRange would build an empty range from it.
   const totalPages = Math.ceil(filteredScans.length / ITEMS_PER_PAGE) || 1;
   const paginationRange = useMemo(
     () => getPaginationRange(currentPage, totalPages),
@@ -82,7 +86,8 @@ export const ScanHistoryList = memo(function ScanHistoryList({
     return filteredScans.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredScans, currentPage, isFullHistoryPage]);
 
-  // Reset to page 1 when search or filter changes
+  // Back to page 1 on every search or filter change, otherwise a user sitting on
+  // page 4 of the old results would land on a page the new results do not have.
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);

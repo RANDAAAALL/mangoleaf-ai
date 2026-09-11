@@ -7,9 +7,9 @@ export interface DiagnosisResult {
 }
 
 /**
- * The 70% minimum confidence rule is a fixed specification, not a tuned value,
- * so it lives in code rather than in model_config.json. If a future config file
- * disagrees with it, the code value wins and a warning is logged.
+ * The 70% minimum confidence rule is fixed by specification, not tuned, so it
+ * lives in code instead of model_config.json. If a config file disagrees, this
+ * value wins and a warning is logged.
  */
 const CONFIDENCE_THRESHOLD = 0.70;
 
@@ -21,24 +21,24 @@ interface ModelConfigThresholds {
   entropyThreshold: number | null;
 }
 
-// Module-level singleton cache: ensures the model is loaded & warmed only ONCE
-// across all component mounts, remounts, and network reconnection events.
+// Loaded and warmed once, then reused across every mount, remount, and
+// reconnection.
 let cachedModel: tf.GraphModel | null = null;
 let loadingPromise: Promise<tf.GraphModel> | null = null;
 let sharedCanvas: HTMLCanvasElement | null = null;
 
-// Both null until model_config.json is read, which means only the confidence
-// check runs. That is the correct default: the notebook exports null for these
-// two whenever no out-of-scope image set was available to fit them against.
+// Null until model_config.json is read, so only the confidence check runs. That
+// is the intended default: the notebook exports null for both whenever it had no
+// out-of-scope image set to fit them against.
 let thresholds: ModelConfigThresholds = {
   marginThreshold: null,
   entropyThreshold: null,
 };
 
 /**
- * Reads the rejection thresholds exported alongside the model weights.
- * Never throws. A missing, malformed, or offline config leaves both optional
- * thresholds null, which disables those two checks and keeps the 70% rule.
+ * Reads the rejection thresholds shipped with the model weights. Never throws:
+ * a missing, malformed, or offline config leaves both thresholds null, which
+ * turns those two checks off and keeps the 70% rule.
  */
 async function loadModelConfig(): Promise<void> {
   try {
@@ -74,18 +74,17 @@ async function loadModelConfig(): Promise<void> {
 }
 
 /**
- * Loads the compiled TensorFlow.js Graph Model from the public directory
- * and runs a dummy prediction warmup to compile WebGL shaders in the background.
- * Uses a module-level singleton cache so the model is only loaded once.
+ * Loads the TensorFlow.js Graph Model from the public directory and runs one
+ * dummy prediction to compile the WebGL shaders up front. Cached at module level
+ * so the load happens once.
  */
 export async function loadMangoModel(): Promise<tf.GraphModel> {
-  // Return cached model instantly if already loaded
   if (cachedModel) {
     console.log("---Model already cached — returning instantly.---");
     return cachedModel;
   }
 
-  // Prevent duplicate concurrent loads (e.g. React StrictMode double-mount)
+  // Stops a second load starting mid-flight, e.g. a React StrictMode double-mount.
   if (loadingPromise) {
     console.log("---Model load already in progress — awaiting...---");
     return loadingPromise;
@@ -94,31 +93,28 @@ export async function loadMangoModel(): Promise<tf.GraphModel> {
   loadingPromise = (async () => {
     console.log("---Initializing TensorFlow.js engine...---");
 
-    // OPTIMIZATION: Force GPU to use 16-bit float textures.
-    // This halves GPU texture memory on phones. Trial 3 ships float32 weight
-    // shards, while this WebGL setting stores the deployed weights in half-float
-    // textures on supported devices. The model artifact is never altered here.
-    // NOTE: If you ever encounter rendering/GPU issues on very old devices, you can remove or comment out this line.
+    // Halves GPU texture memory on phones. Trial 3 ships float32 weight shards;
+    // this setting only changes how WebGL stores them on device, and leaves the
+    // model artifact untouched. Remove it if a very old GPU renders incorrectly.
     tf.env().set("WEBGL_FORCE_F16_TEXTURES", true);
 
     await tf.ready();
 
-    // Fetch the weights and the threshold config concurrently rather than in
-    // sequence. The config is only 567 bytes, but on a rural 3G first load a
-    // sequential request costs an extra round trip before the GPU warmup can
-    // start. Nothing reads the thresholds until the first prediction, so there
-    // is no ordering requirement between the two.
+    // Fetched together, not one after the other. The config is only 567 bytes,
+    // but on rural 3G a sequential request adds a round trip before the GPU
+    // warmup can start. Nothing reads the thresholds until the first prediction,
+    // so the order does not matter.
     const modelPath = "/model/model.json";
     const [model] = await Promise.all([
       tf.loadGraphModel(modelPath),
-      // Deliberately non-fatal: if this file is missing or unreachable the
-      // classifier keeps the hardcoded confidence check and skips the optional
-      // margin and entropy checks, so a config problem can never block a scan.
+      // Non-fatal on purpose: if this file is missing the classifier keeps the
+      // confidence check and skips margin and entropy, so a config problem can
+      // never block a scan.
       loadModelConfig(),
     ]);
     console.log("---Graph model JSON loaded from assets.---");
 
-    // Run a dummy warmup to force compile WebGL shaders on device startup
+    // Compile the shaders now, so the first real scan is not the one that pays.
     console.log("---Warming up GPU WebGL shaders...---");
     tf.tidy(() => {
       const dummyTensor = tf.zeros([1, 224, 224, 3]);
@@ -134,10 +130,10 @@ export async function loadMangoModel(): Promise<tf.GraphModel> {
 }
 
 /**
- * Downscales a full-resolution camera photo to 224x224 using an offscreen Canvas.
- * This avoids creating a massive GPU tensor from a 12-108 megapixel raw camera image
- * just to immediately discard 99.97% of its pixels during tf.image.resizeBilinear.
- * Canvas resizing is a lightweight CPU operation handled natively by the browser.
+ * Shrinks a full-resolution camera photo to 224x224 on an offscreen canvas.
+ * Doing it here avoids building a huge GPU tensor from a 12-108 megapixel photo
+ * only to throw away 99.97% of its pixels in tf.image.resizeBilinear. The canvas
+ * path is plain CPU work the browser already does natively.
  */
 function downscaleToCanvas(
   imgElement: HTMLImageElement,
@@ -149,49 +145,47 @@ function downscaleToCanvas(
   sharedCanvas.width = targetSize;
   sharedCanvas.height = targetSize;
   const ctx = sharedCanvas.getContext("2d", { alpha: false })!;
-  // drawImage handles bilinear scaling natively in the browser engine
+  // drawImage does the bilinear scaling inside the browser engine
   ctx.drawImage(imgElement, 0, 0, targetSize, targetSize);
   return sharedCanvas;
 }
 
 /**
- * Preprocesses an image element and performs on-device WebGL inference
- * using the provided Graph Model. Returns UNCERTAIN_LABEL when the
- * prediction fails the 70% confidence rule, or the optional margin and entropy
- * rules when model_config.json supplies them.
+ * Preprocesses an image and runs on-device WebGL inference with the given Graph
+ * Model. Returns UNCERTAIN_LABEL when the prediction fails the 70% confidence
+ * rule, or the margin and entropy rules when model_config.json supplies them.
  *
- * Optimization notes:
- * - Camera photos are pre-downscaled to 224x224 via Canvas before tensor conversion
- *   to avoid allocating multi-megabyte GPU tensors from raw camera shots.
- * - Uses async data() instead of blocking dataSync() to keep the UI thread responsive.
+ * Two speed decisions worth knowing:
+ * - Photos are downscaled to 224x224 on a canvas before becoming a tensor, so no
+ *   multi-megabyte GPU allocation is made from a raw camera shot.
+ * - Results are read with async data(), not blocking dataSync(), so the UI thread
+ *   keeps running.
  */
 export async function predictMangoDisease(
   model: tf.GraphModel,
   imgElement: HTMLImageElement
 ): Promise<DiagnosisResult> {
-  // 1. Downscale the raw camera photo to 224x224 on a lightweight CPU canvas
-  //    A 12MP photo (4000x3000) = 36 million floats vs 224x224 = 150K floats (240x smaller)
+  // 1. Downscale on the CPU canvas first. A 12MP photo (4000x3000) is 36 million
+  //    floats; 224x224 is 150K, roughly 240x smaller.
   const smallCanvas = downscaleToCanvas(imgElement, 224);
 
-  // 2. Execute tensor calculations wrapped in tf.tidy to purge temporary GPU memory
+  // 2. tf.tidy frees every temporary GPU tensor made inside it
   const outputTensor = tf.tidy(() => {
-    // Convert the pre-scaled 224x224 canvas directly into a compact 3D tensor
+    // The canvas is already 224x224, so this is a small 3D tensor
     const tensor = tf.browser.fromPixels(smallCanvas);
 
-    // Add batch dimension [1, 224, 224, 3] and cast to float
-    // Note: MobileNetV3's internal layer automatically handles pixel normalization
+    // Batch dimension gives [1, 224, 224, 3]. No manual normalization: the
+    // MobileNetV3 graph rescales pixels in its own first layer.
     const batched = tensor.cast("float32").expandDims(0);
 
-    // Run prediction
     return model.predict(batched) as tf.Tensor;
   });
 
-  // 3. Use async data() instead of blocking dataSync() to keep UI animations smooth
+  // 3. async data() keeps animations smooth; dataSync() would block the thread
   const results = await outputTensor.data();
   outputTensor.dispose();
 
-  // Find the top two class probabilities in a single pass. The runner-up is
-  // needed for the margin check below.
+  // Top two probabilities in one pass. The runner-up feeds the margin check.
   let maxIndex = 0;
   let maxProb = -1;
   let secondProb = -1;
@@ -208,9 +202,9 @@ export async function predictMangoDisease(
 
   const margin = maxProb - secondProb;
 
-  // Normalized Shannon entropy: 0 when one class takes everything, 1 when all six
-  // are equally likely. Dividing by log(number of classes) is what makes the value
-  // comparable to the threshold the training notebook fits.
+  // Normalized Shannon entropy: 0 when one class takes everything, 1 when all
+  // six are equally likely. Dividing by log(number of classes) is what makes it
+  // comparable to the threshold fitted in the training notebook.
   let entropy = 0;
   for (let i = 0; i < results.length; i++) {
     const p = results[i];
@@ -227,7 +221,7 @@ export async function predictMangoDisease(
     thresholds.entropyThreshold === null ||
     normalizedEntropy <= thresholds.entropyThreshold;
 
-  // Round for display only, after every check has already run on the raw value.
+  // Round for display only, once every check has run on the raw value.
   const confidence = Math.round(maxProb * 100) / 100;
 
   const accepted = meetsConfidence && meetsMargin && meetsEntropy;
@@ -247,11 +241,11 @@ export async function predictMangoDisease(
 }
 
 /**
- * Efficiently compresses a high-resolution camera photo to a max dimension of 1000px
- * using modern WebP format (with automatic JPEG fallback for older devices).
- * 
- * WebP at 75% quality ≈ 70–90 KB (vs JPEG 80% ≈ 150–250 KB) — halves 3G upload time.
- * Falls back to JPEG 80% if the browser doesn't support WebP canvas export.
+ * Compresses a camera photo to a maximum of 1000px on its longest side, as WebP
+ * where the browser supports it and JPEG where it does not.
+ *
+ * WebP at 75% quality is about 70-90 KB against 150-250 KB for JPEG at 80%,
+ * which halves the upload time on 3G.
  */
 export async function compressImageForStorage(
   imgElement: HTMLImageElement,
@@ -277,7 +271,7 @@ export async function compressImageForStorage(
   const ctx = canvas.getContext("2d", { alpha: false })!;
   ctx.drawImage(imgElement, 0, 0, width, height);
 
-  // Try WebP first (50% smaller than JPEG on 3G networks)
+  // Try WebP first, around half the size of JPEG
   const webpBlob = await new Promise<Blob | null>((resolve) => {
     canvas.toBlob(
       (blob) => resolve(blob),
@@ -286,14 +280,14 @@ export async function compressImageForStorage(
     );
   });
 
-  // If WebP succeeded AND the browser actually produced a WebP blob (not a fallback PNG),
-  // use it. Otherwise fall back to JPEG for maximum compatibility.
+  // Check the type, not just that a blob came back: a browser without WebP
+  // support silently hands back a PNG instead, which is larger than the JPEG.
   if (webpBlob && webpBlob.type === "image/webp") {
     console.log(`---Compressed to WebP: ${(webpBlob.size / 1024).toFixed(0)} KB---`);
     return webpBlob;
   }
 
-  // Fallback: JPEG at 80% quality for older devices
+  // JPEG at 80% for browsers without WebP export
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob(
       (blob) => {
@@ -310,8 +304,9 @@ export async function compressImageForStorage(
 }
 
 /**
- * Computes a unique SHA-256 binary fingerprint (hash) of an image file using
- * the browser-native Web Crypto API. Used for instant local duplicate photo detection.
+ * SHA-256 fingerprint of an image file, via the browser's Web Crypto API. Two
+ * identical files hash the same, which is how a duplicate photo is caught
+ * locally before it is ever saved.
  */
 export async function computeImageHash(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();

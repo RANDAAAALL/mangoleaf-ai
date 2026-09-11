@@ -9,7 +9,7 @@ export interface ScanRecord {
   image_hash?: string;     // Unique SHA-256 binary hash of the photo for duplicate prevention
   updated_at: string;      // ISO Timestamp
   device_id: string;       // Unique mobile/browser device ID
-  // Tracks whether the local record matches Supabase or still needs a sync action.
+  // Says whether the local row matches Supabase or still owes it a change.
   _status?: "synced" | "pending-insert" | "pending-delete";
 }
 
@@ -26,7 +26,8 @@ class MangoLeafDB extends Dexie {
 
   constructor() {
     super("MangoLeafDB");
-    // Version 7 stores scans (with image_hash index) and agricultural guidelines
+    // Listed fields are the indexes, not the whole row. image_hash is indexed
+    // so a duplicate photo can be found without reading every stored record.
     this.version(7).stores({
       scans: "id, image_hash, disease_name, confidence, updated_at, device_id, _status",
       guidelines: "id, disease_name"

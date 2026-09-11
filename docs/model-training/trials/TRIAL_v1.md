@@ -4,7 +4,7 @@ This document records the step-by-step development process, troubleshooting, and
 
 ---
 
-## 📋 Development Timeline Overview
+## Development Timeline Overview
 
 ```mermaid
 graph TD
@@ -19,7 +19,7 @@ graph TD
 
 ---
 
-## 🔍 Step-by-Step Chronicles
+## Step-by-Step Chronicles
 
 ### Phase 1: Dataset Verification & Mounting
 * **Action:** Mounted Google Drive to Google Colab and loaded raw images.
@@ -53,7 +53,7 @@ graph TD
 
 ---
 
-## 📁 Final Deliverables & File Sizes
+## Final Deliverables & File Sizes
 
 The final compiled AI is extremely lightweight (only **6.1 MB total**), meaning it downloads in less than a second and operates 100% in client-side memory:
 
@@ -66,7 +66,7 @@ The final compiled AI is extremely lightweight (only **6.1 MB total**), meaning 
 
 ---
 
-## 🛠️ Code Implementation Details (PWA Frontend)
+## Code Implementation Details (PWA Frontend)
 
 ```typescript
 // Located inside src/app/page.tsx

@@ -8,7 +8,7 @@ Trial 3 reports **97.46%** test accuracy against Trial 2.1's **97.12%**. Those t
 
 ---
 
-## 📋 Development Timeline & Architecture Overview
+## Development Timeline & Architecture Overview
 
 ```mermaid
 graph TD
@@ -24,7 +24,7 @@ graph TD
 
 ---
 
-## 🔍 Step-by-Step Trial 3 Chronicles
+## Step-by-Step Trial 3 Chronicles
 
 ### Phase 1: Perceptual-Hash Deduplication
 
@@ -96,7 +96,7 @@ Best validation loss landing on the last epoch means the model was **still impro
 * **Test loss:** **0.0686**
 * **95% Wilson score interval:** roughly **95.4% to 98.6%** on 393 images
 
-#### 📋 Trial 3 Classification Report & F1-Scores
+#### Trial 3 Classification Report & F1-Scores
 
 | Target Disease Class | Precision | Recall | F1-Score | Test Samples |
 | :--- | :---: | :---: | :---: | :---: |
@@ -109,7 +109,7 @@ Best validation loss landing on the last epoch means the model was **still impro
 | **Macro average** | 0.9633 | 0.9658 | 0.9641 | 393 |
 | **Weighted average** | 0.9753 | 0.9746 | 0.9746 | 393 |
 
-#### 📊 Confusion Matrix
+#### Confusion Matrix
 
 Rows are true labels, columns are predictions.
 
@@ -169,7 +169,7 @@ All 88 pairs are identical on nominal metrics, so the tie was broken on robustne
 | Tune rejection, nominal | 86.9% | **86.9%** |
 | Report rejection, nominal | 70.2% | **70.2%** |
 | Accuracy on accepted | 99.20% | **99.20%** |
-| Retention, measured half-float band, worst case | 94.1% ❌ | **95.2%** ✅ |
+| Retention, measured half-float band, worst case | 94.1%, fails floor | **95.2%, holds floor** |
 | Report rejection, measured band, worst case | 67.9% | **67.9%** |
 | Test images within one band-width of the margin line | 4 of 393 | **1 of 393** |
 
@@ -207,10 +207,10 @@ Trial 2.1's comparable rejection rate was 51.19%. Trial 3's 70.24% is a large ga
 
 | File | Bytes | SHA-256 (verified against `run_record.json`) |
 | :--- | ---: | :--- |
-| `group1-shard1of3.bin` | 4,194,304 | `1d9eade4…78567` ✅ |
-| `group1-shard2of3.bin` | 4,194,304 | `3301dcfe…be4557` ✅ |
-| `group1-shard3of3.bin` | 3,493,960 | `42cbb401…3d1d0` ✅ |
-| `model.json` | 211,565 | `5ca24ce2…3bfe9` ✅ |
+| `group1-shard1of3.bin` | 4,194,304 | `1d9eade4…78567` match |
+| `group1-shard2of3.bin` | 4,194,304 | `3301dcfe…be4557` match |
+| `group1-shard3of3.bin` | 3,493,960 | `42cbb401…3d1d0` match |
+| `model.json` | 211,565 | `5ca24ce2…3bfe9` match |
 | **Total** | **12,094,133** | 11.53 MB, of which 11.33 MB is weights |
 
 All four checksums on the deployed files match the training run's record exactly, which proves the shipped weights are the same artifact the thresholds were fitted on. The stale `model_config.json` inside the export archive independently agrees on `temperature: 1.188751`, `temperatureFoldedIntoWeights: true`, and `trial: "3"`.
@@ -249,8 +249,8 @@ The ratio is 3.055×. The refit's cell 7 used that ratio as a scale factor to pr
 
 | Band | Margin width | Entropy width | Retention at margin 0.40 | Report rejection |
 | :--- | :---: | :---: | :---: | :---: |
-| **Measured** (authoritative) | 0.029155 | 0.010755 | **95.17%** ✅ | 67.86% |
-| Scaled by 3.055× | 0.089071 | 0.032858 | 93.64% ❌ | 61.90% |
+| **Measured** (authoritative) | 0.029155 | 0.010755 | **95.17%, holds floor** | 67.86% |
+| Scaled by 3.055× | 0.089071 | 0.032858 | 93.64%, fails floor | 61.90% |
 
 **The measured band is the one that describes the deployed artifact.** The scaled band calibrates against a figure obtained from a model whose overflow the converter folds away, so it is a loose upper bound rather than a measurement. Both sets are recorded in `model_config.json` under `halfFloat*` keys, with the scaled figures explicitly annotated as an upper bound.
 
@@ -258,7 +258,7 @@ Under the scaled band, margin 0.40 falls to 93.64% retention, below the 95% floo
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
 | Artifact | Value |
 | :--- | :--- |
@@ -292,7 +292,7 @@ Search the minified `public/sw.js` for `'url':'` with single quotes, not `"url":
 
 ---
 
-## ⚠️ Limitations
+## Limitations
 
 1. **49 unresolved cross-label duplicate pairs**, all `anthracnose` against `healthy`. The same image carries two different labels, so one is wrong. TRIAL_v2_1.md flagged hand inspection as required before this trial; it did not happen. Test accuracy is inflated by an unmeasured amount, and the single `healthy` → `anthracnose` error may be a labelling artifact.
 2. **5 near-duplicate pairs straddle two splits.** All are cross-folder and therefore cross-label, so per-folder deduplication cannot remove them by construction.

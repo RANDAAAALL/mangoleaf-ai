@@ -380,7 +380,7 @@ Retrained the classifier on a new image pool and shipped it. Full report in [mod
 - Model version stays `v3.0.0`. Nothing in `public/model/`, the class mapping, the thresholds, or the inference path changed.
 - Release verification passes: `bun run typecheck`, `bun run lint`, and `bun run build`.
 - One annotated tag was created: `v0.4.2` on the release commit `bcae4a1`, with the message "MangoLeaf AI v0.4.2 - scan-sheet drag performance and motion accessibility". No model tag, for the reason above.
-- The GitHub Release for `v0.4.2` has **not** been published yet. When it is, it will be the thirteenth and, like the twelve before it, must sit on a `v0.*` app tag, drafted by selecting the already-pushed tag rather than creating one. Do not use "Generate release notes" on the draft: it overwrites whatever is already in the description box.
+- The GitHub Release for `v0.4.2` was published on August 30, 2026, the thirteenth release and, like the twelve before it, sitting on a `v0.*` app tag. The standing rule for the next one: draft it by selecting the already-pushed tag rather than creating one, and do not use "Generate release notes" on the draft, because it overwrites whatever is already in the description box.
 - **None of this has been tested on a phone.** Every claim above is reasoning from the code and from the built stylesheet, not a measurement. The drag was not profiled before or after, so the improvement is argued rather than quantified, and the reduced-motion block has not been exercised with the setting actually enabled on a device.
 
 ### August 31, 2026: v0.4.3 desktop scan entry points

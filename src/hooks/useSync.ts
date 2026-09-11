@@ -15,7 +15,8 @@ export function useSync() {
     return navigator.onLine;
   });
   
-  // Initialize device ID lazily from localStorage
+  // Read once from localStorage, or generated there on first run. Identifies
+  // this browser so a scan can be tied to it without any account or login.
   const [deviceId] = useState<string>(() => {
     if (typeof window === "undefined") return "";
     let id = localStorage.getItem("device_id");
@@ -26,10 +27,10 @@ export function useSync() {
     return id;
   });
 
-  // Retain the active Realtime channel so it can be removed on disconnect or unmount.
+  // Held so the channel can be removed on disconnect or unmount.
   const subscriptionRef = useRef<RealtimeChannel | null>(null);
 
-  // Sync lock: prevents concurrent sync operations from stacking on slow 3G networks
+  // Lock so two syncs never run at once on a slow 3G connection.
   const isSyncingRef = useRef<boolean>(false);
   const syncRequestedRef = useRef(false);
   const retryAttemptRef = useRef(0);
@@ -77,7 +78,7 @@ export function useSync() {
     };
   }, []);
 
-  // Flush local pending changes (Upload Images to Storage, then Insert DB Rows)
+  // Push pending local changes: upload each image, then insert its row.
   const flushLocalMutations = useCallback(async (): Promise<boolean> => {
     try {
       const pendingScans = await db.scans
@@ -90,9 +91,9 @@ export function useSync() {
         if (scan._status === "pending-insert") {
           let uploadedUrl = scan.image_url;
 
-          // 1. If not uploaded yet, upload binary Blob to Supabase Storage Bucket
+          // 1. Upload the photo bytes if they are not in Storage yet
           if (!uploadedUrl) {
-            // Dynamic file extension based on compressed format (WebP or JPEG fallback)
+            // The extension has to match what the compressor actually produced
             const isWebP = scan.image_blob.type === "image/webp";
             const fileName = `${scan.id}.${isWebP ? "webp" : "jpg"}`;
 
@@ -106,23 +107,23 @@ export function useSync() {
 
               if (uploadError) {
                 console.error("Error uploading image file:", uploadError.message);
-                continue; // Skip database row insertion if image upload fails
+                continue; // No image means there is no row worth inserting
               }
             } catch {
               console.warn("---Upload timed out on slow 3G — will retry next sync.---");
-              continue; // Skip this scan, it stays as pending-insert for next retry
+              continue; // Stays pending-insert, picked up by the next sync
             }
 
-            // 2. Fetch the uploaded file's public URL
+            // 2. Read back the public URL of the uploaded file
             const { data } = supabase.storage.from("scans").getPublicUrl(fileName);
             uploadedUrl = data.publicUrl;
 
-            // Preserve a successful binary upload before inserting its metadata.
-            // Retrying a later row-insert failure then sends no duplicate image bytes.
+            // Save the URL before inserting the row. If the insert then fails,
+            // the retry reuses this upload instead of sending the bytes again.
             await db.scans.update(scan.id, { image_url: uploadedUrl });
           }
 
-          // 3. Insert the text log row in the Supabase Database table
+          // 3. Insert the scan row in the Supabase table
           const { error: dbError } = await supabase.from("scans").insert({
             id: scan.id,
             disease_name: scan.disease_name,
@@ -134,7 +135,7 @@ export function useSync() {
           });
 
           if (!dbError) {
-            // Update local database record as synced
+            // Mark the local copy as synced
             await db.scans.update(scan.id, {
               image_url: uploadedUrl,
               _status: "synced",
@@ -143,16 +144,16 @@ export function useSync() {
             console.error("Error inserting scan record row:", dbError.message);
           }
         } else if (scan._status === "pending-delete") {
-          // 4. Delete the row from the Supabase scans table
+          // 4. Remove the row from the Supabase scans table
           const { error: dbError } = await supabase
             .from("scans")
             .delete()
             .eq("id", scan.id);
 
+          // PGRST116 means the row was already gone, which is the outcome wanted
           if (!dbError || dbError.code === "PGRST116") {
-            // Delete from local IndexedDB
             await db.scans.delete(scan.id);
-            // Clean up storage bucket (try both WebP and JPEG extensions)
+            // The extension is unknown here, so clear both candidates
             await supabase.storage.from("scans").remove([`${scan.id}.webp`, `${scan.id}.jpg`]);
           } else {
             console.error("Error deleting scan record row:", dbError.message);
@@ -170,11 +171,11 @@ export function useSync() {
     }
   }, []);
 
-  // Pull latest data from Supabase (Guidelines & Scan History restoration)
+  // Pull from Supabase: treatment guidelines, and this device's own scan history
   const pullRemoteChanges = useCallback(async (): Promise<boolean> => {
     if (!deviceId) return true;
     try {
-      // 1. Pull the pre-written guidelines from Supabase
+      // 1. Guidelines, which are written on the server side
       const { data: remoteGuidelines, error: guidelinesError } = await supabase
         .from("guidelines")
         .select("id,disease_name,guidelines_en,guidelines_bis");
@@ -190,7 +191,7 @@ export function useSync() {
         await db.guidelines.bulkPut(guidelinesToPut);
       }
 
-      // 2. Pull own Scans to restore local history
+      // 2. This device's scans, so history survives a reinstall or cleared storage
       const { data: remoteScans, error: scansError } = await supabase
         .from("scans")
         .select("id,disease_name,confidence,image_url,image_hash,updated_at,device_id")
@@ -208,7 +209,7 @@ export function useSync() {
               id: rScan.id,
               disease_name: rScan.disease_name,
               confidence: rScan.confidence,
-              image_blob: new Blob(), // Empty placeholder for synced remote scans
+              image_blob: new Blob(), // Empty: the photo is served from image_url
               image_url: rScan.image_url,
               image_hash: rScan.image_hash || undefined,
               updated_at: rScan.updated_at,
@@ -228,11 +229,12 @@ export function useSync() {
     }
   }, [deviceId]);
 
-  // Main synchronization routine
+  // Push first, then pull
   const sync = useCallback(async () => {
     if (!navigator.onLine) return;
 
-    // 3G Safety: Prevent concurrent sync operations from stacking
+    // A sync is already running. Flag it and return, so triggers do not stack
+    // up on a slow connection.
     if (isSyncingRef.current) {
       syncRequestedRef.current = true;
       console.log("---Sync already in progress — skipping duplicate trigger.---");
@@ -290,7 +292,7 @@ export function useSync() {
     };
   }, [clearScheduledRetry, sync]);
 
-  // Create a new scan record (saved locally first, retries sync if online)
+  // Saved locally first, so a scan is never lost when the network is not there
   const createScan = useCallback(
     async (diseaseName: string, confidence: number, imageBlob: Blob, imageHash?: string) => {
       const scanId = crypto.randomUUID();
@@ -317,7 +319,8 @@ export function useSync() {
     [sync, deviceId]
   );
 
-  // Delete scan history record
+  // A scan that never reached Supabase can go immediately; one that did is
+  // marked pending-delete so the server row is removed on the next sync.
   const deleteScan = useCallback(
     async (id: string) => {
       const localScan = await db.scans.get(id);
@@ -339,7 +342,7 @@ export function useSync() {
     [sync]
   );
 
-  // Auto-sync when network reconnects or device ID loads
+  // Sync as soon as the network returns or the device ID becomes available
   useEffect(() => {
     if (!isOnline) {
       clearScheduledRetry();
@@ -355,7 +358,8 @@ export function useSync() {
     }
   }, [clearScheduledRetry, isOnline, deviceId, sync]);
 
-  // Real-time WebSocket connection to listen to database guidelines updates
+  // Realtime channel: a guideline edited on the server reaches the device
+  // without waiting for the next sync.
   useEffect(() => {
     if (!isOnline || !deviceId) {
       if (subscriptionRef.current) {

@@ -1,11 +1,13 @@
-// Label for the model assets in public/model/. Bump this whenever those files
-// are replaced by a retraining cycle. See docs/MODEL_VERSIONING.md.
+// Label for the model assets in public/model/. Bump it whenever those files are
+// replaced by a retraining cycle. See docs/MODEL_VERSIONING.md.
 // Trial 3: deduplicated pool, temperature-calibrated, exported at float32. The
-// WebGL backend uploads the weights into half-float textures regardless, so the
-// larger download buys no accuracy on phones but costs nothing on WASM either.
+// WebGL backend uploads the weights into half-float textures anyway, so the
+// bigger download buys no accuracy on phones, and costs nothing on WASM.
 export const modelVersion = "v3.0.0";
 
-// The 6 standard Carabao Mango classes in alphabetical order matching Keras exports
+// The 6 Carabao Mango classes, in alphabetical order because that is the order
+// the Keras export used. CLASSES[i] must name the class the model scores at
+// output position i, so reordering this array would mislabel every prediction.
 export const CLASSES = [
   "Anthracnose",
   "Bacterial Black Spot",
@@ -15,9 +17,9 @@ export const CLASSES = [
   "Sooty Mold"
 ];
 
-// Stored in ScanRecord.disease_name when a scan fails any of the three rejection
-// gates in classifier.ts: confidence, prediction margin, or entropy. It is not a
-// class, so UI that reads a real prediction must compare against this first.
+// Written into ScanRecord.disease_name when a scan fails any of the three
+// rejection gates in classifier.ts: confidence, margin, or entropy. It is not a
+// class, so any UI that expects a real prediction must check for it first.
 export const UNCERTAIN_LABEL = "Uncertain / Unrecognized";
 
 // Verified treatment guidelines based on BAFS GAP (PNS/BAFPS 45:2009) [19], Dofuor et al. (2023) [6], Sossah et al. (2024) [7], and Pham et al. (2025) [8]

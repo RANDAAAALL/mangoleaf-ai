@@ -24,9 +24,9 @@ function isScanObjectUpload(input: RequestInfo | URL, init?: RequestInit) {
 }
 
 /**
- * Storage upload options do not accept an AbortSignal in Supabase JS v2. This
- * fetch wrapper applies a real timeout only to scan-object writes, keeping
- * stalled mobile uploads from holding the synchronization lock indefinitely.
+ * Supabase JS v2 storage uploads take no AbortSignal, so there is no built-in
+ * way to time one out. This wrapper adds a real timeout to scan uploads only,
+ * which stops a stalled mobile upload from holding the sync lock forever.
  */
 async function fetchWithScanUploadTimeout(
   input: RequestInfo | URL,
@@ -56,7 +56,8 @@ async function fetchWithScanUploadTimeout(
   }
 }
 
-// Shared browser client; authorization must be enforced by Supabase RLS policies.
+// Shared browser client. The anon key is public by design; what a caller may
+// actually read or write is decided by the RLS policies on Supabase.
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   global: {
     fetch: fetchWithScanUploadTimeout,

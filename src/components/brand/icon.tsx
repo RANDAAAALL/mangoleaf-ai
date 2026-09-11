@@ -26,7 +26,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
   strokeWidth?: number | string;
 }
 
-// Icon paths matching FontAwesome 6 icon set provided (640x640 viewBox)
+// FontAwesome 6 paths, all on a 640x640 viewBox
 const FA_PATHS: Record<string, string> = {
   home: "M341.8 72.6C329.5 61.2 310.5 61.2 298.3 72.6L74.3 280.6C64.7 289.6 61.5 303.5 66.3 315.7C71.1 327.9 82.8 336 96 336L112 336L112 512C112 547.3 140.7 576 176 576L464 576C499.3 576 528 547.3 528 512L528 336L544 336C557.2 336 569 327.9 573.8 315.7C578.6 303.5 575.4 289.5 565.8 280.6L341.8 72.6zM304 384L336 384C362.5 384 384 405.5 384 432L384 528L256 528L256 432C256 405.5 277.5 384 304 384z",
   about: "M320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576zM288 224C288 206.3 302.3 192 320 192C337.7 192 352 206.3 352 224C352 241.7 337.7 256 320 256C302.3 256 288 241.7 288 224zM280 288L328 288C341.3 288 352 298.7 352 312L352 400L360 400C373.3 400 384 410.7 384 424C384 437.3 373.3 448 360 448L280 448C266.7 448 256 437.3 256 424C256 410.7 266.7 400 280 400L304 400L304 336L280 336C266.7 336 256 325.3 256 312C256 298.7 266.7 288 280 288z",
@@ -37,15 +37,15 @@ const FA_PATHS: Record<string, string> = {
 };
 
 /**
- * Outline icons that share the 24x24 stroke wrapper below. Only the child
- * shapes differ between them, so they are held as a map rather than as one
- * branch each. Every entry inherits `stroke="currentColor"` and the caller's
- * `strokeWidth`, so a call site sets colour through the surrounding text colour
- * and weight through the prop, never through a value hardcoded here.
+ * Outline icons that share the 24x24 stroke wrapper below. Only the inner shapes
+ * differ, so they live in a map instead of one branch each. Every entry inherits
+ * stroke="currentColor" and the caller's strokeWidth, so a call site sets colour
+ * through the surrounding text colour and weight through the prop. Nothing here
+ * hardcodes either.
  */
 const STROKE_24_SHAPES: Partial<Record<IconName, React.ReactNode>> = {
-  // Camera viewfinder. Deliberately separate from the filled FontAwesome
-  // `camera` glyph above, which is a different weight and viewBox.
+  // Camera viewfinder. Kept separate from the filled FontAwesome `camera` glyph
+  // above, which has a different weight and viewBox.
   "camera-outline": (
     <>
       <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />

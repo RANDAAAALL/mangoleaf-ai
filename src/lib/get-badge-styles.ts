@@ -1,4 +1,5 @@
-// Badge color mapping matching Figma design
+// Green for healthy, red for any disease, grey for anything else, which in
+// practice is the Uncertain result.
 export const getBadgeStyles = (diseaseName: string) => {
   const name = diseaseName.toLowerCase();
   if (name.includes("healthy")) {

@@ -5,15 +5,15 @@ declare const self: ServiceWorkerGlobalScope & {
   __SW_MANIFEST: (PrecacheEntry | string)[];
 };
 
-// Bump this whenever the files in public/model/ are replaced. The CacheFirst rule
-// below never revalidates, and model.json keeps the same URL across model versions,
-// so an already-installed PWA would otherwise keep serving the previous model's
-// weights from cache indefinitely and silently. See docs/MODEL_VERSIONING.md.
+// Bump whenever the files in public/model/ are replaced. The CacheFirst rule
+// below never revalidates and model.json keeps the same URL across versions, so
+// without a new cache name an installed PWA would go on serving the old weights
+// from cache, silently and forever. See docs/MODEL_VERSIONING.md.
 const MODEL_CACHE = "mangoleaf-model-cache-v3-0-0";
 
-// Every model cache name this app has ever used, so the old weights can be
-// evicted instead of sitting on the device forever. Trial 2's model was 11.51 MB,
-// Trial 2.1's was 5.67 MB at float16, and Trial 3's is 11.33 MB at float32.
+// Every model cache name this app has used, so old weights can be evicted
+// instead of sitting on the device. Trial 2 was 11.51 MB, Trial 2.1 was 5.67 MB
+// at float16, Trial 3 is 11.33 MB at float32.
 const OUTDATED_MODEL_CACHES = [
   "mangoleaf-model-cache",
   "mangoleaf-model-cache-v2-1",
@@ -35,9 +35,9 @@ const serwist = new Serwist({
   ],
 });
 
-// Reclaim the space held by superseded model caches. Runs alongside Serwist's own
-// activate handler; failures are swallowed because a stale cache is a disk-space
-// problem, not a correctness one, and must never block the new worker.
+// Free the space held by superseded model caches. Runs alongside Serwist's own
+// activate handler. Failures are swallowed because a leftover cache wastes disk
+// space but breaks nothing, and must never stop the new worker activating.
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     Promise.all(

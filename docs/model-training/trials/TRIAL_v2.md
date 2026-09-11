@@ -8,7 +8,7 @@ Notebook provenance: this report corresponds to the Trial 2 workflow recorded in
 
 ---
 
-## 📋 Development Timeline & Architecture Overview
+## Development Timeline & Architecture Overview
 
 ```mermaid
 graph TD
@@ -22,7 +22,7 @@ graph TD
 
 ---
 
-## 🔍 Step-by-Step Trial 2 Chronicles
+## Step-by-Step Trial 2 Chronicles
 
 ### Phase 1: Dataset Partitioning (Strict 70% / 15% / 15% Stratified Split)
 * **Action:** Combined raw local field photos with open benchmark repositories (`MangoLeafBD` & `MangoDHDS`) into a unified pool of **5,329 raw images**.
@@ -31,7 +31,7 @@ graph TD
   * **Validation Subset (15%):** **798 raw images**
   * **Test Subset (15%):** **801 raw images** *(Held back 100% clean until final evaluation)*
 
-#### 📊 Trial 2 Raw Dataset Distribution Matrix
+#### Trial 2 Raw Dataset Distribution Matrix
 
 | Target Disease Class | Total Raw Pool | Training Set (70%) | Validation Set (15%) | Testing Set (15%) |
 | :--- | :---: | :---: | :---: | :---: |
@@ -73,7 +73,7 @@ graph TD
 * **Stage 2 (10 Epochs):** Base layers unfrozen (`trainable = True`). Entire network fine-tuned at learning rate `0.00001` (`1e-5`).
 * **Evaluation Score:** Reached **`98.25%` Test Accuracy** and **`0.0541` Test Loss** on the clean 15% Test Set!
 
-#### 📋 Trial 2 Classification Report & F1-Scores
+#### Trial 2 Classification Report & F1-Scores
 
 | Target Disease Class | Precision | Recall | F1-Score | Test Samples |
 | :--- | :---: | :---: | :---: | :---: |
@@ -87,7 +87,7 @@ graph TD
 
 ---
 
-## 📁 Final Deliverables & File Sizes
+## Final Deliverables & File Sizes
 
 The compiled web AI engine is **11.51 MB total**, split into 3 binary weight shards for optimal HTTP parallel downloading:
 
@@ -101,7 +101,7 @@ The compiled web AI engine is **11.51 MB total**, split into 3 binary weight sha
 
 ---
 
-## 🛠️ PWA Integration & Verification
+## PWA Integration & Verification
 
 * **Service Worker Caching (`src/sw.ts`):** Serwist `CacheFirst` strategy rule pre-caches `/model/*` assets (`model.json` and all 3 `.bin` shards) for **0.0s offline launches**.
 * **Singleton Model Cache (`src/lib/classifier.ts`):** Module-level `cachedModel` ensures the 11.51 MB model is loaded and GPU-warmed **only once** per browser session. Network reconnections and React remounts return the cached instance in 0.0 seconds.

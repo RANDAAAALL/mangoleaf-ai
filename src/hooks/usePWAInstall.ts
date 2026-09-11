@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 
-// Non-standard Chromium event captured before the browser displays its install UI.
+// Chromium-only event, not in the standard. Firefox and iOS Safari never fire
+// it, so the install button simply never appears there.
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
-/** Exposes whether installation is available and triggers the saved browser prompt. */
+/** Reports whether the app can be installed, and opens the saved prompt. */
 export function usePWAInstall() {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState<boolean>(false);
 
   useEffect(() => {
-    // Check if already running in standalone mode (installed app view)
+    // Already running as an installed app? Then no install button is needed.
+    // The second test is the iOS Safari equivalent of display-mode.
     const checkStandalone = () => {
       const isStandalone =
         window.matchMedia("(display-mode: standalone)").matches ||

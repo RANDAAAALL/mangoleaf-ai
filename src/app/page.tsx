@@ -22,14 +22,16 @@ import { DiagnosticScanner } from "@/components/scan/diagnostic-scanner";
 import { Footer } from "@/components/layout/footer";
 import dynamic from "next/dynamic";
 
-// Load the details modal only when it is needed to keep the initial bundle smaller.
+// Loaded only when a scan result is opened, which keeps it out of the first
+// bundle a farmer downloads.
 const ScanDetailsModal = dynamic(() =>
   import("@/components/modal/scan-details-modal").then((mod) => ({
     default: mod.ScanDetailsModal,
   })),
 );
 
-// Survives client remounts so the model is not initialized twice in one browser session.
+// Module scope, not state, so it survives a remount and the 11.33 MB model is
+// never loaded twice in one browser session.
 let hasInitialized = false;
 
 type AppTab = "home" | "history" | "about";
@@ -39,16 +41,18 @@ export default function Home() {
 
   const { showInstallButton, installApp } = usePWAInstall();
 
-  // Navigation tab state ("home" | "history" | "about")
+  // Which tab is showing
   const [activeTab, setActiveTab] = useState<AppTab>("home");
   const prevTabRef = useRef<AppTab>("home");
 
-  // TensorFlow.js model states
+  // The loaded model, and whether it is still arriving
   const [model, setModel] = useState<tf.GraphModel | null>(null);
   const [isModelLoading, setIsModelLoading] =
     useState<boolean>(!hasInitialized);
 
-  // Load MobileNetV3 model on startup
+  // Start loading the model as soon as the app opens, so it is ready before the
+  // first scan. A failure here is logged, never thrown: the rest of the app
+  // still works without it.
   useEffect(() => {
     if (hasInitialized) return;
 
@@ -67,11 +71,12 @@ export default function Home() {
     initModel();
   }, []);
 
-  // Active scan & modal state
+  // The photo being scanned right now
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  // Refs to stabilize runDiagnosis callback (#7 — avoid re-creating on every state change)
+  // runDiagnosis reads these through refs, so it is not rebuilt every time the
+  // file or preview changes while a scan is in flight.
   const selectedFileRef = useRef(selectedFile);
   const previewUrlRef = useRef(previewUrl);
   useEffect(() => {
@@ -87,15 +92,17 @@ export default function Home() {
   const closeScanSheet = useCallback(() => setIsScanSheetOpen(false), []);
   const openScanSheet = useCallback(() => setIsScanSheetOpen(true), []);
 
-  // Global language state initialized from actual localStorage ("bis" default)
   const [selectedScan, setSelectedScan] = useState<ScanRecord | null>(null);
+
+  // Read from localStorage on first render. Bisaya is the default because the
+  // intended users read it more comfortably than English.
   const [language, setLanguageState] = useState<Language>(() => {
     if (typeof window === "undefined") return "bis";
     const saved = localStorage.getItem("preferred_language");
     return saved === "en" || saved === "bis" ? saved : "bis";
   });
 
-  // Persistent language change handler
+  // Write the choice back to localStorage so it survives a restart
   const setLanguage = useCallback((newLang: Language) => {
     setLanguageState(newLang);
     if (typeof window !== "undefined") {
@@ -103,7 +110,9 @@ export default function Home() {
     }
   }, []);
 
-  // Query local active scans
+  // Live query: re-runs by itself whenever IndexedDB changes. Scans awaiting
+  // deletion are left out so a deleted scan disappears at once, before the
+  // server has confirmed anything.
   const scansQuery = useLiveQuery(
     () =>
       db.scans
@@ -130,7 +139,7 @@ export default function Home() {
     };
   }, [selectedScanImageUrl]);
 
-  // Query cached guidelines
+  // Guidelines cached from Supabase, so treatment advice is readable offline
   const cachedGuidelines = useLiveQuery(() => db.guidelines.toArray(), []);
 
   const guidelineMap = useMemo(() => {
@@ -141,7 +150,8 @@ export default function Home() {
     return map;
   }, [cachedGuidelines]);
 
-  // Lock body & html scroll when scan details modal or legal modal is open
+  // Stop the page behind a modal from scrolling. Both elements need it: html
+  // alone still scrolls on iOS Safari.
   useEffect(() => {
     if (selectedScan || legalModalType) {
       document.body.style.overflow = "hidden";
@@ -156,10 +166,11 @@ export default function Home() {
     };
   }, [selectedScan, legalModalType]);
 
-  // Remember which picker (camera / gallery / desktop) was used, so "Retake" reopens the same source
+  // Which picker was used last (camera, gallery, desktop), so Retake reopens
+  // that same one rather than guessing.
   const lastPickerIdRef = useRef<string | null>(null);
 
-  // Handle photo capture / selection
+  // A photo has been taken or chosen
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -172,7 +183,7 @@ export default function Home() {
     [previewUrl],
   );
 
-  // Retake — clear the current preview and immediately reopen the same photo source
+  // Drop the current preview and reopen the same picker
   const handleRetake = useCallback(() => {
     const pickerId = lastPickerIdRef.current;
     if (previewUrl) URL.revokeObjectURL(previewUrl);
@@ -189,7 +200,8 @@ export default function Home() {
     }
   }, [previewUrl]);
 
-  // Run AI diagnosis (uses refs for selectedFile/previewUrl to keep dependency list stable)
+  // The whole scan: hash, duplicate check, inference, compress, save.
+  // File and preview are read from refs so this callback stays stable.
   const runDiagnosis = useCallback(async () => {
     const file = selectedFileRef.current;
     const preview = previewUrlRef.current;
@@ -203,10 +215,11 @@ export default function Home() {
       const { predictMangoDisease, compressImageForStorage, computeImageHash } =
         await import("@/lib/classifier");
 
-      // 1. Compute SHA-256 hash to check for duplicate gallery photos
+      // 1. Fingerprint the file
       const imageHash = await computeImageHash(file);
 
-      // 2. Search local database for existing duplicate scan
+      // 2. Same photo scanned before? Open that report instead of paying for a
+      //    second inference and storing the image twice.
       const existingScan = await db.scans
         .where("image_hash")
         .equals(imageHash)
@@ -236,7 +249,8 @@ export default function Home() {
       const { diseaseName, confidence } = await predictMangoDisease(model, img);
 
       setScanningProgress(75);
-      // Compress photo using WebP format (75% quality, ~75KB) before saving
+      // Shrink it before saving. Inference already ran on the full image, so
+      // nothing is lost by storing the smaller copy.
       const storageBlob = await compressImageForStorage(img, 1000, 0.75);
 
       setScanningProgress(90);
@@ -264,7 +278,8 @@ export default function Home() {
     }
   }, [model, createScan]);
 
-  // Retrieve guideline for a disease
+  // Synced guidelines first, bundled fallback second, so advice still appears
+  // on a device that has never been online.
   const getGuidelineForScan = useCallback(
     (
       diseaseName: string,

@@ -1,17 +1,17 @@
 import { translations, type Language } from "@/lib/translations";
 
-// Substitutes the {n} placeholder in a relative-time template with its count.
+// Fills the {n} placeholder in a relative-time template with its count.
 function withCount(template: string, count: number): string {
   return template.replace("{n}", String(count));
 }
 
-// Formats a timestamp into human readable relative time in the active language.
+// Turns a timestamp into relative time in the active language.
 export function formatTimeAgo(isoString: string, language: Language): string {
   const t = translations[language];
 
   const date = new Date(isoString);
-  // An unparseable timestamp yields NaN from every comparison below, which would
-  // otherwise fall through to the absolute-date branch and render "NaN".
+  // A bad timestamp makes every comparison below NaN, which would fall through
+  // to the date branch and print "NaN".
   if (Number.isNaN(date.getTime())) return t.justNow;
 
   const diffMs = Date.now() - date.getTime();
@@ -25,7 +25,7 @@ export function formatTimeAgo(isoString: string, language: Language): string {
   if (diffDays === 1) return t.yesterday;
   if (diffDays < 7) return withCount(t.daysAgo, diffDays);
 
-  // Month names come from translations rather than toLocaleDateString because
-  // browsers have no reliable Cebuano/Bisaya month data to fall back on.
+  // Month names come from translations, not toLocaleDateString, because browsers
+  // have no dependable Cebuano/Bisaya month data.
   return `${t.monthsShort[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }

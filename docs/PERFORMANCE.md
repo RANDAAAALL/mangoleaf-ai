@@ -4,7 +4,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ---
 
-## 📊 Executive Summary & Performance Matrix
+## Executive Summary & Performance Matrix
 
 | Metric / Dimension | Before Optimization | After Optimization | Performance Gain |
 | :--- | :--- | :--- | :--- |
@@ -29,7 +29,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ---
 
-## 🧠 1. On-Device AI Engine & WebGL GPU Optimizations
+## 1. On-Device AI Engine & WebGL GPU Optimizations
 
 ### 1.1 Dynamic Code-Splitting for TensorFlow.js (`page.tsx`)
 * **Problem:** Importing `@tensorflow/tfjs` and `@/lib/classifier` statically at the top of `page.tsx` pulled the entire ~1.5MB TensorFlow.js engine into the initial JavaScript bundle, delaying First Contentful Paint (FCP) on slow 3G networks.
@@ -69,7 +69,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ---
 
-## 🎨 2. Frontend React Architecture & DOM Optimizations
+## 2. Frontend React Architecture & DOM Optimizations
 
 ### 2.1 Per-Card Blob URL Management (`scan-card.tsx`)
 * **Problem:** Maintaining a centralized `blobUrlMap` in `page.tsx` meant adding or deleting a single scan caused all Blob ObjectURLs across the entire history list to be revoked and regenerated, causing visible image flickering and memory spikes.
@@ -107,7 +107,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ---
 
-## 🌐 3. PWA Offline Infrastructure & Network Caching
+## 3. PWA Offline Infrastructure & Network Caching
 
 ### 3.1 Service Worker Model Pre-Caching (`sw.ts`)
 * **Strategy:** Serwist precaches all five `/model/*` files: `model.json`, `model_config.json`, and `group1-shard1of3.bin` through `group1-shard3of3.bin`. The `CacheFirst` runtime rule remains as defence in depth.
@@ -142,7 +142,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ---
 
-## 🎭 4. CSS & GPU Compositing Optimizations
+## 4. CSS & GPU Compositing Optimizations
 
 ### 4.1 Solid Backgrounds on Scroll List Cards (`scan-card.tsx`)
 * **Change:** Replaced `backdrop-blur-sm` (expensive GPU filter on every card) with solid `bg-slate-900/95` background.
@@ -167,7 +167,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ---
 
-## 📌 Accuracy & Integrity Guarantee
+## Accuracy & Integrity Guarantee
 
 > **Note on AI Accuracy:** All storage, compression, UI rendering, database, and CSS optimizations operate independently of the neural network math. The AI model receives uncompressed tensor inputs first, preserving the **97.46% test classification accuracy** validated during Trial 3 model training.
 >
