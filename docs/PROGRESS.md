@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: September 2, 2026
+Last updated: September 16, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -471,6 +471,16 @@ The first two bullets were written earlier and sat between the August 28 and Aug
 
   The proper fix, if the composition is ever re-rendered, is to give the splash a composed state at t=0 instead — drop the `opacity: 0` from-states on `#loader-logo` and `#loader-title` — which would make the prepend unnecessary.
 - Recorded in [ARCHITECTURE.md](ARCHITECTURE.md), which now carries `video/` in the project tree and a paragraph on why it is a neighbour of the application rather than part of it, and in [AGENTS.md](../AGENTS.md) as a convention.
+
+### September 16, 2026: local security checks and master push CI
+
+- Added Husky's `pre-push` hook with short coworker-facing comments. Pushes check tracked filenames and fetched Git history for credentials and forbidden private files; deleted historical content remains checked, and findings display locations without credential values.
+- Added a pinned Gitleaks 8.30.1 installer with verified release checksums. The binary stays in ignored `.tools/`, and scanning itself uses no network. Dependency installation registers hooks; coworkers install the scanner separately using the documented command.
+- Added `.github/workflows/ci.yml`, triggered only by pushes to `master`, with independent security and app jobs. App checks preserve the required typecheck, lint, and webpack build order, then check exported PWA assets and every referenced model shard. The workflow does not deploy or change Dependabot settings.
+- Added focused regression tests for security checks and export validation. These do not replace physical-phone, offline, camera, or synchronization testing.
+- Reconciled `bun.lock` and the installed Next.js version with the already-merged Dependabot update to 16.3.3 while adding Husky 9.1.7. The app remains version 0.4.6 and the model remains v3.0.0.
+- Updated setup, architecture, README, and agent instructions with installation steps, file rules, comments, and the distinction between local prevention and post-push CI detection.
+- Extended Husky's pre-push hook to run TypeScript and ESLint after the security scan. Pushes now stop locally for credentials, forbidden private files, type errors, or lint errors; production build and exported-asset verification remain CI-only because they take longer and need Google Fonts.
 
 ## Current Notebook Decision
 

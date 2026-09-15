@@ -1,0 +1,2 @@
+# Git runs hooks through a shell, which needs LF endings on Windows too.
+.husky/* text eol=lf

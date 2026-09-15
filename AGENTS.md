@@ -2,7 +2,7 @@
 
 ## Next.js 16 source of truth
 
-This repository uses Next.js 16.2.10. APIs, conventions, and file structure may differ from older Next.js versions. Before changing Next.js code or configuration, read the relevant installed guide under `node_modules/next/dist/docs/` and follow current deprecation notices.
+This repository uses Next.js 16.3.3. APIs, conventions, and file structure may differ from older Next.js versions. Before changing Next.js code or configuration, read the relevant installed guide under `node_modules/next/dist/docs/` and follow current deprecation notices.
 
 ## Project context
 
@@ -26,6 +26,8 @@ This repository uses Next.js 16.2.10. APIs, conventions, and file structure may 
 - Update documentation when setup, architecture, environment variables, model versions, or release behavior changes.
 - Do not manually edit generated files: `public/sw.js`, `.next/`, `out/`, `next-env.d.ts`, or `*.tsbuildinfo`.
 - Do not commit `.env.local` or other secret-bearing environment files.
+- Keep shared developer checks in tracked `tools/`; `/scripts/` remains local-only. Husky runs security, typecheck, and lint before pushes, and `.github/workflows/ci.yml` repeats them alongside the production build only on pushes to `master`. Keep hook files LF-terminated and comments short enough for coworkers to scan.
+- Install the pinned scanner with `bun run security:install` before security checks. Never print detected credential values or broadly allowlist real findings. Reserve `secrets/` and `confidential/` for local-only files; `.tools/` and Husky's generated `.husky/_/` must remain untracked.
 - Do not turn version labels into environment variables. The app version comes from the `version` field in `package.json` via the `env` block in `next.config.ts`, and the model label is the `modelVersion` constant in `src/lib/constants.ts`. Keep both out of `.env.local`, `.env.example`, and hosting dashboard settings so a stale override cannot display the wrong version.
 - Keep every user-facing string in `src/lib/translations.ts` with an entry in both the `en` and `bis` objects. Do not hardcode English in a component or helper, and do not rely on `toLocaleDateString` or other `Intl` formatting for Cebuano/Bisaya output, because browsers have no reliable locale data for it. Use `{n}` placeholder templates for counted labels so plural rules stay in the translation file.
 - Preserve unrelated user changes and untracked work.

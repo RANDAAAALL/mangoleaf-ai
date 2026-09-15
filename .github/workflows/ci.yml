@@ -1,0 +1,68 @@
+name: MangoLeaf CI
+
+# Check pushes to master only, including merges; this workflow does not deploy.
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # GitHub runs checks directly; local Git hooks belong on developers' computers.
+  HUSKY: "0"
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  security:
+    name: Check secrets and private files
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history catches secrets even after a later commit deletes them.
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+      - name: Install verified secret scanner
+        run: bun run security:install
+      - name: Test security and export checks
+        run: bun run test:tooling
+      - name: Scan tracked files and Git history
+        run: bun run security:check
+
+  check:
+    name: Check application
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+      - name: Install locked dependencies
+        run: bun install --frozen-lockfile
+      # Match the repository's required check order; keep video/ as its own project.
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Lint
+        run: bun run lint
+      - name: Build static application
+        run: bun run build
+      # This check-only build uses client fallbacks; production needs real public settings.
+      - name: Verify exported PWA and model files
+        run: bun run verify:export

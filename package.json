@@ -7,7 +7,12 @@
     "build": "bun --bun next build --webpack",
     "start": "bun --bun next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky",
+    "security:install": "bun tools/install-gitleaks.mjs",
+    "security:check": "bun tools/check-security.mjs",
+    "test:tooling": "bun test ./tools",
+    "verify:export": "bun tools/verify-export.mjs"
   },
   "dependencies": {
     "@serwist/next": "^9.5.11",
@@ -27,6 +32,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
+    "husky": "9.1.7",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

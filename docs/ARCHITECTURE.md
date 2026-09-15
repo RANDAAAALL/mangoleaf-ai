@@ -12,6 +12,9 @@ The tree below highlights the files and directories that define the application.
 
 ```text
 mangoleaf-ai/
+|-- .github/workflows/ci.yml        # Security and app checks on master pushes
+|-- .husky/pre-push                 # Local security check before upload
+|-- tools/                          # Shared scanner setup, security checks, export verification, and tests
 |-- public/                         # Files served directly from the site root
 |   |-- images/
 |   |   |-- icons/
@@ -49,7 +52,7 @@ mangoleaf-ai/
 |   |-- model-training/             # Trial 1, Trial 2, Trial 2.1, and Trial 3 training reports
 |   |   |-- trials/                 # One report card per trial (TRIAL_v1.md … TRIAL_v3.md)
 |   |   |-- figures/                # Per-trial training/tuning figures, one folder per trial
-|   |   |-- artifacts/             # Per-trial run_record.json and model_config.json evidence
+|   |   |-- artifacts/              # Per-trial run_record.json and model_config.json evidence
 |   |   `-- (per-trial dirs above echo the notebooks/ folder-per-trial layout)
 |   |-- ARCHITECTURE.md             # This architecture reference
 |   |-- EMAIL_DISPATCH_WORKFLOW.md  # Adviser and panel correspondence notes (local only, gitignored)
@@ -80,14 +83,14 @@ mangoleaf-ai/
 |   |-- meta.json                    # Composition id and name
 |   |-- package.json                 # Pinned hyperframes CLI scripts
 |   |-- AGENTS.md                    # HyperFrames instructions for coding agents
-|   `-- MangoLeafAI-walkthrough.mp4    # Rendered output
-|-- .env.example                    # Public environment-variable template
-|-- AGENTS.md                       # Repository instructions for coding agents
-|-- README.md                       # Project overview and quick start
-|-- SETUP.md                        # Complete local and Supabase setup guide
-|-- next.config.ts                  # Static export and Serwist integration
-|-- package.json                    # Bun scripts and project dependencies
-`-- tsconfig.json                   # TypeScript and @/* path-alias configuration
+|   `-- MangoLeafAI-walkthrough.mp4  # Rendered output
+|-- .env.example                     # Public environment-variable template
+|-- AGENTS.md                        # Repository instructions for coding agents
+|-- README.md                        # Project overview and quick start
+|-- SETUP.md                         # Complete local and Supabase setup guide
+|-- next.config.ts                   # Static export and Serwist integration
+|-- package.json                     # Bun scripts and project dependencies
+`-- tsconfig.json                    # TypeScript and @/* path-alias configuration
 ```
 
 This is a single Next.js application rather than separate frontend and backend folders. Browser code owns diagnosis and local storage, while Supabase is an external synchronization service.
@@ -219,6 +222,12 @@ These files must stay tracked in git. `.gitignore` patterns that could match the
 - Server-only Next.js features are not part of the current architecture.
 - The Serwist integration currently uses webpack, matching the installed Next.js PWA guidance.
 - The deployed origin must serve model files and the service worker from the expected root paths.
+
+### Local checks and continuous integration
+
+Husky registers `.husky/pre-push` during root dependency installation. The hook checks secrets and private filenames with `tools/check-security.mjs`, then runs TypeScript and ESLint before upload. The security scan includes tracked filenames and fetched Git history, including explicit push commits. `tools/install-gitleaks.mjs` installs the pinned, checksum-verified scanner under ignored `.tools/`. No scanner code or binaries are included in the application export.
+
+`.github/workflows/ci.yml` runs only on pushes to `master`. Independent security and application jobs repeat the history scan and perform typecheck, lint, static build, and exported-asset verification. CI invokes checks directly with Husky disabled. The build uses public-client fallback settings and does not deploy; production configuration and hosting deployment remain separate. Local checks can stop an upload, while CI reports failures after the push. See [SETUP.md](../SETUP.md#local-security-checks-and-github-ci) for installation, file rules, and limits.
 
 ## Naming and organization conventions
 

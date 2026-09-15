@@ -1,0 +1,4 @@
+# Stop uploads containing secrets or code that fails local quality checks.
+bun run security:check --pre-push
+bun run typecheck
+bun run lint
