@@ -483,6 +483,12 @@ The first two bullets were written earlier and sat between the August 28 and Aug
 - Established the initial formatting baseline for supported project files. Generated assets, model exports, notebooks, local-only files, and the separate video project are excluded.
 - Updated setup, README, architecture, and agent instructions with the formatting workflow and ESLint compatibility configuration. Application and model versions remain unchanged because this is developer tooling and formatting work.
 - Verified a frozen dependency install, typecheck, lint, formatting check, production build, exported assets, and all 10 tooling tests. An isolated Git repository confirmed the actual pre-commit hook includes formatting fixes, preserves unstaged edits in partially staged files, handles filenames with spaces, respects ignored files, and blocks syntax errors. The ESLint compatibility check found no conflicting rules.
+- Replaced numbered history buttons with a single localized `< Page N of N >` row, keeping six scans per page. Controls disable at the boundaries, search/filter changes reset to page one, and deletion clamps the current page to the remaining page count.
+- Reproduced the modal clipping with a tall image: the photo column grew to 1,189px inside a 624px modal, placing both badges below the visible card. Constrained the desktop grid row and positioned the image within its column so intrinsic image dimensions cannot expand it. Disease and confidence badges share a bounded row; long names can wrap without covering the score.
+- Made the mobile modal scroll as a whole, preserving access to its footer on short screens. Localized the close button's accessible label.
+- Browser regression checks used the real components and Tailwind styles in an isolated fixture. All 16 image/viewport combinations kept badges visible, including portrait, landscape, missing-image, and uncertain results at 320px, 375px, 800px, and 1,035px widths. Pagination checks covered boundaries, deleting the final page, search reset, single-page and no-result hiding, and Bisaya labels. Physical-phone testing remains pending.
+- Bumped the app to `v0.4.7`; the model remains `v3.0.0`.
+- Verification passed: typecheck, lint, formatting, production build, and all 10 required exported PWA/model assets. The build regenerated `public/sw.js` from the updated source.
 
 ## Current Notebook Decision
 
@@ -511,13 +517,15 @@ Keep every training notebook, and keep each trial's clean template separate from
 - Current documented training run: Trial 3, August 26, 2026
 - Current documented test result: 97.46% accuracy and 0.0686 test loss on 393 deduplicated test images, 95% Wilson interval roughly 95.4% to 98.6%
 - Current documented export size: 11.53 MB total across 3 weight shards plus `model.json`, of which 11.33 MB is weights, plus `model_config.json`
-- Current app model version label: `v3.0.0`, app version `v0.4.6`
+- Current app model version label: `v3.0.0`, app version `v0.4.7`
 - Calibration: temperature `T = 1.188751` folded into the final Dense layer. `T > 1`, so the model was overconfident and folding lowers confidence, which strengthens the 70% floor.
 - Rejection: three gates, all active. Fixed 70% confidence floor, selected margin threshold `0.40`, fitted normalized-entropy threshold `0.40`. Measured 95.17% in-distribution retention, 70.24% out-of-scope rejection on 84 held-out non-mango images with a 95% confidence interval of roughly 60.5% to 80.0%, and 99.20% accuracy on accepted predictions.
 
 Trial 2's 98.25%, Trial 2.1's 97.12%, and Trial 3's 97.46% are three measurements on three different test sets, not a trend. Trial 2's set contained near-duplicates of its own training images. Trial 3's set is a different pool entirely. Never present any of these figures as beating another.
 
 ## Next Work
+
+- **Test v0.4.7 on a physical phone.** Check the one-row history pager, tall/wide scan photos, long disease labels, uncertain-result badges, and scrolling to the modal's close button. Confirm the footer reads `v0.4.7` and `v3.0.0` before testing; the earlier release checks below remain pending as historical follow-up.
 
 - **Test `v0.4.2`, `v0.4.3`, `v0.4.4`, `v0.4.5`, and `v0.4.6` together on a production build on a physical phone.** None of the five has been on a device, so one session covers all of them. The `v0.4.1` footer was confirmed on the live deployment on August 31, 2026, but that was a footer check only, and `v0.4.0` on August 29, 2026 remains the last build to pass all four checks. The phone needs the deployed HTTPS URL, because a LAN address such as `http://192.168.x.x:3000` is not a secure context and registers no service worker. Confirm the footer reads `v0.4.6` and `v3.0.0` first: everything below is invisible until the new service worker has actually activated, so a phone still showing an older version proves nothing about this build. Then check, in order:
   - **"Take Photo" must still be present in the scan sheet.** This is the one regression `v0.4.3` could introduce, and it is invisible on every desktop screen the change was developed and verified on. An emulated 390px viewport showed both cards, but only a real device proves the card is there and that tapping it opens the camera rather than the gallery.

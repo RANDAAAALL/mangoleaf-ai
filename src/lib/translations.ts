@@ -37,6 +37,9 @@ export const translations = {
     // Scan History Section
     recentScansTitle: "Recent Scans",
     scanHistoryTitle: "Scan History",
+    pageOfTotal: "Page {n} of {total}",
+    previousPage: "Previous page",
+    nextPage: "Next page",
     searchPlaceholder: "Search by name...",
     filterAll: "≡ Filter All",
     viewAllHistory: "View All History",
@@ -196,6 +199,9 @@ export const translations = {
     // Scan History Section
     recentScansTitle: "Bag-ong Scan",
     scanHistoryTitle: "Mga nangaging Scan",
+    pageOfTotal: "Panid {n} sa {total}",
+    previousPage: "Miaging panid",
+    nextPage: "Sunod nga panid",
     searchPlaceholder: "Pangitaa pinaagi sa pangalan...",
     filterAll: "≡ I-filter Tanan",
     viewAllHistory: "Tan-awa Ang Tanang History",

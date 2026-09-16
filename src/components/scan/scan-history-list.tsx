@@ -17,28 +17,6 @@ interface ScanHistoryListProps {
 
 const ITEMS_PER_PAGE = 6;
 
-// Builds the page numbers to show. Up to 7 pages all fit, so they are listed in
-// full. Past that, the first and last page always stay visible and the run in
-// between collapses to "...", e.g. [1, '...', 5, 6, 7, '...', 20].
-function getPaginationRange(
-  current: number,
-  total: number,
-): (number | string)[] {
-  if (total <= 7) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-
-  if (current <= 3) {
-    return [1, 2, 3, 4, "...", total];
-  }
-
-  if (current >= total - 2) {
-    return [1, "...", total - 3, total - 2, total - 1, total];
-  }
-
-  return [1, "...", current - 1, current, current + 1, "...", total];
-}
-
 export const ScanHistoryList = memo(function ScanHistoryList({
   scans,
   language,
@@ -70,13 +48,11 @@ export const ScanHistoryList = memo(function ScanHistoryList({
     });
   }, [scans, searchQuery, filterCategory, isFullHistoryPage]);
 
-  // Floor of 1: an empty result set would otherwise make totalPages 0, and
-  // getPaginationRange would build an empty range from it.
+  // Keep the selected page valid when deletion or sync removes the last page.
   const totalPages = Math.ceil(filteredScans.length / ITEMS_PER_PAGE) || 1;
-  const paginationRange = useMemo(
-    () => getPaginationRange(currentPage, totalPages),
-    [currentPage, totalPages],
-  );
+  if (currentPage > totalPages) {
+    setCurrentPage(totalPages);
+  }
 
   const visibleScans = useMemo(() => {
     if (!isFullHistoryPage) {
@@ -237,63 +213,40 @@ export const ScanHistoryList = memo(function ScanHistoryList({
         </div>
       )}
 
-      {/* Smart Truncated Pagination Bar (Handles 10+ pages gracefully with '...') */}
+      {/* Compact pagination stays on one row on narrow screens. */}
       {isFullHistoryPage && hasUserScans && totalPages > 1 && (
-        <div className="flex items-center justify-center gap-1 sm:gap-1.5 pt-6 flex-wrap w-full">
-          {/* Prev Button */}
+        <nav
+          aria-label={t.scanHistoryTitle}
+          className="flex items-center justify-center gap-3 pt-6 w-full"
+        >
           <button
+            type="button"
+            aria-label={t.previousPage}
             onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
             disabled={currentPage === 1}
-            className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${
-              currentPage === 1
-                ? "bg-[#eaf3e5] border border-[#d3e3ca] cursor-not-allowed"
-                : "bg-white border-[#d2e2c4] text-[#143519] hover:bg-[#f0f7eb] cursor-pointer"
-            }`}
+            className="h-11 w-11 shrink-0 rounded-xl border border-[#d2e2c4] bg-white text-[#143519] text-lg font-bold transition-colors hover:bg-[#f0f7eb] cursor-pointer disabled:bg-[#eaf3e5] disabled:text-[#738a77] disabled:cursor-not-allowed"
           >
-            Prev
+            <span aria-hidden="true">&lt;</span>
           </button>
-
-          {/* Numbered Page Buttons & Truncation Ellipsis (...) */}
-          {paginationRange.map((item, idx) => {
-            if (typeof item === "string") {
-              return (
-                <span
-                  key={`ellipsis-${idx}`}
-                  className="px-1.5 py-1 text-xs text-[#738a77] font-bold select-none"
-                >
-                  ...
-                </span>
-              );
-            }
-
-            return (
-              <button
-                key={`page-${item}`}
-                onClick={() => setCurrentPage(item)}
-                className={`min-w-[32px] h-8 rounded-xl border text-xs font-bold transition-colors cursor-pointer flex items-center justify-center ${
-                  currentPage === item
-                    ? "bg-[#1b5e28] border-[#1b5e28] text-white shadow-xs"
-                    : "bg-white border-[#d2e2c4] text-[#143519] hover:bg-[#f0f7eb]"
-                }`}
-              >
-                {item}
-              </button>
-            );
-          })}
-
-          {/* Next Button */}
+          <span
+            aria-live="polite"
+            aria-atomic="true"
+            className="text-xs sm:text-sm font-bold text-[#143519] whitespace-nowrap tabular-nums"
+          >
+            {t.pageOfTotal
+              .replace("{n}", String(currentPage))
+              .replace("{total}", String(totalPages))}
+          </span>
           <button
+            type="button"
+            aria-label={t.nextPage}
             onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${
-              currentPage === totalPages
-                ? "bg-[#eaf3e5] border border-[#d3e3ca] text-slate-400 cursor-not-allowed"
-                : "bg-white border-[#d2e2c4] text-[#143519] hover:bg-[#f0f7eb] cursor-pointer"
-            }`}
+            className="h-11 w-11 shrink-0 rounded-xl border border-[#d2e2c4] bg-white text-[#143519] text-lg font-bold transition-colors hover:bg-[#f0f7eb] cursor-pointer disabled:bg-[#eaf3e5] disabled:text-[#738a77] disabled:cursor-not-allowed"
           >
-            Next
+            <span aria-hidden="true">&gt;</span>
           </button>
-        </div>
+        </nav>
       )}
     </div>
   );

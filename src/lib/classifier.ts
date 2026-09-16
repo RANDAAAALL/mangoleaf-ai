@@ -229,7 +229,7 @@ export async function predictMangoDisease(
   const accepted = meetsConfidence && meetsMargin && meetsEntropy;
   if (!accepted) {
     console.log(
-      `---Rejected: confidence=${maxProb.toFixed(4)} margin=${margin.toFixed(4)} ` +
+      `---Rejected: Raw PredictedDisease=${CLASSES[maxIndex]} confidence=${maxProb.toFixed(4)} margin=${margin.toFixed(4)} ` +
         `entropy=${normalizedEntropy.toFixed(4)}---`,
     );
   }

@@ -122,6 +122,7 @@ v0.4.3  desktop scan entry points
 v0.4.4  shared icon registry and scan-sheet label sizes
 v0.4.5  equal-height How it works cards
 v0.4.6  unified How it works card styling
+v0.4.7  compact history pagination and scan-details badge clipping fix
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
@@ -153,6 +154,10 @@ they are version labels, not secrets.
 sites do not need a non-null assertion. It is a declaration, not a runtime
 guarantee; if the `env` block in `next.config.ts` is removed, the footer renders
 an empty label with no type error.
+
+### v0.4.7: history pagination and scan details
+
+The history list uses localized previous/next controls around `Page {n} of {total}` and returns to a valid page when records are deleted. The scan-details modal constrains its desktop grid and removes the photo's intrinsic dimensions from layout, keeping disease and confidence badges inside the visible photo. On phones, the modal scrolls as a whole so its close action remains reachable. The model stays at `v3.0.0`; no model files or diagnosis thresholds changed.
 
 ## Creating a GitHub Release
 

@@ -27,23 +27,23 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
   return (
     <div className="fixed inset-0 z-50 bg-black/60 md:backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
       {/* Modal Card Container: 2 Columns on Desktop (md:grid-cols-2), 1 Column Stack on Mobile */}
-      <div className="bg-white border border-[#e2ebd9] rounded-3xl w-full max-w-md md:max-w-4xl overflow-hidden shadow-2xl flex flex-col md:grid md:grid-cols-2 max-h-[92vh] my-auto relative">
+      <div className="bg-white border border-[#e2ebd9] rounded-3xl w-full max-w-md md:max-w-4xl overflow-y-auto md:overflow-hidden shadow-2xl flex flex-col md:grid md:grid-cols-2 md:grid-rows-[minmax(0,1fr)] md:h-[640px] max-h-[92dvh] my-auto relative">
         {/* Floating Close Button (Top-Right of Modal on Mobile & Desktop) */}
         <button
           onClick={onClose}
-          aria-label="Close modal"
+          aria-label={t.closeDetailsBtn}
           className="absolute top-4 right-4 z-30 h-9 w-9 bg-white/90 hover:bg-white border border-[#d2e2c4] text-[#143519] rounded-full flex items-center justify-center shadow-md transition-transform hover:scale-105 cursor-pointer font-black text-sm"
         >
           ✕
         </button>
 
         {/* Left Column: Photo Banner */}
-        <div className="w-full aspect-[4/3] md:aspect-auto md:h-full bg-[#f0f5eb] relative border-b md:border-b-0 md:border-r border-[#e2ebd9] shrink-0 overflow-hidden flex items-center justify-center">
+        <div className="w-full min-w-0 min-h-0 aspect-[4/3] md:aspect-auto bg-[#f0f5eb] relative border-b md:border-b-0 md:border-r border-[#e2ebd9] shrink-0 overflow-hidden flex items-center justify-center">
           {imageUrl ? (
             <img
               src={imageUrl}
               alt={scan.disease_name}
-              className="object-cover w-full h-full"
+              className="absolute inset-0 object-cover w-full h-full"
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center text-[#738a77] font-bold text-sm p-6 text-center">
@@ -64,20 +64,17 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
             </div>
           )}
 
-          {/* Floating Disease Badge on Photo */}
-          <div className="absolute bottom-3 left-3 pointer-events-none">
+          {/* Keep both badges inside the photo and let long names wrap. */}
+          <div className="absolute bottom-3 inset-x-3 flex items-end justify-between gap-2 pointer-events-none">
             <span
-              className={`text-[11px] font-black uppercase px-2 py-1  ${badgeClass} backdrop-blur-md rounded-full shadow-sm tracking-wide`}
+              className={`min-w-0 text-[11px] leading-snug break-words font-black uppercase px-2 py-1 ${badgeClass} backdrop-blur-md rounded-2xl shadow-sm tracking-wide`}
             >
               {scan.disease_name}
             </span>
-          </div>
-
-          <div className="absolute bottom-3 right-3 pointer-events-none">
             {/* AI Confidence Score Badge */}
             {scan.disease_name !== UNCERTAIN_LABEL && (
               <span
-                className={`text-[11px] font-black uppercase px-2 py-1 ${badgeClass} backdrop-blur-md rounded-full shadow-sm tracking-wide`}
+                className={`shrink-0 text-[11px] leading-snug font-black uppercase px-2 py-1 ${badgeClass} backdrop-blur-md rounded-full shadow-sm tracking-wide`}
               >
                 {Math.round(scan.confidence * 100)}%
               </span>
@@ -86,7 +83,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
         </div>
 
         {/* Right Column: Diagnostic Report & Treatment Guidelines */}
-        <div className="p-4 sm:p-8 flex flex-col justify-between overflow-y-auto min-h-0 gap-5 bg-white">
+        <div className="p-4 sm:p-8 flex flex-col justify-between shrink-0 md:overflow-y-auto min-h-0 min-w-0 gap-5 bg-white">
           <div className="flex flex-col gap-3.5">
             {/* Header: Title (Full Width) */}
             {/* <div className="flex flex-col gap-2 pr-10"> */}
