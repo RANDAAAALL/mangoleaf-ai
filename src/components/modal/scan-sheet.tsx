@@ -136,9 +136,7 @@ export const ScanSheet = memo(function ScanSheet({
       sheetRef.current.style.transform = `translateY(${nextY}px)`;
     }
     if (backdropRef.current) {
-      backdropRef.current.style.opacity = String(
-        Math.max(0, 1 - nextY / 280),
-      );
+      backdropRef.current.style.opacity = String(Math.max(0, 1 - nextY / 280));
     }
   }, []);
 
@@ -232,14 +230,13 @@ export const ScanSheet = memo(function ScanSheet({
     ? `translateY(${isDragging ? dragYRef.current : dragY}px)`
     : undefined;
 
-  const sheetMotionClass =
-    useInlineTransform
-      ? ""
-      : !isVisible
-        ? "sheet-exit"
-        : !enterAnimationDone
-          ? "sheet-enter"
-          : "";
+  const sheetMotionClass = useInlineTransform
+    ? ""
+    : !isVisible
+      ? "sheet-exit"
+      : !enterAnimationDone
+        ? "sheet-enter"
+        : "";
 
   return (
     <>
@@ -307,7 +304,12 @@ export const ScanSheet = memo(function ScanSheet({
               className="flex flex-col items-center gap-3 p-5 bg-[#f59e2b] text-[#2c1806] rounded-2xl shadow-md cursor-pointer active:scale-[0.97] transition-transform"
             >
               <div className="h-12 w-12 rounded-full bg-[#3d2008] flex items-center justify-center">
-                <Icon name="gallery" size={22} strokeWidth={2.5} color="white" />
+                <Icon
+                  name="gallery"
+                  size={22}
+                  strokeWidth={2.5}
+                  color="white"
+                />
               </div>
               <div className="flex flex-col items-center gap-0.5">
                 <span className="text-sm font-bold">{t.uploadPhotoBtn}</span>

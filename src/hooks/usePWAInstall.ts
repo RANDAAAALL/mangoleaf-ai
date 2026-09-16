@@ -9,7 +9,8 @@ interface BeforeInstallPromptEvent extends Event {
 
 /** Reports whether the app can be installed, and opens the saved prompt. */
 export function usePWAInstall() {
-  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [installPrompt, setInstallPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState<boolean>(false);
 
   useEffect(() => {
@@ -18,7 +19,8 @@ export function usePWAInstall() {
     const checkStandalone = () => {
       const isStandalone =
         window.matchMedia("(display-mode: standalone)").matches ||
-        (window.navigator as unknown as Record<string, unknown>).standalone === true;
+        (window.navigator as unknown as Record<string, unknown>).standalone ===
+          true;
       setIsInstalled(Boolean(isStandalone));
     };
 
@@ -40,18 +42,21 @@ export function usePWAInstall() {
     window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt,
+      );
       window.removeEventListener("appinstalled", handleAppInstalled);
     };
   }, []);
 
   const installApp = async () => {
     if (!installPrompt) return;
-    
+
     // Trigger the native browser install prompt
     await installPrompt.prompt();
     const { outcome } = await installPrompt.userChoice;
-    
+
     if (outcome === "accepted") {
       setIsInstalled(true);
     }

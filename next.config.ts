@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     unoptimized: true,
-  }
+  },
 };
 
 export default withSerwist(nextConfig);

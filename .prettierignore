@@ -1,0 +1,29 @@
+# Generated output, dependencies, and caches
+node_modules/
+.next/
+out/
+build/
+coverage/
+next-env.d.ts
+*.tsbuildinfo
+public/sw.js*
+.husky/_/
+.tools/
+
+# Generated model assets, notebooks, and lockfile
+public/model/
+docs/model-training/artifacts/
+notebooks/
+bun.lock
+
+# Separate video project
+video/
+
+# Local-only files and agent settings
+scripts/
+scratch/
+secrets/
+confidential/
+.env*
+.agents/
+.codex/

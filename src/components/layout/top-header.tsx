@@ -33,7 +33,9 @@ export const TopHeader = memo(function TopHeader({
         <div
           onClick={onLogoClick}
           className={`flex items-center gap-2.5 cursor-pointer ${
-            !showInstallButton ? "md:flex-none flex-1 justify-center md:justify-start" : ""
+            !showInstallButton
+              ? "md:flex-none flex-1 justify-center md:justify-start"
+              : ""
           }`}
         >
           <Logo width={24} height={24} />

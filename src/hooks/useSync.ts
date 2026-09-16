@@ -14,7 +14,7 @@ export function useSync() {
     if (typeof window === "undefined") return true;
     return navigator.onLine;
   });
-  
+
   // Read once from localStorage, or generated there on first run. Identifies
   // this browser so a scan can be tied to it without any account or login.
   const [deviceId] = useState<string>(() => {
@@ -82,7 +82,8 @@ export function useSync() {
   const flushLocalMutations = useCallback(async (): Promise<boolean> => {
     try {
       const pendingScans = await db.scans
-        .where('_status').anyOf(['pending-insert', 'pending-delete'])
+        .where("_status")
+        .anyOf(["pending-insert", "pending-delete"])
         .toArray();
 
       if (pendingScans.length === 0) return false;
@@ -106,16 +107,23 @@ export function useSync() {
                 });
 
               if (uploadError) {
-                console.error("Error uploading image file:", uploadError.message);
+                console.error(
+                  "Error uploading image file:",
+                  uploadError.message,
+                );
                 continue; // No image means there is no row worth inserting
               }
             } catch {
-              console.warn("---Upload timed out on slow 3G — will retry next sync.---");
+              console.warn(
+                "---Upload timed out on slow 3G — will retry next sync.---",
+              );
               continue; // Stays pending-insert, picked up by the next sync
             }
 
             // 2. Read back the public URL of the uploaded file
-            const { data } = supabase.storage.from("scans").getPublicUrl(fileName);
+            const { data } = supabase.storage
+              .from("scans")
+              .getPublicUrl(fileName);
             uploadedUrl = data.publicUrl;
 
             // Save the URL before inserting the row. If the insert then fails,
@@ -154,16 +162,21 @@ export function useSync() {
           if (!dbError || dbError.code === "PGRST116") {
             await db.scans.delete(scan.id);
             // The extension is unknown here, so clear both candidates
-            await supabase.storage.from("scans").remove([`${scan.id}.webp`, `${scan.id}.jpg`]);
+            await supabase.storage
+              .from("scans")
+              .remove([`${scan.id}.webp`, `${scan.id}.jpg`]);
           } else {
             console.error("Error deleting scan record row:", dbError.message);
           }
         }
       }
 
-      return (await db.scans
-        .where('_status').anyOf(['pending-insert', 'pending-delete'])
-        .count()) > 0;
+      return (
+        (await db.scans
+          .where("_status")
+          .anyOf(["pending-insert", "pending-delete"])
+          .count()) > 0
+      );
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error("Error flushing scans mutations:", msg);
@@ -182,7 +195,7 @@ export function useSync() {
 
       if (guidelinesError) throw guidelinesError;
       if (remoteGuidelines) {
-        const guidelinesToPut = remoteGuidelines.map(rGuideline => ({
+        const guidelinesToPut = remoteGuidelines.map((rGuideline) => ({
           id: rGuideline.id,
           disease_name: rGuideline.disease_name,
           guidelines_en: rGuideline.guidelines_en,
@@ -194,7 +207,9 @@ export function useSync() {
       // 2. This device's scans, so history survives a reinstall or cleared storage
       const { data: remoteScans, error: scansError } = await supabase
         .from("scans")
-        .select("id,disease_name,confidence,image_url,image_hash,updated_at,device_id")
+        .select(
+          "id,disease_name,confidence,image_url,image_hash,updated_at,device_id",
+        )
         .eq("device_id", deviceId);
 
       if (scansError) throw scansError;
@@ -205,17 +220,19 @@ export function useSync() {
         const scansToPut: ScanRecord[] = remoteScans.flatMap((rScan, index) =>
           localScans[index]
             ? []
-            : [{
-              id: rScan.id,
-              disease_name: rScan.disease_name,
-              confidence: rScan.confidence,
-              image_blob: new Blob(), // Empty: the photo is served from image_url
-              image_url: rScan.image_url,
-              image_hash: rScan.image_hash || undefined,
-              updated_at: rScan.updated_at,
-              device_id: rScan.device_id,
-              _status: "synced",
-            }],
+            : [
+                {
+                  id: rScan.id,
+                  disease_name: rScan.disease_name,
+                  confidence: rScan.confidence,
+                  image_blob: new Blob(), // Empty: the photo is served from image_url
+                  image_url: rScan.image_url,
+                  image_hash: rScan.image_hash || undefined,
+                  updated_at: rScan.updated_at,
+                  device_id: rScan.device_id,
+                  _status: "synced",
+                },
+              ],
         );
         if (scansToPut.length > 0) {
           await db.scans.bulkPut(scansToPut);
@@ -237,7 +254,9 @@ export function useSync() {
     // up on a slow connection.
     if (isSyncingRef.current) {
       syncRequestedRef.current = true;
-      console.log("---Sync already in progress — skipping duplicate trigger.---");
+      console.log(
+        "---Sync already in progress — skipping duplicate trigger.---",
+      );
       return;
     }
 
@@ -266,7 +285,12 @@ export function useSync() {
         clearScheduledRetry();
       }
     }
-  }, [clearScheduledRetry, flushLocalMutations, pullRemoteChanges, scheduleRetry]);
+  }, [
+    clearScheduledRetry,
+    flushLocalMutations,
+    pullRemoteChanges,
+    scheduleRetry,
+  ]);
 
   useEffect(() => {
     syncRef.current = sync;
@@ -294,7 +318,12 @@ export function useSync() {
 
   // Saved locally first, so a scan is never lost when the network is not there
   const createScan = useCallback(
-    async (diseaseName: string, confidence: number, imageBlob: Blob, imageHash?: string) => {
+    async (
+      diseaseName: string,
+      confidence: number,
+      imageBlob: Blob,
+      imageHash?: string,
+    ) => {
       const scanId = crypto.randomUUID();
       const timestamp = new Date().toISOString();
 
@@ -316,7 +345,7 @@ export function useSync() {
         void sync();
       }
     },
-    [sync, deviceId]
+    [sync, deviceId],
   );
 
   // A scan that never reached Supabase can go immediately; one that did is
@@ -339,7 +368,7 @@ export function useSync() {
         }
       }
     },
-    [sync]
+    [sync],
   );
 
   // Sync as soon as the network returns or the device ID becomes available
@@ -375,7 +404,11 @@ export function useSync() {
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "guidelines" },
-        async (payload: { eventType: string; new: Record<string, unknown>; old: Record<string, unknown> }) => {
+        async (payload: {
+          eventType: string;
+          new: Record<string, unknown>;
+          old: Record<string, unknown>;
+        }) => {
           console.log("---Realtime Postgres change detected---", payload);
           const { eventType, new: newRecord, old: oldRecord } = payload;
 
@@ -389,7 +422,7 @@ export function useSync() {
           } else if (eventType === "DELETE") {
             await db.guidelines.delete(String(oldRecord.id));
           }
-        }
+        },
       )
       .subscribe();
 
@@ -403,9 +436,12 @@ export function useSync() {
     };
   }, [isOnline, deviceId]);
 
-  return useMemo(() => ({
-    createScan,
-    deleteScan,
-    triggerSync: sync,
-  }), [createScan, deleteScan, sync]);
+  return useMemo(
+    () => ({
+      createScan,
+      deleteScan,
+      triggerSync: sync,
+    }),
+    [createScan, deleteScan, sync],
+  );
 }

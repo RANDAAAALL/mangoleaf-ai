@@ -51,8 +51,18 @@ export const ScanCard = memo(function ScanCard({
           />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center text-[#738a77] text-xs font-semibold bg-[#eef5e9]">
-            <svg className="h-8 w-8 mb-1 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <svg
+              className="h-8 w-8 mb-1 opacity-50"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
             </svg>
             <span>{t.noImageOffline}</span>
           </div>
@@ -60,7 +70,9 @@ export const ScanCard = memo(function ScanCard({
 
         {/* Floating Disease Badge */}
         <div className="absolute top-3 right-3">
-          <span className={`text-[10px] uppercase font-extrabold px-2.5 py-1 rounded-full border shadow-xs ${badgeClass}`}>
+          <span
+            className={`text-[10px] uppercase font-extrabold px-2.5 py-1 rounded-full border shadow-xs ${badgeClass}`}
+          >
             {scan.disease_name}
           </span>
         </div>
@@ -78,8 +90,18 @@ export const ScanCard = memo(function ScanCard({
             title="Delete scan log"
             className="text-rose-600 sm:text-slate-300 sm:hover:text-rose-600 transition-colors p-1"
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
             </svg>
           </button>
         </div>

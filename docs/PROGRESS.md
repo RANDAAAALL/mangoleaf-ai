@@ -172,9 +172,9 @@ Retrained the classifier to resolve a leakage problem discovered in Trial 2's da
 
 **Training.** MobileNetV3-Large, two-stage fine-tuning. Replaced Trial 2's on-disk minority-class file duplication with `compute_class_weight('balanced')`, because duplicated files would have re-entered the very problem the trial exists to solve. Stage 2 explicitly freezes all 46 BatchNormalization layers, leaving 80 trainable weight tensors. That freeze is the fix for Trial 2's fine-tuning collapse, where accuracy fell from 0.9735 at the end of stage 1 to 0.8535 at the first stage-2 epoch because unfreezing the base also let the BatchNorm layers overwrite ImageNet's population statistics from small batches.
 
-**Results.** 97.12% test accuracy (405 of 417 correct, 12 errors) and 0.0768 test loss, with a 95% Wilson score interval of roughly 95.0% to 98.3%. Every one of the 12 errors involves `bacterial_black_spot` or `mango_scab`, the two smallest training classes at 207 and 203 images and genuinely similar in appearance. The other four classes are perfect. A dedicated diagnostic ruled out residual leakage as the explanation for those perfect scores: the classes scoring 1.0000 have the *fewest* nearby training images, which is the inverse of the leakage pattern.
+**Results.** 97.12% test accuracy (405 of 417 correct, 12 errors) and 0.0768 test loss, with a 95% Wilson score interval of roughly 95.0% to 98.3%. Every one of the 12 errors involves `bacterial_black_spot` or `mango_scab`, the two smallest training classes at 207 and 203 images and genuinely similar in appearance. The other four classes are perfect. A dedicated diagnostic ruled out residual leakage as the explanation for those perfect scores: the classes scoring 1.0000 have the _fewest_ nearby training images, which is the inverse of the leakage pattern.
 
-**Calibration.** Fitted a single scalar temperature `T = 0.754966` on the validation logits by minimizing negative log-likelihood, then folded it into the final Dense layer as `W/T` and `b/T`. Accuracy is identical to six decimal places because argmax is invariant to division by a positive constant. Because `T < 1.0` the model was underconfident, so folding *raises* confidence, which makes the fixed 70% floor a weaker out-of-scope rejector rather than a stronger one.
+**Calibration.** Fitted a single scalar temperature `T = 0.754966` on the validation logits by minimizing negative log-likelihood, then folded it into the final Dense layer as `W/T` and `b/T`. Accuracy is identical to six decimal places because argmax is invariant to division by a positive constant. Because `T < 1.0` the model was underconfident, so folding _raises_ confidence, which makes the fixed 70% floor a weaker out-of-scope rejector rather than a stronger one.
 
 **Export.** TensorFlow.js Graph Model with Float16 quantization: 5.88 MB across 2 weight shards, down from 11.51 MB across 3. Verified by walking the shard bytes against the `weightsManifest` rather than trusting the file size: 199 of 199 float-valued tensors quantized, no `inf` or `NaN` anywhere. Comparing the two `model.json` files node by node found zero op-count differences (461 nodes, 62 convolutions, 2,970,642 weight scalars in both), so inference cost on device is unchanged and the whole 5.63 MB saving is a transfer saving.
 
@@ -184,7 +184,6 @@ Retrained the classifier to resolve a leakage problem discovered in Trial 2's da
 
 - Verified with `bun run typecheck`, `bun run lint`, and `bun run build`, all exiting 0. Confirmed the generated `public/sw.js` carries the new cache name and lists exactly two weight shards.
 - Not committed on the day of the swap. Committing adds 5.88 MB of binaries to git history permanently, on top of Trial 2's 11.51 MB. The model shipped instead as part of the v2.1.1 commit described below, so the intermediate `v2.1.0` state has no commit of its own.
-
 
 ### August 23, 2026: Static asset move and a gitignore anchoring fix
 
@@ -200,7 +199,6 @@ Two observations recorded while inspecting the generated service worker, neither
 
 - The Serwist precache manifest covers every file under `public/`, so the 12 KB architecture diagram is now downloaded to each installed device even though only the documentation uses it. Moving it to `docs/` would remove it from the manifest.
 - Precache URLs generated on Windows contain backslash separators, for example `/images\icons\png\icon-192x192.png`. These resolve correctly, because the WHATWG URL parser treats a backslash as a path separator for HTTP URLs and Serwist derives every cache key through `new URL()`. A Linux build of the same commit emits forward slashes, so the two produce a noisy diff of an identical service worker.
-
 
 ### August 24, 2026: out-of-scope threshold fitting and model v2.1.1
 
@@ -219,7 +217,6 @@ Two observations recorded while inspecting the generated service worker, neither
 **Field evidence from four rejected phone scans.** Confidence rejected nothing and margin rejected nothing; entropy rejected all four. Every one of them cleared the 70% floor at 0.7720, 0.8467, and 0.8501, and every one cleared the 0.55 margin at 0.5962, 0.7626, and 0.7617. A 70%-only build would have labelled sky, gourds, and avocados as mango diseases at 77% to 85% displayed confidence. Two caveats: one scan's entropy of `0.3096` clears the `0.30` line by only `0.0096`, which is inside the `0.0158` scaled float16 band, so it is not robust evidence; and a photograph of lemons returned `Healthy` at 100%, a genuine closed-set miss and one of the roughly 48.8% that slips through. Fixing that case needs a seventh class or an open-set method, both out of scope for v2.1.1.
 
 **Still open at the end of that day.** The phone session was a development build with Fast Refresh present, so the service worker and precache paths were never exercised. Production-build verification was outstanding on every platform. The desktop half was closed the following day, recorded below; the phone half is still open.
-
 
 ### August 25, 2026: local production verification, Bisaya terms parity, and the v0.2.6 release
 
@@ -263,7 +260,6 @@ Five of the six classes were accepted during the session. **`mango_scab` was not
 - Also centred the About tab heading and widened the README icon from 50 to 80 pixels.
 - Model version stays `v2.1.1` and `MODEL_CACHE` stays `mangoleaf-model-cache-v2-1-1`. Nothing in `public/model/` changed, and the four model precache entries are byte-identical across the rebuild. `public/sw.js` was regenerated after the version bump so the committed manifest matches the shipped bundle hashes.
 
-
 ### August 26-27, 2026: Trial 3 retraining, threshold refit, and the v0.3.0 release
 
 Retrained the classifier on a new image pool and shipped it. Full report in [model-training/trials/TRIAL_v3.md](model-training/trials/TRIAL_v3.md).
@@ -278,7 +274,7 @@ Retrained the classifier on a new image pool and shipped it. Full report in [mod
 
 **Six of the 10 errors are `bacterial_black_spot` against `mango_scab`** in one direction or the other. Those are the two smallest classes and the two whose folders are original field photography rather than Roboflow output. `bacterial_canker` and `anthracnose` are perfect on recall.
 
-**Calibration.** Fitted `T = 1.188751` on the validation logits and folded it into the final Dense layer as `W/T` and `b/T`. Validation NLL improved from 0.098212 to 0.096231. Note the direction: `T > 1` means the model was **over**confident, so folding *lowers* confidence and makes the fixed 70% floor a stronger out-of-scope rejector. Trial 2.1's `T = 0.754966` did the opposite. The two trials were miscalibrated in opposite directions, so no calibration behaviour carries over between them.
+**Calibration.** Fitted `T = 1.188751` on the validation logits and folded it into the final Dense layer as `W/T` and `b/T`. Validation NLL improved from 0.098212 to 0.096231. Note the direction: `T > 1` means the model was **over**confident, so folding _lowers_ confidence and makes the fixed 70% floor a stronger out-of-scope rejector. Trial 2.1's `T = 0.754966` did the opposite. The two trials were miscalibrated in opposite directions, so no calibration behaviour carries over between them.
 
 **The training run shipped a dead margin gate, and the refit fixed it.** `run_record.json` recorded `marginThreshold: 0.0`, which is vacuously true for every input, so the margin gate rejected nothing. Two causes compounded: the sweep started at margin 0.00, and the candidate comparison used a strict `>`, so 0.00 won every tie by being tried first. Refitting found **88 tied `(margin, entropy)` pairs across 44 distinct margins from 0.00 to 0.43**, all at the same tune rejection of 0.8690, so the threshold was free to be chosen and the training run chose the only value that does nothing.
 
@@ -470,6 +466,7 @@ The first two bullets were written earlier and sat between the August 28 and Aug
   ```
 
   The proper fix, if the composition is ever re-rendered, is to give the splash a composed state at t=0 instead — drop the `opacity: 0` from-states on `#loader-logo` and `#loader-title` — which would make the prepend unnecessary.
+
 - Recorded in [ARCHITECTURE.md](ARCHITECTURE.md), which now carries `video/` in the project tree and a paragraph on why it is a neighbour of the application rather than part of it, and in [AGENTS.md](../AGENTS.md) as a convention.
 
 ### September 16, 2026: local security checks and master push CI
@@ -481,6 +478,11 @@ The first two bullets were written earlier and sat between the August 28 and Aug
 - Reconciled `bun.lock` and the installed Next.js version with the already-merged Dependabot update to 16.3.3 while adding Husky 9.1.7. The app remains version 0.4.6 and the model remains v3.0.0.
 - Updated setup, architecture, README, and agent instructions with installation steps, file rules, comments, and the distinction between local prevention and post-push CI detection.
 - Extended Husky's pre-push hook to run TypeScript and ESLint after the security scan. Pushes now stop locally for credentials, forbidden private files, type errors, or lint errors; production build and exported-asset verification remain CI-only because they take longer and need Google Fonts.
+- Added pinned Prettier, lint-staged, and eslint-config-prettier dependencies with shared formatting and ignore settings. Coworkers can format without an editor extension.
+- Added a Husky pre-commit hook that formats staged files and includes fixes in the commit. Pre-push and master-push CI check formatting without rewriting files.
+- Established the initial formatting baseline for supported project files. Generated assets, model exports, notebooks, local-only files, and the separate video project are excluded.
+- Updated setup, README, architecture, and agent instructions with the formatting workflow and ESLint compatibility configuration. Application and model versions remain unchanged because this is developer tooling and formatting work.
+- Verified a frozen dependency install, typecheck, lint, formatting check, production build, exported assets, and all 10 tooling tests. An isolated Git repository confirmed the actual pre-commit hook includes formatting fixes, preserves unstaged edits in partially staged files, handles filenames with spaces, respects ignored files, and blocks syntax errors. The ESLint compatibility check found no conflicting rules.
 
 ## Current Notebook Decision
 

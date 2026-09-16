@@ -281,9 +281,7 @@ export default function Home() {
   // Synced guidelines first, bundled fallback second, so advice still appears
   // on a device that has never been online.
   const getGuidelineForScan = useCallback(
-    (
-      diseaseName: string,
-    ): { en: string; bis: string } => {
+    (diseaseName: string): { en: string; bis: string } => {
       const key = diseaseName.toLowerCase().replace(/\s+/g, "_");
       const matched = guidelineMap[key];
 

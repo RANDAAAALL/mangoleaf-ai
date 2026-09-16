@@ -11,7 +11,7 @@ export interface DiagnosisResult {
  * lives in code instead of model_config.json. If a config file disagrees, this
  * value wins and a warning is logged.
  */
-const CONFIDENCE_THRESHOLD = 0.70;
+const CONFIDENCE_THRESHOLD = 0.7;
 
 /** Optional extra rejection thresholds, fitted in the training notebook. */
 interface ModelConfigThresholds {
@@ -69,7 +69,9 @@ async function loadModelConfig(): Promise<void> {
         `entropy=${thresholds.entropyThreshold} (null means the check is off).---`,
     );
   } catch {
-    console.log("---model_config.json unreadable — using the 70% check only.---");
+    console.log(
+      "---model_config.json unreadable — using the 70% check only.---",
+    );
   }
 }
 
@@ -137,7 +139,7 @@ export async function loadMangoModel(): Promise<tf.GraphModel> {
  */
 function downscaleToCanvas(
   imgElement: HTMLImageElement,
-  targetSize: number = 224
+  targetSize: number = 224,
 ): HTMLCanvasElement {
   if (!sharedCanvas) {
     sharedCanvas = document.createElement("canvas");
@@ -163,7 +165,7 @@ function downscaleToCanvas(
  */
 export async function predictMangoDisease(
   model: tf.GraphModel,
-  imgElement: HTMLImageElement
+  imgElement: HTMLImageElement,
 ): Promise<DiagnosisResult> {
   // 1. Downscale on the CPU canvas first. A 12MP photo (4000x3000) is 36 million
   //    floats; 224x224 is 150K, roughly 240x smaller.
@@ -236,7 +238,7 @@ export async function predictMangoDisease(
 
   return {
     diseaseName,
-    confidence
+    confidence,
   };
 }
 
@@ -250,7 +252,7 @@ export async function predictMangoDisease(
 export async function compressImageForStorage(
   imgElement: HTMLImageElement,
   maxDimension: number = 1000,
-  quality: number = 0.75
+  quality: number = 0.75,
 ): Promise<Blob> {
   let width = imgElement.naturalWidth || imgElement.width;
   let height = imgElement.naturalHeight || imgElement.height;
@@ -273,17 +275,15 @@ export async function compressImageForStorage(
 
   // Try WebP first, around half the size of JPEG
   const webpBlob = await new Promise<Blob | null>((resolve) => {
-    canvas.toBlob(
-      (blob) => resolve(blob),
-      "image/webp",
-      quality
-    );
+    canvas.toBlob((blob) => resolve(blob), "image/webp", quality);
   });
 
   // Check the type, not just that a blob came back: a browser without WebP
   // support silently hands back a PNG instead, which is larger than the JPEG.
   if (webpBlob && webpBlob.type === "image/webp") {
-    console.log(`---Compressed to WebP: ${(webpBlob.size / 1024).toFixed(0)} KB---`);
+    console.log(
+      `---Compressed to WebP: ${(webpBlob.size / 1024).toFixed(0)} KB---`,
+    );
     return webpBlob;
   }
 
@@ -292,13 +292,14 @@ export async function compressImageForStorage(
     canvas.toBlob(
       (blob) => {
         if (blob) {
-          console.log(`---Compressed to JPEG (fallback): ${(blob.size / 1024).toFixed(0)} KB---`);
+          console.log(
+            `---Compressed to JPEG (fallback): ${(blob.size / 1024).toFixed(0)} KB---`,
+          );
           resolve(blob);
-        }
-        else reject(new Error("Canvas blob compression failed"));
+        } else reject(new Error("Canvas blob compression failed"));
       },
       "image/jpeg",
-      0.80
+      0.8,
     );
   });
 }
@@ -314,4 +315,3 @@ export async function computeImageHash(file: File): Promise<string> {
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
-

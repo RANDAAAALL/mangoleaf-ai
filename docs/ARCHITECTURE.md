@@ -13,7 +13,8 @@ The tree below highlights the files and directories that define the application.
 ```text
 mangoleaf-ai/
 |-- .github/workflows/ci.yml        # Security and app checks on master pushes
-|-- .husky/pre-push                 # Local security check before upload
+|-- .husky/pre-commit               # Format staged files before committing
+|-- .husky/pre-push                 # Security, TypeScript, lint, and formatting checks
 |-- tools/                          # Shared scanner setup, security checks, export verification, and tests
 |-- public/                         # Files served directly from the site root
 |   |-- images/
@@ -111,13 +112,13 @@ Reusable UI lives in `src/components/`. Filenames use lowercase kebab-case, whil
 
 Components are grouped into subfolders by the role they play rather than kept in one flat directory:
 
-| Folder | Contents | Role |
-| --- | --- | --- |
-| `brand/` | `logo.tsx`, `icon.tsx` | Identity marks and the shared icon set |
-| `layout/` | `top-header.tsx`, `bottom-nav.tsx`, `footer.tsx`, `splash-screen.tsx` | Application frame around screen content |
-| `modal/` | `legal-modal.tsx`, `scan-details-modal.tsx`, `scan-sheet.tsx` | Overlay dialogs and sheets |
-| `scan/` | `diagnostic-scanner.tsx`, `scan-card.tsx`, `scan-history-list.tsx`, `how-it-works-steps.tsx`, `disease-coverage-card.tsx` | Diagnosis feature surface |
-| `tab/` | `home-tab.tsx`, `history-tab.tsx`, `about-tab.tsx` | One component per navigation tab |
+| Folder    | Contents                                                                                                                  | Role                                    |
+| --------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `brand/`  | `logo.tsx`, `icon.tsx`                                                                                                    | Identity marks and the shared icon set  |
+| `layout/` | `top-header.tsx`, `bottom-nav.tsx`, `footer.tsx`, `splash-screen.tsx`                                                     | Application frame around screen content |
+| `modal/`  | `legal-modal.tsx`, `scan-details-modal.tsx`, `scan-sheet.tsx`                                                             | Overlay dialogs and sheets              |
+| `scan/`   | `diagnostic-scanner.tsx`, `scan-card.tsx`, `scan-history-list.tsx`, `how-it-works-steps.tsx`, `disease-coverage-card.tsx` | Diagnosis feature surface               |
+| `tab/`    | `home-tab.tsx`, `history-tab.tsx`, `about-tab.tsx`                                                                        | One component per navigation tab        |
 
 The three tab components are the boundary between `page.tsx` and screen content. `page.tsx` owns all state and handlers, and renders exactly one of `HomeTab`, `HistoryTab`, or `AboutTab` per active tab. Adding a screen means adding a tab component and one branch in `page.tsx`, not editing shared markup.
 
@@ -125,7 +126,7 @@ Grouping is by role, not by which tab uses a file. `scan/scan-history-list.tsx` 
 
 `modal/scan-sheet.tsx` is the sharper case of the same rule: it is a dismissible bottom sheet, so it is grouped with the overlays even though its content is the camera-or-gallery choice that starts a scan. It is also the one component that reaches outside React to drive another file's markup.
 
-**The sheet's drag deliberately bypasses React, and that is not an oversight to tidy up.** The drag-move handler assigns `sheetRef.current.style.transform` and `backdropRef.current.style.opacity` directly instead of calling `setState`, because a `touchmove` handler runs at the digitizer's sampling rate and a React re-render per event is far more work than the one style write the frame needs. To keep the imperative writes and React consistent, the render path reads `dragYRef.current` rather than the `dragY` state while a drag is in progress, so an unrelated parent re-render commits the live drag offset instead of a stale zero. `dragY` state is written only at drag end, which is what lets React clear the imperative `transform` and run the snap-back or dismiss transition. Reverting any one of those three pieces to ordinary state breaks the other two. `page.tsx` renders two hidden `<input type="file">` elements carrying the ids `scan-camera-input` and `scan-gallery-input`, and the sheet calls `document.getElementById` on those ids and clicks the input directly, because a file picker only opens from a real user gesture on the input itself. **Renaming or removing either id breaks image selection silently:** the lookup returns `null`, the sheet still closes, and nothing reports an error. Keep the ids and the sheet in step, and keep both inputs mounted whenever the sheet can be opened. That obligation is why the desktop sheet, which since `v0.4.3` shows only the gallery card because a desktop browser ignores `capture="environment"`, hides the camera *button* with `md:hidden` and leaves `scan-camera-input` mounted: the retake flow in `page.tsx` reopens whichever picker was last used, keyed by that id, so unmounting the input would break retake for camera-captured photos on phones.
+**The sheet's drag deliberately bypasses React, and that is not an oversight to tidy up.** The drag-move handler assigns `sheetRef.current.style.transform` and `backdropRef.current.style.opacity` directly instead of calling `setState`, because a `touchmove` handler runs at the digitizer's sampling rate and a React re-render per event is far more work than the one style write the frame needs. To keep the imperative writes and React consistent, the render path reads `dragYRef.current` rather than the `dragY` state while a drag is in progress, so an unrelated parent re-render commits the live drag offset instead of a stale zero. `dragY` state is written only at drag end, which is what lets React clear the imperative `transform` and run the snap-back or dismiss transition. Reverting any one of those three pieces to ordinary state breaks the other two. `page.tsx` renders two hidden `<input type="file">` elements carrying the ids `scan-camera-input` and `scan-gallery-input`, and the sheet calls `document.getElementById` on those ids and clicks the input directly, because a file picker only opens from a real user gesture on the input itself. **Renaming or removing either id breaks image selection silently:** the lookup returns `null`, the sheet still closes, and nothing reports an error. Keep the ids and the sheet in step, and keep both inputs mounted whenever the sheet can be opened. That obligation is why the desktop sheet, which since `v0.4.3` shows only the gallery card because a desktop browser ignores `capture="environment"`, hides the camera _button_ with `md:hidden` and leaves `scan-camera-input` mounted: the retake flow in `page.tsx` reopens whichever picker was last used, keyed by that id, so unmounting the input would break retake for camera-captured photos on phones.
 
 A reusable SVG belongs in `brand/icon.tsx` under a name in the exported `IconName` union, not inline in whichever component needs it first. Icons that share the 24x24 stroke wrapper are held in the `STROKE_24_SHAPES` map, so adding one is a shape entry rather than another render branch. No entry hardcodes a colour or a size: every icon inherits `currentColor` from the surrounding text colour and takes its pixel dimensions from the `size` prop, which is what lets one shape serve call sites with different colours. Two entries can look like duplicates without being interchangeable. `camera` is a filled FontAwesome glyph on a 640x640 viewBox and `camera-outline` is a stroked viewfinder on a 24x24 one, so they are separate names rather than one icon with a variant flag.
 
@@ -155,11 +156,11 @@ When adding a relative-time string, add it to both the `en` and `bis` objects in
 
 **Rejection is three gates, not one, and all three must pass.** A prediction is accepted only when `meetsConfidence && meetsMargin && meetsEntropy`:
 
-| Gate | Test | Source | Current value |
-| --- | --- | --- | --- |
-| Confidence | Top-1 probability at least the threshold | Hardcoded `CONFIDENCE_THRESHOLD` | `0.70`, fixed |
-| Margin | Top-1 minus top-2 probability at least the threshold | `model_config.json` | `0.40` |
-| Entropy | Normalized Shannon entropy at most the threshold | `model_config.json` | `0.40` |
+| Gate       | Test                                                 | Source                           | Current value |
+| ---------- | ---------------------------------------------------- | -------------------------------- | ------------- |
+| Confidence | Top-1 probability at least the threshold             | Hardcoded `CONFIDENCE_THRESHOLD` | `0.70`, fixed |
+| Margin     | Top-1 minus top-2 probability at least the threshold | `model_config.json`              | `0.40`        |
+| Entropy    | Normalized Shannon entropy at most the threshold     | `model_config.json`              | `0.40`        |
 
 The confidence floor is hardcoded and deliberately not configurable. It is a manuscript specification cited to [31], so a `model_config.json` that asks for a different value is refused: the classifier logs a warning and keeps `0.70`. Margin and entropy are the opposite: both start `null`, and `null` disables that gate. A missing or malformed config therefore degrades to the confidence gate alone rather than blocking a scan, which is why a device can run on one gate without any visible error. The console line `Model config loaded: margin=..., entropy=...` printed at startup is the only way to tell from the app which gates are live, and it is what the production phone checks in `docs/PROGRESS.md` look for.
 
@@ -195,7 +196,7 @@ Supabase is therefore a synchronization and recovery layer; IndexedDB remains th
 
 `src/sw.ts` configures Serwist. It precaches the generated application assets, claims active clients, applies a `CacheFirst` strategy to `/model/*`, and adds its own `activate` handler that deletes every superseded model cache listed in `OUTDATED_MODEL_CACHES`. `next.config.ts` integrates Serwist, disables it during development, and enables static export. It also reads the `version` field from `package.json` and injects it as `NEXT_PUBLIC_APP_VERSION`, which Next replaces with a literal string at build time wherever the code references it. Because the site is a static export, every public value must be baked in during the build; nothing is resolved at runtime. See `docs/MODEL_VERSIONING.md`.
 
-The precache manifest that Serwist generates covers the build output *and every file under `public/`*. Anything added to `public/` is therefore downloaded to each installed device during service-worker installation, whether or not the application ever requests it. Keep assets that only documentation uses out of `public/` unless they also have to be reachable at a site URL.
+The precache manifest that Serwist generates covers the build output _and every file under `public/`_. Anything added to `public/` is therefore downloaded to each installed device during service-worker installation, whether or not the application ever requests it. Keep assets that only documentation uses out of `public/` unless they also have to be reachable at a site URL.
 
 **That manifest, not the `CacheFirst` rule, is what actually updates the model.** `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `/model/*` rule never fires in practice. Every file under `public/model/` carries a content-revision hash in the manifest, so a changed weight shard is refetched on the next service-worker activation regardless of the cache name, and Serwist's own `activate` handler evicts precache entries missing from the current manifest. The `MODEL_CACHE` bump and the `OUTDATED_MODEL_CACHES` eviction are therefore defence in depth whose real payoff is reclaiming several megabytes of superseded weights, not the update mechanism. Do not treat an inspection of `CacheStorage` as verification: the current `mangoleaf-model-cache-v3-0-0` can legitimately be empty on a correctly updated device.
 
@@ -203,7 +204,7 @@ The precache manifest that Serwist generates covers the build output *and every 
 
 Application images live under `public/images/`, with the icon set in `public/images/icons/png/` and `public/images/icons/svg/`. The PNG icons are not decorative: `src/app/manifest.ts` declares the 192x192 and 512x512 files as `maskable`, and browsers refuse to offer the install prompt when a declared icon of at least 192x192 cannot be fetched. `src/app/layout.tsx` points the favicon and Apple touch icon at the same tree. Renaming or moving this directory means updating both files and rebuilding.
 
-These files must stay tracked in git. `.gitignore` patterns that could match them need a leading slash so they stay anchored to the repository root; a bare pattern such as `images` matches a directory of that name at *any* depth and silently excludes `public/images/`. Such a mistake does not surface in `git status`, because ignored paths are not reported as untracked, and it cannot be undone with a negation such as `!public/images/`, because git never descends into a directory that a parent pattern has excluded. The symptom appears only after a fresh clone or a deployment build: no favicon, and an uninstallable PWA.
+These files must stay tracked in git. `.gitignore` patterns that could match them need a leading slash so they stay anchored to the repository root; a bare pattern such as `images` matches a directory of that name at _any_ depth and silently excludes `public/images/`. Such a mistake does not surface in `git status`, because ignored paths are not reported as untracked, and it cannot be undone with a negation such as `!public/images/`, because git never descends into a directory that a parent pattern has excluded. The symptom appears only after a fresh clone or a deployment build: no favicon, and an uninstallable PWA.
 
 ## Data flow for a scan
 
@@ -225,9 +226,9 @@ These files must stay tracked in git. `.gitignore` patterns that could match the
 
 ### Local checks and continuous integration
 
-Husky registers `.husky/pre-push` during root dependency installation. The hook checks secrets and private filenames with `tools/check-security.mjs`, then runs TypeScript and ESLint before upload. The security scan includes tracked filenames and fetched Git history, including explicit push commits. `tools/install-gitleaks.mjs` installs the pinned, checksum-verified scanner under ignored `.tools/`. No scanner code or binaries are included in the application export.
+Husky registers `.husky/pre-commit` and `.husky/pre-push` during root dependency installation. Before commits, `lint-staged` formats staged files with Prettier and stages the fixes. `.prettierignore` keeps generated assets, model files, notebooks, and the separate video project outside formatting. Before upload, the push hook checks secrets and private filenames with `tools/check-security.mjs`, then runs TypeScript, ESLint, and Prettier's check-only command. The security scan includes tracked filenames and fetched Git history, including explicit push commits. `tools/install-gitleaks.mjs` installs the pinned, checksum-verified scanner under ignored `.tools/`. No scanner code or binaries are included in the application export.
 
-`.github/workflows/ci.yml` runs only on pushes to `master`. Independent security and application jobs repeat the history scan and perform typecheck, lint, static build, and exported-asset verification. CI invokes checks directly with Husky disabled. The build uses public-client fallback settings and does not deploy; production configuration and hosting deployment remain separate. Local checks can stop an upload, while CI reports failures after the push. See [SETUP.md](../SETUP.md#local-security-checks-and-github-ci) for installation, file rules, and limits.
+`.github/workflows/ci.yml` runs only on pushes to `master`. Independent security and application jobs repeat the history scan and perform typecheck, lint, formatting checks, static build, and exported-asset verification. CI invokes checks directly with Husky disabled. The build uses public-client fallback settings and does not deploy; production configuration and hosting deployment remain separate. Local checks can stop an upload, while CI reports failures after the push. See [SETUP.md](../SETUP.md#local-security-checks-and-github-ci) for installation, file rules, and limits.
 
 ## Naming and organization conventions
 

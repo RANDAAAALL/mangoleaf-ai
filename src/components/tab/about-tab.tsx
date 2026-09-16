@@ -91,7 +91,10 @@ export const AboutTab = memo(function AboutTab({
   return (
     <div className="flex flex-col gap-12 pb-8 sm:gap-16 sm:pb-12">
       <section className="relative isolate overflow-hidden rounded-3xl bg-[#1c682d] px-6 py-9 text-white shadow-sm sm:px-10 sm:py-12">
-        <div className="absolute right-5 top-5 opacity-15 sm:right-8 sm:top-7" aria-hidden="true">
+        <div
+          className="absolute right-5 top-5 opacity-15 sm:right-8 sm:top-7"
+          aria-hidden="true"
+        >
           <Logo className="h-24 w-24 sm:h-36 sm:w-36" fill="#d9f5d6" />
         </div>
         <div className="relative flex max-w-2xl flex-col items-start gap-5">
@@ -292,9 +295,7 @@ function TechnicalFact({ value, label }: { value: string; label: string }) {
   return (
     <div>
       <p className="text-lg font-bold tracking-tight text-[#143519]">{value}</p>
-      <p className="mt-1 text-xs font-medium text-[#526856]">
-        {label}
-      </p>
+      <p className="mt-1 text-xs font-medium text-[#526856]">{label}</p>
     </div>
   );
 }

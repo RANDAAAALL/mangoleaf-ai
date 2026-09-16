@@ -26,7 +26,8 @@ This repository uses Next.js 16.3.3. APIs, conventions, and file structure may d
 - Update documentation when setup, architecture, environment variables, model versions, or release behavior changes.
 - Do not manually edit generated files: `public/sw.js`, `.next/`, `out/`, `next-env.d.ts`, or `*.tsbuildinfo`.
 - Do not commit `.env.local` or other secret-bearing environment files.
-- Keep shared developer checks in tracked `tools/`; `/scripts/` remains local-only. Husky runs security, typecheck, and lint before pushes, and `.github/workflows/ci.yml` repeats them alongside the production build only on pushes to `master`. Keep hook files LF-terminated and comments short enough for coworkers to scan.
+- Keep shared developer checks in tracked `tools/`; `/scripts/` remains local-only. Husky uses `lint-staged` and Prettier to format staged files before commits, then runs security, typecheck, lint, and formatting checks before pushes. `.github/workflows/ci.yml` repeats the checks alongside the production build only on pushes to `master`. Keep hook files LF-terminated and comments short enough for coworkers to scan.
+- Use the pinned project Prettier and `.prettierrc.json`; respect `.prettierignore`. Run `bun run format` before verification when preparing source changes so the generated service worker reflects the formatted source. Keep ESLint's Prettier compatibility config last. Never run whole-project formatting from a Git hook or use formatting writes in CI.
 - Install the pinned scanner with `bun run security:install` before security checks. Never print detected credential values or broadly allowlist real findings. Reserve `secrets/` and `confidential/` for local-only files; `.tools/` and Husky's generated `.husky/_/` must remain untracked.
 - Do not turn version labels into environment variables. The app version comes from the `version` field in `package.json` via the `env` block in `next.config.ts`, and the model label is the `modelVersion` constant in `src/lib/constants.ts`. Keep both out of `.env.local`, `.env.example`, and hosting dashboard settings so a stale override cannot display the wrong version.
 - Keep every user-facing string in `src/lib/translations.ts` with an entry in both the `en` and `bis` objects. Do not hardcode English in a component or helper, and do not rely on `toLocaleDateString` or other `Intl` formatting for Cebuano/Bisaya output, because browsers have no reliable locale data for it. Use `{n}` placeholder templates for counted labels so plural rules stay in the translation file.
@@ -36,16 +37,16 @@ This repository uses Next.js 16.3.3. APIs, conventions, and file structure may d
 
 Every implementation task must include a documentation-impact review before it is considered complete. Update the documents affected by the change in the same task; do not postpone known documentation updates to a later commit.
 
-| Change made | Documentation or metadata to review and update |
-| --- | --- |
-| Installation steps, prerequisites, Supabase resources, commands, or environment variables | `SETUP.md`, `.env.example`, and the README quick start when relevant |
-| Application layers, data flow, storage, synchronization, service worker, deployment model, or important directories | `docs/ARCHITECTURE.md` |
-| User-visible feature, workflow, important fix, milestone, or completed project task | `docs/PROGRESS.md` |
-| Performance behavior, caching, bundle loading, image processing, inference, memory, or network optimization | `docs/PERFORMANCE.md` |
-| App version, model version, release process, tags, or notebook-version policy | `docs/MODEL_VERSIONING.md`, `package.json`, `src/lib/constants.ts`, and other displayed version references |
-| Model training, dataset, class mapping, evaluation metrics, or exported model files | The applicable file under `docs/model-training/`, `docs/MODEL_VERSIONING.md`, and `docs/PROGRESS.md` |
-| File or directory rename | All imports, scripts, configuration, Markdown links, project trees, and documentation references to the old path |
-| New long-lived convention or recurring agent workflow | `AGENTS.md` |
+| Change made                                                                                                         | Documentation or metadata to review and update                                                                   |
+| ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Installation steps, prerequisites, Supabase resources, commands, or environment variables                           | `SETUP.md`, `.env.example`, and the README quick start when relevant                                             |
+| Application layers, data flow, storage, synchronization, service worker, deployment model, or important directories | `docs/ARCHITECTURE.md`                                                                                           |
+| User-visible feature, workflow, important fix, milestone, or completed project task                                 | `docs/PROGRESS.md`                                                                                               |
+| Performance behavior, caching, bundle loading, image processing, inference, memory, or network optimization         | `docs/PERFORMANCE.md`                                                                                            |
+| App version, model version, release process, tags, or notebook-version policy                                       | `docs/MODEL_VERSIONING.md`, `package.json`, `src/lib/constants.ts`, and other displayed version references       |
+| Model training, dataset, class mapping, evaluation metrics, or exported model files                                 | The applicable file under `docs/model-training/`, `docs/MODEL_VERSIONING.md`, and `docs/PROGRESS.md`             |
+| File or directory rename                                                                                            | All imports, scripts, configuration, Markdown links, project trees, and documentation references to the old path |
+| New long-lived convention or recurring agent workflow                                                               | `AGENTS.md`                                                                                                      |
 
 Use these rules when maintaining documentation:
 

@@ -2,3 +2,4 @@
 bun run security:check --pre-push
 bun run typecheck
 bun run lint
+bun run format:check

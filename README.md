@@ -46,7 +46,7 @@ Then open `http://localhost:3000`.
 
 The Supabase values in `.env.local` must be replaced before cloud synchronization will work. See [SETUP.md](./SETUP.md) for the complete local setup, Supabase requirements, static-export notes, and pre-commit checks.
 
-Dependency installation registers the Husky `pre-push` hook. The separate scanner setup downloads a pinned, checksum-verified Gitleaks binary into ignored `.tools/`. Pushes then check Git history for secrets and forbidden files, TypeScript, and linting locally. GitHub repeats these checks and verifies the app on pushes to `master`; see [local checks and CI](./SETUP.md#local-security-checks-and-github-ci).
+Dependency installation registers Husky hooks. Before commits, `lint-staged` formats staged files with the project's Prettier configuration and includes the fixes in the commit; no editor extension is required. The separate scanner setup downloads a pinned, checksum-verified Gitleaks binary into ignored `.tools/`. Pushes check Git history for secrets and forbidden files, TypeScript, linting, and formatting locally. GitHub repeats these checks and verifies the app on pushes to `master`; see [local checks and CI](./SETUP.md#local-security-checks-and-github-ci).
 
 ## Documentation
 
@@ -62,17 +62,20 @@ Dependency installation registers the Husky `pre-push` hook. The separate scanne
 
 ## Commands
 
-| Command             | Description                                                                            |
-| ------------------- | -------------------------------------------------------------------------------------- |
-| `bun run dev`       | Start the Next.js development server with webpack.                                     |
-| `bun run typecheck` | Run TypeScript checks without emitting files.                                          |
-| `bun run lint`      | Run ESLint across the repository.                                                      |
-| `bun run build`     | Create the production static export and service worker.                                |
-| `bun run security:install` | Install the pinned local Gitleaks scanner.                                      |
-| `bun run security:check` | Check tracked paths and fetched Git history for private files and secrets.        |
-| `bun run test:tooling` | Test security and export checks using disposable fixtures.                         |
-| `bun run verify:export` | Verify required PWA and model assets after a production build.                    |
-| `bun run start`     | Run `next start`; this is not the deployment path while `output: "export"` is enabled. |
+| Command                    | Description                                                                            |
+| -------------------------- | -------------------------------------------------------------------------------------- |
+| `bun run dev`              | Start the Next.js development server with webpack.                                     |
+| `bun run typecheck`        | Run TypeScript checks without emitting files.                                          |
+| `bun run lint`             | Run ESLint across the repository.                                                      |
+| `bun run format`           | Format supported project files, respecting `.prettierignore`.                          |
+| `bun run format:check`     | Check formatting without changing files.                                               |
+| `bun run format:staged`    | Format staged files; called automatically by Husky before commits.                     |
+| `bun run build`            | Create the production static export and service worker.                                |
+| `bun run security:install` | Install the pinned local Gitleaks scanner.                                             |
+| `bun run security:check`   | Check tracked paths and fetched Git history for private files and secrets.             |
+| `bun run test:tooling`     | Test security and export checks using disposable fixtures.                             |
+| `bun run verify:export`    | Verify required PWA and model assets after a production build.                         |
+| `bun run start`            | Run `next start`; this is not the deployment path while `output: "export"` is enabled. |
 
 Before committing, run these checks in order:
 
@@ -81,6 +84,8 @@ bun run typecheck
 bun run lint
 bun run build
 ```
+
+Husky repeats security, TypeScript, ESLint, and formatting checks automatically when you run `git push`. It does not run `bun run build`, so this full list remains required before committing. When preparing source changes, run `bun run format` before these checks so the build reflects the formatted source.
 
 ## Important note
 

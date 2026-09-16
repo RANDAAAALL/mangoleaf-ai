@@ -13,9 +13,27 @@ const STEP_STYLES: {
   numBg: string;
   icon: IconName;
 }[] = [
-  { border: "border border-[#cfe2c8]", bg: "bg-[#edf6e9]", text: "text-[#143519]", numBg: "bg-[#277839]", icon: "camera-outline" },
-  { border: "border border-[#cfe2c8]", bg: "bg-[#edf6e9]", text: "text-[#143519]", numBg: "bg-[#277839]", icon: "sparkle" },
-  { border: "border border-[#cfe2c8]", bg: "bg-[#edf6e9]", text: "text-[#143519]", numBg: "bg-[#277839]", icon: "clipboard-check" },
+  {
+    border: "border border-[#cfe2c8]",
+    bg: "bg-[#edf6e9]",
+    text: "text-[#143519]",
+    numBg: "bg-[#277839]",
+    icon: "camera-outline",
+  },
+  {
+    border: "border border-[#cfe2c8]",
+    bg: "bg-[#edf6e9]",
+    text: "text-[#143519]",
+    numBg: "bg-[#277839]",
+    icon: "sparkle",
+  },
+  {
+    border: "border border-[#cfe2c8]",
+    bg: "bg-[#edf6e9]",
+    text: "text-[#143519]",
+    numBg: "bg-[#277839]",
+    icon: "clipboard-check",
+  },
 ];
 
 export const HowItWorksSteps = memo(function HowItWorksSteps({

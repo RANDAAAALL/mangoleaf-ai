@@ -1,0 +1,2 @@
+# Format staged files and include the fixes in this commit.
+bun run format:staged

@@ -41,9 +41,9 @@ Copy-Item .env.example .env.local
 
 Configure these values in `.env.local`:
 
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `NEXT_PUBLIC_SUPABASE_URL` | For cloud sync | Supabase project API URL. |
+| Variable                        | Required       | Purpose                              |
+| ------------------------------- | -------------- | ------------------------------------ |
+| `NEXT_PUBLIC_SUPABASE_URL`      | For cloud sync | Supabase project API URL.            |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | For cloud sync | Supabase browser-safe anonymous key. |
 
 Version labels are not environment variables. The footer app version is derived
@@ -122,11 +122,17 @@ bun run build
 
 Do not commit until all three commands pass. The build check matters because it verifies the static export and Serwist service-worker generation in addition to TypeScript and ESLint.
 
+Husky repeats security, TypeScript, ESLint, and formatting checks automatically when you run `git push`. It does not run `bun run build`, so this full list remains required before committing. Run `bun run format` before these checks when preparing source changes. If the commit hook subsequently reformats source files, rebuild and include the regenerated service worker in a follow-up commit.
+
 ## Local security checks and GitHub CI
 
-`bun install` runs the `prepare` script and registers Husky's `.husky/pre-push` hook in this clone. Every coworker must install dependencies after cloning. `bun run security:install` downloads Gitleaks 8.30.1 from its official GitHub release, verifies the archive's pinned SHA-256 checksum, and installs it under ignored `.tools/`. Supported systems are Windows, macOS, and Linux on x64 or arm64. Installation needs internet access; push checks do not. No Gitleaks account or license key is needed for this direct CLI installation.
+`bun install` runs the `prepare` script and registers Husky's `.husky/pre-commit` and `.husky/pre-push` hooks in this clone. Every coworker must install dependencies after cloning. `bun run security:install` downloads Gitleaks 8.30.1 from its official GitHub release, verifies the archive's pinned SHA-256 checksum, and installs it under ignored `.tools/`. Supported systems are Windows, macOS, and Linux on x64 or arm64. Installation needs internet access; push checks do not. No Gitleaks account or license key is needed for this direct CLI installation.
 
-When you push, the hook runs `bun run security:check --pre-push`, `bun run typecheck`, then `bun run lint`. The security check examines tracked file paths and all fetched Git history, including HEAD and the exact commits supplied by Git for the push. It catches credentials and forbidden files even when a later commit deletes them. A missing scanner, incomplete shallow history, scanner error, security finding, type error, or lint error stops the push. Ref deletions alone do not upload commits and skip the security scan, but still run typecheck and lint.
+Before a commit, Husky runs `bun run format:staged`. The pinned `lint-staged` package passes staged filenames to `prettier --write --ignore-unknown` and stages formatting fixes automatically. Its default backup and handling of partially staged files preserve unstaged edits; a task failure stops the commit. No VSCode extension is required. An installed Prettier extension can use the project's local package and `.prettierrc.json`, so editor formatting follows the same rules as hooks and CI.
+
+Use `bun run format` to format the project manually and `bun run format:check` to check without editing. `.prettierignore` excludes generated output, model assets, notebooks, lockfiles, local-only files, and the separate `video/` project. Source, tooling, workflows, and project Markdown remain included. Line endings use `auto` to accept Windows and Unix checkouts; Git attributes still require LF for hooks. ESLint loads `eslint-config-prettier` last to disable conflicting formatting rules while retaining code-quality checks.
+
+When you push, the hook runs `bun run security:check --pre-push`, `bun run typecheck`, `bun run lint`, then `bun run format:check`. The security check examines tracked file paths and all fetched Git history, including HEAD and the exact commits supplied by Git for the push. It catches credentials and forbidden files even when a later commit deletes them. A missing scanner, incomplete shallow history, scanner error, security finding, type error, lint error, or formatting error stops the push. Ref deletions alone do not upload commits and skip the security scan, but still run typecheck, lint, and formatting checks. Push hooks and CI only check formatting; they never rewrite files. If formatting blocks a push, run `bun run format`, review and commit the fixes, then retry.
 
 The file policy blocks `.env*` except `.env.example`, private-key/container extensions (`.pem`, `.key`, `.p12`, `.pfx`, `.keystore`), SSH private-key filenames, `secrets/` and `confidential/` directories, and the two local-only documents `docs/EMAIL_DISPATCH_WORKFLOW.md` and `docs/MANUSCRIPT_MODIFICATIONS.md`. Ignored, uncommitted `.env.local` files stay on your computer and are not scanned or uploaded. The `.env.example` template remains subject to credential scanning once committed. Other confidential documents need an explicit rule in `tools/check-security.mjs`; the scanner cannot infer business sensitivity.
 
@@ -140,7 +146,7 @@ bun run verify:export  # Run after bun run build.
 
 Findings show filenames, lines, rules, and commit IDs without credential values. Remove an unpushed secret from every affected local commit before retrying. If a real credential already reached GitHub, revoke or rotate it; deleting its latest file does not remove earlier exposure. Review false positives individually instead of broadly excluding files or history.
 
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs only for pushes to `master`, including merges. Its `security` job installs the same scanner, tests the tooling, and scans the full fetched history. Its independent `check` job installs frozen dependencies, runs typecheck, lint, and webpack build in order, then verifies exported PWA/model files. Both have read-only repository permission; newer pushes cancel unfinished older runs. No video dependencies or training notebooks are executed.
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs only for pushes to `master`, including merges. Its `security` job installs the same scanner, tests the tooling, and scans the full fetched history. Its independent `check` job installs frozen dependencies, runs typecheck, lint, formatting checks, and webpack build in order, then verifies exported PWA/model files. Both have read-only repository permission; newer pushes cancel unfinished older runs. No video dependencies or training notebooks are executed.
 
 CI sets `HUSKY=0` because it invokes checks directly. The build uses the existing public-client fallback settings and requires no production credentials; it is not a deployment artifact for cloud synchronization. Production builds still need the public Supabase values described above. App/model version labels remain sourced from code. The workflow does not deploy, change Dependabot settings, or gate an independent hosting deployment. It starts after GitHub receives a push and does not inspect pushes isolated on other branches. Local hooks can be skipped, so keep both layers. The hook deliberately excludes production build and export verification because the build is slower and downloads Google Fonts; CI owns those checks.
 

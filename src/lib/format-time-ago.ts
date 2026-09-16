@@ -21,7 +21,8 @@ export function formatTimeAgo(isoString: string, language: Language): string {
 
   if (diffMins < 1) return t.justNow;
   if (diffMins < 60) return withCount(t.minutesAgo, diffMins);
-  if (diffHours < 24) return withCount(diffHours === 1 ? t.hourAgo : t.hoursAgo, diffHours);
+  if (diffHours < 24)
+    return withCount(diffHours === 1 ? t.hourAgo : t.hoursAgo, diffHours);
   if (diffDays === 1) return t.yesterday;
   if (diffDays < 7) return withCount(t.daysAgo, diffDays);
 

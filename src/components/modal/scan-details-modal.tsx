@@ -88,7 +88,6 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
         {/* Right Column: Diagnostic Report & Treatment Guidelines */}
         <div className="p-4 sm:p-8 flex flex-col justify-between overflow-y-auto min-h-0 gap-5 bg-white">
           <div className="flex flex-col gap-3.5">
-
             {/* Header: Title (Full Width) */}
             {/* <div className="flex flex-col gap-2 pr-10"> */}
             <div className="flex justify-center">
@@ -98,19 +97,19 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
 
               {/* Sub-header: Timestamp + Score Badge Row */}
               {/* <div className="flex items-center justify-between gap-2 flex-wrap pt-0.5"> */}
-                <span className="text-xs font-semibold text-[#526856]">
-                  {t.scannedOnPrefix}{" "}
-                  {new Date(scan.updated_at).toLocaleString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "2-digit",
-                  })}
-                </span>
+              <span className="text-xs font-semibold text-[#526856]">
+                {t.scannedOnPrefix}{" "}
+                {new Date(scan.updated_at).toLocaleString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
+                })}
+              </span>
 
-                {/* AI Confidence Score Badge */}
-                {/* {scan.disease_name !== UNCERTAIN_LABEL && (
+              {/* AI Confidence Score Badge */}
+              {/* {scan.disease_name !== UNCERTAIN_LABEL && (
                   <span className="text-xs font-extrabold px-3 py-1 bg-[#e5f5e0] border border-[#c3e6ba] text-[#1b5e28] rounded-full shadow-xs">
                     {t.scorePrefix} {Math.round(scan.confidence * 100)}%
                   </span>
