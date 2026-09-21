@@ -53,8 +53,12 @@ Dependency installation registers Husky hooks. Before commits, `lint-staged` for
 - [Setup guide](./SETUP.md)
 - [Architecture](./docs/ARCHITECTURE.md)
 - [Performance and optimization notes](./docs/PERFORMANCE.md)
+- [Testing and reliability guide](./docs/TESTING.md)
+- [Physical reliability checklist](./docs/PHYSICAL_RELIABILITY_CHECKLIST.md)
+- [Physical checklist answer example (fictional)](./docs/PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md)
 - [Development progress](./docs/PROGRESS.md)
 - [Model and release versioning](./docs/MODEL_VERSIONING.md)
+- [Experimental notebook workflows (candidates, not shipped or deployed)](./notebooks/experiment/README.md)
 - [Trial 3 model report (current shipping model)](./docs/model-training/trials/TRIAL_v3.md)
 - [Trial 2.1 model report (superseded)](./docs/model-training/trials/TRIAL_v2_1.md)
 - [Trial 2 model report (superseded)](./docs/model-training/trials/TRIAL_v2.md)
@@ -62,20 +66,27 @@ Dependency installation registers Husky hooks. Before commits, `lint-staged` for
 
 ## Commands
 
-| Command                    | Description                                                                            |
-| -------------------------- | -------------------------------------------------------------------------------------- |
-| `bun run dev`              | Start the Next.js development server with webpack.                                     |
-| `bun run typecheck`        | Run TypeScript checks without emitting files.                                          |
-| `bun run lint`             | Run ESLint across the repository.                                                      |
-| `bun run format`           | Format supported project files, respecting `.prettierignore`.                          |
-| `bun run format:check`     | Check formatting without changing files.                                               |
-| `bun run format:staged`    | Format staged files; called automatically by Husky before commits.                     |
-| `bun run build`            | Create the production static export and service worker.                                |
-| `bun run security:install` | Install the pinned local Gitleaks scanner.                                             |
-| `bun run security:check`   | Check tracked paths and fetched Git history for private files and secrets.             |
-| `bun run test:tooling`     | Test security and export checks using disposable fixtures.                             |
-| `bun run verify:export`    | Verify required PWA and model assets after a production build.                         |
-| `bun run start`            | Run `next start`; this is not the deployment path while `output: "export"` is enabled. |
+See [application testing](./docs/TESTING.md) for browser installation and report interpretation. Use the [physical reliability checklist](./docs/PHYSICAL_RELIABILITY_CHECKLIST.md) to record real-device evidence. Long reliability runs are explicit commands; core E2E runs in CI on `master` pushes.
+
+| Command                           | Description                                                                            |
+| --------------------------------- | -------------------------------------------------------------------------------------- |
+| `bun run dev`                     | Start the Next.js development server with webpack.                                     |
+| `bun run typecheck`               | Run TypeScript checks without emitting files.                                          |
+| `bun run lint`                    | Run ESLint across the repository.                                                      |
+| `bun run format`                  | Format supported project files, respecting `.prettierignore`.                          |
+| `bun run format:check`            | Check formatting without changing files.                                               |
+| `bun run format:staged`           | Format staged files; called automatically by Husky before commits.                     |
+| `bun run build`                   | Create the production static export and service worker.                                |
+| `bun run security:install`        | Install the pinned local Gitleaks scanner.                                             |
+| `bun run security:check`          | Check tracked paths and fetched Git history for private files and secrets.             |
+| `bun run test:tooling`            | Test security and export checks using disposable fixtures.                             |
+| `bun run test:build`              | Prepare or reuse the isolated production export used by browser tests.                 |
+| `bun run test:e2e`                | Build an isolated app and test desktop/mobile scan workflows.                          |
+| `bun run test:reliability`        | Run 30 predictions per photo and a 30-minute mixed-use session.                        |
+| `bun run test:report`             | Open the core browser-test HTML report.                                                |
+| `bun run test:report:reliability` | Open the latest reliability HTML report.                                               |
+| `bun run verify:export`           | Verify required PWA and model assets after a production build.                         |
+| `bun run start`                   | Run `next start`; this is not the deployment path while `output: "export"` is enabled. |
 
 Before committing, run these checks in order:
 

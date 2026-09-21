@@ -1,6 +1,6 @@
 {
   "name": "mangoleaf-ai",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "private": true,
   "scripts": {
     "dev": "bun --bun next dev --webpack",
@@ -15,6 +15,11 @@
     "security:install": "bun tools/install-gitleaks.mjs",
     "security:check": "bun tools/check-security.mjs",
     "test:tooling": "bun test ./tools",
+    "test:build": "bun tools/build-test-app.mjs",
+    "test:e2e": "bun tools/run-browser-tests.mjs e2e",
+    "test:reliability": "bun tools/run-browser-tests.mjs reliability",
+    "test:report": "playwright show-report playwright-report/e2e",
+    "test:report:reliability": "playwright show-report playwright-report/reliability",
     "verify:export": "bun tools/verify-export.mjs"
   },
   "dependencies": {
@@ -29,10 +34,12 @@
     "serwist": "^9.5.11"
   },
   "devDependencies": {
+    "@playwright/test": "1.63.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "busboy": "1.6.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "eslint-config-prettier": "10.1.8",

@@ -4,6 +4,10 @@ node_modules/
 out/
 build/
 coverage/
+.test-app/
+test-results/
+playwright-report/
+.playwright-mcp/
 next-env.d.ts
 *.tsbuildinfo
 public/sw.js*

@@ -42,7 +42,7 @@ jobs:
   check:
     name: Check application
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
         with:
@@ -68,3 +68,18 @@ jobs:
       # This check-only build uses client fallbacks; production needs real public settings.
       - name: Verify exported PWA and model files
         run: bun run verify:export
+      - name: Install browser dependencies
+        run: bunx --no-install playwright install --with-deps chromium firefox webkit
+      # Core browser cases use an isolated export and local mock backend.
+      - name: Test desktop, mobile, and offline scan workflows
+        run: bun run test:e2e
+      - name: Save browser reports and failure traces
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: browser-test-evidence
+          path: |
+            playwright-report/e2e/
+            test-results/e2e/
+          if-no-files-found: ignore
+          retention-days: 14

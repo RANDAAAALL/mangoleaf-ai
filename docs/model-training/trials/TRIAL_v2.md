@@ -1,5 +1,7 @@
 # MangoLeaf AI: Trial 2 Model Training & Performance Evaluation Report
 
+> **Reading note, September 21, 2026:** Trial 2 and its v2.1 successor are historical. References below to v2.1 as the active template describe the earlier transition. The current baseline is [Trial 3](TRIAL_v3.md), with the clean template at [`notebooks/v3/MangoLeaf_AI_Training_v3.ipynb`](../../../notebooks/v3/MangoLeaf_AI_Training_v3.ipynb). New candidate workflows belong under [`notebooks/experiment/`](../../../notebooks/experiment/README.md). Historical UI and performance descriptions below are not current reliability evidence; see [TESTING.md](../../TESTING.md).
+
 This document records the step-by-step development, dataset pre-balancing, two-stage fine-tuning, and performance evaluation for **Trial 2** of the on-device image classification model completed on **July 25, 2026**.
 
 Notebook provenance: this report corresponds to the Trial 2 workflow recorded in `notebooks/v2/MangoLeaf_AI_Training_v2.ipynb`. That notebook is historical evidence only. The retraining template is now `notebooks/v2.1/MangoLeaf_AI_Training_v2.1.ipynb`; copy it to a new versioned notebook before the next dataset update.

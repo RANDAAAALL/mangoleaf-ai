@@ -21,6 +21,10 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     "public/sw.js*",
     "scratch/**",
+    ".test-app/**",
+    "test-results/**",
+    "playwright-report/**",
+    ".playwright-mcp/**",
     "src/remotion/**",
   ]),
   // Let Prettier own formatting; keep ESLint's code-quality checks.

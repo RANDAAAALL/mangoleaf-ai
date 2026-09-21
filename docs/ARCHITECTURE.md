@@ -6,16 +6,35 @@ MangoLeaf AI is a client-heavy, offline-first Next.js 16 application. The browse
 
 ![MangoLeaf AI Architecture](../public/images/mangoleaf-architecture.svg)
 
+## Test and release boundaries
+
+`tools/e2e/` holds Playwright functional and reliability cases. Controlled model responses exercise all accepted/rejected UI branches; separate real-model cases import the production classifier in a test-only harness and upload the supplied photos through the real app. Diagnostics remain in reports. The harness is served only by the local test server and is not part of `src/` or the deployed export.
+
+`tools/build-test-app.mjs` copies application inputs into an ignored, hash-addressed `.test-app/` directory and builds a private static export with a loopback mock backend. It excludes the existing generated worker and regenerates one there. This leaves the normal `out/` and tracked `public/sw.js` alone. Fresh browser contexts isolate local data; the server's connection policy prevents external service access. The mock verifies client flow, not Supabase's server behavior or RLS.
+
+The local server uses pinned, development-only Busboy to extract photo bytes from multipart uploads. This preserves the unnamed file field sent by the installed Supabase client, which Bun 1.4's built-in form parser drops. R02 compares the stored bytes with the local scan image after reconnect.
+
+Core desktop/mobile and Chromium service-worker cases run in the existing `master` push CI. R01 repeated inference and R03 extended use run explicitly; [TESTING.md](TESTING.md) defines scope and [PHYSICAL_RELIABILITY_CHECKLIST.md](PHYSICAL_RELIABILITY_CHECKLIST.md) records real-device coverage. Reports, traces, and the private build stay untracked. A scan-card object-URL lifecycle fix accompanied the tests so a replaced photo blob cannot leave a revoked URL in the rendered image; the tests use the existing inference path and model assets.
+
+The manual release workflow uses Vercel staged production builds: disable automatic domain assignment in the dashboard, test the exact candidate commit/deployment, then promote it after review. Candidate labels/docs may be committed before release, with pending status stated honestly. Staging uses Production settings; it does not isolate the database. See [candidate testing and promotion](MODEL_VERSIONING.md#candidate-testing-and-promotion). CI checks do not themselves deploy or gate an independent Vercel promotion.
+
+Experiment guides live under [experiment/v3.1](model-training/experiment/v3.1/BACKGROUND_EXPERIMENT_v3_1.md) and [experiment/v3.2](model-training/experiment/v3.2/THRESHOLD_FITTING_v3_2.md). Their candidate notebooks and completed experimental evidence live in [notebooks/experiment](../notebooks/experiment/README.md): **experimental candidates, not shipped or deployed**. `v3.1` and `v3.2` identify notebook workflows, not app/model versions. Trial reports, figures, artifacts, and completed trial notebooks retain their existing locations and history.
+
 ## Project structure
 
-The tree below highlights the files and directories that define the application. Generated directories such as `.next/` and `out/` are intentionally omitted. A few listed files are marked local only, meaning they are gitignored working notes that are not part of a fresh clone.
+The tree below highlights the files and directories that define the application. Generated directories such as `.next/` and `out/` are intentionally omitted. See [local generated folders](TESTING.md#local-generated-folders) for the test builds, downloaded scanner, and reports that appear after running developer commands.
 
 ```text
 mangoleaf-ai/
 |-- .github/workflows/ci.yml        # Security and app checks on master pushes
 |-- .husky/pre-commit               # Format staged files before committing
 |-- .husky/pre-push                 # Security, TypeScript, lint, and formatting checks
-|-- tools/                          # Shared scanner setup, security checks, export verification, and tests
+|-- playwright.config.ts            # Browser projects and core/reliability suites
+|-- tools/                          # Shared checks and isolated browser-test tooling
+|   |-- e2e/                        # .pw.ts cases, photo fixtures, test-only inference harness
+|   |-- build-test-app.mjs          # Private static export with a local mock backend
+|   |-- serve-test-app.mjs          # Loopback static/mock server
+|   `-- run-browser-tests.mjs       # Build verification and Node.js Playwright runner
 |-- public/                         # Files served directly from the site root
 |   |-- images/
 |   |   |-- icons/
@@ -51,17 +70,21 @@ mangoleaf-ai/
 |   `-- sw.ts                       # Serwist source configuration
 |-- docs/                           # Detailed engineering and project history
 |   |-- model-training/             # Trial 1, Trial 2, Trial 2.1, and Trial 3 training reports
+|   |   |-- experiment/             # Experimental guides; candidates, not shipped or deployed
+|   |   |   |-- v3.1/               # v3.1 workflow: training and original-weight threshold fitting
+|   |   |   `-- v3.2/               # v3.2 workflow: paired threshold fitting
 |   |   |-- trials/                 # One report card per trial (TRIAL_v1.md … TRIAL_v3.md)
 |   |   |-- figures/                # Per-trial training/tuning figures, one folder per trial
 |   |   |-- artifacts/              # Per-trial run_record.json and model_config.json evidence
 |   |   `-- (per-trial dirs above echo the notebooks/ folder-per-trial layout)
 |   |-- ARCHITECTURE.md             # This architecture reference
-|   |-- EMAIL_DISPATCH_WORKFLOW.md  # Adviser and panel correspondence notes (local only, gitignored)
-|   |-- MANUSCRIPT_MODIFICATIONS.md # Manuscript corrections traced to measured results (local only, gitignored)
 |   |-- MODEL_VERSIONING.md         # App, model, notebook, and release versioning
 |   |-- PERFORMANCE.md              # Performance decisions and measurements
+|   |-- PHYSICAL_RELIABILITY_CHECKLIST.md # Fillable physical-device reliability evidence
+|   |-- PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md # Fictional answer-format example; never evidence
+|   |-- TESTING.md                  # Automated cases, reliability protocol, device checklist
 |   `-- PROGRESS.md                 # Development timeline and current baseline
-|-- notebooks/                      # Colab notebooks, one folder per trial; all kept
+|-- notebooks/                      # Colab notebooks: trial records and experimental workflows
 |   |-- v1/
 |   |   `-- MangoLeaf_AI_Training_v1.ipynb                  # Historical Trial 1
 |   |-- v2/
@@ -70,12 +93,16 @@ mangoleaf-ai/
 |   |   |-- MangoLeaf_AI_Training_v2.1.ipynb                # Trial 2.1 template, outputs cleared
 |   |   |-- MangoLeaf_AI_Training_v2_1_Post_Training.ipynb  # Completed Trial 2.1 run, do not rerun
 |   |   `-- MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb # Trial 2.1 margin and entropy fitting, no retraining
-|   `-- v3/
-|       |-- MangoLeaf_AI_Training_v3.ipynb                  # Current retraining template, 34 cells, outputs cleared
-|       |-- MangoLeaf_AI_Training_v3_1st_to_8th_Cells_Results.ipynb # Partial Trial 3 run, data-preparation cells only
-|       |-- MangoLeaf_AI_Training_v3_Post_Training.ipynb    # Completed Trial 3 run, manuscript evidence, do not rerun
-|       |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb         # Trial 3 threshold template, 8 cells, outputs cleared
-|       `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb # Trial 3 fitting run; cell 9 settles the margin at 0.40
+|   |-- v3/
+|   |   |-- MangoLeaf_AI_Training_v3.ipynb                  # Current retraining template, 34 cells, outputs cleared
+|   |   |-- MangoLeaf_AI_Training_v3_1st_to_8th_Cells_Results.ipynb # Partial Trial 3 run, data-preparation cells only
+|   |   |-- MangoLeaf_AI_Training_v3_Post_Training.ipynb    # Completed Trial 3 run, manuscript evidence, do not rerun
+|   |   |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb         # Trial 3 threshold template, 8 cells, outputs cleared
+|   |   `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb # Trial 3 fitting run; cell 9 settles the margin at 0.40
+|   `-- experiment/                  # Experimental notebooks/evidence; candidates, not shipped or deployed
+|       |-- README.md                # Status, scope, and notebook-version boundary
+|       |-- v3.1/                    # v3.1 workflow templates and completed results
+|       `-- v3.2/                    # v3.2 workflow template and completed results
 |-- video/                           # Promotional video, a separate HyperFrames project
 |   |-- assets/                      # Render inputs plus the thumbnail still
 |   |-- index.html                   # Root composition and timeline
@@ -228,7 +255,7 @@ These files must stay tracked in git. `.gitignore` patterns that could match the
 
 Husky registers `.husky/pre-commit` and `.husky/pre-push` during root dependency installation. Before commits, `lint-staged` formats staged files with Prettier and stages the fixes. `.prettierignore` keeps generated assets, model files, notebooks, and the separate video project outside formatting. Before upload, the push hook checks secrets and private filenames with `tools/check-security.mjs`, then runs TypeScript, ESLint, and Prettier's check-only command. The security scan includes tracked filenames and fetched Git history, including explicit push commits. `tools/install-gitleaks.mjs` installs the pinned, checksum-verified scanner under ignored `.tools/`. No scanner code or binaries are included in the application export.
 
-`.github/workflows/ci.yml` runs only on pushes to `master`. Independent security and application jobs repeat the history scan and perform typecheck, lint, formatting checks, static build, and exported-asset verification. CI invokes checks directly with Husky disabled. The build uses public-client fallback settings and does not deploy; production configuration and hosting deployment remain separate. Local checks can stop an upload, while CI reports failures after the push. See [SETUP.md](../SETUP.md#local-security-checks-and-github-ci) for installation, file rules, and limits.
+`.github/workflows/ci.yml` runs only on pushes to `master`. Independent security and application jobs run tooling tests, repeat the history scan, and perform typecheck, lint, formatting checks, static build, and exported-asset verification. The application job also runs core E2E against an isolated export and retains browser reports for 14 days; R01 and R03 remain explicit reliability runs. CI invokes checks directly with Husky disabled. The build uses public-client fallback settings and does not deploy; production configuration and hosting deployment remain separate. Local checks can stop an upload, while CI reports failures after the push. See [SETUP.md](../SETUP.md#local-security-checks-and-github-ci) for installation, file rules, and limits.
 
 ## Naming and organization conventions
 

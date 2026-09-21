@@ -25,18 +25,24 @@ export const ScanCard = memo(function ScanCard({
   const badgeClass = getBadgeStyles(scan.disease_name);
   const timeAgoText = formatTimeAgo(scan.updated_at, language);
 
-  const [localBlobUrl, setLocalBlobUrl] = useState<string | null>(null);
+  const [localImage, setLocalImage] = useState<{
+    blob: Blob;
+    url: string;
+  } | null>(null);
 
   useEffect(() => {
     if (imageBlob && imageBlob.size > 0) {
       const url = URL.createObjectURL(imageBlob);
-      setLocalBlobUrl(url);
+      setLocalImage({ blob: imageBlob, url });
       return () => URL.revokeObjectURL(url);
     }
-    setLocalBlobUrl(null);
+    setLocalImage(null);
   }, [imageBlob]);
 
-  const displayUrl = localBlobUrl || imageUrlFallback;
+  // Remove stale URLs from the image before effect cleanup revokes them.
+  const displayUrl =
+    (localImage?.blob === imageBlob ? localImage?.url : null) ||
+    imageUrlFallback;
 
   return (
     <div className="bg-white border border-[#e2ebd9] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col group">

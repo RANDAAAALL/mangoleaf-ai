@@ -4,7 +4,7 @@ This file records how to version the application, model, and training notebooks 
 
 ## Training Notebooks
 
-All notebooks live under `notebooks/`, grouped one folder per trial. Keep every one of them.
+Historical trial notebooks live under `notebooks/v{n}/`. Experimental candidates and completed experimental evidence live under `notebooks/experiment/<notebook-version>/`; that workflow version does not imply a shipped app/model version. Keep every notebook.
 
 | File                                                                   | Role                                          | Recommendation                                                                                                                                                                                                                                                                                                     |
 | ---------------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -23,14 +23,14 @@ All notebooks live under `notebooks/`, grouped one folder per trial. Keep every 
 
 **The lesson is the one this table now enforces: commit a notebook the day it runs, not the day the trial is written up.** Every file in the paragraph above that survived was survivable because it was tracked, and every file that nearly did not was untracked. A completed training run is evidence, and evidence that exists in one Google Drive is not backed up. `MangoLeaf_AI_Training_v3_1st_to_8th_Cells_Results.ipynb` had additionally never appeared in any document, so it could have been lost without anyone noticing it was missing.
 
-For the next dataset update, copy `notebooks/v3/MangoLeaf_AI_Training_v3.ipynb` into a new trial folder instead of overwriting a completed run. Name the notebook after the model version it produces, so a notebook filename and its exported model always agree:
+For the next experiment, copy `notebooks/v3/MangoLeaf_AI_Training_v3.ipynb` into a new folder under `notebooks/experiment/` instead of overwriting a completed run. Record the candidate model version inside the notebook and its exported metadata. The folder and filename identify the workflow; they do not establish the model version or adoption status:
 
 ```text
-notebooks/v3.1/MangoLeaf_AI_Training_v3.1.ipynb   same images, changed training procedure only
-notebooks/v4/MangoLeaf_AI_Training_v4.ipynb       new or expanded dataset, new classes, or a new architecture
+notebooks/experiment/v3.1/MangoLeaf_AI_Training_v3_1.ipynb   same images, changed training procedure only
+notebooks/experiment/v4/MangoLeaf_AI_Training_v4.ipynb     prospective dataset/class/architecture experiment
 ```
 
-A new dataset is a major change, so the next retraining cycle after Trial 3 produces `notebooks/v4/MangoLeaf_AI_Training_v4.ipynb`, `model-v4.0.0`, and `docs/model-training/trials/TRIAL_v4.md`. Trial 3 itself followed this rule: a new image pool made it `model-v3.0.0` with [TRIAL_v3.md](model-training/trials/TRIAL_v3.md) as its report. The next section explains why.
+A new biological dataset is a major model change under this project's policy, so a future adopted dataset revision would use a label such as `model-v4.0.0`. Keep its guide under `docs/model-training/experiment/v4/` while it is a candidate; an adoption decision can add a trial report such as `docs/model-training/trials/TRIAL_v4.md`. Same-data retraining, including the v3.1 background experiment, can use a minor model version. Trial 3 introduced a new image pool and is recorded as `model-v3.0.0` in [TRIAL_v3.md](model-training/trials/TRIAL_v3.md).
 
 Each completed training notebook should record:
 
@@ -46,6 +46,22 @@ Each completed training notebook should record:
 - exported model format
 - exported file size and checksum
 
+### September 17, 2026: threshold-fitting notebook revision v3.1
+
+Use [`notebooks/experiment/v3.1/MangoLeaf_AI_Threshold_Fitting_v3_1.ipynb`](../notebooks/experiment/v3.1/MangoLeaf_AI_Threshold_Fitting_v3_1.ipynb) for the next threshold-only experiment against the existing Trial 3 weights. It replaces the older template as the recommended fitting workflow: validation mango images and OOD tune select settings; saved settings are then evaluated with test mango images and OOD report. Historical v3 notebooks and outputs remain intact.
+
+The requested `v3.1` filename identifies a **notebook revision**, not retrained weights. This is an explicit naming exception to the training-notebook convention above. The source model remains `model-v3.0.0`; the candidate configuration uses the patch label `model-v3.0.1`. No app/model label changes until a measured candidate is adopted and deployed. A future same-data retraining still follows the minor-version rule below.
+
+The original test/report collections influenced previous tuning, so the notebook labels their evaluation as previously used data. A fresh independent evaluation requires genuinely reserved images. See the [upload checklist and fitting guide](model-training/experiment/v3.1/THRESHOLD_FITTING_v3_1.md). The notebook template carries no claimed new results.
+
+### September 18, 2026: background experiment and paired threshold fitting
+
+Use [training v3.1](../notebooks/experiment/v3.1/MangoLeaf_AI_Training_v3_1.ipynb) for the controlled background-replacement experiment and [threshold fitting v3.2](../notebooks/experiment/v3.2/MangoLeaf_AI_Threshold_Fitting_v3_2.ipynb) for its two new calibrated models. Both are clean experimental templates. The completed v3 notebooks and the earlier threshold-only v3.1 templates/results remain historical evidence.
+
+The background candidate is `model-v3.1.0`; its freshly trained control is identified as `model-v3.1.0-control`. This is a training-procedure experiment using the unchanged biological source images and original split. Replacement scene photos are auxiliary training augmentation, recorded separately; they do not expand or resplit the mango evaluation dataset. This explicitly falls under the minor-version rule. Adding new biological specimens, changing the evaluation dataset, classes, or architecture requires revisiting the version and comparison protocol.
+
+The fitting notebook's `v3.2` is a **workflow revision**, not `model-v3.2.0`. It reuses the validation-based fitting method and adds paired-model provenance, a freeze before either evaluation, and comparison reports. No model is adopted automatically and no deployed version changes until measured review and deployment. See the [experiment/upload guide](model-training/experiment/v3.1/BACKGROUND_EXPERIMENT_v3_1.md).
+
 ## Model Versions
 
 Model versions should be separate from app versions because the app can change without a new model, and the model can be retrained without a major UI change.
@@ -60,13 +76,13 @@ model-v2.1.1  Trial 2.1 weights plus fitted margin and entropy rejection thresho
 model-v3.0.0  Trial 3 new dataset pool, recalibrated temperature, float32 export, refitted margin and entropy thresholds
 ```
 
-Choose the level by what the change does to the previous test accuracy, because a version label exists to tell one deployed artifact from another and the accuracy figure is what the manuscript quotes:
+Choose the level by the model/data change. A version identifies an artifact; it does not rank its accuracy:
 
-| Level | Meaning                                                                       | Test accuracy is                                                                                       | Example                                                                             |
-| ----- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| Patch | No retraining. Configuration only, fitted against weights that already exist. | Unchanged. The same weights produce the same predictions.                                              | `v2.1.0` to `v2.1.1`, margin and entropy fitted on the existing resume bundle       |
-| Minor | Retrained on the same source images with a changed procedure.                 | Comparable but not identical. Report both numbers and explain the difference.                          | `v2.0.0` to `v2.1.0`, deduplication and temperature calibration on the Trial 2 pool |
-| Major | New or expanded dataset, a changed class list, or a different architecture.   | Not comparable. The test set itself is different, so the old figure describes a different measurement. | `v1.0.0` to `v2.0.0`, and the next cycle when the new dataset arrives               |
+| Level | Meaning                                                                     | Test accuracy is                                                                                               | Example                                                                             |
+| ----- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Patch | No retraining. Rejection settings fitted against existing weights.          | Raw class scores stay the same for the same preprocessing/backend; accepted accuracy and retention can change. | `v2.1.0` to `v2.1.1`, margin and entropy fitted on the existing resume bundle       |
+| Minor | Retrained on the same source images with a changed procedure.               | Comparable but not identical. Report both numbers and explain the difference.                                  | `v2.0.0` to `v2.1.0`, deduplication and temperature calibration on the Trial 2 pool |
+| Major | New or expanded dataset, a changed class list, or a different architecture. | Not comparable. The test set itself is different, so the old figure describes a different measurement.         | `v1.0.0` to `v2.0.0`, and the next cycle when the new dataset arrives               |
 
 New images make the version major even when the six classes and the architecture are untouched, because they land in a new 70/15/15 split and therefore a new test set. `97.12%` was measured on 417 specific images; an accuracy measured on a different set is not a higher or lower version of that number, it is a different number. Recalibration follows for the same reason: the temperature and both fitted thresholds are properties of one set of weights, so all three are refitted rather than carried over.
 
@@ -123,6 +139,7 @@ v0.4.4  shared icon registry and scan-sheet label sizes
 v0.4.5  equal-height How it works cards
 v0.4.6  unified How it works card styling
 v0.4.7  compact history pagination and scan-details badge clipping fix
+v0.4.8  scan-photo URL fix, browser reliability testing, and documentation alignment
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
@@ -159,21 +176,37 @@ an empty label with no type error.
 
 The history list uses localized previous/next controls around `Page {n} of {total}` and returns to a valid page when records are deleted. The scan-details modal constrains its desktop grid and removes the photo's intrinsic dimensions from layout, keeping disease and confidence badges inside the visible photo. On phones, the modal scrolls as a whole so its close action remains reachable. The model stays at `v3.0.0`; no model files or diagnosis thresholds changed.
 
+### v0.4.8: scan photo fix and reliability testing
+
+This patch prepares app version `0.4.8`. Scan cards track which image blob owns each local URL, avoiding a revoked URL when that blob is replaced. The release also adds isolated browser tests for scan/history flows and offline behavior, explicit repeated-inference and 30-minute reliability commands, and core E2E coverage in the `master` push workflow. Test guides, checklist examples, release instructions, and experimental notebook locations are aligned with the implementation.
+
+The model remains `v3.0.0`; model assets, class mapping, preprocessing, and rejection thresholds are unchanged. The intended app tag is `v0.4.8`. Record its actual commit after the tag is created.
+
+## Candidate testing and promotion
+
+Added September 20, 2026. Preparing an intended version is separate from publishing it. Commit candidate code, matching version labels, and affected documentation together after local checks. Mark new entries **candidate / not released** until their release decision is made. Do not write that CI, physical-device testing, or deployment passed before it happened. App and model labels remain independent; tooling-only changes do not require a new model label.
+
+1. Finalize candidate source/model files and intended version labels. A model label must identify the files actually included in that candidate. Keep the currently deployed baseline explicitly distinguished in documentation.
+2. Run `bun run format`, then `bun run typecheck`, `bun run lint`, and `bun run build` in that order. Run core E2E and applicable reliability checks from [TESTING.md](TESTING.md). A new model also needs accuracy/OOD evaluation.
+3. Commit and push the candidate. Husky handles staged formatting and pre-push checks; repeat affected checks/builds if formatting or another edit changes the tested source.
+4. Wait for CI on that `master` commit. For manual approval, configure Vercel **Settings > Environments > Production > Branch Tracking**, keep `master`, and disable **Auto-assign Custom Production Domains**. Documentation does not change this dashboard setting; confirm it before relying on staged deployment behavior.
+5. Test the exact staged deployment on physical devices using the same checklist. Record commit, deployment URL, app/model versions, model hashes, and actual results. Confirm phones loaded the intended worker/model instead of an older cache. Staged Production uses Production environment variables and is not an isolated database.
+6. After required checks and review pass, manually promote that exact deployment, verify its live version, and publish the tag/release for its tested commit. Staged promotion reuses the build. Creating a GitHub Release does not deploy the app or gate Vercel.
+
+Multiple attempts can share an intended unreleased version; distinguish them by commit ID and build/model hashes. If code, model files, labels, or build settings change, rebuild and repeat affected checks. A failed candidate receives fixes and another evaluation; do not move a published release tag to hide it. Add final evidence/release status as a subsequent documentation entry rather than rewriting historical measurements or moving the tested tag to a later docs-only commit.
+
+Reference: [Vercel staged production promotion](https://vercel.com/docs/deployments/promoting-a-deployment#staging-and-promoting-a-production-deployment).
+
 ## Creating a GitHub Release
 
-From the project root. Bump the `version` field in `package.json` first, because
-the footer label is derived from it:
+Prepare version labels, review and commit the intended files, and finish the candidate testing and promotion procedure above before tagging. Only app tags get a GitHub Release in this project; model tags are provenance markers.
+
+Replace `vX.Y.Z` with the approved app version and `TESTED_COMMIT_SHA` with the full commit ID from the completed evidence record. Do not reuse an existing published tag:
 
 ```bash
-git status
-git add -A
-git diff --cached --check
-git commit -m "feat(app): ship v0.4.0 field experience"
-git tag -a v0.4.0 -m "MangoLeaf AI v0.4.0 - mobile field experience and resilient offline sync"
-git push origin master --follow-tags
+git tag -a vX.Y.Z TESTED_COMMIT_SHA -m "MangoLeaf AI vX.Y.Z"
+git push origin vX.Y.Z
 ```
-
-Review `git status` before committing to confirm that only intended project files are staged.
 
 Then open GitHub:
 
@@ -184,11 +217,11 @@ Then open GitHub:
 5. Add a short title and release notes.
 6. Publish the release.
 
-For a model-only milestone, use a model tag instead:
+If the release adopts a new model, also create its provenance tag on the tested commit that contains those exact assets. For a model-only milestone, create only this tag; do not publish a separate GitHub Release. Replace both placeholders before running:
 
 ```bash
-git tag -a model-v3.0.0 -m "Trial 3 new dataset pool, temperature-calibrated, float32 TFJS Graph Model with refitted rejection thresholds"
-git push origin model-v3.0.0
+git tag -a model-vX.Y.Z TESTED_COMMIT_SHA -m "MangoLeaf model-vX.Y.Z"
+git push origin model-vX.Y.Z
 ```
 
 Do not attach large raw datasets to GitHub Releases unless the dataset license and file size are appropriate. Keep release notes focused on what changed, what was tested, and what should be treated as the current baseline.

@@ -1,31 +1,31 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
-This document outlines the technical optimizations, hardware acceleration strategies, memory management budgets, and React re-render controls implemented in **MangoLeaf AI** (`mangoleaf-ai`) to ensure seamless execution on low-end mobile devices and offline agricultural environments.
+This document describes the performance mechanisms implemented in **MangoLeaf AI** (`mangoleaf-ai`). Their effects depend on the image, browser, hardware, and network. Use [TESTING.md](TESTING.md) and the [physical reliability checklist](PHYSICAL_RELIABILITY_CHECKLIST.md) to record measurements for the exact candidate and device.
+
+The matrix distinguishes implementation choices from measured outcomes. Earlier instant-loading, fixed-frame-rate, and zero-leak claims were not established device benchmarks. R01 measures repeated-inference consistency; R02 exercises cached offline behavior; R03 records a 30-minute session. None proves field accuracy or performance on every phone.
 
 ---
 
-## Executive Summary & Performance Matrix
+## Performance mechanisms and expected effects
 
-| Metric / Dimension                     | Before Optimization                               | After Optimization                                                      | Performance Gain                                      |
-| :------------------------------------- | :------------------------------------------------ | :---------------------------------------------------------------------- | :---------------------------------------------------- |
-| **Initial JS Payload (TFJS Engine)**   | Eagerly imported in main bundle (~1.5MB)          | Dynamic `import()` inside `useEffect` & event handlers                  | **~1.5MB lighter initial load, instant FCP**          |
-| **GPU VRAM Allocation (Per Scan)**     | ~36 Million Floats (12MP Raw Tensor)              | ~150 Thousand Floats (224x224 Canvas)                                   | **~240x Memory Reduction**                            |
-| **GPU Texture Precision**              | 32-bit Float                                      | 16-bit Float (`WEBGL_FORCE_F16_TEXTURES`)                               | **50% Lower VRAM Footprint**                          |
-| **Model Download Size (First Load)**   | Uncached model fetch                              | 11.53 MB Trial 3 float32 model precached in 3 shards                    | **No repeat download after install**                  |
-| **UI Thread Block during AI**          | Synchronous Blocking (`dataSync()`)               | Async Non-blocking (`outputTensor.data()`)                              | **Smooth 60FPS UI Animations**                        |
-| **Stored Scan Photo Size**             | 6.0 MB – 12.0 MB Raw Camera File                  | ~75 KB WebP (with JPEG ~150 KB fallback)                                | **80x–160x Smaller Storage & Upload**                 |
-| **Blob URL Memory & Render Lifecycle** | Central map regenerated ALL URLs on 1 scan change | Per-card `useEffect` ObjectURL creation & auto-cleanup                  | **Zero image flicker, zero heap leaks**               |
-| **React Component Re-renders**         | Entire component tree re-rendered                 | `React.memo()` + stabilized callbacks (`useCallback`) & memoized arrays | **~75% Fewer DOM Diffs**                              |
-| **Mobile Modal GPU Compositing**       | Full-screen `backdrop-blur-md` on budget phones   | Light `bg-black/60` on mobile, `md:backdrop-blur-sm` on desktop         | **Smooth 60FPS modal transitions on budget Androids** |
-| **Model Re-loads on Reconnect**        | Re-loaded on every network toggle                 | Module-level singleton cache (loaded once)                              | **0.0s Reconnect Latency**                            |
-| **Canvas Allocation per Scan**         | New `<canvas>` element every inference            | Module-level singleton canvas reuse                                     | **Zero GC Pressure**                                  |
-| **Database Sync Operations**           | Sequential single-row `put()` calls               | Batch `bulkPut()` single-transaction                                    | **~3x Faster Sync Flush**                             |
-| **Font Loading (FOIT)**                | Flash of Invisible Text on slow 3G                | `display: "swap"` instant text rendering                                | **Instant Text Visibility**                           |
-| **Conditional Component Bundles**      | All components loaded upfront                     | `next/dynamic` code-splitting for heavy modals                          | **Smaller Initial JS Payload**                        |
-| **Duplicate Photo Detection**          | Same gallery photo re-diagnosed every time        | SHA-256 Web Crypto hash check skips AI entirely                         | **No model inference for duplicates**                 |
-| **3G Upload Timeout**                  | Stalled Storage upload holds sync job             | Per-request `AbortController` aborts after 10 seconds                   | **10s max, exponential retry**                        |
-| **Concurrent Sync Safety**             | Sync triggers could overlap or miss new work      | Lock queues one follow-up sync                                          | **No overlapping uploads, no missed mutation**        |
-| **Supabase First Request**             | Cold DNS + TLS handshake (~300ms on 3G)           | `<link rel="preconnect">` preflight                                     | **~300ms Faster First Sync**                          |
+| Mechanism               | Current implementation                            | Expected effect or evidence limit                                                                        |
+| ----------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| TensorFlow.js loading   | Dynamic classifier imports                        | Defers classifier code loading; total downloads and startup timing still need measurement.               |
+| Input tensor size       | Canvas resizes to 224x224 before tensor creation  | 150,528 channel values instead of 36 million for a 12MP RGB image; this is not total application memory. |
+| GPU textures            | `WEBGL_FORCE_F16_TEXTURES`                        | Uses half-float render textures on the WebGL path; score parity must be measured.                        |
+| Model download          | Trial 3 float32 assets are precached              | Reuses cached files while storage and revisions remain valid.                                            |
+| Output readback         | `outputTensor.data()`                             | Avoids synchronous readback; does not guarantee a frame rate.                                            |
+| Stored photos           | WebP with JPEG fallback after inference           | Reduces upload/storage bytes; final sizes vary by image.                                                 |
+| Blob URLs               | Per-card ownership and cleanup                    | Avoids stale URLs when a photo blob is replaced.                                                         |
+| React rendering         | Memoized components and selected stable callbacks | Can skip renders when props stay equal; no measured percentage is claimed.                               |
+| Overlay effects         | Reduced mobile backdrop blur                      | Reduces filter work; target-phone frame rates remain a manual measurement.                               |
+| Model and canvas reuse  | Module-level instances                            | Avoids repeated initialization/allocation within the page session.                                       |
+| Database batches        | `bulkGet()` and `bulkPut()`                       | Reduces per-record database work; no fixed speedup is established.                                       |
+| Fonts and modal bundles | Font swapping and dynamic Details import          | Shows fallback text and defers some UI code.                                                             |
+| Duplicate photos        | SHA-256 lookup before inference                   | Reuses an active saved report; not a new prediction.                                                     |
+| Storage upload timeout  | 10-second abort timer with retries                | Limits a stalled upload attempt; total synchronization time is not capped at 10 seconds.                 |
+| Concurrent sync         | Lock and one queued follow-up pass                | Serializes sync work while preserving new pending mutations.                                             |
+| Connection hints        | Supabase preconnect and DNS-prefetch              | May reduce connection setup delay; network measurements are needed.                                      |
 
 ---
 
@@ -35,39 +35,41 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 - **Problem:** Importing `@tensorflow/tfjs` and `@/lib/classifier` statically at the top of `page.tsx` pulled the entire ~1.5MB TensorFlow.js engine into the initial JavaScript bundle, delaying First Contentful Paint (FCP) on slow 3G networks.
 - **Solution:** TensorFlow.js functions are dynamically imported using `await import("@/lib/classifier")` inside the model initialization `useEffect` and inside the `runDiagnosis` handler.
-- **Result:** Initial page HTML and styling render in **under 1 second**, while TensorFlow.js loads silently in the background.
+- **Expected effect:** Page content can render while TensorFlow.js loads in the background. First-contentful-paint timing needs measurement on the target device and connection.
 
 ### 1.2 CPU Canvas Pre-Downscaling (GPU VRAM Protection)
 
 - **Problem:** Smartphone cameras produce 12MP to 108MP photos (e.g. 4000x3000 pixels). Converting raw high-res images directly into TensorFlow.js tensors allocates 36 million floating-point numbers in GPU memory before resizing.
-- **Solution:** In `src/lib/classifier.ts`, raw photos are first pre-scaled down to **224x224 pixels** on a lightweight CPU `<canvas>` element using browser-native bilinear interpolation before `tf.browser.fromPixels()` is invoked.
-- **Result:** Prevents mobile browser tab crashes ("Aw, Snap!") on low-end smartphones with limited RAM.
+- **Solution:** In `src/lib/classifier.ts`, photos are resized to **224x224 pixels** with browser Canvas before `tf.browser.fromPixels()` is invoked. The entire image is drawn into the square; this step resizes rather than crops, and can stretch a non-square image. Browser interpolation is not guaranteed to match the training loader.
+- **Expected effect:** Reduces the input tensor to 150,528 channel values, about 239 times fewer than a 12-megapixel RGB image. This is an input-size comparison, not a measurement of total GPU memory or proof that a browser cannot crash.
 
 ### 1.3 WebGL 16-Bit Float Textures
 
 - **Implementation:** `tf.env().set("WEBGL_FORCE_F16_TEXTURES", true)` is executed prior to model initialization.
-- **Rationale:** Halves GPU texture memory allocation on phones. Trial 3 deliberately ships float32 weights, but this WebGL setting uploads them to half-float textures on supported devices. The model file, class mapping, thresholds, and model accuracy are not changed at runtime.
+- **Rationale:** Requests half-float texture storage on the WebGL path. Compatible textures use fewer bytes than float32 textures; this does not halve all application memory or establish that every GPU operation uses 16-bit arithmetic. Saved model files, class mapping, and thresholds stay unchanged, but rounding can alter scores or a decision near a threshold. The flag alone does not establish the cause of a wrong diagnosis or guarantee unchanged accuracy.
 - **Download trade-off:** Trial 3 remains 11.53 MB across three shards. A separately verified float16 export could reduce transfer size, but it is not shipped; no model artifact was modified in this optimization pass.
+
+The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag definitions](https://github.com/tensorflow/tfjs/blob/tfjs-v4.22.0/tfjs-backend-webgl/src/flags_webgl.ts). Use browser/device evidence before changing this flag or claiming a benefit from another precision setting.
 
 ### 1.4 Asynchronous Non-Blocking Inference & Garbage Collection
 
 - **Implementation:** Output tensors are extracted via `await outputTensor.data()` instead of synchronous `dataSync()`.
-- **VRAM Cleanup:** All tensor creation and matrix operations are wrapped inside `tf.tidy()`. Intermediate tensors are immediately purged from GPU VRAM, maintaining zero memory leaks across consecutive scans.
+- **Tensor cleanup:** `tf.tidy()` releases intermediate tensors, and the returned output tensor is disposed after its data is read. Automated R01 checks for net tensor-count growth; browser heap and GPU allocation behavior still need observation during extended use.
 
 ### 1.5 Startup GPU Shader Warmup & Light Green Splash Screen
 
 - **Implementation:** On app launch, `loadMangoModel()` executes a dummy inference with `tf.zeros([1, 224, 224, 3])` behind a light organic green (`#f6faf1`) splash screen (`<SplashScreen />`) featuring the SVG brand logo and dual-tone spinner (`border-[#e2ebd9] border-t-[#277839]`).
-- **Rationale:** Forces the mobile GPU to compile all WebGL shader programs during initial loading so that the user's first real scan executes instantaneously with zero lag.
+- **Rationale:** Runs the model path once during loading to prepare its shaders before the first real scan. Actual scan latency remains device- and image-dependent.
 
 ### 1.6 Module-Level Model Singleton Cache (`classifier.ts`)
 
 - **Implementation:** `cachedModel` and `loadingPromise` variables persist at the module level outside React's component lifecycle.
-- **Behavior:** The AI model is loaded, warmed, and cached **only once** per browser session. All subsequent calls to `loadMangoModel()` return the cached instance in **0.0 seconds**, eliminating redundant model re-downloads during network reconnection events or React component remounts.
+- **Behavior:** After successful initialization, subsequent calls reuse the loaded model in the current page session. Network reconnection does not reload it; a full page reload or terminated browser process creates a new in-memory session.
 
 ### 1.7 Singleton Canvas Reuse (`classifier.ts`)
 
 - **Implementation:** A module-level `sharedCanvas` HTMLCanvasElement is created once and reused for all subsequent `downscaleToCanvas()` calls.
-- **Context Hint:** Canvas 2D context is initialized with `{ alpha: false }` since all camera photos are opaque JPEGs, eliminating unnecessary alpha channel compositing overhead.
+- **Context Hint:** Canvas 2D context uses `{ alpha: false }` for an opaque output. Uploaded files can still contain transparency, so this setting is part of the image-processing behavior rather than proof that every input is a JPEG.
 - **Confidence Rounding:** Replaced `parseFloat(maxProb.toFixed(2))` (float→string→float) with `Math.round(maxProb * 100) / 100` (pure numeric operation) in the inference hot path.
 
 ### 1.8 One-Time Splash Screen Guard (`page.tsx`)
@@ -83,7 +85,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 - **Problem:** Maintaining a centralized `blobUrlMap` in `page.tsx` meant adding or deleting a single scan caused all Blob ObjectURLs across the entire history list to be revoked and regenerated, causing visible image flickering and memory spikes.
 - **Solution:** Blob URL creation is scoped directly inside `scan-card.tsx` using a local `useEffect` linked to `imageBlob`.
-- **Cleanup:** Each `ScanCard` revokes its own `ObjectURL` upon unmounting or when the scan blob changes, ensuring zero image flickering and zero heap memory leaks.
+- **Cleanup:** Each `ScanCard` revokes its own `ObjectURL` upon unmounting or when the scan blob changes. Its render checks which blob owns the URL, avoiding reuse of a stale URL while effects update. This targeted cleanup is not proof of zero heap leaks across the application.
 
 ### 2.2 Modular Component Refactoring & `React.memo()` Memoization
 
@@ -100,15 +102,15 @@ This document outlines the technical optimizations, hardware acceleration strate
 ### 2.4 Mobile Overlay Backdrop Blur Removal
 
 - **Implementation:** Replaced heavy `backdrop-blur-md` on mobile full-screen overlays with lightweight `bg-black/60 md:backdrop-blur-sm` in `diagnostic-scanner.tsx`, `scan-details-modal.tsx`, and `legal-modal.tsx`.
-- **Impact:** Budget Android devices (e.g., Redmi, Galaxy A series) render modal transitions smoothly at 60FPS without GPU shader composite bottlenecking.
+- **Expected effect:** Reduces backdrop-filter work on small screens. Frame rate on budget phones needs physical-device measurement.
 
 ### 2.5 Post-Inference Storage Compression (WebP with JPEG Fallback)
 
 - **Flow:**
   1. User snaps a photo.
-  2. AI model analyzes the uncompressed image first (**97.46% Test Accuracy maintained**).
+  2. AI model analyzes the image through the existing 224x224 preprocessing before storage compression.
   3. **AFTER** prediction finishes, `compressImageForStorage()` resizes the photo to a max dimension of 1000px and compresses using **WebP at 75% quality** (~70–90 KB). If the browser doesn't support WebP canvas export, automatically falls back to **JPEG at 80% quality** (~150 KB).
-- **Impact:** Drops storage footprint from **6 MB → 75 KB** (80x reduction) for WebP-capable devices, ensuring rapid synchronization on weak 3G/4G cellular networks. Upload time halved compared to JPEG.
+- **Expected effect:** Reduces stored and uploaded image bytes. The sizes above are examples; actual compression and upload time depend on image content and network conditions. This compression occurs after diagnosis and does not change that completed prediction.
 
 ### 2.6 Dynamic Code-Splitting for Modals (`page.tsx`)
 
@@ -127,7 +129,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 ### 3.1 Service Worker Model Pre-Caching (`sw.ts`)
 
 - **Strategy:** Serwist precaches all five `/model/*` files: `model.json`, `model_config.json`, and `group1-shard1of3.bin` through `group1-shard3of3.bin`. The `CacheFirst` runtime rule remains as defence in depth.
-- **Impact:** Guarantees that even if the smartphone is rebooted in complete Airplane Mode, the AI model loads instantly from browser `CacheStorage`.
+- **Expected effect:** Enables offline model loading after successful service-worker installation and caching, while browser storage remains available. Loading still requires local model initialization; cache eviction, cleared site data, or an incomplete first load can prevent it. R02 and the physical checklist verify this behavior for a recorded environment.
 - **Versioned cache name:** `mangoleaf-model-cache-v3-0-0`. The cache label is bumped whenever `public/model/` changes, and activation deletes superseded model caches so old weights do not occupy device storage forever.
 - **The precache is the real update mechanism.** Public files receive content-revision hashes in Serwist's precache manifest, which is matched before runtime caching. Replaced weights therefore refetch on next activation. An empty runtime model cache is normal; verify updates in generated `public/sw.js`.
 
@@ -146,7 +148,7 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 - **Implementation:** When a farmer selects a photo, `computeImageHash()` in `classifier.ts` calculates a unique 64-character SHA-256 fingerprint through browser-native asynchronous Web Crypto. Its time depends on original photo size, but it does not run TensorFlow.js.
 - **Lookup:** The hash is checked against the indexed `image_hash` column in Dexie's `scans` table via `db.scans.where("image_hash").equals(hash).first()`.
-- **Duplicate Found:** If matched, the app skips AI model execution entirely and instantly opens the existing scan report — saving 100% of GPU memory, battery, and processing time.
+- **Duplicate Found:** If an active record matches, the app opens its existing report and skips a new model inference. Hashing, storage lookup, and UI rendering still consume time and resources. Reopening this report does not count as an R01 prediction.
 - **New Photo:** If no match, runs the AI model normally and stores the `image_hash` alongside the scan record in both IndexedDB and Supabase.
 
 ### 3.5 3G Network Resilience: Upload Timeout (`supabase-client.ts`, `useSync.ts`)
@@ -167,13 +169,13 @@ This document outlines the technical optimizations, hardware acceleration strate
 
 ### 4.1 Solid Backgrounds on Scroll List Cards (`scan-card.tsx`)
 
-- **Change:** Replaced `backdrop-blur-sm` (expensive GPU filter on every card) with solid `bg-slate-900/95` background.
-- **Impact:** Eliminates severe GPU rasterization lag during fast scrolling on budget smartphones.
+- **Current implementation:** Scan cards use a solid `bg-white` background without a backdrop-blur filter. The older `bg-slate-900/95` value belongs to the previous dark UI.
+- **Expected effect:** Avoids a backdrop filter on every card; scrolling smoothness still needs device measurement.
 
 ### 4.2 Targeted CSS Transitions
 
-- **Change:** Replaced `transition-all` with `transition-colors` or `transition-transform` on interactive elements across components.
-- **Impact:** Browser only recalculates composite-friendly properties (color, transform) during hover/tap interactions, avoiding expensive layout recalculations.
+- **Current implementation:** Many controls use `transition-colors` or `transition-transform`; some containers, including scan cards, still use `transition-all`.
+- **Expected effect:** Restricts the properties animated by those controls. Color changes can require repainting, so these classes are not proof that all transitions run only in the compositor.
 
 ### 4.3 Clean Text Justification Engine
 
@@ -189,12 +191,12 @@ This document outlines the technical optimizations, hardware acceleration strate
 ### 4.5 Supabase Network Preconnect (`layout.tsx`)
 
 - **Implementation:** Added `<link rel="preconnect">` and `<link rel="dns-prefetch">` for the Supabase project URL in document `<head>`.
-- **Impact:** Browser initiates DNS resolution and TLS handshake to Supabase immediately on page load, saving **~300ms** on the first network request over 3G/4G networks.
+- **Expected effect:** Allows the browser to prepare the Supabase connection earlier. Any latency saving depends on whether the browser uses the hint and whether a connection is already available.
 
 ---
 
-## Accuracy & Integrity Guarantee
+## Accuracy and runtime evidence
 
-> **Note on AI Accuracy:** All storage, compression, UI rendering, database, and CSS optimizations operate independently of the neural network math. The AI model receives uncompressed tensor inputs first, preserving the **97.46% test classification accuracy** validated during Trial 3 model training.
+> **Note on AI accuracy:** The **97.46%** figure describes the recorded Trial 3 evaluation on 393 images. It is not a measured accuracy guarantee for browser inference or farm photos. Storage compression happens after prediction, but preprocessing, numeric precision, and rejection gates can affect runtime results. Browser consistency and UI tests do not establish diagnostic accuracy.
 >
 > The three trial figures are not a trend line. Trial 2 scored 98.25% on a test set that contained near-duplicate copies of its own training images, so part of that score measured memorization. Perceptual-hash deduplication removed the duplicates before splitting, which is why Trial 2.1's 97.12% on 417 images is the honest figure rather than a regression. Trial 3 then changed the image pool, so its 97.46% is measured on a different 393-image test set again. Each number describes its own test set and none of them is a higher or lower version of another. See [model-training/trials/TRIAL_v3.md](model-training/trials/TRIAL_v3.md) for the current model and [model-training/trials/TRIAL_v2_1.md](model-training/trials/TRIAL_v2_1.md) for the deduplication work.

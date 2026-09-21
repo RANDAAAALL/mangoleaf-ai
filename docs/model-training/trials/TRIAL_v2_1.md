@@ -1,5 +1,7 @@
 # MangoLeaf AI: Trial 2.1 Model Training & Performance Evaluation Report
 
+> **Reading note, September 21, 2026:** [Trial 3](TRIAL_v3.md) superseded this model on August 27, 2026. “Shipping model” and “before the v3 run” below refer to the original Trial 2.1 period. Keep these results as evidence; follow [MODEL_VERSIONING.md](../../MODEL_VERSIONING.md) and [TESTING.md](../../TESTING.md) for current candidate and browser/device checks. Weight-conversion probes and historical precision estimates are not proof of identical behavior on every phone.
+
 This document records the dataset deduplication, class-weighted two-stage fine-tuning, temperature calibration, and Float16 export for **Trial 2.1** of the on-device image classification model, completed on **August 22, 2026**.
 
 Notebook provenance: the clean template is `notebooks/v2.1/MangoLeaf_AI_Training_v2.1.ipynb` and the completed run with all outputs preserved is `notebooks/v2.1/MangoLeaf_AI_Training_v2_1_Post_Training.ipynb`. Trial 2 remains recorded in [TRIAL_v2.md](TRIAL_v2.md); this trial supersedes it as the shipping model.

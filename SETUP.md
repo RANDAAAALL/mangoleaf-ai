@@ -120,7 +120,7 @@ bun run lint
 bun run build
 ```
 
-Do not commit until all three commands pass. The build check matters because it verifies the static export and Serwist service-worker generation in addition to TypeScript and ESLint.
+Do not commit until all three commands pass. TypeScript and ESLint run in their own steps; the build separately verifies the static export and Serwist service-worker generation. Next.js 16 does not run ESLint as part of the build.
 
 Husky repeats security, TypeScript, ESLint, and formatting checks automatically when you run `git push`. It does not run `bun run build`, so this full list remains required before committing. Run `bun run format` before these checks when preparing source changes. If the commit hook subsequently reformats source files, rebuild and include the regenerated service worker in a follow-up commit.
 
@@ -146,11 +146,43 @@ bun run verify:export  # Run after bun run build.
 
 Findings show filenames, lines, rules, and commit IDs without credential values. Remove an unpushed secret from every affected local commit before retrying. If a real credential already reached GitHub, revoke or rotate it; deleting its latest file does not remove earlier exposure. Review false positives individually instead of broadly excluding files or history.
 
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs only for pushes to `master`, including merges. Its `security` job installs the same scanner, tests the tooling, and scans the full fetched history. Its independent `check` job installs frozen dependencies, runs typecheck, lint, formatting checks, and webpack build in order, then verifies exported PWA/model files. Both have read-only repository permission; newer pushes cancel unfinished older runs. No video dependencies or training notebooks are executed.
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs only for pushes to `master`, including merges. Its `security` job installs the same scanner, tests the tooling, and scans the full fetched history. Its independent `check` job installs frozen dependencies, runs typecheck, lint, formatting checks, and webpack build in order, then verifies exported PWA/model files. It also installs Playwright browsers, tests an isolated static export, and saves reports/failure traces for 14 days. Both have read-only repository permission; newer pushes cancel unfinished older runs. No video dependencies or training notebooks are executed.
 
-CI sets `HUSKY=0` because it invokes checks directly. The build uses the existing public-client fallback settings and requires no production credentials; it is not a deployment artifact for cloud synchronization. Production builds still need the public Supabase values described above. App/model version labels remain sourced from code. The workflow does not deploy, change Dependabot settings, or gate an independent hosting deployment. It starts after GitHub receives a push and does not inspect pushes isolated on other branches. Local hooks can be skipped, so keep both layers. The hook deliberately excludes production build and export verification because the build is slower and downloads Google Fonts; CI owns those checks.
+CI sets `HUSKY=0` because it invokes checks directly. The build uses the existing public-client fallback settings and requires no production credentials; it is not a deployment artifact for cloud synchronization. Production builds still need the public Supabase values described above. App/model version labels remain sourced from code. The workflow does not deploy, change Dependabot settings, or gate an independent hosting deployment. It starts after GitHub receives a push and does not inspect pushes isolated on other branches. Local hooks can be skipped, so keep both layers. The hook deliberately excludes production build and export verification because the build is slower and downloads Google Fonts. CI runs these checks automatically; developers still run the required local build before committing and can run `bun run verify:export` afterward.
 
 Tooling regression tests cover secret/file history checks and export assets. They do not test camera capture, browser inference, offline reloads, or Supabase synchronization.
+
+## Browser tests and reliability
+
+Use Node.js 24 alongside Bun. Install the pinned browser binaries once after `bun install`:
+
+```bash
+bunx --no-install playwright install chromium firefox webkit
+bun run test:e2e
+bun run test:report
+```
+
+On Linux, include `--with-deps` when installing browsers. `test:e2e` prepares a production export in ignored `.test-app/`, compiles only local mock backend settings, and serves it on `127.0.0.1:4173`. It reuses the export only when input hashes match. It never overwrites the normal `out/` build or manually edits `public/sw.js`. Never deploy `.test-app/`; it contains test backend settings and tooling. Keep port 4173 free and run browser suites one at a time.
+
+Run `bun run test:reliability` explicitly for 30 real predictions per supplied photo and a 30-minute mixed-use session. It defaults to one emulated Chromium phone; select another supported project explicitly to repeat measurements. These long checks are not in Husky or per-push CI. Reports are under ignored `playwright-report/` and `test-results/`; preserve formal evidence before rerunning. See [TESTING.md](docs/TESTING.md) for case IDs, report-only rejection diagnostics, fixture labels, limitations, and the manual physical-device checklist.
+
+For why `.test-app/`, `.tools/`, `playwright-report/`, and `test-results/` appear locally, what creates them, and what happens if you remove them, see [local generated folders](docs/TESTING.md#local-generated-folders).
+
+## Staged releases on Vercel
+
+To review each `master` deployment before it serves users, open Vercel **Settings > Environments > Production > Branch Tracking**, keep `master`, and disable **Auto-assign Custom Production Domains**. Confirm the dashboard setting; these repository changes do not configure Vercel. Builds remain Production/Staged until manually promoted. The previous Current deployment keeps serving the production domain.
+
+Wait for CI and applicable reliability/device checks, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Candidate version labels and documentation may be pushed before approval, but must not claim an unreleased version has shipped. Follow the [candidate release procedure](docs/MODEL_VERSIONING.md#candidate-testing-and-promotion).
+
+## Threshold-fitting notebook inputs
+
+For threshold-only experiments against the existing Trial 3 model, follow the [v3.1 Colab upload checklist](docs/model-training/experiment/v3.1/THRESHOLD_FITTING_v3_1.md). It requires the original calibrated `.keras` model and `resume_info.json`, the existing `val/` and `test/` class folders, and the OOD image collection. The root Bun dependencies do not execute this Python notebook. It writes candidate results into a separate Drive folder; application deployment remains a separate step.
+
+## Background-replacement training experiment
+
+For the paired retraining experiment, use the [v3.1 preparation and Colab guide](docs/model-training/experiment/v3.1/BACKGROUND_EXPERIMENT_v3_1.md). Training needs the original `train/`, `val/`, and `test/` split, the reserved OOD collection, and a separate pool of replacement-background photos. Cutouts are generated automatically in Colab and reviewed before training. The companion v3.2 fitting notebook consumes both newly calibrated models and freezes both threshold selections before evaluation. The original threshold-only v3.1 notebook remains for the old Trial 3 weights.
+
+The [v3.2 paired threshold guide](docs/model-training/experiment/v3.2/THRESHOLD_FITTING_v3_2.md) documents that workflow separately. Experiment documentation follows notebook versions; these directories do not announce deployed model versions.
 
 ## Common setup issues
 

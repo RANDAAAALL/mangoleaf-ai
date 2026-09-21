@@ -1,0 +1,61 @@
+{
+  "purpose": "Functional smoke examples; not an independent accuracy dataset. Originals are unchanged.",
+  "photos": [
+    {
+      "file": "healthy_mango_fruit.JPG",
+      "sha256": "5e832bc5a93f67dda12f79405fa39e89f7208052bb5ee6e627711967c6ee668c",
+      "expectedLabel": "Healthy",
+      "expectedKind": "mango",
+      "labelSource": "User-supplied filename; expert verification pending"
+    },
+    {
+      "file": "healthy_mangoleaf.jpg",
+      "sha256": "46aba3daebb33fb637f38a985d09d63cfae3810d93a5debd8dbe17a8b9d2c464",
+      "expectedLabel": "Healthy",
+      "expectedKind": "mango",
+      "labelSource": "User-supplied filename; expert verification pending"
+    },
+    {
+      "file": "mangofruit_bacterial_black_spot.jpg",
+      "sha256": "d099549a7f4fc77ed38682754361c99664b29f3ab6af10ceab8bf87747612457",
+      "expectedLabel": "Bacterial Black Spot",
+      "expectedKind": "mango",
+      "labelSource": "User-supplied filename; expert verification pending"
+    },
+    {
+      "file": "mangofruit_mango_scab.jpg",
+      "sha256": "943b57eda15d86cbc0329cf62919897a50235730bdf1096fa0fbc10d71ccdfff",
+      "expectedLabel": "Mango Scab",
+      "expectedKind": "mango",
+      "labelSource": "User-supplied filename; expert verification pending"
+    },
+    {
+      "file": "mangoleaf_anthracnose.jpg",
+      "sha256": "392c0842f1215bd3fb639ec6965e53194004c8c2d33f93a3ce6a36d506460dc9",
+      "expectedLabel": "Anthracnose",
+      "expectedKind": "mango",
+      "labelSource": "User-supplied filename; expert verification pending"
+    },
+    {
+      "file": "mangoleaf_bacterial_canker.jpg",
+      "sha256": "bcadcc14e91f8cbb6f88a67d35389c453b6cd1c107fa39909acd78a2f6a9e70f",
+      "expectedLabel": "Bacterial Canker",
+      "expectedKind": "mango",
+      "labelSource": "User-supplied filename; expert verification pending"
+    },
+    {
+      "file": "mangoleaf_sooty_mold.jpg",
+      "sha256": "265c4244670d7e8ac61a7c58eaba00814ec3e9dd1e042f0fe7e0fb696b8d9b0b",
+      "expectedLabel": "Sooty Mold",
+      "expectedKind": "mango",
+      "labelSource": "User-supplied filename; expert verification pending"
+    },
+    {
+      "file": "ood.jpg",
+      "sha256": "9b995697456d49e1bf9ed6b10650bc55948d422dd5be25e9c30ae59a7c7a4b65",
+      "expectedLabel": null,
+      "expectedKind": "ood",
+      "labelSource": "User-supplied filename; expert verification pending"
+    }
+  ]
+}
