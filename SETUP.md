@@ -9,6 +9,7 @@ This guide covers local development and the external services required by the cu
 - `tar` for scanner installation (included with current Windows, macOS, and typical Linux installations)
 - A modern browser with IndexedDB, Web Workers, Web Crypto, Canvas, and WebGL support
 - A Supabase project if cloud synchronization is required
+- Optional: [Cloudflared](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/) available on the command line for `bun run tunnel`
 
 Confirm Bun is installed:
 
@@ -41,17 +42,17 @@ Copy-Item .env.example .env.local
 
 Configure these values in `.env.local`:
 
-| Variable                        | Required       | Purpose                              |
-| ------------------------------- | -------------- | ------------------------------------ |
-| `NEXT_PUBLIC_SUPABASE_URL`      | For cloud sync | Supabase project API URL.            |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | For cloud sync | Supabase browser-safe anonymous key. |
+| Variable                               | Required       | Purpose                                |
+| -------------------------------------- | -------------- | -------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`             | For cloud sync | Supabase project API URL.              |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | For cloud sync | Supabase browser-safe publishable key. |
 
 Version labels are not environment variables. The footer app version is derived
 from the `version` field in `package.json` by `next.config.ts`, and the model
 label is the `modelVersion` constant in `src/lib/constants.ts`. See
-`docs/MODEL_VERSIONING.md`.
+[PWA versioning](docs/versions/PWA_VERSIONING.md) and [AI model versioning](docs/versions/AI_MODEL_VERSIONING.md).
 
-The client also accepts `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` as a fallback key name, but `.env.example` uses `NEXT_PUBLIC_SUPABASE_ANON_KEY` as the canonical project convention.
+The committed template uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Older projects may keep `NEXT_PUBLIC_SUPABASE_ANON_KEY` as the compatible public-key setting. Configure one browser-safe project key; neither name may contain a secret or service-role key.
 
 Do not commit `.env.local`. It is already covered by `.gitignore`.
 
@@ -59,20 +60,26 @@ Do not commit `.env.local`. It is already covered by `.gitignore`.
 
 The synchronization code expects the following resources:
 
-- A public Storage bucket named `scans`.
-- A `scans` table for device-scoped scan metadata.
+- Anonymous sign-ins enabled under Authentication, **Sign In / Providers**.
+- A private Storage bucket named `scans`, with owner-restricted object policies.
+- A `scans` table for guest-owned scan metadata, with owner-restricted RLS policies.
 - A `guidelines` table for English and Cebuano/Bisaya treatment guidance.
-- Row Level Security policies appropriate for the deployment.
+- Public read-only access to `guidelines`; browser clients cannot edit treatment text.
 - Realtime enabled for the `guidelines` table if live guidance updates are required.
 
-The current client reads and writes these `scans` fields:
+The cloud client creates and reuses an anonymous guest session in the background. Farmers do not enter an email or password. Local diagnosis and History remain available while that session or a cloud request is pending; public treatment-guideline reads do not depend on guest sign-in.
+
+The scan schema keeps the prediction metadata, browser label, and a separate verified owner. The following is a field overview, not a standalone secure setup script:
 
 ```sql
 create table public.scans (
   id uuid primary key,
   disease_name text not null,
   confidence float8 not null,
-  image_url text,
+  image_url text, -- retained for legacy rows; new photos use a private object path
+  storage_path text,
+  owner_id uuid,
+  model_version text,
   image_hash text,
   updated_at timestamptz not null default now(),
   device_id uuid not null
@@ -90,9 +97,13 @@ create table public.guidelines (
 );
 ```
 
-Security policies should be reviewed for the actual deployment. The browser uses a public Supabase key, so do not rely on that key to protect privileged data.
+An old row may have a null `owner_id` so its data can be retained without inventing ownership. New browser inserts must match the signed guest's `auth.uid()`. `device_id` is not an ownership credential. New photo paths sit under that guest's directory, and downloads require a matching session. See [Supabase security and recovery](./docs/supabase/SECURITY-AND-SYNC.md) for the reviewed policies, legacy records, private backups, rollout order, and verification status. Do not execute the schema overview alone and assume that grants, RLS, and Storage have been secured.
 
-Maintain treatment text in `public.guidelines` only. Use the existing IDs `anthracnose`, `bacterial_black_spot`, `bacterial_canker`, `mango_scab`, `sooty_mold`, and `healthy`; Healthy Leaf and Healthy Fruit both read `healthy`. Populate both language fields with nonblank text. The [dated source review](./docs/guidelines/treatment-guidelines-review-2026-10-02.md) contains proposed replacements for manual review and entry; it has not applied them to Supabase.
+The same public project URL and browser-safe key remain sufficient. Never use a service-role or secret key in browser code. Enabling anonymous sign-ins alone does not replace the previously broad policies. If the database is secured before the matching app is deployed, an older UUID-only client cannot synchronize private scans; its local scans and publicly readable guidance continue to work.
+
+The current project's October 2 owner-security migration and private bucket are applied and verified. The matching client changes remain local until deployment. Follow the [implementation status](./docs/supabase/SECURITY-AND-SYNC.md#implementation-status) for the migration identity, preserved data, and remaining rollout step; do not recreate or replace the existing cloud tables to repeat this setup.
+
+Maintain treatment text in `public.guidelines` only. Use the existing IDs `anthracnose`, `bacterial_black_spot`, `bacterial_canker`, `mango_scab`, `sooty_mold`, and `healthy`; Healthy Leaf and Healthy Fruit both read `healthy`. Populate both language fields with nonblank text. The [dated source review](./docs/treatment-guidelines/TREATMENT-GUIDELINES-REVIEW-2026-10-02.md) contains proposed replacements for manual review and entry; it has not applied them to Supabase.
 
 Successful synchronization saves these rows in IndexedDB. A device can then display its downloaded advice offline, including during a failed later sync. A device with no matching saved row, or a blank selected-language field, displays a translated unavailable message. There is no bundled treatment fallback. Initial use, cleared browser storage, and new guideline updates require a successful online sync; changing the table does not instantly update an offline device.
 
@@ -105,6 +116,34 @@ bun run dev
 Open `http://localhost:3000`.
 
 Serwist is disabled in development to prevent stale service-worker caches. Test production caching and offline behavior from a production build served over HTTPS or localhost.
+
+### Optional: temporary link to the local app
+
+Use this option to try the app on a phone or another computer through a temporary internet link. The app still runs on your development computer, which must stay on with both terminals running. For local development on the same computer, use `bun run dev` and open `http://localhost:3000`; the tunnel is optional.
+
+The existing `bun run tunnel` script runs `cloudflared tunnel --url http://localhost:3000`. Install Cloudflared using the prerequisite link above, then confirm it is available:
+
+```bash
+cloudflared --version
+```
+
+Start the app in one terminal and keep it running:
+
+```bash
+# Terminal 1, from the project folder
+bun run dev
+```
+
+Open another terminal in the same folder:
+
+```bash
+# Terminal 2
+bun run tunnel
+```
+
+Open the printed `trycloudflare.com` link on the other device. The script targets port 3000, so the app must be running on that port. Anyone with the link can access this development server until you stop the tunnel with `Ctrl+C`. Quick Tunnels are temporary development links; see [Cloudflare's guide](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/).
+
+Serwist remains disabled when using `bun run dev` through the link. Use a production export for service-worker and offline-caching checks.
 
 ## Production build
 
@@ -168,15 +207,15 @@ bun run test:report
 
 On Linux, include `--with-deps` when installing browsers. `test:e2e` prepares a production export in ignored `.test-app/`, compiles only local mock backend settings, and serves it on `127.0.0.1:4173`. It reuses the export only when input hashes match. It never overwrites the normal `out/` build or manually edits `public/sw.js`. Never deploy `.test-app/`; it contains test backend settings and tooling. Keep port 4173 free and run browser suites one at a time.
 
-Run `bun run test:reliability` explicitly for 30 real predictions per supplied photo and a 30-minute mixed-use session. It defaults to one emulated Chromium phone; select another supported project explicitly to repeat measurements. These long checks are not in Husky or per-push CI. Reports are under ignored `playwright-report/` and `test-results/`; preserve formal evidence before rerunning. See [TESTING.md](docs/TESTING.md) for case IDs, report-only rejection diagnostics, fixture labels, limitations, and the manual physical-device checklist.
+Run `bun run test:reliability` explicitly for 30 real predictions per supplied photo and a 30-minute mixed-use session. It defaults to one emulated Chromium phone; select another supported project explicitly to repeat measurements. These long checks are not in Husky or per-push CI. Reports are under ignored `playwright-report/` and `test-results/`; preserve formal evidence before rerunning. See [TESTING.md](docs/testing/TESTING.md) for case IDs, report-only rejection diagnostics, fixture labels, limitations, and the manual physical-device checklist.
 
-For why `.test-app/`, `.tools/`, `playwright-report/`, and `test-results/` appear locally, what creates them, and what happens if you remove them, see [local generated folders](docs/TESTING.md#local-generated-folders).
+For why `.test-app/`, `.tools/`, `playwright-report/`, and `test-results/` appear locally, what creates them, and what happens if you remove them, see [local generated folders](docs/testing/TESTING.md#local-generated-folders).
 
 ## Staged releases on Vercel
 
 To review each `master` deployment before it serves users, open Vercel **Settings > Environments > Production > Branch Tracking**, keep `master`, and disable **Auto-assign Custom Production Domains**. Confirm the dashboard setting; these repository changes do not configure Vercel. Builds remain Production/Staged until manually promoted. The previous Current deployment keeps serving the production domain.
 
-Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Candidate version labels and documentation may be pushed before approval, but must not claim an unreleased version has shipped. Follow the [candidate release procedure](docs/MODEL_VERSIONING.md#candidate-testing-and-promotion); the [testing guide](docs/TESTING.md) records local v0.4.9 validation.
+Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Candidate version labels and documentation may be pushed before approval, but must not claim an unreleased version has shipped. Follow the [candidate release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion); the [testing guide](docs/testing/TESTING.md) separates historical v0.4.9 results from [v0.5.0 candidate validation](docs/testing/TESTING.md#v050-candidate-validation-october-3-2026).
 
 ## Threshold-fitting notebook inputs
 
@@ -194,7 +233,7 @@ For the completed **V4.2.0 two-model experiment**, follow the [leaf/fruit Colab 
 
 ## Common setup issues
 
-App `0.4.9` uses the adopted [V4.3.0 Combined model](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md), with display label `v4.3.0` and saved gates 0.70 / 0 / 0.42. Keep its five fitted files together in root `public/model/`. Adoption changes the configuration's release identity and status; the graph, shards, class order, preprocessing, temperature, and numerical gates remain those of the completed Combined export. The [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) records the original and adopted identities/hashes. No retraining is needed to run these files. Restart the development server after a swap and reload the page to replace the in-memory model. For production-preview testing, rebuild and wait for the new worker to activate, then reload. The exact pre-adoption state is preserved in ignored `.tools/release-backups/v0.4.9-model-v4.3.0-20261002/before/`; earlier V3 and V4.1.1 rollback bundles remain. Production promotion is pending final CI and release approval.
+App candidate `0.5.0` uses the adopted [V4.3.0 Combined model](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md), with display label `v4.3.0` and saved gates 0.70 / 0 / 0.42. Keep its five fitted files together in root `public/model/`. Adoption changes the configuration's release identity and status; the graph, shards, class order, preprocessing, temperature, and numerical gates remain those of the completed Combined export. The [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) records the original and adopted identities/hashes. No retraining is needed to run these files. Restart the development server after a swap and reload the page to replace the in-memory model. For production-preview testing, rebuild and wait for the new worker to activate, then reload. The exact pre-adoption state is preserved in ignored `.tools/release-backups/v0.4.9-model-v4.3.0-20261002/before/`; earlier V3 and V4.1.1 rollback bundles remain. Production promotion is pending final CI and release approval.
 
 - If a push reports a missing scanner, run `bun run security:install`. If the hook cannot find Bun, make Bun available to the terminal or Git GUI's PATH and restart that application.
 - For a shallow clone, run `git fetch --unshallow` before scanning. If hooks were not registered during dependency installation, run `bun run prepare` and confirm `git config --get core.hooksPath` prints `.husky/_`.

@@ -1,8 +1,10 @@
 # MangoLeaf AI: Trial 2.1 Model Training & Performance Evaluation Report
 
+> **Notebook location update, October 2, 2026:** Preserved Trial 2.1 training and threshold-fitting notebooks now live under [`notebooks/non-experiment/v2.1/`](../../../../notebooks/non-experiment/v2.1/). Original notebook paths below remain historical provenance. Use the [notebook index](../../../../notebooks/README.md) for current locations; saved notebook contents and outputs are unchanged.
+
 > **Current-model note, October 2, 2026:** The adopted application model is [V4.3.0 Combined](../v4.3.0/TRIAL_v4_3_0.md#current-model-adoption-october-2-2026), replacing V3 as the adopted baseline. This Trial 2.1 report and its earlier reading note remain historical evidence.
 
-> **Reading note, September 21, 2026:** [Trial 3](../v3/TRIAL_v3.md) superseded this model on August 27, 2026. “Shipping model” and “before the v3 run” below refer to the original Trial 2.1 period. Keep these results as evidence; follow [MODEL_VERSIONING.md](../../../MODEL_VERSIONING.md) and [TESTING.md](../../../TESTING.md) for current candidate and browser/device checks. Weight-conversion probes and historical precision estimates are not proof of identical behavior on every phone.
+> **Reading note, September 21, 2026:** [Trial 3](../v3/TRIAL_v3.md) superseded this model on August 27, 2026. “Shipping model” and “before the v3 run” below refer to the original Trial 2.1 period. Keep these results as evidence; follow [AI model versioning](../../../versions/AI_MODEL_VERSIONING.md) and [TESTING.md](../../../testing/TESTING.md) for current candidate and browser/device checks. Weight-conversion probes and historical precision estimates are not proof of identical behavior on every phone.
 
 This document records the dataset deduplication, class-weighted two-stage fine-tuning, temperature calibration, and Float16 export for **Trial 2.1** of the on-device image classification model, completed on **August 22, 2026**.
 

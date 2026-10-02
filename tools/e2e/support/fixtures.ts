@@ -237,6 +237,48 @@ export async function openApp(page: Page) {
     page.getByRole("heading", { name: "Recent Scans", exact: true }),
   ).toBeVisible({ timeout: 90_000 });
 }
+
+// Only the isolated HTTP mock accepts these test sessions. Never use this
+// helper against a production Supabase project or attach its token to reports.
+export async function mockGuestToken(page: Page): Promise<string> {
+  return page.evaluate(() => {
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index)!;
+      if (!key.endsWith("-auth-token")) continue;
+      const value = JSON.parse(localStorage.getItem(key)!);
+      if (value.access_token) return value.access_token as string;
+    }
+    throw new Error("No isolated guest session was saved");
+  });
+}
+
+// Playwright serializes a Blob as an empty object. Inspect its byte length
+// inside the browser instead of reading Blob properties in the Node test.
+export async function savedPhotoSize(page: Page, id: string): Promise<number> {
+  return page.evaluate(
+    (scanId) =>
+      new Promise<number>((resolve, reject) => {
+        const opening = indexedDB.open("MangoLeafDB");
+        opening.onerror = () => reject(opening.error);
+        opening.onsuccess = () => {
+          const database = opening.result;
+          const query = database
+            .transaction("scans")
+            .objectStore("scans")
+            .get(scanId);
+          query.onerror = () => {
+            database.close();
+            reject(query.error);
+          };
+          query.onsuccess = () => {
+            database.close();
+            resolve(query.result?.image_blob?.size ?? 0);
+          };
+        };
+      }),
+    id,
+  );
+}
 export async function nav(page: Page, label: string) {
   await page
     .getByRole("button", { name: label, exact: true })

@@ -1,12 +1,12 @@
 import { defaultCache } from "@serwist/next/worker";
-import { Serwist, CacheFirst, type PrecacheEntry } from "serwist";
+import { Serwist, CacheFirst, NetworkOnly, type PrecacheEntry } from "serwist";
 
 declare const self: ServiceWorkerGlobalScope & {
   __SW_MANIFEST: (PrecacheEntry | string)[];
 };
 
 // Bump with model swaps so old runtime caches can be evicted. Precache revisions
-// fetch changed model files. See docs/MODEL_VERSIONING.md.
+// fetch changed model files. See docs/versions/AI_MODEL_VERSIONING.md.
 const MODEL_CACHE = "mangoleaf-model-cache-v4-3-0";
 
 // Every model cache name this app has used, so old weights can be evicted
@@ -24,11 +24,23 @@ const OUTDATED_MODEL_CACHES = [
   "mangoleaf-model-cache-v4-3-0-candidate",
 ];
 
+// Private cloud responses must be authorized on every request. IndexedDB,
+// rather than the service worker's shared URL cache, keeps offline photos.
+function isPrivateCloudRequest(url: URL) {
+  return /\/(?:auth\/v1(?:\/|$)|storage\/v1(?:\/|$)|rest\/v1\/scans(?:\/|$))/.test(
+    url.pathname,
+  );
+}
+
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   skipWaiting: true,
   clientsClaim: true,
   runtimeCaching: [
+    {
+      matcher: ({ url }) => isPrivateCloudRequest(url),
+      handler: new NetworkOnly(),
+    },
     {
       matcher: /\/model\/.*$/,
       handler: new CacheFirst({
@@ -44,11 +56,33 @@ const serwist = new Serwist({
 // space but breaks nothing, and must never stop the new worker activating.
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    Promise.all(
-      OUTDATED_MODEL_CACHES.filter((name) => name !== MODEL_CACHE).map((name) =>
-        caches.delete(name).catch(() => false),
+    Promise.all([
+      ...OUTDATED_MODEL_CACHES.filter((name) => name !== MODEL_CACHE).map(
+        (name) => caches.delete(name).catch(() => false),
       ),
-    ),
+      // Remove cloud responses cached by workers installed before ownership
+      // checks existed. Public guidance and model caches remain available.
+      caches
+        .keys()
+        .then((names) =>
+          Promise.all(
+            names
+              .filter((name) => !OUTDATED_MODEL_CACHES.includes(name))
+              .map(async (name) => {
+                const cache = await caches.open(name);
+                const requests = await cache.keys();
+                await Promise.all(
+                  requests
+                    .filter((request) =>
+                      isPrivateCloudRequest(new URL(request.url)),
+                    )
+                    .map((request) => cache.delete(request)),
+                );
+              }),
+          ),
+        )
+        .catch(() => undefined),
+    ]),
   );
 });
 

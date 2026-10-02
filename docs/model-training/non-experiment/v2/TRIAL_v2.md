@@ -1,8 +1,10 @@
 # MangoLeaf AI: Trial 2 Model Training & Performance Evaluation Report
 
+> **Notebook location update, October 2, 2026:** Preserved Trial 2 notebooks now live under [`notebooks/non-experiment/v2/`](../../../../notebooks/non-experiment/v2/), and Trial 2.1 notebooks under [`notebooks/non-experiment/v2.1/`](../../../../notebooks/non-experiment/v2.1/). Original paths and model-status statements below describe the historical trials. Use the [notebook index](../../../../notebooks/README.md) for current locations and the current app model.
+
 > **Current-model note, October 2, 2026:** The adopted application model is [V4.3.0 Combined](../v4.3.0/TRIAL_v4_3_0.md#current-model-adoption-october-2-2026), replacing V3 as the adopted baseline. This Trial 2 report and its earlier reading note remain historical evidence.
 
-> **Reading note, September 21, 2026:** Trial 2 and its v2.1 successor are historical. References below to v2.1 as the active template describe the earlier transition. The current baseline is [Trial 3](../v3/TRIAL_v3.md), with the clean template at [`notebooks/v3/MangoLeaf_AI_Training_v3.ipynb`](../../../../notebooks/v3/MangoLeaf_AI_Training_v3.ipynb). New candidate workflows belong under [`notebooks/experiment/`](../../../../notebooks/experiment/README.md). Historical UI and performance descriptions below are not current reliability evidence; see [TESTING.md](../../../TESTING.md).
+> **Reading note, September 21, 2026:** Trial 2 and its v2.1 successor are historical. References below to v2.1 as the active template describe the earlier transition. The current baseline is [Trial 3](../v3/TRIAL_v3.md), with the clean template at [`notebooks/v3/MangoLeaf_AI_Training_v3.ipynb`](../../../../notebooks/non-experiment/v3/MangoLeaf_AI_Training_v3.ipynb). New candidate workflows belong under [`notebooks/experiment/`](../../../../notebooks/experiment/README.md). Historical UI and performance descriptions below are not current reliability evidence; see [TESTING.md](../../../testing/TESTING.md).
 
 This document records the step-by-step development, dataset pre-balancing, two-stage fine-tuning, and performance evaluation for **Trial 2** of the on-device image classification model completed on **July 25, 2026**.
 

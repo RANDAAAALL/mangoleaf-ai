@@ -188,7 +188,7 @@ The app now maintains treatment text only through Supabase and its downloaded In
 | Matching row is missing, or selected-language text is blank            | Treatment guidelines are unavailable on this device. Connect to the internet and let the app sync, then try again. | Wala pay giya sa pagtambal nga magamit niini nga device. Konektar sa internet ug hulata nga mahuman ang pag-sync sa app, dayon sulayi usab. |
 | Downloaded advice exists, including offline use or a later failed sync | Display the saved guideline text.                                                                                  | Ipakita ang natipig nga giya.                                                                                                               |
 
-English and Bisaya are checked independently. A blank English field does not hide valid Bisaya guidance, and vice versa. This is a guidance-availability message; it does not mean the AI diagnosis failed. See [architecture](../ARCHITECTURE.md#local-persistence) and [availability checks](../TESTING.md#treatment-guideline-availability-checks).
+English and Bisaya are checked independently. A blank English field does not hide valid Bisaya guidance, and vice versa. This is a guidance-availability message; it does not mean the AI diagnosis failed. See [architecture](../ARCHITECTURE.md#local-persistence) and [availability checks](../testing/TESTING.md#treatment-guideline-availability-checks).
 
 ## Current Supabase wording — before snapshot
 

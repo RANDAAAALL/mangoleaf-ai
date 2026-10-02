@@ -62,7 +62,7 @@ Compare raw accuracy, correct and wrong accepted diagnoses, valid mango rejectio
 
 Training saves a unique run under `MyDrive/mangoleaf_experiments/v4.1/training/`. Copy its printed full path into `TRAINING_RUN` in the threshold notebook. Threshold fitting writes its own unique run under `MyDrive/mangoleaf_experiments/v4.1/threshold_fitting/`. Keep manifests, reviewed-mask evidence, per-arm weights, configurations, prediction CSVs, and reports together so results can be audited after Colab disconnects.
 
-Candidate labels may use the `model-v4.1.0` family with an arm name. A same-image training-procedure change is a minor model candidate under [model versioning](../../../MODEL_VERSIONING.md). No arm is adopted because it has the newest number. Review independent evidence and complete the normal release checks before any later app model swap.
+Candidate labels may use the `model-v4.1.0` family with an arm name. A same-image training-procedure change is a minor model candidate under [model versioning](../../../versions/AI_MODEL_VERSIONING.md). No arm is adopted because it has the newest number. Review independent evidence and complete the normal release checks before any later app model swap.
 
 ## Completed result and local test
 

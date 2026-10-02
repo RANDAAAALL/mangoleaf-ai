@@ -4,7 +4,7 @@
 
 This experiment separates `healthy_leaf` and `healthy_fruit`. It trains one model using the v3 recipe, then fits rejection thresholds in a separate notebook. The notebooks alone do not change the application's model, version, labels, or assets.
 
-The notebook workflow itself does not change the app. A later, reversible local trial copied the fitted candidate into `public/model/` with matching seven-class app labels. See [model versioning](../../../MODEL_VERSIONING.md#september-24-2026-local-v4-candidate-trial) for the backup and rollback boundary.
+The notebook workflow itself does not change the app. A later, reversible local trial copied the fitted candidate into `public/model/` with matching seven-class app labels. See [model versioning](../../../versions/AI_MODEL_VERSIONING.md#september-24-2026-local-v4-candidate-trial) for the backup and rollback boundary.
 
 ## Files to open
 
@@ -191,4 +191,4 @@ These checks cover notebook schema/syntax, preserved training settings, renamed-
 
 Review actual training and threshold results before selecting this candidate. The local trial updates all seven application class indices, English/Bisaya labels, healthy guidance, model assets/configuration, cache/version handling, and affected tests together; it is not an adoption decision. Accepted healthy predictions should display **Healthy Leaf** or **Healthy Fruit**; rejected predictions remain **Uncertain / Unrecognized**.
 
-Keep the shipped deployment unchanged while this experiment is evaluated. Follow the [model versioning policy](../../../MODEL_VERSIONING.md) and the existing release checks before any application deployment.
+Keep the shipped deployment unchanged while this experiment is evaluated. Follow the [model versioning policy](../../../versions/AI_MODEL_VERSIONING.md) and the existing release checks before any application deployment.

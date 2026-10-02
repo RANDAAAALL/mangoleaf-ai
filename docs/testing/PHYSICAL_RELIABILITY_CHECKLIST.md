@@ -173,4 +173,4 @@ Complete one row for every physical environment tested. Do not claim untested co
 - [ ] Automated reports, physical evidence, commit ID, deployment URL, and versions match same candidate.
 - [ ] Final decision: Candidate may proceed to release decision / Candidate blocked from release — reason and evidence location:
 
-See [TESTING.md](TESTING.md) for automated scope and limitations. See [MODEL_VERSIONING.md](MODEL_VERSIONING.md#candidate-testing-and-promotion) for candidate promotion and tagging order.
+See [TESTING.md](TESTING.md) for automated scope and limitations. See [PWA versioning](../versions/PWA_VERSIONING.md#candidate-testing-and-promotion) for candidate promotion and tagging order.

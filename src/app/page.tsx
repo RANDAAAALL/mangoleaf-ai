@@ -7,6 +7,7 @@ import { useSync } from "@/hooks/useSync";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { computeImageHash } from "@/lib/image-hash";
+import { compressImageForStorage } from "@/lib/image-storage";
 import type * as tf from "@tensorflow/tfjs";
 import { modelVersion, UNCERTAIN_LABEL } from "@/lib/constants";
 import { translations, type Language } from "@/lib/translations";
@@ -24,16 +25,16 @@ import { DiagnosticScanner } from "@/components/scan/diagnostic-scanner";
 import { Footer } from "@/components/layout/footer";
 import dynamic from "next/dynamic";
 
-// Loaded only when a scan result is opened, which keeps it out of the first
-// bundle a farmer downloads.
+// Defer loading this component into the page until a scan result is opened.
+// The production service worker still precaches its chunk for offline use.
 const ScanDetailsModal = dynamic(() =>
   import("@/components/modal/scan-details-modal").then((mod) => ({
     default: mod.ScanDetailsModal,
   })),
 );
 
-// Module scope, not state, so it survives a remount and the 11.33 MB model is
-// never loaded twice in one browser session.
+// Module scope keeps the initialization flag across page remounts. The
+// classifier also shares its model-loading promise during an in-flight load.
 let hasInitialized = false;
 
 type AppTab = "home" | "history" | "about";
@@ -181,7 +182,10 @@ export default function Home() {
     if (selectedScan?.image_blob && selectedScan.image_blob.size > 0) {
       return URL.createObjectURL(selectedScan.image_blob);
     }
-    return selectedScan?.image_url || null;
+    // Unowned legacy cloud links cannot be used after the bucket is private.
+    return selectedScan?._status === "local-only"
+      ? null
+      : selectedScan?.image_url || null;
   }, [selectedScan]);
 
   useEffect(() => {
@@ -355,8 +359,7 @@ export default function Home() {
         return;
       }
 
-      const { predictMangoDisease, compressImageForStorage } =
-        await import("@/lib/classifier");
+      const { predictMangoDisease } = await import("@/lib/classifier");
       if (request !== photoRequestRef.current) return;
 
       const img = new Image();

@@ -204,7 +204,9 @@ export const ScanHistoryList = memo(function ScanHistoryList({
               key={scan.id}
               scan={scan}
               imageBlob={scan.image_blob || null}
-              imageUrlFallback={scan.image_url}
+              imageUrlFallback={
+                scan._status === "local-only" ? null : scan.image_url
+              }
               language={language}
               onSelect={onSelectScan}
               onDelete={onDeleteScan}

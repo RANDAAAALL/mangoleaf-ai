@@ -2,7 +2,7 @@
 
 > **Current-model note, October 2, 2026:** The adopted application model is [V4.3.0 Combined](../v4.3.0/TRIAL_v4_3_0.md#current-model-adoption-october-2-2026), replacing V3 as the adopted baseline. This Trial 1 report and its earlier reading note remain historical evidence.
 
-> **Reading note, September 21, 2026:** This is a historical Trial 1 record. Its code examples, UI, and performance claims describe that period, not the current application or measured physical-device reliability. The current model report is [Trial 3](../v3/TRIAL_v3.md); use [TESTING.md](../../../TESTING.md) for current test requirements. Historical measurements below are preserved.
+> **Reading note, September 21, 2026:** This is a historical Trial 1 record. Its code examples, UI, and performance claims describe that period, not the current application or measured physical-device reliability. The current model report is [Trial 3](../v3/TRIAL_v3.md); use [TESTING.md](../../../testing/TESTING.md) for current test requirements. Historical measurements below are preserved.
 
 This document records the step-by-step development process, troubleshooting, and final integration of the on-device image classification model completed on **July 20-21, 2026**.
 

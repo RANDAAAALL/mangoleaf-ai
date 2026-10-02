@@ -26,6 +26,6 @@ See the [original paired-run instructions](../v3.1/TRIAL_v3_1.md#run-threshold-f
 
 ## Deployment decision
 
-Running or archiving this notebook does not adopt its models. Keep the deployed v3.0.0 baseline unless a candidate is explicitly accepted following model evaluation and browser/device testing. Reused evaluation data and a single training seed do not establish a general improvement. Follow [model versioning](../../../MODEL_VERSIONING.md) and [application testing](../../../TESTING.md) before deployment.
+Running or archiving this notebook does not adopt its models. Keep the deployed v3.0.0 baseline unless a candidate is explicitly accepted following model evaluation and browser/device testing. Reused evaluation data and a single training seed do not establish a general improvement. Follow [model versioning](../../../versions/AI_MODEL_VERSIONING.md) and [application testing](../../../testing/TESTING.md) before deployment.
 
 Local notebook checks remain `python tools/verify-background-notebooks.py`. They validate notebook logic with synthetic data; they do not train models, judge mask quality, or measure field accuracy.

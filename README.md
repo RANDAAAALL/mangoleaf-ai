@@ -9,6 +9,8 @@
 
 MangoLeaf AI is an offline-first progressive web application that helps identify possible diseases affecting mango leaves and fruit. Classification runs in the browser with TensorFlow.js, scans are stored locally in IndexedDB, and pending records synchronize with Supabase when connectivity is available.
 
+**Current app model: V4.3.0 Combined.** One model identifies seven classes covering mango leaves and fruit. **App version: v0.5.0 (release candidate).**
+
 ## Features
 
 - Capture a photo or upload an existing mango leaf or fruit image.
@@ -18,11 +20,14 @@ MangoLeaf AI is an offline-first progressive web application that helps identify
 - Keep a local scan history that remains available offline.
 - Check exact-file duplicates before diagnosis; retake, cancel, or open the saved result from photo review.
 - Compress stored images to WebP with a JPEG fallback.
-- Synchronize scan records and treatment guidelines with Supabase.
+- Synchronize private scan records and photos through an automatic guest session; no registration screen is required.
+- Download public treatment guidelines independently of guest sign-in and keep their saved copy available offline.
 - Read downloaded treatment guidelines offline; missing guidance shows an English/Bisaya status message rather than bundled treatment advice.
 - Install the app on supported devices as a PWA.
 
-App `0.4.9` adopts the seven-class V4.3.0 Combined model (`v4.3.0`) as the current application model, replacing the former six-class V3 baseline. The single scan flow remains in use, with separate Healthy Fruit and Healthy Leaf results. The [adopted trial report](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) and [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) preserve export provenance, fitted gates, and model hashes. Its [comparison with V4.1.1](docs/model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) reports mixed reused-set results; adoption does not establish improved field accuracy. Production promotion and the `v0.4.9` GitHub Release remain pending the final checks described in the [release procedure](docs/MODEL_VERSIONING.md#candidate-testing-and-promotion). The [testing guide](docs/TESTING.md) records local validation. Earlier trials and rollback backups remain preserved.
+App `0.4.9` adopted the seven-class V4.3.0 Combined model (`v4.3.0`) on October 2, 2026, replacing the former six-class V3 baseline. The single scan flow remains in use, with separate Healthy Fruit and Healthy Leaf results. The [adopted trial report](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) and [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) preserve export provenance, fitted gates, and model hashes. Its [comparison with V4.1.1](docs/model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) reports mixed reused-set results; adoption does not establish improved field accuracy. App `0.5.0` prepares the private-cloud synchronization release while retaining this model. See the [v0.5.0 candidate record](docs/versions/PWA_VERSIONING.md#v050-private-cloud-synchronization-candidate-october-3-2026) for scope, validation, and publication status. The [testing guide](docs/testing/TESTING.md) records local validation. Earlier trials and rollback backups remain preserved.
+
+The [cloud-security update](docs/supabase/SECURITY-AND-SYNC.md#implementation-status) adds guest-owned private scans while preserving the local scan flow. Its private backup and October 2 local checks passed; the [testing guide](docs/testing/TESTING.md#v050-candidate-validation-october-3-2026) records validation for the newly labeled candidate separately. The live Supabase bucket and owner policies are applied and verified, with original cloud records/files retained. The matching updated app client has not been deployed; older clients can still scan locally and read public guidance, but cannot synchronize private scans until updated.
 
 ## Technology
 
@@ -45,41 +50,82 @@ cp .env.example .env.local
 bun run dev
 ```
 
-Then open `http://localhost:3000`.
+Then open `http://localhost:3000` on the same computer. This is the usual way to run the app locally.
 
 The Supabase values in `.env.local` must be replaced before cloud synchronization will work. See [SETUP.md](./SETUP.md) for the complete local setup, Supabase requirements, static-export notes, and pre-commit checks.
 
 Dependency installation registers Husky hooks. Before commits, `lint-staged` formats staged files with the project's Prettier configuration and includes the fixes in the commit; no editor extension is required. The separate scanner setup downloads a pinned, checksum-verified Gitleaks binary into ignored `.tools/`. Pushes check Git history for secrets and forbidden files, TypeScript, linting, and formatting locally. GitHub repeats these checks and verifies the app on pushes to `master`; see [local checks and CI](./SETUP.md#local-security-checks-and-github-ci).
 
+### Optional: test the local app on a phone or another computer
+
+Use this option when you want to try the app on another device through a temporary internet link. The app still runs on your development computer, which must stay on with both terminals running. You can skip this section when testing only on the same computer.
+
+Install [Cloudflared](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/) first. Keep the development server running in one terminal:
+
+```bash
+# Terminal 1
+bun run dev
+```
+
+Open a second terminal in the project folder:
+
+```bash
+# Terminal 2
+bun run tunnel
+```
+
+Open the temporary `trycloudflare.com` link printed in Terminal 2. Anyone with that link can reach your local development server while the tunnel runs. Stop it with `Ctrl+C` when finished. See [Cloudflare's Quick Tunnel guide](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/) and the [setup notes](./SETUP.md#optional-temporary-link-to-the-local-app).
+
 ## Documentation
+
+### Current model used by the app
+
+**V4.3.0 Combined is the current application model.** These links describe its training, results, and saved files. Production promotion is tracked separately in the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion).
+
+- [V4.3.0 current model report and saved results](./docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md)
+- [V4.3.0 training notebooks and completed runs](./notebooks/non-experiment/v4.3.0/)
+- [V4.3.0 compared with V4.1.1](./docs/model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md)
+
+### Experimental models
+
+These versions are preserved experiments; they are not the current application model.
+
+- [All experimental training notebooks](./notebooks/experiment/README.md)
+- [V4.1 experiment results](./docs/model-training/experiment/v4.1/TRIAL_v4_1.md#completed-result-and-local-test)
+- [V4.1.1 repeated training and results](./docs/model-training/experiment/v4.1.1/TRIAL_v4_1_1.md)
+- [V4.2.0 separate leaf and fruit model results](./docs/model-training/experiment/v4.2.0/TRIAL_v4_2_0.md)
+
+### Older models
+
+- [V3 previous application model report](./docs/model-training/non-experiment/v3/TRIAL_v3.md)
+- [V2.1 older model report](./docs/model-training/non-experiment/v2.1/TRIAL_v2_1.md)
+- [V2 older model report](./docs/model-training/non-experiment/v2/TRIAL_v2.md)
+- [V1 older model report](./docs/model-training/non-experiment/v1/TRIAL_v1.md)
+- [Current and older model training notebooks](./notebooks/non-experiment/README.md)
+
+### Project guides
 
 - [Setup guide](./SETUP.md)
 - [Architecture](./docs/ARCHITECTURE.md)
+- [Supabase setup, cloud privacy, and recovery](docs/supabase/SECURITY-AND-SYNC.md)
 - [Performance and optimization notes](./docs/PERFORMANCE.md)
-- [Testing and reliability guide](./docs/TESTING.md)
-- [Physical reliability checklist](./docs/PHYSICAL_RELIABILITY_CHECKLIST.md)
-- [Physical checklist answer example (fictional)](./docs/PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md)
+- [October 3 performance review and recommended improvements](docs/PERFORMANCE.md#low-end-device-performance-review-october-3-2026)
+- [Testing and reliability guide](./docs/testing/TESTING.md)
+- [Physical reliability checklist](./docs/testing/PHYSICAL_RELIABILITY_CHECKLIST.md)
+- [Physical checklist answer example (fictional)](./docs/testing/PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md)
 - [Development progress](./docs/PROGRESS.md)
-- [Treatment-guideline review and proposed English/Bisaya corrections](./docs/guidelines/treatment-guidelines-review-2026-10-02.md)
-- [Model and release versioning](./docs/MODEL_VERSIONING.md)
-- [Experimental notebook workflows (candidates, not shipped or deployed)](./notebooks/experiment/README.md)
-- [V4.1 completed experiment and local test evidence](./docs/model-training/experiment/v4.1/TRIAL_v4_1.md#completed-result-and-local-test)
-- [V4.1.1 completed reproduction, inputs, and evidence](./docs/model-training/experiment/v4.1.1/TRIAL_v4_1_1.md)
-- [V4.2.0 separate leaf/fruit experiment results, notebooks, and limits](./docs/model-training/experiment/v4.2.0/TRIAL_v4_2_0.md)
-- [V4.3.0 adopted Combined model: inputs, evidence, comparison, and rollback](./docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md)
-- [V4.3.0 preserved workflow and completed notebooks](./notebooks/v4.3.0/)
-- [Trial 3 model report (previous released baseline)](./docs/model-training/non-experiment/v3/TRIAL_v3.md)
-- [Trial 2.1 model report (superseded)](./docs/model-training/non-experiment/v2.1/TRIAL_v2_1.md)
-- [Trial 2 model report (superseded)](./docs/model-training/non-experiment/v2/TRIAL_v2.md)
-- [Trial 1 model report (superseded)](./docs/model-training/non-experiment/v1/TRIAL_v1.md)
+- [Treatment-guideline review and proposed English/Bisaya corrections](./docs/treatment-guidelines/TREATMENT-GUIDELINES-REVIEW-2026-10-02.md)
+- [PWA versions and releases](docs/versions/PWA_VERSIONING.md)
+- [AI model versions, training history, and saved evidence](docs/versions/AI_MODEL_VERSIONING.md)
 
 ## Commands
 
-See [application testing](./docs/TESTING.md) for browser installation and report interpretation. Use the [physical reliability checklist](./docs/PHYSICAL_RELIABILITY_CHECKLIST.md) to record real-device evidence. Long reliability runs are explicit commands; core E2E runs in CI on `master` pushes.
+See [application testing](./docs/testing/TESTING.md) for browser installation and report interpretation. Use the [physical reliability checklist](./docs/testing/PHYSICAL_RELIABILITY_CHECKLIST.md) to record real-device evidence. Long reliability runs are explicit commands; core E2E runs in CI on `master` pushes.
 
 | Command                           | Description                                                                            |
 | --------------------------------- | -------------------------------------------------------------------------------------- |
 | `bun run dev`                     | Start the Next.js development server with webpack.                                     |
+| `bun run tunnel`                  | Create a temporary link to the local server on port 3000; requires Cloudflared.        |
 | `bun run typecheck`               | Run TypeScript checks without emitting files.                                          |
 | `bun run lint`                    | Run ESLint across the repository.                                                      |
 | `bun run format`                  | Format supported project files, respecting `.prettierignore`.                          |

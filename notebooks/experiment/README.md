@@ -4,7 +4,7 @@
 
 This folder holds candidate notebook workflows and completed experimental evidence. A completed notebook does not automatically change application assets or deployment. An explicit local candidate test may copy verified model files after preserving a rollback backup; adoption and release still follow the model-version policy.
 
-The user adopted V4.3.0 Combined on October 2, 2026. Its unchanged clean templates and completed result notebooks now live under [`notebooks/v4.3.0/`](../v4.3.0/); see the [adopted and historical notebook index](../README.md) and [current-model record](../../docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md#current-model-adoption-october-2-2026). Other workflows below retain their experimental status.
+The user adopted V4.3.0 Combined on October 2, 2026. Its unchanged clean templates and completed result notebooks now live under [`notebooks/non-experiment/v4.3.0/`](../non-experiment/v4.3.0/); see the [adopted and historical notebook index](../README.md) and [current-model record](../../docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md#current-model-adoption-october-2-2026). The `non-experiment/` group contains both the current adopted model and older models; the workflows below retain their experimental status.
 
 Folder versions identify notebook workflows, not model versions:
 

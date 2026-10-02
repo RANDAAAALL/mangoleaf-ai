@@ -6,6 +6,8 @@ MangoLeaf AI is a client-heavy, offline-first Next.js 16 application. The browse
 
 ![MangoLeaf AI Architecture](../public/images/mangoleaf-architecture.svg)
 
+**Current candidate:** PWA `0.5.0` retains the adopted V4.3.0 Combined model. The version bump packages the guest-owned private-cloud client, local-history upgrade, and public-guideline separation described below. See the [release record](versions/PWA_VERSIONING.md#v050-private-cloud-synchronization-candidate-october-3-2026) for validation and pending publication status; model adoption and earlier measurements remain dated records.
+
 ## Test and release boundaries
 
 `tools/e2e/` holds Playwright functional and reliability cases. Controlled model responses exercise all accepted/rejected UI branches; separate real-model cases import the production classifier in a test-only harness and upload the supplied photos through the real app. Diagnostics remain in reports. The harness is served only by the local test server and is not part of `src/` or the deployed export.
@@ -14,13 +16,13 @@ MangoLeaf AI is a client-heavy, offline-first Next.js 16 application. The browse
 
 The local server uses pinned, development-only Busboy to extract photo bytes from multipart uploads. This preserves the unnamed file field sent by the installed Supabase client, which Bun 1.4's built-in form parser drops. R02 compares the stored bytes with the local scan image after reconnect.
 
-Core desktop/mobile and Chromium service-worker cases run in the existing `master` push CI. R01 repeated inference and R03 extended use run explicitly; [TESTING.md](TESTING.md) defines scope and [PHYSICAL_RELIABILITY_CHECKLIST.md](PHYSICAL_RELIABILITY_CHECKLIST.md) records real-device coverage. Reports, traces, and the private build stay untracked. A scan-card object-URL lifecycle fix accompanied the tests so a replaced photo blob cannot leave a revoked URL in the rendered image; the tests use the existing inference path and model assets.
+Core desktop/mobile and Chromium service-worker cases run in the existing `master` push CI. R01 repeated inference and R03 extended use run explicitly; [TESTING.md](testing/TESTING.md) defines scope and [PHYSICAL_RELIABILITY_CHECKLIST.md](testing/PHYSICAL_RELIABILITY_CHECKLIST.md) records real-device coverage. Reports, traces, and the private build stay untracked. A scan-card object-URL lifecycle fix accompanied the tests so a replaced photo blob cannot leave a revoked URL in the rendered image; the tests use the existing inference path and model assets.
 
-The manual release workflow uses Vercel staged production builds: disable automatic domain assignment in the dashboard, test the exact candidate commit/deployment, then promote it after review. Candidate labels/docs may be committed before release, with pending status stated honestly. Staging uses Production settings; it does not isolate the database. See [candidate testing and promotion](MODEL_VERSIONING.md#candidate-testing-and-promotion). CI checks do not themselves deploy or gate an independent Vercel promotion.
+The manual release workflow uses Vercel staged production builds: disable automatic domain assignment in the dashboard, test the exact candidate commit/deployment, then promote it after review. Candidate labels/docs may be committed before release, with pending status stated honestly. Staging uses Production settings; it does not isolate the database. See [candidate testing and promotion](versions/PWA_VERSIONING.md#candidate-testing-and-promotion). CI checks do not themselves deploy or gate an independent Vercel promotion.
 
 Experiment guides live under [experiment/v3.1](model-training/experiment/v3.1/TRIAL_v3_1.md), [experiment/v3.2](model-training/experiment/v3.2/TRIAL_v3_2.md), [experiment/v4](model-training/experiment/v4/TRIAL_v4.md), [experiment/v4.1](model-training/experiment/v4.1/TRIAL_v4_1.md), [experiment/v4.1.1](model-training/experiment/v4.1.1/TRIAL_v4_1_1.md), and [experiment/v4.2.0](model-training/experiment/v4.2.0/TRIAL_v4_2_0.md). Their candidate notebooks and completed experimental evidence live in [notebooks/experiment](../notebooks/experiment/README.md): **experimental candidates, not shipped or deployed**. V4 introduced separate healthy-leaf and healthy-fruit outputs while preserving historical split membership by file contents. V4.1 compared control, background replacement, local lighting, and both effects; V4.1.1 completed a guided reproduction. V4.2.0 completed separate leaf and fruit runs; only leaf met the threshold-selection rule. On October 2, 2026, the user adopted the single seven-class V4.3.0 Combined model for app `0.4.9`, replacing V3 as the current application baseline. The [adoption receipt](model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) records original export and adopted identities/hashes. Exact earlier model/app backups remain in ignored `.tools/model-backups/`; `.tools/release-backups/v0.4.9-model-v4.3.0-20261002/before/` preserves the pre-adoption state. Production promotion remains pending the final CI and release checks.
 
-Historical and adopted trial reports live under `docs/model-training/non-experiment/v{n}/`. Each version keeps its report beside any saved `artifacts/` and `figures/`; those evidence folders exist only when files are available. Upon adoption, preserved templates and completed notebooks move to `notebooks/v{n}/` without changing cell contents or saved outputs. Experimental versions use the same per-version grouping but remain candidates regardless of the `TRIAL_*.md` filename. V3.1 also retains its separate [original-weight threshold guide](model-training/experiment/v3.1/THRESHOLD_FITTING_v3_1.md).
+Historical and adopted trial reports live under `docs/model-training/non-experiment/v{n}/`. Each version keeps its report beside any saved `artifacts/` and `figures/`; those evidence folders exist only when files are available. Their preserved templates and completed notebooks live under `notebooks/non-experiment/v{n}/`, including the current adopted V4.3.0 model and older versions. Experimental notebooks stay under `notebooks/experiment/v{n}/` and remain candidates regardless of the `TRIAL_*.md` filename. Moving these records does not change notebook cell contents, saved outputs, or original Google Drive run paths. V3.1 also retains its separate [original-weight threshold guide](model-training/experiment/v3.1/THRESHOLD_FITTING_v3_1.md).
 
 V4 notebook outputs default to `MyDrive/mangoleaf_experiments/v4/training/` and `MyDrive/mangoleaf_experiments/v4/threshold_fitting/`. Each run and downloadable evidence/model ZIP carries its v4 workflow label and unique run ID. See the [Drive output layout](model-training/experiment/v4/TRIAL_v4.md#where-google-drive-outputs-go) for folder contents and existing-run compatibility.
 
@@ -32,11 +34,13 @@ V4.1.1 saved separate `MyDrive/mangoleaf_experiments/v4.1.1/` training, threshol
 
 The [V4.2.0 guide](model-training/experiment/v4.2.0/TRIAL_v4_2_0.md) defines two separate experimental classifiers: four leaf classes (including Bacterial Canker) and three fruit classes. Each has one training notebook with integrated figure steps, a separate threshold notebook, and completed Drive runs under `MyDrive/mangoleaf_experiments/v4.2.0/`. Curated evidence is under each organ's `artifacts/` and `figures/`, with source paths and SHA-256 hashes in `source_manifest.json`. The local two-choice app trial is over; the exact two-model asset and app-source state is retained in ignored `.tools/model-backups/v4.2.0-dual-experiment-20260929/`. The fruit gate was infeasible. Neither model was adopted or deployed.
 
-The [V4.3.0 adopted trial report](model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) records one completed seven-class Combined model, two workflow notebooks, and separately preserved completed result copies now under `notebooks/v4.3.0/`. Training reads the saved V4.1.1 split and provenance, reviews the original 62 scene photos plus the supplied 138 new scene photos, and fits a single combined recipe. Background replacement and local lighting each keep their 30% probability during training only; validation and test retain original pixels. The reviewed 200-scene pool is augmentation input, not an expanded mango dataset. Original training and fitting runs retain their `MyDrive/mangoleaf_experiments/v4.3.0/` paths and candidate metadata. Figure steps are integrated into the training notebook: training charts first, then evaluation charts after fitting. Verified evidence copies retain their artifacts/training/, artifacts/threshold_fitting/, artifacts/review/, and final figures/ grouping. The [comparison](model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) records unchanged selected mango decisions and mixed OOD results. Root `public/model/` now contains the adopted Combined graph, configuration, and three shards, with `v4.3.0` display label and `mangoleaf-model-cache-v4-3-0` cache identity. Only configuration release metadata changes from the original fitted export; numerical settings and weights are preserved. Current photo guidance, bilingual text, and history remain in use. Adoption is recorded separately from pending production promotion.
+The [V4.3.0 adopted trial report](model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) records one completed seven-class Combined model, two workflow notebooks, and separately preserved completed result copies now under `notebooks/non-experiment/v4.3.0/`. Training reads the saved V4.1.1 split and provenance, reviews the original 62 scene photos plus the supplied 138 new scene photos, and fits a single combined recipe. Background replacement and local lighting each keep their 30% probability during training only; validation and test retain original pixels. The reviewed 200-scene pool is augmentation input, not an expanded mango dataset. Original training and fitting runs retain their `MyDrive/mangoleaf_experiments/v4.3.0/` paths and candidate metadata. Figure steps are integrated into the training notebook: training charts first, then evaluation charts after fitting. Verified evidence copies retain their artifacts/training/, artifacts/threshold_fitting/, artifacts/review/, and final figures/ grouping. The [comparison](model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) records unchanged selected mango decisions and mixed OOD results. Root `public/model/` now contains the adopted Combined graph, configuration, and three shards, with `v4.3.0` display label and `mangoleaf-model-cache-v4-3-0` cache identity. Only configuration release metadata changes from the original fitted export; numerical settings and weights are preserved. Current photo guidance, bilingual text, and history remain in use. Adoption is recorded separately from pending production promotion.
 
 ## Project structure
 
-The tree below highlights the files and directories that define the application. Generated directories such as `.next/` and `out/` are intentionally omitted. See [local generated folders](TESTING.md#local-generated-folders) for the test builds, downloaded scanner, and reports that appear after running developer commands.
+The tree below highlights the files and directories that define the application. Generated directories such as `.next/` and `out/` are intentionally omitted. See [local generated folders](testing/TESTING.md#local-generated-folders) for the test builds, downloaded scanner, and reports that appear after running developer commands.
+
+Testing instructions and physical-device checklists are grouped under `docs/testing/`. Treatment-advice source reviews and proposed English/Bisaya wording are grouped under `docs/treatment-guidelines/`. Supabase ownership, configuration, and recovery instructions live in [SECURITY-AND-SYNC.md](supabase/SECURITY-AND-SYNC.md), with SQL explanations beside the maintenance files. App and model version records live under `docs/versions/`; dated performance reviews stay within `docs/PERFORMANCE.md`. These folder names describe the documents they contain; the Supabase table remains named `guidelines`.
 
 ```text
 mangoleaf-ai/
@@ -44,6 +48,8 @@ mangoleaf-ai/
 |-- .husky/pre-commit               # Format staged files before committing
 |-- .husky/pre-push                 # Security, TypeScript, lint, and formatting checks
 |-- playwright.config.ts            # Browser projects and core/reliability suites
+|-- supabase/sql/                   # Reviewed cloud-security transition and verification SQL
+|   |-- README.md                   # Plain-English guide to the maintenance scripts
 |-- tools/                          # Shared checks and isolated browser-test tooling
 |   |-- e2e/                        # .pw.ts cases, photo fixtures, test-only inference harness
 |   |-- build-test-app.mjs          # Private static export with a local mock backend
@@ -84,18 +90,28 @@ mangoleaf-ai/
 |   |   |-- useScrollLock.ts        # Shared scroll lock for overlapping modals
 |   |   `-- useSync.ts              # IndexedDB and Supabase synchronization
 |   |-- lib/
-|   |   |-- classifier.ts           # Model loading, inference, compression
+|   |   |-- classifier.ts           # Model loading, inference; compatible helper exports
+|   |   |-- cloud-session.ts        # Serialized background guest-session reuse
+|   |   |-- cloud-scan.ts           # Owner-scoped cloud IDs and photo paths
+|   |   |-- cloud-sync.ts           # Owned row mutations and private photo downloads
 |   |   |-- constants.ts            # Model classes and model version label
 |   |   |-- db.ts                   # Dexie schema and scan record types
 |   |   |-- format-time-ago.ts      # Relative timestamp formatting for scan cards
 |   |   |-- get-badge-styles.ts     # Disease-name to badge color class mapping
 |   |   |-- image-hash.ts           # Lightweight original-file SHA-256 fingerprint
+|   |   |-- image-storage.ts        # Canvas compression after diagnosis, without TensorFlow.js
 |   |   |-- supabase-client.ts      # Browser-side Supabase client
 |   |   `-- translations.ts         # English and Cebuano/Bisaya interface text
 |   |-- env.d.ts                    # Types for build-time injected public env values
 |   `-- sw.ts                       # Serwist source configuration
 |-- docs/                           # Detailed engineering and project history
-|   |-- guidelines/                 # Dated source reviews and manual bilingual drafts
+|   |-- supabase/                   # Cloud ownership, configuration, and recovery
+|   |   `-- SECURITY-AND-SYNC.md     # Overview, setup links, evidence, and recovery
+|   |-- treatment-guidelines/       # Treatment-advice source reviews and bilingual drafts
+|   |-- testing/                    # Test instructions and physical-device checklists
+|   |   |-- TESTING.md              # Automated cases, reliability protocol, device checklist
+|   |   |-- PHYSICAL_RELIABILITY_CHECKLIST.md        # Fillable physical-device evidence
+|   |   `-- PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md # Fictional example; never evidence
 |   |-- model-training/             # Versioned model guides, evidence, and trial reports
 |   |   |-- experiment/             # Candidate workflows; not shipped or deployed
 |   |   |   |-- v3.1/               # TRIAL_v3_1.md plus separate threshold-only guide
@@ -111,28 +127,30 @@ mangoleaf-ai/
 |   |       |-- v3/                 # TRIAL_v3.md, artifacts/, figures/; previous released baseline
 |   |       `-- v4.3.0/             # Adopted trial/comparison, artifacts/, figures/
 |   |-- ARCHITECTURE.md             # This architecture reference
-|   |-- MODEL_VERSIONING.md         # App, model, notebook, and release versioning
-|   |-- PERFORMANCE.md              # Performance decisions and measurements
-|   |-- PHYSICAL_RELIABILITY_CHECKLIST.md        # Fillable physical-device reliability evidence
-|   |-- PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md # Fictional answer-format example; never evidence
-|   |-- TESTING.md                  # Automated cases, reliability protocol, device checklist
+|   |-- versions/                   # Separate app and model version records
+|   |   |-- PWA_VERSIONING.md        # App versions, release history, and deployment
+|   |   `-- AI_MODEL_VERSIONING.md   # Model versions, notebooks, and saved evidence
+|   |-- PERFORMANCE.md              # Performance mechanisms, dated reviews, and measurements
 |   `-- PROGRESS.md                 # Development timeline and current baseline
 |-- notebooks/                      # Colab notebooks: trial records and experimental workflows
-|   |-- v1/
-|   |   `-- MangoLeaf_AI_Training_v1.ipynb                  # Historical Trial 1
-|   |-- v2/
-|   |   `-- MangoLeaf_AI_Training_v2.ipynb                  # Historical Trial 2
-|   |-- v2.1/
-|   |   |-- MangoLeaf_AI_Training_v2.1.ipynb                # Trial 2.1 template, outputs cleared
-|   |   |-- MangoLeaf_AI_Training_v2_1_Post_Training.ipynb  # Completed Trial 2.1 run, do not rerun
-|   |   `-- MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb # Trial 2.1 margin and entropy fitting, no retraining
-|   |-- v3/
-|   |   |-- MangoLeaf_AI_Training_v3.ipynb                  # Current retraining template, 34 cells, outputs cleared
-|   |   |-- MangoLeaf_AI_Training_v3_1st_to_8th_Cells_Results.ipynb # Partial Trial 3 run, data-preparation cells only
-|   |   |-- MangoLeaf_AI_Training_v3_Post_Training.ipynb    # Completed Trial 3 run, manuscript evidence, do not rerun
-|   |   |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb         # Trial 3 threshold template, 8 cells, outputs cleared
-|   |   `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb # Trial 3 fitting run; cell 9 settles the margin at 0.40
-|   |-- v4.3.0/                      # Adopted Combined templates and preserved completed result snapshots
+|   |-- README.md                   # Current model and notebook-group overview
+|   |-- non-experiment/             # Current adopted model and older model pipelines
+|   |   |-- README.md               # Current and older training-notebook index
+|   |   |-- v1/
+|   |   |   `-- MangoLeaf_AI_Training_v1.ipynb                  # Historical Trial 1
+|   |   |-- v2/
+|   |   |   `-- MangoLeaf_AI_Training_v2.ipynb                  # Historical Trial 2
+|   |   |-- v2.1/
+|   |   |   |-- MangoLeaf_AI_Training_v2.1.ipynb                # Trial 2.1 template, outputs cleared
+|   |   |   |-- MangoLeaf_AI_Training_v2_1_Post_Training.ipynb  # Completed Trial 2.1 run, do not rerun
+|   |   |   `-- MangoLeaf_AI_Threshold_Fitting_v2_1_1_Results.ipynb # Trial 2.1 margin and entropy fitting, no retraining
+|   |   |-- v3/
+|   |   |   |-- MangoLeaf_AI_Training_v3.ipynb                  # Historical retraining template, 34 cells, outputs cleared
+|   |   |   |-- MangoLeaf_AI_Training_v3_1st_to_8th_Cells_Results.ipynb # Partial Trial 3 run, data-preparation cells only
+|   |   |   |-- MangoLeaf_AI_Training_v3_Post_Training.ipynb    # Completed Trial 3 run, manuscript evidence, do not rerun
+|   |   |   |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb         # Trial 3 threshold template, 8 cells, outputs cleared
+|   |   |   `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb # Trial 3 fitting run; cell 9 settles the margin at 0.40
+|   |   `-- v4.3.0/                 # Current adopted model; templates and completed runs
 |   `-- experiment/                  # Experimental notebooks/evidence; candidates, not shipped or deployed
 |       |-- README.md                # Status, scope, and notebook-version boundary
 |       |-- v3.1/                    # v3.1 workflow templates and completed results
@@ -212,7 +230,7 @@ When adding a relative-time string, add it to both the `en` and `bis` objects in
 
 ### On-device AI pipeline
 
-`src/app/page.tsx` coordinates photo review and saving. `src/lib/image-hash.ts` hashes files without importing TensorFlow.js; `src/lib/classifier.ts` provides browser inference and compression and re-exports the existing hashing function for compatibility:
+`src/app/page.tsx` coordinates photo review and saving. `src/lib/image-hash.ts` hashes files without importing TensorFlow.js, and `src/lib/image-storage.ts` creates the compressed photo saved after diagnosis. `src/lib/classifier.ts` provides browser inference and re-exports both helpers for existing callers. The page imports storage compression directly and dynamically loads the prediction function when diagnosis starts:
 
 1. During initial loading, fetch `/model/model.json` with `tf.loadGraphModel` and `/model/model_config.json` for its rejection settings.
 2. Cache and warm the single seven-class V4.3.0 Combined model once per browser session.
@@ -236,43 +254,48 @@ The confidence floor is hardcoded and deliberately not configurable. It is a man
 
 Entropy is normalized by `Math.log(results.length)` so it stays on a 0-to-1 scale comparable to the fitted threshold. Confidence is compared before rounding; the rounded value is returned for display only, because comparing the rounded number would let `0.695` clear a `0.70` gate and silently lower the real floor to 69.5%.
 
-Root `public/model/` contains the adopted seven-output V4.3.0 Combined model, with fitted confidence 0.70, margin 0, and entropy 0.42 gates. Its class order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold, as defined in `src/lib/constants.ts`. Both healthy outputs reuse the existing `healthy` treatment-guidance key. Original candidate files and earlier model baselines remain preserved; the adoption receipt distinguishes unchanged graph/shard hashes from the relabeled configuration. See [MODEL_VERSIONING.md](MODEL_VERSIONING.md).
+Root `public/model/` contains the adopted seven-output V4.3.0 Combined model, with fitted confidence 0.70, margin 0, and entropy 0.42 gates. Its class order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold, as defined in `src/lib/constants.ts`. Both healthy outputs reuse the existing `healthy` treatment-guidance key. Original candidate files and earlier model baselines remain preserved; the adoption receipt distinguishes unchanged graph/shard hashes from the relabeled configuration. See [AI model versioning](versions/AI_MODEL_VERSIONING.md).
 
-During local development (`bun run dev`), each inference prints a collapsed browser-console table of all class probabilities, ranked from highest to lowest. The table sorts copies of the scores and rounds only the display percentages. Production builds omit the table. See [TESTING.md](TESTING.md#fixture-and-report-interpretation) for reading it and handling duplicate photos.
+During local development (`bun run dev`), each inference prints a collapsed browser-console table of all class probabilities, ranked from highest to lowest. The table sorts copies of the scores and rounds only the display percentages. Production builds omit the table. See [TESTING.md](testing/TESTING.md#fixture-and-report-interpretation) for reading it and handling duplicate photos.
 
 ### Local persistence
 
-`src/lib/db.ts` defines the Dexie database `MangoLeafDB` with two stores:
+`src/lib/db.ts` defines version 8 of the Dexie database `MangoLeafDB` with two stores:
 
-- `scans`: image blobs, predictions, sync metadata, timestamps, and device ownership. Existing V4.2.0 trial rows may also retain local model/organ fields.
+- `scans`: image blobs, predictions, sync metadata, timestamps, a browser label, and optional verified cloud-owner/private-object references. Existing V4.2.0 trial rows may also retain local model/organ fields.
 - `guidelines`: cached English and Cebuano/Bisaya treatment guidance. Disease and healthy presentation colors are fixed in the client, not stored in Supabase.
 
-New scans are written locally first. This allows diagnosis and history features to keep working without a network connection.
+New scans are written locally first. This allows diagnosis and history features to keep working without a network connection. Cloud-owned rows additionally retain `owner_id`, `cloud_id`, and `storage_path`; the cloud ID can differ from a retained pre-upgrade local ID. The upgrade preserves legacy reports and photo Blobs, marks formerly uploaded unowned rows local-only, and gives purely local pending rows a new cloud identity rather than colliding with inaccessible historical server rows.
 
 Treatment guidance is authored in Supabase's `public.guidelines` table and read from its downloaded IndexedDB copy. `getGuidelineForScan()` in `src/app/page.tsx` maps both healthy classes to `healthy`, preserves valid cached text during offline use, and handles English and Bisaya independently. While the local query is pending it shows a translated loading message. A missing row or blank language field shows a translated unavailable message from `src/lib/translations.ts`. The application no longer bundles treatment advice in `src/lib/constants.ts` or uses generic treatment instructions when guidance is missing. Users need a successful guideline download before advice is available offline.
 
 An `Uncertain / Unrecognized` result is handled before the cached-guideline lookup. It displays the user-approved English/Bisaya photo reminder immediately, including offline use and while IndexedDB is loading. Scan details use the heading “Try another photo” / “Sulayi og laing litrato” for this result. The reminder is interface text in `src/lib/translations.ts`; it does not require a Supabase guideline row or change model rejection rules. Loading and unavailable guideline messages still apply to accepted class results.
 
-Historical trial and legacy rows remain visible in local history. Duplicate reuse requires the exact active `model_version`, so V4.2.0, the former V4.3.0 candidate identity, V3, and unlabeled legacy rows do not substitute for adopted V4.3.0 inference. This prevents an unidentified older diagnosis from blocking the promoted model. The V4.2.0 route metadata was local only; the Supabase schema has no matching columns.
+Historical trial and legacy rows remain visible in local history. Duplicate reuse requires the exact active `model_version`, so V4.2.0, the former V4.3.0 candidate identity, V3, and unlabeled legacy rows do not substitute for adopted V4.3.0 inference. This prevents an unidentified older diagnosis from blocking the promoted model. The V4.2.0 route metadata stays local; new owned cloud rows preserve `model_version` without converting older unlabeled diagnoses into current-model reports.
 
 ### Synchronization
 
 `src/hooks/useSync.ts` coordinates Supabase synchronization:
 
 - Creates a stable per-browser `device_id` in `localStorage`.
-- Uploads pending image blobs to the public `scans` Storage bucket.
-- Inserts scan metadata into the `scans` table.
-- Marks deletions locally and removes remote rows/files when online.
-- Pulls the current device's remote scans for history restoration.
-- Pulls and caches treatment guidelines.
+- Obtains and reuses a saved anonymous guest session for private cloud operations, without a login screen or a diagnosis dependency.
+- Uploads pending image blobs into the guest's directory in the private `scans` Storage bucket.
+- Inserts metadata with a verified owner and private object path. RLS compares that owner with the signed session; the browser's `device_id` is a label, not proof of ownership.
+- Marks deletions locally and removes only the guest's owned remote rows/files when online.
+- Pulls the signed guest's remote scans and downloads private photos into IndexedDB for later offline display.
+- Pulls publicly readable treatment guidelines independently of guest sign-in. A successful full response atomically replaces the local guideline snapshot, including removal of deleted remote rows; a failed fetch preserves cached advice.
 - Subscribes to Realtime changes for the `guidelines` table.
-- Uses a sync lock with one queued follow-up pass, a real 10-second Storage upload timeout, exponential retry while online, and an immediate retry when the app returns to foreground.
+- Uses a sync lock with one queued follow-up pass, a real 10-second cloud-request timeout, a 15-second session-wait bound, exponential retry while online, and an immediate retry when the app returns to foreground. The guest get-or-create sequence is also serialized across supported tabs with Web Locks.
 
-Supabase is therefore a synchronization and recovery layer; IndexedDB remains the immediate source used by the UI.
+Supabase is therefore a synchronization and recovery layer; IndexedDB remains the immediate source used by the UI. Guest creation needs a network connection. A failed sign-in, refresh, or upload leaves local scanning available and cloud changes pending. Losing the saved anonymous session also loses access to that guest's cloud records; there is no cross-device account recovery in this design. The live server's private bucket and ownership policies were applied and verified on October 2; the matching client described here is validated locally and awaits deployment.
+
+Older cloud rows/files remain preserved without automatically assigning them to a submitted `device_id`. Their former public image links are not a fallback for private downloads. Existing local image Blobs remain usable. A local-only report without photo bytes keeps its diagnosis and shows “Photo not saved on this device” / “Walay litrato nga natipigan niini nga device”; it does not request the old unowned URL. Recovering that remote photo needs an administrator's explicit decision. The old deployed client cannot sync private scans after the server transition until it receives the matching updated app. See [cloud ownership and recovery](supabase/SECURITY-AND-SYNC.md) for status, verification, and rollout boundaries.
 
 ### PWA and offline caching
 
-`src/sw.ts` configures Serwist. It precaches the generated application assets, claims active clients, applies a `CacheFirst` strategy to `/model/*`, and adds its own `activate` handler that deletes every superseded model cache listed in `OUTDATED_MODEL_CACHES`. `next.config.ts` integrates Serwist, disables it during development, and enables static export. It also reads the `version` field from `package.json` and injects it as `NEXT_PUBLIC_APP_VERSION`, which Next replaces with a literal string at build time wherever the code references it. Because the site is a static export, every public value must be baked in during the build; nothing is resolved at runtime. See `docs/MODEL_VERSIONING.md`.
+Private cloud endpoints for Auth, scans metadata, and Storage use a `NetworkOnly` rule before Serwist's default runtime rules. Their responses are not kept in a shared service-worker URL cache. Worker activation also removes matching entries left by earlier workers. Offline scan/photo access comes from IndexedDB Blobs; publicly downloaded guideline rows remain in their local table.
+
+`src/sw.ts` configures Serwist. It precaches the generated application assets, claims active clients, applies a `CacheFirst` strategy to `/model/*`, and adds its own `activate` handler that deletes every superseded model cache listed in `OUTDATED_MODEL_CACHES`. `next.config.ts` integrates Serwist, disables it during development, and enables static export. It also reads the `version` field from `package.json` and injects it as `NEXT_PUBLIC_APP_VERSION`, which Next replaces with a literal string at build time wherever the code references it. Because the site is a static export, every public value must be baked in during the build; nothing is resolved at runtime. See [PWA versioning](versions/PWA_VERSIONING.md).
 
 The precache manifest that Serwist generates covers the build output _and every file under `public/`_. Anything added to `public/` is therefore downloaded to each installed device during service-worker installation, whether or not the application ever requests it. Keep assets that only documentation uses out of `public/` unless they also have to be reachable at a site URL.
 
@@ -291,7 +314,7 @@ These files must stay tracked in git. `.gitignore` patterns that could match the
 3. The single classifier preprocesses the image and runs on-device inference.
 4. The result and compressed image are saved to IndexedDB with `pending-insert` status.
 5. The scan appears immediately in the UI through Dexie live queries.
-6. If online, synchronization uploads the image and inserts the remote metadata row.
+6. If online, background synchronization obtains a guest session, uploads the image into its private owner directory, and inserts the owned metadata row. This does not delay steps 3–5.
 7. The local record becomes `synced`; failed operations remain pending for a later retry.
 
 ## Build and deployment constraints
@@ -314,5 +337,8 @@ Husky registers `.husky/pre-commit` and `.husky/pre-push` during root dependency
 - React component identifiers: PascalCase.
 - Custom hooks: camelCase `useSomething.ts` filenames with matching `useSomething` exports.
 - Detailed engineering and history documentation: `docs/`.
+- Test instructions and device checklists: `docs/testing/`; treatment-advice source reviews: `docs/treatment-guidelines/`.
+- Supabase configuration, cloud ownership, and recovery: `docs/supabase/`.
+- Training notebooks: `notebooks/non-experiment/` for the current adopted and older models, and `notebooks/experiment/` for experimental candidates.
 - Root documentation: `README.md` for the overview, `SETUP.md` for installation, and `AGENTS.md` for coding-agent instructions.
 - Generated files such as `public/sw.js`, `.next/`, `out/`, and `next-env.d.ts` should not be edited by hand.

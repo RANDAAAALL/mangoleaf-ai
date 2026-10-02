@@ -21,6 +21,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     "public/sw.js*",
     "scratch/**",
+    // Local audit output; tracked tools/ still receives the normal checks.
+    ".tools/**",
     ".test-app/**",
     "test-results/**",
     "playwright-report/**",

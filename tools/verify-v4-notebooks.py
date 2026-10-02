@@ -67,7 +67,7 @@ class NotebookChecks(unittest.TestCase):
         self.assertEqual(TRAIN["export-helpers"], FIT["export-helpers"])
 
     def test_preserved_v3_augmentation_and_training_settings(self):
-        old = json.loads((ROOT / "notebooks/v3/MangoLeaf_AI_Training_v3.ipynb").read_text(encoding="utf-8"))
+        old = json.loads((ROOT / "notebooks/non-experiment/v3/MangoLeaf_AI_Training_v3.ipynb").read_text(encoding="utf-8"))
         self.assertEqual(TRAIN["augmentation"].strip(), "".join(old["cells"][16]["source"]).strip())
         tree = ast.parse(TRAIN["setup"])
         constants = {}

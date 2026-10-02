@@ -8,6 +8,7 @@ import {
   records,
   nav,
   attachJson,
+  mockGuestToken,
 } from "./support/fixtures";
 import { createHash } from "node:crypto";
 
@@ -151,25 +152,33 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
     saved.map((row) => row.id).sort(),
   );
   const response = await page.request.get("/__mock__/rest/v1/scans", {
-    params: { device_id: "eq." + synced[0].device_id },
+    params: { owner_id: "eq." + synced[0].owner_id },
+    headers: { Authorization: `Bearer ${await mockGuestToken(page)}` },
   });
   expect(response.ok()).toBe(true);
   const remote = await response.json();
   expect(remote).toHaveLength(2);
   for (const row of synced) {
-    expect(remote).toContainEqual({
-      id: row.id,
-      disease_name: row.disease_name,
-      confidence: row.confidence,
-      image_url: row.image_url,
-      image_hash: row.image_hash,
-      device_id: row.device_id,
-      updated_at: row.updated_at,
-    });
-    expect(row.image_url).toMatch(
-      /^http:\/\/127\.0\.0\.1:4173\/__mock__\/storage\//,
+    expect(remote).toContainEqual(
+      expect.objectContaining({
+        id: row.cloud_id,
+        disease_name: row.disease_name,
+        confidence: row.confidence,
+        image_url: row.image_url,
+        image_hash: row.image_hash,
+        owner_id: row.owner_id,
+        storage_path: row.storage_path,
+        model_version: row.model_version,
+        device_id: row.device_id,
+        updated_at: row.updated_at,
+      }),
     );
-    const uploaded = await page.request.get(row.image_url!);
+    expect(row.image_url).toBeNull();
+    expect(row.storage_path).toMatch(/^[0-9a-f-]+\/[0-9a-f-]+\.(webp|jpg)$/);
+    const uploaded = await page.request.get(
+      `/__mock__/storage/v1/object/authenticated/scans/${row.storage_path}`,
+      { headers: { Authorization: `Bearer ${await mockGuestToken(page)}` } },
+    );
     expect(uploaded.ok()).toBe(true);
     const localHash = await page.evaluate(
       (id) =>

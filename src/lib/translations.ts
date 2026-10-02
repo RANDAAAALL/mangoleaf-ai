@@ -95,7 +95,7 @@ export const translations = {
     guidelinesUnavailable:
       "Treatment guidelines are unavailable on this device. Connect to the internet and let the app sync, then try again.",
     closeDetailsBtn: "Close details",
-    noImageOffline: "No Image Available Offline",
+    noImageOffline: "Photo not saved on this device",
 
     // About Page
     aboutHeroTitle: "Technology that works where the mango farmer works.",
@@ -284,7 +284,7 @@ export const translations = {
     guidelinesUnavailable:
       "Wala pay giya sa pagtambal nga magamit niini nga device. Konektar sa internet ug hulata nga mahuman ang pag-sync sa app, dayon sulayi usab.",
     closeDetailsBtn: "Isara ang detalye",
-    noImageOffline: "Walay Litrato nga Nadownload Offline",
+    noImageOffline: "Walay litrato nga natipigan niini nga device",
 
     // About Page
     aboutHeroTitle: "Teknolohiya nga molihok diin nagtrabaho ang mag-uuma.",

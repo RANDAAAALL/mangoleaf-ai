@@ -142,7 +142,7 @@ Compare both models' accepted wrong diagnoses, rejected valid mango images, and 
 
 These are exploratory comparisons on previously used test/report data. The old collections do not become fresh by renaming or reshuffling them. One seed cannot establish a general augmentation benefit. Further confirmatory work needs predeclared repeated runs and genuinely reserved field/OOD images. Thousands of backgrounds are not thousands of independent disease specimens.
 
-The notebooks do not convert TensorFlow.js assets, replace `public/model/`, or deploy a model. Adopting a candidate requires a separate measured decision, conversion, browser parity checks, and the model-deployment steps in [MODEL_VERSIONING.md](../../../MODEL_VERSIONING.md).
+The notebooks do not convert TensorFlow.js assets, replace `public/model/`, or deploy a model. Adopting a candidate requires a separate measured decision, conversion, browser parity checks, and the model-deployment steps in [AI model versioning](../../../versions/AI_MODEL_VERSIONING.md).
 
 ## Local verification and limits
 

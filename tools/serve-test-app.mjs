@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve, sep } from "node:path";
 import busboy from "busboy";
+import { createHmac, randomUUID } from "node:crypto";
 
 const build = JSON.parse(readFileSync(".test-app/current.json", "utf8"));
 const testRoot = resolve(".test-app");
@@ -19,6 +20,9 @@ if (!bundle.success) throw new Error(String(bundle.logs));
 const harness = await bundle.outputs[0].text();
 const rows = new Map();
 const objects = new Map();
+const sessions = new Map();
+const refreshTokens = new Map();
+const signingKey = randomUUID();
 const headers = {
   "Cache-Control": "no-store",
   // A browser test must never contact production services.
@@ -26,6 +30,58 @@ const headers = {
     "connect-src 'self' blob: ws://127.0.0.1:4173; object-src 'none'",
 };
 const json = (value, status = 200) => Response.json(value, { status, headers });
+function guestSession(user = null, refreshToken = randomUUID()) {
+  const timestamp = Math.floor(Date.now() / 1000);
+  user ??= {
+    id: randomUUID(),
+    aud: "authenticated",
+    role: "authenticated",
+    app_metadata: { provider: "anonymous", providers: ["anonymous"] },
+    user_metadata: {},
+    identities: [],
+    is_anonymous: true,
+    created_at: new Date().toISOString(),
+  };
+  const encode = (value) =>
+    Buffer.from(JSON.stringify(value)).toString("base64url");
+  const body = `${encode({ alg: "HS256", typ: "JWT" })}.${encode({
+    sub: user.id,
+    aud: "authenticated",
+    role: "authenticated",
+    is_anonymous: true,
+    iat: timestamp,
+    exp: timestamp + 3600,
+    session_id: randomUUID(),
+  })}`;
+  const accessToken = `${body}.${createHmac("sha256", signingKey).update(body).digest("base64url")}`;
+  const session = {
+    access_token: accessToken,
+    token_type: "bearer",
+    expires_in: 3600,
+    expires_at: timestamp + 3600,
+    refresh_token: refreshToken,
+    user,
+  };
+  sessions.set(accessToken, session);
+  refreshTokens.set(refreshToken, user);
+  return session;
+}
+function guest(request) {
+  const token = request.headers
+    .get("authorization")
+    ?.replace(/^Bearer\s+/i, "");
+  const session = sessions.get(token);
+  return session && session.expires_at > Date.now() / 1000
+    ? session.user
+    : null;
+}
+function ownsPath(user, key) {
+  return Boolean(
+    user &&
+    key.startsWith(`scans/${user.id}/`) &&
+    /^scans\/[0-9a-f-]+\/[0-9a-f-]+\.(?:webp|jpg)$/.test(key),
+  );
+}
 function localFile(root, name) {
   const path = resolve(root, name);
   if (!path.startsWith(root + sep))
@@ -70,24 +126,75 @@ Bun.serve({
       );
     if (path.startsWith("/__test__/photos/"))
       return localFile(fixtureRoot, path.slice("/__test__/photos/".length));
-    if (path === "/__mock__/rest/v1/guidelines") return json([]);
+    if (path === "/__mock__/auth/v1/signup" && request.method === "POST")
+      return json(guestSession());
+    if (path === "/__mock__/auth/v1/token" && request.method === "POST") {
+      const body = await request.json();
+      const user = refreshTokens.get(body.refresh_token);
+      return user
+        ? json(guestSession(user, body.refresh_token))
+        : json({ error: "invalid_grant" }, 400);
+    }
+    if (path === "/__mock__/auth/v1/user") {
+      const user = guest(request);
+      return user ? json(user) : json({ error: "Not authenticated" }, 401);
+    }
+    if (path === "/__mock__/rest/v1/guidelines")
+      return request.method === "GET"
+        ? json([])
+        : json({ error: "Read only" }, 403);
     if (path === "/__mock__/rest/v1/scans") {
+      const user = guest(request);
+      if (!user) return json({ message: "Not authenticated" }, 401);
       if (request.method === "POST") {
         const row = await request.json();
+        if (
+          row.owner_id !== user.id ||
+          row.image_url !== null ||
+          !ownsPath(user, `scans/${row.storage_path}`) ||
+          row.storage_path !==
+            `${user.id}/${row.id}.${row.storage_path.endsWith(".webp") ? "webp" : "jpg"}`
+        )
+          return json({ message: "Ownership policy denied insert" }, 403);
+        if (rows.has(row.id))
+          return json({ code: "23505", message: "Duplicate id" }, 409);
         rows.set(row.id, row);
         return json(null, 201);
       }
       if (request.method === "DELETE") {
-        rows.delete(url.searchParams.get("id")?.replace(/^eq\./, ""));
+        const id = url.searchParams.get("id")?.replace(/^eq\./, "");
+        if (rows.get(id)?.owner_id === user.id) rows.delete(id);
         return new Response(null, { status: 204, headers });
       }
-      const device = url.searchParams.get("device_id")?.replace(/^eq\./, "");
-      return json([...rows.values()].filter((row) => row.device_id === device));
+      if (request.method !== "GET")
+        return json({ message: "Read only scans" }, 403);
+      const matching = [...rows.values()].filter(
+        (row) =>
+          row.owner_id === user.id &&
+          [...url.searchParams].every(
+            ([field, value]) =>
+              !value.startsWith("eq.") || String(row[field]) === value.slice(3),
+          ),
+      );
+      return json(matching);
     }
     if (path.startsWith("/__mock__/storage/v1/object/")) {
+      const user = guest(request);
+      if (!user) return json({ error: "Not authenticated" }, 401);
       const key = path
         .replace("/__mock__/storage/v1/object/", "")
-        .replace(/^public\//, "");
+        .replace(/^authenticated\//, "");
+      if (key.startsWith("public/"))
+        return json({ error: "Private bucket" }, 403);
+      if (request.method === "DELETE") {
+        const { prefixes } = await request.json();
+        if (!prefixes.every((name) => ownsPath(user, key + "/" + name)))
+          return json({ error: "Ownership policy denied delete" }, 403);
+        for (const name of prefixes) objects.delete(key + "/" + name);
+        return json([]);
+      }
+      if (!ownsPath(user, key))
+        return json({ error: "Ownership policy denied access" }, 403);
       if (request.method === "POST" || request.method === "PUT") {
         // Supabase sends Blob uploads as multipart; store only the photo part.
         const contentType =
@@ -120,11 +227,6 @@ Bun.serve({
         if (!upload) return json({ error: "Missing upload file" }, 400);
         objects.set(key, upload);
         return json({ Key: key });
-      }
-      if (request.method === "DELETE") {
-        const { prefixes } = await request.json();
-        for (const name of prefixes) objects.delete(key + "/" + name);
-        return json([]);
       }
       const object = objects.get(key);
       return object

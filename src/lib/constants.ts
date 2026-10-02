@@ -1,5 +1,5 @@
 // Label for the model assets in public/model/. Bump it whenever those files are
-// replaced by a retraining cycle. See docs/MODEL_VERSIONING.md.
+// replaced by a retraining cycle. See docs/versions/AI_MODEL_VERSIONING.md.
 // Adopted seven-class v4.3.0 Combined model. Training provenance stays in its saved run.
 export const modelVersion = "v4.3.0";
 
