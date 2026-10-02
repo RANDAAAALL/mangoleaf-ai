@@ -1,0 +1,44 @@
+{
+  "sourceRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.1.1/training/v4-1-1-training-20260928T043539Z-37576200",
+  "sourceCompletionSha256": "2c62e4289c449ed5f1b18c1690ddf0341dc07a3cb36ae5807def42babbe6bd16",
+  "sourceChoiceNotes": "Reuse the completed V4.1.1 seven-class historical experiment.",
+  "sourceFiles": {
+    "training_complete.json": "2c62e4289c449ed5f1b18c1690ddf0341dc07a3cb36ae5807def42babbe6bd16",
+    "plan.json": "5ccbb904e5846c91642b1736a0f48466f2b14c1a57139a43d491940ed8de1883",
+    "input_manifest.json": "3d103e66cba4edcadc1aae97a1e49aaa655e4f1cd1d3de6531d148de4b913631",
+    "white_background_review.json": "2ae6656d984651859eaa7cb5f5ba848009cd219b74b9beada8dc55eedb499594",
+    "mask_review.json": "98dda88135b97da9d49692dac7d0540fa4a30da98b4e9e9ca4e1c5e3b3d29db9"
+  },
+  "datasetSplitCopiedByteForByte": true,
+  "datasetSplitSha256": "670c52544cb14cec872b78f74721152d1079ca30f8b66bbdb864276d21240dfd",
+  "historicalIdentity": "3ca5a4625524eb5546d999f8a1ebcd15aac1cb7231b48963fdc565aee77559b8",
+  "counts": {
+    "train": {
+      "anthracnose": 339,
+      "bacterial_black_spot": 207,
+      "bacterial_canker": 343,
+      "healthy_fruit": 77,
+      "healthy_leaf": 347,
+      "mango_scab": 157,
+      "sooty_mold": 349
+    },
+    "val": {
+      "anthracnose": 73,
+      "bacterial_black_spot": 44,
+      "bacterial_canker": 74,
+      "healthy_fruit": 16,
+      "healthy_leaf": 75,
+      "mango_scab": 34,
+      "sooty_mold": 75
+    },
+    "test": {
+      "anthracnose": 73,
+      "bacterial_black_spot": 45,
+      "bacterial_canker": 74,
+      "healthy_fruit": 17,
+      "healthy_leaf": 75,
+      "mango_scab": 34,
+      "sooty_mold": 75
+    }
+  }
+}

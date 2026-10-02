@@ -1,0 +1,258 @@
+{
+    "experiment":  "v4.2.0",
+    "organ":  "mangoleaf",
+    "status":  "experimental feasible threshold candidate; browser parity not measured",
+    "sourceRoot":  "C:/Users/My Pc/Desktop/workspace/capstone/model/brain/v4.2.0",
+    "trainingRun":  "v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405",
+    "thresholdRun":  "v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23",
+    "files":  [
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/plan.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/plan.json",
+                      "sha256":  "c2a669695230115759f7352858b73885d7987766c3a7f7ee2ca866d48b27ff40",
+                      "bytes":  12718
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/training_complete.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/training_complete.json",
+                      "sha256":  "a9c941c25048f8ca8a458b2601ebcc3753bc2df2f2d9efdf7c8ede1c93132fe3",
+                      "bytes":  6386
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/background_schedule.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/background_schedule.json",
+                      "sha256":  "9839ce1922d558bbd7e92d3229976d5b9bdf6f0faee33d3df64bf19f5e4b443d",
+                      "bytes":  61055
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/duplicate_audit.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/duplicate_audit.json",
+                      "sha256":  "5fccec22826686d75602d2aa4176bc0f75c21fa6a397418b709b67cbc375a0e1",
+                      "bytes":  13686
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/external_overlap_audit.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/external_overlap_audit.json",
+                      "sha256":  "a426448566efc07126c37cce2ad46b301f3abd356ebd1e68448d2c866307b23f",
+                      "bytes":  209
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/input_manifest.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/input_manifest.json",
+                      "sha256":  "76a81c2e982dc67fa300f734615500e563c60ed1bd49017b533bebba3fe2cbac",
+                      "bytes":  1072961
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/mask_review.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/mask_review.json",
+                      "sha256":  "3b04562e465c531a366cca3bdae6491a8404d96b7bc535a094752dac34e0b655",
+                      "bytes":  50819
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/scene_review.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/scene_review.json",
+                      "sha256":  "5f2c174a27dc0e9e20000b3ef1f7cadd8d684a0f9cf202a611786ab6f1cba9e8",
+                      "bytes":  14439
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/lighting_review.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/lighting_review.json",
+                      "sha256":  "d377bee765c1b219fc0b0cc6296a3821802e4f987a7d9f94471436287398288d",
+                      "bytes":  564
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/white_background_review.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/white_background_review.json",
+                      "sha256":  "5385a540bee0e29c23fe0b992cff048fe8457562c30ec1ca3718bab5cd822ce1",
+                      "bytes":  4959
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/candidate_hashes.json",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/candidate_hashes.json",
+                      "sha256":  "832e2bdd1d084fae8f186c326dfa76e8980f9234cb108f8512620c9a8d16b8e4",
+                      "bytes":  490
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/evaluation.json",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/evaluation.json",
+                      "sha256":  "e20ff505724000992d43e7d6293a78e3432ab0f32c088dc0f6013e0b5270f3fe",
+                      "bytes":  8699
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/evaluation_started.json",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/evaluation_started.json",
+                      "sha256":  "f6a2e6177dcf9439cf984067749b9fc644c818f9a8ac3ee26ac0a644e173e72e",
+                      "bytes":  228
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/evaluation_inputs.json",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/evaluation_inputs.json",
+                      "sha256":  "eac55842b74c13777f0355154da9651deaf7f47eb7cba2845d05ff6f8b0d31ba",
+                      "bytes":  1082638
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/selected_thresholds.json",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/selected_thresholds.json",
+                      "sha256":  "e00b6e631f937a63b762e96c3699f0cdb535a7c39db81b7f3c7bb75946cb0e8d",
+                      "bytes":  7512
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/REPORT.md",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/REPORT.md",
+                      "sha256":  "af0858afb89f2ce40464f30aa932d466367edb7bfba24f1a31e7e031b1eed254",
+                      "bytes":  2042
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/arms/combined/training_history.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/arms/combined/training_history.json",
+                      "sha256":  "971e4da21b625054afef263944128d112f128d8c0618ca6bb1129bd08035c3d6",
+                      "bytes":  2795
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/arms/combined/confidence_only_mango_test_predictions.csv",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/arms/combined/confidence_only_mango_test_predictions.csv",
+                      "sha256":  "7c46733f554e40dcde833956c2e8ea1d760410464e80b0ea49544bb64daa049b",
+                      "bytes":  194998
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/arms/combined/confidence_only_new_ood_report_predictions.csv",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/arms/combined/confidence_only_new_ood_report_predictions.csv",
+                      "sha256":  "a3e0f75fb1b4298e8e1aa161d45d6aabea9ffdf2b99fde369e5a04240db23eed",
+                      "bytes":  11664
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/arms/combined/confidence_only_old_ood_report_predictions.csv",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/arms/combined/confidence_only_old_ood_report_predictions.csv",
+                      "sha256":  "7dafc4aee1e40c0f44f3635ea8ea6ea9f34c75c5d96c9ec62499b9ab68985c56",
+                      "bytes":  29813
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/arms/combined/raw_per_class_metrics.csv",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/arms/combined/raw_per_class_metrics.csv",
+                      "sha256":  "96b5906bbab21921dd4d3c7bdec06f77cf37220f222507c1d61e9c77d96845f9",
+                      "bytes":  226
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/arms/combined/selected_mango_test_predictions.csv",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/arms/combined/selected_mango_test_predictions.csv",
+                      "sha256":  "594276d069481033f3d59b5e5f597975b3e874a40a370c82ec6c758981cd43ff",
+                      "bytes":  195011
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/arms/combined/selected_new_ood_report_predictions.csv",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/arms/combined/selected_new_ood_report_predictions.csv",
+                      "sha256":  "225fe0a0b4f8fcee974cc1350c844335a885acbea8f165005db236855e5bd253",
+                      "bytes":  11823
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/arms/combined/selected_old_ood_report_predictions.csv",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/arms/combined/selected_old_ood_report_predictions.csv",
+                      "sha256":  "348155e30228d5d25b3657114527c3d615030f0c79b3f3e3ae4bbdc4453c4341",
+                      "bytes":  30100
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/arms/combined/threshold_search.csv",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/arms/combined/threshold_search.csv",
+                      "sha256":  "8d73a877d50f95a0130fd523889d5ec8f7d9c782a26aea6afdef49c6d5d015e8",
+                      "bytes":  300844
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/arms/combined/tuning_predictions.csv",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/arms/combined/tuning_predictions.csv",
+                      "sha256":  "7a460e6ca893f6fbb85d455bc990a16571f31241ed5f5e0182754a4fd3e56f9c",
+                      "bytes":  223793
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/figure_provenance.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/figure_provenance.json",
+                      "sha256":  "ca492f166da02c8ee1ca95437da822c33d2bcb5cfeddf7cd6246624a6ea72bc5",
+                      "bytes":  1978
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/training_figure_provenance.json",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/training_figure_provenance.json",
+                      "sha256":  "5f5ff6229d68ae18adaa7707b7693341c0b45e6b1346949ddb224d99669b0034",
+                      "bytes":  2497
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/figures/augmentation_preview.png",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/figures/augmentation_preview.png",
+                      "sha256":  "536b0fb164c50ed1dbc44d1c562c68e3063212d64f4df36825e33b308cff3f66",
+                      "bytes":  1464406
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/figures/confusion_matrix.png",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/figures/confusion_matrix.png",
+                      "sha256":  "4ea32375a23906f719394664439fc3351ea3159a6b51d37b33b18c529fbce64d",
+                      "bytes":  66176
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/figures/grad_cam.png",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/figures/grad_cam.png",
+                      "sha256":  "1b8bc228633f6cee444b30ae2fcaaef3ea4bed35bb6a71be080e0630543416cd",
+                      "bytes":  1091644
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/figures/per_class_metrics.csv",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/figures/per_class_metrics.csv",
+                      "sha256":  "96b5906bbab21921dd4d3c7bdec06f77cf37220f222507c1d61e9c77d96845f9",
+                      "bytes":  226
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/figures/per_class_metrics.png",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/figures/per_class_metrics.png",
+                      "sha256":  "656fbe5feb5c2d7c4b1b1094ac7fc4d50c58d8a4c0f3a17f0138f50d2b34edc2",
+                      "bytes":  45429
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/figures/threshold_search.png",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/figures/threshold_search.png",
+                      "sha256":  "0b73662896a877ad94bc9bb4877e8c6456ee450653e6f25860c2eaca348e2c7b",
+                      "bytes":  74933
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/figures/training_curves.png",
+                      "source":  "training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405/figures/training_curves.png",
+                      "sha256":  "88ec5c66c75da9d811e095eb26837bcf9b308ad0ccfc3f520e1c064e8097acfd",
+                      "bytes":  119315
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangoleaf/artifacts/model_config.json",
+                      "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/candidate_models/combined/model_config.json",
+                      "sha256":  "305bed399455a14f3011092817ca45ea0f34a984e8bc5376a1f412a2a254493d",
+                      "bytes":  1081
+                  }
+              ],
+    "publicModelFiles":  [
+                             {
+                                 "path":  "public/model/mangoleaf/group1-shard1of3.bin",
+                                 "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/candidate_models/combined/group1-shard1of3.bin",
+                                 "sha256":  "e5f5bf70e83fcec5cc90e7930435971f67f58425b7b7209a9739a82ae9cba564",
+                                 "bytes":  4194304
+                             },
+                             {
+                                 "path":  "public/model/mangoleaf/group1-shard2of3.bin",
+                                 "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/candidate_models/combined/group1-shard2of3.bin",
+                                 "sha256":  "2d7e6b3bd8c6531981ffd3e35af82633a962f8922ef59e93ba935165a5eeedda",
+                                 "bytes":  4194304
+                             },
+                             {
+                                 "path":  "public/model/mangoleaf/group1-shard3of3.bin",
+                                 "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/candidate_models/combined/group1-shard3of3.bin",
+                                 "sha256":  "1157b61c920ef7e25441346ede39cdc0c34ceac942b390d1c82b17e485b869c0",
+                                 "bytes":  3486272
+                             },
+                             {
+                                 "path":  "public/model/mangoleaf/model.json",
+                                 "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/candidate_models/combined/model.json",
+                                 "sha256":  "f85da1613b8c96ce26f130f73bbc73ca837f7cfcaaca3889bdb138ea170593d7",
+                                 "bytes":  214028
+                             },
+                             {
+                                 "path":  "public/model/mangoleaf/model_config.json",
+                                 "source":  "threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23/candidate_models/combined/model_config.json",
+                                 "sha256":  "305bed399455a14f3011092817ca45ea0f34a984e8bc5376a1f412a2a254493d",
+                                 "bytes":  1081
+                             }
+                         ]
+}

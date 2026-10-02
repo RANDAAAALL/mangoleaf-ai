@@ -1,0 +1,85 @@
+{
+  "status": "post-training diagnostic figures, not new model evaluation",
+  "trainingRun": "v4-1-1-training-20260928T043539Z-37576200",
+  "thresholdRun": "v4-1-1-thresholds-20260928T060638Z-a3a7418c",
+  "modelArm": "background",
+  "modelSha256": "2f94a3502ef50d25cb0817b2c598ac3b65d2dc0a2ceb3604c467dc69d12c391b",
+  "trainingCompleteSha256": "2c62e4289c449ed5f1b18c1690ddf0341dc07a3cb36ae5807def42babbe6bd16",
+  "evaluationSha256": "c18db308c8af22e26fa0a229d2363bab59873ab842e6bc76b5878b5d44e7fb8b",
+  "selectedThresholdsSha256": "58b7316f426c320912df516973ce58c3dad7ae49d2c2522756d3d405b80bf212",
+  "planSha256": "5ccbb904e5846c91642b1736a0f48466f2b14c1a57139a43d491940ed8de1883",
+  "augmentationPreview": {
+    "trainingImage": "train/healthy_leaf/healthy_leaf__20211231_154835 (Custom).jpg",
+    "trainingImageSha256": "0cd113021e3d7aea199742c32a8365a6d18d5e93e5d7ba163d8e09bb6da2a536",
+    "epoch": 5,
+    "scene": "fgyrtyrtytryrty.jpg",
+    "sceneSha256": "df2a54c1a3d3f05b791c22a26724c112072e27a2503b94300ec49c8775fc9d11",
+    "mask": "2f1b4f85f5204e16492f.png",
+    "maskSha256": "b51df74ea4ea7b8e8563a75cc3b669e99742e42e3e331726b40b8a471aa43bc5",
+    "interpretation": "Top row reconstructs the frozen pre-Keras inputs; bottom row is a new representative draw, not the original fit tensor."
+  },
+  "gradCamValidationImages": [
+    {
+      "image": "val/anthracnose/anthracnose__20211008_124249 (Custom).jpg",
+      "imageSha256": "2a5801dbd06a341af4f402cca9be42b41597dc64a994923d40b24bf9c39fd5b4",
+      "actual": "anthracnose",
+      "rawPrediction": "anthracnose",
+      "rawConfidence": 0.9999146461486816
+    },
+    {
+      "image": "val/bacterial_black_spot/bacterial_black_spot__Bc104.jpg",
+      "imageSha256": "692d4fd097a4e9759615f8b80e304aedcb336b2469d42cdad9eec350fb475744",
+      "actual": "bacterial_black_spot",
+      "rawPrediction": "bacterial_black_spot",
+      "rawConfidence": 0.6598139405250549
+    },
+    {
+      "image": "val/bacterial_canker/bacterial_canker__IMG_20211106_120833 (Custom).jpg",
+      "imageSha256": "c167ef3d3cc11d498d4fe2b30574b9a2da40e52245e49827e5965e188fe65d60",
+      "actual": "bacterial_canker",
+      "rawPrediction": "bacterial_canker",
+      "rawConfidence": 0.9998812675476074
+    },
+    {
+      "image": "val/healthy_fruit/healthy_fruit__725318273_1696519271391031_8474708639771176175_n.jpg",
+      "imageSha256": "18c047f48c6deb7b423919369488485c608300cbba79d078428954694073ba4f",
+      "actual": "healthy_fruit",
+      "rawPrediction": "mango_scab",
+      "rawConfidence": 0.5374433994293213
+    },
+    {
+      "image": "val/healthy_leaf/healthy_leaf__20211231_123346 (Custom).jpg",
+      "imageSha256": "e3e1c8df010caa588fc9e479f180c2c2adeb2502b01e04a03a6f0e7e43675c1b",
+      "actual": "healthy_leaf",
+      "rawPrediction": "healthy_leaf",
+      "rawConfidence": 0.9993574023246765
+    },
+    {
+      "image": "val/mango_scab/mango_scab__Sc1.jpg",
+      "imageSha256": "cfd8e8c51314e62012e5b5977412a477c9f026d196d526c807a3c226e0cc8bb1",
+      "actual": "mango_scab",
+      "rawPrediction": "mango_scab",
+      "rawConfidence": 0.9297821521759033
+    },
+    {
+      "image": "val/sooty_mold/sooty_mold__IMG_20211108_120859 (Custom).jpg",
+      "imageSha256": "2de920f0b19c1b241657ecd9abb187b43ed864b189e91f24f17eb49ef5ea695c",
+      "actual": "sooty_mold",
+      "rawPrediction": "sooty_mold",
+      "rawConfidence": 0.9994637370109558
+    }
+  ],
+  "figures": {
+    "augmentation_preview.png": "15e259079baac4ccb9186523cbbe9ca3df3143c79fd937a0e8551b2af80cd6b2",
+    "confusion_matrix.png": "d8a7245509cdd37e713f32c48385bbb974190fdf507f3e4f1c5a74dd164097db",
+    "grad_cam.png": "97b501cc31e532922cfaf88d2c8c84eecc0b0754d4361874c883191e824d1f4b",
+    "per_class_metrics.png": "697c99f368237c2d1766645ad8c25acf310980ebd66e3ad749c7d68d632277fb",
+    "threshold_search.png": "c756dc94d222702aadf6e0828160e713f3e5bb4d3ce7566b34594aa1e57008de",
+    "training_curves.png": "3e16f4cb6d608c48c1385bb5e98894bf9e7ca9940e6f662678f83db08513f837"
+  },
+  "limits": [
+    "Historical test and old OOD data were used in earlier development.",
+    "Grad-CAM is a diagnostic explanation, not proof of diagnosis accuracy.",
+    "Original stochastic Keras augmentation draws were not saved; preview draws are new."
+  ]
+}

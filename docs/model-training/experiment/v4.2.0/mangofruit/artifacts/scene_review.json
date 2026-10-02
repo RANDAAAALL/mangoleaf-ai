@@ -1,0 +1,446 @@
+{
+  "reviewedAt": "2026-09-28T16:44:59.789850+00:00",
+  "allScenesReviewed": true,
+  "backgroundNotes": "All the images are came from the own cellphone photos and internet public imag",
+  "scenePreviewsSha256": {
+    "page-001.jpg": "2941d7501442247b4027c46a104f9ba511f90f1cceffe3f604e0328b236bcd74",
+    "page-002.jpg": "103f1b4e5156213511324dc9a820bd2c15c27cde0c2cd5cec46ef931cce3c4b5",
+    "page-003.jpg": "16e5dff8f8d0a0c28bf10613d6a1e2685f0522d1f36a356267ed26ecd0205098"
+  },
+  "scenes": [
+    {
+      "id": "0d651814b2ffc12eafb1",
+      "relativePath": "20260919_024634.jpg",
+      "sha256": "caffa9ae0a035112981a34e60c4fd23f582966b7185841244087c2c8313e013a",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "85ffa8542fa4f3378ab7",
+      "relativePath": "20260919_024644.jpg",
+      "sha256": "1e4b885f6a3462b75826f796f62ab30f1666e6a5164fbdd271712cadede30781",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "3ccacff1bb2c5306b82a",
+      "relativePath": "20260919_024648.jpg",
+      "sha256": "b499f89dd9815e8ef80bae7095ca2382452ec1b2b48c33318cee3b68ddbd37e0",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "13f4dbdc6c0a88ac81c3",
+      "relativePath": "20260919_024659.jpg",
+      "sha256": "0f577e8daab8aaf1433e656457778f5b6d8b9f27c98fd15f96094b008b6af8e8",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "d9bbc139299dfe6c665b",
+      "relativePath": "20260919_024706.jpg",
+      "sha256": "0195d757f1282ce05659c227d9111f4b78beca1b4202e7d932bda2133266a4db",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "69957c7b2eb8d29a0f45",
+      "relativePath": "20260919_024751.jpg",
+      "sha256": "80e8855c542ac8a366703635fbe5e43bb7c3aa765b920140f2292fc2d2308d4f",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "c030d1cffe31932d0b0b",
+      "relativePath": "20260919_024802.jpg",
+      "sha256": "d80c14c75ea71ee17819c3d8cd0baee58a0fb0c616fb2b09afc69a7f23e62486",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "778b4ea42ee944899a46",
+      "relativePath": "20260919_024814.jpg",
+      "sha256": "71f6fbce7385825231bb0f7afab47bb25094b2f282f36b71a66910becf5e3909",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "0d15d1a0f5c9e76a51bb",
+      "relativePath": "20260919_024829.jpg",
+      "sha256": "e4fcb05f7ee761956efbf2e325dccc12d84f6af6dd1ea945e35891b97382ddd4",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "52ed155d779907ce39d3",
+      "relativePath": "20260919_024837.jpg",
+      "sha256": "6538c007a86d52f18dd544256decc4b0f7dd06daca1e2c7351041bfd1cc8ace3",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "f38691236a249833d8a3",
+      "relativePath": "20260919_025023.jpg",
+      "sha256": "e39e4ebab3487e1c55f8b94f67e760ffb8b3a2d2b67b4528eb6b8c5556e4d390",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "1ec7ec9ec0c907a2faa0",
+      "relativePath": "360_F_536205433_3gvsXuJG3LjFufNFyDn8ocVOWZoGIywa.jpg",
+      "sha256": "60dcfacdf70446529c1cfe853951527fa1345438fc4dc13b899e6d69329169b2",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "90602019bc369c102368",
+      "relativePath": "503364956_4108204039412491_193289898358932419_n.jpg",
+      "sha256": "49776b755fd8eb87e8963e1db3b37cd58878f7eae425b3cd4fb3c17e718280c5",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "2aaa64d8766f49920691",
+      "relativePath": "795776045_2088962935035945_3281301272652016111_n.jpg",
+      "sha256": "1b47613a9e2afa480a9d2b681388bc0b41ea666b7501190f718588672d1ce310",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "fc5bc8b7ac1278fd512f",
+      "relativePath": "809978842_2263352371153778_913570081529937827_n.jpg",
+      "sha256": "7c9253f370435e6f628a0dd011305315614f33087e872be470550d261518a947",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "4d1c2f3089d9f4339e73",
+      "relativePath": "814998776_1634108748081551_5627940970449263212_n.jpg",
+      "sha256": "84118f273c3e404115858471476933dd35e264d007f357d27b90071364e7fe03",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "2021b61790c628dad8bb",
+      "relativePath": "815468511_1613763380446297_5035152037097991966_n.jpg",
+      "sha256": "a6f46cb9449d46283368a544577013f6ecbb6257e90c990082af8a57933716c9",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "a133840496f23eb1911f",
+      "relativePath": "IMG_20260730_191240_1.jpg",
+      "sha256": "e7ef8f4300c3625e8031e392054e58f9c4ba5db39496aab5b0d7de2c8daf4f8d",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "4dd43dae7c1932054d55",
+      "relativePath": "IMG_20260829_215031.jpg",
+      "sha256": "e94bfe616756e75e210c351b8ef3220645794cb05f1140050a52c081ade5b216",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "8ea617f6837aae9003ec",
+      "relativePath": "IMG_20260911_215034.jpg",
+      "sha256": "317be424bc1ddb1b1963a2e90bc7b3c9681d3be32b1d4920230165fc3680c24a",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "ca44fe7da36434946874",
+      "relativePath": "San-Juan-Batangas-Mango-Farm-1-1024x768.jpeg",
+      "sha256": "7ec6f72c0a7e56dc16ec88a878b18535eaad7f53906821e709d278ae2f1ae9b2",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "697be65de8556c28b7e3",
+      "relativePath": "Sunset-Shells-Christy-Mandeville-Feb-9-2023.jpg",
+      "sha256": "edcb512692d7c77540e8fdbed95d5125e3350a19f7e96aa1f657a9203e326365",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "f9a2ea4097092deb8fe7",
+      "relativePath": "dfgbvvbn.jpg",
+      "sha256": "37d11d5f603c7a36d79a24f250780cc93b93eeda2910f17de9a5a0bbb72dd65e",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "b07999eb2c40808c514e",
+      "relativePath": "fghfghfghfgh.jpg",
+      "sha256": "5c53f8ae9564ebe2c369c4cc214156a24efdd90ca81565de9576e10914b4f27a",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "c22dffdfeb782a2f3141",
+      "relativePath": "fghfghgfhfghgfhgfh.jpg",
+      "sha256": "3e804809074fabdc9c50bd5932282d3bac8e4b7cff3f61bdf84af3d00bf3bf19",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "5071af57a08063806b20",
+      "relativePath": "fgyrtyrtytryrty.jpg",
+      "sha256": "df2a54c1a3d3f05b791c22a26724c112072e27a2503b94300ec49c8775fc9d11",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "8c2e1f39ff464687747f",
+      "relativePath": "fhfvbbvbnvbn.jpg",
+      "sha256": "70e97c197b98da8fde51acc3417dea6d715cd3b046fbcc69e569fae0b112f1c8",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "a2114a56a8f5b3473fb8",
+      "relativePath": "gfhfghgfhgfhgfh.jpg",
+      "sha256": "b3339b8886bc3d2512e7138730d4f2bf9865e628cf86b8081fba69e9bd392b13",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "d9abaabf54d94d0f8934",
+      "relativePath": "ghjghjjghj.jpg",
+      "sha256": "f7c8da5e6dc15f1173abf3d9f9eee338cc25992e833c8a3ec1a3d583fa6d3d6b",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "f4f411d57a1153f74b24",
+      "relativePath": "image-1788748088275.jpg",
+      "sha256": "b30b5b0a684abeff76b19dad5806c81c562422432db23432b7f263cc84d60b3c",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "64858b060f1dd7386cad",
+      "relativePath": "images (1).jpg",
+      "sha256": "f2b849a9e1c62b49f5c90e513743031cea7fe2159a2e8c66cb4b17aedea8f308",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "8741429bc5197ea2824c",
+      "relativePath": "images (2).jpg",
+      "sha256": "6898e6484fe0a358297cad6f3c7c61f966f6549d9e9c921bd69c35652a380d6c",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "fb347d8ffec7ad6656e7",
+      "relativePath": "images (3).jpg",
+      "sha256": "47e8c18194b40879b18838f1026f6a91dd22e31383ffdfc437e40d34b59b2520",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "f10c8144e6f76de48a79",
+      "relativePath": "images (4).jpg",
+      "sha256": "ec8718b2d95dd77cb65a08d16b1d9f81be23c7e85f14f856189c3509fcc9e757",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "1272499304a26fb5bcdf",
+      "relativePath": "images (5).jpg",
+      "sha256": "7f597256c5a768fa18b3f89a3beef589817a8a56e99166881a81a19bc35b28e8",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "728b82c63f3a95977482",
+      "relativePath": "images (6).jpg",
+      "sha256": "18539c6e7838453aa353e4baa78eb9c5907779e531f304b97f69f1bcbbc94da8",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "13bcdcda6d106cc28825",
+      "relativePath": "images.jpg",
+      "sha256": "883eb06c718ec3a159a5b35a49db7dd2b3c7c79888cd7161306138d4f95d9a2b",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "5e25277c7c92055d350b",
+      "relativePath": "mg.jpg",
+      "sha256": "0e2e606d79e0bb621d2c5fe52cce92460365856157534677ed4e1464060bb493",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "31ed21390750a0d4c54f",
+      "relativePath": "ouioi.jpg",
+      "sha256": "e2dcf3cafc94606645e3cdfaa3ff75376c6ede607a0fd0021c2518f706b9ea2a",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "c2144d3d0ace93e23b92",
+      "relativePath": "pexels-kinley-lindsey-922918528-29588513.jpg",
+      "sha256": "cb1c9e1406e8a1086e5e287f37b10627c08b921f074b0cc95ddcbf73ce03a9d3",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "e958c479ff4c133114ff",
+      "relativePath": "piopiopop.jpg",
+      "sha256": "1378e75dbf8bf2a07c58c567d954b51fa3daecb9840ecaa68dd67cfd7efdaabc",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "2a510225f6c64d7a28e4",
+      "relativePath": "qwdfdfgfhf.jpg",
+      "sha256": "d54aff9a39d2b143bb05ac519a840140acb1b02da709e7d4865b3d301e2e0253",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "8c96451515f71a32d5d5",
+      "relativePath": "qwe.jpg",
+      "sha256": "d046dff11e2c9ba3c250f923e813cfd86714af98216f04cd5a10b39e002a965c",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "1e47106c23bd7b715fbc",
+      "relativePath": "qweqwe.jpg",
+      "sha256": "2289424fbe8829f08dd898fbc0b45640f52fa6e8d73703d8305515e16b2c26a8",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "b757814e3d5e146d8a52",
+      "relativePath": "qweqweqweqwe.jpg",
+      "sha256": "2df8cf2fb0e86454c57d48bf84a823b61d55120b51fdb4d2bc9aa4a0ce74c2f8",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "7bc0b759c49395ce2640",
+      "relativePath": "qweqwewqeqwewqe.jpg",
+      "sha256": "ee12a9a9581ddf638c5251b06402540974db5e32ec3d2b1d021e2606a7604bfb",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "23bcf879c156a02563d0",
+      "relativePath": "rn_image_picker_lib_temp_10e2c2c0-e117-4263-9ecf-cda5ff608826.jpg",
+      "sha256": "ec7939e62d9db9884b5b479a9cfd6035b2b76f84e061a5a7731959b8bdca8b4d",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "2fa1853888ff46f12d2d",
+      "relativePath": "rn_image_picker_lib_temp_11beacfb-2a76-4d16-a090-14a06db84c05.jpg",
+      "sha256": "acc2b135ae64bd51a3f796251e82f0e84f5181239a34810ad7e030ccdfc446e5",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "548495fcf7850defd4c2",
+      "relativePath": "rn_image_picker_lib_temp_5252cc76-2832-48bf-a983-a09e13e95c08.jpg",
+      "sha256": "d1908a06e712cb146780a92b366ec2226c5ebab05c30f5af321a8cf4c0024513",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "96b5260429c2fb85fdf8",
+      "relativePath": "rn_image_picker_lib_temp_69eaa3f7-d235-4ed4-a029-4a1139737f4e.jpg",
+      "sha256": "d0e9e186bb540c634a7a8e9a75fba698313ff03aa6f4d1b65a687e4b73f54c4e",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "ae21a46e6c07ed8c46ae",
+      "relativePath": "rn_image_picker_lib_temp_70988618-f67c-4aed-bf72-600a091b4da9.jpg",
+      "sha256": "51c25ac787da7fa48c5ac8ed3bc6969a531362aad12401e735d0e1f761134d1d",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "a64ba96edfb1cc3f2ba8",
+      "relativePath": "rn_image_picker_lib_temp_ab028e31-e654-419b-8acd-19f2ff2fc3b4.jpg",
+      "sha256": "23840d8ee1d1fb77b7c48a2cf4633c804855c3d65ac56f3be527fa06476a54d7",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "36cac4d1dfad00302e08",
+      "relativePath": "rn_image_picker_lib_temp_f0711fe0-439b-4870-bbb2-f674e4e65382.jpg",
+      "sha256": "8210ac871c594e47e36fd3aa0f72b272bb61924772b0e66b36e5fa36265e30f7",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "bee4f4947a1af7046ffa",
+      "relativePath": "rn_image_picker_lib_temp_f0c810ba-f9e7-44d9-b9ce-8d91d724d738.jpg",
+      "sha256": "c5f2e18ee7a63b96f84c1bcb925ee440184d59f9942ac082215cc939b8e7b11a",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "3fb42dda577b75ab2bbb",
+      "relativePath": "rn_image_picker_lib_temp_fd375150-3858-4e4d-8a16-4ffc924bd5e8.jpg",
+      "sha256": "e4ce4a940f6a41018be79d0e2ce27b52548c62d1bd0841dbba247a0d0f232e80",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "f89b556d875eabe169f8",
+      "relativePath": "rtyrty.jpg",
+      "sha256": "cd29c8e02c9a1fe7bcc499f7d716d6727ab9316fcadcfebf31ddb37b6711fe65",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "835ce1c00c4877779b2c",
+      "relativePath": "sunset-over-sea-stockcake.jpg",
+      "sha256": "95e31d43d582a1b12ff63a6a1a125a5c3f62e65e557453feb07798c63e57a2a5",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "8643414152a836f210ce",
+      "relativePath": "tertretr.jpg",
+      "sha256": "002efed888e73bf350a2e931bf79eacc3308b5cdeea55295082926159c5b6b8f",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "5c682ae6499cd9dbdc80",
+      "relativePath": "tyututyuytutyuty.jpg",
+      "sha256": "f7be85dc4ee397d3afdd8e9c595559774aa4098fb69938012936508018c3fa87",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "f5f751aa9e0e5976c7d8",
+      "relativePath": "vbnvbnvbn.jpg",
+      "sha256": "661ce508a1cd48a9b1a2ef60f3605d4b167f397591c79d8d830ea1cdcb280000",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "29f60e21d8c8ed812562",
+      "relativePath": "vcbcbcvbcv.jpg",
+      "sha256": "31f9b90b7c30cc2f62b725de593e94b0c0ce51ce07f7f6ce0d4f4beb84060328",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    },
+    {
+      "id": "759173c9ac07be0fb240",
+      "relativePath": "ytr.jpg",
+      "sha256": "b739aa1f549953a335a28d422853a0df4042f78f5e6384a11216d4f8fa9bdd28",
+      "approved": true,
+      "reason": "Approved after visual and rights review"
+    }
+  ]
+}

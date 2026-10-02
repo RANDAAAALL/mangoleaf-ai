@@ -1,0 +1,356 @@
+{
+  "rawFiles": 5098,
+  "uniqueFileContents": 2649,
+  "identicalCopiesExcluded": 2449,
+  "nearMatchesExcluded": [
+    {
+      "source": "anthracnose/20211011_133201 (Custom).jpg",
+      "sha256": "025f9860dbdddf2707e79d39a3c9f2f05f33b1582cec929ea4c251d1081d5cbf",
+      "representative": "anthracnose/20211011_133200 (Custom).jpg",
+      "distance": 2
+    },
+    {
+      "source": "anthracnose/20211011_134655(0) (Custom).jpg",
+      "sha256": "6296284a72376c1ed0fa0e1f8628a0106f08654a75652b65ce1912867afbefc7",
+      "representative": "anthracnose/20211011_134655 (Custom).jpg",
+      "distance": 2
+    },
+    {
+      "source": "anthracnose/20211011_170703 (Custom).jpg",
+      "sha256": "f3e5620217f14da56910f3fd5ee5078e36b100e490fe44107f77387139e42f73",
+      "representative": "anthracnose/20211011_170702 (Custom).jpg",
+      "distance": 2
+    },
+    {
+      "source": "anthracnose/20211011_170704 (Custom).jpg",
+      "sha256": "5a42231275ed0e84a8cdb69352b595bcd3c5383d4ff2b8b1e6ff3d33de55e9c3",
+      "representative": "anthracnose/20211011_170702 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "anthracnose/20211011_170718 (Custom).jpg",
+      "sha256": "982160e783a41ac2f989c39f37ecb6972e4ba786af498bc90a734be847f10b8c",
+      "representative": "anthracnose/20211011_170717 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "anthracnose/IMG_20211011_161534 (Custom).jpg",
+      "sha256": "fe818ac40a19c955443fd7768552e89e7ee3dc8aa9d058b482fba259ef250505",
+      "representative": "anthracnose/IMG_20211011_161532 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "anthracnose/IMG_20211011_161616 (Custom).jpg",
+      "sha256": "7fa5ac2fc5cb1f6219fca679ab213083651d3408737b0c0f99aea29c89415476",
+      "representative": "anthracnose/IMG_20211011_161615 (Custom).jpg",
+      "distance": 2
+    },
+    {
+      "source": "anthracnose/IMG_20211011_164047 (Custom).jpg",
+      "sha256": "a38891636c91e6d4914a9a04187e6028c0e47b40c589c20383ecba60e17acaf2",
+      "representative": "anthracnose/IMG_20211011_160605 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "anthracnose/IMG_20211011_164858 (Custom).jpg",
+      "sha256": "b06160995fe3c3dd88d6476e3ae50b918d6f475091c028b10b0e2e99189080fb",
+      "representative": "anthracnose/IMG_20211011_161928 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "bacterial_black_spot/Bc119.jpg",
+      "sha256": "42b2b691086eebb49999e64ac97539fb1f8f460e7597092ae3574f0408be710d",
+      "representative": "bacterial_black_spot/Bc103.jpg",
+      "distance": 0
+    },
+    {
+      "source": "bacterial_black_spot/Bc211.jpg",
+      "sha256": "142b894da0b3fed7ecac199e1d9bf89f67df6542c9c2006ef86c4089dfa089e9",
+      "representative": "bacterial_black_spot/Bc207.jpg",
+      "distance": 4
+    },
+    {
+      "source": "bacterial_black_spot/Bc276.jpg",
+      "sha256": "75762d00e3e1133a25b18cd03268230f4d29cb91a7b6dd371c341a2abc5fee00",
+      "representative": "bacterial_black_spot/Bc274.jpg",
+      "distance": 2
+    },
+    {
+      "source": "bacterial_canker/IMG_20211106_134420_1 (Custom).jpg",
+      "sha256": "6bf29425534c80136c13bfc973de742dbdb9899de447b5febe8b970c4d885e9b",
+      "representative": "bacterial_canker/IMG_20211106_134420 (Custom).jpg",
+      "distance": 2
+    },
+    {
+      "source": "bacterial_canker/IMG_20211106_134738 (Custom).jpg",
+      "sha256": "20291284b81ff0c6e3d613a0469ca47836f3ffb9efa6ba481ac9299f59eb6130",
+      "representative": "bacterial_canker/IMG_20211106_134644 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "bacterial_canker/IMG_20211106_134909 (Custom).jpg",
+      "sha256": "4cfaefca152c3b39cca88678e9ed2e620db6f55173fc1a044bbd8ac95831310b",
+      "representative": "bacterial_canker/IMG_20211106_134906 (Custom).jpg",
+      "distance": 0
+    },
+    {
+      "source": "bacterial_canker/IMG_20211106_135414 (Custom).jpg",
+      "sha256": "8b23c30b8944174b5c0d12380ce05287c299263901decbfa7e83a2d591669770",
+      "representative": "bacterial_canker/IMG_20211106_135411 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "bacterial_canker/IMG_20211106_135637_1 (Custom).jpg",
+      "sha256": "5ac8217c3a5501abfaa13f6762aac2695abf55da1baa41f236e1dc776cfbffdb",
+      "representative": "bacterial_canker/IMG_20211106_135637 (Custom).jpg",
+      "distance": 2
+    },
+    {
+      "source": "bacterial_canker/IMG_20211106_135958_1 (Custom).jpg",
+      "sha256": "ba48e1090c81c7d4301c65bde544373ea17e7c3bc85723bf60e3c5000371692b",
+      "representative": "bacterial_canker/IMG_20211106_135958 (Custom).jpg",
+      "distance": 0
+    },
+    {
+      "source": "bacterial_canker/IMG_20211106_140014 (Custom).jpg",
+      "sha256": "4fe17d6555bdb293fd299bdae8ee577595c57b72be7dcb42f265acff552be667",
+      "representative": "bacterial_canker/IMG_20211106_140012 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "bacterial_canker/IMG_20211106_142847_1 (Custom).jpg",
+      "sha256": "f1f23c99c97765518cf6ecc14aa932d4b3d84c61c61dac2b06760806be844a5d",
+      "representative": "bacterial_canker/IMG_20211106_142847 (Custom).jpg",
+      "distance": 2
+    },
+    {
+      "source": "bacterial_canker/IMG_20211106_143149 (Custom).jpg",
+      "sha256": "d5ea04e0cb4d94be9bbe35e394ecd2c491867ca819aede76d819ec4a31bec8c8",
+      "representative": "bacterial_canker/IMG_20211106_143134 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "healthy_fruit/He168.jpg",
+      "sha256": "f765e3dedfe27c5a1aa008773451b1524ec849a07035cd7281631122dcdc21c9",
+      "representative": "healthy_fruit/He120.jpg",
+      "distance": 2
+    },
+    {
+      "source": "healthy_fruit/He179.jpg",
+      "sha256": "4f3a493eabb491d0fe378250201d6eaec384f9cebaf94ba03f617ef1f777aba1",
+      "representative": "healthy_fruit/He117.jpg",
+      "distance": 0
+    },
+    {
+      "source": "healthy_fruit/He190.jpg",
+      "sha256": "e987099a47b48599ff0a9d3ce403944c02906f7191bc133b2576e5d89b64f544",
+      "representative": "healthy_fruit/He121.jpg",
+      "distance": 0
+    },
+    {
+      "source": "healthy_fruit/He24.jpg",
+      "sha256": "7a3860028b8753c3c69c257d471df8366f3507ca9aa867a81068269f765c338d",
+      "representative": "healthy_fruit/He106.jpg",
+      "distance": 4
+    },
+    {
+      "source": "healthy_fruit/He33.jpg",
+      "sha256": "e2cc870b70aa8c17dc1c8045732367dfb1c25a6cd45dd756486e851e04501573",
+      "representative": "healthy_fruit/He194.jpg",
+      "distance": 4
+    },
+    {
+      "source": "healthy_fruit/He35.jpg",
+      "sha256": "88c1d7e0ebcbae97033893d7dca4803c044a8a0526a93105961e013a0a0e90bd",
+      "representative": "healthy_fruit/He116.jpg",
+      "distance": 0
+    },
+    {
+      "source": "healthy_fruit/He63.jpg",
+      "sha256": "7ed8c58458b824362ff35520cb67da4ae7884c31d5b7edc721676ec1146538e6",
+      "representative": "healthy_fruit/He103.jpg",
+      "distance": 0
+    },
+    {
+      "source": "healthy_fruit/He81.jpg",
+      "sha256": "37b70066380103d99bbe70bd7f4691ab53fab000ad892223b74df513303f2554",
+      "representative": "healthy_fruit/He106.jpg",
+      "distance": 4
+    },
+    {
+      "source": "healthy_leaf/20211231_125230 (Custom).jpg",
+      "sha256": "27451750138ce6ead3f3f0ce23c9e2713eb0932b7fb826bf1cca124018b6ad66",
+      "representative": "healthy_leaf/20211231_124457 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "healthy_leaf/20211231_155437 (Custom).jpg",
+      "sha256": "bbf79f262c3258109aa6c167dc9e488099fa6ab4a59d4d6d2808ebdafaa686e9",
+      "representative": "healthy_leaf/20211231_123608 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "healthy_leaf/20211231_155948 (Custom).jpg",
+      "sha256": "e3bf9abd1a30886a37b95a68f7f9a727f450d0bf0c18566fb1217c1a6e1414fd",
+      "representative": "healthy_leaf/20211231_124834 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "healthy_leaf/20211231_160030 (Custom).jpg",
+      "sha256": "4b5e91a221c85843a53efd2d2bd0df822fc0444e48272b6d5c7da4fa738844fb",
+      "representative": "healthy_leaf/20211231_155737 (Custom).jpg",
+      "distance": 2
+    },
+    {
+      "source": "healthy_leaf/20211231_161254 (Custom).jpg",
+      "sha256": "c4bbe6ae077d0e61bceff51f5fda42e24f172e83eebcff3406c2cfdc956eb056",
+      "representative": "healthy_leaf/20211231_125024 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "mango_scab/Sc125.jpg",
+      "sha256": "8b3a02c7ab3ed1bb65547d08f5a13c37a670345a00f7b281b33a577480b6c0b2",
+      "representative": "mango_scab/Sc123.jpg",
+      "distance": 2
+    },
+    {
+      "source": "mango_scab/Sc257.jpg",
+      "sha256": "9de734abf8671bf6febe9a2f722bd3d0cfb5b62e80d812be742eeeb9939eb55a",
+      "representative": "mango_scab/Sc235.jpg",
+      "distance": 0
+    },
+    {
+      "source": "mango_scab/Sc260.jpg",
+      "sha256": "4af1e942b484d23ef157002d705f91a19cda3a86ae3f23a5fc17f141e88accdd",
+      "representative": "mango_scab/Sc259.jpg",
+      "distance": 4
+    },
+    {
+      "source": "mango_scab/Sc288.jpg",
+      "sha256": "742b59eb7309fe1c7b0020be04ba9e6f570a696ac2dce95030186fa4c090118e",
+      "representative": "mango_scab/Sc232.jpg",
+      "distance": 4
+    },
+    {
+      "source": "mango_scab/Sc67.jpg",
+      "sha256": "6adda074db75a101a02f95a938f5f2391542a4959b107f25d893c1151598e76d",
+      "representative": "mango_scab/Sc40.jpg",
+      "distance": 0
+    },
+    {
+      "source": "sooty_mold/IMG_20211108_121022 (Custom).jpg",
+      "sha256": "db0bcb9cda59d16b340a6860466bb3f7aefda838069ff985e592edc7048af43d",
+      "representative": "sooty_mold/IMG_20211108_120816 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "sooty_mold/IMG_20211108_122447 (Custom).jpg",
+      "sha256": "fbecc155cda61a0a53047f8f2d1bc3bb54616c05ffc8d362295a7710339abd56",
+      "representative": "sooty_mold/IMG_20211108_122336 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "sooty_mold/IMG_20211108_123548 (Custom).jpg",
+      "sha256": "ba250bfe9604f53d2cde81ca5e41fb7349c12779681249a6f0f68bcb1d37a808",
+      "representative": "sooty_mold/IMG_20211108_123545 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "sooty_mold/IMG_20211108_123730 (Custom).jpg",
+      "sha256": "4ab5b3d5edd8f5ebb10748cffea3af284a0a43d1c55ad0a3259a084c92814304",
+      "representative": "sooty_mold/IMG_20211108_123732 (Custom).jpg",
+      "distance": 2
+    },
+    {
+      "source": "sooty_mold/IMG_20211211_154853_1 (Custom).jpg",
+      "sha256": "fdbae61c1572487f019be69afcc2f31210f92de3150acf3d709f4158d18e0e24",
+      "representative": "sooty_mold/IMG_20211211_154853 (Custom).jpg",
+      "distance": 2
+    },
+    {
+      "source": "sooty_mold/IMG_20211211_155021 (Custom).jpg",
+      "sha256": "a144c2c549cc1ea4ea4d4a4664fd3de16b132935901cd064459e2c7681b8a411",
+      "representative": "sooty_mold/IMG_20211211_155019 (Custom).jpg",
+      "distance": 4
+    },
+    {
+      "source": "sooty_mold/IMG_20211211_160001 (Custom).jpg",
+      "sha256": "3a59d0343facbe922a839c1dba76cefb63245aa0829755cba7329230d1c9aad6",
+      "representative": "sooty_mold/IMG_20211211_155507 (Custom).jpg",
+      "distance": 4
+    }
+  ],
+  "retainedSimilarityFlags": [
+    {
+      "first": "train/healthy_leaf/healthy_leaf__20211231_123156 (Custom).jpg",
+      "second": "train/sooty_mold/sooty_mold__IMG_20211212_143042 (Custom).jpg",
+      "distance": 4,
+      "crossSubset": false,
+      "crossLabel": true
+    },
+    {
+      "first": "val/healthy_leaf/healthy_leaf__20211231_124108 (Custom).jpg",
+      "second": "train/anthracnose/anthracnose__IMG_20211011_153223 (Custom).jpg",
+      "distance": 4,
+      "crossSubset": true,
+      "crossLabel": true
+    },
+    {
+      "first": "train/mango_scab/mango_scab__Sc142.jpg",
+      "second": "train/bacterial_black_spot/bacterial_black_spot__Bc235.jpg",
+      "distance": 4,
+      "crossSubset": false,
+      "crossLabel": true
+    },
+    {
+      "first": "train/healthy_leaf/healthy_leaf__20211231_125032 (Custom).jpg",
+      "second": "val/sooty_mold/sooty_mold__IMG_20211108_121929 (Custom).jpg",
+      "distance": 4,
+      "crossSubset": true,
+      "crossLabel": true
+    },
+    {
+      "first": "val/healthy_leaf/healthy_leaf__20211231_125059 (Custom).jpg",
+      "second": "train/anthracnose/anthracnose__20211011_134607 (Custom).jpg",
+      "distance": 4,
+      "crossSubset": true,
+      "crossLabel": true
+    },
+    {
+      "first": "train/anthracnose/anthracnose__IMG_20211011_153304 (Custom).jpg",
+      "second": "train/healthy_leaf/healthy_leaf__20211231_125451 (Custom).jpg",
+      "distance": 2,
+      "crossSubset": false,
+      "crossLabel": true
+    },
+    {
+      "first": "train/bacterial_black_spot/bacterial_black_spot__Bc101.jpg",
+      "second": "train/mango_scab/mango_scab__Sc252.jpg",
+      "distance": 4,
+      "crossSubset": false,
+      "crossLabel": true
+    },
+    {
+      "first": "train/healthy_leaf/healthy_leaf__20211231_124117 (Custom).jpg",
+      "second": "val/bacterial_canker/bacterial_canker__IMG_20211106_121133 (Custom).jpg",
+      "distance": 4,
+      "crossSubset": true,
+      "crossLabel": true
+    },
+    {
+      "first": "train/anthracnose/anthracnose__IMG_20211011_161928 (Custom).jpg",
+      "second": "train/healthy_leaf/healthy_leaf__20211231_162219 (Custom).jpg",
+      "distance": 4,
+      "crossSubset": false,
+      "crossLabel": true
+    },
+    {
+      "first": "train/bacterial_canker/bacterial_canker__IMG_20211106_121111 (Custom).jpg",
+      "second": "val/anthracnose/anthracnose__IMG_20211011_165141 (Custom).jpg",
+      "distance": 4,
+      "crossSubset": true,
+      "crossLabel": true
+    }
+  ],
+  "interpretation": "Similarity flags require visual review; historical membership is preserved."
+}

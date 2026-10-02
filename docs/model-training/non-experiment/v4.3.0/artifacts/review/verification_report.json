@@ -1,0 +1,70 @@
+{
+  "status": "passed",
+  "sourceRoot": "C:\\Users\\My Pc\\Desktop\\workspace\\capstone\\model\\brain\\v4.3.0",
+  "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+  "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0",
+  "counts": {
+    "trainingArtifacts": 300,
+    "recoveryArtifacts": 287,
+    "thresholdArtifacts": 34,
+    "evidenceArtifacts": 33,
+    "candidateFiles": 5
+  },
+  "verifiedChecks": 3024,
+  "graphInputShape": [
+    -1,
+    224,
+    224,
+    3
+  ],
+  "graphOutputShape": [
+    -1,
+    7
+  ],
+  "float32Values": 2971553,
+  "int32Values": 50,
+  "weightBytes": 11886412,
+  "modelConfig": {
+    "modelVersion": "model-v4.3.0-candidate",
+    "experimentVersion": "v4.3.0",
+    "arm": "combined",
+    "classes": [
+      "anthracnose",
+      "bacterial_black_spot",
+      "bacterial_canker",
+      "healthy_fruit",
+      "healthy_leaf",
+      "mango_scab",
+      "sooty_mold"
+    ],
+    "inputSize": [
+      224,
+      224
+    ],
+    "preprocessing": "TensorFlow RGB decode (Pillow RGB with EXIF transpose for WebP); bilinear 224x224, no antialias; float32 0-255; model rescales internally",
+    "temperature": 1.1602258301498714,
+    "temperatureFoldedIntoWeights": true,
+    "thresholds": {
+      "confidenceThreshold": 0.7,
+      "marginThreshold": 0.0,
+      "entropyThreshold": 0.42
+    },
+    "status": "experimental candidate; not adopted or deployed",
+    "modelSha256": "e5d323cfdca00fde64b1da4da6a5f1328ff627d9616d518b6ca82595c3f8137e",
+    "selectionSha256": "fd213d6ed4fc37e10738f391d989dc32e7ad3555d048e02ac7ba9921f5bb26b3",
+    "evaluationSha256": "46da4aa3d2fd2532bc45256447302f58938e53ee16b6fe58d7794b73bc035de1",
+    "trainingCompleteSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+    "browserParityMeasured": false
+  },
+  "candidateFileHashes": {
+    "model.json": "f5ebdd96893513f05d78126880e9a56a94c4750f75b02a2ee2fb7d3792c8267b",
+    "group1-shard1of3.bin": "04e1e18a28cb414442c66617a0bc0cbdff2e93116d08d0a170f04b30572bf09c",
+    "group1-shard2of3.bin": "0432d0dc9a25e4d2d0048aa5c8120076c05466a6363bd2d5a0c5e5ee4fd34954",
+    "group1-shard3of3.bin": "a0fab950ece352711e938467d6bf5f6aaed6c48b5ee1e37812b0a7192399292b",
+    "model_config.json": "23f976f5d4311885e49a7738a02fe7576a073e700dc7dd1a0e1a70b60dd3cb52"
+  },
+  "trainingCompleteSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+  "thresholdCompleteSha256": "daba6fc62c90be8eaec43e50032935bfaae68179f1b2d76c3ee605a21766c452",
+  "candidateZipSha256": "12d32498e017b1224b80ef5a93820704cb32127c836ca64ed25b546713eb7430",
+  "exceptions": []
+}

@@ -1,0 +1,30 @@
+{
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.1.1/training/v4-1-1-training-20260928T043539Z-37576200",
+  "trainingCompleteSha256": "2c62e4289c449ed5f1b18c1690ddf0341dc07a3cb36ae5807def42babbe6bd16",
+  "trainingManifestSha256": "3d103e66cba4edcadc1aae97a1e49aaa655e4f1cd1d3de6531d148de4b913631",
+  "oldOodSplitMethod": "historical V4 flat-folder split: sorted paths, RandomState(42), 50/50",
+  "oldOodExcluded": [],
+  "newOodExcluded": [],
+  "exclusionReasons": {},
+  "counts": {
+    "train": 1819,
+    "val": 391,
+    "test": 393,
+    "background_source": 62,
+    "ood_tune": 84,
+    "ood_report": 84,
+    "ood_new_report": 32
+  },
+  "newOodTotalUploaded": 32,
+  "newOodRetained": 32,
+  "nearDuplicateFlagCount": 0,
+  "nearDuplicateThreshold": "64-bit DCT pHash, rotations/mirrors, Hamming distance <= 4",
+  "runtime": {
+    "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+    "tensorflow": "2.20.0",
+    "keras": "3.13.2",
+    "numpy": "2.1.3",
+    "pillow": "11.3.0"
+  },
+  "createdAt": "2026-09-28T06:10:12.447976+00:00"
+}

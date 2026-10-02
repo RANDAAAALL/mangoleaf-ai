@@ -1,0 +1,234 @@
+{
+    "experiment":  "v4.2.0",
+    "organ":  "mangofruit",
+    "status":  "experimental training export only; threshold selection infeasible, no fitted candidate",
+    "sourceRoot":  "C:/Users/My Pc/Desktop/workspace/capstone/model/brain/v4.2.0",
+    "trainingRun":  "v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae",
+    "thresholdRun":  "v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7",
+    "files":  [
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/plan.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/plan.json",
+                      "sha256":  "e9b823118f33d41c0d9b696b54539732e2d0511723d43b4b69183bf3d4eb1def",
+                      "bytes":  12624
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/training_complete.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/training_complete.json",
+                      "sha256":  "d705a057781f7124ae296e8e5ad240aac0b933f39c0126f6c07ccad9f736ba36",
+                      "bytes":  6181
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/background_schedule.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/background_schedule.json",
+                      "sha256":  "3020a4ca3db527c09e6bc7ad987d126df89b7fc20df71742f58eb5510f23d565",
+                      "bytes":  21257
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/duplicate_audit.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/duplicate_audit.json",
+                      "sha256":  "5fccec22826686d75602d2aa4176bc0f75c21fa6a397418b709b67cbc375a0e1",
+                      "bytes":  13686
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/external_overlap_audit.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/external_overlap_audit.json",
+                      "sha256":  "99f9f6bead0d0d7d71555c232f7941a1114956e07fa642d87aa86e4c14741df5",
+                      "bytes":  208
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/input_manifest.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/input_manifest.json",
+                      "sha256":  "f2eabf88fc4fc8dd7474648cea15c6663d7d9e12a9a3ba21130c729f48b91284",
+                      "bytes":  354146
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/mask_review.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/mask_review.json",
+                      "sha256":  "191525c11c6418674773cb09097bef69baa1c85d69ab294aba9d193b57d21626",
+                      "bytes":  18630
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/scene_review.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/scene_review.json",
+                      "sha256":  "6f62a26c451638f2a6ec04a9f03676525dcc780c04229031df5bc3b88fabcfa9",
+                      "bytes":  17186
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/lighting_review.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/lighting_review.json",
+                      "sha256":  "c39060e614d4a505c61f44797e055dc1fec892f99c5e56e8267fd2b3d268acc2",
+                      "bytes":  482
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/white_background_review.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/white_background_review.json",
+                      "sha256":  "77dba9aac41e6f0f6ef0f0a819f1b608e5a34c6708092e043584c5e687d6b9a7",
+                      "bytes":  1928
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/candidate_hashes.json",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/candidate_hashes.json",
+                      "sha256":  "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+                      "bytes":  3
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/evaluation.json",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/evaluation.json",
+                      "sha256":  "8215f0bdd5ada95860ba1e12d80bdf41131576a6acc48de013d0cabb8950c3cc",
+                      "bytes":  4848
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/evaluation_started.json",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/evaluation_started.json",
+                      "sha256":  "4625ce6dd7de5618cfc13a0fc7ee8030ff9d667c921307aa1801978af53c6726",
+                      "bytes":  228
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/evaluation_inputs.json",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/evaluation_inputs.json",
+                      "sha256":  "95d9d46a4f01462853ee147273dd5da03124e00ae0a811673a0934db102560f0",
+                      "bytes":  364144
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/selected_thresholds.json",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/selected_thresholds.json",
+                      "sha256":  "8aee54a3d019a3c0e9b6d711aa0cce09e65ba92b6fad00df13751566cd18c33e",
+                      "bytes":  4708
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/REPORT.md",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/REPORT.md",
+                      "sha256":  "37f3f5a33bf1106f8eb0ffc88e60164fefff91fa5cbe30c91808608ee014e6c3",
+                      "bytes":  2053
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/arms/combined/training_history.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/arms/combined/training_history.json",
+                      "sha256":  "6fafce6675a44de756544efd6dc477344ab0dd5f8882e02d91faf10b2c146b55",
+                      "bytes":  2770
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/arms/combined/confidence_only_mango_test_predictions.csv",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/arms/combined/confidence_only_mango_test_predictions.csv",
+                      "sha256":  "66dca7e010b4102054a088af496b7a55a4ee7b3b4a59554be66df4a2ee74cb54",
+                      "bytes":  54528
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/arms/combined/confidence_only_new_ood_report_predictions.csv",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/arms/combined/confidence_only_new_ood_report_predictions.csv",
+                      "sha256":  "b933c16e44e1b0f5e5fccb12f77bce5dc8aa5299ec0ae5d915914c97bc3c9684",
+                      "bytes":  10870
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/arms/combined/confidence_only_old_ood_report_predictions.csv",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/arms/combined/confidence_only_old_ood_report_predictions.csv",
+                      "sha256":  "8525fff1ae125e24acab645bc53e4fbfefa8440d857cdf629dacce2613446cca",
+                      "bytes":  27706
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/arms/combined/raw_per_class_metrics.csv",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/arms/combined/raw_per_class_metrics.csv",
+                      "sha256":  "82c62e7f1cffe18f5032d22f6bf7b6664d06b0c2851f62977eac029ec6960c5f",
+                      "bytes":  218
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/arms/combined/threshold_search.csv",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/arms/combined/threshold_search.csv",
+                      "sha256":  "5901bf20df6d2c44358d9bec6fbd0a468f22152f252ae546819ff17146df1b61",
+                      "bytes":  293185
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/arms/combined/tuning_predictions.csv",
+                      "source":  "threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7/arms/combined/tuning_predictions.csv",
+                      "sha256":  "4c05a16da789d927d2a6184f3d11e1b600abb634e63bea83db13647a98ee72c0",
+                      "bytes":  79950
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/figure_provenance.json",
+                      "source":  "post_training_figures/mangofruit/v4-2-0-mangofruit-figures-20260929T055036Z/figure_provenance.json",
+                      "sha256":  "05fe213e67303d7480ff143bcca3508b9aa35e7dcfd6c5600bf019460a9569e0",
+                      "bytes":  3337
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/figures/augmentation_preview.png",
+                      "source":  "post_training_figures/mangofruit/v4-2-0-mangofruit-figures-20260929T055036Z/augmentation_preview.png",
+                      "sha256":  "4a4ceae3ced4454a79ada53c48658b2df7adeb4715aab6f9deb7a3307c5638f4",
+                      "bytes":  1176544
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/figures/confusion_matrix.png",
+                      "source":  "post_training_figures/mangofruit/v4-2-0-mangofruit-figures-20260929T055036Z/confusion_matrix.png",
+                      "sha256":  "cd3eb4a2b38366fadbf77d05182b71ccc4aa8345b20b27f85ae5a935ed456ff4",
+                      "bytes":  54110
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/figures/grad_cam.png",
+                      "source":  "post_training_figures/mangofruit/v4-2-0-mangofruit-figures-20260929T055036Z/grad_cam.png",
+                      "sha256":  "42dfac274f6956090989a6f234602c889378c5b7ef2188c83306b2d5d46d0e48",
+                      "bytes":  1448723
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/figures/per_class_metrics.csv",
+                      "source":  "post_training_figures/mangofruit/v4-2-0-mangofruit-figures-20260929T055036Z/per_class_metrics.csv",
+                      "sha256":  "83d25c42def102124149f598072ae7725135c239136ff8bcdcd78cb7874f8ae8",
+                      "bytes":  249
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/figures/per_class_metrics.png",
+                      "source":  "post_training_figures/mangofruit/v4-2-0-mangofruit-figures-20260929T055036Z/per_class_metrics.png",
+                      "sha256":  "e02b3b7ee3eceb1dafcd41365ef8fad0576139ae92077827633c56b3aec064fd",
+                      "bytes":  43065
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/figures/threshold_search.png",
+                      "source":  "post_training_figures/mangofruit/v4-2-0-mangofruit-figures-20260929T055036Z/threshold_search.png",
+                      "sha256":  "51d430c5092fadad9baa2dd5cea375306be791f79eb8b6b534a74f16da3d60ce",
+                      "bytes":  84216
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/figures/training_curves.png",
+                      "source":  "post_training_figures/mangofruit/v4-2-0-mangofruit-figures-20260929T055036Z/training_curves.png",
+                      "sha256":  "853135bb0180bf1a0cdf8996930900b0a0edfd8d539a54ee027a52a69163ab39",
+                      "bytes":  103234
+                  },
+                  {
+                      "path":  "docs/model-training/experiment/v4.2.0/mangofruit/artifacts/model_config.json",
+                      "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/arms/combined/tfjs_model/model_config.json",
+                      "sha256":  "bba3fbb60a1396808ca2fe52937aaf960df41d366e9e5d42dfa522afbb04c431",
+                      "bytes":  649
+                  }
+              ],
+    "publicModelFiles":  [
+                             {
+                                 "path":  "public/model/mangofruit/group1-shard1of3.bin",
+                                 "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/arms/combined/tfjs_model/group1-shard1of3.bin",
+                                 "sha256":  "9d956389c2b10ccc6869b9ca9aa430f77b94478e8b72c29d7cde781f4da42723",
+                                 "bytes":  4194304
+                             },
+                             {
+                                 "path":  "public/model/mangofruit/group1-shard2of3.bin",
+                                 "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/arms/combined/tfjs_model/group1-shard2of3.bin",
+                                 "sha256":  "24a7035c63d9b493e6051203b18b6d4a30e474b88420023dabac6a69ac6c1ea1",
+                                 "bytes":  4194304
+                             },
+                             {
+                                 "path":  "public/model/mangofruit/group1-shard3of3.bin",
+                                 "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/arms/combined/tfjs_model/group1-shard3of3.bin",
+                                 "sha256":  "88f0c3ebb6169f9b9a852f0faa30c32cb9b4b30cda3570b08218047f6baf3111",
+                                 "bytes":  3482428
+                             },
+                             {
+                                 "path":  "public/model/mangofruit/model.json",
+                                 "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/arms/combined/tfjs_model/model.json",
+                                 "sha256":  "25d218a8795096fd81d90efb89f6d03f5a84be516efa9e976906daa550bd1a3b",
+                                 "bytes":  212860
+                             },
+                             {
+                                 "path":  "public/model/mangofruit/model_config.json",
+                                 "source":  "training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae/arms/combined/tfjs_model/model_config.json",
+                                 "sha256":  "bba3fbb60a1396808ca2fe52937aaf960df41d366e9e5d42dfa522afbb04c431",
+                                 "bytes":  649
+                             }
+                         ]
+}

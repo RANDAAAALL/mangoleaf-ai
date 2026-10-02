@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, memo, useCallback } from "react";
 import { translations, type Language } from "@/lib/translations";
 import { Icon } from "@/components/brand/icon";
+import { useScrollLock } from "@/hooks/useScrollLock";
 
 interface ScanSheetProps {
   isOpen: boolean;
@@ -79,16 +80,7 @@ export const ScanSheet = memo(function ScanSheet({
     };
   }, []);
 
-  useEffect(() => {
-    if (!shouldRender) return;
-
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-    };
-  }, [shouldRender]);
+  useScrollLock(shouldRender);
 
   const handleCamera = () => {
     const input = document.getElementById(
@@ -258,7 +250,7 @@ export const ScanSheet = memo(function ScanSheet({
 
       <div
         ref={sheetRef}
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl touch-none will-change-transform ${sheetMotionClass}`}
+        className={`fixed bottom-0 left-0 right-0 z-50 max-h-[calc(100dvh-1rem)] flex flex-col bg-white rounded-t-3xl shadow-2xl touch-none will-change-transform ${sheetMotionClass}`}
         style={{
           paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))",
           transform: sheetTransform,
@@ -267,19 +259,36 @@ export const ScanSheet = memo(function ScanSheet({
       >
         <div
           ref={dragHandleRef}
-          className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing touch-none select-none"
+          className="shrink-0 flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing touch-none select-none"
         >
           <div className="w-10 h-1.5 bg-[#d2e2c4] rounded-full" />
         </div>
 
-        <div className="px-6 pb-4 flex flex-col gap-4 touch-auto">
-          <h3 className="text-lg font-bold text-[#143519] text-center">
+        {/* Only the content scrolls; the drag handle stays available on short screens. */}
+        <div className="min-h-0 overflow-y-auto px-6 pb-4 flex flex-col gap-4 touch-auto">
+          <h3 className="shrink-0 text-lg font-bold text-[#143519] text-center">
             {t.scanSheetTitle}
           </h3>
 
+          {/* Shared advice applies to both camera capture and existing gallery photos. */}
+          <ul className="shrink-0 space-y-2 rounded-2xl border border-[#d2e2c4] bg-[#f0f7eb] p-3 text-left text-xs leading-relaxed text-[#526856]">
+            <li>
+              <span className="font-bold text-[#143519]">
+                {t.scanSheetFramingLabel}
+              </span>{" "}
+              {t.scanSheetFramingTip}
+            </li>
+            <li>
+              <span className="font-bold text-[#143519]">
+                {t.scanSheetLightingLabel}
+              </span>{" "}
+              {t.scanSheetLightingTip}
+            </li>
+          </ul>
+
           {/* Auto rows, not grid-rows-2: the camera card is md:hidden, and an
               explicit second row would still reserve its gap on desktop. */}
-          <div className="grid gap-3">
+          <div className="shrink-0 grid gap-3">
             {/* Camera capture is mobile-only. A desktop browser ignores
                 capture="environment", so this card would open the same file
                 dialog as Upload Photo while implying a camera. The input itself
@@ -293,7 +302,7 @@ export const ScanSheet = memo(function ScanSheet({
               </div>
               <div className="flex flex-col items-center gap-0.5">
                 <span className="text-sm font-bold">{t.takePhotoBtn}</span>
-                <span className="text-[10px] sm:text-[12px] text-emerald-100 leading-tight text-center">
+                <span className="text-xs text-emerald-100 leading-relaxed text-center">
                   {t.scanSheetCameraDesc}
                 </span>
               </div>
@@ -313,7 +322,7 @@ export const ScanSheet = memo(function ScanSheet({
               </div>
               <div className="flex flex-col items-center gap-0.5">
                 <span className="text-sm font-bold">{t.uploadPhotoBtn}</span>
-                <span className="text-[10px] sm:text-[12px] text-[#523012] leading-tight text-center">
+                <span className="text-xs text-[#523012] leading-relaxed text-center">
                   {t.scanSheetGalleryDesc}
                 </span>
               </div>
@@ -322,7 +331,7 @@ export const ScanSheet = memo(function ScanSheet({
 
           <button
             onClick={onClose}
-            className="w-full py-3 bg-slate-100 text-slate-600 font-bold rounded-xl text-sm cursor-pointer hover:bg-slate-200 transition-colors"
+            className="shrink-0 w-full py-3 bg-slate-100 text-slate-600 font-bold rounded-xl text-sm cursor-pointer hover:bg-slate-200 transition-colors"
           >
             {t.cancelBtn}
           </button>

@@ -1,0 +1,23 @@
+{
+  "background": {
+    "group1-shard1of3.bin": "1ca4518a48c77a9f5fb0b74a3b877aab79759ee5ecea35f008cbcb3a5cd5b524",
+    "group1-shard2of3.bin": "26aca33b55cb469817329fe085acc275ec5ef77a77e7c12c4021c6de48c8df05",
+    "group1-shard3of3.bin": "eec90d9c195b5e205e6bfc12fa923aa7e74b8a0b4972ca4a1b022b66729434d5",
+    "model.json": "a7fe6275bbb39f7be0faf7711796f27d512d1340825c2aa0c8f8f263b3722be3",
+    "model_config.json": "3d4f6e4f5681d1d91d1bf4191b739eabd3b4c1563b0f0110a1157dc2317315b5"
+  },
+  "lighting": {
+    "group1-shard1of3.bin": "851e201eee769a88bf21c94fa1c22ca793473405fe4afcc4e298b0753ff0cd02",
+    "group1-shard2of3.bin": "29335832fcab96db0e8156c0844466cc9acef554e94c33e2bcbaa4d583c57af2",
+    "group1-shard3of3.bin": "45ec96f1ff4870a506f31e952615649770510286ad03365a1eaeca4c40a3b9ee",
+    "model.json": "3075d729abcb27d3c4352201e0e2d489d61560339fbab5354cd971e4fb86b68f",
+    "model_config.json": "58ac8e2465af0b5887592a71089cd33695019d819f3d2b59dda56ca3bf6c9ebd"
+  },
+  "combined": {
+    "group1-shard1of3.bin": "6229c6ccda45c8c801d92d1f3f8f4a55c39a5461b4e0d4746ef70c03925f8187",
+    "group1-shard2of3.bin": "c3326a6cfd5baf662af2220b5f3d368fd6b410c67a688d31a9d569c41e07d3f9",
+    "group1-shard3of3.bin": "1c911fdaca6615e666cb2f41a68cf8782de178425be38efa6c50c0b3bf84dab3",
+    "model.json": "f5a4425121ca1263077dc37c0d44f3904b6ff35557ba7d33cf13e02c70f2036a",
+    "model_config.json": "8be226f655da675fc9c64a11ea80859c9f51eaf5627e3abded2e5fca783c5302"
+  }
+}

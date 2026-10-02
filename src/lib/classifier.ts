@@ -205,7 +205,7 @@ export async function predictMangoDisease(
   const margin = maxProb - secondProb;
 
   // Normalized Shannon entropy: 0 when one class takes everything, 1 when all
-  // six are equally likely. Dividing by log(number of classes) is what makes it
+  // classes are equally likely. Dividing by log(number of classes) is what makes it
   // comparable to the threshold fitted in the training notebook.
   let entropy = 0;
   for (let i = 0; i < results.length; i++) {
@@ -227,6 +227,23 @@ export async function predictMangoDisease(
   const confidence = Math.round(maxProb * 100) / 100;
 
   const accepted = meetsConfidence && meetsMargin && meetsEntropy;
+  // Show every score during local development; sort copies so class indices stay intact.
+  if (process.env.NODE_ENV === "development") {
+    const ranked = Array.from(results, (probability, index) => ({
+      className: CLASSES[index],
+      probability,
+    })).sort((a, b) => b.probability - a.probability);
+    console.groupCollapsed(
+      `Class probabilities (${accepted ? "accepted" : "rejected"})`,
+    );
+    console.table(
+      ranked.map(({ className, probability }) => ({
+        Class: className,
+        Probability: `${(probability * 100).toFixed(2)}%`,
+      })),
+    );
+    console.groupEnd();
+  }
   if (!accepted) {
     console.log(
       `---Rejected: Raw PredictedDisease=${CLASSES[maxIndex]} confidence=${maxProb.toFixed(4)} margin=${margin.toFixed(4)} ` +
@@ -309,9 +326,4 @@ export async function compressImageForStorage(
  * identical files hash the same, which is how a duplicate photo is caught
  * locally before it is ever saved.
  */
-export async function computeImageHash(file: File): Promise<string> {
-  const arrayBuffer = await file.arrayBuffer();
-  const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-}
+export { computeImageHash } from "@/lib/image-hash";

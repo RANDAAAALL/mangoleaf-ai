@@ -23,6 +23,7 @@ async function initialize() {
   return {
     metadata: {
       modelVersion,
+      modelAssetVersion: config.modelVersion,
       tfjs: tf.version.tfjs,
       backend: tf.getBackend(),
       forcedFloat16: tf.env().getBool("WEBGL_FORCE_F16_TEXTURES"),

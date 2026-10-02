@@ -1,0 +1,646 @@
+{
+  "scheduleMatchesExactRecomputation": true,
+  "classes": [
+    {
+      "class": "anthracnose",
+      "trainUnique": 339,
+      "approvedUnique": 0,
+      "replacedUnique": 0,
+      "replacementPresentations": 0,
+      "replacementPercentOfClassPresentations": 0.0,
+      "lightUnique": 337,
+      "lightPresentations": 1517,
+      "backgroundAndLight": 0,
+      "usedUniqueScenes": 0
+    },
+    {
+      "class": "bacterial_black_spot",
+      "trainUnique": 207,
+      "approvedUnique": 15,
+      "replacedUnique": 15,
+      "replacementPresentations": 57,
+      "replacementPercentOfClassPresentations": 1.8357487922705313,
+      "lightUnique": 206,
+      "lightPresentations": 916,
+      "backgroundAndLight": 17,
+      "usedUniqueScenes": 51
+    },
+    {
+      "class": "bacterial_canker",
+      "trainUnique": 343,
+      "approvedUnique": 0,
+      "replacedUnique": 0,
+      "replacementPresentations": 0,
+      "replacementPercentOfClassPresentations": 0.0,
+      "lightUnique": 343,
+      "lightPresentations": 1566,
+      "backgroundAndLight": 0,
+      "usedUniqueScenes": 0
+    },
+    {
+      "class": "healthy_fruit",
+      "trainUnique": 77,
+      "approvedUnique": 0,
+      "replacedUnique": 0,
+      "replacementPresentations": 0,
+      "replacementPercentOfClassPresentations": 0.0,
+      "lightUnique": 76,
+      "lightPresentations": 350,
+      "backgroundAndLight": 0,
+      "usedUniqueScenes": 0
+    },
+    {
+      "class": "healthy_leaf",
+      "trainUnique": 347,
+      "approvedUnique": 42,
+      "replacedUnique": 42,
+      "replacementPresentations": 178,
+      "replacementPercentOfClassPresentations": 3.419788664745437,
+      "lightUnique": 345,
+      "lightPresentations": 1504,
+      "backgroundAndLight": 48,
+      "usedUniqueScenes": 122
+    },
+    {
+      "class": "mango_scab",
+      "trainUnique": 157,
+      "approvedUnique": 3,
+      "replacedUnique": 3,
+      "replacementPresentations": 13,
+      "replacementPercentOfClassPresentations": 0.5520169851380042,
+      "lightUnique": 156,
+      "lightPresentations": 764,
+      "backgroundAndLight": 6,
+      "usedUniqueScenes": 12
+    },
+    {
+      "class": "sooty_mold",
+      "trainUnique": 349,
+      "approvedUnique": 6,
+      "replacedUnique": 6,
+      "replacementPresentations": 25,
+      "replacementPercentOfClassPresentations": 0.4775549188156638,
+      "lightUnique": 346,
+      "lightPresentations": 1577,
+      "backgroundAndLight": 7,
+      "usedUniqueScenes": 23
+    }
+  ],
+  "epochs": [
+    {
+      "epoch": 1,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 5,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 9,
+        "mango_scab": 2,
+        "sooty_mold": 2
+      },
+      "light": {
+        "anthracnose": 99,
+        "bacterial_black_spot": 66,
+        "bacterial_canker": 113,
+        "healthy_fruit": 27,
+        "healthy_leaf": 99,
+        "mango_scab": 60,
+        "sooty_mold": 94
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 1,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 4,
+        "mango_scab": 1,
+        "sooty_mold": 1
+      },
+      "backgroundTotal": 18,
+      "lightTotal": 558,
+      "overlapTotal": 7
+    },
+    {
+      "epoch": 2,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 3,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 10,
+        "mango_scab": 0,
+        "sooty_mold": 2
+      },
+      "light": {
+        "anthracnose": 88,
+        "bacterial_black_spot": 74,
+        "bacterial_canker": 111,
+        "healthy_fruit": 24,
+        "healthy_leaf": 113,
+        "mango_scab": 50,
+        "sooty_mold": 105
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 0,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 3,
+        "mango_scab": 0,
+        "sooty_mold": 0
+      },
+      "backgroundTotal": 15,
+      "lightTotal": 565,
+      "overlapTotal": 3
+    },
+    {
+      "epoch": 3,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 1,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 14,
+        "mango_scab": 0,
+        "sooty_mold": 2
+      },
+      "light": {
+        "anthracnose": 97,
+        "bacterial_black_spot": 51,
+        "bacterial_canker": 98,
+        "healthy_fruit": 24,
+        "healthy_leaf": 92,
+        "mango_scab": 49,
+        "sooty_mold": 109
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 0,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 1,
+        "mango_scab": 0,
+        "sooty_mold": 2
+      },
+      "backgroundTotal": 17,
+      "lightTotal": 520,
+      "overlapTotal": 3
+    },
+    {
+      "epoch": 4,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 4,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 11,
+        "mango_scab": 1,
+        "sooty_mold": 0
+      },
+      "light": {
+        "anthracnose": 97,
+        "bacterial_black_spot": 50,
+        "bacterial_canker": 95,
+        "healthy_fruit": 22,
+        "healthy_leaf": 97,
+        "mango_scab": 53,
+        "sooty_mold": 103
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 0,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 1,
+        "mango_scab": 0,
+        "sooty_mold": 0
+      },
+      "backgroundTotal": 16,
+      "lightTotal": 517,
+      "overlapTotal": 1
+    },
+    {
+      "epoch": 5,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 3,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 11,
+        "mango_scab": 1,
+        "sooty_mold": 2
+      },
+      "light": {
+        "anthracnose": 98,
+        "bacterial_black_spot": 68,
+        "bacterial_canker": 105,
+        "healthy_fruit": 22,
+        "healthy_leaf": 104,
+        "mango_scab": 47,
+        "sooty_mold": 108
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 1,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 4,
+        "mango_scab": 0,
+        "sooty_mold": 0
+      },
+      "backgroundTotal": 17,
+      "lightTotal": 552,
+      "overlapTotal": 5
+    },
+    {
+      "epoch": 6,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 5,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 15,
+        "mango_scab": 1,
+        "sooty_mold": 3
+      },
+      "light": {
+        "anthracnose": 99,
+        "bacterial_black_spot": 61,
+        "bacterial_canker": 103,
+        "healthy_fruit": 23,
+        "healthy_leaf": 110,
+        "mango_scab": 47,
+        "sooty_mold": 101
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 1,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 5,
+        "mango_scab": 1,
+        "sooty_mold": 0
+      },
+      "backgroundTotal": 24,
+      "lightTotal": 544,
+      "overlapTotal": 7
+    },
+    {
+      "epoch": 7,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 3,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 13,
+        "mango_scab": 1,
+        "sooty_mold": 1
+      },
+      "light": {
+        "anthracnose": 85,
+        "bacterial_black_spot": 54,
+        "bacterial_canker": 107,
+        "healthy_fruit": 23,
+        "healthy_leaf": 112,
+        "mango_scab": 54,
+        "sooty_mold": 112
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 2,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 5,
+        "mango_scab": 1,
+        "sooty_mold": 0
+      },
+      "backgroundTotal": 18,
+      "lightTotal": 547,
+      "overlapTotal": 8
+    },
+    {
+      "epoch": 8,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 4,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 11,
+        "mango_scab": 1,
+        "sooty_mold": 0
+      },
+      "light": {
+        "anthracnose": 109,
+        "bacterial_black_spot": 62,
+        "bacterial_canker": 96,
+        "healthy_fruit": 21,
+        "healthy_leaf": 106,
+        "mango_scab": 56,
+        "sooty_mold": 108
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 1,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 3,
+        "mango_scab": 0,
+        "sooty_mold": 0
+      },
+      "backgroundTotal": 16,
+      "lightTotal": 558,
+      "overlapTotal": 4
+    },
+    {
+      "epoch": 9,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 3,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 12,
+        "mango_scab": 1,
+        "sooty_mold": 1
+      },
+      "light": {
+        "anthracnose": 119,
+        "bacterial_black_spot": 66,
+        "bacterial_canker": 114,
+        "healthy_fruit": 24,
+        "healthy_leaf": 101,
+        "mango_scab": 55,
+        "sooty_mold": 93
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 1,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 2,
+        "mango_scab": 1,
+        "sooty_mold": 0
+      },
+      "backgroundTotal": 17,
+      "lightTotal": 572,
+      "overlapTotal": 4
+    },
+    {
+      "epoch": 10,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 4,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 10,
+        "mango_scab": 1,
+        "sooty_mold": 1
+      },
+      "light": {
+        "anthracnose": 109,
+        "bacterial_black_spot": 61,
+        "bacterial_canker": 93,
+        "healthy_fruit": 24,
+        "healthy_leaf": 82,
+        "mango_scab": 53,
+        "sooty_mold": 111
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 3,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 5,
+        "mango_scab": 0,
+        "sooty_mold": 0
+      },
+      "backgroundTotal": 16,
+      "lightTotal": 533,
+      "overlapTotal": 8
+    },
+    {
+      "epoch": 11,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 3,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 11,
+        "mango_scab": 1,
+        "sooty_mold": 2
+      },
+      "light": {
+        "anthracnose": 103,
+        "bacterial_black_spot": 58,
+        "bacterial_canker": 105,
+        "healthy_fruit": 17,
+        "healthy_leaf": 104,
+        "mango_scab": 58,
+        "sooty_mold": 103
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 2,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 2,
+        "mango_scab": 0,
+        "sooty_mold": 1
+      },
+      "backgroundTotal": 17,
+      "lightTotal": 548,
+      "overlapTotal": 5
+    },
+    {
+      "epoch": 12,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 5,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 17,
+        "mango_scab": 1,
+        "sooty_mold": 3
+      },
+      "light": {
+        "anthracnose": 101,
+        "bacterial_black_spot": 60,
+        "bacterial_canker": 108,
+        "healthy_fruit": 25,
+        "healthy_leaf": 91,
+        "mango_scab": 52,
+        "sooty_mold": 114
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 1,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 3,
+        "mango_scab": 0,
+        "sooty_mold": 1
+      },
+      "backgroundTotal": 26,
+      "lightTotal": 551,
+      "overlapTotal": 5
+    },
+    {
+      "epoch": 13,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 7,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 10,
+        "mango_scab": 0,
+        "sooty_mold": 3
+      },
+      "light": {
+        "anthracnose": 98,
+        "bacterial_black_spot": 61,
+        "bacterial_canker": 110,
+        "healthy_fruit": 25,
+        "healthy_leaf": 103,
+        "mango_scab": 39,
+        "sooty_mold": 103
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 3,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 2,
+        "mango_scab": 0,
+        "sooty_mold": 1
+      },
+      "backgroundTotal": 20,
+      "lightTotal": 539,
+      "overlapTotal": 6
+    },
+    {
+      "epoch": 14,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 6,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 11,
+        "mango_scab": 1,
+        "sooty_mold": 1
+      },
+      "light": {
+        "anthracnose": 101,
+        "bacterial_black_spot": 63,
+        "bacterial_canker": 111,
+        "healthy_fruit": 35,
+        "healthy_leaf": 97,
+        "mango_scab": 54,
+        "sooty_mold": 108
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 0,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 4,
+        "mango_scab": 1,
+        "sooty_mold": 0
+      },
+      "backgroundTotal": 19,
+      "lightTotal": 569,
+      "overlapTotal": 5
+    },
+    {
+      "epoch": 15,
+      "background": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 1,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 13,
+        "mango_scab": 1,
+        "sooty_mold": 2
+      },
+      "light": {
+        "anthracnose": 114,
+        "bacterial_black_spot": 61,
+        "bacterial_canker": 97,
+        "healthy_fruit": 14,
+        "healthy_leaf": 93,
+        "mango_scab": 37,
+        "sooty_mold": 105
+      },
+      "overlap": {
+        "anthracnose": 0,
+        "bacterial_black_spot": 1,
+        "bacterial_canker": 0,
+        "healthy_fruit": 0,
+        "healthy_leaf": 4,
+        "mango_scab": 1,
+        "sooty_mold": 1
+      },
+      "backgroundTotal": 17,
+      "lightTotal": 521,
+      "overlapTotal": 7
+    }
+  ],
+  "total": {
+    "trainUnique": 1819,
+    "approvedUnique": 66,
+    "replacementUniqueForegrounds": 66,
+    "replacementPresentations": 273,
+    "allTrainingPresentations": 27285,
+    "replacementPercentAll": 1.000549752611325,
+    "approvedForegroundsNeverReplaced": [],
+    "approvedUniqueForegroundContentHashes": 66,
+    "allLocalLightPresentations": 8194,
+    "lightPercentAll": 30.031152647975077,
+    "lightSigns": {
+      "highlight": 4123,
+      "shadow": 4071
+    },
+    "lightUniqueTrainImages": 1809,
+    "lightAndBackground": 78,
+    "backgroundWithoutLight": 195,
+    "lightWithoutBackground": 8116,
+    "neither": 18896
+  },
+  "sceneCounts": {
+    "old": {
+      "approvedUnique": 62,
+      "usedUnique": 48,
+      "unusedUnique": 14,
+      "presentations": 80
+    },
+    "new": {
+      "approvedUnique": 138,
+      "usedUnique": 101,
+      "unusedUnique": 37,
+      "presentations": 193
+    }
+  },
+  "allSceneBytesUnique": true,
+  "allSceneDecodedUnique": true,
+  "sceneErrors": [],
+  "artifactChecks": {
+    "recovery_state.json": {
+      "recordedArtifacts": 287,
+      "errors": []
+    },
+    "training_complete.json": {
+      "recordedArtifacts": 300,
+      "errors": []
+    }
+  },
+  "zipImageHashErrors": [],
+  "maskHashErrors": [],
+  "figureErrors": [],
+  "figureIdentityChecks": {
+    "modelSha": true,
+    "trainingCompleteSha": true,
+    "thresholdCompleteSha": true,
+    "selectedThresholdsSha": true,
+    "evaluationSha": true,
+    "trainingFigureProvenanceSha": true,
+    "perClassCsvSha": true
+  }
+}

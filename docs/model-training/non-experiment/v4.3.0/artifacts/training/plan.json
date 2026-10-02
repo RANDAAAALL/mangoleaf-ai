@@ -1,0 +1,132 @@
+{
+  "modelVersion": "model-v4.3.0-candidate",
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "seed": 42,
+  "splitFractions": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "splitPolicy": "reuse exact saved V4.1.1 historical membership by contents",
+  "baselineIdentity": "3ca5a4625524eb5546d999f8a1ebcd15aac1cb7231b48963fdc565aee77559b8",
+  "rawIdentity": "74150e956332546b0f383b8182efd66472390219ebad21e23b4d28fdd9645755",
+  "phashDistance": 5,
+  "batchSize": 32,
+  "imageSize": [
+    224,
+    224
+  ],
+  "stage1": [
+    5,
+    0.001
+  ],
+  "stage2": [
+    10,
+    1e-05
+  ],
+  "augmentation": [
+    "horizontal_and_vertical",
+    30,
+    0.2,
+    0.2,
+    0.2
+  ],
+  "preprocessing": "TensorFlow RGB decode (Pillow RGB with EXIF transpose for WebP); bilinear 224x224, no antialias; float32 0-255; model rescales internally",
+  "confidenceThreshold": 0.7,
+  "minimumValidationRetention": 0.95,
+  "runtime": {
+    "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+    "tensorflow": "2.20.0",
+    "keras": "3.13.2",
+    "numpy": "2.1.3",
+    "pillow": "11.3.0"
+  },
+  "evaluationStatus": "previously_used",
+  "evaluationNotes": "The original v3 test/OOD report images influenced earlier development.",
+  "arms": [
+    "combined"
+  ],
+  "blendProbability": 0.3,
+  "localLightProbability": 0.3,
+  "lightAmplitude": [
+    18.0,
+    40.0
+  ],
+  "lightRadius": [
+    0.18,
+    0.35
+  ],
+  "backgroundNotes": "All the images are came from the own cellphone photos and internet public image",
+  "backgroundRoots": {
+    "old": "/content/drive/MyDrive/mangoleaf_background_photos",
+    "new": "/content/drive/MyDrive/mangoleaf_new_background_photos"
+  },
+  "expectedBackgroundCounts": {
+    "old": 62,
+    "new": 138
+  },
+  "sceneInventorySha256": "9a96bc475833ab3022d927aa76138408a802533db5f37cb531375db2ef45fadd",
+  "sourceCompletionSha256": "2c62e4289c449ed5f1b18c1690ddf0341dc07a3cb36ae5807def42babbe6bd16",
+  "sourceProvenanceSha256": "797547702698512bb732054a36f98ba0444b2482ee9c0b9e2f19a7dff39144d1",
+  "whiteEligibilityRule": "every training image manually reviewed; hash-valid prior decisions are suggestions",
+  "maskRule": "reviewed train-only masks; hash-valid saved masks reused; original image when mask rejected",
+  "modelSelection": "minimum val_loss within each stage",
+  "temperatureRule": "validation NLL only; logits divided by temperature once",
+  "backgroundCount": 200,
+  "approvedBackgroundCounts": {
+    "old": 62,
+    "new": 138
+  },
+  "sceneReviewSha256": "501df67cd51718c9c65f97c8bfd769736e7b47ca4d1ba788d16aed6b176e7be1",
+  "inputManifestSha256": "f5d264f3ccb3df032cbf97d1a2c6aa12fb9e174dc09f166f2e669c402b9e4834",
+  "datasetSplitSha256": "670c52544cb14cec872b78f74721152d1079ca30f8b66bbdb864276d21240dfd",
+  "whiteReviewSha256": "b177627feec3aecde26163e2426e799108375ab44b6b3acb2bcf0da43a6b1160",
+  "maskReviewSha256": "69e63f545a39626dcef5f84018c9b935fdad92d921358e97c462b70f2e7b0a89",
+  "lightingReviewSha256": "bc837dde91d279b7f6e04600e8d98015eb48e356f7b48679c46989c841765c45",
+  "backgroundScheduleSha256": "2c751193a768181feda27a4a30dcf2983a2783452fe9a69110e0937400a052b0",
+  "trainingImagesByClass": {
+    "anthracnose": 339,
+    "bacterial_black_spot": 207,
+    "bacterial_canker": 343,
+    "healthy_fruit": 77,
+    "healthy_leaf": 347,
+    "mango_scab": 157,
+    "sooty_mold": 349
+  },
+  "eligibleWhiteImagesByClass": {
+    "anthracnose": 0,
+    "bacterial_black_spot": 15,
+    "bacterial_canker": 0,
+    "healthy_fruit": 0,
+    "healthy_leaf": 42,
+    "mango_scab": 3,
+    "sooty_mold": 6
+  },
+  "approvedMaskImagesByClass": {
+    "anthracnose": 0,
+    "bacterial_black_spot": 15,
+    "bacterial_canker": 0,
+    "healthy_fruit": 0,
+    "healthy_leaf": 42,
+    "mango_scab": 3,
+    "sooty_mold": 6
+  },
+  "scenePresentationsByClass": {
+    "anthracnose": 0,
+    "bacterial_black_spot": 57,
+    "bacterial_canker": 0,
+    "healthy_fruit": 0,
+    "healthy_leaf": 178,
+    "mango_scab": 13,
+    "sooty_mold": 25
+  },
+  "expectedReplacedTrainingFraction": 0.010885101704233095
+}

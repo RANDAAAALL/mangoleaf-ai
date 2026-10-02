@@ -28,8 +28,18 @@ export const translations = {
     retakeBtn: "Retake",
     reviewPhotoTitle: "Review Photo",
     cancelBtn: "Cancel",
+    closeBtn: "Close",
+    photoPreviewAlt: "Selected photo for diagnosis",
+    duplicatePhotoTitle: "Photo already scanned",
+    duplicatePhotoDescription:
+      "This photo already has a saved diagnosis. Choose another photo, or find the existing result in History.",
+    viewSavedResultBtn: "View saved result",
+    checkingPhoto: "Checking photo...",
+    photoCheckFailedText:
+      "We could not check whether this photo was already scanned. Try again, or choose another photo.",
+    retryPhotoCheckBtn: "Try again",
     photoCheckHint:
-      "Make sure the single leaf or fruit is clear and in the center. If it's blurry or dark, take another photo.",
+      "Check that one whole leaf or fruit is clearly visible, without blur, bright reflections, or deep shadows. Retake if needed.",
 
     // How It Works Card
     HowItWorksTitle: "How it works?",
@@ -78,6 +88,12 @@ export const translations = {
     scannedOnPrefix: "Scanned on",
     scorePrefix: "Score:",
     preTreatmentGuidelines: "Treatment Guidelines",
+    uncertainPhotoHeading: "Try another photo",
+    uncertainPhotoReminder:
+      "Couldn't confidently identify this photo. Please try again with a clear and proper one photo of green mango fruit or mango leaf.",
+    guidelinesLoading: "Loading saved treatment guidelines...",
+    guidelinesUnavailable:
+      "Treatment guidelines are unavailable on this device. Connect to the internet and let the app sync, then try again.",
     closeDetailsBtn: "Close details",
     noImageOffline: "No Image Available Offline",
 
@@ -103,7 +119,7 @@ export const translations = {
     aboutSyncDesc:
       "Scan records can be stored locally and synchronized when connectivity becomes available.",
     aboutAiEngineHeading: "The AI Engine",
-    aboutModelAccuracyLabel: "Model Accuracy",
+    aboutModelVersionLabel: "Current model for mango leaves and fruit",
     aboutModelArchitectureValue: "MobileNetV3",
     aboutArchitectureLabel: "Model Architecture",
     aboutRuntimeValue: "TensorFlow.js",
@@ -137,27 +153,36 @@ export const translations = {
     diseaseSootyMold: "Sooty Mold",
     diseaseBacterialBlackSpot: "Bacterial Black Spot",
     diseaseMangoScab: "Mango Scab",
-    healthyLabel: "Healthy",
-    healthyDesc: "A mango leaf or fruit that is free from detectable disease.",
+    healthyLabel: "Healthy Leaf and Healthy Fruit",
+    healthyDesc: "Separate healthy results for mango leaves and fruit.",
+    diagnosticScope:
+      "The model checks Anthracnose, Sooty Mold, Bacterial Canker, Bacterial Black Spot, Mango Scab, Healthy Leaf, and Healthy Fruit. A result below 70% confidence or outside the fitted margin and entropy limits is Uncertain.",
 
     // Bottom Navigation & Scan Sheet
     navScan: "Scan",
     scanSheetTitle: "Start a Scan",
-    scanSheetCameraDesc:
-      "Capture a clear and proper single photo of a mango leaf or fruit in daylight",
-    scanSheetGalleryDesc:
-      "Upload an existing clear and proper single leaf or fruit photo from your gallery in daylight",
+    scanSheetFramingLabel: "Framing:",
+    scanSheetFramingTip:
+      "Keep one whole mango leaf or fruit visible and close enough to see damaged areas.",
+    scanSheetLightingLabel: "Lighting:",
+    scanSheetLightingTip:
+      "Use even lighting; avoid bright reflections and deep shadows.",
+    scanSheetCameraDesc: "Take a new photo with your camera.",
+    scanSheetGalleryDesc: "Choose an existing photo from your gallery.",
 
     // How It Works Steps (visual cards)
-    howStep1Title: "Snap or Upload",
+    howStep1Title: "Take or Upload",
     howStep1Desc:
-      "Take a clear and proper single photo of a mango leaf or fruit in daylight.",
-    howStep2Title: "AI Analyzes",
-    howStep2Desc: "Instant on device diagnosis — no internet needed.",
-    howStep3Title: "Get Results",
-    howStep3Desc: "View treatment guidance in Bisaya or English.",
+      "Take or upload a clear photo of one whole mango leaf or fruit in even lighting.",
+    howStep2Title: "Review and Scan",
+    howStep2Desc:
+      "Check the preview, retake if needed, then tap Run AI Diagnosis.",
+    howStep3Title: "Read Your Result",
+    howStep3Desc:
+      "Read the predicted condition and available guidance in English or Bisaya. If uncertain, try another clear photo.",
 
     // Footer
+    footerVersions: "PWA {appVersion} / Model {modelVersion}",
     footerCopyright:
       "© 2026 MangoLeaf AI. Designed for the Future of Filipino Dabawenyo Agriculture.",
     privacyPolicy: "Privacy Policy",
@@ -187,11 +212,22 @@ export const translations = {
     // AI Scanning Progress Overlay
     runningAI: "Nag-classify sa AI...",
     runDiagnosisBtn: "Sugdan ang Diagnosis",
-    retakeBtn: "Pagkuhag Usab",
+    retakeBtn: "Pagpilig Usab",
     reviewPhotoTitle: "Susiha ang Litrato",
     cancelBtn: "I-kansela",
+    closeBtn: "Isara",
+    photoPreviewAlt: "Gipiling litrato para sa diagnosis",
+    duplicatePhotoTitle: "Na-scan nani siya nga litrato",
+    duplicatePhotoDescription:
+      "Aduna nay litrato nga naka save daan sa Dating Scan. Palihug pagpili og laing litrato nga tarong og klaro sa usa ka dahon o bunga sa mangga, o pangitaa ang resulta sa Dating Scan.",
+    // "Aduna nay natipig nga diagnosis kini nga litrato. Pagpili og laing litrato, o pangitaa ang resulta sa Dating Scan.",
+    viewSavedResultBtn: "Tan-awa ang litrato sa Dating Scan",
+    checkingPhoto: "Gisusi ang litrato...",
+    photoCheckFailedText:
+      "Wala masusi kung na-scan na kini nga litrato. Sulayi pag-usab, o pagpili og laing litrato.",
+    retryPhotoCheckBtn: "Sulayi pag-usab",
     photoCheckHint:
-      "Siguroha nga klaro ug anaa sa tunga ang usa ka dahon o bunga sa mangga. Kung hanap o ngitngit, pagkuha og laing litrato.",
+      "Susiha nga klarong makita ang tibuok usa ka dahon o bunga sa mangga, nga dili hanap, silaw, o natabonan og baga nga landong. Pagkuha og laing litrato kung kinahanglan.",
 
     // How It Works Card
     HowItWorksTitle: "Unsaon ni pag-gamit?",
@@ -241,6 +277,12 @@ export const translations = {
     scannedOnPrefix: "Na-scan niadtong",
     scorePrefix: "Puntos:",
     preTreatmentGuidelines: "Mga Pagtambal ug Pahinumdom",
+    uncertainPhotoHeading: "Sulayi og laing litrato",
+    uncertainPhotoReminder:
+      "Dili maka diagnose ang application og resulta basi sa litrato. Sulayi usab og gamit usa ka laing litrato nga tarong og klaro nga bunga o dahon sa mangga, nga adunay igo nga tama-tama kahayag sa background.",
+    guidelinesLoading: "Gikarga ang natipig nga giya sa pagtambal...",
+    guidelinesUnavailable:
+      "Wala pay giya sa pagtambal nga magamit niini nga device. Konektar sa internet ug hulata nga mahuman ang pag-sync sa app, dayon sulayi usab.",
     closeDetailsBtn: "Isara ang detalye",
     noImageOffline: "Walay Litrato nga Nadownload Offline",
 
@@ -266,7 +308,8 @@ export const translations = {
     aboutSyncDesc:
       "Matipigan lokal ang mga rekord sa scan ug ma-sync kung adunay koneksyon.",
     aboutAiEngineHeading: "Ang AI Engine",
-    aboutModelAccuracyLabel: "Katukma sa Model",
+    aboutModelVersionLabel:
+      "Kasamtangang modelo para sa dahon ug bunga sa mangga",
     aboutModelArchitectureValue: "MobileNetV3",
     aboutArchitectureLabel: "Arkitektura sa Model",
     aboutRuntimeValue: "TensorFlow.js",
@@ -300,31 +343,39 @@ export const translations = {
     diseaseSootyMold: "Sooty Mold",
     diseaseBacterialBlackSpot: "Bacterial Black Spot",
     diseaseMangoScab: "Mango Scab",
-    healthyLabel: "Himsog",
-    healthyDesc: "Ang dahon o bunga sa mangga nga walay sakit.",
+    healthyLabel: "Himsog nga Dahon ug Himsog nga Bunga",
+    healthyDesc:
+      "Lahi ang himsog nga resulta para sa dahon ug bunga sa mangga.",
+    diagnosticScope:
+      "Ang model mosusi sa Anthracnose, Sooty Mold, Bacterial Canker, Bacterial Black Spot, Mango Scab, Healthy Leaf, ug Healthy Fruit. Ang resulta nga ubos sa 70% confidence o dili makapasar sa margin ug entropy mahimong Uncertain.",
 
     // Bottom Navigation & Scan Sheet
     navScan: "I-scan",
     scanSheetTitle: "Magsugod og Scan",
-    scanSheetCameraDesc:
-      "Ablihi ang kamera aron mag-picture og klaro og tarong nga isa ka dahon o bunga sa mangga samtang adlaw",
-    scanSheetGalleryDesc:
-      "Ablihi ang gallery aron mag-kuhag litrato nga klaro og tarong nga isa ka dahon o bunga sa mangga samtang adlaw",
+    scanSheetFramingLabel: "Pagpahimutang:",
+    scanSheetFramingTip:
+      "Siguroha nga makita ang tibuok usa ka dahon o bunga sa mangga. Duola aron klarong makita ang mga bahin nga adunay kadaot.",
+    scanSheetLightingLabel: "Kahayag:",
+    scanSheetLightingTip:
+      "Gamit og igo ug pantay nga kahayag; likayi ang silaw nga repleksyon ug baga nga landong.",
+    scanSheetCameraDesc: "Pagkuha og bag-ong litrato gamit ang kamera.",
+    scanSheetGalleryDesc: "Pilia ang litrato gikan sa imong gallery.",
 
     // How It Works Steps (visual cards)
-    howStep1Title: "Litrato o Upload",
+    howStep1Title: "Kuhaa o I-upload",
     howStep1Desc:
-      "Pagkuhag klaro og tarong nga litrato sa usa ka dahon o bunga sa mangga samtang adlaw.",
-    howStep2Title: "I-Analysis sa AI",
+      "Pagkuha o pag-upload og klarong litrato sa usa ka tibuok dahon o bunga sa mangga nga adunay igo ug pantay nga kahayag.",
+    howStep2Title: "Susiha ug I-scan",
     howStep2Desc:
-      "Paspas nga pag-analysis o diagnose ni AI sa device - wala nay internet nga kinahanglan.",
-    howStep3Title: "Resulta gikan sa AI",
+      "Susiha ang litrato. Pagpili usab kung kinahanglan, dayon i-tap ang Sugdan ang Diagnosis.",
+    howStep3Title: "Basaha ang Resulta",
     howStep3Desc:
-      "Tan-awa og Basaha ang resulta ki-ini sa mapa Bisaya o English.",
+      "Basaha ang posibleng kondisyon ug ang magamit nga giya sa English o Bisaya. Kung dili sigurado ang resulta, sulayi gamit ang laing klarong litrato.",
 
     // Footer
     footerCopyright:
       "© 2026 MangoLeaf AI. Gidisenyo alang sa Kaugmaon sa Agrikultura sa Pilipinas.",
+    footerVersions: "PWA {appVersion} / Modelo {modelVersion}",
     privacyPolicy: "Polisiya sa Pribasya",
     termsOfService: "Kondisyon sa Serbisyo",
   },

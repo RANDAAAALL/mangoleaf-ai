@@ -1,35 +1,33 @@
 {
-  "modelVersion": "model-v3.0.0",
-  "trial": "3",
-  "classes": ["anthracnose","bacterial_black_spot","bacterial_canker","healthy","mango_scab","sooty_mold"],
-  "inputSize": [224, 224],
-  "pixelRange": "0-255 raw, MobileNetV3 rescales internally",
-  "temperature": 1.188751,
+  "modelVersion": "model-v4.3.0",
+  "experimentVersion": "v4.3.0",
+  "arm": "combined",
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "inputSize": [
+    224,
+    224
+  ],
+  "preprocessing": "TensorFlow RGB decode (Pillow RGB with EXIF transpose for WebP); bilinear 224x224, no antialias; float32 0-255; model rescales internally",
+  "temperature": 1.1602258301498714,
   "temperatureFoldedIntoWeights": true,
-  "weightPrecision": "float32 in the shards; the WebGL backend uploads them into half-float textures at runtime, so the deployed arithmetic is 16-bit either way",
   "thresholds": {
     "confidenceThreshold": 0.7,
-    "marginThreshold": 0.4,
-    "entropyThreshold": 0.4,
-    "note": "margin and entropy fitted on 84 out-of-scope images; rejection rate 70.2% measured on 84 held-out images"
+    "marginThreshold": 0.0,
+    "entropyThreshold": 0.42
   },
-  "rejection": {
-    "confidenceThreshold": 0.7,
-    "marginThreshold": 0.4,
-    "entropyThreshold": 0.4,
-    "tuneRetention": 0.9517,
-    "tuneRejection": 0.869,
-    "reportRejection": 0.7024,
-    "accuracyOnAccepted": 0.992,
-    "oodTuneCount": 84,
-    "oodReportCount": 84,
-    "marginSelection": "selected among 88 tied (margin, entropy) pairs spanning margin 0.00 to 0.43; 0.40 taken from the band-aware refit, which holds 95.2% retention under the measured half-float band where 0.43 falls to 94.1%",
-    "halfFloatBandRetention": 0.9517,
-    "halfFloatBandRejection": 0.6786,
-    "halfFloatBandConfidenceShift": 0.013899,
-    "halfFloatScaledRetention": 0.9364,
-    "halfFloatScaledRejection": 0.619,
-    "halfFloatScaledNote": "the scaled figures multiply the measured shift by 3.055x to reach the 0.042463 confidence shift reported in the training notebook; that shift was measured on a model whose expanded_conv_depthwise_bn variance had overflowed to inf. The converter folds BatchNorm into the preceding convolution, and the largest weight in the deployed graph is 117.53 against a half-float ceiling of 65504, so no overflow occurs on the phone. The scaled figures are therefore a loose upper bound, not a measurement.",
-    "largestDeployedWeight": 117.5306
-  }
+  "status": "adopted application model; deployment recorded separately",
+  "modelSha256": "e5d323cfdca00fde64b1da4da6a5f1328ff627d9616d518b6ca82595c3f8137e",
+  "selectionSha256": "fd213d6ed4fc37e10738f391d989dc32e7ad3555d048e02ac7ba9921f5bb26b3",
+  "evaluationSha256": "46da4aa3d2fd2532bc45256447302f58938e53ee16b6fe58d7794b73bc035de1",
+  "trainingCompleteSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+  "browserParityMeasured": false,
+  "exportSourceModelVersion": "model-v4.3.0-candidate"
 }

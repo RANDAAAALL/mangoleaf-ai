@@ -119,7 +119,11 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
               {/* Guidelines Section Header & Language Toggle */}
               <div className="flex flex-col justify-center items-center sm:flex-row sm:items-center sm:justify-between gap-2">
                 <span className="text-xs font-black text-[#143519] uppercase tracking-wider flex items-center gap-1.5">
-                  <span>{t.preTreatmentGuidelines}</span>
+                  <span>
+                    {scan.disease_name === UNCERTAIN_LABEL
+                      ? t.uncertainPhotoHeading
+                      : t.preTreatmentGuidelines}
+                  </span>
                 </span>
 
                 {/* Language Switcher Toggle */}

@@ -1,0 +1,22 @@
+{
+  "reviewedAt": "2026-09-28T04:51:06.263835+00:00",
+  "allClassesReviewed": true,
+  "probability": 0.3,
+  "amplitude": [
+    18.0,
+    40.0
+  ],
+  "radius": [
+    0.18,
+    0.35
+  ],
+  "previewSha256": {
+    "anthracnose": "ade2b7355c868a3546ba1614ae82b13b232ee2ced00012abfe484378660f33b7",
+    "bacterial_black_spot": "b64da07d5389a404af7a36434ea4ad7ce62c726c7d645e37fa182c1307439f89",
+    "bacterial_canker": "42b742de26c59c0f042a1c7bc0af628c8e653ea0a0fda8f7830ffbe6ce9a0ff2",
+    "healthy_fruit": "ad650557e5166225d517236482d0d04461d650ab63c8d79af3699f2a8c531523",
+    "healthy_leaf": "cbeb45844f5f0ce164ae01b1c841d574f9c50b0bc898b7d5840d744397242af3",
+    "mango_scab": "38a45a072556db3eff9ddc921307c78b0a0b2e0d1df4cf484c9d81da423bb101",
+    "sooty_mold": "cc78a8bb35b8a774a37e70da28ad13c2f494213562c3bca15fd0ccce9f7f4c68"
+  }
+}

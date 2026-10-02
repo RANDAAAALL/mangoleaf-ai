@@ -1,0 +1,55 @@
+{
+  "organ": "mangoleaf",
+  "modelVersion": "model-v4.2.0-mangoleaf-candidate",
+  "trainingCompleteSha256": "a9c941c25048f8ca8a458b2601ebcc3753bc2df2f2d9efdf7c8ede1c93132fe3",
+  "modelSha256": "d284cde29761a924781be40da2c84b9e314b66e3fa306b99a47b8c7af87af7d1",
+  "augmentationPreview": {
+    "trainingImage": "train/healthy_leaf/healthy_leaf__20211231_123220 (Custom).jpg",
+    "trainingImageSha256": "75f0a37602c580099319cb7378c29425587f7ddc6a6c7f0107f940e1cf150c70",
+    "epoch": 0,
+    "scene": "gfhfghgfhgfhgfh.jpg",
+    "sceneSha256": "b3339b8886bc3d2512e7138730d4f2bf9865e628cf86b8081fba69e9bd392b13",
+    "mask": "1a2492e7e435dfcd4742.png",
+    "maskSha256": "3b336d4f91aba62b0f91a455f52718240dfff4e5392f0dc7e7c6f1f37d55afcd",
+    "interpretation": "Top row reconstructs the frozen pre-Keras inputs; bottom row is a new representative draw, not the original fit tensor."
+  },
+  "gradCamValidationImages": [
+    {
+      "image": "val/anthracnose/anthracnose__20211008_124249 (Custom).jpg",
+      "imageSha256": "2a5801dbd06a341af4f402cca9be42b41597dc64a994923d40b24bf9c39fd5b4",
+      "actual": "anthracnose",
+      "rawPrediction": "anthracnose",
+      "rawConfidence": 1.0
+    },
+    {
+      "image": "val/bacterial_canker/bacterial_canker__IMG_20211106_120833 (Custom).jpg",
+      "imageSha256": "c167ef3d3cc11d498d4fe2b30574b9a2da40e52245e49827e5965e188fe65d60",
+      "actual": "bacterial_canker",
+      "rawPrediction": "bacterial_canker",
+      "rawConfidence": 1.0
+    },
+    {
+      "image": "val/healthy_leaf/healthy_leaf__20211231_123346 (Custom).jpg",
+      "imageSha256": "e3e1c8df010caa588fc9e479f180c2c2adeb2502b01e04a03a6f0e7e43675c1b",
+      "actual": "healthy_leaf",
+      "rawPrediction": "healthy_leaf",
+      "rawConfidence": 1.0
+    },
+    {
+      "image": "val/sooty_mold/sooty_mold__IMG_20211108_120859 (Custom).jpg",
+      "imageSha256": "2de920f0b19c1b241657ecd9abb187b43ed864b189e91f24f17eb49ef5ea695c",
+      "actual": "sooty_mold",
+      "rawPrediction": "sooty_mold",
+      "rawConfidence": 1.0
+    }
+  ],
+  "figures": {
+    "training_curves.png": "88ec5c66c75da9d811e095eb26837bcf9b308ad0ccfc3f520e1c064e8097acfd",
+    "augmentation_preview.png": "536b0fb164c50ed1dbc44d1c562c68e3063212d64f4df36825e33b308cff3f66",
+    "grad_cam.png": "1b8bc228633f6cee444b30ae2fcaaef3ea4bed35bb6a71be080e0630543416cd"
+  },
+  "limits": [
+    "Augmentation's final Keras transform is a new random draw.",
+    "Grad-CAM is a validation diagnostic, not an accuracy measure."
+  ]
+}

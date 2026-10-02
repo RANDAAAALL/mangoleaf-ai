@@ -1,0 +1,56 @@
+{
+  "MangoLeaf_AI_Training_v4_3_0_Post_Training.ipynb": [
+    {
+      "cell": 3,
+      "type": "code",
+      "diff": "--- MangoLeaf_AI_Training_v4_3_0.ipynb\n+++ MangoLeaf_AI_Training_v4_3_0_Post_Training.ipynb\n@@ -29,9 +29,11 @@\n print('Runtime:', RUNTIME)\n \n # Choose the exact saved source; a run folder is required, not a parent directory.\n-V4_1_1_TRAINING_RUN = ''\n+V4_1_1_TRAINING_RUN = '/content/drive/MyDrive/mangoleaf_experiments/v4.1.1/training/v4-1-1-training-20260928T043539Z-37576200'\n+\n # This is the completed V4.1.1 record published with the historical experiment.\n SOURCE_COMPLETION_SHA256 = '2c62e4289c449ed5f1b18c1690ddf0341dc07a3cb36ae5807def42babbe6bd16'\n+\n # If using a different genuine completed V4.1.1 run, record its externally saved\n # completion hash and explain that source choice; never edit hashes to hide changes.\n SOURCE_CHOICE_NOTES = 'Reuse the completed V4.1.1 seven-class historical experiment.'\n@@ -43,7 +45,7 @@\n EXPECTED_BACKGROUND_COUNTS = {'old': 62, 'new': 138}\n OLD_OOD_DIR = Path('/content/drive/MyDrive/mango_ood_test')\n NEW_OOD_DIR = Path('/content/drive/MyDrive/mango_ood_test_new_photos')\n-BACKGROUND_NOTES = ''  # Record sources, dates, usage rights, and the new collection.\n+BACKGROUND_NOTES = 'All the images are came from the own cellphone photos and internet public image'  # Record sources, dates, usage rights, and the new collection.\n REUSE_REVIEWED_MASKS = True  # Valid saved masks avoid repeating segmentation work.\n BLEND_PROBABILITY = 0.30  # Among approved white-background images, per epoch.\n LOCAL_LIGHT_PROBABILITY = 0.30  # Among all training images, per epoch.\n"
+    },
+    {
+      "cell": 15,
+      "type": "code",
+      "diff": "--- MangoLeaf_AI_Training_v4_3_0.ipynb\n+++ MangoLeaf_AI_Training_v4_3_0_Post_Training.ipynb\n@@ -1,7 +1,7 @@\n-SCENE_REVIEW_COMPLETE = False\n+SCENE_REVIEW_COMPLETE = True\n EXCLUDE_SCENE_IDS = []  # IDs from the contact sheets that should not be replacement scenes.\n REVIEWED_SIMILARITY_SCENE_IDS = []  # Every ID printed in Step 6, after checking its flagged pair(s).\n-SCENE_REVIEW_NOTES = ''  # State suitability decisions and what similarity flags were checked.\n+SCENE_REVIEW_NOTES = 'Reviewed all scene-preview pages. Kept suitable images as replacement'  # State suitability decisions and what similarity flags were checked.\n ACKNOWLEDGE_SCENE_COUNT_MISMATCH = False\n SCENE_COUNT_MISMATCH_NOTES = ''  # Explain a documented count difference; never silently reset 62/138.\n \n"
+    },
+    {
+      "cell": 19,
+      "type": "code",
+      "diff": "--- MangoLeaf_AI_Training_v4_3_0.ipynb\n+++ MangoLeaf_AI_Training_v4_3_0_Post_Training.ipynb\n@@ -1,4 +1,4 @@\n-WHITE_REVIEW_COMPLETE = False\n+WHITE_REVIEW_COMPLETE = True\n ADD_WHITE_IDS = []     # IDs that the border heuristic missed.\n REMOVE_WHITE_IDS = []  # Suggested or imported IDs whose backgrounds are not clean white.\n \n"
+    },
+    {
+      "cell": 25,
+      "type": "code",
+      "diff": "--- MangoLeaf_AI_Training_v4_3_0.ipynb\n+++ MangoLeaf_AI_Training_v4_3_0_Post_Training.ipynb\n@@ -1,4 +1,4 @@\n-MASK_REVIEW_COMPLETE = False\n+MASK_REVIEW_COMPLETE = True\n REJECT_MASK_IDS = []  # Copy IDs from bad preview rows; originals remain in training.\n \n if not MASK_REVIEW_COMPLETE:\n"
+    },
+    {
+      "cell": 29,
+      "type": "code",
+      "diff": "--- MangoLeaf_AI_Training_v4_3_0.ipynb\n+++ MangoLeaf_AI_Training_v4_3_0_Post_Training.ipynb\n@@ -1,4 +1,4 @@\n-LIGHT_REVIEW_COMPLETE = False\n+LIGHT_REVIEW_COMPLETE = True\n if not LIGHT_REVIEW_COMPLETE:\n     raise ValueError('Inspect local highlight/shadow previews, then set LIGHT_REVIEW_COMPLETE = True.')\n LIGHT_REVIEW_PATH = RUN_DIR / 'lighting_review.json'\n"
+    },
+    {
+      "cell": 52,
+      "type": "code",
+      "diff": "--- MangoLeaf_AI_Training_v4_3_0.ipynb\n+++ MangoLeaf_AI_Training_v4_3_0_Post_Training.ipynb\n@@ -5,7 +5,7 @@\n import shutil, uuid\n if not Path('/content/drive/MyDrive').is_dir():\n     drive.mount('/content/drive')\n-FIGURE_TRAINING_RUN = ''  # Full saved run path or its exact v4-3-0-training-* folder name.\n+FIGURE_TRAINING_RUN = '/content/drive/MyDrive/mangoleaf_experiments/v4.3.0/training/v4-3-0-training-20261001T112311Z-961e5eb7'  # Full saved run path or its exact v4-3-0-training-* folder name.\n TRAINING_RUN_ROOT = Path('/content/drive/MyDrive/mangoleaf_experiments/v4.3.0/training')\n if FIGURE_TRAINING_RUN.strip():\n     supplied = Path(FIGURE_TRAINING_RUN.strip())\n"
+    },
+    {
+      "cell": 56,
+      "type": "code",
+      "diff": "--- MangoLeaf_AI_Training_v4_3_0.ipynb\n+++ MangoLeaf_AI_Training_v4_3_0_Post_Training.ipynb\n@@ -1,5 +1,5 @@\n # First run the separate V4.3.0 threshold notebook; paste its exact completed path.\n-FIGURE_THRESHOLD_RUN = ''\n+FIGURE_THRESHOLD_RUN = '/content/drive/MyDrive/mangoleaf_experiments/v4.3.0/threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0'\n if not FIGURE_THRESHOLD_RUN.strip():\n     raise ValueError('Finish threshold fitting/evaluation, then set FIGURE_THRESHOLD_RUN.')\n threshold_root = Path('/content/drive/MyDrive/mangoleaf_experiments/v4.3.0/threshold_fitting').resolve()\n"
+    }
+  ],
+  "MangoLeaf_AI_Threshold_Fitting_v4_3_0_Results.ipynb": [
+    {
+      "cell": 2,
+      "type": "code",
+      "diff": "--- MangoLeaf_AI_Threshold_Fitting_v4_3_0.ipynb\n+++ MangoLeaf_AI_Threshold_Fitting_v4_3_0_Results.ipynb\n@@ -25,7 +25,7 @@\n CONFIDENCE_ONLY = {'confidenceThreshold': 0.70, 'marginThreshold': 0.0, 'entropyThreshold': 1.0}\n \n EXPERIMENT_ROOT = Path('/content/drive/MyDrive/mangoleaf_experiments/v4.3.0')\n-TRAINING_RUN = 'PASTE_v4-3-0-training_RUN_FOLDER'  # Completed folder name, or full absolute Drive path.\n+TRAINING_RUN = '/content/drive/MyDrive/mangoleaf_experiments/v4.3.0/training/v4-3-0-training-20261001T112311Z-961e5eb7'  # Completed folder name, or full absolute Drive path.\n OLD_OOD_DIR = Path('/content/drive/MyDrive/mango_ood_test')\n NEW_OOD_DIR = Path('/content/drive/MyDrive/mango_ood_test_new_photos')\n REFERENCE_V411_INPUTS = Path('/content/drive/MyDrive/mangoleaf_experiments/v4.1.1/threshold_fitting/v4-1-1-thresholds-20260928T060638Z-a3a7418c/evaluation_inputs.json')\n"
+    },
+    {
+      "cell": 16,
+      "type": "code",
+      "diff": "--- MangoLeaf_AI_Threshold_Fitting_v4_3_0.ipynb\n+++ MangoLeaf_AI_Threshold_Fitting_v4_3_0_Results.ipynb\n@@ -1,6 +1,6 @@\n-OLD_OOD_SCOPE_REVIEWED = False\n-NEW_OOD_SCOPE_REVIEWED = False\n-SCOPE_REVIEW_NOTES = ''  # Describe both collections, mixed scenes, and every exclusion.\n+OLD_OOD_SCOPE_REVIEWED = True\n+NEW_OOD_SCOPE_REVIEWED = True\n+SCOPE_REVIEW_NOTES = 'Done checked all the both collections'  # Describe both collections, mixed scenes, and every exclusion.\n DISTINCT_NEAR_PAIR_REASONS = {}  # {'pairId': 'Visible reasons these are different photos/scenes'}\n FRESH_COLLECTION_NOTES = 'Original V4.1/V4.1.1 OOD report photos reused; no pristine new OOD evidence in this run.'\n \n"
+    },
+    {
+      "cell": 22,
+      "type": "code",
+      "diff": "--- MangoLeaf_AI_Threshold_Fitting_v4_3_0.ipynb\n+++ MangoLeaf_AI_Threshold_Fitting_v4_3_0_Results.ipynb\n@@ -1,6 +1,8 @@\n+import random\n+\n DEBUG_ARM = 'combined'  # The only model trained by this workflow.\n-DEBUG_SUBSET = 'new_ood_report'  # mango_test, old_ood_report, new_ood_report\n-DEBUG_IMAGE_INDEX = 0\n+DEBUG_SUBSET = 'mango_test'  # mango_test, old_ood_report, new_ood_report\n+DEBUG_IMAGE_INDEX = random.randrange(0,300)\n DEBUG_GATE = 'selected'  # selected or confidence_only\n \n read_selection_lock()\n"
+    }
+  ]
+}

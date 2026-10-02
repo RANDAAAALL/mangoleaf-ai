@@ -4,14 +4,14 @@
     {
       "file": "healthy_mango_fruit.JPG",
       "sha256": "5e832bc5a93f67dda12f79405fa39e89f7208052bb5ee6e627711967c6ee668c",
-      "expectedLabel": "Healthy",
+      "expectedLabel": "Healthy Fruit",
       "expectedKind": "mango",
       "labelSource": "User-supplied filename; expert verification pending"
     },
     {
       "file": "healthy_mangoleaf.jpg",
       "sha256": "46aba3daebb33fb637f38a985d09d63cfae3810d93a5debd8dbe17a8b9d2c464",
-      "expectedLabel": "Healthy",
+      "expectedLabel": "Healthy Leaf",
       "expectedKind": "mango",
       "labelSource": "User-supplied filename; expert verification pending"
     },
@@ -23,11 +23,11 @@
       "labelSource": "User-supplied filename; expert verification pending"
     },
     {
-      "file": "mangofruit_mango_scab.jpg",
-      "sha256": "943b57eda15d86cbc0329cf62919897a50235730bdf1096fa0fbc10d71ccdfff",
+      "file": "mangofruit_mango_scab.png",
+      "sha256": "46489d778fa5c3d04468e8a5301916527c43ff43d4dd25e735ee1ce160728424",
       "expectedLabel": "Mango Scab",
       "expectedKind": "mango",
-      "labelSource": "User-supplied filename; expert verification pending"
+      "labelSource": "Replacement supplied October 2, 2026; user filename; expert verification pending"
     },
     {
       "file": "mangoleaf_anthracnose.jpg",
@@ -38,10 +38,10 @@
     },
     {
       "file": "mangoleaf_bacterial_canker.jpg",
-      "sha256": "bcadcc14e91f8cbb6f88a67d35389c453b6cd1c107fa39909acd78a2f6a9e70f",
+      "sha256": "822150af07b381a8e22da8f2f7611dbaf89c6a354c8511667dcdd85319329677",
       "expectedLabel": "Bacterial Canker",
       "expectedKind": "mango",
-      "labelSource": "User-supplied filename; expert verification pending"
+      "labelSource": "Replacement supplied October 2, 2026; user filename; expert verification pending"
     },
     {
       "file": "mangoleaf_sooty_mold.jpg",

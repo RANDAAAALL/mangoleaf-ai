@@ -1,0 +1,10 @@
+{
+  "datasetImages": 2603,
+  "sceneOverlapExclusions": [],
+  "sceneCrossCollectionSimilarityFlags": [],
+  "oldOodImagesAudited": 168,
+  "newOodImagesAudited": 32,
+  "oldOodFolderPresent": true,
+  "newOodFolderPresent": true,
+  "interpretation": "Optional audit only; threshold fitting performs its own complete OOD audit."
+}

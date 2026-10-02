@@ -1,0 +1,152 @@
+{
+  "status": "V4.3.0 Combined restored for local retesting only; not adopted or deployed",
+  "restoredAt": "2026-10-01T22:06:01.773472+00:00",
+  "appVersion": "0.4.8",
+  "displayModelVersion": "v4.3.0-candidate",
+  "modelConfig": {
+    "modelVersion": "model-v4.3.0-candidate",
+    "experimentVersion": "v4.3.0",
+    "arm": "combined",
+    "classes": [
+      "anthracnose",
+      "bacterial_black_spot",
+      "bacterial_canker",
+      "healthy_fruit",
+      "healthy_leaf",
+      "mango_scab",
+      "sooty_mold"
+    ],
+    "inputSize": [
+      224,
+      224
+    ],
+    "preprocessing": "TensorFlow RGB decode (Pillow RGB with EXIF transpose for WebP); bilinear 224x224, no antialias; float32 0-255; model rescales internally",
+    "temperature": 1.1602258301498714,
+    "temperatureFoldedIntoWeights": true,
+    "thresholds": {
+      "confidenceThreshold": 0.7,
+      "marginThreshold": 0.0,
+      "entropyThreshold": 0.42
+    },
+    "status": "experimental candidate; not adopted or deployed",
+    "modelSha256": "e5d323cfdca00fde64b1da4da6a5f1328ff627d9616d518b6ca82595c3f8137e",
+    "selectionSha256": "fd213d6ed4fc37e10738f391d989dc32e7ad3555d048e02ac7ba9921f5bb26b3",
+    "evaluationSha256": "46da4aa3d2fd2532bc45256447302f58938e53ee16b6fe58d7794b73bc035de1",
+    "trainingCompleteSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+    "browserParityMeasured": false
+  },
+  "originalCandidateRoot": "C:\\Users\\My Pc\\Desktop\\workspace\\capstone\\model\\brain\\v4.3.0\\threshold_fitting\\v4-3-0-thresholds-20261001T120051Z-e1c5cdb0\\candidate_models\\combined",
+  "restoredFrom": ".tools/model-backups/v4.3.0-combined-before-v4.1.1-20261002",
+  "sourceBackupManifestSha256": "99ca782ab90f0001737dcf9cd299b3e7f3a9e8547e8f322d961cf1b6a1696be6",
+  "modelFiles": [
+    {
+      "path": "group1-shard1of3.bin",
+      "bytes": 4194304,
+      "sha256": "04e1e18a28cb414442c66617a0bc0cbdff2e93116d08d0a170f04b30572bf09c",
+      "backupPath": "model/group1-shard1of3.bin"
+    },
+    {
+      "path": "group1-shard2of3.bin",
+      "bytes": 4194304,
+      "sha256": "0432d0dc9a25e4d2d0048aa5c8120076c05466a6363bd2d5a0c5e5ee4fd34954",
+      "backupPath": "model/group1-shard2of3.bin"
+    },
+    {
+      "path": "group1-shard3of3.bin",
+      "bytes": 3497804,
+      "sha256": "a0fab950ece352711e938467d6bf5f6aaed6c48b5ee1e37812b0a7192399292b",
+      "backupPath": "model/group1-shard3of3.bin"
+    },
+    {
+      "path": "model.json",
+      "bytes": 214028,
+      "sha256": "f5ebdd96893513f05d78126880e9a56a94c4750f75b02a2ee2fb7d3792c8267b",
+      "backupPath": "model/model.json"
+    },
+    {
+      "path": "model_config.json",
+      "bytes": 1113,
+      "sha256": "23f976f5d4311885e49a7738a02fe7576a073e700dc7dd1a0e1a70b60dd3cb52",
+      "backupPath": "model/model_config.json"
+    }
+  ],
+  "preservedV411Backup": ".tools/model-backups/v4.1.1-background-before-v4.3.0-retest-20261002",
+  "preservedV411ManifestSha256": "df2bf14726b0407f1cebfa6b40b5560777c36f935946f2e10e717275d19712c0",
+  "preservedV411ModelFiles": [
+    {
+      "path": "group1-shard1of3.bin",
+      "bytes": 4194304,
+      "sha256": "74edde0da8865ab05764c0f9e6ccf5c66cfb219985e45ff9f73864d69a99d11b",
+      "backupPath": "model/group1-shard1of3.bin"
+    },
+    {
+      "path": "group1-shard2of3.bin",
+      "bytes": 4194304,
+      "sha256": "44a08bb18264d487ab857b4a996e3c1192e0e8ade8ae0bfb593bd4835b1ceb01",
+      "backupPath": "model/group1-shard2of3.bin"
+    },
+    {
+      "path": "group1-shard3of3.bin",
+      "bytes": 3497804,
+      "sha256": "51ec00e497b152a7e4528ad26d85685e73ec0acc96333f34f4830e7f82c07e4b",
+      "backupPath": "model/group1-shard3of3.bin"
+    },
+    {
+      "path": "model.json",
+      "bytes": 211692,
+      "sha256": "fa039a0dbd1c187ebae2457d5e1516cdbf1259c90a00ac8b8146a0bb9382ec8a",
+      "backupPath": "model/model.json"
+    },
+    {
+      "path": "model_config.json",
+      "bytes": 1114,
+      "sha256": "3c8d51535dad1ee5140bed0d195730b26e71fbd312154792ae4484054d1be782",
+      "backupPath": "model/model_config.json"
+    }
+  ],
+  "notes": [
+    "All five restored assets match the original fitted Combined candidate byte-for-byte.",
+    "Latest UI guidance, Bisaya translations, history and guideline changes are retained.",
+    "Original training/evaluation files, curated evidence and older backups are preserved.",
+    "No retraining or new accuracy evaluation was performed.",
+    "Browser parity, field/OOD accuracy and physical-device checks remain pending before adoption."
+  ],
+  "verification": {
+    "checkedAt": "2026-10-01T22:15:08.027593+00:00",
+    "commands": [
+      {
+        "command": "bun run format",
+        "result": "passed"
+      },
+      {
+        "command": "bun run typecheck",
+        "result": "passed"
+      },
+      {
+        "command": "bun run lint",
+        "result": "passed"
+      },
+      {
+        "command": "bun run build",
+        "result": "passed"
+      },
+      {
+        "command": "bun run verify:export",
+        "result": "passed"
+      }
+    ],
+    "exportedModelFilesByteIdentical": 5,
+    "protectedFilesByteIdentical": 111,
+    "historicalProgressEventsPreserved": 59,
+    "dailyOrRangeProgressHeadings": 42,
+    "affectedMarkdownLinksVerified": 236,
+    "applicationBrowserCasesRun": false,
+    "browserKerasProbabilityParityMeasured": false,
+    "physicalDeviceChecksCompleted": false,
+    "generatedServiceWorkerSha256": "492f548e35efb4309ea7332ac380bd5d4495d9a0251ebf038362df563b381397",
+    "exportedWorkerByteIdentical": true,
+    "modelPrecacheRevisionsVerified": 5,
+    "runtimeCache": "mangoleaf-model-cache-v4-3-0-candidate",
+    "olderBackupManifestFilesVerified": 59
+  }
+}

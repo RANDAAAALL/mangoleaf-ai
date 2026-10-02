@@ -1,0 +1,119 @@
+{
+  "modelVersion": "model-v4.1.0-candidate",
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "seed": 42,
+  "splitFractions": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "splitPolicy": "preserve original v3 membership by contents",
+  "baselineIdentity": "3ca5a4625524eb5546d999f8a1ebcd15aac1cb7231b48963fdc565aee77559b8",
+  "rawIdentity": "74150e956332546b0f383b8182efd66472390219ebad21e23b4d28fdd9645755",
+  "phashDistance": 5,
+  "batchSize": 32,
+  "imageSize": [
+    224,
+    224
+  ],
+  "stage1": [
+    5,
+    0.001
+  ],
+  "stage2": [
+    10,
+    1e-05
+  ],
+  "augmentation": [
+    "horizontal_and_vertical",
+    30,
+    0.2,
+    0.2,
+    0.2
+  ],
+  "preprocessing": "TensorFlow RGB decode (Pillow RGB with EXIF transpose for WebP); bilinear 224x224, no antialias; float32 0-255; model rescales internally",
+  "confidenceThreshold": 0.7,
+  "minimumValidationRetention": 0.95,
+  "runtime": {
+    "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+    "tensorflow": "2.20.0",
+    "keras": "3.13.2",
+    "numpy": "2.1.3",
+    "pillow": "11.3.0"
+  },
+  "evaluationStatus": "previously_used",
+  "evaluationNotes": "The original v3 test/OOD report images influenced earlier development.",
+  "arms": [
+    "control",
+    "background",
+    "lighting",
+    "combined"
+  ],
+  "blendProbability": 0.3,
+  "localLightProbability": 0.3,
+  "lightAmplitude": [
+    18.0,
+    40.0
+  ],
+  "lightRadius": [
+    0.18,
+    0.35
+  ],
+  "backgroundNotes": "All 62 images are came from the own cellphone photos and internet public images",
+  "backgroundCount": 62,
+  "whiteEligibilityRule": "border color suggestion then every training image manually reviewed",
+  "maskRule": "reviewed train-only masks; original image when mask rejected",
+  "modelSelection": "minimum val_loss within each stage",
+  "temperatureRule": "validation NLL only; logits divided by temperature once",
+  "inputManifestSha256": "3d103e66cba4edcadc1aae97a1e49aaa655e4f1cd1d3de6531d148de4b913631",
+  "datasetSplitSha256": "76e89bd2c0d90cfed5dcbb90dd91f8ce0410dadf89876b1de769bd3283a3e8e7",
+  "whiteReviewSha256": "64ac7c08afa08efa1df8feb67770756b235725ffb42da5fa7c5b951884e9955f",
+  "maskReviewSha256": "5c72cf8b2d0949bb52e9590cf9bbc804052a6da91be9d9604ce0410e5cb8435b",
+  "lightingReviewSha256": "da15e79296f9e1509eeadce1edfc2d9516bd0d33a41845c8f57e1852bc36e68a",
+  "backgroundScheduleSha256": "c4c05d7068d44ae7f934f57c26195b99f3955180ba4b8a40d65b6aa6ded291b4",
+  "trainingImagesByClass": {
+    "anthracnose": 339,
+    "bacterial_black_spot": 207,
+    "bacterial_canker": 343,
+    "healthy_fruit": 77,
+    "healthy_leaf": 347,
+    "mango_scab": 157,
+    "sooty_mold": 349
+  },
+  "eligibleWhiteImagesByClass": {
+    "anthracnose": 0,
+    "bacterial_black_spot": 15,
+    "bacterial_canker": 0,
+    "healthy_fruit": 0,
+    "healthy_leaf": 42,
+    "mango_scab": 3,
+    "sooty_mold": 6
+  },
+  "approvedMaskImagesByClass": {
+    "anthracnose": 0,
+    "bacterial_black_spot": 15,
+    "bacterial_canker": 0,
+    "healthy_fruit": 0,
+    "healthy_leaf": 42,
+    "mango_scab": 3,
+    "sooty_mold": 6
+  },
+  "scenePresentationsByClass": {
+    "anthracnose": 0,
+    "bacterial_black_spot": 57,
+    "bacterial_canker": 0,
+    "healthy_fruit": 0,
+    "healthy_leaf": 178,
+    "mango_scab": 13,
+    "sooty_mold": 25
+  },
+  "expectedReplacedTrainingFraction": 0.010885101704233095
+}

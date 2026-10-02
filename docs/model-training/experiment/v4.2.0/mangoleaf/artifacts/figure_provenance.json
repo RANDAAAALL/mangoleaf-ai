@@ -1,0 +1,29 @@
+{
+  "status": "experimental candidate figures; not adoption evidence",
+  "organ": "mangoleaf",
+  "modelVersion": "model-v4.2.0-mangoleaf-candidate",
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.2.0/training/mangoleaf/v4-2-0-mangoleaf-training-20260928T152551Z-a88e1405",
+  "thresholdRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.2.0/threshold_fitting/mangoleaf/v4-2-0-mangoleaf-thresholds-20260928T155345Z-0e372b23",
+  "modelSha256": "d284cde29761a924781be40da2c84b9e314b66e3fa306b99a47b8c7af87af7d1",
+  "trainingCompleteSha256": "a9c941c25048f8ca8a458b2601ebcc3753bc2df2f2d9efdf7c8ede1c93132fe3",
+  "selectedThresholdsSha256": "e00b6e631f937a63b762e96c3699f0cdb535a7c39db81b7f3c7bb75946cb0e8d",
+  "evaluationSha256": "e20ff505724000992d43e7d6293a78e3432ab0f32c088dc0f6013e0b5270f3fe",
+  "trainingFigureProvenanceSha256": "5f5ff6229d68ae18adaa7707b7693341c0b45e6b1346949ddb224d99669b0034",
+  "sourceCsvSha256": {
+    "perClassMetrics": "96b5906bbab21921dd4d3c7bdec06f77cf37220f222507c1d61e9c77d96845f9",
+    "thresholdSearch": "8d73a877d50f95a0130fd523889d5ec8f7d9c782a26aea6afdef49c6d5d015e8"
+  },
+  "figures": {
+    "augmentation_preview.png": "536b0fb164c50ed1dbc44d1c562c68e3063212d64f4df36825e33b308cff3f66",
+    "confusion_matrix.png": "4ea32375a23906f719394664439fc3351ea3159a6b51d37b33b18c529fbce64d",
+    "grad_cam.png": "1b8bc228633f6cee444b30ae2fcaaef3ea4bed35bb6a71be080e0630543416cd",
+    "per_class_metrics.png": "656fbe5feb5c2d7c4b1b1094ac7fc4d50c58d8a4c0f3a17f0138f50d2b34edc2",
+    "threshold_search.png": "0b73662896a877ad94bc9bb4877e8c6456ee450653e6f25860c2eaca348e2c7b",
+    "training_curves.png": "88ec5c66c75da9d811e095eb26837bcf9b308ad0ccfc3f520e1c064e8097acfd"
+  },
+  "perClassCsvSha256": "96b5906bbab21921dd4d3c7bdec06f77cf37220f222507c1d61e9c77d96845f9",
+  "limits": [
+    "Historical test/OOD data are reused, not fresh field validation.",
+    "Threshold charts display saved search results and do not refit gates."
+  ]
+}

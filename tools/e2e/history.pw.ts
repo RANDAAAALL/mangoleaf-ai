@@ -15,7 +15,7 @@ test("F10/F11: latest four, six per page, search/filter, deletion and page recov
   page,
 }) => {
   test.setTimeout(180_000);
-  await controlledModel(page, scoresFor("Healthy"));
+  await controlledModel(page, scoresFor("Healthy Fruit"));
   await openApp(page);
   for (const photo of photos.slice(0, 7)) {
     await runScan(page, photo.file);

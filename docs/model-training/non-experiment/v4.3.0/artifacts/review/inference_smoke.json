@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "backend": "TensorFlow.js CPU",
+  "modelVersion": "model-v4.3.0-candidate",
+  "inputShape": [
+    1,
+    224,
+    224,
+    3
+  ],
+  "outputShape": [
+    1,
+    7
+  ],
+  "scoreSum": 0.9999999385327101,
+  "remainingTensors": 0,
+  "limits": [
+    "Synthetic zero input establishes graph execution only; browser/Keras parity and field accuracy remain unmeasured."
+  ]
+}

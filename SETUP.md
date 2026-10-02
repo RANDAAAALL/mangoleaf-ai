@@ -92,6 +92,10 @@ create table public.guidelines (
 
 Security policies should be reviewed for the actual deployment. The browser uses a public Supabase key, so do not rely on that key to protect privileged data.
 
+Maintain treatment text in `public.guidelines` only. Use the existing IDs `anthracnose`, `bacterial_black_spot`, `bacterial_canker`, `mango_scab`, `sooty_mold`, and `healthy`; Healthy Leaf and Healthy Fruit both read `healthy`. Populate both language fields with nonblank text. The [dated source review](./docs/guidelines/treatment-guidelines-review-2026-10-02.md) contains proposed replacements for manual review and entry; it has not applied them to Supabase.
+
+Successful synchronization saves these rows in IndexedDB. A device can then display its downloaded advice offline, including during a failed later sync. A device with no matching saved row, or a blank selected-language field, displays a translated unavailable message. There is no bundled treatment fallback. Initial use, cleared browser storage, and new guideline updates require a successful online sync; changing the table does not instantly update an offline device.
+
 ## Run locally
 
 ```bash
@@ -172,7 +176,7 @@ For why `.test-app/`, `.tools/`, `playwright-report/`, and `test-results/` appea
 
 To review each `master` deployment before it serves users, open Vercel **Settings > Environments > Production > Branch Tracking**, keep `master`, and disable **Auto-assign Custom Production Domains**. Confirm the dashboard setting; these repository changes do not configure Vercel. Builds remain Production/Staged until manually promoted. The previous Current deployment keeps serving the production domain.
 
-Wait for CI and applicable reliability/device checks, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Candidate version labels and documentation may be pushed before approval, but must not claim an unreleased version has shipped. Follow the [candidate release procedure](docs/MODEL_VERSIONING.md#candidate-testing-and-promotion).
+Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Candidate version labels and documentation may be pushed before approval, but must not claim an unreleased version has shipped. Follow the [candidate release procedure](docs/MODEL_VERSIONING.md#candidate-testing-and-promotion); the [testing guide](docs/TESTING.md) records local v0.4.9 validation.
 
 ## Threshold-fitting notebook inputs
 
@@ -180,11 +184,17 @@ For threshold-only experiments against the existing Trial 3 model, follow the [v
 
 ## Background-replacement training experiment
 
-For the paired retraining experiment, use the [v3.1 preparation and Colab guide](docs/model-training/experiment/v3.1/BACKGROUND_EXPERIMENT_v3_1.md). Training needs the original `train/`, `val/`, and `test/` split, the reserved OOD collection, and a separate pool of replacement-background photos. Cutouts are generated automatically in Colab and reviewed before training. The companion v3.2 fitting notebook consumes both newly calibrated models and freezes both threshold selections before evaluation. The original threshold-only v3.1 notebook remains for the old Trial 3 weights.
+For the paired retraining experiment, use the [v3.1 preparation and Colab guide](docs/model-training/experiment/v3.1/TRIAL_v3_1.md). Training needs the original `train/`, `val/`, and `test/` split, the reserved OOD collection, and a separate pool of replacement-background photos. Cutouts are generated automatically in Colab and reviewed before training. The companion v3.2 fitting notebook consumes both newly calibrated models and freezes both threshold selections before evaluation. The original threshold-only v3.1 notebook remains for the old Trial 3 weights.
 
-The [v3.2 paired threshold guide](docs/model-training/experiment/v3.2/THRESHOLD_FITTING_v3_2.md) documents that workflow separately. Experiment documentation follows notebook versions; these directories do not announce deployed model versions.
+The [v3.2 paired threshold guide](docs/model-training/experiment/v3.2/TRIAL_v3_2.md) documents that workflow separately. Experiment documentation follows notebook versions; these directories do not announce deployed model versions.
+
+For the seven-class experiment with separate background and localized-lighting arms, follow the original [V4.1 Colab guide](docs/model-training/experiment/v4.1/TRIAL_v4_1.md) or the completed, step-by-step [V4.1.1 reproduction guide](docs/model-training/experiment/v4.1.1/TRIAL_v4_1_1.md). Both use the verified V4 split and existing background photos. The 32-photo OOD folder was new for V4.1 but reused in V4.1.1, so it is no longer independent evidence. Review masks and lighting previews before training; finish all four arms before threshold fitting. Colab notebooks saved separate Drive runs; the V4.1.1 Background bundle is preserved in an ignored backup for local rollback, not a deployed model.
+
+For the completed **V4.2.0 two-model experiment**, follow the [leaf/fruit Colab guide and evidence report](docs/model-training/experiment/v4.2.0/TRIAL_v4_2_0.md). It uses the same source folders and preserved split, with Bacterial Canker assigned to the leaf group. If reproducing it, run each training notebook, then its matching threshold notebook, then return to the training notebook's saved-result figure steps. Check the actual Google Drive contents before starting. The local two-model app trial has ended; its files are preserved in ignored `.tools/model-backups/v4.2.0-dual-experiment-20260929/`. **Only leaf had a feasible fitted candidate**; neither model was deployed or released.
 
 ## Common setup issues
+
+App `0.4.9` uses the adopted [V4.3.0 Combined model](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md), with display label `v4.3.0` and saved gates 0.70 / 0 / 0.42. Keep its five fitted files together in root `public/model/`. Adoption changes the configuration's release identity and status; the graph, shards, class order, preprocessing, temperature, and numerical gates remain those of the completed Combined export. The [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) records the original and adopted identities/hashes. No retraining is needed to run these files. Restart the development server after a swap and reload the page to replace the in-memory model. For production-preview testing, rebuild and wait for the new worker to activate, then reload. The exact pre-adoption state is preserved in ignored `.tools/release-backups/v0.4.9-model-v4.3.0-20261002/before/`; earlier V3 and V4.1.1 rollback bundles remain. Production promotion is pending final CI and release approval.
 
 - If a push reports a missing scanner, run `bun run security:install`. If the hook cannot find Bun, make Bun available to the terminal or Git GUI's PATH and restart that application.
 - For a shallow clone, run `git fetch --unshallow` before scanning. If hooks were not registered during dependency installation, run `bun run prepare` and confirm `git config --get core.hooksPath` prints `.husky/_`.

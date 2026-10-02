@@ -1,0 +1,26 @@
+{
+  "modelVersion": "model-v4.3.0-candidate",
+  "arm": "combined",
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "inputSize": [
+    224,
+    224
+  ],
+  "preprocessing": "TensorFlow RGB decode (Pillow RGB with EXIF transpose for WebP); bilinear 224x224, no antialias; float32 0-255; model rescales internally",
+  "temperature": 1.1602258301498714,
+  "temperatureFoldedIntoWeights": true,
+  "status": "experimental candidate; rejection thresholds not fitted",
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": null,
+    "entropyThreshold": null
+  }
+}

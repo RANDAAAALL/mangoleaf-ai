@@ -2,11 +2,12 @@ import Dexie, { type Table } from "dexie";
 
 export interface ScanRecord {
   id: string; // UUID
-  disease_name: string; // e.g. "Anthracnose", "Sooty Mold", "Bacterial Canker", "Bacterial Black Spot", "Mango Scab", "Healthy"
+  disease_name: string; // e.g. "Anthracnose", "Healthy Leaf", "Healthy Fruit", or a saved older "Healthy"
   confidence: number; // e.g. 0.92 (92%)
   image_blob: Blob; // The raw binary photo captured by mobile camera (used for offline display)
   image_url: string | null; // Public cloud link of the uploaded photo (null when offline)
   image_hash?: string; // Unique SHA-256 binary hash of the photo for duplicate prevention
+  model_version?: string; // Local model label; keeps trial reports out of another model's duplicate lookup
   updated_at: string; // ISO Timestamp
   device_id: string; // Unique mobile/browser device ID
   // Says whether the local row matches Supabase or still owes it a change.

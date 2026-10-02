@@ -1,0 +1,525 @@
+{
+  "experimentVersion": "v4.3.0",
+  "modelVersion": "model-v4.3.0-candidate",
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "armOrder": [
+    "combined"
+  ],
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.3.0/training/v4-3-0-training-20261001T112311Z-961e5eb7",
+  "trainingCompleteSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+  "arms": {
+    "combined": {
+      "status": "feasible",
+      "thresholds": {
+        "confidenceThreshold": 0.7,
+        "marginThreshold": 0.0,
+        "entropyThreshold": 0.42
+      },
+      "modelSha256": "e5d323cfdca00fde64b1da4da6a5f1328ff627d9616d518b6ca82595c3f8137e",
+      "temperature": 1.1602258301498714,
+      "rawClassificationReport": {
+        "anthracnose": {
+          "precision": 0.9864864864864865,
+          "recall": 1.0,
+          "f1-score": 0.9931972789115646,
+          "support": 73.0
+        },
+        "bacterial_black_spot": {
+          "precision": 0.9761904761904762,
+          "recall": 0.9111111111111111,
+          "f1-score": 0.9425287356321839,
+          "support": 45.0
+        },
+        "bacterial_canker": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 74.0
+        },
+        "healthy_fruit": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 17.0
+        },
+        "healthy_leaf": {
+          "precision": 0.9868421052631579,
+          "recall": 1.0,
+          "f1-score": 0.9933774834437086,
+          "support": 75.0
+        },
+        "mango_scab": {
+          "precision": 0.8918918918918919,
+          "recall": 0.9705882352941176,
+          "f1-score": 0.9295774647887324,
+          "support": 34.0
+        },
+        "sooty_mold": {
+          "precision": 1.0,
+          "recall": 0.9733333333333334,
+          "f1-score": 0.9864864864864865,
+          "support": 75.0
+        },
+        "accuracy": 0.9821882951653944,
+        "macro avg": {
+          "precision": 0.9773444228331447,
+          "recall": 0.9792903828197946,
+          "f1-score": 0.9778810641803822,
+          "support": 393.0
+        },
+        "weighted avg": {
+          "precision": 0.982899661987649,
+          "recall": 0.9821882951653944,
+          "f1-score": 0.9822204224213078,
+          "support": 393.0
+        }
+      },
+      "rawConfusionMatrix": [
+        [
+          73,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          41,
+          0,
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          74,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          17,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          75,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          33,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          73
+        ]
+      ],
+      "calibratedTestCrossEntropy": 0.06605269759893417,
+      "gatedReports": {
+        "confidence_only": {
+          "mango_test": {
+            "total": 393,
+            "accepted": 377,
+            "rejected": 16,
+            "retention": 0.9592875318066157,
+            "rejectionRate": 0.04071246819338423,
+            "rawAccuracy": 0.9821882951653944,
+            "acceptedCorrect": 373,
+            "acceptedWrong": 4,
+            "acceptedAccuracy": 0.9893899204244032,
+            "acceptedErrorsPerInput": 0.010178117048346057,
+            "healthyErrorCounts": {
+              "healthyAcceptedAsDisease": 0,
+              "diseaseAcceptedAsHealthy": 0,
+              "healthyOrganConfusion": 0
+            },
+            "perClass": {
+              "anthracnose": {
+                "total": 73,
+                "acceptedCorrect": 73,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "bacterial_black_spot": {
+                "total": 45,
+                "acceptedCorrect": 36,
+                "acceptedWrong": 2,
+                "rejected": 7,
+                "retention": 0.8444444444444444
+              },
+              "bacterial_canker": {
+                "total": 74,
+                "acceptedCorrect": 74,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "healthy_fruit": {
+                "total": 17,
+                "acceptedCorrect": 15,
+                "acceptedWrong": 0,
+                "rejected": 2,
+                "retention": 0.8823529411764706
+              },
+              "healthy_leaf": {
+                "total": 75,
+                "acceptedCorrect": 75,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "mango_scab": {
+                "total": 34,
+                "acceptedCorrect": 27,
+                "acceptedWrong": 1,
+                "rejected": 6,
+                "retention": 0.8235294117647058
+              },
+              "sooty_mold": {
+                "total": 75,
+                "acceptedCorrect": 73,
+                "acceptedWrong": 1,
+                "rejected": 1,
+                "retention": 0.9866666666666667
+              }
+            },
+            "confusion": {
+              "rows": [
+                "anthracnose",
+                "bacterial_black_spot",
+                "bacterial_canker",
+                "healthy_fruit",
+                "healthy_leaf",
+                "mango_scab",
+                "sooty_mold"
+              ],
+              "columns": [
+                "anthracnose",
+                "bacterial_black_spot",
+                "bacterial_canker",
+                "healthy_fruit",
+                "healthy_leaf",
+                "mango_scab",
+                "sooty_mold",
+                "uncertain"
+              ],
+              "counts": [
+                [
+                  73,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  36,
+                  0,
+                  0,
+                  0,
+                  2,
+                  0,
+                  7
+                ],
+                [
+                  0,
+                  0,
+                  74,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  15,
+                  0,
+                  0,
+                  0,
+                  2
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  75,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  27,
+                  0,
+                  6
+                ],
+                [
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  73,
+                  1
+                ]
+              ]
+            }
+          },
+          "old_ood_report": {
+            "total": 84,
+            "accepted": 33,
+            "rejected": 51,
+            "retention": 0.39285714285714285,
+            "rejectionRate": 0.6071428571428571,
+            "falseAcceptRate": 0.39285714285714285
+          },
+          "new_ood_report": {
+            "total": 32,
+            "accepted": 8,
+            "rejected": 24,
+            "retention": 0.25,
+            "rejectionRate": 0.75,
+            "falseAcceptRate": 0.25
+          }
+        },
+        "selected": {
+          "mango_test": {
+            "total": 393,
+            "accepted": 376,
+            "rejected": 17,
+            "retention": 0.9567430025445293,
+            "rejectionRate": 0.043256997455470736,
+            "rawAccuracy": 0.9821882951653944,
+            "acceptedCorrect": 373,
+            "acceptedWrong": 3,
+            "acceptedAccuracy": 0.9920212765957447,
+            "acceptedErrorsPerInput": 0.007633587786259542,
+            "healthyErrorCounts": {
+              "healthyAcceptedAsDisease": 0,
+              "diseaseAcceptedAsHealthy": 0,
+              "healthyOrganConfusion": 0
+            },
+            "perClass": {
+              "anthracnose": {
+                "total": 73,
+                "acceptedCorrect": 73,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "bacterial_black_spot": {
+                "total": 45,
+                "acceptedCorrect": 36,
+                "acceptedWrong": 2,
+                "rejected": 7,
+                "retention": 0.8444444444444444
+              },
+              "bacterial_canker": {
+                "total": 74,
+                "acceptedCorrect": 74,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "healthy_fruit": {
+                "total": 17,
+                "acceptedCorrect": 15,
+                "acceptedWrong": 0,
+                "rejected": 2,
+                "retention": 0.8823529411764706
+              },
+              "healthy_leaf": {
+                "total": 75,
+                "acceptedCorrect": 75,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "mango_scab": {
+                "total": 34,
+                "acceptedCorrect": 27,
+                "acceptedWrong": 1,
+                "rejected": 6,
+                "retention": 0.8235294117647058
+              },
+              "sooty_mold": {
+                "total": 75,
+                "acceptedCorrect": 73,
+                "acceptedWrong": 0,
+                "rejected": 2,
+                "retention": 0.9733333333333334
+              }
+            },
+            "confusion": {
+              "rows": [
+                "anthracnose",
+                "bacterial_black_spot",
+                "bacterial_canker",
+                "healthy_fruit",
+                "healthy_leaf",
+                "mango_scab",
+                "sooty_mold"
+              ],
+              "columns": [
+                "anthracnose",
+                "bacterial_black_spot",
+                "bacterial_canker",
+                "healthy_fruit",
+                "healthy_leaf",
+                "mango_scab",
+                "sooty_mold",
+                "uncertain"
+              ],
+              "counts": [
+                [
+                  73,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  36,
+                  0,
+                  0,
+                  0,
+                  2,
+                  0,
+                  7
+                ],
+                [
+                  0,
+                  0,
+                  74,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  15,
+                  0,
+                  0,
+                  0,
+                  2
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  75,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  27,
+                  0,
+                  6
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  73,
+                  2
+                ]
+              ]
+            }
+          },
+          "old_ood_report": {
+            "total": 84,
+            "accepted": 24,
+            "rejected": 60,
+            "retention": 0.2857142857142857,
+            "rejectionRate": 0.7142857142857143,
+            "falseAcceptRate": 0.2857142857142857
+          },
+          "new_ood_report": {
+            "total": 32,
+            "accepted": 5,
+            "rejected": 27,
+            "retention": 0.15625,
+            "rejectionRate": 0.84375,
+            "falseAcceptRate": 0.15625
+          }
+        }
+      }
+    }
+  },
+  "selectionSha256": "fd213d6ed4fc37e10738f391d989dc32e7ad3555d048e02ac7ba9921f5bb26b3",
+  "evaluationInputsSha256": "889eee8e88bc51cebb0551c9a2cab73321c302bdc5b2a86ff48b58507d9f1a3c",
+  "oldTestAndOodStatus": "exploratory; used in earlier model development",
+  "newOodStatus": "V4.1/V4.1.1 reused photos; report-only after combined gate freeze, not pristine external test",
+  "newOodCollectionNotes": "Original V4.1/V4.1.1 OOD report photos reused; no pristine new OOD evidence in this run.",
+  "newOodTotalUploaded": 32,
+  "newOodRetained": 32,
+  "oldOodTuneCount": 84,
+  "oldOodReportCount": 84,
+  "browserParityMeasured": false,
+  "freshLabeledMangoFieldAccuracyMeasured": false,
+  "finishedAt": "2026-10-01T12:09:20.211201+00:00"
+}

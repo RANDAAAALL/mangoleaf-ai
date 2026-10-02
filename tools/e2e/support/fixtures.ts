@@ -9,7 +9,14 @@ import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 import manifest from "../fixtures/manifest.json";
 import type { ScanRecord } from "../../../src/lib/db";
-import { CLASSES } from "../../../src/lib/constants";
+import { CLASSES, modelVersion } from "../../../src/lib/constants";
+import { translations } from "../../../src/lib/translations";
+
+declare global {
+  interface Window {
+    mangoReleaseGuidelineReads?: () => void;
+  }
+}
 
 export const photos = manifest.photos;
 export const photoPath = (file: string) =>
@@ -71,6 +78,7 @@ export async function attachJson(info: TestInfo, name: string, value: unknown) {
 
 // Fixed scores exercise UI branches without claiming anything about model accuracy.
 export async function controlledModel(page: Page, scores: number[]) {
+  expect(scores).toHaveLength(CLASSES.length);
   await page.route("**/model/__ui-scores.bin", (route) =>
     route.fulfill({
       body: Buffer.from(new Float32Array(scores).buffer),
@@ -110,7 +118,9 @@ export async function controlledModel(page: Page, scores: number[]) {
                 value: {
                   tensor: {
                     dtype: "DT_FLOAT",
-                    tensorShape: { dim: [{ size: "1" }, { size: "6" }] },
+                    tensorShape: {
+                      dim: [{ size: "1" }, { size: String(CLASSES.length) }],
+                    },
                     floatVal: scores,
                   },
                 },
@@ -144,14 +154,18 @@ export async function controlledModel(page: Page, scores: number[]) {
             output: {
               name: "output:0",
               dtype: "DT_FLOAT",
-              tensorShape: { dim: [{ size: "1" }, { size: "6" }] },
+              tensorShape: {
+                dim: [{ size: "1" }, { size: String(CLASSES.length) }],
+              },
             },
           },
         },
         weightsManifest: [
           {
             paths: ["__ui-scores.bin"],
-            weights: [{ name: "scores", shape: [1, 6], dtype: "float32" }],
+            weights: [
+              { name: "scores", shape: [1, CLASSES.length], dtype: "float32" },
+            ],
           },
         ],
       },
@@ -159,7 +173,64 @@ export async function controlledModel(page: Page, scores: number[]) {
   );
 }
 export const scoresFor = (label: string) =>
-  CLASSES.map((name) => (name === label ? 0.95 : 0.01));
+  CLASSES.map((name) => (name === label ? 0.95 : 0.05 / (CLASSES.length - 1)));
+
+export async function holdGuidelineReads(page: Page) {
+  await page.addInitScript(() => {
+    let holding = true;
+    const pending: (() => void)[] = [];
+    const getAll = IDBObjectStore.prototype.getAll;
+    const success = Object.getOwnPropertyDescriptor(
+      IDBRequest.prototype,
+      "onsuccess",
+    )!;
+    IDBObjectStore.prototype.getAll = function (
+      ...args: Parameters<typeof getAll>
+    ) {
+      const request = getAll.apply(this, args);
+      if (this.name === "guidelines") {
+        // Delay delivery of real IndexedDB results, keeping loading deterministic.
+        Object.defineProperty(request, "onsuccess", {
+          configurable: true,
+          set(callback: IDBRequest["onsuccess"]) {
+            success.set!.call(request, (event: Event) => {
+              const deliver = () => callback?.call(request, event);
+              if (holding) pending.push(deliver);
+              else deliver();
+            });
+          },
+        });
+      }
+      return request;
+    };
+    Object.assign(window, {
+      mangoReleaseGuidelineReads() {
+        holding = false;
+        pending.splice(0).forEach((deliver) => deliver());
+      },
+    });
+  });
+}
+
+export async function releaseGuidelineReads(page: Page) {
+  await page.evaluate(() => {
+    if (!window.mangoReleaseGuidelineReads)
+      throw new Error("Guideline read control was not installed");
+    window.mangoReleaseGuidelineReads();
+  });
+}
+
+export async function waitForMockScanPull(page: Page) {
+  // Sync pulls scan history after guidance; a synced row alone does not mean the pull finished.
+  const response = await page.waitForResponse(
+    (response) =>
+      response.request().method() === "GET" &&
+      new URL(response.url()).pathname === "/__mock__/rest/v1/scans",
+  );
+  expect(response.ok()).toBe(true);
+  expect(await response.finished()).toBeNull();
+}
+
 export async function openApp(page: Page) {
   await page.goto("/");
   await expect(
@@ -173,7 +244,12 @@ export async function nav(page: Page, label: string) {
     .first()
     .click();
 }
-export async function choosePhoto(page: Page, file: string, camera = false) {
+export async function choosePhoto(
+  page: Page,
+  file: string,
+  camera = false,
+  duplicate = false,
+) {
   await nav(page, "Scan");
   await expect(
     page.getByRole("heading", { name: "Start a Scan" }),
@@ -188,9 +264,17 @@ export async function choosePhoto(page: Page, file: string, camera = false) {
   );
   await chooser.setFiles(photoPath(file));
   await expect(
-    page.getByRole("heading", { name: "Review Photo" }),
+    page.getByRole("heading", {
+      name: duplicate
+        ? translations.en.duplicatePhotoTitle
+        : translations.en.reviewPhotoTitle,
+      exact: true,
+    }),
   ).toBeVisible();
-  const preview = page.getByRole("img", { name: "Preview", exact: true });
+  const preview = page.getByRole("img", {
+    name: translations.en.photoPreviewAlt,
+    exact: true,
+  });
   await expect(preview).toBeVisible();
   const hash = await preview.evaluate(async (element: HTMLImageElement) => {
     const bytes = await (await fetch(element.src)).arrayBuffer();
@@ -213,7 +297,7 @@ export async function runScan(page: Page, file: string) {
   const expectedHash = photos.find((photo) => photo.file === file)!.sha256;
   const displayedImage = details(page).locator("img");
   const correctPhoto = await displayedImage.evaluate(
-    async (image: HTMLImageElement, hash) => {
+    async (image: HTMLImageElement, expected) => {
       const database = await new Promise<IDBDatabase>((resolve, reject) => {
         const request = indexedDB.open("MangoLeafDB");
         request.onsuccess = () => resolve(request.result);
@@ -224,22 +308,27 @@ export async function runScan(page: Page, file: string) {
           .transaction("scans")
           .objectStore("scans")
           .index("image_hash")
-          .getAll(hash);
+          .getAll(expected.hash);
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
       });
       database.close();
-      if (saved.length !== 1 || saved[0].image_blob.size === 0) return false;
+      // Historical diagnoses can share the bytes; only this model owns the new result.
+      const current = saved.filter(
+        (row) => row.model_version === expected.modelVersion,
+      );
+      if (current.length !== 1 || current[0].image_blob.size === 0)
+        return false;
       const actual = new Uint8Array(
         await (await fetch(image.src)).arrayBuffer(),
       );
-      const expected = new Uint8Array(await saved[0].image_blob.arrayBuffer());
+      const stored = new Uint8Array(await current[0].image_blob.arrayBuffer());
       return (
-        actual.length === expected.length &&
-        actual.every((byte, i) => byte === expected[i])
+        actual.length === stored.length &&
+        actual.every((byte, i) => byte === stored[i])
       );
     },
-    expectedHash,
+    { hash: expectedHash, modelVersion },
   );
   expect(
     correctPhoto,

@@ -1,0 +1,26 @@
+{
+  "status": "derived from saved seeded schedule; not new training or prediction",
+  "selectedGlobalEpochOneBased": 14,
+  "discardedFinalGlobalEpochOneBased": 15,
+  "backgroundScheduleSha256": "2c751193a768181feda27a4a30dcf2983a2783452fe9a69110e0937400a052b0",
+  "replacementPresentations": 256,
+  "distinctForegrounds": 66,
+  "distinctScenes": 143,
+  "distinctScenesByPool": {
+    "new": 96,
+    "old": 47
+  },
+  "presentationsByPool": {
+    "new": 180,
+    "old": 76
+  },
+  "presentationsByClass": {
+    "bacterial_black_spot": 56,
+    "healthy_leaf": 165,
+    "mango_scab": 12,
+    "sooty_mold": 23
+  },
+  "limits": [
+    "Whole-run counts include the discarded final epoch; this record counts only the retained training path."
+  ]
+}

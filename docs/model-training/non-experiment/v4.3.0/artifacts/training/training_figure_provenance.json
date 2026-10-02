@@ -1,0 +1,80 @@
+{
+  "workflowVersion": "v4.3.0",
+  "modelVersion": "model-v4.3.0-candidate",
+  "trainingCompleteSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+  "modelSha256": "e5d323cfdca00fde64b1da4da6a5f1328ff627d9616d518b6ca82595c3f8137e",
+  "planSha256": "6734a326b9b3b6a685b2ec797acb1a24527c5ec84de44721782291ec83878524",
+  "inputManifestSha256": "f5d264f3ccb3df032cbf97d1a2c6aa12fb9e174dc09f166f2e669c402b9e4834",
+  "sceneReviewSha256": "501df67cd51718c9c65f97c8bfd769736e7b47ca4d1ba788d16aed6b176e7be1",
+  "backgroundScheduleSha256": "2c751193a768181feda27a4a30dcf2983a2783452fe9a69110e0937400a052b0",
+  "augmentationPreview": {
+    "trainingImage": "train/bacterial_black_spot/bacterial_black_spot__Bc208.jpg",
+    "trainingImageSha256": "2073b5626e7582b3b9040976832ae61cad98c9f93dfbd0e1b0e27e1e3b26fc7d",
+    "epoch": 0,
+    "scene": "new/rpt[yprtyp.JPEG",
+    "sceneSha256": "df93b27b63ec8bdb6c13f957b37b3f9b123d176929b569933851794a4f96a740",
+    "mask": "b72cb3b9c0669db91c3b.png",
+    "maskSha256": "51ce540a66308aeddc6b975ba6efd6a158ba7a01622b7cc4c8dadec2d1abe3a3",
+    "interpretation": "Only the Combined input top column reconstructs the scheduled pre-Keras training input; other top columns isolate effects for demonstration. Bottom transforms are new representative draws, not recovered fit tensors."
+  },
+  "gradCamValidationImages": [
+    {
+      "image": "val/anthracnose/anthracnose__20211008_124249 (Custom).jpg",
+      "imageSha256": "2a5801dbd06a341af4f402cca9be42b41597dc64a994923d40b24bf9c39fd5b4",
+      "actual": "anthracnose",
+      "rawPrediction": "anthracnose",
+      "rawConfidence": 0.9999085664749146
+    },
+    {
+      "image": "val/bacterial_black_spot/bacterial_black_spot__Bc104.jpg",
+      "imageSha256": "692d4fd097a4e9759615f8b80e304aedcb336b2469d42cdad9eec350fb475744",
+      "actual": "bacterial_black_spot",
+      "rawPrediction": "bacterial_black_spot",
+      "rawConfidence": 0.6281057000160217
+    },
+    {
+      "image": "val/bacterial_canker/bacterial_canker__IMG_20211106_120833 (Custom).jpg",
+      "imageSha256": "c167ef3d3cc11d498d4fe2b30574b9a2da40e52245e49827e5965e188fe65d60",
+      "actual": "bacterial_canker",
+      "rawPrediction": "bacterial_canker",
+      "rawConfidence": 0.9998918771743774
+    },
+    {
+      "image": "val/healthy_fruit/healthy_fruit__725318273_1696519271391031_8474708639771176175_n.jpg",
+      "imageSha256": "18c047f48c6deb7b423919369488485c608300cbba79d078428954694073ba4f",
+      "actual": "healthy_fruit",
+      "rawPrediction": "mango_scab",
+      "rawConfidence": 0.47039031982421875
+    },
+    {
+      "image": "val/healthy_leaf/healthy_leaf__20211231_123346 (Custom).jpg",
+      "imageSha256": "e3e1c8df010caa588fc9e479f180c2c2adeb2502b01e04a03a6f0e7e43675c1b",
+      "actual": "healthy_leaf",
+      "rawPrediction": "healthy_leaf",
+      "rawConfidence": 0.9996047616004944
+    },
+    {
+      "image": "val/mango_scab/mango_scab__Sc1.jpg",
+      "imageSha256": "cfd8e8c51314e62012e5b5977412a477c9f026d196d526c807a3c226e0cc8bb1",
+      "actual": "mango_scab",
+      "rawPrediction": "mango_scab",
+      "rawConfidence": 0.9306508898735046
+    },
+    {
+      "image": "val/sooty_mold/sooty_mold__IMG_20211108_120859 (Custom).jpg",
+      "imageSha256": "2de920f0b19c1b241657ecd9abb187b43ed864b189e91f24f17eb49ef5ea695c",
+      "actual": "sooty_mold",
+      "rawPrediction": "sooty_mold",
+      "rawConfidence": 0.9992724061012268
+    }
+  ],
+  "figures": {
+    "training_curves.png": "ea1a434a8cf3d4248528bed9ed17a9bf9c6fb102edf9399408c7b4b961968d93",
+    "augmentation_preview.png": "1f629305229df9168500d5372a08ed0825915f887c71f6287c3a31ba95a904d1",
+    "grad_cam.png": "9a10c9013ed1a67bf89c9500a458ccaf1307381dabf51d44371e779179400aef"
+  },
+  "limits": [
+    "Final Keras augmentation transforms are new representative random draws.",
+    "Grad-CAM uses validation images and does not measure accuracy."
+  ]
+}

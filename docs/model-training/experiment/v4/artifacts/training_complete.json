@@ -1,0 +1,33 @@
+{
+  "modelVersion": "model-v4.0.0",
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "artifacts": {
+    "model_calibrated.keras": "b058e6412aa577d2d53f7fd6d7e3610c04f76b3569f7076a47ceeb5e09c45cff",
+    "validation_probabilities.npy": "75973d7e9b1e22523027b811137bdec149ce7132c7b1dcab42de95251e18d8b5",
+    "resume_info.json": "591bb75168b3bb41ae9168bc91f1bbf57975a89dbc6c0b88b7495a4e5dc49f0a",
+    "input_manifest.json": "e34012fbfdd87f824b96d93f2d2155def2b7319937f380be63971738326be2ca",
+    "plan.json": "d037a47701e8b4438523d03b3e8b29a0cd20a93d7ee0b31e16e35194918af3fd",
+    "dataset_split.zip": "f35b302554ac4adfe028ea93a736dc02b8ce40ad8d018988bd2752d921717647",
+    "duplicate_audit.json": "5fccec22826686d75602d2aa4176bc0f75c21fa6a397418b709b67cbc375a0e1",
+    "reviewed_images.json": "e91ba42c835bdb10403c630237f2a9bfabe32563edc8bec5a5a5cc55adc36f70",
+    "raw_inventory.json": "f7a4ddeee33cae2694a1072e74e68beedd568782a025b00769da46acbf1987a7",
+    "training_history.json": "df0b54b6d9e36b6d59aa87fad8eac28a850054fb9fe3ff6b468bbca8f23f0e23",
+    "v4-export-f8905ea2/model/model.json": "0512e27eab88bc7e621aec707dd89682fe757eb30be59cf28ff45a099ba94d7d",
+    "v4-export-f8905ea2/model/group1-shard1of3.bin": "6f8d433f27f27776f3a169314522c0badcbdb0837d8609ffa9fbde1e63bf4f15",
+    "v4-export-f8905ea2/model/group1-shard2of3.bin": "77b6cac4685b8386f36840670efe060c4d927c47fd53ca14c20b3b732e826232",
+    "v4-export-f8905ea2/model/group1-shard3of3.bin": "6445130857ac7b40893c7d2374fb48caf7a0108b399295a5bd27fcced3b79227",
+    "v4-export-f8905ea2/model/model_config.json": "02a0c9e1f4ee5d913538145dfff800b975e5fa59d90e30563770d78762f0c83b"
+  },
+  "tfjsDirectory": "v4-export-f8905ea2/model",
+  "testPredictionsRun": false,
+  "finishedAt": "2026-09-23T11:28:35.869181+00:00",
+  "status": "experimental; evaluate before adoption"
+}

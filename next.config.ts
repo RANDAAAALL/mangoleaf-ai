@@ -13,6 +13,7 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = {
   output: "export",
+  allowedDevOrigins: ["*.trycloudflare.com"],
   env: {
     // Sourced from package.json "version" so the footer label always matches
     // the committed release. Override only for one-off preview builds.

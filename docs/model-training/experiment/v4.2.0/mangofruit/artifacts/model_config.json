@@ -1,0 +1,23 @@
+{
+  "modelVersion": "model-v4.2.0-mangofruit-candidate",
+  "organ": "mangofruit",
+  "arm": "combined",
+  "classes": [
+    "bacterial_black_spot",
+    "healthy_fruit",
+    "mango_scab"
+  ],
+  "inputSize": [
+    224,
+    224
+  ],
+  "preprocessing": "TensorFlow RGB decode (Pillow RGB with EXIF transpose for WebP); bilinear 224x224, no antialias; float32 0-255; model rescales internally",
+  "temperature": 1.082587300331594,
+  "temperatureFoldedIntoWeights": true,
+  "status": "experimental candidate; rejection thresholds not fitted",
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": null,
+    "entropyThreshold": null
+  }
+}

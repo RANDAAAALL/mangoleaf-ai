@@ -1,0 +1,113 @@
+{
+  "interpretation": "Review-quality limitation: the Step 6 instruction lists text/people among exclusion criteria, but these approved scenes contain such content and were sampled. No evidence of schedule or numerical/hash corruption. Visibility of background content in the final composite depends on the alpha mask and crop. This does not by itself invalidate local experimental installation; it limits claims that all scenes were screened as prescribed.",
+  "sourceInstruction": "Step 6: Exclude mango subjects, disease-revealing content, text, people, unsuitable settings, and repeated views when appropriate.",
+  "sourceNotebook": "notebooks/experiment/v4.3.0/MangoLeaf_AI_Training_v4_3_0_Post_Training.ipynb",
+  "sceneReviewSha256": "501df67cd51718c9c65f97c8bfd769736e7b47ca4d1ba788d16aed6b176e7be1",
+  "reviewNotes": "Reviewed all scene-preview pages. Kept suitable images as replacement",
+  "reviewExcludedImages": [],
+  "visualScope": "All nine scene contact sheets and all nine mask contact sheets inspected. The listed findings are concrete examples, not a complete unsuitable-content count. Parent independently inspected the frozen monitor, people/dog/guitar, and bottle files.",
+  "findings": [
+    {
+      "id": "735a10552a52f34e3696",
+      "pool": "old",
+      "relativePath": "old/20260919_024751.jpg",
+      "frozenRelativePath": "backgrounds/735a10552a52f34e3696.jpg",
+      "frozenLocalPath": "C:\\Users\\My Pc\\Desktop\\workspace\\capstone\\model\\brain\\v4.3.0\\training\\v4-3-0-training-20261001T112311Z-961e5eb7\\backgrounds\\735a10552a52f34e3696.jpg",
+      "recordedSha256": "80e8855c542ac8a366703635fbe5e43bb7c3aa765b920140f2292fc2d2308d4f",
+      "computedSha256": "80e8855c542ac8a366703635fbe5e43bb7c3aa765b920140f2292fc2d2308d4f",
+      "decodedRgbSha256": "ff42e7539e249144edabb5dbb7b14a289b9f9f5bb67f37a26b013ede15a70588",
+      "observedContent": "Game monitor containing prominent interface text and a person in an inset.",
+      "approved": true,
+      "replacementPresentationCount": 1,
+      "uses": [
+        {
+          "epochZeroBased": 0,
+          "epochOneBased": 1,
+          "label": "mango_scab",
+          "trainRelativePath": "train/mango_scab/mango_scab__Sc247.jpg"
+        }
+      ]
+    },
+    {
+      "id": "7bf638248fb5ce095229",
+      "pool": "old",
+      "relativePath": "old/IMG_20260730_191240_1.jpg",
+      "frozenRelativePath": "backgrounds/7bf638248fb5ce095229.jpg",
+      "frozenLocalPath": "C:\\Users\\My Pc\\Desktop\\workspace\\capstone\\model\\brain\\v4.3.0\\training\\v4-3-0-training-20261001T112311Z-961e5eb7\\backgrounds\\7bf638248fb5ce095229.jpg",
+      "recordedSha256": "e7ef8f4300c3625e8031e392054e58f9c4ba5db39496aab5b0d7de2c8daf4f8d",
+      "computedSha256": "e7ef8f4300c3625e8031e392054e58f9c4ba5db39496aab5b0d7de2c8daf4f8d",
+      "decodedRgbSha256": "076af891f8bc231fcaa659f02dc200016a9c559fecd1426bcfc4c17dc41f7a66",
+      "observedContent": "A person's arm/hand and RC Cola product branding are visible.",
+      "approved": true,
+      "replacementPresentationCount": 1,
+      "uses": [
+        {
+          "epochZeroBased": 10,
+          "epochOneBased": 11,
+          "label": "healthy_leaf",
+          "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154939 (Custom).jpg"
+        }
+      ]
+    },
+    {
+      "id": "534cab3e52799ecde06f",
+      "pool": "old",
+      "relativePath": "old/IMG_20260829_215031.jpg",
+      "frozenRelativePath": "backgrounds/534cab3e52799ecde06f.jpg",
+      "frozenLocalPath": "C:\\Users\\My Pc\\Desktop\\workspace\\capstone\\model\\brain\\v4.3.0\\training\\v4-3-0-training-20261001T112311Z-961e5eb7\\backgrounds\\534cab3e52799ecde06f.jpg",
+      "recordedSha256": "e94bfe616756e75e210c351b8ef3220645794cb05f1140050a52c081ade5b216",
+      "computedSha256": "e94bfe616756e75e210c351b8ef3220645794cb05f1140050a52c081ade5b216",
+      "decodedRgbSha256": "6727e7b8b0079af3338ecc5b02211ac6816c6278189c35b2c78c4e6159b752ae",
+      "observedContent": "People, a dog, and a guitar are visible around a table.",
+      "approved": true,
+      "replacementPresentationCount": 1,
+      "uses": [
+        {
+          "epochZeroBased": 4,
+          "epochOneBased": 5,
+          "label": "healthy_leaf",
+          "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155345 (Custom).jpg"
+        }
+      ]
+    },
+    {
+      "id": "e7755db263471ef34f6c",
+      "pool": "old",
+      "relativePath": "old/rn_image_picker_lib_temp_f0c810ba-f9e7-44d9-b9ce-8d91d724d738.jpg",
+      "frozenRelativePath": "backgrounds/e7755db263471ef34f6c.jpg",
+      "frozenLocalPath": "C:\\Users\\My Pc\\Desktop\\workspace\\capstone\\model\\brain\\v4.3.0\\training\\v4-3-0-training-20261001T112311Z-961e5eb7\\backgrounds\\e7755db263471ef34f6c.jpg",
+      "recordedSha256": "c5f2e18ee7a63b96f84c1bcb925ee440184d59f9942ac082215cc939b8e7b11a",
+      "computedSha256": "c5f2e18ee7a63b96f84c1bcb925ee440184d59f9942ac082215cc939b8e7b11a",
+      "decodedRgbSha256": "b32bfd42c25dd1bd75fbd32b1debadf624e0eeb6b3424b46f3c5e142c93955ef",
+      "observedContent": "Alcohol bottle with prominently readable product text/branding.",
+      "approved": true,
+      "replacementPresentationCount": 4,
+      "uses": [
+        {
+          "epochZeroBased": 0,
+          "epochOneBased": 1,
+          "label": "healthy_leaf",
+          "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161436 (Custom).jpg"
+        },
+        {
+          "epochZeroBased": 5,
+          "epochOneBased": 6,
+          "label": "healthy_leaf",
+          "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155015 (Custom).jpg"
+        },
+        {
+          "epochZeroBased": 7,
+          "epochOneBased": 8,
+          "label": "healthy_leaf",
+          "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161331 (Custom).jpg"
+        },
+        {
+          "epochZeroBased": 14,
+          "epochOneBased": 15,
+          "label": "healthy_leaf",
+          "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155330 (Custom).jpg"
+        }
+      ]
+    }
+  ]
+}

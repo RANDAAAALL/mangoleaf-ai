@@ -12,14 +12,17 @@ MangoLeaf AI is an offline-first progressive web application that helps identify
 ## Features
 
 - Capture a photo or upload an existing mango leaf or fruit image.
-- Run on-device classification with a six-class TensorFlow.js Graph Model.
+- Run on-device seven-class classification with a TensorFlow.js Graph Model.
 - Review the predicted condition, confidence score, and treatment guidance.
 - Switch treatment guidance between English and Cebuano/Bisaya.
 - Keep a local scan history that remains available offline.
-- Detect duplicate images with SHA-256 hashing.
+- Check exact-file duplicates before diagnosis; retake, cancel, or open the saved result from photo review.
 - Compress stored images to WebP with a JPEG fallback.
 - Synchronize scan records and treatment guidelines with Supabase.
+- Read downloaded treatment guidelines offline; missing guidance shows an English/Bisaya status message rather than bundled treatment advice.
 - Install the app on supported devices as a PWA.
+
+App `0.4.9` adopts the seven-class V4.3.0 Combined model (`v4.3.0`) as the current application model, replacing the former six-class V3 baseline. The single scan flow remains in use, with separate Healthy Fruit and Healthy Leaf results. The [adopted trial report](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) and [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) preserve export provenance, fitted gates, and model hashes. Its [comparison with V4.1.1](docs/model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) reports mixed reused-set results; adoption does not establish improved field accuracy. Production promotion and the `v0.4.9` GitHub Release remain pending the final checks described in the [release procedure](docs/MODEL_VERSIONING.md#candidate-testing-and-promotion). The [testing guide](docs/TESTING.md) records local validation. Earlier trials and rollback backups remain preserved.
 
 ## Technology
 
@@ -57,12 +60,18 @@ Dependency installation registers Husky hooks. Before commits, `lint-staged` for
 - [Physical reliability checklist](./docs/PHYSICAL_RELIABILITY_CHECKLIST.md)
 - [Physical checklist answer example (fictional)](./docs/PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md)
 - [Development progress](./docs/PROGRESS.md)
+- [Treatment-guideline review and proposed English/Bisaya corrections](./docs/guidelines/treatment-guidelines-review-2026-10-02.md)
 - [Model and release versioning](./docs/MODEL_VERSIONING.md)
 - [Experimental notebook workflows (candidates, not shipped or deployed)](./notebooks/experiment/README.md)
-- [Trial 3 model report (current shipping model)](./docs/model-training/trials/TRIAL_v3.md)
-- [Trial 2.1 model report (superseded)](./docs/model-training/trials/TRIAL_v2_1.md)
-- [Trial 2 model report (superseded)](./docs/model-training/trials/TRIAL_v2.md)
-- [Trial 1 model report (superseded)](./docs/model-training/trials/TRIAL_v1.md)
+- [V4.1 completed experiment and local test evidence](./docs/model-training/experiment/v4.1/TRIAL_v4_1.md#completed-result-and-local-test)
+- [V4.1.1 completed reproduction, inputs, and evidence](./docs/model-training/experiment/v4.1.1/TRIAL_v4_1_1.md)
+- [V4.2.0 separate leaf/fruit experiment results, notebooks, and limits](./docs/model-training/experiment/v4.2.0/TRIAL_v4_2_0.md)
+- [V4.3.0 adopted Combined model: inputs, evidence, comparison, and rollback](./docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md)
+- [V4.3.0 preserved workflow and completed notebooks](./notebooks/v4.3.0/)
+- [Trial 3 model report (previous released baseline)](./docs/model-training/non-experiment/v3/TRIAL_v3.md)
+- [Trial 2.1 model report (superseded)](./docs/model-training/non-experiment/v2.1/TRIAL_v2_1.md)
+- [Trial 2 model report (superseded)](./docs/model-training/non-experiment/v2/TRIAL_v2.md)
+- [Trial 1 model report (superseded)](./docs/model-training/non-experiment/v1/TRIAL_v1.md)
 
 ## Commands
 

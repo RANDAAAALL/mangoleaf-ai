@@ -1,0 +1,18 @@
+{
+  "reviewedAt": "2026-09-28T16:50:35.009043+00:00",
+  "allClassesReviewed": true,
+  "probability": 0.3,
+  "amplitude": [
+    18.0,
+    40.0
+  ],
+  "radius": [
+    0.18,
+    0.35
+  ],
+  "previewSha256": {
+    "bacterial_black_spot": "b64da07d5389a404af7a36434ea4ad7ce62c726c7d645e37fa182c1307439f89",
+    "healthy_fruit": "ad650557e5166225d517236482d0d04461d650ab63c8d79af3699f2a8c531523",
+    "mango_scab": "38a45a072556db3eff9ddc921307c78b0a0b2e0d1df4cf484c9d81da423bb101"
+  }
+}

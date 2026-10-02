@@ -1,0 +1,102 @@
+{
+  "modelVersion": "model-v4.2.0-mangofruit-candidate",
+  "organ": "mangofruit",
+  "classes": [
+    "bacterial_black_spot",
+    "healthy_fruit",
+    "mango_scab"
+  ],
+  "armOrder": [
+    "combined"
+  ],
+  "arms": {
+    "combined": {
+      "arm": "combined",
+      "modelVersion": "model-v4.2.0-mangofruit-candidate",
+      "classes": [
+        "bacterial_black_spot",
+        "healthy_fruit",
+        "mango_scab"
+      ],
+      "seed": 42,
+      "temperature": 1.082587300331594,
+      "temperatureFoldedIntoWeights": true,
+      "confidenceThreshold": 0.7,
+      "minimumValidationRetention": 0.95,
+      "preprocessing": "TensorFlow RGB decode (Pillow RGB with EXIF transpose for WebP); bilinear 224x224, no antialias; float32 0-255; model rescales internally",
+      "classWeights": {
+        "bacterial_black_spot": 0.7101449275362319,
+        "healthy_fruit": 1.9090909090909092,
+        "mango_scab": 0.9363057324840764
+      },
+      "validationCalibrationNll": {
+        "before": 0.37798063024294765,
+        "after": 0.3768540726853973
+      },
+      "validationImageCount": 94,
+      "validationProbabilityOrder": "input_manifest.json images subset=val in listed order",
+      "modelSha256": "6c79059aa7d5142f9bafab1266a49948e3b2fe38f0d3a0547e74d8098e8f180f",
+      "validationProbabilitiesSha256": "3f31e57a5ed8fc72294937e1b44b89883fa51225faf60af0b8a8ab75924293c7",
+      "initialWeightsSha256": "7a1670ce4e01277dc96c336decb0a9ae4b988556d1a9a77c0cd43901d46173d4",
+      "inputManifestSha256": "f2eabf88fc4fc8dd7474648cea15c6663d7d9e12a9a3ba21130c729f48b91284",
+      "datasetSplitSha256": "42842a4155fca41b2998063da71f7ccad38796419b9e41882a6318d4e0793327",
+      "planSha256": "e9b823118f33d41c0d9b696b54539732e2d0511723d43b4b69183bf3d4eb1def",
+      "whiteReviewSha256": "77dba9aac41e6f0f6ef0f0a819f1b608e5a34c6708092e043584c5e687d6b9a7",
+      "sceneReviewSha256": "6f62a26c451638f2a6ec04a9f03676525dcc780c04229031df5bc3b88fabcfa9",
+      "maskReviewSha256": "191525c11c6418674773cb09097bef69baa1c85d69ab294aba9d193b57d21626",
+      "lightingReviewSha256": "c39060e614d4a505c61f44797e055dc1fec892f99c5e56e8267fd2b3d268acc2",
+      "backgroundScheduleSha256": "3020a4ca3db527c09e6bc7ad987d126df89b7fc20df71742f58eb5510f23d565",
+      "runtime": {
+        "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+        "tensorflow": "2.20.0",
+        "keras": "3.13.2",
+        "numpy": "2.1.3",
+        "pillow": "11.3.0"
+      },
+      "baseLayerName": "MobileNetV3Large",
+      "testPredictionsRun": false,
+      "status": "experimental candidate; rejection thresholds not fitted",
+      "tfjsDirectory": "arms/combined/tfjs_model",
+      "tfjsArtifacts": {
+        "model.json": "25d218a8795096fd81d90efb89f6d03f5a84be516efa9e976906daa550bd1a3b",
+        "group1-shard1of3.bin": "9d956389c2b10ccc6869b9ca9aa430f77b94478e8b72c29d7cde781f4da42723",
+        "group1-shard2of3.bin": "24a7035c63d9b493e6051203b18b6d4a30e474b88420023dabac6a69ac6c1ea1",
+        "group1-shard3of3.bin": "88f0c3ebb6169f9b9a852f0faa30c32cb9b4b30cda3570b08218047f6baf3111",
+        "model_config.json": "bba3fbb60a1396808ca2fe52937aaf960df41d366e9e5d42dfa522afbb04c431"
+      }
+    }
+  },
+  "initialWeightsSha256": "7a1670ce4e01277dc96c336decb0a9ae4b988556d1a9a77c0cd43901d46173d4",
+  "inputManifestSha256": "f2eabf88fc4fc8dd7474648cea15c6663d7d9e12a9a3ba21130c729f48b91284",
+  "datasetSplitSha256": "42842a4155fca41b2998063da71f7ccad38796419b9e41882a6318d4e0793327",
+  "planSha256": "e9b823118f33d41c0d9b696b54539732e2d0511723d43b4b69183bf3d4eb1def",
+  "whiteReviewSha256": "77dba9aac41e6f0f6ef0f0a819f1b608e5a34c6708092e043584c5e687d6b9a7",
+  "sceneReviewSha256": "6f62a26c451638f2a6ec04a9f03676525dcc780c04229031df5bc3b88fabcfa9",
+  "maskReviewSha256": "191525c11c6418674773cb09097bef69baa1c85d69ab294aba9d193b57d21626",
+  "lightingReviewSha256": "c39060e614d4a505c61f44797e055dc1fec892f99c5e56e8267fd2b3d268acc2",
+  "backgroundScheduleSha256": "3020a4ca3db527c09e6bc7ad987d126df89b7fc20df71742f58eb5510f23d565",
+  "artifacts": {
+    "input_manifest.json": "f2eabf88fc4fc8dd7474648cea15c6663d7d9e12a9a3ba21130c729f48b91284",
+    "plan.json": "e9b823118f33d41c0d9b696b54539732e2d0511723d43b4b69183bf3d4eb1def",
+    "dataset_split.zip": "42842a4155fca41b2998063da71f7ccad38796419b9e41882a6318d4e0793327",
+    "duplicate_audit.json": "5fccec22826686d75602d2aa4176bc0f75c21fa6a397418b709b67cbc375a0e1",
+    "white_background_review.json": "77dba9aac41e6f0f6ef0f0a819f1b608e5a34c6708092e043584c5e687d6b9a7",
+    "scene_review.json": "6f62a26c451638f2a6ec04a9f03676525dcc780c04229031df5bc3b88fabcfa9",
+    "mask_review.json": "191525c11c6418674773cb09097bef69baa1c85d69ab294aba9d193b57d21626",
+    "lighting_review.json": "c39060e614d4a505c61f44797e055dc1fec892f99c5e56e8267fd2b3d268acc2",
+    "background_schedule.json": "3020a4ca3db527c09e6bc7ad987d126df89b7fc20df71742f58eb5510f23d565",
+    "figures/training_curves.png": "03c3b596358deaf80b38790059fa6bab3cdd64f261dae1db9234f74745321cb9",
+    "arms/combined/model_calibrated.keras": "6c79059aa7d5142f9bafab1266a49948e3b2fe38f0d3a0547e74d8098e8f180f",
+    "arms/combined/validation_probabilities.npy": "3f31e57a5ed8fc72294937e1b44b89883fa51225faf60af0b8a8ab75924293c7",
+    "arms/combined/resume_info.json": "6f28b7fab7ecb1da90c082acc64971d0513c3d26e9bd12b151a714a084028fd3",
+    "arms/combined/training_history.json": "6fafce6675a44de756544efd6dc477344ab0dd5f8882e02d91faf10b2c146b55",
+    "arms/combined/tfjs_model/model.json": "25d218a8795096fd81d90efb89f6d03f5a84be516efa9e976906daa550bd1a3b",
+    "arms/combined/tfjs_model/group1-shard1of3.bin": "9d956389c2b10ccc6869b9ca9aa430f77b94478e8b72c29d7cde781f4da42723",
+    "arms/combined/tfjs_model/group1-shard2of3.bin": "24a7035c63d9b493e6051203b18b6d4a30e474b88420023dabac6a69ac6c1ea1",
+    "arms/combined/tfjs_model/group1-shard3of3.bin": "88f0c3ebb6169f9b9a852f0faa30c32cb9b4b30cda3570b08218047f6baf3111",
+    "arms/combined/tfjs_model/model_config.json": "bba3fbb60a1396808ca2fe52937aaf960df41d366e9e5d42dfa522afbb04c431"
+  },
+  "testPredictionsRun": false,
+  "finishedAt": "2026-09-28T17:02:25.759369+00:00",
+  "status": "experimental candidate; evaluate before adoption"
+}

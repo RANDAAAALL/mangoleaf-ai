@@ -1,0 +1,5 @@
+sha256,relativePath,label,oldClass,newClass,oldCorrect,newCorrect
+749932358634e9cebbe3387bf0ff9a532ff28ca791864929fdce97206f93a3c1,yeoripyopopy.jpg,OOD,sooty_mold,healthy_leaf,False,False
+810f4579d311f6d2eeb1bc7e42898eee7cf9f3a8ce0e04ae3bf0ed77ec292796,vmbnmvbkdf.jpg,OOD,sooty_mold,mango_scab,False,False
+82d9af051b554f71bf53ab8f399aba85db36caeac3176df328f2b84852954202,123qwe.jpg,OOD,mango_scab,healthy_leaf,False,False
+de8881a2fd20bd23a95dc2db846332dd3663c065f033786e8988117617a48476,",mvcbm,mdflcbvc.jpg",OOD,sooty_mold,healthy_leaf,False,False

@@ -1,0 +1,4 @@
+arm,class,precision,recall,f1-score,support
+combined,bacterial_black_spot,0.8723404255319149,0.9111111111111111,0.8913043478260869,45.0
+combined,healthy_fruit,1.0,1.0,1.0,17.0
+combined,mango_scab,0.875,0.8235294117647058,0.8484848484848485,34.0

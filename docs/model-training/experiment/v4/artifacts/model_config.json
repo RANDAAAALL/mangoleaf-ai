@@ -1,0 +1,28 @@
+{
+  "modelVersion": "model-v4.0.0",
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "inputSize": [
+    224,
+    224
+  ],
+  "preprocessing": "TensorFlow RGB decode; bilinear 224x224, no antialias; float32 0-255; model rescales internally",
+  "temperature": 1.2507985826540509,
+  "temperatureFoldedIntoWeights": true,
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": 0.0,
+    "entropyThreshold": 0.34
+  },
+  "status": "experimental; not adopted or deployed",
+  "selectionSha256": "4b96a4cfb96b733d37f38c114034428c164d26a7ce2779c143ecbedc27d28c35",
+  "evaluationSha256": "6bf3c9162497f9e8b21c72d6efbf7e1a03de7b5ae8489bb2785bbb9fa6698a58",
+  "trainingCompleteSha256": "a1e4cec69caeff26a2d4a9bbd5258c51b53e0b678f68add96ff4334c1521bbde"
+}

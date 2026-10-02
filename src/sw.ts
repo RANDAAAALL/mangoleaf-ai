@@ -5,11 +5,9 @@ declare const self: ServiceWorkerGlobalScope & {
   __SW_MANIFEST: (PrecacheEntry | string)[];
 };
 
-// Bump whenever the files in public/model/ are replaced. The CacheFirst rule
-// below never revalidates and model.json keeps the same URL across versions, so
-// without a new cache name an installed PWA would go on serving the old weights
-// from cache, silently and forever. See docs/MODEL_VERSIONING.md.
-const MODEL_CACHE = "mangoleaf-model-cache-v3-0-0";
+// Bump with model swaps so old runtime caches can be evicted. Precache revisions
+// fetch changed model files. See docs/MODEL_VERSIONING.md.
+const MODEL_CACHE = "mangoleaf-model-cache-v4-3-0";
 
 // Every model cache name this app has used, so old weights can be evicted
 // instead of sitting on the device. Trial 2 was 11.51 MB, Trial 2.1 was 5.67 MB
@@ -18,6 +16,12 @@ const OUTDATED_MODEL_CACHES = [
   "mangoleaf-model-cache",
   "mangoleaf-model-cache-v2-1",
   "mangoleaf-model-cache-v2-1-1",
+  "mangoleaf-model-cache-v3-0-0",
+  "mangoleaf-model-cache-v4-0-0",
+  "mangoleaf-model-cache-v4-1-0-candidate",
+  "mangoleaf-model-cache-v4-1-1-candidate",
+  "mangoleaf-model-cache-v4-2-0-dual-experiment",
+  "mangoleaf-model-cache-v4-3-0-candidate",
 ];
 
 const serwist = new Serwist({

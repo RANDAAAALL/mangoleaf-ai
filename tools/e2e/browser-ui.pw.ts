@@ -1,4 +1,7 @@
 import { test, expect, openApp, nav } from "./support/fixtures";
+import { modelVersion } from "../../src/lib/constants";
+import { translations } from "../../src/lib/translations";
+import packageInfo from "../../package.json";
 
 test("R04: cross-browser navigation and mobile scan controls remain usable", async ({
   page,
@@ -26,4 +29,28 @@ test("R04: cross-browser navigation and mobile scan controls remain usable", asy
   await expect(page.getByRole("heading", { name: "Start a Scan" })).toHaveCount(
     0,
   );
+});
+
+test("R04: About and footer show the current app and model versions in both languages", async ({
+  page,
+}) => {
+  await openApp(page);
+  await nav(page, "About");
+  for (const language of ["en", "bis"] as const) {
+    const t = translations[language];
+    if (language === "bis")
+      await page
+        .getByRole("button", { name: /^(EN\/BIS|EN)$/ })
+        .filter({ visible: true })
+        .first()
+        .click();
+    await expect(page.getByText(modelVersion, { exact: true })).toBeVisible();
+    await expect(
+      page.getByText(t.aboutModelVersionLabel, { exact: true }),
+    ).toBeVisible();
+    const versions = t.footerVersions
+      .replace("{appVersion}", `v${packageInfo.version}`)
+      .replace("{modelVersion}", modelVersion);
+    await expect(page.getByText(versions, { exact: true })).toBeVisible();
+  }
 });

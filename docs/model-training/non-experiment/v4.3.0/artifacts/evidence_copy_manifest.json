@@ -1,0 +1,2187 @@
+{
+  "status": "verified experimental evidence copies; not adoption or deployment",
+  "sourceRoot": "C:\\Users\\My Pc\\Desktop\\workspace\\capstone\\model\\brain\\v4.3.0",
+  "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+  "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0",
+  "originalFileCount": 444,
+  "originalBytes": 502635779,
+  "sourceInventorySha256": "e801ea5fa84c486870d8de24c64272bce6963eeb8bd87f155d55a0662785f6cb",
+  "verifiedTrainingCompleteSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+  "verifiedThresholdCompleteSha256": "daba6fc62c90be8eaec43e50032935bfaae68179f1b2d76c3ee605a21766c452",
+  "verifiedCandidateHashes": {
+    "model.json": "f5ebdd96893513f05d78126880e9a56a94c4750f75b02a2ee2fb7d3792c8267b",
+    "group1-shard1of3.bin": "04e1e18a28cb414442c66617a0bc0cbdff2e93116d08d0a170f04b30572bf09c",
+    "group1-shard2of3.bin": "0432d0dc9a25e4d2d0048aa5c8120076c05466a6363bd2d5a0c5e5ee4fd34954",
+    "group1-shard3of3.bin": "a0fab950ece352711e938467d6bf5f6aaed6c48b5ee1e37812b0a7192399292b",
+    "model_config.json": "23f976f5d4311885e49a7738a02fe7576a073e700dc7dd1a0e1a70b60dd3cb52"
+  },
+  "verification": {
+    "trainingArtifacts": 300,
+    "thresholdArtifacts": 34,
+    "evidenceArtifacts": 33,
+    "candidateZipReadback": true,
+    "evidenceZipReadback": true,
+    "graphWeightsFinite": true
+  },
+  "files": [
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/arms/combined/resume_info.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/resume_info.json",
+      "sha256": "9059b4a98081c6cb02b9ad0bf54fc3ee0aef7d15212d2f966259761f97ef1bc4",
+      "bytes": 2619,
+      "sourceSha256": "9059b4a98081c6cb02b9ad0bf54fc3ee0aef7d15212d2f966259761f97ef1bc4",
+      "copiedSha256": "9059b4a98081c6cb02b9ad0bf54fc3ee0aef7d15212d2f966259761f97ef1bc4",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/arms/combined/tfjs_model/model_config.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/tfjs_model/model_config.json",
+      "sha256": "e258e6e7972cadd35774c96b0dac7c538aaaec4521efd78dbddf75b41b475861",
+      "bytes": 695,
+      "sourceSha256": "e258e6e7972cadd35774c96b0dac7c538aaaec4521efd78dbddf75b41b475861",
+      "copiedSha256": "e258e6e7972cadd35774c96b0dac7c538aaaec4521efd78dbddf75b41b475861",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/arms/combined/training_history.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/training_history.json",
+      "sha256": "03c5a69d90027c9978feb44510c775ccf8d80e393cd1ad9a00b6d5620ddaa59d",
+      "bytes": 2783,
+      "sourceSha256": "03c5a69d90027c9978feb44510c775ccf8d80e393cd1ad9a00b6d5620ddaa59d",
+      "copiedSha256": "03c5a69d90027c9978feb44510c775ccf8d80e393cd1ad9a00b6d5620ddaa59d",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/background_schedule.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/background_schedule.json",
+      "sha256": "2c751193a768181feda27a4a30dcf2983a2783452fe9a69110e0937400a052b0",
+      "bytes": 82770,
+      "sourceSha256": "2c751193a768181feda27a4a30dcf2983a2783452fe9a69110e0937400a052b0",
+      "copiedSha256": "2c751193a768181feda27a4a30dcf2983a2783452fe9a69110e0937400a052b0",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/duplicate_audit.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/duplicate_audit.json",
+      "sha256": "5fccec22826686d75602d2aa4176bc0f75c21fa6a397418b709b67cbc375a0e1",
+      "bytes": 13686,
+      "sourceSha256": "5fccec22826686d75602d2aa4176bc0f75c21fa6a397418b709b67cbc375a0e1",
+      "copiedSha256": "5fccec22826686d75602d2aa4176bc0f75c21fa6a397418b709b67cbc375a0e1",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/external_overlap_audit.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/external_overlap_audit.json",
+      "sha256": "a5d85ca10c0253b3b460bdaca1af534da89313ffc2b35da5397b60c2ffc9aab8",
+      "bytes": 325,
+      "sourceSha256": "a5d85ca10c0253b3b460bdaca1af534da89313ffc2b35da5397b60c2ffc9aab8",
+      "copiedSha256": "a5d85ca10c0253b3b460bdaca1af534da89313ffc2b35da5397b60c2ffc9aab8",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/figure_provenance.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figure_provenance.json",
+      "sha256": "1b6548fbf2fea7dfba71911091f726072cf34b9cea331059f3db182510508748",
+      "bytes": 2033,
+      "sourceSha256": "1b6548fbf2fea7dfba71911091f726072cf34b9cea331059f3db182510508748",
+      "copiedSha256": "1b6548fbf2fea7dfba71911091f726072cf34b9cea331059f3db182510508748",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/input_manifest.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/input_manifest.json",
+      "sha256": "f5d264f3ccb3df032cbf97d1a2c6aa12fb9e174dc09f166f2e669c402b9e4834",
+      "bytes": 1553891,
+      "sourceSha256": "f5d264f3ccb3df032cbf97d1a2c6aa12fb9e174dc09f166f2e669c402b9e4834",
+      "copiedSha256": "f5d264f3ccb3df032cbf97d1a2c6aa12fb9e174dc09f166f2e669c402b9e4834",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/lighting_review.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/lighting_review.json",
+      "sha256": "bc837dde91d279b7f6e04600e8d98015eb48e356f7b48679c46989c841765c45",
+      "bytes": 835,
+      "sourceSha256": "bc837dde91d279b7f6e04600e8d98015eb48e356f7b48679c46989c841765c45",
+      "copiedSha256": "bc837dde91d279b7f6e04600e8d98015eb48e356f7b48679c46989c841765c45",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/mask_inventory.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_inventory.json",
+      "sha256": "69b20c350d5b517534f4c3ef01d306c32f46b065f3408b5da9f390b51f7c2ede",
+      "bytes": 78648,
+      "sourceSha256": "69b20c350d5b517534f4c3ef01d306c32f46b065f3408b5da9f390b51f7c2ede",
+      "copiedSha256": "69b20c350d5b517534f4c3ef01d306c32f46b065f3408b5da9f390b51f7c2ede",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/mask_jobs.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_jobs.json",
+      "sha256": "8ede1aa7e6254aff99174720505691f6e9ba96ff7885e5241ba2072d47dca8fc",
+      "bytes": 68518,
+      "sourceSha256": "8ede1aa7e6254aff99174720505691f6e9ba96ff7885e5241ba2072d47dca8fc",
+      "copiedSha256": "8ede1aa7e6254aff99174720505691f6e9ba96ff7885e5241ba2072d47dca8fc",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/mask_requirements.txt",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_requirements.txt",
+      "sha256": "29957def0785c27fe001212447045683659123d01b0aae9779935b6e3da1d070",
+      "bytes": 104,
+      "sourceSha256": "29957def0785c27fe001212447045683659123d01b0aae9779935b6e3da1d070",
+      "copiedSha256": "29957def0785c27fe001212447045683659123d01b0aae9779935b6e3da1d070",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/mask_reuse_audit.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_reuse_audit.json",
+      "sha256": "d565308248d4fd6a7f839dcec3c03560fec98a025b2e646b3e829e38c41885c7",
+      "bytes": 31607,
+      "sourceSha256": "d565308248d4fd6a7f839dcec3c03560fec98a025b2e646b3e829e38c41885c7",
+      "copiedSha256": "d565308248d4fd6a7f839dcec3c03560fec98a025b2e646b3e829e38c41885c7",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/mask_review.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_review.json",
+      "sha256": "69e63f545a39626dcef5f84018c9b935fdad92d921358e97c462b70f2e7b0a89",
+      "bytes": 83241,
+      "sourceSha256": "69e63f545a39626dcef5f84018c9b935fdad92d921358e97c462b70f2e7b0a89",
+      "copiedSha256": "69e63f545a39626dcef5f84018c9b935fdad92d921358e97c462b70f2e7b0a89",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/plan.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/plan.json",
+      "sha256": "6734a326b9b3b6a685b2ec797acb1a24527c5ec84de44721782291ec83878524",
+      "bytes": 4130,
+      "sourceSha256": "6734a326b9b3b6a685b2ec797acb1a24527c5ec84de44721782291ec83878524",
+      "copiedSha256": "6734a326b9b3b6a685b2ec797acb1a24527c5ec84de44721782291ec83878524",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/recovery_state.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/recovery_state.json",
+      "sha256": "ed1d27c4c8eae412567902ddfca945fc625bc678ed00726862cc9cc2b8977dfb",
+      "bytes": 31836,
+      "sourceSha256": "ed1d27c4c8eae412567902ddfca945fc625bc678ed00726862cc9cc2b8977dfb",
+      "copiedSha256": "ed1d27c4c8eae412567902ddfca945fc625bc678ed00726862cc9cc2b8977dfb",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/requirements.txt",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/requirements.txt",
+      "sha256": "99667286f3b0645093f75218230e26f7b1ad2f32fdf0afe0aa570e37c28598cb",
+      "bytes": 14117,
+      "sourceSha256": "99667286f3b0645093f75218230e26f7b1ad2f32fdf0afe0aa570e37c28598cb",
+      "copiedSha256": "99667286f3b0645093f75218230e26f7b1ad2f32fdf0afe0aa570e37c28598cb",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/scene_inventory.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/scene_inventory.json",
+      "sha256": "9a96bc475833ab3022d927aa76138408a802533db5f37cb531375db2ef45fadd",
+      "bytes": 162818,
+      "sourceSha256": "9a96bc475833ab3022d927aa76138408a802533db5f37cb531375db2ef45fadd",
+      "copiedSha256": "9a96bc475833ab3022d927aa76138408a802533db5f37cb531375db2ef45fadd",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/scene_review.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/scene_review.json",
+      "sha256": "501df67cd51718c9c65f97c8bfd769736e7b47ca4d1ba788d16aed6b176e7be1",
+      "bytes": 6605,
+      "sourceSha256": "501df67cd51718c9c65f97c8bfd769736e7b47ca4d1ba788d16aed6b176e7be1",
+      "copiedSha256": "501df67cd51718c9c65f97c8bfd769736e7b47ca4d1ba788d16aed6b176e7be1",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/source_provenance.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/source_provenance.json",
+      "sha256": "797547702698512bb732054a36f98ba0444b2482ee9c0b9e2f19a7dff39144d1",
+      "bytes": 1684,
+      "sourceSha256": "797547702698512bb732054a36f98ba0444b2482ee9c0b9e2f19a7dff39144d1",
+      "copiedSha256": "797547702698512bb732054a36f98ba0444b2482ee9c0b9e2f19a7dff39144d1",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/source_records/input_manifest.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/source_records/input_manifest.json",
+      "sha256": "3d103e66cba4edcadc1aae97a1e49aaa655e4f1cd1d3de6531d148de4b913631",
+      "bytes": 1354287,
+      "sourceSha256": "3d103e66cba4edcadc1aae97a1e49aaa655e4f1cd1d3de6531d148de4b913631",
+      "copiedSha256": "3d103e66cba4edcadc1aae97a1e49aaa655e4f1cd1d3de6531d148de4b913631",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/source_records/mask_review.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/source_records/mask_review.json",
+      "sha256": "98dda88135b97da9d49692dac7d0540fa4a30da98b4e9e9ca4e1c5e3b3d29db9",
+      "bytes": 67213,
+      "sourceSha256": "98dda88135b97da9d49692dac7d0540fa4a30da98b4e9e9ca4e1c5e3b3d29db9",
+      "copiedSha256": "98dda88135b97da9d49692dac7d0540fa4a30da98b4e9e9ca4e1c5e3b3d29db9",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/source_records/plan.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/source_records/plan.json",
+      "sha256": "5ccbb904e5846c91642b1736a0f48466f2b14c1a57139a43d491940ed8de1883",
+      "bytes": 3444,
+      "sourceSha256": "5ccbb904e5846c91642b1736a0f48466f2b14c1a57139a43d491940ed8de1883",
+      "copiedSha256": "5ccbb904e5846c91642b1736a0f48466f2b14c1a57139a43d491940ed8de1883",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/source_records/training_complete.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/source_records/training_complete.json",
+      "sha256": "2c62e4289c449ed5f1b18c1690ddf0341dc07a3cb36ae5807def42babbe6bd16",
+      "bytes": 18807,
+      "sourceSha256": "2c62e4289c449ed5f1b18c1690ddf0341dc07a3cb36ae5807def42babbe6bd16",
+      "copiedSha256": "2c62e4289c449ed5f1b18c1690ddf0341dc07a3cb36ae5807def42babbe6bd16",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/source_records/white_background_review.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/source_records/white_background_review.json",
+      "sha256": "2ae6656d984651859eaa7cb5f5ba848009cd219b74b9beada8dc55eedb499594",
+      "bytes": 6584,
+      "sourceSha256": "2ae6656d984651859eaa7cb5f5ba848009cd219b74b9beada8dc55eedb499594",
+      "copiedSha256": "2ae6656d984651859eaa7cb5f5ba848009cd219b74b9beada8dc55eedb499594",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/training_complete.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/training_complete.json",
+      "sha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+      "bytes": 37796,
+      "sourceSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+      "copiedSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/training_curves_provenance.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/training_curves_provenance.json",
+      "sha256": "fbbed287034718581fcdb59331eca62bb577fd2df552b42012c470212c88e726",
+      "bytes": 316,
+      "sourceSha256": "fbbed287034718581fcdb59331eca62bb577fd2df552b42012c470212c88e726",
+      "copiedSha256": "fbbed287034718581fcdb59331eca62bb577fd2df552b42012c470212c88e726",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/training_figure_provenance.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/training_figure_provenance.json",
+      "sha256": "18e05a1f87bef7b0afb7d1696bc1d5110729c916369f2ccd56595ec2009f049d",
+      "bytes": 3918,
+      "sourceSha256": "18e05a1f87bef7b0afb7d1696bc1d5110729c916369f2ccd56595ec2009f049d",
+      "copiedSha256": "18e05a1f87bef7b0afb7d1696bc1d5110729c916369f2ccd56595ec2009f049d",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/white_background_review.json",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_review.json",
+      "sha256": "b177627feec3aecde26163e2426e799108375ab44b6b3acb2bcf0da43a6b1160",
+      "bytes": 14933,
+      "sourceSha256": "b177627feec3aecde26163e2426e799108375ab44b6b3acb2bcf0da43a6b1160",
+      "copiedSha256": "b177627feec3aecde26163e2426e799108375ab44b6b3acb2bcf0da43a6b1160",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/confidence_only_mango_test_predictions.csv",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/arms/combined/confidence_only_mango_test_predictions.csv",
+      "sha256": "95f9fbeec121f8805d9968613926f98d290b03128e88e64b034fed34d6ea93fe",
+      "bytes": 273282,
+      "sourceSha256": "95f9fbeec121f8805d9968613926f98d290b03128e88e64b034fed34d6ea93fe",
+      "copiedSha256": "95f9fbeec121f8805d9968613926f98d290b03128e88e64b034fed34d6ea93fe",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/confidence_only_new_ood_report_predictions.csv",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/arms/combined/confidence_only_new_ood_report_predictions.csv",
+      "sha256": "e8949b781aee0a04d46a3a602b4bc1054275c21f1c58a65ad6fce013d2361509",
+      "bytes": 13823,
+      "sourceSha256": "e8949b781aee0a04d46a3a602b4bc1054275c21f1c58a65ad6fce013d2361509",
+      "copiedSha256": "e8949b781aee0a04d46a3a602b4bc1054275c21f1c58a65ad6fce013d2361509",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/confidence_only_old_ood_report_predictions.csv",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/arms/combined/confidence_only_old_ood_report_predictions.csv",
+      "sha256": "a433a5a58b51a7712ecb2c2209c7631fb7859dfce887fa8c48b88cbe1bfa819e",
+      "bytes": 35286,
+      "sourceSha256": "a433a5a58b51a7712ecb2c2209c7631fb7859dfce887fa8c48b88cbe1bfa819e",
+      "copiedSha256": "a433a5a58b51a7712ecb2c2209c7631fb7859dfce887fa8c48b88cbe1bfa819e",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/raw_per_class_metrics.csv",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/arms/combined/raw_per_class_metrics.csv",
+      "sha256": "8b2df327d9c4ff5be7393fb92a911107fd1bc4e8809f0eb524176cb716e8909a",
+      "bytes": 446,
+      "sourceSha256": "8b2df327d9c4ff5be7393fb92a911107fd1bc4e8809f0eb524176cb716e8909a",
+      "copiedSha256": "8b2df327d9c4ff5be7393fb92a911107fd1bc4e8809f0eb524176cb716e8909a",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/selected_mango_test_predictions.csv",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/arms/combined/selected_mango_test_predictions.csv",
+      "sha256": "f2e68e138fc2953ff975ed24cb6082103bfead1bdd89ff7f2083c2a2157bcccd",
+      "bytes": 273328,
+      "sourceSha256": "f2e68e138fc2953ff975ed24cb6082103bfead1bdd89ff7f2083c2a2157bcccd",
+      "copiedSha256": "f2e68e138fc2953ff975ed24cb6082103bfead1bdd89ff7f2083c2a2157bcccd",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/selected_new_ood_report_predictions.csv",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/arms/combined/selected_new_ood_report_predictions.csv",
+      "sha256": "de09b9a9d8937e06069557c4720c63bcb388d1498941313a92a3ae19311f0605",
+      "bytes": 14078,
+      "sourceSha256": "de09b9a9d8937e06069557c4720c63bcb388d1498941313a92a3ae19311f0605",
+      "copiedSha256": "de09b9a9d8937e06069557c4720c63bcb388d1498941313a92a3ae19311f0605",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/selected_old_ood_report_predictions.csv",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/arms/combined/selected_old_ood_report_predictions.csv",
+      "sha256": "536944dd080c2fd91408f78aee212ac9d74ccffb773b844538d3c115e91e6cf8",
+      "bytes": 35825,
+      "sourceSha256": "536944dd080c2fd91408f78aee212ac9d74ccffb773b844538d3c115e91e6cf8",
+      "copiedSha256": "536944dd080c2fd91408f78aee212ac9d74ccffb773b844538d3c115e91e6cf8",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/threshold_search.csv",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/arms/combined/threshold_search.csv",
+      "sha256": "3a998f0736c388ae2fad7567ea032df827dfb85d7e73609b4d0619781f33d8fc",
+      "bytes": 310854,
+      "sourceSha256": "3a998f0736c388ae2fad7567ea032df827dfb85d7e73609b4d0619781f33d8fc",
+      "copiedSha256": "3a998f0736c388ae2fad7567ea032df827dfb85d7e73609b4d0619781f33d8fc",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/tuning_predictions.csv",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/arms/combined/tuning_predictions.csv",
+      "sha256": "428a8e0a154e0c64f3165857f81f84da18467f97ab91a41489df6f857194efda",
+      "bytes": 305824,
+      "sourceSha256": "428a8e0a154e0c64f3165857f81f84da18467f97ab91a41489df6f857194efda",
+      "copiedSha256": "428a8e0a154e0c64f3165857f81f84da18467f97ab91a41489df6f857194efda",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/audit/near_duplicate_pairs.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/near_duplicate_pairs.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "bytes": 3,
+      "sourceSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "copiedSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/audit/new_ood_index.csv",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/new_ood_index.csv",
+      "sha256": "9165eff13d43f7eda1883fb921595ad0dcce62cf9edfa995dfa9ea404e09dfca",
+      "bytes": 3270,
+      "sourceSha256": "9165eff13d43f7eda1883fb921595ad0dcce62cf9edfa995dfa9ea404e09dfca",
+      "copiedSha256": "9165eff13d43f7eda1883fb921595ad0dcce62cf9edfa995dfa9ea404e09dfca",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/audit/old_ood_index.csv",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/old_ood_index.csv",
+      "sha256": "5b93964d53bbba75e109fa982ed007e6e6b503188748d49cf7fc67926e313f2f",
+      "bytes": 17034,
+      "sourceSha256": "5b93964d53bbba75e109fa982ed007e6e6b503188748d49cf7fc67926e313f2f",
+      "copiedSha256": "5b93964d53bbba75e109fa982ed007e6e6b503188748d49cf7fc67926e313f2f",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/audit/preflight.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/preflight.json",
+      "sha256": "2b3dc366a1befb229faa9ab8b36b102d6d52d230beeb534a9f836cfbb9e02c55",
+      "bytes": 1857,
+      "sourceSha256": "2b3dc366a1befb229faa9ab8b36b102d6d52d230beeb534a9f836cfbb9e02c55",
+      "copiedSha256": "2b3dc366a1befb229faa9ab8b36b102d6d52d230beeb534a9f836cfbb9e02c55",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/candidate_exports.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/candidate_exports.json",
+      "sha256": "366f5085abce34edbf13cfe8711451b92342325ba773f2e1acb192cefbd8e8b9",
+      "bytes": 591,
+      "sourceSha256": "366f5085abce34edbf13cfe8711451b92342325ba773f2e1acb192cefbd8e8b9",
+      "copiedSha256": "366f5085abce34edbf13cfe8711451b92342325ba773f2e1acb192cefbd8e8b9",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/candidate_hashes.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/candidate_hashes.json",
+      "sha256": "dd60c38a3a2498f9780239bf252eeff25c6de54539c775db8141e7a318659975",
+      "bytes": 490,
+      "sourceSha256": "dd60c38a3a2498f9780239bf252eeff25c6de54539c775db8141e7a318659975",
+      "copiedSha256": "dd60c38a3a2498f9780239bf252eeff25c6de54539c775db8141e7a318659975",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/candidate_models/combined/model_config.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/candidate_models/combined/model_config.json",
+      "sha256": "23f976f5d4311885e49a7738a02fe7576a073e700dc7dd1a0e1a70b60dd3cb52",
+      "bytes": 1113,
+      "sourceSha256": "23f976f5d4311885e49a7738a02fe7576a073e700dc7dd1a0e1a70b60dd3cb52",
+      "copiedSha256": "23f976f5d4311885e49a7738a02fe7576a073e700dc7dd1a0e1a70b60dd3cb52",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/evaluation.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/evaluation.json",
+      "sha256": "46da4aa3d2fd2532bc45256447302f58938e53ee16b6fe58d7794b73bc035de1",
+      "bytes": 13886,
+      "sourceSha256": "46da4aa3d2fd2532bc45256447302f58938e53ee16b6fe58d7794b73bc035de1",
+      "copiedSha256": "46da4aa3d2fd2532bc45256447302f58938e53ee16b6fe58d7794b73bc035de1",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/evaluation_inputs.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/evaluation_inputs.json",
+      "sha256": "889eee8e88bc51cebb0551c9a2cab73321c302bdc5b2a86ff48b58507d9f1a3c",
+      "bytes": 1601522,
+      "sourceSha256": "889eee8e88bc51cebb0551c9a2cab73321c302bdc5b2a86ff48b58507d9f1a3c",
+      "copiedSha256": "889eee8e88bc51cebb0551c9a2cab73321c302bdc5b2a86ff48b58507d9f1a3c",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/evaluation_lock.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/evaluation_lock.json",
+      "sha256": "7e26486a089ddbc8096ddb121ec0ec43f948c7101985da7283af961130292b69",
+      "bytes": 330,
+      "sourceSha256": "7e26486a089ddbc8096ddb121ec0ec43f948c7101985da7283af961130292b69",
+      "copiedSha256": "7e26486a089ddbc8096ddb121ec0ec43f948c7101985da7283af961130292b69",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/evaluation_started.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/evaluation_started.json",
+      "sha256": "e41048774cfce2f5f8d57affe09bd4dff12f2478816f8eed9da8ae4cfc508a32",
+      "bytes": 228,
+      "sourceSha256": "e41048774cfce2f5f8d57affe09bd4dff12f2478816f8eed9da8ae4cfc508a32",
+      "copiedSha256": "e41048774cfce2f5f8d57affe09bd4dff12f2478816f8eed9da8ae4cfc508a32",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/evidence_hashes.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/evidence_hashes.json",
+      "sha256": "a766907a90818e224b0f865c29cc7cf82f5e4e3ba9c8807ebcba40f361a941f2",
+      "bytes": 3388,
+      "sourceSha256": "a766907a90818e224b0f865c29cc7cf82f5e4e3ba9c8807ebcba40f361a941f2",
+      "copiedSha256": "a766907a90818e224b0f865c29cc7cf82f5e4e3ba9c8807ebcba40f361a941f2",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/REPORT.md",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/REPORT.md",
+      "sha256": "414a9c95517a3ae4c3d51f65db88dfd90ab6404fed5bae3a04989d5a6da3f359",
+      "bytes": 2673,
+      "sourceSha256": "414a9c95517a3ae4c3d51f65db88dfd90ab6404fed5bae3a04989d5a6da3f359",
+      "copiedSha256": "414a9c95517a3ae4c3d51f65db88dfd90ab6404fed5bae3a04989d5a6da3f359",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/selected_thresholds.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/selected_thresholds.json",
+      "sha256": "fd213d6ed4fc37e10738f391d989dc32e7ad3555d048e02ac7ba9921f5bb26b3",
+      "bytes": 10682,
+      "sourceSha256": "fd213d6ed4fc37e10738f391d989dc32e7ad3555d048e02ac7ba9921f5bb26b3",
+      "copiedSha256": "fd213d6ed4fc37e10738f391d989dc32e7ad3555d048e02ac7ba9921f5bb26b3",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/selection_lock.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/selection_lock.json",
+      "sha256": "9240a87517f25b5229deea4e30e958a6e0ea7e2c477e189935dc51787a92e84e",
+      "bytes": 373,
+      "sourceSha256": "9240a87517f25b5229deea4e30e958a6e0ea7e2c477e189935dc51787a92e84e",
+      "copiedSha256": "9240a87517f25b5229deea4e30e958a6e0ea7e2c477e189935dc51787a92e84e",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/threshold_complete.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/threshold_complete.json",
+      "sha256": "daba6fc62c90be8eaec43e50032935bfaae68179f1b2d76c3ee605a21766c452",
+      "bytes": 4642,
+      "sourceSha256": "daba6fc62c90be8eaec43e50032935bfaae68179f1b2d76c3ee605a21766c452",
+      "copiedSha256": "daba6fc62c90be8eaec43e50032935bfaae68179f1b2d76c3ee605a21766c452",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/figures/training_curves.png",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figures/training_curves.png",
+      "sha256": "ea1a434a8cf3d4248528bed9ed17a9bf9c6fb102edf9399408c7b4b961968d93",
+      "bytes": 118603,
+      "sourceSha256": "ea1a434a8cf3d4248528bed9ed17a9bf9c6fb102edf9399408c7b4b961968d93",
+      "copiedSha256": "ea1a434a8cf3d4248528bed9ed17a9bf9c6fb102edf9399408c7b4b961968d93",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/figures/augmentation_preview.png",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figures/augmentation_preview.png",
+      "sha256": "1f629305229df9168500d5372a08ed0825915f887c71f6287c3a31ba95a904d1",
+      "bytes": 2305817,
+      "sourceSha256": "1f629305229df9168500d5372a08ed0825915f887c71f6287c3a31ba95a904d1",
+      "copiedSha256": "1f629305229df9168500d5372a08ed0825915f887c71f6287c3a31ba95a904d1",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/figures/grad_cam.png",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figures/grad_cam.png",
+      "sha256": "9a10c9013ed1a67bf89c9500a458ccaf1307381dabf51d44371e779179400aef",
+      "bytes": 2569601,
+      "sourceSha256": "9a10c9013ed1a67bf89c9500a458ccaf1307381dabf51d44371e779179400aef",
+      "copiedSha256": "9a10c9013ed1a67bf89c9500a458ccaf1307381dabf51d44371e779179400aef",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/figures/confusion_matrix.png",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figures/confusion_matrix.png",
+      "sha256": "35135507bd7e7e23921657f46a9a9767692bc77aa20df88030e83d85819eee85",
+      "bytes": 105337,
+      "sourceSha256": "35135507bd7e7e23921657f46a9a9767692bc77aa20df88030e83d85819eee85",
+      "copiedSha256": "35135507bd7e7e23921657f46a9a9767692bc77aa20df88030e83d85819eee85",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/figures/per_class_metrics.png",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figures/per_class_metrics.png",
+      "sha256": "b16feea18e5d47280c7f34a94f2effab687f096c8d96401322e24a7c4dd4aca6",
+      "bytes": 63751,
+      "sourceSha256": "b16feea18e5d47280c7f34a94f2effab687f096c8d96401322e24a7c4dd4aca6",
+      "copiedSha256": "b16feea18e5d47280c7f34a94f2effab687f096c8d96401322e24a7c4dd4aca6",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/figures/threshold_search.png",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figures/threshold_search.png",
+      "sha256": "aa44028244de4b161d777236ed9063898149168102731bdf68f1ac69ddc1ac34",
+      "bytes": 75293,
+      "sourceSha256": "aa44028244de4b161d777236ed9063898149168102731bdf68f1ac69ddc1ac34",
+      "copiedSha256": "aa44028244de4b161d777236ed9063898149168102731bdf68f1ac69ddc1ac34",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/figures/per_class_metrics.csv",
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figures/per_class_metrics.csv",
+      "sha256": "8b2df327d9c4ff5be7393fb92a911107fd1bc4e8809f0eb524176cb716e8909a",
+      "bytes": 446,
+      "sourceSha256": "8b2df327d9c4ff5be7393fb92a911107fd1bc4e8809f0eb524176cb716e8909a",
+      "copiedSha256": "8b2df327d9c4ff5be7393fb92a911107fd1bc4e8809f0eb524176cb716e8909a",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    },
+    {
+      "repositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/historical/v4.1.1_evaluation_inputs.json",
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0-evidence.zip!historical/v4.1.1_evaluation_inputs.json",
+      "sha256": "9692d77f942abd2a2715b0f9f6bfc7a19833be421711c065b9bbe7ab0fe129a9",
+      "bytes": 1364085,
+      "sourceSha256": "9692d77f942abd2a2715b0f9f6bfc7a19833be421711c065b9bbe7ab0fe129a9",
+      "copiedSha256": "9692d77f942abd2a2715b0f9f6bfc7a19833be421711c065b9bbe7ab0fe129a9",
+      "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+      "thresholdRunId": "v4-3-0-thresholds-20261001T120051Z-e1c5cdb0"
+    }
+  ],
+  "scopeOmissions": [
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/export_attempts/20261001T115150Z-22f402c8/converter_stubs/tensorflow_decision_forests/__init__.py",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/export_attempts/20261001T115150Z-22f402c8/converter_stubs/tensorflow_decision_forests/__pycache__/__init__.cpython-313.pyc",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/export_attempts/20261001T115150Z-22f402c8/converter_stubs/tensorflow_decision_forests/keras.py",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/export_attempts/20261001T115150Z-22f402c8/saved_model/fingerprint.pb",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/export_attempts/20261001T115150Z-22f402c8/saved_model/saved_model.pb",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/export_attempts/20261001T115150Z-22f402c8/saved_model/variables/variables.data-00000-of-00001",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/export_attempts/20261001T115150Z-22f402c8/saved_model/variables/variables.index",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/model_calibrated.keras",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/stage1_best.weights.h5",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/stage2_best.weights.h5",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/tfjs_model/group1-shard1of3.bin",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/tfjs_model/group1-shard2of3.bin",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/tfjs_model/group1-shard3of3.bin",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/tfjs_model/model.json",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/arms/combined/validation_probabilities.npy",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/015c3e087b2b2301e45d.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/01a99a2a76a1e8bcae22.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/01ade25478caa5b27838.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/022e69d9528e70074430.jpeg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/02a50bc105ccd5539112.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/02ab959f52cdd6baa158.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/082c1c41c85b1ede0fa6.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/08f600a7768a8b729a8f.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/0afe4f8243c50a0cd353.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/0c3b1febe4f9d59341f2.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/0c45833a0bda3674ebc5.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/0d4fa53a7be24e07a617.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/0eeb89b7374122ade544.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/103d5f6c6e166b3b0b55.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/11194ffa1a6875d28ee2.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/13a2c272df29df9de268.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/1456b48b48db5ab3209f.jpeg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/16a0c7e869330569eddf.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/17b5ad67f0bfc87bafbe.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/183a10ad2c45040e6d71.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/1994ff51faf3c9fb47d7.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/19d06f80c06f7c93dfed.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/1da788e58b5502f39b24.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/1f5c190183916b4ed9dc.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/24f52ef394509dd6b254.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/26d51c489b316bb4851e.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/27a7018a764ebda38371.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/291fab5bdd08dbfcefed.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/2bcc34f0612d422ce6a6.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/2c7058b39fb06521fa66.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/2f6a9fa868212558081f.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/32519184023f2d727697.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/36d810f695cbef7b5451.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/37e6acc264906d1bdc80.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/37fd08bfa7cde561be52.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/39c753f0e1701f753ae6.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/3afba8e4cc186c8ebdfd.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/3ba03cde58bedb52ac1e.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/3d916a7e1eebb0248d9f.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/40c7559cdc915f900bfe.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/40e234beb202c7b49312.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/41c41723f727eb344799.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/42a3566d6b6446a14627.jpeg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/463820b16dae4a364cbb.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/47592c80494b7ed22790.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/47af02f30827c3fc18a9.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/4b21791d4c092c86bd6e.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/4d1fd6b7550f649f9801.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/507b48a4d2127a50ffc9.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/507ba35ff15c6b3dc65a.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/5081433f10fca437be3a.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/5091f3e49fda8770f05a.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/534cab3e52799ecde06f.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/5404c9b9c6e73168d806.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/545872ddbf930bd96130.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/5500f4b7b01fb1be8bc3.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/55e246f70a2354d3ba68.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/579143d3cae335b757d1.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/57c7d455078f8b367e68.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/592a8f2e85bea37d3916.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/5948a9fca420ebc6ae3b.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/5948c1597f4c5430cefa.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/59a1cfa3415d56a9d8c1.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/5b2ba3c11155e8b048a2.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/5bd14bf7ba9f3773f77d.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/5cfd1a2fc23a890c27e3.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/5f8b9600170d4c984600.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/5fb628879866443dfa41.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/626896064be86f18d67d.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/63a3bbc4571d812938e5.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/69e3e2d1ecd2ad3587d9.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/69f9636ad933303e1fa7.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/6aac6919dbcc960a5146.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/6c19e7e063fa50d27fe8.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/6e8e03deafe6e1c05aec.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/6e9e881e564cadcaff2c.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/6f47c32bf1c0ebb80e08.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/6fd0d339b19f4dbe7053.jpeg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/716a989a7117a5bbc8de.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/71ff7b5ab551e49dea7b.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/72a631be1a3bf7d10ff4.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/735a10552a52f34e3696.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/74ae4a9e0b4ef96a31b1.jpeg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/753b8ce84aa7897924cb.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/753bddc4fdd3e109bc18.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/756c69e08ac3e880dcef.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/76c2ad623568799135cb.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/79451e053638ec87b9c6.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/79fc7a83c4369b6a32a2.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/7a49496a0022fd2ae2d5.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/7acb08089ebd546fe1d0.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/7bf638248fb5ce095229.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/7ce4f41256bb0204ea9b.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/7cf100587b5501c71b4d.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/7d991e7f2617e53ea288.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8110bc85c0ac352fd7e6.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8156a6507e48d9d92a93.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/81f7976d14928a53f058.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8290bd727f310e1e8ed9.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/84ef8c5b9e8845554317.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/88faefda01bc58e8862b.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/899615056096234ba9fe.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/899f0ee8789340f63151.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8ac9892f838bb4458999.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8b5b467727255d7f15c0.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8b835d0be4c670baec82.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8c0e613a9aa4fb08f364.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8ca95acd131ae2f0c301.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8f046cd7ae88e5187106.jpeg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8f33f8b7fc60b8b8e37c.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8f73c6d20dd2ecc252c0.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/8fe968ebfedf5072ab23.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/90cdc03aca204401886a.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/91ff4b90184fc26764d1.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/940b0d83f98da75b1fdc.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/94ef235152c873b7e1a4.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/95aca61a7770760c12b5.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/98ef95d282c6c914c194.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/9ab2bbda49681375e44c.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/9abab4a579c5409f4daf.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/9c27ab3dadb7c626d66c.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/9fb696a896b05c41d648.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/9fcc21fcc11f3b9a9051.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/a067db2d4a9747572988.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/a2f780979d0d0d9a47a5.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/a349877020770b353593.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/a3856863533120894468.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/a3f47002bc72bead1dce.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/a525ff40f8fad88903a0.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/a66a81b371e4439d441c.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/a8233609e09514e5bc92.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/a82383ad2d03f2a0afd6.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/a8d741f3c22a8decf63c.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/a93bae2a7069f59e12c5.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/aa64ada11be407b26e49.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/ac05e61d95aa9c5c4114.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/ad7b549369df4fd31dbf.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/ad7cb954df82862e42ff.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/ae6d60095a2f1e4c796f.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/af419a8dd750657f7056.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b03fbb2e4f4410a795cb.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b102fa9b10552cb6263f.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b13a5f00831869d15f0d.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b1bfbb51ca63856e6e4b.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b2347ebc8ae5432f8e6c.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b32e66f5ba853695b941.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b45799d71cfc89db6a0a.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b469f52480867633b4b5.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b4cb459689775f439957.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b7951d204a0193b7622d.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b7a15bf6a55bfcceabef.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/b9295b83fff994c8e98e.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/bae3b52510ea9aa5840c.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/bb3b14eb8fb89960c0dc.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/bb90966eca4cc359c1e1.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/bd5f8c3c89a190f5d55c.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/bdc039407af1e08c578a.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/bf626eb46c0c49b872a4.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/c028dff8f330ad3abe98.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/c147c86b71a4c5670c44.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/c6dc7c66735cbcfadb90.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/c74b8127c81e3ea8d612.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/c9581be0eb2fa116fb3f.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/cb9993f90929e2935ab8.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/d629f84b295a5322643f.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/d6b2b6296d13b649b97d.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/d7c43faba0da9b142d7f.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/d99c19d7b5f8b1f599af.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/da237a1fda7dfce13115.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/da290ebc1e875a43ac57.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/dba9004476b7511b7b01.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/dfbf31b68490ecf0d41c.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/dfe6af3f1da4f2955daa.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/e37235af36315e2e69ac.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/e3d4dc93a5ad5c199d07.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/e557e0a8f8cca819c3bf.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/e67f473430b5d68eac54.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/e7755db263471ef34f6c.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/e7a42e93c80d2a8a1871.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/e7d2cf3952efcf960b68.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/ea1fd1791f399a216d3f.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/ea47ae18a3b2f1d581e7.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/eb7b4f6ea36b4fac4495.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/ebc80fa05feca6f4c568.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/ec06b1016e0936a4f01a.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/ece32416debd4a3e0d8a.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/ecff5619cdc82abf2611.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/ed54a5a471b3eb605065.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/edbe23befe23ff4bd783.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/f00a14c54b49bde34399.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/f21b67c977f9b90711a4.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/f46a62322df94a4f6108.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/f4e317a015a9a1eb2994.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/fa926872775d162494b6.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/fb6d2c59773886340dd0.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/fb8018c815cfe75229de.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/fbc55558d301d4e5779e.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/fc37aba2dbeb2657b6a3.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/fe75f6a7239fff5b5870.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/backgrounds/feb21b956e6a450befc0.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/dataset_split.zip",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figure_attempts/evaluation-20261001T122824Z-6aef530f/confusion_matrix.png",
+      "reason": "attempt or redundant pending record"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figure_attempts/evaluation-20261001T122824Z-6aef530f/per_class_metrics.csv",
+      "reason": "attempt or redundant pending record"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figure_attempts/evaluation-20261001T122824Z-6aef530f/per_class_metrics.png",
+      "reason": "attempt or redundant pending record"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figure_attempts/evaluation-20261001T122824Z-6aef530f/threshold_search.png",
+      "reason": "attempt or redundant pending record"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figure_attempts/training-20261001T122551Z-a0c9f1f1/augmentation_preview.png",
+      "reason": "attempt or redundant pending record"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figure_attempts/training-20261001T122551Z-a0c9f1f1/grad_cam.png",
+      "reason": "attempt or redundant pending record"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/figure_provenance.json.pending.json",
+      "reason": "attempt or redundant pending record"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/lighting_previews/anthracnose.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/lighting_previews/bacterial_black_spot.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/lighting_previews/bacterial_canker.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/lighting_previews/healthy_fruit.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/lighting_previews/healthy_leaf.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/lighting_previews/mango_scab.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/lighting_previews/sooty_mold.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_previews/page-001.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_previews/page-002.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_previews/page-003.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_previews/page-004.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_previews/page-005.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_previews/page-006.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_previews/page-007.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_previews/page-008.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_previews/page-009.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/03d6e64205f9aa4454f6.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/04e32dacc9a3a09de491.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/052738e317d5861a77e1.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/05aab36def1fe6fcc1dc.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/0f40d8fc0f46a0d6a325.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/0f7a030d6da9f068509b.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/1a2492e7e435dfcd4742.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/27029d01e54b361b1c5e.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/2a8cd8ba5e29297ddbaa.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/2ab46a6238252c6e1882.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/2ad6574edb60a5e1c299.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/2adc9b1361318b818d6b.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/2f1b4f85f5204e16492f.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/3a71a0ba82d114a6fd3a.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/3b698e605e8cdab91412.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/3ba157ce12557d5187a5.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/3cf5a588eb076d67ca69.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/3d7d1c6fea1cd643848b.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/402d5b8af83fd4f1b0b1.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/40815f9968cbdff7ddc9.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/431080cdfb4d848cddf9.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/4356c77e2c6b60c3e38f.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/507424474a1a2575e8c3.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/51b7a82bc6048e246769.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/52924691e6bc413012c0.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/556d3e476e6043a00217.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/58604434211c57ccb95f.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/59bef3881f20854c2257.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/5ca6ae750235e0fb8a1a.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/5cc231a019c7ac069260.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/5d8a3b4686a956c319f7.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/646f5085afa7916cba97.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/6c2f9923208597ff9d66.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/6e84bfe9073557991d9d.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/6f0b00866a12bd864fb4.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/7928f13089e1ecc15f8a.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/79bd3566051f48359438.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/7a58d7389ccb138348c9.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/7c93b0a99b4df9c159d0.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/8000ccbf8c82dfd92965.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/88e491bbc8d5fa740a08.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/8933c92fd33410c91cbc.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/8b48090b1fda3b9615d1.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/8d4334bf34ecf6fad7f7.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/8e7bc6040b99844e6bf6.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/947fa9a182b0e63c7531.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/966e4065d2f511e09ed3.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/982dbbff19188909448f.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/99a4a795dd3dbe69dcfc.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/a7e59196999d17715420.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/a85090080126565151df.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/ab62e01a8adb49d1554c.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/abd7b04eacb9b1c7307d.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/b67f3d0c56695ec71a63.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/b72cb3b9c0669db91c3b.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/ba5d19327ce5e144cc07.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/ba6b78735567497c4363.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/cb06afec85b09bf2c8fe.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/d77962b959d8e2ddaedd.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/daa46974f657ef9ac5bf.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/e08f4b19f155337135ca.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/ecf5dcb5fa860d49347a.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/f20548b1ce793d3e6918.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/f3429ff0dc97d975c83b.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/f3c6ed9c38701bb5e6dd.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/masks/fa706d1cd9bdce2040f6.png",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/scene_previews/page-001.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/scene_previews/page-002.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/scene_previews/page-003.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/scene_previews/page-004.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/scene_previews/page-005.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/scene_previews/page-006.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/scene_previews/page-007.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/scene_previews/page-008.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/scene_previews/page-009.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/training_figure_provenance.json.pending.json",
+      "reason": "attempt or redundant pending record"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-001.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-002.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-003.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-004.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-005.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-006.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-007.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-008.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-009.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-010.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-011.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-012.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-013.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-014.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-015.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-016.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-017.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-018.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-019.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-020.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-021.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-022.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-023.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-024.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-025.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-026.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-027.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-028.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-029.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-030.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-031.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-032.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-033.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-034.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-035.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-036.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-037.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-038.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-039.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-040.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-041.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-042.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-043.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-044.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-045.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-046.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-047.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-048.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-049.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-050.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/white_background_previews/page-051.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/new_ood_000.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/new_ood_001.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/old_ood_000.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/old_ood_001.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/old_ood_002.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/old_ood_003.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/old_ood_004.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/old_ood_005.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/old_ood_006.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/old_ood_007.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/audit/old_ood_008.jpg",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/candidate_models/combined/group1-shard1of3.bin",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/candidate_models/combined/group1-shard2of3.bin",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/candidate_models/combined/group1-shard3of3.bin",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/candidate_models/combined/model.json",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0-combined-candidate_model.zip",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    },
+    {
+      "sourceRelative": "threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0-evidence.zip",
+      "reason": "model graph/weights, image/mask/preview, dataset or ZIP retained in originals"
+    }
+  ],
+  "omissionNotes": [
+    "Original image/background/mask/preview files, dataset split ZIP, Keras/NumPy/TFJS model blobs, graph JSON, downloadable ZIPs and figure-attempt/pending files remain in the preserved original tree.",
+    "Model configuration JSON is copied as metadata; model weights and graph JSON are excluded from documentation.",
+    "The historical V4.1.1 evaluation input JSON is copied from its verified evidence ZIP member because that original packaged reference is not a loose file."
+  ]
+}

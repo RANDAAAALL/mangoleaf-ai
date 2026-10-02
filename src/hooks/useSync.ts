@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { supabase } from "@/lib/supabase-client";
 import { db, type ScanRecord } from "@/lib/db";
+import { modelVersion } from "@/lib/constants";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
 const SYNC_RETRY_DELAYS_MS = [10_000, 30_000, 60_000, 300_000];
@@ -334,6 +335,7 @@ export function useSync() {
         image_blob: imageBlob,
         image_url: null,
         image_hash: imageHash,
+        model_version: modelVersion,
         updated_at: timestamp,
         device_id: deviceId,
         _status: "pending-insert",

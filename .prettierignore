@@ -16,7 +16,7 @@ public/sw.js*
 
 # Generated model assets, notebooks, and lockfile
 public/model/
-docs/model-training/artifacts/
+docs/model-training/**/artifacts/
 notebooks/
 bun.lock
 

@@ -1,0 +1,12 @@
+{
+  "status": "feasible",
+  "candidateZips": {
+    "combined": "/content/drive/MyDrive/mangoleaf_experiments/v4.3.0/threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0-combined-candidate_model.zip"
+  },
+  "candidateZipSha256": {
+    "combined": "12d32498e017b1224b80ef5a93820704cb32127c836ca64ed25b546713eb7430"
+  },
+  "trainingFilesCopiedUnchanged": true,
+  "selectionSha256": "fd213d6ed4fc37e10738f391d989dc32e7ad3555d048e02ac7ba9921f5bb26b3",
+  "evaluationSha256": "46da4aa3d2fd2532bc45256447302f58938e53ee16b6fe58d7794b73bc035de1"
+}

@@ -1,0 +1,193 @@
+{
+  "status": "derived analyses; original experiment evidence copied separately",
+  "reviewedDate": "2026-10-01",
+  "inputs": {
+    "docs/model-training/experiment/v4.3.0/artifacts/training/training_complete.json": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+    "docs/model-training/experiment/v4.3.0/artifacts/training/background_schedule.json": "2c751193a768181feda27a4a30dcf2983a2783452fe9a69110e0937400a052b0",
+    "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/evaluation.json": "46da4aa3d2fd2532bc45256447302f58938e53ee16b6fe58d7794b73bc035de1",
+    "docs/model-training/experiment/v4.3.0/artifacts/threshold_fitting/selected_thresholds.json": "fd213d6ed4fc37e10738f391d989dc32e7ad3555d048e02ac7ba9921f5bb26b3",
+    "docs/model-training/experiment/v4.1.1/artifacts/evaluation.json": "c18db308c8af22e26fa0a229d2363bab59873ab842e6bc76b5878b5d44e7fb8b",
+    "docs/model-training/experiment/v4.1.1/artifacts/selected_thresholds.json": "58b7316f426c320912df516973ce58c3dad7ae49d2c2522756d3d405b80bf212"
+  },
+  "files": [
+    {
+      "path": "accepted-mango-errors-v411-background.csv",
+      "bytes": 620,
+      "sha256": "1aede28790fb6bbeab1804c91f4502187f03e6df3bd3a063f896722b8730346d",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "accepted-mango-errors-v411-combined.csv",
+      "bytes": 618,
+      "sha256": "dcb17050a5ccdfbcf505ca2481c70ce66a9a399aad34506fc0cecb6362624a8e",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "accepted-mango-errors-v411-control.csv",
+      "bytes": 787,
+      "sha256": "d6768c66c6c6f8279a34d345d802fc1437e10168f9da7625476e8010e191e0c9",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "accepted-mango-errors-v411-lighting.csv",
+      "bytes": 617,
+      "sha256": "b009d2bf3393d39bd1ed349eeaab7edec67cf9abce432394b00790bf5674eadb",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "accepted-mango-errors-v430-combined.csv",
+      "bytes": 620,
+      "sha256": "aea829aa05788443afa3f4a7b08808ed26c3c0fd0036406d2cd47e98fd30e049",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "audit-summary.json",
+      "bytes": 224385,
+      "sha256": "9bd339337bb628d567fd7e0ec0bad3d55fcf42b9fec5b4580f457bb1b03e1ffa",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "inference_smoke.json",
+      "bytes": 392,
+      "sha256": "19355a9c0badb705b370804659695a41f372629217b6aac11868b55ebed8ff7e",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "notebook-source-differences.json",
+      "bytes": 7597,
+      "sha256": "f255a992b6b147eaf79ded318b4ecc3d110a84af13480e78503e071ae89f596b",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-all-v430-v411-background-mango_test.csv",
+      "bytes": 112511,
+      "sha256": "aea895c7a9b75b08283d6477b302141c13e1579b4e64facf6487377e6fb06dd6",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-all-v430-v411-background-new_ood_report.csv",
+      "bytes": 7240,
+      "sha256": "8d3ac401b4f46f686f7f2ac66037834c42137faa48c97b22487484cb8a0a4e67",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-all-v430-v411-background-old_ood_report.csv",
+      "bytes": 19363,
+      "sha256": "263eb64b9432dc125b7a94c2132e7c473ab8b660cd3db07e3eac775229d67ef6",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-all-v430-v411-combined-mango_test.csv",
+      "bytes": 112490,
+      "sha256": "1cebef51445a149ea3f0ea4e462d0b2d601c4b2ad5b23da4c56b67534a12c79d",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-all-v430-v411-combined-new_ood_report.csv",
+      "bytes": 7238,
+      "sha256": "42bc80695ad76ef194c41bb288cfd6c04971ef3eb684b29af26eecda2f34f1ac",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-all-v430-v411-combined-old_ood_report.csv",
+      "bytes": 19361,
+      "sha256": "5feeaca7a04fcace2837970605715d2e4928a6c63eb5bac1a6a0022d90cf17cb",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-raw-class-changes-v430-v411-background-mango_test.csv",
+      "bytes": 255,
+      "sha256": "3fc94973e58cc8a4ca3b158b431ceb5f248306f11ce3eed45f153b7da28ec9cc",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-raw-class-changes-v430-v411-background-new_ood_report.csv",
+      "bytes": 554,
+      "sha256": "bf011ebc16cfa894081c68bcea75c39e5205901d40d4bf73e6c3c7cb8118e01a",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-raw-class-changes-v430-v411-background-old_ood_report.csv",
+      "bytes": 1531,
+      "sha256": "15c8d270adffeb8a51e3a58cbe19edba9a7c5c7f5da247ea33355de43191512a",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-raw-class-changes-v430-v411-combined-mango_test.csv",
+      "bytes": 255,
+      "sha256": "3fc94973e58cc8a4ca3b158b431ceb5f248306f11ce3eed45f153b7da28ec9cc",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-raw-class-changes-v430-v411-combined-new_ood_report.csv",
+      "bytes": 554,
+      "sha256": "bf011ebc16cfa894081c68bcea75c39e5205901d40d4bf73e6c3c7cb8118e01a",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-raw-class-changes-v430-v411-combined-old_ood_report.csv",
+      "bytes": 1541,
+      "sha256": "7a284f60e361a9ca091cadbd97078715416dc491c8180ea3ecadd1ac94ff4c1a",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-v430-v411-background-new_ood_report.csv",
+      "bytes": 1027,
+      "sha256": "2b1f69d01bd92cc7cc612fc0a29855fefde7b3ca65adc643779e97994cf9a6a1",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-v430-v411-background-old_ood_report.csv",
+      "bytes": 2444,
+      "sha256": "1c0a10229cf9852659aaecd3bbf9678c63473d97de47f630b889a9998a74b31b",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-v430-v411-combined-new_ood_report.csv",
+      "bytes": 1026,
+      "sha256": "9b3952da875311f1866e337ba1fc057d7e8968d9727c8d94271e59a11aa11568",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "paired-v430-v411-combined-old_ood_report.csv",
+      "bytes": 2444,
+      "sha256": "997441bac52000899edaf960456bce92b94447b064c4fa9fa1d441a2b9e3e72a",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "retained_checkpoint_usage.json",
+      "bytes": 764,
+      "sha256": "679289017c6bcd888b8b8b98126a590ab5dd24df3a75d9ed715031e300d76d99",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "training_audit_report.md",
+      "bytes": 9997,
+      "sha256": "3938caeadecc2e1477e47b034879752c645237cc1529da1184aa221ca3a28e92",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "training_counts.json",
+      "bytes": 16559,
+      "sha256": "2a6e15422f37bf3226fd8560bfbc5cd763a76e10fc0a1430e68ba28e5e160283",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "training_scene_suitability.json",
+      "bytes": 6182,
+      "sha256": "a9b8cf9d9c21f4c71728bcd9fa54b4d3e40dc4432dca8e67f33086d051f3ea4a",
+      "origin": "local independent review of the saved experiment records"
+    },
+    {
+      "path": "verification_report.json",
+      "bytes": 2677,
+      "sha256": "1993f1bd5900e3f42bd8963d70e046a0180915d5b9c3f449a4c2d2c402d6662d",
+      "origin": "local independent review of the saved experiment records"
+    }
+  ],
+  "limits": [
+    "No neural-network retraining, report-image inference, or gate refitting was performed. A separate synthetic-input TensorFlow.js CPU smoke check establishes graph execution only.",
+    "Original copied evidence is listed in ../evidence_copy_manifest.json.",
+    "Retrospective gate sensitivity in audit-summary.json does not alter the frozen candidate."
+  ]
+}

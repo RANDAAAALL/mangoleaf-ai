@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Icon } from "@/components/brand/icon";
 import { Logo } from "@/components/brand/logo";
 import { translations, type Language } from "@/lib/translations";
+import { modelVersion } from "@/lib/constants";
 
 interface AboutTabProps {
   language: Language;
@@ -187,10 +188,10 @@ export const AboutTab = memo(function AboutTab({
           </h2>
           <div className="mt-5">
             <p className="text-6xl font-black tracking-[-0.07em] text-[#277839] sm:text-7xl">
-              97.46%
+              {modelVersion}
             </p>
             <p className="mt-1 text-xs font-medium text-[#526856]">
-              {t.aboutModelAccuracyLabel}
+              {t.aboutModelVersionLabel}
             </p>
           </div>
           <div className="mt-9 grid w-full gap-7 sm:grid-cols-3 sm:gap-5">

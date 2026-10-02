@@ -1,0 +1,314 @@
+{
+  "arms": {
+    "combined": {
+      "status": "feasible",
+      "thresholds": {
+        "confidenceThreshold": 0.7,
+        "marginThreshold": 0.0,
+        "entropyThreshold": 0.01
+      },
+      "modelSha256": "d284cde29761a924781be40da2c84b9e314b66e3fa306b99a47b8c7af87af7d1",
+      "temperature": 0.25000622798609307,
+      "rawClassificationReport": {
+        "anthracnose": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 73.0
+        },
+        "bacterial_canker": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 74.0
+        },
+        "healthy_leaf": {
+          "precision": 0.9868421052631579,
+          "recall": 1.0,
+          "f1-score": 0.9933774834437086,
+          "support": 75.0
+        },
+        "sooty_mold": {
+          "precision": 1.0,
+          "recall": 0.9866666666666667,
+          "f1-score": 0.9932885906040269,
+          "support": 75.0
+        },
+        "accuracy": 0.9966329966329966,
+        "macro avg": {
+          "precision": 0.9967105263157895,
+          "recall": 0.9966666666666667,
+          "f1-score": 0.9966665185119339,
+          "support": 297.0
+        },
+        "weighted avg": {
+          "precision": 0.9966772993088782,
+          "recall": 0.9966329966329966,
+          "f1-score": 0.9966328469817514,
+          "support": 297.0
+        }
+      },
+      "rawConfusionMatrix": [
+        [
+          73,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          74,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          75,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          74
+        ]
+      ],
+      "calibratedTestCrossEntropy": 0.007939514704048634,
+      "gatedReports": {
+        "confidence_only": {
+          "mango_test": {
+            "total": 297,
+            "accepted": 297,
+            "rejected": 0,
+            "retention": 1.0,
+            "rejectionRate": 0.0,
+            "rawAccuracy": 0.9966329966329966,
+            "acceptedCorrect": 296,
+            "acceptedWrong": 1,
+            "acceptedAccuracy": 0.9966329966329966,
+            "acceptedErrorsPerInput": 0.003367003367003367,
+            "healthyErrorCounts": {
+              "healthyAcceptedAsDisease": 0,
+              "diseaseAcceptedAsHealthy": 1,
+              "healthyOrganConfusion": 0
+            },
+            "perClass": {
+              "anthracnose": {
+                "total": 73,
+                "acceptedCorrect": 73,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "bacterial_canker": {
+                "total": 74,
+                "acceptedCorrect": 74,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "healthy_leaf": {
+                "total": 75,
+                "acceptedCorrect": 75,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "sooty_mold": {
+                "total": 75,
+                "acceptedCorrect": 74,
+                "acceptedWrong": 1,
+                "rejected": 0,
+                "retention": 1.0
+              }
+            },
+            "confusion": {
+              "rows": [
+                "anthracnose",
+                "bacterial_canker",
+                "healthy_leaf",
+                "sooty_mold"
+              ],
+              "columns": [
+                "anthracnose",
+                "bacterial_canker",
+                "healthy_leaf",
+                "sooty_mold",
+                "uncertain"
+              ],
+              "counts": [
+                [
+                  73,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  74,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  75,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1,
+                  74,
+                  0
+                ]
+              ]
+            }
+          },
+          "old_ood_report": {
+            "total": 84,
+            "accepted": 77,
+            "rejected": 7,
+            "retention": 0.9166666666666666,
+            "rejectionRate": 0.08333333333333333,
+            "falseAcceptRate": 0.9166666666666666
+          },
+          "new_ood_report": {
+            "total": 32,
+            "accepted": 28,
+            "rejected": 4,
+            "retention": 0.875,
+            "rejectionRate": 0.125,
+            "falseAcceptRate": 0.875
+          }
+        },
+        "selected": {
+          "mango_test": {
+            "total": 297,
+            "accepted": 295,
+            "rejected": 2,
+            "retention": 0.9932659932659933,
+            "rejectionRate": 0.006734006734006734,
+            "rawAccuracy": 0.9966329966329966,
+            "acceptedCorrect": 295,
+            "acceptedWrong": 0,
+            "acceptedAccuracy": 1.0,
+            "acceptedErrorsPerInput": 0.0,
+            "healthyErrorCounts": {
+              "healthyAcceptedAsDisease": 0,
+              "diseaseAcceptedAsHealthy": 0,
+              "healthyOrganConfusion": 0
+            },
+            "perClass": {
+              "anthracnose": {
+                "total": 73,
+                "acceptedCorrect": 73,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "bacterial_canker": {
+                "total": 74,
+                "acceptedCorrect": 74,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "healthy_leaf": {
+                "total": 75,
+                "acceptedCorrect": 75,
+                "acceptedWrong": 0,
+                "rejected": 0,
+                "retention": 1.0
+              },
+              "sooty_mold": {
+                "total": 75,
+                "acceptedCorrect": 73,
+                "acceptedWrong": 0,
+                "rejected": 2,
+                "retention": 0.9733333333333334
+              }
+            },
+            "confusion": {
+              "rows": [
+                "anthracnose",
+                "bacterial_canker",
+                "healthy_leaf",
+                "sooty_mold"
+              ],
+              "columns": [
+                "anthracnose",
+                "bacterial_canker",
+                "healthy_leaf",
+                "sooty_mold",
+                "uncertain"
+              ],
+              "counts": [
+                [
+                  73,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  74,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  75,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  73,
+                  2
+                ]
+              ]
+            }
+          },
+          "old_ood_report": {
+            "total": 84,
+            "accepted": 36,
+            "rejected": 48,
+            "retention": 0.42857142857142855,
+            "rejectionRate": 0.5714285714285714,
+            "falseAcceptRate": 0.42857142857142855
+          },
+          "new_ood_report": {
+            "total": 32,
+            "accepted": 8,
+            "rejected": 24,
+            "retention": 0.25,
+            "rejectionRate": 0.75,
+            "falseAcceptRate": 0.25
+          }
+        }
+      }
+    }
+  },
+  "selectionSha256": "e00b6e631f937a63b762e96c3699f0cdb535a7c39db81b7f3c7bb75946cb0e8d",
+  "evaluationInputsSha256": "eac55842b74c13777f0355154da9651deaf7f47eb7cba2845d05ff6f8b0d31ba",
+  "oldTestAndOodStatus": "exploratory; used in earlier model development",
+  "newOodStatus": "previously evaluated in V4.1/V4.1.1; reused report-only after gate freeze",
+  "newOodCollectionNotes": "These 32 OOD photos were already reported in V4.1/V4.1.1; V4.2.0 reuse is exploratory, not independent.",
+  "newOodTotalUploaded": 32,
+  "newOodRetained": 32,
+  "oldOodTuneCount": 84,
+  "oldOodReportCount": 84,
+  "browserParityMeasured": false,
+  "freshLabeledMangoFieldAccuracyMeasured": false,
+  "finishedAt": "2026-09-28T16:00:16.178052+00:00"
+}

@@ -8,24 +8,24 @@ The matrix distinguishes implementation choices from measured outcomes. Earlier 
 
 ## Performance mechanisms and expected effects
 
-| Mechanism               | Current implementation                            | Expected effect or evidence limit                                                                        |
-| ----------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| TensorFlow.js loading   | Dynamic classifier imports                        | Defers classifier code loading; total downloads and startup timing still need measurement.               |
-| Input tensor size       | Canvas resizes to 224x224 before tensor creation  | 150,528 channel values instead of 36 million for a 12MP RGB image; this is not total application memory. |
-| GPU textures            | `WEBGL_FORCE_F16_TEXTURES`                        | Uses half-float render textures on the WebGL path; score parity must be measured.                        |
-| Model download          | Trial 3 float32 assets are precached              | Reuses cached files while storage and revisions remain valid.                                            |
-| Output readback         | `outputTensor.data()`                             | Avoids synchronous readback; does not guarantee a frame rate.                                            |
-| Stored photos           | WebP with JPEG fallback after inference           | Reduces upload/storage bytes; final sizes vary by image.                                                 |
-| Blob URLs               | Per-card ownership and cleanup                    | Avoids stale URLs when a photo blob is replaced.                                                         |
-| React rendering         | Memoized components and selected stable callbacks | Can skip renders when props stay equal; no measured percentage is claimed.                               |
-| Overlay effects         | Reduced mobile backdrop blur                      | Reduces filter work; target-phone frame rates remain a manual measurement.                               |
-| Model and canvas reuse  | Module-level instances                            | Avoids repeated initialization/allocation within the page session.                                       |
-| Database batches        | `bulkGet()` and `bulkPut()`                       | Reduces per-record database work; no fixed speedup is established.                                       |
-| Fonts and modal bundles | Font swapping and dynamic Details import          | Shows fallback text and defers some UI code.                                                             |
-| Duplicate photos        | SHA-256 lookup before inference                   | Reuses an active saved report; not a new prediction.                                                     |
-| Storage upload timeout  | 10-second abort timer with retries                | Limits a stalled upload attempt; total synchronization time is not capped at 10 seconds.                 |
-| Concurrent sync         | Lock and one queued follow-up pass                | Serializes sync work while preserving new pending mutations.                                             |
-| Connection hints        | Supabase preconnect and DNS-prefetch              | May reduce connection setup delay; network measurements are needed.                                      |
+| Mechanism               | Current implementation                             | Expected effect or evidence limit                                                                        |
+| ----------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| TensorFlow.js loading   | Dynamic classifier imports                         | Defers classifier code loading; total downloads and startup timing still need measurement.               |
+| Input tensor size       | Canvas resizes to 224x224 before tensor creation   | 150,528 channel values instead of 36 million for a 12MP RGB image; this is not total application memory. |
+| GPU textures            | `WEBGL_FORCE_F16_TEXTURES`                         | Uses half-float render textures on the WebGL path; score parity must be measured.                        |
+| Model download          | Single V4.3.0 Combined export is precached locally | Reuses cached files while storage and revisions remain valid.                                            |
+| Output readback         | `outputTensor.data()`                              | Avoids synchronous readback; does not guarantee a frame rate.                                            |
+| Stored photos           | WebP with JPEG fallback after inference            | Reduces upload/storage bytes; final sizes vary by image.                                                 |
+| Blob URLs               | Per-card ownership and cleanup                     | Avoids stale URLs when a photo blob is replaced.                                                         |
+| React rendering         | Memoized components and selected stable callbacks  | Can skip renders when props stay equal; no measured percentage is claimed.                               |
+| Overlay effects         | Reduced mobile backdrop blur                       | Reduces filter work; target-phone frame rates remain a manual measurement.                               |
+| Model and canvas reuse  | One cached model instance and one shared canvas    | Avoids repeated initialization/allocation within the page session.                                       |
+| Database batches        | `bulkGet()` and `bulkPut()`                        | Reduces per-record database work; no fixed speedup is established.                                       |
+| Fonts and modal bundles | Font swapping and dynamic Details import           | Shows fallback text and defers some UI code.                                                             |
+| Duplicate photos        | SHA-256 lookup before inference                    | Reuses an active saved report; not a new prediction.                                                     |
+| Storage upload timeout  | 10-second abort timer with retries                 | Limits a stalled upload attempt; total synchronization time is not capped at 10 seconds.                 |
+| Concurrent sync         | Lock and one queued follow-up pass                 | Serializes sync work while preserving new pending mutations.                                             |
+| Connection hints        | Supabase preconnect and DNS-prefetch               | May reduce connection setup delay; network measurements are needed.                                      |
 
 ---
 
@@ -58,13 +58,13 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 
 ### 1.5 Startup GPU Shader Warmup & Light Green Splash Screen
 
-- **Implementation:** On app launch, `loadMangoModel()` executes a dummy inference with `tf.zeros([1, 224, 224, 3])` behind a light organic green (`#f6faf1`) splash screen (`<SplashScreen />`) featuring the SVG brand logo and dual-tone spinner (`border-[#e2ebd9] border-t-[#277839]`).
-- **Rationale:** Runs the model path once during loading to prepare its shaders before the first real scan. Actual scan latency remains device- and image-dependent.
+- **Implementation:** On app launch, the adopted single V4.3.0 Combined model loads and runs a dummy inference with `tf.zeros([1, 224, 224, 3])` behind the existing light organic green (`#f6faf1`) splash screen (`<SplashScreen />`).
+- **Rationale:** Warms the model before the first real scan. If the model or config fails to load, startup resolves to a translated reload prompt. Its five files total about **12.10 MB**. First-load time, GPU/heap memory, and scan latency on low-end phones still need measurement.
 
 ### 1.6 Module-Level Model Singleton Cache (`classifier.ts`)
 
-- **Implementation:** `cachedModel` and `loadingPromise` variables persist at the module level outside React's component lifecycle.
-- **Behavior:** After successful initialization, subsequent calls reuse the loaded model in the current page session. Network reconnection does not reload it; a full page reload or terminated browser process creates a new in-memory session.
+- **Implementation:** The cached model and its loading promise persist at module level outside React's component lifecycle.
+- **Behavior:** After successful initialization, subsequent calls reuse the same model in the current page session. Network reconnection does not reload it; a full page reload or terminated browser process creates a new in-memory session.
 
 ### 1.7 Singleton Canvas Reuse (`classifier.ts`)
 
@@ -128,9 +128,9 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 
 ### 3.1 Service Worker Model Pre-Caching (`sw.ts`)
 
-- **Strategy:** Serwist precaches all five `/model/*` files: `model.json`, `model_config.json`, and `group1-shard1of3.bin` through `group1-shard3of3.bin`. The `CacheFirst` runtime rule remains as defence in depth.
+- **Strategy:** Serwist precaches the five adopted V4.3.0 Combined model files under `/model/`: `model.json`, `model_config.json`, and three weight shards. The `CacheFirst` runtime rule remains as defence in depth.
 - **Expected effect:** Enables offline model loading after successful service-worker installation and caching, while browser storage remains available. Loading still requires local model initialization; cache eviction, cleared site data, or an incomplete first load can prevent it. R02 and the physical checklist verify this behavior for a recorded environment.
-- **Versioned cache name:** `mangoleaf-model-cache-v3-0-0`. The cache label is bumped whenever `public/model/` changes, and activation deletes superseded model caches so old weights do not occupy device storage forever.
+- **Versioned cache name:** `mangoleaf-model-cache-v4-3-0` for the adopted V4.3.0 Combined model in app `0.4.9`. Activation deletes superseded model caches, including V4.1.1, V4.2.0, and V4.3.0 candidate runtime caches. The active V4.3.0 cache is protected by the activation filter.
 - **The precache is the real update mechanism.** Public files receive content-revision hashes in Serwist's precache manifest, which is matched before runtime caching. Replaced weights therefore refetch on next activation. An empty runtime model cache is normal; verify updates in generated `public/sw.js`.
 
 ### 3.2 High-Capacity Offline Database (Dexie.js / IndexedDB)
@@ -142,14 +142,17 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 ### 3.3 Batch Database Operations (`useSync.ts`)
 
 - **Guidelines Sync:** Remote guidelines are inserted via `db.guidelines.bulkPut()` in a single IndexedDB transaction instead of sequential individual `put()` calls.
+- **Guidelines Display:** Scan details read the existing live-query cache and perform no additional network request. Downloaded advice remains available offline; missing or blank text uses a translated status message. The bundled treatment dictionary has been removed, so guideline revisions are maintained in Supabase and arrive through successful synchronization. No download-time or bundle-size benchmark was measured for this change.
 - **Scans Sync:** Remote scans are checked with one `db.scans.bulkGet()` and inserted through `db.scans.bulkPut()`, avoiding one IndexedDB request per restored history row.
 
 ### 3.4 Duplicate Photo Checker (SHA-256 Image Hash)
 
-- **Implementation:** When a farmer selects a photo, `computeImageHash()` in `classifier.ts` calculates a unique 64-character SHA-256 fingerprint through browser-native asynchronous Web Crypto. Its time depends on original photo size, but it does not run TensorFlow.js.
-- **Lookup:** The hash is checked against the indexed `image_hash` column in Dexie's `scans` table via `db.scans.where("image_hash").equals(hash).first()`.
-- **Duplicate Found:** If an active record matches, the app opens its existing report and skips a new model inference. Hashing, storage lookup, and UI rendering still consume time and resources. Reopening this report does not count as an R01 prediction.
-- **New Photo:** If no match, runs the AI model normally and stores the `image_hash` alongside the scan record in both IndexedDB and Supabase.
+- **Implementation:** Photo selection starts one asynchronous `computeImageHash()` call in the lightweight `image-hash.ts` module using browser-native Web Crypto. This calculates a 64-character SHA-256 fingerprint of the original file. Time and buffer size depend on original photo size; the helper imports no TensorFlow.js code and does not run model inference or upload the photo. `classifier.ts` re-exports the helper for existing callers.
+- **Lookup:** The hash is checked against the indexed `image_hash` column in Dexie's `scans` table, rather than reading the whole history. Reuse requires the exact active `model_version`; pending-deletion rows, another model version, and legacy unversioned rows are excluded. Older records remain visible in History, while reuploading their photo runs the adopted model.
+- **Duplicate Found:** The existing preview shows "Photo already scanned" with Retake, Cancel, X, and View saved result. Opening that result is an explicit action and creates no record or prediction. The saved record is checked again before opening in case it changed during review. Reopening a report does not count as an R01 prediction.
+- **New Photo:** Diagnosis stays disabled while checking. The completed hash is retained for this selected file and reused at diagnosis and save time. A final indexed lookup catches a duplicate saved since the preview check, without rereading and hashing the image bytes. No match means normal inference, compression, and storage of `image_hash` in IndexedDB and Supabase.
+- **Cleanup:** Closing or retaking clears selection state, resets the picker, and releases the preview object URL. A stale asynchronous check cannot update a newer selection or reopen a dismissed preview. Rapid repeated diagnosis clicks are guarded so one review cannot start overlapping inference calls. Lookup failure keeps diagnosis disabled and offers a retry.
+- **Scope:** This is exact-file matching, not perceptual matching. Edited, cropped, or recompressed copies can be treated as new photos; the app does not automatically block similar-looking leaves.
 
 ### 3.5 3G Network Resilience: Upload Timeout (`supabase-client.ts`, `useSync.ts`)
 
@@ -197,6 +200,12 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 
 ## Accuracy and runtime evidence
 
+App `0.4.9` adopts V4.3.0 Combined with unchanged graph/shard bytes, seven-class order, preprocessing, folded temperature, and fitted `0.70 / 0 / 0.42` gates. Only release metadata changes in `model_config.json`; the [adoption receipt](model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) records both configuration hashes. Adoption does not provide a new performance benchmark.
+
+On October 2, 2026, filtered R01 passed one `chromium-mobile` case with a test duration of 57.2 seconds. It made eight photos × 30 actual predictions (240), with stable raw/displayed classes and acceptance, maximum raw-confidence range `0`, and maximum net tensor growth per photo `0`. The report records WebGL and browser `153.0.8010.12`. These same-session measurements describe application input fingerprint `aafefbaaff86b0c86f55ef534afc3e0e416dcb1825c15c5aaf912ed48703100a`; they do not establish field accuracy, browser/Keras parity, or a general inference-speed guarantee. The adoption receipt preserves the final core/R01 report records and hashes.
+
+The [V4.3.0 report](model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) preserves 386/393 raw correct predictions (98.22%), 373 correct/3 wrong accepted, 17 rejected mango images, and 24/84 plus 5/32 false OOD accepts on reused collections. These seven-class observations measure a different task from V3's six-class score and do not establish field accuracy, independent OOD rejection, or full browser/Keras parity. See the [testing guide](TESTING.md) for automated validation status.
+
 > **Note on AI accuracy:** The **97.46%** figure describes the recorded Trial 3 evaluation on 393 images. It is not a measured accuracy guarantee for browser inference or farm photos. Storage compression happens after prediction, but preprocessing, numeric precision, and rejection gates can affect runtime results. Browser consistency and UI tests do not establish diagnostic accuracy.
 >
-> The three trial figures are not a trend line. Trial 2 scored 98.25% on a test set that contained near-duplicate copies of its own training images, so part of that score measured memorization. Perceptual-hash deduplication removed the duplicates before splitting, which is why Trial 2.1's 97.12% on 417 images is the honest figure rather than a regression. Trial 3 then changed the image pool, so its 97.46% is measured on a different 393-image test set again. Each number describes its own test set and none of them is a higher or lower version of another. See [model-training/trials/TRIAL_v3.md](model-training/trials/TRIAL_v3.md) for the current model and [model-training/trials/TRIAL_v2_1.md](model-training/trials/TRIAL_v2_1.md) for the deduplication work.
+> The three trial figures are not a trend line. Trial 2 scored 98.25% on a test set that contained near-duplicate copies of its own training images, so part of that score measured memorization. Perceptual-hash deduplication removed the duplicates before splitting, which is why Trial 2.1's 97.12% on 417 images is the honest figure rather than a regression. Trial 3 then changed the image pool, so its 97.46% is measured on a different 393-image test set again. Each number describes its own test set and none of them is a higher or lower version of another. See [model-training/non-experiment/v3/TRIAL_v3.md](model-training/non-experiment/v3/TRIAL_v3.md) for the previous released model and [model-training/non-experiment/v2.1/TRIAL_v2_1.md](model-training/non-experiment/v2.1/TRIAL_v2_1.md) for the deduplication work. V4 through V4.3.0 use seven classes; their reused-set results describe a different task and still need independent field evaluation.

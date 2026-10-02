@@ -1,0 +1,1427 @@
+{
+  "rule": "one scene choice per approved image and epoch, used by the combined model",
+  "seed": 42,
+  "presentations": [
+    {
+      "epoch": 0,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_123220 (Custom).jpg",
+      "sceneRelativePath": "gfhfghgfhgfhgfh.jpg",
+      "sceneSha256": "b3339b8886bc3d2512e7138730d4f2bf9865e628cf86b8081fba69e9bd392b13",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 0,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154948 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_fd375150-3858-4e4d-8a16-4ffc924bd5e8.jpg",
+      "sceneSha256": "e4ce4a940f6a41018be79d0e2ce27b52548c62d1bd0841dbba247a0d0f232e80",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 0,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155308 (Custom).jpg",
+      "sceneRelativePath": "sunset-over-sea-stockcake.jpg",
+      "sceneSha256": "95e31d43d582a1b12ff63a6a1a125a5c3f62e65e557453feb07798c63e57a2a5",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 0,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155330 (Custom).jpg",
+      "sceneRelativePath": "tertretr.jpg",
+      "sceneSha256": "002efed888e73bf350a2e931bf79eacc3308b5cdeea55295082926159c5b6b8f",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 0,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155345 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_70988618-f67c-4aed-bf72-600a091b4da9.jpg",
+      "sceneSha256": "51c25ac787da7fa48c5ac8ed3bc6969a531362aad12401e735d0e1f761134d1d",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 0,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_160039 (Custom).jpg",
+      "sceneRelativePath": "20260919_024802.jpg",
+      "sceneSha256": "d80c14c75ea71ee17819c3d8cd0baee58a0fb0c616fb2b09afc69a7f23e62486",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 0,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161436 (Custom).jpg",
+      "sceneRelativePath": "795776045_2088962935035945_3281301272652016111_n.jpg",
+      "sceneSha256": "1b47613a9e2afa480a9d2b681388bc0b41ea666b7501190f718588672d1ce310",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 0,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161857 (Custom).jpg",
+      "sceneRelativePath": "sunset-over-sea-stockcake.jpg",
+      "sceneSha256": "95e31d43d582a1b12ff63a6a1a125a5c3f62e65e557453feb07798c63e57a2a5",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 0,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162045 (Custom).jpg",
+      "sceneRelativePath": "mg.jpg",
+      "sceneSha256": "0e2e606d79e0bb621d2c5fe52cce92460365856157534677ed4e1464060bb493",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 0,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211211_155450 (Custom).jpg",
+      "sceneRelativePath": "San-Juan-Batangas-Mango-Farm-1-1024x768.jpeg",
+      "sceneSha256": "7ec6f72c0a7e56dc16ec88a878b18535eaad7f53906821e709d278ae2f1ae9b2",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 0,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145302 (Custom).jpg",
+      "sceneRelativePath": "809978842_2263352371153778_913570081529937827_n.jpg",
+      "sceneSha256": "7c9253f370435e6f628a0dd011305315614f33087e872be470550d261518a947",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154812 (Custom).jpg",
+      "sceneRelativePath": "qwe.jpg",
+      "sceneSha256": "d046dff11e2c9ba3c250f923e813cfd86714af98216f04cd5a10b39e002a965c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154939 (Custom).jpg",
+      "sceneRelativePath": "20260919_024634.jpg",
+      "sceneSha256": "caffa9ae0a035112981a34e60c4fd23f582966b7185841244087c2c8313e013a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154948 (Custom).jpg",
+      "sceneRelativePath": "fghfghfghfgh.jpg",
+      "sceneSha256": "5c53f8ae9564ebe2c369c4cc214156a24efdd90ca81565de9576e10914b4f27a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155015 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_70988618-f67c-4aed-bf72-600a091b4da9.jpg",
+      "sceneSha256": "51c25ac787da7fa48c5ac8ed3bc6969a531362aad12401e735d0e1f761134d1d",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155342 (Custom).jpg",
+      "sceneRelativePath": "qweqwewqeqwewqe.jpg",
+      "sceneSha256": "ee12a9a9581ddf638c5251b06402540974db5e32ec3d2b1d021e2606a7604bfb",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155637 (Custom).jpg",
+      "sceneRelativePath": "San-Juan-Batangas-Mango-Farm-1-1024x768.jpeg",
+      "sceneSha256": "7ec6f72c0a7e56dc16ec88a878b18535eaad7f53906821e709d278ae2f1ae9b2",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_160415 (Custom).jpg",
+      "sceneRelativePath": "fhfvbbvbnvbn.jpg",
+      "sceneSha256": "70e97c197b98da8fde51acc3417dea6d715cd3b046fbcc69e569fae0b112f1c8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161331 (Custom).jpg",
+      "sceneRelativePath": "20260919_024814.jpg",
+      "sceneSha256": "71f6fbce7385825231bb0f7afab47bb25094b2f282f36b71a66910becf5e3909",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161339 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_70988618-f67c-4aed-bf72-600a091b4da9.jpg",
+      "sceneSha256": "51c25ac787da7fa48c5ac8ed3bc6969a531362aad12401e735d0e1f761134d1d",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161427 (Custom).jpg",
+      "sceneRelativePath": "qweqwe.jpg",
+      "sceneSha256": "2289424fbe8829f08dd898fbc0b45640f52fa6e8d73703d8305515e16b2c26a8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145257 (Custom).jpg",
+      "sceneRelativePath": "fgyrtyrtytryrty.jpg",
+      "sceneSha256": "df2a54c1a3d3f05b791c22a26724c112072e27a2503b94300ec49c8775fc9d11",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 1,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145356 (Custom).jpg",
+      "sceneRelativePath": "20260919_024634.jpg",
+      "sceneSha256": "caffa9ae0a035112981a34e60c4fd23f582966b7185841244087c2c8313e013a",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_123220 (Custom).jpg",
+      "sceneRelativePath": "images (6).jpg",
+      "sceneSha256": "18539c6e7838453aa353e4baa78eb9c5907779e531f304b97f69f1bcbbc94da8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154728 (Custom).jpg",
+      "sceneRelativePath": "dfgbvvbn.jpg",
+      "sceneSha256": "37d11d5f603c7a36d79a24f250780cc93b93eeda2910f17de9a5a0bbb72dd65e",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154732 (Custom).jpg",
+      "sceneRelativePath": "ghjghjjghj.jpg",
+      "sceneSha256": "f7c8da5e6dc15f1173abf3d9f9eee338cc25992e833c8a3ec1a3d583fa6d3d6b",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154925 (Custom).jpg",
+      "sceneRelativePath": "IMG_20260730_191240_1.jpg",
+      "sceneSha256": "e7ef8f4300c3625e8031e392054e58f9c4ba5db39496aab5b0d7de2c8daf4f8d",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154939 (Custom).jpg",
+      "sceneRelativePath": "tertretr.jpg",
+      "sceneSha256": "002efed888e73bf350a2e931bf79eacc3308b5cdeea55295082926159c5b6b8f",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155028 (Custom).jpg",
+      "sceneRelativePath": "qwe.jpg",
+      "sceneSha256": "d046dff11e2c9ba3c250f923e813cfd86714af98216f04cd5a10b39e002a965c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155058 (Custom).jpg",
+      "sceneRelativePath": "images (5).jpg",
+      "sceneSha256": "7f597256c5a768fa18b3f89a3beef589817a8a56e99166881a81a19bc35b28e8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155235 (Custom).jpg",
+      "sceneRelativePath": "images.jpg",
+      "sceneSha256": "883eb06c718ec3a159a5b35a49db7dd2b3c7c79888cd7161306138d4f95d9a2b",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155345 (Custom).jpg",
+      "sceneRelativePath": "qwe.jpg",
+      "sceneSha256": "d046dff11e2c9ba3c250f923e813cfd86714af98216f04cd5a10b39e002a965c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155358 (Custom).jpg",
+      "sceneRelativePath": "rtyrty.jpg",
+      "sceneSha256": "cd29c8e02c9a1fe7bcc499f7d716d6727ab9316fcadcfebf31ddb37b6711fe65",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155530 (Custom).jpg",
+      "sceneRelativePath": "tyututyuytutyuty.jpg",
+      "sceneSha256": "f7be85dc4ee397d3afdd8e9c595559774aa4098fb69938012936508018c3fa87",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155835 (Custom).jpg",
+      "sceneRelativePath": "images (4).jpg",
+      "sceneSha256": "ec8718b2d95dd77cb65a08d16b1d9f81be23c7e85f14f856189c3509fcc9e757",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161427 (Custom).jpg",
+      "sceneRelativePath": "Sunset-Shells-Christy-Mandeville-Feb-9-2023.jpg",
+      "sceneSha256": "edcb512692d7c77540e8fdbed95d5125e3350a19f7e96aa1f657a9203e326365",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161719 (Custom).jpg",
+      "sceneRelativePath": "20260919_024659.jpg",
+      "sceneSha256": "0f577e8daab8aaf1433e656457778f5b6d8b9f27c98fd15f96094b008b6af8e8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211211_155450 (Custom).jpg",
+      "sceneRelativePath": "gfhfghgfhgfhgfh.jpg",
+      "sceneSha256": "b3339b8886bc3d2512e7138730d4f2bf9865e628cf86b8081fba69e9bd392b13",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 2,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_144907 (Custom).jpg",
+      "sceneRelativePath": "795776045_2088962935035945_3281301272652016111_n.jpg",
+      "sceneSha256": "1b47613a9e2afa480a9d2b681388bc0b41ea666b7501190f718588672d1ce310",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 3,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154812 (Custom).jpg",
+      "sceneRelativePath": "IMG_20260730_191240_1.jpg",
+      "sceneSha256": "e7ef8f4300c3625e8031e392054e58f9c4ba5db39496aab5b0d7de2c8daf4f8d",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 3,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154816 (Custom).jpg",
+      "sceneRelativePath": "IMG_20260829_215031.jpg",
+      "sceneSha256": "e94bfe616756e75e210c351b8ef3220645794cb05f1140050a52c081ade5b216",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 3,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154835 (Custom).jpg",
+      "sceneRelativePath": "qwe.jpg",
+      "sceneSha256": "d046dff11e2c9ba3c250f923e813cfd86714af98216f04cd5a10b39e002a965c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 3,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154928 (Custom).jpg",
+      "sceneRelativePath": "fghfghgfhfghgfhgfh.jpg",
+      "sceneSha256": "3e804809074fabdc9c50bd5932282d3bac8e4b7cff3f61bdf84af3d00bf3bf19",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 3,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155152 (Custom).jpg",
+      "sceneRelativePath": "pexels-kinley-lindsey-922918528-29588513.jpg",
+      "sceneSha256": "cb1c9e1406e8a1086e5e287f37b10627c08b921f074b0cc95ddcbf73ce03a9d3",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 3,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_160039 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_69eaa3f7-d235-4ed4-a029-4a1139737f4e.jpg",
+      "sceneSha256": "d0e9e186bb540c634a7a8e9a75fba698313ff03aa6f4d1b65a687e4b73f54c4e",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 3,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_160415 (Custom).jpg",
+      "sceneRelativePath": "piopiopop.jpg",
+      "sceneSha256": "1378e75dbf8bf2a07c58c567d954b51fa3daecb9840ecaa68dd67cfd7efdaabc",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 3,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161448 (Custom).jpg",
+      "sceneRelativePath": "qwe.jpg",
+      "sceneSha256": "d046dff11e2c9ba3c250f923e813cfd86714af98216f04cd5a10b39e002a965c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 3,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161613 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_ab028e31-e654-419b-8acd-19f2ff2fc3b4.jpg",
+      "sceneSha256": "23840d8ee1d1fb77b7c48a2cf4633c804855c3d65ac56f3be527fa06476a54d7",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 3,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161857 (Custom).jpg",
+      "sceneRelativePath": "qwdfdfgfhf.jpg",
+      "sceneSha256": "d54aff9a39d2b143bb05ac519a840140acb1b02da709e7d4865b3d301e2e0253",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 3,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162123 (Custom).jpg",
+      "sceneRelativePath": "images.jpg",
+      "sceneSha256": "883eb06c718ec3a159a5b35a49db7dd2b3c7c79888cd7161306138d4f95d9a2b",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154835 (Custom).jpg",
+      "sceneRelativePath": "20260919_024814.jpg",
+      "sceneSha256": "71f6fbce7385825231bb0f7afab47bb25094b2f282f36b71a66910becf5e3909",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155308 (Custom).jpg",
+      "sceneRelativePath": "20260919_024814.jpg",
+      "sceneSha256": "71f6fbce7385825231bb0f7afab47bb25094b2f282f36b71a66910becf5e3909",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155330 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_70988618-f67c-4aed-bf72-600a091b4da9.jpg",
+      "sceneSha256": "51c25ac787da7fa48c5ac8ed3bc6969a531362aad12401e735d0e1f761134d1d",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155342 (Custom).jpg",
+      "sceneRelativePath": "tyututyuytutyuty.jpg",
+      "sceneSha256": "f7be85dc4ee397d3afdd8e9c595559774aa4098fb69938012936508018c3fa87",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155345 (Custom).jpg",
+      "sceneRelativePath": "vbnvbnvbn.jpg",
+      "sceneSha256": "661ce508a1cd48a9b1a2ef60f3605d4b167f397591c79d8d830ea1cdcb280000",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_160039 (Custom).jpg",
+      "sceneRelativePath": "images.jpg",
+      "sceneSha256": "883eb06c718ec3a159a5b35a49db7dd2b3c7c79888cd7161306138d4f95d9a2b",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161427 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_10e2c2c0-e117-4263-9ecf-cda5ff608826.jpg",
+      "sceneSha256": "ec7939e62d9db9884b5b479a9cfd6035b2b76f84e061a5a7731959b8bdca8b4d",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161448 (Custom).jpg",
+      "sceneRelativePath": "20260919_024829.jpg",
+      "sceneSha256": "e4fcb05f7ee761956efbf2e325dccc12d84f6af6dd1ea945e35891b97382ddd4",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161613 (Custom).jpg",
+      "sceneRelativePath": "images (6).jpg",
+      "sceneSha256": "18539c6e7838453aa353e4baa78eb9c5907779e531f304b97f69f1bcbbc94da8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162045 (Custom).jpg",
+      "sceneRelativePath": "20260919_024751.jpg",
+      "sceneSha256": "80e8855c542ac8a366703635fbe5e43bb7c3aa765b920140f2292fc2d2308d4f",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162151 (Custom).jpg",
+      "sceneRelativePath": "814998776_1634108748081551_5627940970449263212_n.jpg",
+      "sceneSha256": "84118f273c3e404115858471476933dd35e264d007f357d27b90071364e7fe03",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145257 (Custom).jpg",
+      "sceneRelativePath": "fhfvbbvbnvbn.jpg",
+      "sceneSha256": "70e97c197b98da8fde51acc3417dea6d715cd3b046fbcc69e569fae0b112f1c8",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 4,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145302 (Custom).jpg",
+      "sceneRelativePath": "20260919_024829.jpg",
+      "sceneSha256": "e4fcb05f7ee761956efbf2e325dccc12d84f6af6dd1ea945e35891b97382ddd4",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_123220 (Custom).jpg",
+      "sceneRelativePath": "20260919_024802.jpg",
+      "sceneSha256": "d80c14c75ea71ee17819c3d8cd0baee58a0fb0c616fb2b09afc69a7f23e62486",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154835 (Custom).jpg",
+      "sceneRelativePath": "fgyrtyrtytryrty.jpg",
+      "sceneSha256": "df2a54c1a3d3f05b791c22a26724c112072e27a2503b94300ec49c8775fc9d11",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154928 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_f0c810ba-f9e7-44d9-b9ce-8d91d724d738.jpg",
+      "sceneSha256": "c5f2e18ee7a63b96f84c1bcb925ee440184d59f9942ac082215cc939b8e7b11a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154939 (Custom).jpg",
+      "sceneRelativePath": "pexels-kinley-lindsey-922918528-29588513.jpg",
+      "sceneSha256": "cb1c9e1406e8a1086e5e287f37b10627c08b921f074b0cc95ddcbf73ce03a9d3",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154948 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_11beacfb-2a76-4d16-a090-14a06db84c05.jpg",
+      "sceneSha256": "acc2b135ae64bd51a3f796251e82f0e84f5181239a34810ad7e030ccdfc446e5",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155015 (Custom).jpg",
+      "sceneRelativePath": "795776045_2088962935035945_3281301272652016111_n.jpg",
+      "sceneSha256": "1b47613a9e2afa480a9d2b681388bc0b41ea666b7501190f718588672d1ce310",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155028 (Custom).jpg",
+      "sceneRelativePath": "795776045_2088962935035945_3281301272652016111_n.jpg",
+      "sceneSha256": "1b47613a9e2afa480a9d2b681388bc0b41ea666b7501190f718588672d1ce310",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155218 (Custom).jpg",
+      "sceneRelativePath": "IMG_20260911_215034.jpg",
+      "sceneSha256": "317be424bc1ddb1b1963a2e90bc7b3c9681d3be32b1d4920230165fc3680c24a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155308 (Custom).jpg",
+      "sceneRelativePath": "images.jpg",
+      "sceneSha256": "883eb06c718ec3a159a5b35a49db7dd2b3c7c79888cd7161306138d4f95d9a2b",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155455 (Custom).jpg",
+      "sceneRelativePath": "20260919_024659.jpg",
+      "sceneSha256": "0f577e8daab8aaf1433e656457778f5b6d8b9f27c98fd15f96094b008b6af8e8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155835 (Custom).jpg",
+      "sceneRelativePath": "ouioi.jpg",
+      "sceneSha256": "e2dcf3cafc94606645e3cdfaa3ff75376c6ede607a0fd0021c2518f706b9ea2a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161331 (Custom).jpg",
+      "sceneRelativePath": "image-1788748088275.jpg",
+      "sceneSha256": "b30b5b0a684abeff76b19dad5806c81c562422432db23432b7f263cc84d60b3c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161339 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_5252cc76-2832-48bf-a983-a09e13e95c08.jpg",
+      "sceneSha256": "d1908a06e712cb146780a92b366ec2226c5ebab05c30f5af321a8cf4c0024513",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161448 (Custom).jpg",
+      "sceneRelativePath": "20260919_024802.jpg",
+      "sceneSha256": "d80c14c75ea71ee17819c3d8cd0baee58a0fb0c616fb2b09afc69a7f23e62486",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162151 (Custom).jpg",
+      "sceneRelativePath": "fghfghfghfgh.jpg",
+      "sceneSha256": "5c53f8ae9564ebe2c369c4cc214156a24efdd90ca81565de9576e10914b4f27a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211211_155450 (Custom).jpg",
+      "sceneRelativePath": "20260919_024829.jpg",
+      "sceneSha256": "e4fcb05f7ee761956efbf2e325dccc12d84f6af6dd1ea945e35891b97382ddd4",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145257 (Custom).jpg",
+      "sceneRelativePath": "San-Juan-Batangas-Mango-Farm-1-1024x768.jpeg",
+      "sceneSha256": "7ec6f72c0a7e56dc16ec88a878b18535eaad7f53906821e709d278ae2f1ae9b2",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 5,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145356 (Custom).jpg",
+      "sceneRelativePath": "rtyrty.jpg",
+      "sceneSha256": "cd29c8e02c9a1fe7bcc499f7d716d6727ab9316fcadcfebf31ddb37b6711fe65",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_123220 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_fd375150-3858-4e4d-8a16-4ffc924bd5e8.jpg",
+      "sceneSha256": "e4ce4a940f6a41018be79d0e2ce27b52548c62d1bd0841dbba247a0d0f232e80",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154816 (Custom).jpg",
+      "sceneRelativePath": "dfgbvvbn.jpg",
+      "sceneSha256": "37d11d5f603c7a36d79a24f250780cc93b93eeda2910f17de9a5a0bbb72dd65e",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155022 (Custom).jpg",
+      "sceneRelativePath": "809978842_2263352371153778_913570081529937827_n.jpg",
+      "sceneSha256": "7c9253f370435e6f628a0dd011305315614f33087e872be470550d261518a947",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155218 (Custom).jpg",
+      "sceneRelativePath": "qweqwewqeqwewqe.jpg",
+      "sceneSha256": "ee12a9a9581ddf638c5251b06402540974db5e32ec3d2b1d021e2606a7604bfb",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155342 (Custom).jpg",
+      "sceneRelativePath": "20260919_024802.jpg",
+      "sceneSha256": "d80c14c75ea71ee17819c3d8cd0baee58a0fb0c616fb2b09afc69a7f23e62486",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155345 (Custom).jpg",
+      "sceneRelativePath": "images (6).jpg",
+      "sceneSha256": "18539c6e7838453aa353e4baa78eb9c5907779e531f304b97f69f1bcbbc94da8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155455 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_70988618-f67c-4aed-bf72-600a091b4da9.jpg",
+      "sceneSha256": "51c25ac787da7fa48c5ac8ed3bc6969a531362aad12401e735d0e1f761134d1d",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155835 (Custom).jpg",
+      "sceneRelativePath": "20260919_024829.jpg",
+      "sceneSha256": "e4fcb05f7ee761956efbf2e325dccc12d84f6af6dd1ea945e35891b97382ddd4",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_160039 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_70988618-f67c-4aed-bf72-600a091b4da9.jpg",
+      "sceneSha256": "51c25ac787da7fa48c5ac8ed3bc6969a531362aad12401e735d0e1f761134d1d",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_160415 (Custom).jpg",
+      "sceneRelativePath": "mg.jpg",
+      "sceneSha256": "0e2e606d79e0bb621d2c5fe52cce92460365856157534677ed4e1464060bb493",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161339 (Custom).jpg",
+      "sceneRelativePath": "20260919_024829.jpg",
+      "sceneSha256": "e4fcb05f7ee761956efbf2e325dccc12d84f6af6dd1ea945e35891b97382ddd4",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162037 (Custom).jpg",
+      "sceneRelativePath": "tyututyuytutyuty.jpg",
+      "sceneSha256": "f7be85dc4ee397d3afdd8e9c595559774aa4098fb69938012936508018c3fa87",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162151 (Custom).jpg",
+      "sceneRelativePath": "20260919_024802.jpg",
+      "sceneSha256": "d80c14c75ea71ee17819c3d8cd0baee58a0fb0c616fb2b09afc69a7f23e62486",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 6,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145257 (Custom).jpg",
+      "sceneRelativePath": "San-Juan-Batangas-Mango-Farm-1-1024x768.jpeg",
+      "sceneSha256": "7ec6f72c0a7e56dc16ec88a878b18535eaad7f53906821e709d278ae2f1ae9b2",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 7,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_123220 (Custom).jpg",
+      "sceneRelativePath": "images (6).jpg",
+      "sceneSha256": "18539c6e7838453aa353e4baa78eb9c5907779e531f304b97f69f1bcbbc94da8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 7,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154728 (Custom).jpg",
+      "sceneRelativePath": "20260919_024814.jpg",
+      "sceneSha256": "71f6fbce7385825231bb0f7afab47bb25094b2f282f36b71a66910becf5e3909",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 7,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154732 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_ab028e31-e654-419b-8acd-19f2ff2fc3b4.jpg",
+      "sceneSha256": "23840d8ee1d1fb77b7c48a2cf4633c804855c3d65ac56f3be527fa06476a54d7",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 7,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154812 (Custom).jpg",
+      "sceneRelativePath": "qweqwewqeqwewqe.jpg",
+      "sceneSha256": "ee12a9a9581ddf638c5251b06402540974db5e32ec3d2b1d021e2606a7604bfb",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 7,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155330 (Custom).jpg",
+      "sceneRelativePath": "fhfvbbvbnvbn.jpg",
+      "sceneSha256": "70e97c197b98da8fde51acc3417dea6d715cd3b046fbcc69e569fae0b112f1c8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 7,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155455 (Custom).jpg",
+      "sceneRelativePath": "815468511_1613763380446297_5035152037097991966_n.jpg",
+      "sceneSha256": "a6f46cb9449d46283368a544577013f6ecbb6257e90c990082af8a57933716c9",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 7,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161331 (Custom).jpg",
+      "sceneRelativePath": "795776045_2088962935035945_3281301272652016111_n.jpg",
+      "sceneSha256": "1b47613a9e2afa480a9d2b681388bc0b41ea666b7501190f718588672d1ce310",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 7,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161427 (Custom).jpg",
+      "sceneRelativePath": "815468511_1613763380446297_5035152037097991966_n.jpg",
+      "sceneSha256": "a6f46cb9449d46283368a544577013f6ecbb6257e90c990082af8a57933716c9",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 7,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161436 (Custom).jpg",
+      "sceneRelativePath": "qweqwe.jpg",
+      "sceneSha256": "2289424fbe8829f08dd898fbc0b45640f52fa6e8d73703d8305515e16b2c26a8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 7,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161613 (Custom).jpg",
+      "sceneRelativePath": "20260919_024659.jpg",
+      "sceneSha256": "0f577e8daab8aaf1433e656457778f5b6d8b9f27c98fd15f96094b008b6af8e8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 7,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162123 (Custom).jpg",
+      "sceneRelativePath": "20260919_024634.jpg",
+      "sceneSha256": "caffa9ae0a035112981a34e60c4fd23f582966b7185841244087c2c8313e013a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154732 (Custom).jpg",
+      "sceneRelativePath": "qwe.jpg",
+      "sceneSha256": "d046dff11e2c9ba3c250f923e813cfd86714af98216f04cd5a10b39e002a965c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155015 (Custom).jpg",
+      "sceneRelativePath": "ghjghjjghj.jpg",
+      "sceneSha256": "f7c8da5e6dc15f1173abf3d9f9eee338cc25992e833c8a3ec1a3d583fa6d3d6b",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155058 (Custom).jpg",
+      "sceneRelativePath": "IMG_20260730_191240_1.jpg",
+      "sceneSha256": "e7ef8f4300c3625e8031e392054e58f9c4ba5db39496aab5b0d7de2c8daf4f8d",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155235 (Custom).jpg",
+      "sceneRelativePath": "fgyrtyrtytryrty.jpg",
+      "sceneSha256": "df2a54c1a3d3f05b791c22a26724c112072e27a2503b94300ec49c8775fc9d11",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155326 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_fd375150-3858-4e4d-8a16-4ffc924bd5e8.jpg",
+      "sceneSha256": "e4ce4a940f6a41018be79d0e2ce27b52548c62d1bd0841dbba247a0d0f232e80",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155637 (Custom).jpg",
+      "sceneRelativePath": "20260919_024648.jpg",
+      "sceneSha256": "b499f89dd9815e8ef80bae7095ca2382452ec1b2b48c33318cee3b68ddbd37e0",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_160039 (Custom).jpg",
+      "sceneRelativePath": "IMG_20260829_215031.jpg",
+      "sceneSha256": "e94bfe616756e75e210c351b8ef3220645794cb05f1140050a52c081ade5b216",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161448 (Custom).jpg",
+      "sceneRelativePath": "gfhfghgfhgfhgfh.jpg",
+      "sceneSha256": "b3339b8886bc3d2512e7138730d4f2bf9865e628cf86b8081fba69e9bd392b13",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161719 (Custom).jpg",
+      "sceneRelativePath": "tyututyuytutyuty.jpg",
+      "sceneSha256": "f7be85dc4ee397d3afdd8e9c595559774aa4098fb69938012936508018c3fa87",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162037 (Custom).jpg",
+      "sceneRelativePath": "IMG_20260911_215034.jpg",
+      "sceneSha256": "317be424bc1ddb1b1963a2e90bc7b3c9681d3be32b1d4920230165fc3680c24a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162045 (Custom).jpg",
+      "sceneRelativePath": "fgyrtyrtytryrty.jpg",
+      "sceneSha256": "df2a54c1a3d3f05b791c22a26724c112072e27a2503b94300ec49c8775fc9d11",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162123 (Custom).jpg",
+      "sceneRelativePath": "sunset-over-sea-stockcake.jpg",
+      "sceneSha256": "95e31d43d582a1b12ff63a6a1a125a5c3f62e65e557453feb07798c63e57a2a5",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 8,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_144907 (Custom).jpg",
+      "sceneRelativePath": "image-1788748088275.jpg",
+      "sceneSha256": "b30b5b0a684abeff76b19dad5806c81c562422432db23432b7f263cc84d60b3c",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 9,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154816 (Custom).jpg",
+      "sceneRelativePath": "images.jpg",
+      "sceneSha256": "883eb06c718ec3a159a5b35a49db7dd2b3c7c79888cd7161306138d4f95d9a2b",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 9,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155022 (Custom).jpg",
+      "sceneRelativePath": "20260919_024751.jpg",
+      "sceneSha256": "80e8855c542ac8a366703635fbe5e43bb7c3aa765b920140f2292fc2d2308d4f",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 9,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155058 (Custom).jpg",
+      "sceneRelativePath": "IMG_20260829_215031.jpg",
+      "sceneSha256": "e94bfe616756e75e210c351b8ef3220645794cb05f1140050a52c081ade5b216",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 9,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155252 (Custom).jpg",
+      "sceneRelativePath": "Sunset-Shells-Christy-Mandeville-Feb-9-2023.jpg",
+      "sceneSha256": "edcb512692d7c77540e8fdbed95d5125e3350a19f7e96aa1f657a9203e326365",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 9,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155308 (Custom).jpg",
+      "sceneRelativePath": "20260919_024802.jpg",
+      "sceneSha256": "d80c14c75ea71ee17819c3d8cd0baee58a0fb0c616fb2b09afc69a7f23e62486",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 9,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155342 (Custom).jpg",
+      "sceneRelativePath": "qweqwe.jpg",
+      "sceneSha256": "2289424fbe8829f08dd898fbc0b45640f52fa6e8d73703d8305515e16b2c26a8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 9,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155345 (Custom).jpg",
+      "sceneRelativePath": "20260919_024751.jpg",
+      "sceneSha256": "80e8855c542ac8a366703635fbe5e43bb7c3aa765b920140f2292fc2d2308d4f",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 9,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155530 (Custom).jpg",
+      "sceneRelativePath": "qweqwe.jpg",
+      "sceneSha256": "2289424fbe8829f08dd898fbc0b45640f52fa6e8d73703d8305515e16b2c26a8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 9,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161427 (Custom).jpg",
+      "sceneRelativePath": "qwe.jpg",
+      "sceneSha256": "d046dff11e2c9ba3c250f923e813cfd86714af98216f04cd5a10b39e002a965c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 9,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161613 (Custom).jpg",
+      "sceneRelativePath": "20260919_024751.jpg",
+      "sceneSha256": "80e8855c542ac8a366703635fbe5e43bb7c3aa765b920140f2292fc2d2308d4f",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 9,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145356 (Custom).jpg",
+      "sceneRelativePath": "fghfghfghfgh.jpg",
+      "sceneSha256": "5c53f8ae9564ebe2c369c4cc214156a24efdd90ca81565de9576e10914b4f27a",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_123220 (Custom).jpg",
+      "sceneRelativePath": "piopiopop.jpg",
+      "sceneSha256": "1378e75dbf8bf2a07c58c567d954b51fa3daecb9840ecaa68dd67cfd7efdaabc",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154812 (Custom).jpg",
+      "sceneRelativePath": "20260919_024644.jpg",
+      "sceneSha256": "1e4b885f6a3462b75826f796f62ab30f1666e6a5164fbdd271712cadede30781",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154928 (Custom).jpg",
+      "sceneRelativePath": "image-1788748088275.jpg",
+      "sceneSha256": "b30b5b0a684abeff76b19dad5806c81c562422432db23432b7f263cc84d60b3c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154939 (Custom).jpg",
+      "sceneRelativePath": "20260919_024706.jpg",
+      "sceneSha256": "0195d757f1282ce05659c227d9111f4b78beca1b4202e7d932bda2133266a4db",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155015 (Custom).jpg",
+      "sceneRelativePath": "images (2).jpg",
+      "sceneSha256": "6898e6484fe0a358297cad6f3c7c61f966f6549d9e9c921bd69c35652a380d6c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155058 (Custom).jpg",
+      "sceneRelativePath": "fgyrtyrtytryrty.jpg",
+      "sceneSha256": "df2a54c1a3d3f05b791c22a26724c112072e27a2503b94300ec49c8775fc9d11",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155218 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_fd375150-3858-4e4d-8a16-4ffc924bd5e8.jpg",
+      "sceneSha256": "e4ce4a940f6a41018be79d0e2ce27b52548c62d1bd0841dbba247a0d0f232e80",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155252 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_10e2c2c0-e117-4263-9ecf-cda5ff608826.jpg",
+      "sceneSha256": "ec7939e62d9db9884b5b479a9cfd6035b2b76f84e061a5a7731959b8bdca8b4d",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161436 (Custom).jpg",
+      "sceneRelativePath": "images (1).jpg",
+      "sceneSha256": "f2b849a9e1c62b49f5c90e513743031cea7fe2159a2e8c66cb4b17aedea8f308",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161719 (Custom).jpg",
+      "sceneRelativePath": "fgyrtyrtytryrty.jpg",
+      "sceneSha256": "df2a54c1a3d3f05b791c22a26724c112072e27a2503b94300ec49c8775fc9d11",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162045 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_ab028e31-e654-419b-8acd-19f2ff2fc3b4.jpg",
+      "sceneSha256": "23840d8ee1d1fb77b7c48a2cf4633c804855c3d65ac56f3be527fa06476a54d7",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145257 (Custom).jpg",
+      "sceneRelativePath": "20260919_024648.jpg",
+      "sceneSha256": "b499f89dd9815e8ef80bae7095ca2382452ec1b2b48c33318cee3b68ddbd37e0",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 10,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145356 (Custom).jpg",
+      "sceneRelativePath": "San-Juan-Batangas-Mango-Farm-1-1024x768.jpeg",
+      "sceneSha256": "7ec6f72c0a7e56dc16ec88a878b18535eaad7f53906821e709d278ae2f1ae9b2",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154732 (Custom).jpg",
+      "sceneRelativePath": "20260919_024802.jpg",
+      "sceneSha256": "d80c14c75ea71ee17819c3d8cd0baee58a0fb0c616fb2b09afc69a7f23e62486",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154816 (Custom).jpg",
+      "sceneRelativePath": "images (5).jpg",
+      "sceneSha256": "7f597256c5a768fa18b3f89a3beef589817a8a56e99166881a81a19bc35b28e8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154835 (Custom).jpg",
+      "sceneRelativePath": "360_F_536205433_3gvsXuJG3LjFufNFyDn8ocVOWZoGIywa.jpg",
+      "sceneSha256": "60dcfacdf70446529c1cfe853951527fa1345438fc4dc13b899e6d69329169b2",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154928 (Custom).jpg",
+      "sceneRelativePath": "20260919_024706.jpg",
+      "sceneSha256": "0195d757f1282ce05659c227d9111f4b78beca1b4202e7d932bda2133266a4db",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155235 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_ab028e31-e654-419b-8acd-19f2ff2fc3b4.jpg",
+      "sceneSha256": "23840d8ee1d1fb77b7c48a2cf4633c804855c3d65ac56f3be527fa06476a54d7",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155252 (Custom).jpg",
+      "sceneRelativePath": "qweqweqweqwe.jpg",
+      "sceneSha256": "2df8cf2fb0e86454c57d48bf84a823b61d55120b51fdb4d2bc9aa4a0ce74c2f8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155308 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_69eaa3f7-d235-4ed4-a029-4a1139737f4e.jpg",
+      "sceneSha256": "d0e9e186bb540c634a7a8e9a75fba698313ff03aa6f4d1b65a687e4b73f54c4e",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155342 (Custom).jpg",
+      "sceneRelativePath": "IMG_20260911_215034.jpg",
+      "sceneSha256": "317be424bc1ddb1b1963a2e90bc7b3c9681d3be32b1d4920230165fc3680c24a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155530 (Custom).jpg",
+      "sceneRelativePath": "809978842_2263352371153778_913570081529937827_n.jpg",
+      "sceneSha256": "7c9253f370435e6f628a0dd011305315614f33087e872be470550d261518a947",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155637 (Custom).jpg",
+      "sceneRelativePath": "20260919_024644.jpg",
+      "sceneSha256": "1e4b885f6a3462b75826f796f62ab30f1666e6a5164fbdd271712cadede30781",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155835 (Custom).jpg",
+      "sceneRelativePath": "20260919_024829.jpg",
+      "sceneSha256": "e4fcb05f7ee761956efbf2e325dccc12d84f6af6dd1ea945e35891b97382ddd4",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_160039 (Custom).jpg",
+      "sceneRelativePath": "20260919_024802.jpg",
+      "sceneSha256": "d80c14c75ea71ee17819c3d8cd0baee58a0fb0c616fb2b09afc69a7f23e62486",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161436 (Custom).jpg",
+      "sceneRelativePath": "20260919_024644.jpg",
+      "sceneSha256": "1e4b885f6a3462b75826f796f62ab30f1666e6a5164fbdd271712cadede30781",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161448 (Custom).jpg",
+      "sceneRelativePath": "image-1788748088275.jpg",
+      "sceneSha256": "b30b5b0a684abeff76b19dad5806c81c562422432db23432b7f263cc84d60b3c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161613 (Custom).jpg",
+      "sceneRelativePath": "360_F_536205433_3gvsXuJG3LjFufNFyDn8ocVOWZoGIywa.jpg",
+      "sceneSha256": "60dcfacdf70446529c1cfe853951527fa1345438fc4dc13b899e6d69329169b2",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162123 (Custom).jpg",
+      "sceneRelativePath": "images (6).jpg",
+      "sceneSha256": "18539c6e7838453aa353e4baa78eb9c5907779e531f304b97f69f1bcbbc94da8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162151 (Custom).jpg",
+      "sceneRelativePath": "20260919_025023.jpg",
+      "sceneSha256": "e39e4ebab3487e1c55f8b94f67e760ffb8b3a2d2b67b4528eb6b8c5556e4d390",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211211_155450 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_f0c810ba-f9e7-44d9-b9ce-8d91d724d738.jpg",
+      "sceneSha256": "c5f2e18ee7a63b96f84c1bcb925ee440184d59f9942ac082215cc939b8e7b11a",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_144907 (Custom).jpg",
+      "sceneRelativePath": "fghfghgfhfghgfhgfh.jpg",
+      "sceneSha256": "3e804809074fabdc9c50bd5932282d3bac8e4b7cff3f61bdf84af3d00bf3bf19",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 11,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145257 (Custom).jpg",
+      "sceneRelativePath": "rtyrty.jpg",
+      "sceneSha256": "cd29c8e02c9a1fe7bcc499f7d716d6727ab9316fcadcfebf31ddb37b6711fe65",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155015 (Custom).jpg",
+      "sceneRelativePath": "images (2).jpg",
+      "sceneSha256": "6898e6484fe0a358297cad6f3c7c61f966f6549d9e9c921bd69c35652a380d6c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155028 (Custom).jpg",
+      "sceneRelativePath": "fghfghfghfgh.jpg",
+      "sceneSha256": "5c53f8ae9564ebe2c369c4cc214156a24efdd90ca81565de9576e10914b4f27a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155326 (Custom).jpg",
+      "sceneRelativePath": "20260919_024751.jpg",
+      "sceneSha256": "80e8855c542ac8a366703635fbe5e43bb7c3aa765b920140f2292fc2d2308d4f",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155330 (Custom).jpg",
+      "sceneRelativePath": "rtyrty.jpg",
+      "sceneSha256": "cd29c8e02c9a1fe7bcc499f7d716d6727ab9316fcadcfebf31ddb37b6711fe65",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155358 (Custom).jpg",
+      "sceneRelativePath": "images (1).jpg",
+      "sceneSha256": "f2b849a9e1c62b49f5c90e513743031cea7fe2159a2e8c66cb4b17aedea8f308",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155455 (Custom).jpg",
+      "sceneRelativePath": "20260919_025023.jpg",
+      "sceneSha256": "e39e4ebab3487e1c55f8b94f67e760ffb8b3a2d2b67b4528eb6b8c5556e4d390",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161427 (Custom).jpg",
+      "sceneRelativePath": "images (6).jpg",
+      "sceneSha256": "18539c6e7838453aa353e4baa78eb9c5907779e531f304b97f69f1bcbbc94da8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161448 (Custom).jpg",
+      "sceneRelativePath": "images (2).jpg",
+      "sceneSha256": "6898e6484fe0a358297cad6f3c7c61f966f6549d9e9c921bd69c35652a380d6c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162045 (Custom).jpg",
+      "sceneRelativePath": "ouioi.jpg",
+      "sceneSha256": "e2dcf3cafc94606645e3cdfaa3ff75376c6ede607a0fd0021c2518f706b9ea2a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162151 (Custom).jpg",
+      "sceneRelativePath": "vcbcbcvbcv.jpg",
+      "sceneSha256": "31f9b90b7c30cc2f62b725de593e94b0c0ce51ce07f7f6ce0d4f4beb84060328",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_144907 (Custom).jpg",
+      "sceneRelativePath": "503364956_4108204039412491_193289898358932419_n.jpg",
+      "sceneSha256": "49776b755fd8eb87e8963e1db3b37cd58878f7eae425b3cd4fb3c17e718280c5",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145302 (Custom).jpg",
+      "sceneRelativePath": "San-Juan-Batangas-Mango-Farm-1-1024x768.jpeg",
+      "sceneSha256": "7ec6f72c0a7e56dc16ec88a878b18535eaad7f53906821e709d278ae2f1ae9b2",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 12,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145356 (Custom).jpg",
+      "sceneRelativePath": "qweqwewqeqwewqe.jpg",
+      "sceneSha256": "ee12a9a9581ddf638c5251b06402540974db5e32ec3d2b1d021e2606a7604bfb",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154728 (Custom).jpg",
+      "sceneRelativePath": "rtyrty.jpg",
+      "sceneSha256": "cd29c8e02c9a1fe7bcc499f7d716d6727ab9316fcadcfebf31ddb37b6711fe65",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154939 (Custom).jpg",
+      "sceneRelativePath": "images (4).jpg",
+      "sceneSha256": "ec8718b2d95dd77cb65a08d16b1d9f81be23c7e85f14f856189c3509fcc9e757",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155022 (Custom).jpg",
+      "sceneRelativePath": "image-1788748088275.jpg",
+      "sceneSha256": "b30b5b0a684abeff76b19dad5806c81c562422432db23432b7f263cc84d60b3c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155028 (Custom).jpg",
+      "sceneRelativePath": "20260919_024751.jpg",
+      "sceneSha256": "80e8855c542ac8a366703635fbe5e43bb7c3aa765b920140f2292fc2d2308d4f",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155058 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_f0711fe0-439b-4870-bbb2-f674e4e65382.jpg",
+      "sceneSha256": "8210ac871c594e47e36fd3aa0f72b272bb61924772b0e66b36e5fa36265e30f7",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155218 (Custom).jpg",
+      "sceneRelativePath": "fghfghfghfgh.jpg",
+      "sceneSha256": "5c53f8ae9564ebe2c369c4cc214156a24efdd90ca81565de9576e10914b4f27a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155252 (Custom).jpg",
+      "sceneRelativePath": "815468511_1613763380446297_5035152037097991966_n.jpg",
+      "sceneSha256": "a6f46cb9449d46283368a544577013f6ecbb6257e90c990082af8a57933716c9",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155308 (Custom).jpg",
+      "sceneRelativePath": "20260919_024837.jpg",
+      "sceneSha256": "6538c007a86d52f18dd544256decc4b0f7dd06daca1e2c7351041bfd1cc8ace3",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155637 (Custom).jpg",
+      "sceneRelativePath": "vbnvbnvbn.jpg",
+      "sceneSha256": "661ce508a1cd48a9b1a2ef60f3605d4b167f397591c79d8d830ea1cdcb280000",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162123 (Custom).jpg",
+      "sceneRelativePath": "images (3).jpg",
+      "sceneSha256": "47e8c18194b40879b18838f1026f6a91dd22e31383ffdfc437e40d34b59b2520",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162151 (Custom).jpg",
+      "sceneRelativePath": "20260919_024751.jpg",
+      "sceneSha256": "80e8855c542ac8a366703635fbe5e43bb7c3aa765b920140f2292fc2d2308d4f",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 13,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_144903 (Custom).jpg",
+      "sceneRelativePath": "qweqwewqeqwewqe.jpg",
+      "sceneSha256": "ee12a9a9581ddf638c5251b06402540974db5e32ec3d2b1d021e2606a7604bfb",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154835 (Custom).jpg",
+      "sceneRelativePath": "qwdfdfgfhf.jpg",
+      "sceneSha256": "d54aff9a39d2b143bb05ac519a840140acb1b02da709e7d4865b3d301e2e0253",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_154948 (Custom).jpg",
+      "sceneRelativePath": "20260919_024634.jpg",
+      "sceneSha256": "caffa9ae0a035112981a34e60c4fd23f582966b7185841244087c2c8313e013a",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155015 (Custom).jpg",
+      "sceneRelativePath": "qwdfdfgfhf.jpg",
+      "sceneSha256": "d54aff9a39d2b143bb05ac519a840140acb1b02da709e7d4865b3d301e2e0253",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155152 (Custom).jpg",
+      "sceneRelativePath": "795776045_2088962935035945_3281301272652016111_n.jpg",
+      "sceneSha256": "1b47613a9e2afa480a9d2b681388bc0b41ea666b7501190f718588672d1ce310",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155235 (Custom).jpg",
+      "sceneRelativePath": "qweqweqweqwe.jpg",
+      "sceneSha256": "2df8cf2fb0e86454c57d48bf84a823b61d55120b51fdb4d2bc9aa4a0ce74c2f8",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155326 (Custom).jpg",
+      "sceneRelativePath": "qwdfdfgfhf.jpg",
+      "sceneSha256": "d54aff9a39d2b143bb05ac519a840140acb1b02da709e7d4865b3d301e2e0253",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155330 (Custom).jpg",
+      "sceneRelativePath": "795776045_2088962935035945_3281301272652016111_n.jpg",
+      "sceneSha256": "1b47613a9e2afa480a9d2b681388bc0b41ea666b7501190f718588672d1ce310",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_155342 (Custom).jpg",
+      "sceneRelativePath": "20260919_024837.jpg",
+      "sceneSha256": "6538c007a86d52f18dd544256decc4b0f7dd06daca1e2c7351041bfd1cc8ace3",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_160039 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_ab028e31-e654-419b-8acd-19f2ff2fc3b4.jpg",
+      "sceneSha256": "23840d8ee1d1fb77b7c48a2cf4633c804855c3d65ac56f3be527fa06476a54d7",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161331 (Custom).jpg",
+      "sceneRelativePath": "images (2).jpg",
+      "sceneSha256": "6898e6484fe0a358297cad6f3c7c61f966f6549d9e9c921bd69c35652a380d6c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_161613 (Custom).jpg",
+      "sceneRelativePath": "qwe.jpg",
+      "sceneSha256": "d046dff11e2c9ba3c250f923e813cfd86714af98216f04cd5a10b39e002a965c",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162037 (Custom).jpg",
+      "sceneRelativePath": "Sunset-Shells-Christy-Mandeville-Feb-9-2023.jpg",
+      "sceneSha256": "edcb512692d7c77540e8fdbed95d5125e3350a19f7e96aa1f657a9203e326365",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/healthy_leaf/healthy_leaf__20211231_162123 (Custom).jpg",
+      "sceneRelativePath": "rn_image_picker_lib_temp_69eaa3f7-d235-4ed4-a029-4a1139737f4e.jpg",
+      "sceneSha256": "d0e9e186bb540c634a7a8e9a75fba698313ff03aa6f4d1b65a687e4b73f54c4e",
+      "label": "healthy_leaf"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211211_155450 (Custom).jpg",
+      "sceneRelativePath": "gfhfghgfhgfhgfh.jpg",
+      "sceneSha256": "b3339b8886bc3d2512e7138730d4f2bf9865e628cf86b8081fba69e9bd392b13",
+      "label": "sooty_mold"
+    },
+    {
+      "epoch": 14,
+      "trainRelativePath": "train/sooty_mold/sooty_mold__IMG_20211212_145302 (Custom).jpg",
+      "sceneRelativePath": "IMG_20260911_215034.jpg",
+      "sceneSha256": "317be424bc1ddb1b1963a2e90bc7b3c9681d3be32b1d4920230165fc3680c24a",
+      "label": "sooty_mold"
+    }
+  ]
+}

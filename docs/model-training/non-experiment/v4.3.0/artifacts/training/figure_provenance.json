@@ -1,0 +1,30 @@
+{
+  "status": "experimental candidate figures; not adoption evidence",
+  "workflowVersion": "v4.3.0",
+  "modelVersion": "model-v4.3.0-candidate",
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.3.0/training/v4-3-0-training-20261001T112311Z-961e5eb7",
+  "thresholdRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.3.0/threshold_fitting/v4-3-0-thresholds-20261001T120051Z-e1c5cdb0",
+  "modelSha256": "e5d323cfdca00fde64b1da4da6a5f1328ff627d9616d518b6ca82595c3f8137e",
+  "trainingCompleteSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+  "selectedThresholdsSha256": "fd213d6ed4fc37e10738f391d989dc32e7ad3555d048e02ac7ba9921f5bb26b3",
+  "thresholdCompleteSha256": "daba6fc62c90be8eaec43e50032935bfaae68179f1b2d76c3ee605a21766c452",
+  "evaluationSha256": "46da4aa3d2fd2532bc45256447302f58938e53ee16b6fe58d7794b73bc035de1",
+  "trainingFigureProvenanceSha256": "18e05a1f87bef7b0afb7d1696bc1d5110729c916369f2ccd56595ec2009f049d",
+  "sourceCsvSha256": {
+    "perClassMetrics": "8b2df327d9c4ff5be7393fb92a911107fd1bc4e8809f0eb524176cb716e8909a",
+    "thresholdSearch": "3a998f0736c388ae2fad7567ea032df827dfb85d7e73609b4d0619781f33d8fc"
+  },
+  "figures": {
+    "training_curves.png": "ea1a434a8cf3d4248528bed9ed17a9bf9c6fb102edf9399408c7b4b961968d93",
+    "augmentation_preview.png": "1f629305229df9168500d5372a08ed0825915f887c71f6287c3a31ba95a904d1",
+    "grad_cam.png": "9a10c9013ed1a67bf89c9500a458ccaf1307381dabf51d44371e779179400aef",
+    "confusion_matrix.png": "35135507bd7e7e23921657f46a9a9767692bc77aa20df88030e83d85819eee85",
+    "per_class_metrics.png": "b16feea18e5d47280c7f34a94f2effab687f096c8d96401322e24a7c4dd4aca6",
+    "threshold_search.png": "aa44028244de4b161d777236ed9063898149168102731bdf68f1ac69ddc1ac34"
+  },
+  "perClassCsvSha256": "8b2df327d9c4ff5be7393fb92a911107fd1bc4e8809f0eb524176cb716e8909a",
+  "limits": [
+    "Historical test/OOD data are reused, not fresh field validation.",
+    "Threshold charts display saved search results and do not refit gates."
+  ]
+}

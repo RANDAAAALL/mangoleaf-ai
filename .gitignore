@@ -49,6 +49,7 @@ next-env.d.ts
 # documentation
 /docs/MANUSCRIPT_MODIFICATIONS.md
 docs/EMAIL_DISPATCH_WORKFLOW.md
+/docs/releases/v0_4_9.md
 
 # scratch folder
 /scratch/
@@ -70,3 +71,6 @@ docs/EMAIL_DISPATCH_WORKFLOW.md
 # The composition, its source assets, and the rendered MP4 are tracked.
 # Dependencies are not: reinstall them from video/bun.lock.
 /video/node_modules
+
+# notes for non-duplicate images on the dataset
+mango_dataset_v3_notes_non_duplicate.md

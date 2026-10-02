@@ -5,9 +5,11 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { db, type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { useSync } from "@/hooks/useSync";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
+import { useScrollLock } from "@/hooks/useScrollLock";
+import { computeImageHash } from "@/lib/image-hash";
 import type * as tf from "@tensorflow/tfjs";
-import { FALLBACK_GUIDELINES } from "@/lib/constants";
-import { type Language } from "@/lib/translations";
+import { modelVersion, UNCERTAIN_LABEL } from "@/lib/constants";
+import { translations, type Language } from "@/lib/translations";
 
 // Modular UI Components matching Figma Design System
 import { SplashScreen } from "@/components/layout/splash-screen";
@@ -35,6 +37,23 @@ const ScanDetailsModal = dynamic(() =>
 let hasInitialized = false;
 
 type AppTab = "home" | "history" | "about";
+
+type PhotoCheck =
+  | { status: "idle" | "checking" | "error" }
+  | { status: "ready"; hash: string; duplicate: ScanRecord | null };
+
+function findDuplicateScan(imageHash: string) {
+  return db.scans
+    .where("image_hash")
+    .equals(imageHash)
+    .filter(
+      (scan) =>
+        scan._status !== "pending-delete" &&
+        // Legacy reports have no reliable model identity; keep them in History.
+        scan.model_version === modelVersion,
+    )
+    .first();
+}
 
 export default function Home() {
   const { createScan, deleteScan } = useSync();
@@ -72,17 +91,29 @@ export default function Home() {
   }, []);
 
   // The photo being scanned right now
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const selectedFileRef = useRef<File | null>(null);
+  const previewUrlRef = useRef<string | null>(null);
+  const photoRequestRef = useRef(0);
+  const photoHashRef = useRef<string | null>(null);
+  const [photoCheck, setPhotoCheck] = useState<PhotoCheck>({ status: "idle" });
+  const photoCheckRef = useRef<PhotoCheck>({ status: "idle" });
+  const scanInFlightRef = useRef(false);
+  const scanLauncherRef = useRef<HTMLElement | null>(null);
+  const restoreReviewFocusRef = useRef(false);
+  const mainRef = useRef<HTMLElement>(null);
 
-  // runDiagnosis reads these through refs, so it is not rebuilt every time the
-  // file or preview changes while a scan is in flight.
-  const selectedFileRef = useRef(selectedFile);
-  const previewUrlRef = useRef(previewUrl);
+  const updatePhotoCheck = useCallback((check: PhotoCheck) => {
+    photoCheckRef.current = check;
+    setPhotoCheck(check);
+  }, []);
+
   useEffect(() => {
-    selectedFileRef.current = selectedFile;
-    previewUrlRef.current = previewUrl;
-  }, [selectedFile, previewUrl]);
+    return () => {
+      photoRequestRef.current += 1;
+      if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
+    };
+  }, []);
   const [isScanning, setIsScanning] = useState(false);
   const [scanningProgress, setScanningProgress] = useState(0);
   const [legalModalType, setLegalModalType] = useState<
@@ -90,9 +121,31 @@ export default function Home() {
   >(null);
   const [isScanSheetOpen, setIsScanSheetOpen] = useState(false);
   const closeScanSheet = useCallback(() => setIsScanSheetOpen(false), []);
-  const openScanSheet = useCallback(() => setIsScanSheetOpen(true), []);
+  const openScanSheet = useCallback(
+    (event?: React.MouseEvent<HTMLButtonElement>) => {
+      // Capture the persistent launcher before the sheet/native picker takes focus.
+      scanLauncherRef.current =
+        event?.currentTarget ??
+        (document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null);
+      setIsScanSheetOpen(true);
+    },
+    [],
+  );
 
   const [selectedScan, setSelectedScan] = useState<ScanRecord | null>(null);
+
+  useEffect(() => {
+    if (previewUrl || selectedScan || !restoreReviewFocusRef.current) return;
+    restoreReviewFocusRef.current = false;
+    const launcher = scanLauncherRef.current;
+    const target =
+      launcher?.isConnected && launcher !== document.body
+        ? launcher
+        : mainRef.current;
+    target?.focus({ preventScroll: true });
+  }, [previewUrl, selectedScan]);
 
   // Read from localStorage on first render. Bisaya is the default because the
   // intended users read it more comfortably than English.
@@ -150,45 +203,77 @@ export default function Home() {
     return map;
   }, [cachedGuidelines]);
 
-  // Stop the page behind a modal from scrolling. Both elements need it: html
-  // alone still scrolls on iOS Safari.
-  useEffect(() => {
-    if (selectedScan || legalModalType) {
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-    };
-  }, [selectedScan, legalModalType]);
+  useScrollLock(Boolean(previewUrl || selectedScan || legalModalType));
 
   // Which picker was used last (camera, gallery, desktop), so Retake reopens
   // that same one rather than guessing.
   const lastPickerIdRef = useRef<string | null>(null);
 
+  const clearPhoto = useCallback(() => {
+    // Invalidate pending checks before clearing the preview or opening a picker.
+    photoRequestRef.current += 1;
+    if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
+    selectedFileRef.current = null;
+    previewUrlRef.current = null;
+    photoHashRef.current = null;
+    setPreviewUrl(null);
+    updatePhotoCheck({ status: "idle" });
+    const picker = document.getElementById(lastPickerIdRef.current ?? "");
+    if (picker instanceof HTMLInputElement) picker.value = "";
+  }, [updatePhotoCheck]);
+
+  const checkSelectedPhoto = useCallback(async () => {
+    const file = selectedFileRef.current;
+    if (!file || scanInFlightRef.current) return;
+    const request = ++photoRequestRef.current;
+    updatePhotoCheck({ status: "checking" });
+    try {
+      // Hash once per selection. Retrying a database lookup reuses these bytes.
+      const hash = photoHashRef.current ?? (await computeImageHash(file));
+      if (request !== photoRequestRef.current) return;
+      photoHashRef.current = hash;
+      const duplicate = await findDuplicateScan(hash);
+      if (request !== photoRequestRef.current) return;
+      updatePhotoCheck({ status: "ready", hash, duplicate: duplicate ?? null });
+      if (duplicate) {
+        console.log("---Duplicate photo detected — awaiting photo review.---");
+      }
+    } catch (err) {
+      if (request !== photoRequestRef.current) return;
+      console.error("Photo duplicate check failed:", err);
+      updatePhotoCheck({ status: "error" });
+    }
+  }, [updatePhotoCheck]);
+
   // A photo has been taken or chosen
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
-      if (!file) return;
+      if (!file || scanInFlightRef.current) return;
+      restoreReviewFocusRef.current = false;
+      clearPhoto();
       lastPickerIdRef.current = e.target.id;
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
-      setSelectedFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
+      e.target.value = "";
+      selectedFileRef.current = file;
+      previewUrlRef.current = URL.createObjectURL(file);
+      setPreviewUrl(previewUrlRef.current);
+      void checkSelectedPhoto();
     },
-    [previewUrl],
+    [clearPhoto, checkSelectedPhoto],
   );
+
+  const closePhotoReview = useCallback(() => {
+    if (scanInFlightRef.current) return;
+    restoreReviewFocusRef.current = true;
+    clearPhoto();
+  }, [clearPhoto]);
 
   // Drop the current preview and reopen the same picker
   const handleRetake = useCallback(() => {
+    if (scanInFlightRef.current) return;
     const pickerId = lastPickerIdRef.current;
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-    setSelectedFile(null);
-    setPreviewUrl(null);
+    restoreReviewFocusRef.current = true;
+    clearPhoto();
     if (pickerId) {
       const input = document.getElementById(
         pickerId,
@@ -198,44 +283,81 @@ export default function Home() {
         input.click(); // synchronous — preserves the user-activation needed to open the camera
       }
     }
-  }, [previewUrl]);
+  }, [clearPhoto]);
 
-  // The whole scan: hash, duplicate check, inference, compress, save.
-  // File and preview are read from refs so this callback stays stable.
+  const viewSavedResult = useCallback(async () => {
+    const check = photoCheckRef.current;
+    if (check.status !== "ready" || !check.duplicate || scanInFlightRef.current)
+      return;
+    const request = ++photoRequestRef.current;
+    updatePhotoCheck({ status: "checking" });
+    try {
+      // Another tab or sync may have deleted the saved report since selection.
+      const existingScan = await findDuplicateScan(check.hash);
+      if (request !== photoRequestRef.current) return;
+      if (existingScan) {
+        clearPhoto();
+        setSelectedScan(existingScan);
+      } else {
+        updatePhotoCheck({
+          status: "ready",
+          hash: check.hash,
+          duplicate: null,
+        });
+      }
+    } catch (err) {
+      if (request !== photoRequestRef.current) return;
+      console.error("Saved photo lookup failed:", err);
+      updatePhotoCheck({ status: "error" });
+    }
+  }, [clearPhoto, updatePhotoCheck]);
+
+  // Recheck the local report index, then infer, compress and save a new photo.
   const runDiagnosis = useCallback(async () => {
     const file = selectedFileRef.current;
-    const preview = previewUrlRef.current;
-    if (!file || !model) return;
+    const check = photoCheckRef.current;
+    if (
+      !file ||
+      !model ||
+      scanInFlightRef.current ||
+      check.status !== "ready" ||
+      check.duplicate
+    )
+      return;
 
+    // Ref guards rapid clicks before React renders the scanning state.
+    scanInFlightRef.current = true;
+    const request = photoRequestRef.current;
     setIsScanning(true);
     setScanningProgress(15);
     let inferenceImageUrl: string | null = null;
 
     try {
-      const { predictMangoDisease, compressImageForStorage, computeImageHash } =
-        await import("@/lib/classifier");
-
-      // 1. Fingerprint the file
-      const imageHash = await computeImageHash(file);
-
-      // 2. Same photo scanned before? Open that report instead of paying for a
-      //    second inference and storing the image twice.
-      const existingScan = await db.scans
-        .where("image_hash")
-        .equals(imageHash)
-        .first();
-      if (existingScan) {
-        console.log(
-          "---Duplicate photo detected — opening existing scan report.---",
-        );
-        setSelectedScan(existingScan);
-        if (preview) URL.revokeObjectURL(preview);
-        setSelectedFile(null);
-        setPreviewUrl(null);
-        setIsScanning(false);
-        setScanningProgress(0);
+      // Reports from a different model still need fresh inference. The same
+      // current/legacy eligibility rule applies both here and during review.
+      let existingScan: ScanRecord | undefined;
+      try {
+        existingScan = await findDuplicateScan(check.hash);
+      } catch (err) {
+        if (request === photoRequestRef.current) {
+          console.error("Photo duplicate recheck failed:", err);
+          updatePhotoCheck({ status: "error" });
+        }
         return;
       }
+      if (request !== photoRequestRef.current) return;
+      if (existingScan) {
+        updatePhotoCheck({
+          status: "ready",
+          hash: check.hash,
+          duplicate: existingScan,
+        });
+        return;
+      }
+
+      const { predictMangoDisease, compressImageForStorage } =
+        await import("@/lib/classifier");
+      if (request !== photoRequestRef.current) return;
 
       const img = new Image();
       inferenceImageUrl = URL.createObjectURL(file);
@@ -244,62 +366,80 @@ export default function Home() {
         img.onerror = reject;
         img.src = inferenceImageUrl!;
       });
+      if (request !== photoRequestRef.current) return;
 
       setScanningProgress(45);
       const { diseaseName, confidence } = await predictMangoDisease(model, img);
+      if (request !== photoRequestRef.current) return;
 
       setScanningProgress(75);
       // Shrink it before saving. Inference already ran on the full image, so
       // nothing is lost by storing the smaller copy.
       const storageBlob = await compressImageForStorage(img, 1000, 0.75);
+      if (request !== photoRequestRef.current) return;
 
       setScanningProgress(90);
 
-      await createScan(diseaseName, confidence, storageBlob, imageHash);
-
-      if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
-      setSelectedFile(null);
-      setPreviewUrl(null);
-      setIsScanning(false);
-      setScanningProgress(0);
+      await createScan(diseaseName, confidence, storageBlob, check.hash);
+      if (request !== photoRequestRef.current) return;
 
       const newestScan = await db.scans.orderBy("updated_at").last();
+      if (request !== photoRequestRef.current) return;
+      clearPhoto();
       if (newestScan) {
         setSelectedScan(newestScan);
       }
     } catch (err) {
       console.error("AI classification error:", err);
+    } finally {
+      scanInFlightRef.current = false;
       setIsScanning(false);
       setScanningProgress(0);
-    } finally {
       if (inferenceImageUrl) {
         URL.revokeObjectURL(inferenceImageUrl);
       }
     }
-  }, [model, createScan]);
+  }, [model, createScan, clearPhoto, updatePhotoCheck]);
 
-  // Synced guidelines first, bundled fallback second, so advice still appears
-  // on a device that has never been online.
+  // Read downloaded guidance offline. Missing advice gets a status message;
+  // treatment text is maintained only in Supabase, not bundled with the app.
   const getGuidelineForScan = useCallback(
     (diseaseName: string): { en: string; bis: string } => {
-      const key = diseaseName.toLowerCase().replace(/\s+/g, "_");
-      const matched = guidelineMap[key];
-
-      if (matched) {
+      // A rejected prediction needs photo guidance, regardless of cached advice.
+      if (diseaseName === UNCERTAIN_LABEL) {
         return {
-          en: matched.guidelines_en,
-          bis: matched.guidelines_bis,
+          en: translations.en.uncertainPhotoReminder,
+          bis: translations.bis.uncertainPhotoReminder,
         };
       }
 
-      return (
-        FALLBACK_GUIDELINES[key] || {
-          en: "No specific guidelines downloaded yet. Keep the mango leaves dry, prune infected twigs, and avoid overhead sprinkler watering.",
-          bis: "Wala pay nadownload nga guidelines. Padayon nga pama-un ang mga dahon, putlon ang mga naapektuhang sanga, ug likayi ang pagbisbis nga magbasa sa dahon.",
-        }
-      );
+      // The local query resolves before we decide whether guidance is missing.
+      if (cachedGuidelines === undefined) {
+        return {
+          en: translations.en.guidelinesLoading,
+          bis: translations.bis.guidelinesLoading,
+        };
+      }
+
+      const classKey = diseaseName.toLowerCase().replace(/\s+/g, "_");
+      // Both v4 healthy outputs share the existing general healthy guidance.
+      const key =
+        classKey === "healthy_leaf" || classKey === "healthy_fruit"
+          ? "healthy"
+          : classKey;
+      const matched = guidelineMap[key];
+
+      // Validate each language separately so blank text cannot hide the other.
+      return {
+        en:
+          matched?.guidelines_en?.trim() ||
+          translations.en.guidelinesUnavailable,
+        bis:
+          matched?.guidelines_bis?.trim() ||
+          translations.bis.guidelinesUnavailable,
+      };
     },
-    [guidelineMap],
+    [cachedGuidelines, guidelineMap],
   );
 
   const handleTabChange = useCallback((tab: AppTab) => {
@@ -351,7 +491,11 @@ export default function Home() {
         />
 
         {/* Main Content Area — extra bottom padding for bottom nav */}
-        <main className="max-w-7xl mx-auto px-6 py-8 pb-28 md:pb-8 flex flex-col">
+        <main
+          ref={mainRef}
+          tabIndex={-1}
+          className="max-w-7xl mx-auto px-6 py-8 pb-28 md:pb-8 flex flex-col outline-none"
+        >
           <div key={activeTab} className="tab-panel-fade-in flex flex-col">
             {activeTab === "home" && (
               <HomeTab
@@ -393,11 +537,24 @@ export default function Home() {
         <DiagnosticScanner
           previewUrl={previewUrl}
           isScanning={isScanning}
+          isCheckingPhoto={photoCheck.status === "checking"}
+          photoCheckFailed={photoCheck.status === "error"}
+          isDuplicate={
+            photoCheck.status === "ready" && Boolean(photoCheck.duplicate)
+          }
+          canRunDiagnosis={
+            Boolean(model) &&
+            photoCheck.status === "ready" &&
+            !photoCheck.duplicate
+          }
           scanningProgress={scanningProgress}
           language={language}
           onFileChange={handleFileChange}
           onRunDiagnosis={runDiagnosis}
           onRetake={handleRetake}
+          onClose={closePhotoReview}
+          onViewSavedResult={viewSavedResult}
+          onRetryPhotoCheck={checkSelectedPhoto}
         />
       )}
 

@@ -1,0 +1,9 @@
+{
+  "combined": {
+    "model.json": "f5ebdd96893513f05d78126880e9a56a94c4750f75b02a2ee2fb7d3792c8267b",
+    "group1-shard1of3.bin": "04e1e18a28cb414442c66617a0bc0cbdff2e93116d08d0a170f04b30572bf09c",
+    "group1-shard2of3.bin": "0432d0dc9a25e4d2d0048aa5c8120076c05466a6363bd2d5a0c5e5ee4fd34954",
+    "group1-shard3of3.bin": "a0fab950ece352711e938467d6bf5f6aaed6c48b5ee1e37812b0a7192399292b",
+    "model_config.json": "23f976f5d4311885e49a7738a02fe7576a073e700dc7dd1a0e1a70b60dd3cb52"
+  }
+}

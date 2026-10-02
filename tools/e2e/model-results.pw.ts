@@ -11,6 +11,7 @@ import {
   attachJson,
   photoPath,
 } from "./support/fixtures";
+import { CLASSES, modelVersion } from "../../src/lib/constants";
 
 for (const photo of photos) {
   test(`M01: real-model report and saved UI — ${photo.file}`, async ({
@@ -32,12 +33,15 @@ for (const photo of photos) {
     );
     expect(await harness.evaluate(() => window.mangoTestError)).toBeUndefined();
     const metadata = await harness.evaluate(() => window.mangoTest.metadata);
+    expect(metadata.modelVersion).toBe(modelVersion);
+    expect(metadata.modelAssetVersion).toBe(`model-${modelVersion}`);
+    expect(metadata.classes).toEqual(CLASSES);
     const prediction = await harness.evaluate(
       (file) => window.mangoTest.predict("/__test__/photos/" + file),
       photo.file,
     );
     await harness.close();
-    expect(prediction.probabilities).toHaveLength(6);
+    expect(prediction.probabilities).toHaveLength(CLASSES.length);
     expect(
       prediction.probabilities.every(
         (p) => Number.isFinite(p) && p >= 0 && p <= 1,
@@ -46,6 +50,7 @@ for (const photo of photos) {
     expect(
       Math.abs(prediction.probabilities.reduce((a, b) => a + b, 0) - 1),
     ).toBeLessThan(0.02);
+    expect(prediction.accepted).toBe(prediction.failedGates.length === 0);
     await openApp(page);
     const started = Date.now();
     await runScan(page, photo.file);
@@ -54,6 +59,7 @@ for (const photo of photos) {
     expect(saved.image_hash).toBe(photo.sha256);
     expect(saved.disease_name).toBe(prediction.diseaseName);
     expect(saved.confidence).toBe(prediction.confidence);
+    expect(saved.model_version).toBe(modelVersion);
     if (!prediction.accepted) expect(diagnostics).toHaveLength(1);
     const labelMatches =
       photo.expectedKind === "ood"
@@ -67,6 +73,7 @@ for (const photo of photos) {
         : "Does not match supplied label; inspect model report",
     });
     await attachJson(info, "model-observation", {
+      source: "Actual production classifier with original fixture bytes",
       photo,
       labelMatches,
       labelStatus: "provisional; expert verification pending",
@@ -82,7 +89,9 @@ for (const photo of photos) {
     });
     await info.attach("input-photo", {
       path: photoPath(photo.file),
-      contentType: "image/jpeg",
+      contentType: photo.file.toLowerCase().endsWith(".png")
+        ? "image/png"
+        : "image/jpeg",
     });
     await info.attach("result.png", {
       body: await page.screenshot(),

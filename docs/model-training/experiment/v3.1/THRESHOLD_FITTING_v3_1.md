@@ -85,6 +85,6 @@ The clean template itself makes no measured accuracy, retention, or rejection cl
 
 ## Local verification
 
-For new background-replacement training weights, use the [paired experiment guide](BACKGROUND_EXPERIMENT_v3_1.md) and its v3.2 threshold notebook. This v3.1 workflow intentionally remains tied to the original Trial 3 resume bundle.
+For new background-replacement training weights, use the [paired experiment guide](TRIAL_v3_1.md) and its v3.2 threshold notebook. This v3.1 workflow intentionally remains tied to the original Trial 3 resume bundle.
 
 Run `python tools/verify-threshold-notebook.py` from the repository root. This standard-library check validates clean notebook cells, Python syntax, threshold selection, undefined accepted accuracy when all images are rejected, saved-selection integrity, and the reporting/export flow using synthetic predictions. Changing only evaluation predictions must leave selected thresholds unchanged. It does not execute TensorFlow, load the real model, or measure model accuracy.

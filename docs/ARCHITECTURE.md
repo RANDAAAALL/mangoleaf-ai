@@ -18,7 +18,21 @@ Core desktop/mobile and Chromium service-worker cases run in the existing `maste
 
 The manual release workflow uses Vercel staged production builds: disable automatic domain assignment in the dashboard, test the exact candidate commit/deployment, then promote it after review. Candidate labels/docs may be committed before release, with pending status stated honestly. Staging uses Production settings; it does not isolate the database. See [candidate testing and promotion](MODEL_VERSIONING.md#candidate-testing-and-promotion). CI checks do not themselves deploy or gate an independent Vercel promotion.
 
-Experiment guides live under [experiment/v3.1](model-training/experiment/v3.1/BACKGROUND_EXPERIMENT_v3_1.md) and [experiment/v3.2](model-training/experiment/v3.2/THRESHOLD_FITTING_v3_2.md). Their candidate notebooks and completed experimental evidence live in [notebooks/experiment](../notebooks/experiment/README.md): **experimental candidates, not shipped or deployed**. `v3.1` and `v3.2` identify notebook workflows, not app/model versions. Trial reports, figures, artifacts, and completed trial notebooks retain their existing locations and history.
+Experiment guides live under [experiment/v3.1](model-training/experiment/v3.1/TRIAL_v3_1.md), [experiment/v3.2](model-training/experiment/v3.2/TRIAL_v3_2.md), [experiment/v4](model-training/experiment/v4/TRIAL_v4.md), [experiment/v4.1](model-training/experiment/v4.1/TRIAL_v4_1.md), [experiment/v4.1.1](model-training/experiment/v4.1.1/TRIAL_v4_1_1.md), and [experiment/v4.2.0](model-training/experiment/v4.2.0/TRIAL_v4_2_0.md). Their candidate notebooks and completed experimental evidence live in [notebooks/experiment](../notebooks/experiment/README.md): **experimental candidates, not shipped or deployed**. V4 introduced separate healthy-leaf and healthy-fruit outputs while preserving historical split membership by file contents. V4.1 compared control, background replacement, local lighting, and both effects; V4.1.1 completed a guided reproduction. V4.2.0 completed separate leaf and fruit runs; only leaf met the threshold-selection rule. On October 2, 2026, the user adopted the single seven-class V4.3.0 Combined model for app `0.4.9`, replacing V3 as the current application baseline. The [adoption receipt](model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) records original export and adopted identities/hashes. Exact earlier model/app backups remain in ignored `.tools/model-backups/`; `.tools/release-backups/v0.4.9-model-v4.3.0-20261002/before/` preserves the pre-adoption state. Production promotion remains pending the final CI and release checks.
+
+Historical and adopted trial reports live under `docs/model-training/non-experiment/v{n}/`. Each version keeps its report beside any saved `artifacts/` and `figures/`; those evidence folders exist only when files are available. Upon adoption, preserved templates and completed notebooks move to `notebooks/v{n}/` without changing cell contents or saved outputs. Experimental versions use the same per-version grouping but remain candidates regardless of the `TRIAL_*.md` filename. V3.1 also retains its separate [original-weight threshold guide](model-training/experiment/v3.1/THRESHOLD_FITTING_v3_1.md).
+
+V4 notebook outputs default to `MyDrive/mangoleaf_experiments/v4/training/` and `MyDrive/mangoleaf_experiments/v4/threshold_fitting/`. Each run and downloadable evidence/model ZIP carries its v4 workflow label and unique run ID. See the [Drive output layout](model-training/experiment/v4/TRIAL_v4.md#where-google-drive-outputs-go) for folder contents and existing-run compatibility.
+
+V4.1 writes training and fitting runs under `MyDrive/mangoleaf_experiments/v4.1/`. Its replacement and lighting effects touch training images only. Validation and test pixels stay unchanged. The completed run froze every arm's threshold selection before predicting on the 32 newly uploaded OOD photos. Selected result records and preview sheets are copied under `docs/model-training/experiment/v4.1/artifacts/` and `docs/model-training/experiment/v4.1/figures/`; see the [v4.1 evidence guide](model-training/experiment/v4.1/TRIAL_v4_1.md#completed-result-and-local-test).
+
+The separate V4.1 post-training figures notebook reads those completed runs, the saved Keras background model, and original scene photos. It writes charts, a reconstructed training-augmentation example, and validation Grad-CAM under a new Drive `post_training_figures/` run. Selected local copies and input hashes are indexed in the [V4.1 figure guide](model-training/experiment/v4.1/TRIAL_v4_1.md#post-training-figures-september-25-2026); the figures do not change weights, thresholds, or deployed assets.
+
+V4.1.1 saved separate `MyDrive/mangoleaf_experiments/v4.1.1/` training, threshold-fitting, and figure runs. Its [guide](model-training/experiment/v4.1.1/TRIAL_v4_1_1.md) separates raw mango/split/scene inputs from later OOD inputs, records review gates, and labels reused evaluation collections as exploratory. Its Background candidate was the previous local `public/model/` copy and remains in an ignored backup; selected evidence is indexed under `docs/model-training/experiment/v4.1.1/`. This did not adopt or deploy the model.
+
+The [V4.2.0 guide](model-training/experiment/v4.2.0/TRIAL_v4_2_0.md) defines two separate experimental classifiers: four leaf classes (including Bacterial Canker) and three fruit classes. Each has one training notebook with integrated figure steps, a separate threshold notebook, and completed Drive runs under `MyDrive/mangoleaf_experiments/v4.2.0/`. Curated evidence is under each organ's `artifacts/` and `figures/`, with source paths and SHA-256 hashes in `source_manifest.json`. The local two-choice app trial is over; the exact two-model asset and app-source state is retained in ignored `.tools/model-backups/v4.2.0-dual-experiment-20260929/`. The fruit gate was infeasible. Neither model was adopted or deployed.
+
+The [V4.3.0 adopted trial report](model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) records one completed seven-class Combined model, two workflow notebooks, and separately preserved completed result copies now under `notebooks/v4.3.0/`. Training reads the saved V4.1.1 split and provenance, reviews the original 62 scene photos plus the supplied 138 new scene photos, and fits a single combined recipe. Background replacement and local lighting each keep their 30% probability during training only; validation and test retain original pixels. The reviewed 200-scene pool is augmentation input, not an expanded mango dataset. Original training and fitting runs retain their `MyDrive/mangoleaf_experiments/v4.3.0/` paths and candidate metadata. Figure steps are integrated into the training notebook: training charts first, then evaluation charts after fitting. Verified evidence copies retain their artifacts/training/, artifacts/threshold_fitting/, artifacts/review/, and final figures/ grouping. The [comparison](model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) records unchanged selected mango decisions and mixed OOD results. Root `public/model/` now contains the adopted Combined graph, configuration, and three shards, with `v4.3.0` display label and `mangoleaf-model-cache-v4-3-0` cache identity. Only configuration release metadata changes from the original fitted export; numerical settings and weights are preserved. Current photo guidance, bilingual text, and history remain in use. Adoption is recorded separately from pending production promotion.
 
 ## Project structure
 
@@ -33,7 +47,12 @@ mangoleaf-ai/
 |-- tools/                          # Shared checks and isolated browser-test tooling
 |   |-- e2e/                        # .pw.ts cases, photo fixtures, test-only inference harness
 |   |-- build-test-app.mjs          # Private static export with a local mock backend
+|   |-- generate-v4-1-figures.py    # V4.1 charts, preview, and Grad-CAM from completed runs
+|   |-- build-v4-1-figures-notebook.py   # Regenerate the uploadable figures notebook
+|   |-- build-v4-1-1-figures-notebook.py # Build the guided V4.1.1 figures notebook from the V4.1 recipe
 |   |-- serve-test-app.mjs          # Loopback static/mock server
+|   |-- verify-v4-notebooks.py      # Seven-class notebook contracts and optional read-only data audit
+|   |-- verify-v4-1-notebooks.py    # Four-arm experiment contracts and synthetic data-boundary checks
 |   `-- run-browser-tests.mjs       # Build verification and Node.js Playwright runner
 |-- public/                         # Files served directly from the site root
 |   |-- images/
@@ -41,7 +60,12 @@ mangoleaf-ai/
 |   |   |   |-- png/                # PWA, favicon, and Apple touch icons
 |   |   |   `-- svg/                # Vector application and favicon icons
 |   |   `-- mangoleaf-architecture.svg  # Diagram embedded by this document
-|   |-- model/                      # TensorFlow.js model JSON, weight shards, and model_config.json
+|   |-- model/                      # Adopted V4.3.0 Combined seven-class model
+|   |   |-- model.json              # Seven-output TensorFlow.js graph
+|   |   |-- model_config.json       # Class order, preprocessing, fitted thresholds
+|   |   |-- group1-shard1of3.bin
+|   |   |-- group1-shard2of3.bin
+|   |   `-- group1-shard3of3.bin
 |   `-- sw.js                       # Generated Serwist service worker; do not edit
 |-- src/                            # Application source code
 |   |-- app/                        # Next.js App Router entry points
@@ -52,35 +76,44 @@ mangoleaf-ai/
 |   |-- components/                 # Reusable interface components, grouped by role
 |   |   |-- brand/                  # Application logo and icon set
 |   |   |-- layout/                 # Top header, navigation bar, footer, and splash screen
-|   |   |-- modal/                  # Legal dialog, scan-details dialog, scan bottom sheet
+|   |   |-- modal/                  # Legal, scan-details, and scan bottom sheet
 |   |   |-- scan/                   # Scan controls, result card, history list, guide
 |   |   `-- tab/                    # Home, history, and about screen content
 |   |-- hooks/
 |   |   |-- usePWAInstall.ts        # PWA installation prompt state and actions
+|   |   |-- useScrollLock.ts        # Shared scroll lock for overlapping modals
 |   |   `-- useSync.ts              # IndexedDB and Supabase synchronization
 |   |-- lib/
-|   |   |-- classifier.ts           # Model loading, inference, hashing, compression
-|   |   |-- constants.ts            # Model classes, fallback guidance, model version label
-|   |   |-- db.ts                   # Dexie database schema and record types
+|   |   |-- classifier.ts           # Model loading, inference, compression
+|   |   |-- constants.ts            # Model classes and model version label
+|   |   |-- db.ts                   # Dexie schema and scan record types
 |   |   |-- format-time-ago.ts      # Relative timestamp formatting for scan cards
 |   |   |-- get-badge-styles.ts     # Disease-name to badge color class mapping
+|   |   |-- image-hash.ts           # Lightweight original-file SHA-256 fingerprint
 |   |   |-- supabase-client.ts      # Browser-side Supabase client
 |   |   `-- translations.ts         # English and Cebuano/Bisaya interface text
 |   |-- env.d.ts                    # Types for build-time injected public env values
 |   `-- sw.ts                       # Serwist source configuration
 |-- docs/                           # Detailed engineering and project history
-|   |-- model-training/             # Trial 1, Trial 2, Trial 2.1, and Trial 3 training reports
-|   |   |-- experiment/             # Experimental guides; candidates, not shipped or deployed
-|   |   |   |-- v3.1/               # v3.1 workflow: training and original-weight threshold fitting
-|   |   |   `-- v3.2/               # v3.2 workflow: paired threshold fitting
-|   |   |-- trials/                 # One report card per trial (TRIAL_v1.md … TRIAL_v3.md)
-|   |   |-- figures/                # Per-trial training/tuning figures, one folder per trial
-|   |   |-- artifacts/              # Per-trial run_record.json and model_config.json evidence
-|   |   `-- (per-trial dirs above echo the notebooks/ folder-per-trial layout)
+|   |-- guidelines/                 # Dated source reviews and manual bilingual drafts
+|   |-- model-training/             # Versioned model guides, evidence, and trial reports
+|   |   |-- experiment/             # Candidate workflows; not shipped or deployed
+|   |   |   |-- v3.1/               # TRIAL_v3_1.md plus separate threshold-only guide
+|   |   |   |-- v3.2/               # TRIAL_v3_2.md paired threshold guide
+|   |   |   |-- v4/                 # TRIAL_v4.md, artifacts/, figures/
+|   |   |   |-- v4.1/               # TRIAL_v4_1.md, artifacts/, figures/
+|   |   |   |-- v4.1.1/             # TRIAL_v4_1_1.md, artifacts/, figures/; completed candidate
+|   |   |   `-- v4.2.0/             # TRIAL_v4_2_0.md; mangoleaf/ and mangofruit/ evidence
+|   |   `-- non-experiment/         # Historical and adopted model trials
+|   |       |-- v1/                 # TRIAL_v1.md
+|   |       |-- v2/                 # TRIAL_v2.md, figures/
+|   |       |-- v2.1/               # TRIAL_v2_1.md, artifacts/, figures/
+|   |       |-- v3/                 # TRIAL_v3.md, artifacts/, figures/; previous released baseline
+|   |       `-- v4.3.0/             # Adopted trial/comparison, artifacts/, figures/
 |   |-- ARCHITECTURE.md             # This architecture reference
 |   |-- MODEL_VERSIONING.md         # App, model, notebook, and release versioning
 |   |-- PERFORMANCE.md              # Performance decisions and measurements
-|   |-- PHYSICAL_RELIABILITY_CHECKLIST.md # Fillable physical-device reliability evidence
+|   |-- PHYSICAL_RELIABILITY_CHECKLIST.md        # Fillable physical-device reliability evidence
 |   |-- PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md # Fictional answer-format example; never evidence
 |   |-- TESTING.md                  # Automated cases, reliability protocol, device checklist
 |   `-- PROGRESS.md                 # Development timeline and current baseline
@@ -99,10 +132,15 @@ mangoleaf-ai/
 |   |   |-- MangoLeaf_AI_Training_v3_Post_Training.ipynb    # Completed Trial 3 run, manuscript evidence, do not rerun
 |   |   |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb         # Trial 3 threshold template, 8 cells, outputs cleared
 |   |   `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb # Trial 3 fitting run; cell 9 settles the margin at 0.40
+|   |-- v4.3.0/                      # Adopted Combined templates and preserved completed result snapshots
 |   `-- experiment/                  # Experimental notebooks/evidence; candidates, not shipped or deployed
 |       |-- README.md                # Status, scope, and notebook-version boundary
 |       |-- v3.1/                    # v3.1 workflow templates and completed results
-|       `-- v3.2/                    # v3.2 workflow template and completed results
+|       |-- v3.2/                    # v3.2 workflow template and completed results
+|       |-- v4/                      # Seven-class experimental training and threshold templates
+|       |-- v4.1/                    # Four-arm training, thresholds, and post-training figures
+|       |-- v4.1.1/                  # Guided templates and completed reproduction notebooks
+|       `-- v4.2.0/                  # Separate leaf/fruit templates and completed result notebooks
 |-- video/                           # Promotional video, a separate HyperFrames project
 |   |-- assets/                      # Render inputs plus the thumbnail still
 |   |-- index.html                   # Root composition and timeline
@@ -153,6 +191,8 @@ Grouping is by role, not by which tab uses a file. `scan/scan-history-list.tsx` 
 
 `modal/scan-sheet.tsx` is the sharper case of the same rule: it is a dismissible bottom sheet, so it is grouped with the overlays even though its content is the camera-or-gallery choice that starts a scan. It is also the one component that reaches outside React to drive another file's markup.
 
+The sheet shows shared English/Bisaya framing and lighting tips below its title, before either picker. Its descriptions explain camera and gallery actions rather than repeating the tips. The content scrolls within the available viewport while the drag handle stays visible. The existing review dialog reads a shorter inspection reminder from `photoCheckHint`. These are static instructions, not automatic quality checks; they do not crop photos or change model inputs, rejection rules, duplicate handling, or camera behavior.
+
 **The sheet's drag deliberately bypasses React, and that is not an oversight to tidy up.** The drag-move handler assigns `sheetRef.current.style.transform` and `backdropRef.current.style.opacity` directly instead of calling `setState`, because a `touchmove` handler runs at the digitizer's sampling rate and a React re-render per event is far more work than the one style write the frame needs. To keep the imperative writes and React consistent, the render path reads `dragYRef.current` rather than the `dragY` state while a drag is in progress, so an unrelated parent re-render commits the live drag offset instead of a stale zero. `dragY` state is written only at drag end, which is what lets React clear the imperative `transform` and run the snap-back or dismiss transition. Reverting any one of those three pieces to ordinary state breaks the other two. `page.tsx` renders two hidden `<input type="file">` elements carrying the ids `scan-camera-input` and `scan-gallery-input`, and the sheet calls `document.getElementById` on those ids and clicks the input directly, because a file picker only opens from a real user gesture on the input itself. **Renaming or removing either id breaks image selection silently:** the lookup returns `null`, the sheet still closes, and nothing reports an error. Keep the ids and the sheet in step, and keep both inputs mounted whenever the sheet can be opened. That obligation is why the desktop sheet, which since `v0.4.3` shows only the gallery card because a desktop browser ignores `capture="environment"`, hides the camera _button_ with `md:hidden` and leaves `scan-camera-input` mounted: the retake flow in `page.tsx` reopens whichever picker was last used, keyed by that id, so unmounting the input would break retake for camera-captured photos on phones.
 
 A reusable SVG belongs in `brand/icon.tsx` under a name in the exported `IconName` union, not inline in whichever component needs it first. Icons that share the 24x24 stroke wrapper are held in the `STROKE_24_SHAPES` map, so adding one is a shape entry rather than another render branch. No entry hardcodes a colour or a size: every icon inherits `currentColor` from the surrounding text colour and takes its pixel dimensions from the `size` prop, which is what lets one shape serve call sites with different colours. Two entries can look like duplicates without being interchangeable. `camera` is a filled FontAwesome glyph on a 640x640 viewBox and `camera-outline` is a stroked viewfinder on a 24x24 one, so they are separate names rather than one icon with a variant flag.
@@ -172,37 +212,48 @@ When adding a relative-time string, add it to both the `en` and `bis` objects in
 
 ### On-device AI pipeline
 
-`src/lib/classifier.ts` owns the browser inference flow:
+`src/app/page.tsx` coordinates photo review and saving. `src/lib/image-hash.ts` hashes files without importing TensorFlow.js; `src/lib/classifier.ts` provides browser inference and compression and re-exports the existing hashing function for compatibility:
 
-1. Load `/model/model.json` with `tf.loadGraphModel`, fetching `/model/model_config.json` concurrently for the rejection thresholds.
-2. Cache and warm the model once per browser session.
-3. Downscale the image to `224 x 224` with a shared canvas.
-4. Run TensorFlow.js inference and dispose temporary tensors.
-5. Apply three rejection gates and return the highest-probability class only if all three pass; otherwise return `Uncertain / Unrecognized`.
-6. Compress the image for storage and calculate a SHA-256 hash for duplicate detection.
+1. During initial loading, fetch `/model/model.json` with `tf.loadGraphModel` and `/model/model_config.json` for its rejection settings.
+2. Cache and warm the single seven-class V4.3.0 Combined model once per browser session.
+3. On photo selection, show the preview and asynchronously hash the original file with SHA-256. Query the indexed local `image_hash` column before enabling diagnosis. Keep the hash for this selection so diagnosis does not hash the same file again.
+4. If an eligible saved scan matches, keep the preview open with the bilingual "Photo already scanned" message. Retake opens the original picker; Cancel or X closes review; View saved result opens the existing report. Reuse requires an exact `model_version` match with `v4.3.0`. Pending-deletion rows, another model label, and legacy rows without a label do not block a new inference.
+5. For a new photo, Run AI Diagnosis rechecks the local duplicate lookup before inference. Downscale the image to `224 x 224` with a shared canvas, run TensorFlow.js inference, and dispose temporary tensors.
+6. Apply the model's rejection gates and return the highest-probability class only if they pass; otherwise return `Uncertain / Unrecognized`.
+7. Compress the image for storage and save the existing original-file hash with the new scan record.
 
-**Rejection is three gates, not one, and all three must pass.** A prediction is accepted only when `meetsConfidence && meetsMargin && meetsEntropy`:
+Photo review uses `scan/diagnostic-scanner.tsx`. X and Escape discard the selected photo before diagnosis, without opening a picker or saving a record. These dismiss controls are unavailable during active diagnosis. A duplicate check must finish successfully before diagnosis can start; a failed check offers a retry. Closing or replacing a photo invalidates its pending check and releases its preview URL, so a delayed result cannot reopen an old selection. `useScrollLock.ts` counts active locks shared by the page and scan sheet so closing the sheet cannot unlock scrolling behind a newly opened preview. Duplicate detection compares file contents, not visual similarity: renaming an unchanged file still matches, while cropping or recompressing can produce a different hash.
 
-| Gate       | Test                                                 | Source                           | Current value |
-| ---------- | ---------------------------------------------------- | -------------------------------- | ------------- |
-| Confidence | Top-1 probability at least the threshold             | Hardcoded `CONFIDENCE_THRESHOLD` | `0.70`, fixed |
-| Margin     | Top-1 minus top-2 probability at least the threshold | `model_config.json`              | `0.40`        |
-| Entropy    | Normalized Shannon entropy at most the threshold     | `model_config.json`              | `0.40`        |
+The adopted V4.3.0 Combined model uses these settings:
 
-The confidence floor is hardcoded and deliberately not configurable. It is a manuscript specification cited to [31], so a `model_config.json` that asks for a different value is refused: the classifier logs a warning and keeps `0.70`. Margin and entropy are the opposite: both start `null`, and `null` disables that gate. A missing or malformed config therefore degrades to the confidence gate alone rather than blocking a scan, which is why a device can run on one gate without any visible error. The console line `Model config loaded: margin=..., entropy=...` printed at startup is the only way to tell from the app which gates are live, and it is what the production phone checks in `docs/PROGRESS.md` look for.
+| Gate       | Test                                                 | Source                           | Setting |
+| ---------- | ---------------------------------------------------- | -------------------------------- | ------- |
+| Confidence | Top-1 probability at least the threshold             | Hardcoded `CONFIDENCE_THRESHOLD` | `0.70`  |
+| Margin     | Top-1 minus top-2 probability at least the threshold | `model_config.json`              | `0.00`  |
+| Entropy    | Normalized Shannon entropy at most the threshold     | `model_config.json`              | `0.42`  |
 
-Entropy is normalized by `Math.log(results.length)` so it stays on a 0-to-1 scale comparable to the fitted threshold regardless of class count. Confidence is compared before rounding; the rounded value is returned for display only, because comparing the rounded number would let `0.695` clear a `0.70` gate and silently lower the real floor to 69.5%.
+The confidence floor is hardcoded and deliberately not configurable. It is a manuscript specification cited to [31], so a `model_config.json` that asks for a different value is refused: the classifier logs a warning and keeps `0.70`. Margin and entropy are optional; `null` disables that gate. The config travels with the exact fitted weights.
 
-The model assets are committed under `public/model/` and contain six output classes defined in `src/lib/constants.ts`. Both fitted thresholds are properties of one specific set of weights, so `model_config.json` is replaced together with the shards and never carried across a model swap. See `docs/MODEL_VERSIONING.md`.
+Entropy is normalized by `Math.log(results.length)` so it stays on a 0-to-1 scale comparable to the fitted threshold. Confidence is compared before rounding; the rounded value is returned for display only, because comparing the rounded number would let `0.695` clear a `0.70` gate and silently lower the real floor to 69.5%.
+
+Root `public/model/` contains the adopted seven-output V4.3.0 Combined model, with fitted confidence 0.70, margin 0, and entropy 0.42 gates. Its class order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold, as defined in `src/lib/constants.ts`. Both healthy outputs reuse the existing `healthy` treatment-guidance key. Original candidate files and earlier model baselines remain preserved; the adoption receipt distinguishes unchanged graph/shard hashes from the relabeled configuration. See [MODEL_VERSIONING.md](MODEL_VERSIONING.md).
+
+During local development (`bun run dev`), each inference prints a collapsed browser-console table of all class probabilities, ranked from highest to lowest. The table sorts copies of the scores and rounds only the display percentages. Production builds omit the table. See [TESTING.md](TESTING.md#fixture-and-report-interpretation) for reading it and handling duplicate photos.
 
 ### Local persistence
 
 `src/lib/db.ts` defines the Dexie database `MangoLeafDB` with two stores:
 
-- `scans`: image blobs, predictions, sync metadata, timestamps, and device ownership.
+- `scans`: image blobs, predictions, sync metadata, timestamps, and device ownership. Existing V4.2.0 trial rows may also retain local model/organ fields.
 - `guidelines`: cached English and Cebuano/Bisaya treatment guidance. Disease and healthy presentation colors are fixed in the client, not stored in Supabase.
 
 New scans are written locally first. This allows diagnosis and history features to keep working without a network connection.
+
+Treatment guidance is authored in Supabase's `public.guidelines` table and read from its downloaded IndexedDB copy. `getGuidelineForScan()` in `src/app/page.tsx` maps both healthy classes to `healthy`, preserves valid cached text during offline use, and handles English and Bisaya independently. While the local query is pending it shows a translated loading message. A missing row or blank language field shows a translated unavailable message from `src/lib/translations.ts`. The application no longer bundles treatment advice in `src/lib/constants.ts` or uses generic treatment instructions when guidance is missing. Users need a successful guideline download before advice is available offline.
+
+An `Uncertain / Unrecognized` result is handled before the cached-guideline lookup. It displays the user-approved English/Bisaya photo reminder immediately, including offline use and while IndexedDB is loading. Scan details use the heading “Try another photo” / “Sulayi og laing litrato” for this result. The reminder is interface text in `src/lib/translations.ts`; it does not require a Supabase guideline row or change model rejection rules. Loading and unavailable guideline messages still apply to accepted class results.
+
+Historical trial and legacy rows remain visible in local history. Duplicate reuse requires the exact active `model_version`, so V4.2.0, the former V4.3.0 candidate identity, V3, and unlabeled legacy rows do not substitute for adopted V4.3.0 inference. This prevents an unidentified older diagnosis from blocking the promoted model. The V4.2.0 route metadata was local only; the Supabase schema has no matching columns.
 
 ### Synchronization
 
@@ -225,7 +276,7 @@ Supabase is therefore a synchronization and recovery layer; IndexedDB remains th
 
 The precache manifest that Serwist generates covers the build output _and every file under `public/`_. Anything added to `public/` is therefore downloaded to each installed device during service-worker installation, whether or not the application ever requests it. Keep assets that only documentation uses out of `public/` unless they also have to be reachable at a site URL.
 
-**That manifest, not the `CacheFirst` rule, is what actually updates the model.** `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `/model/*` rule never fires in practice. Every file under `public/model/` carries a content-revision hash in the manifest, so a changed weight shard is refetched on the next service-worker activation regardless of the cache name, and Serwist's own `activate` handler evicts precache entries missing from the current manifest. The `MODEL_CACHE` bump and the `OUTDATED_MODEL_CACHES` eviction are therefore defence in depth whose real payoff is reclaiming several megabytes of superseded weights, not the update mechanism. Do not treat an inspection of `CacheStorage` as verification: the current `mangoleaf-model-cache-v3-0-0` can legitimately be empty on a correctly updated device.
+**That manifest, not the `CacheFirst` rule, is what actually updates the model.** `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `/model/*` rule never fires in practice. Every file under `public/model/` carries a content-revision hash in the manifest, so a changed weight shard is refetched on the next service-worker activation regardless of the cache name, and Serwist's own `activate` handler evicts precache entries missing from the current manifest. The current `MODEL_CACHE` label `mangoleaf-model-cache-v4-3-0` and the `OUTDATED_MODEL_CACHES` eviction are defence in depth whose real payoff is reclaiming superseded weights, including the V4.1.1, V4.2.0, and V4.3.0 candidate runtime caches, not the update mechanism. The activation filter protects the active V4.3.0 runtime cache. The runtime cache can legitimately be empty on a correctly updated device.
 
 ### Static assets
 
@@ -235,9 +286,9 @@ These files must stay tracked in git. `.gitignore` patterns that could match the
 
 ## Data flow for a scan
 
-1. The user captures or selects an image.
-2. The app hashes the original file and checks IndexedDB for a duplicate.
-3. The classifier preprocesses the image and runs on-device inference.
+1. The user captures or selects an image from the scan sheet.
+2. The app hashes the original file and checks IndexedDB for a matching eligible scan. Reuse requires the exact active `model_version`; another label or an unlabeled legacy row cannot substitute for adopted V4.3.0 inference.
+3. The single classifier preprocesses the image and runs on-device inference.
 4. The result and compressed image are saved to IndexedDB with `pending-insert` status.
 5. The scan appears immediately in the UI through Dexie live queries.
 6. If online, synchronization uploads the image and inserts the remote metadata row.

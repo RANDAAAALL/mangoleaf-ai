@@ -1,0 +1,59 @@
+{
+  "status": "post-threshold Fruit diagnostic figures; no new test/OOD evaluation",
+  "organ": "mangofruit",
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.2.0/training/mangofruit/v4-2-0-mangofruit-training-20260928T164258Z-a4e1abae",
+  "thresholdRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.2.0/threshold_fitting/mangofruit/v4-2-0-mangofruit-thresholds-20260928T193804Z-fc01d0f7",
+  "modelArm": "combined",
+  "modelSha256": "6c79059aa7d5142f9bafab1266a49948e3b2fe38f0d3a0547e74d8098e8f180f",
+  "trainingCompleteSha256": "d705a057781f7124ae296e8e5ad240aac0b933f39c0126f6c07ccad9f736ba36",
+  "evaluationSha256": "8215f0bdd5ada95860ba1e12d80bdf41131576a6acc48de013d0cabb8950c3cc",
+  "selectedThresholdsSha256": "8aee54a3d019a3c0e9b6d711aa0cce09e65ba92b6fad00df13751566cd18c33e",
+  "planSha256": "e9b823118f33d41c0d9b696b54539732e2d0511723d43b4b69183bf3d4eb1def",
+  "augmentationPreview": {
+    "trainingImage": "train/bacterial_black_spot/bacterial_black_spot__Bc208.jpg",
+    "trainingImageSha256": "2073b5626e7582b3b9040976832ae61cad98c9f93dfbd0e1b0e27e1e3b26fc7d",
+    "epoch": 0,
+    "scene": "rn_image_picker_lib_temp_70988618-f67c-4aed-bf72-600a091b4da9.jpg",
+    "sceneSha256": "51c25ac787da7fa48c5ac8ed3bc6969a531362aad12401e735d0e1f761134d1d",
+    "mask": "b72cb3b9c0669db91c3b.png",
+    "maskSha256": "51ce540a66308aeddc6b975ba6efd6a158ba7a01622b7cc4c8dadec2d1abe3a3",
+    "interpretation": "Scene and light reconstructed; final Keras draw is new, not original fit pixels."
+  },
+  "gradCamValidationImages": [
+    {
+      "image": "val/bacterial_black_spot/bacterial_black_spot__Bc104.jpg",
+      "imageSha256": "692d4fd097a4e9759615f8b80e304aedcb336b2469d42cdad9eec350fb475744",
+      "actual": "bacterial_black_spot",
+      "rawPrediction": "bacterial_black_spot",
+      "rawConfidence": 0.575804591178894
+    },
+    {
+      "image": "val/healthy_fruit/healthy_fruit__725318273_1696519271391031_8474708639771176175_n.jpg",
+      "imageSha256": "18c047f48c6deb7b423919369488485c608300cbba79d078428954694073ba4f",
+      "actual": "healthy_fruit",
+      "rawPrediction": "healthy_fruit",
+      "rawConfidence": 0.4716807007789612
+    },
+    {
+      "image": "val/mango_scab/mango_scab__Sc1.jpg",
+      "imageSha256": "cfd8e8c51314e62012e5b5977412a477c9f026d196d526c807a3c226e0cc8bb1",
+      "actual": "mango_scab",
+      "rawPrediction": "mango_scab",
+      "rawConfidence": 0.9219663739204407
+    }
+  ],
+  "figures": {
+    "augmentation_preview.png": "4a4ceae3ced4454a79ada53c48658b2df7adeb4715aab6f9deb7a3307c5638f4",
+    "confusion_matrix.png": "cd3eb4a2b38366fadbf77d05182b71ccc4aa8345b20b27f85ae5a935ed456ff4",
+    "grad_cam.png": "42dfac274f6956090989a6f234602c889378c5b7ef2188c83306b2d5d46d0e48",
+    "per_class_metrics.png": "e02b3b7ee3eceb1dafcd41365ef8fad0576139ae92077827633c56b3aec064fd",
+    "threshold_search.png": "51d430c5092fadad9baa2dd5cea375306be791f79eb8b6b534a74f16da3d60ce",
+    "training_curves.png": "853135bb0180bf1a0cdf8996930900b0a0edfd8d539a54ee027a52a69163ab39"
+  },
+  "perClassCsvSha256": "83d25c42def102124149f598072ae7725135c239136ff8bcdcd78cb7874f8ae8",
+  "limits": [
+    "Historical test and old OOD photos influenced prior development.",
+    "Grad-CAM is diagnostic, not proof of field accuracy.",
+    "Geometric augmentation preview uses a new random draw."
+  ]
+}

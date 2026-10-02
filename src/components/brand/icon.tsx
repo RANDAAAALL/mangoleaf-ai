@@ -12,6 +12,7 @@ export type IconName =
   | "leaf"
   | "fruit"
   | "check"
+  | "close"
   | "scan"
   | "camera-outline"
   | "sparkle"
@@ -49,6 +50,7 @@ const FA_PATHS: Record<string, string> = {
  * hardcodes either.
  */
 const STROKE_24_SHAPES: Partial<Record<IconName, React.ReactNode>> = {
+  close: <path d="M6 6l12 12M18 6L6 18" />,
   // Camera viewfinder. Kept separate from the filled FontAwesome `camera` glyph
   // above, which has a different weight and viewBox.
   "camera-outline": (

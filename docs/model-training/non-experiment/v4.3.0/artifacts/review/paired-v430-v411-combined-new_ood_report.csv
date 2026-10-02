@@ -1,0 +1,5 @@
+sha256,relativePath,label,oldAccepted,newAccepted,oldClass,newClass,oldReturned,newReturned,oldConfidence,newConfidence,oldEntropy,newEntropy
+2a039f6cd78a17f9675b9ec0e67037d11d5c253531da935b7b7abaa5c399e974,asdasdadav.jpg,OOD,False,True,healthy_leaf,healthy_leaf,uncertain,healthy_leaf,0.5715551972389221,0.7608094811439514,0.6046720002030582,0.41359392640675036
+8ab5b59afe3a10c0af7e5283579d71be28dec62b99fa7329d0f35b817ec671a0,qwelkqwkleqwe.jpg,OOD,False,True,healthy_leaf,healthy_leaf,uncertain,healthy_leaf,0.488757461309433,0.8144067525863647,0.6984107472820678,0.3779333000498487
+9fb5af8934ad66505db64d0cd20d60714fe22215dbe8d7294d7682b2e47fccaa,eyortoieritertor.jpg,OOD,False,True,mango_scab,mango_scab,uncertain,mango_scab,0.7186080813407898,0.7243220210075378,0.4361014553435351,0.40677769617177895
+c5117f9ee9a078cb7c2a0a17128c5e26855641915df68bf93ed54f7bee9c4e0e,",nb,mn,.png",OOD,False,True,sooty_mold,sooty_mold,uncertain,sooty_mold,0.7396878600120544,0.7830978631973267,0.45933498161403596,0.40045417038381875

@@ -1,0 +1,99 @@
+{
+  "status": "verified local restoration; not adopted or released",
+  "recordedAt": "2026-10-01T19:40:03.548868+00:00",
+  "restoredModelVersion": "model-v4.1.1-candidate",
+  "restoredDisplayModelVersion": "v4.1.1-candidate",
+  "arm": "background",
+  "appVersion": "0.4.8",
+  "sourceBackup": ".tools/model-backups/v4.1.1-background-before-v4.3.0-20261001",
+  "sourceBackupManifestSha256": "e60be4ac87f79b061d864f0339ad1ea677b5dc4216a7e2746e3f62620277895c",
+  "originalCandidateRoot": "C:/Users/My Pc/Desktop/workspace/capstone/model/brain/v4.1.1/threshold_fitting/v4-1-1-thresholds-20260928T060638Z-a3a7418c/candidate_models/background",
+  "restoredModelFiles": [
+    {
+      "path": "group1-shard1of3.bin",
+      "bytes": 4194304,
+      "sha256": "74edde0da8865ab05764c0f9e6ccf5c66cfb219985e45ff9f73864d69a99d11b",
+      "backupPath": "model/group1-shard1of3.bin"
+    },
+    {
+      "path": "group1-shard2of3.bin",
+      "bytes": 4194304,
+      "sha256": "44a08bb18264d487ab857b4a996e3c1192e0e8ade8ae0bfb593bd4835b1ceb01",
+      "backupPath": "model/group1-shard2of3.bin"
+    },
+    {
+      "path": "group1-shard3of3.bin",
+      "bytes": 3497804,
+      "sha256": "51ec00e497b152a7e4528ad26d85685e73ec0acc96333f34f4830e7f82c07e4b",
+      "backupPath": "model/group1-shard3of3.bin"
+    },
+    {
+      "path": "model.json",
+      "bytes": 211692,
+      "sha256": "fa039a0dbd1c187ebae2457d5e1516cdbf1259c90a00ac8b8146a0bb9382ec8a",
+      "backupPath": "model/model.json"
+    },
+    {
+      "path": "model_config.json",
+      "bytes": 1114,
+      "sha256": "3c8d51535dad1ee5140bed0d195730b26e71fbd312154792ae4484054d1be782",
+      "backupPath": "model/model_config.json"
+    }
+  ],
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": 0.0,
+    "entropyThreshold": 0.38
+  },
+  "temperature": 1.162061222701274,
+  "temperatureFoldedIntoWeights": true,
+  "runtimeCache": "mangoleaf-model-cache-v4-1-1-candidate",
+  "preservedV430Backup": ".tools/model-backups/v4.3.0-combined-before-v4.1.1-20261002",
+  "preservedV430BackupManifestSha256": "99ca782ab90f0001737dcf9cd299b3e7f3a9e8547e8f322d961cf1b6a1696be6",
+  "preservedV430ModelFiles": [
+    {
+      "path": "group1-shard1of3.bin",
+      "bytes": 4194304,
+      "sha256": "04e1e18a28cb414442c66617a0bc0cbdff2e93116d08d0a170f04b30572bf09c",
+      "backupPath": "model/group1-shard1of3.bin"
+    },
+    {
+      "path": "group1-shard2of3.bin",
+      "bytes": 4194304,
+      "sha256": "0432d0dc9a25e4d2d0048aa5c8120076c05466a6363bd2d5a0c5e5ee4fd34954",
+      "backupPath": "model/group1-shard2of3.bin"
+    },
+    {
+      "path": "group1-shard3of3.bin",
+      "bytes": 3497804,
+      "sha256": "a0fab950ece352711e938467d6bf5f6aaed6c48b5ee1e37812b0a7192399292b",
+      "backupPath": "model/group1-shard3of3.bin"
+    },
+    {
+      "path": "model.json",
+      "bytes": 214028,
+      "sha256": "f5ebdd96893513f05d78126880e9a56a94c4750f75b02a2ee2fb7d3792c8267b",
+      "backupPath": "model/model.json"
+    },
+    {
+      "path": "model_config.json",
+      "bytes": 1113,
+      "sha256": "23f976f5d4311885e49a7738a02fe7576a073e700dc7dd1a0e1a70b60dd3cb52",
+      "backupPath": "model/model_config.json"
+    }
+  ],
+  "preservedApplicationFiles": [
+    "src/lib/classifier.ts",
+    "src/app/page.tsx",
+    "src/lib/translations.ts",
+    "src/components/modal/scan-details-modal.tsx",
+    "src/components/scan/diagnostic-scanner.tsx"
+  ],
+  "browserParityMeasured": false,
+  "notes": [
+    "This is an operational model-restoration receipt, not a new training/evaluation result.",
+    "Both bundle hashes match their original fitted candidate exports.",
+    "Recent photo review, Supabase-maintained guidance, and uncertain-photo reminders are preserved.",
+    "Build and physical/browser evidence must be recorded separately."
+  ]
+}

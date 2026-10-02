@@ -1,0 +1,6 @@
+{
+  "planSha256": "6734a326b9b3b6a685b2ec797acb1a24527c5ec84de44721782291ec83878524",
+  "historySha256": "03c5a69d90027c9978feb44510c775ccf8d80e393cd1ad9a00b6d5620ddaa59d",
+  "figureSha256": "ea1a434a8cf3d4248528bed9ed17a9bf9c6fb102edf9399408c7b4b961968d93",
+  "source": "actual saved epoch metrics; no model.fit"
+}

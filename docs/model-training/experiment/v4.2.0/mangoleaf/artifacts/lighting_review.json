@@ -1,0 +1,19 @@
+{
+  "reviewedAt": "2026-09-28T15:36:16.273535+00:00",
+  "allClassesReviewed": true,
+  "probability": 0.3,
+  "amplitude": [
+    18.0,
+    40.0
+  ],
+  "radius": [
+    0.18,
+    0.35
+  ],
+  "previewSha256": {
+    "anthracnose": "ade2b7355c868a3546ba1614ae82b13b232ee2ced00012abfe484378660f33b7",
+    "bacterial_canker": "42b742de26c59c0f042a1c7bc0af628c8e653ea0a0fda8f7830ffbe6ce9a0ff2",
+    "healthy_leaf": "cbeb45844f5f0ce164ae01b1c841d574f9c50b0bc898b7d5840d744397242af3",
+    "sooty_mold": "cc78a8bb35b8a774a37e70da28ad13c2f494213562c3bca15fd0ccce9f7f4c68"
+  }
+}
