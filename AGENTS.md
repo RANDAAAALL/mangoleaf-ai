@@ -2,7 +2,7 @@
 
 ## Next.js 16 source of truth
 
-This repository uses Next.js 16.3.3. APIs, conventions, and file structure may differ from older Next.js versions. Before changing Next.js code or configuration, read the relevant installed guide under `node_modules/next/dist/docs/` and follow current deprecation notices.
+This repository uses Next.js 16.3.6. APIs, conventions, and file structure may differ from older Next.js versions. Before changing Next.js code or configuration, read the relevant installed guide under `node_modules/next/dist/docs/` and follow current deprecation notices.
 
 ## Project context
 
@@ -37,6 +37,7 @@ This repository uses Next.js 16.3.3. APIs, conventions, and file structure may d
 - Do not turn version labels into environment variables. The app version comes from the `version` field in `package.json` via the `env` block in `next.config.ts`, and the model label is the `modelVersion` constant in `src/lib/constants.ts`. Keep both out of `.env.local`, `.env.example`, and hosting dashboard settings so a stale override cannot display the wrong version.
 - Keep every user-facing string in `src/lib/translations.ts` with an entry in both the `en` and `bis` objects. Do not hardcode English in a component or helper, and do not rely on `toLocaleDateString` or other `Intl` formatting for Cebuano/Bisaya output, because browsers have no reliable locale data for it. Use `{n}` placeholder templates for counted labels so plural rules stay in the translation file.
 - Preserve unrelated user changes and untracked work.
+- Treat preserved Colab package snapshots as historical evidence, never as installation instructions. Keep their original bytes and run ledgers; record repository archive names in a separate provenance mapping. Review dependency advisories before executing a historical training workflow in a new environment. Keep unresolved dependency findings visible rather than suppressing the audit.
 - Reuse a saved duplicate diagnosis only when its `model_version` exactly matches the active model. Keep older and unlabeled legacy reports in History, but run current-model inference when their photo is uploaded again.
 
 ## Application tests and release candidates

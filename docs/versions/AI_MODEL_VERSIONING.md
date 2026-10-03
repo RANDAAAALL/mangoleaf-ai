@@ -8,6 +8,8 @@ An app update can keep the same model, and a model change does not by itself req
 
 ## Reading the historical records
 
+**Historical runtime security, October 3, 2026:** The V4.3.0 Colab package freeze is archived as `colab-runtime-snapshot.txt`, with [separate provenance](../model-training/non-experiment/v4.3.0/artifacts/runtime-snapshot-provenance.json). Its 14,117 bytes, original filename in the run ledgers, notebook outputs, and model hashes are preserved. The [security review](../security/DEPENDENCY_SECURITY.md) records 112 advisories against that old environment. The PWA does not install it; a future training run must use a reviewed, patched runtime rather than reinstalling the snapshot. This repository archive clarification does not change model version or establish retraining compatibility.
+
 The dated records below preserve what was prepared, copied locally, restored, or adopted at that time. Phrases such as "current model" and "now holds" inside an older record describe that date, not the latest application state. Original scores, export identities, rollback paths, and pending checks remain unchanged. The latest adoption record identifies V4.3.0 Combined; production promotion and tag/release publication remain pending.
 
 ## Training Notebooks

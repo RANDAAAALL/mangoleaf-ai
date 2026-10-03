@@ -114,6 +114,7 @@ These versions are preserved experiments; they are not the current application m
 - [Physical reliability checklist](./docs/testing/PHYSICAL_RELIABILITY_CHECKLIST.md)
 - [Physical checklist answer example (fictional)](./docs/testing/PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md)
 - [Development progress](./docs/PROGRESS.md)
+- [Dependency security: app patches and archived training advisories](docs/security/DEPENDENCY_SECURITY.md)
 - [Treatment-guideline review and proposed English/Bisaya corrections](./docs/treatment-guidelines/TREATMENT-GUIDELINES-REVIEW-2026-10-02.md)
 - [PWA versions and releases](docs/versions/PWA_VERSIONING.md)
 - [AI model versions, training history, and saved evidence](docs/versions/AI_MODEL_VERSIONING.md)
@@ -134,6 +135,8 @@ See [application testing](./docs/testing/TESTING.md) for browser installation an
 | `bun run build`                   | Create the production static export and service worker.                                |
 | `bun run security:install`        | Install the pinned local Gitleaks scanner.                                             |
 | `bun run security:check`          | Check tracked paths and fetched Git history for private files and secrets.             |
+| `bun run security:dependencies`   | Audit installed app packages; unresolved findings keep a nonzero exit.                 |
+| `bun run verify:training-archive` | Verify the unchanged historical Colab snapshot against its original ledgers.           |
 | `bun run test:tooling`            | Test security and export checks using disposable fixtures.                             |
 | `bun run test:build`              | Prepare or reuse the isolated production export used by browser tests.                 |
 | `bun run test:e2e`                | Build an isolated app and test desktop/mobile scan workflows.                          |

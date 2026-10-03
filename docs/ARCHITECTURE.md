@@ -10,6 +10,8 @@ MangoLeaf AI is a client-heavy, offline-first Next.js 16 application. The browse
 
 ## Test and release boundaries
 
+The [dependency security review](security/DEPENDENCY_SECURITY.md) separates the current Bun application from the archived Colab environment. Next.js and its ESLint configuration use `16.3.6`; a root Browserslist override and compatible lockfile updates address additional package advisories. The historical Python freeze is stored as `colab-runtime-snapshot.txt`, with a separate repository-path mapping and unchanged original ledgers. Neither the app build nor CI installs those Python packages. This classification does not make the old training environment safe to recreate.
+
 `tools/e2e/` holds Playwright functional and reliability cases. Controlled model responses exercise all accepted/rejected UI branches; separate real-model cases import the production classifier in a test-only harness and upload the supplied photos through the real app. Diagnostics remain in reports. The harness is served only by the local test server and is not part of `src/` or the deployed export.
 
 `tools/build-test-app.mjs` copies application inputs into an ignored, hash-addressed `.test-app/` directory and builds a private static export with a loopback mock backend. It excludes the existing generated worker and regenerates one there. This leaves the normal `out/` and tracked `public/sw.js` alone. Fresh browser contexts isolate local data; the server's connection policy prevents external service access. The mock verifies client flow, not Supabase's server behavior or RLS.
@@ -51,6 +53,7 @@ mangoleaf-ai/
 |-- supabase/sql/                   # Reviewed cloud-security transition and verification SQL
 |   |-- README.md                   # Plain-English guide to the maintenance scripts
 |-- tools/                          # Shared checks and isolated browser-test tooling
+|   |-- verify-training-archive.mjs # Verify historical runtime bytes and provenance
 |   |-- e2e/                        # .pw.ts cases, photo fixtures, test-only inference harness
 |   |-- build-test-app.mjs          # Private static export with a local mock backend
 |   |-- generate-v4-1-figures.py    # V4.1 charts, preview, and Grad-CAM from completed runs
@@ -105,6 +108,8 @@ mangoleaf-ai/
 |   |-- env.d.ts                    # Types for build-time injected public env values
 |   `-- sw.ts                       # Serwist source configuration
 |-- docs/                           # Detailed engineering and project history
+|   |-- security/                   # Application dependencies and historical environment risks
+|   |   `-- DEPENDENCY_SECURITY.md   # Advisory review, remediation, and residual findings
 |   |-- supabase/                   # Cloud ownership, configuration, and recovery
 |   |   `-- SECURITY-AND-SYNC.md     # Overview, setup links, evidence, and recovery
 |   |-- treatment-guidelines/       # Treatment-advice source reviews and bilingual drafts

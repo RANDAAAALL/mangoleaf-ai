@@ -1,0 +1,17 @@
+{
+  "recordType": "repository-only historical runtime snapshot mapping",
+  "recordedOn": "2026-10-03",
+  "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+  "originalFilename": "requirements.txt",
+  "originalSourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/requirements.txt",
+  "originalRepositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/requirements.txt",
+  "repositoryPath": "docs/model-training/non-experiment/v4.3.0/artifacts/training/colab-runtime-snapshot.txt",
+  "sha256": "99667286f3b0645093f75218230e26f7b1ad2f32fdf0afe0aa570e37c28598cb",
+  "bytes": 14117,
+  "installable": false,
+  "trainingCompleteSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+  "evidenceCopyManifestSha256": "20c87c2c60d6ed60bae5d9f0212a7efae8230b8dd273b3bc0bcaa0b47c19530f",
+  "reason": "The file records the full historical Colab pip-freeze environment; it is not a supported application or training installation manifest.",
+  "securityStatus": "Original package versions remain historical evidence. The old environment has unresolved advisories and must not be recreated from this snapshot.",
+  "originalRecordsPreserved": true
+}

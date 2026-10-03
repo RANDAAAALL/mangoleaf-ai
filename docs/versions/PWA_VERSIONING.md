@@ -6,6 +6,8 @@ This guide explains the PWA version: the application interface, local/offline be
 
 ## Reading the release history
 
+**Dependency security, October 3, 2026:** The local `0.5.0` candidate now selects Next.js and its ESLint configuration `16.3.6`, overrides Browserslist to `4.28.7`, and records compatible transitive security patches in `bun.lock`. App/model labels remain `0.5.0` / `v4.3.0`. The [dependency review](../security/DEPENDENCY_SECURITY.md) records a clean production-dependency audit and one unresolved development-only `braces` advisory. Earlier candidate validation remains tied to its original dependency snapshot; new checks and remote release status are recorded separately.
+
 The records below retain earlier app changes and their original status. Historical references to V3 or an earlier candidate describe those entries' dates. An intended version in the list is not proof that it was released or deployed; use the recorded commit, tag, and completed evidence to identify a published build. This documentation split does not change either version label.
 
 ## App Releases

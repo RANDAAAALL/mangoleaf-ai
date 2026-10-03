@@ -26,6 +26,14 @@ bun install --frozen-lockfile
 bun run security:install
 ```
 
+## Dependency security and archived training records
+
+The root app uses Next.js and its ESLint configuration at `16.3.6`. `package.json` overrides Browserslist to `4.28.7` because the installed Serwist release pins an affected version. The committed Bun lockfile records the remaining compatible security updates. Use the frozen installation command above to reproduce these selections.
+
+Run `bun run security:dependencies` for an online package-vulnerability audit. This is separate from the credential/history scanner, `bun run security:check`. The October 3 full dependency audit retains one high-severity finding in development-only `braces`; there is no published patched version. Do not interpret that nonzero exit as a scanner malfunction or add an ignore rule. The [dependency security review](docs/security/DEPENDENCY_SECURITY.md) records its caller, precautions, all 113 original Dependabot alerts, and verification status.
+
+The saved Colab `colab-runtime-snapshot.txt` is a historical package inventory, not a supported installation file. Do not pass it to `pip install -r`; its original versions have unresolved advisories. `bun run verify:training-archive` checks its unchanged bytes against the original training ledgers. A new training session requires a separately reviewed, patched environment and compatibility checks.
+
 ## Configure environment variables
 
 Copy the committed template to a local environment file:

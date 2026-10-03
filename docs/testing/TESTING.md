@@ -50,6 +50,12 @@ The five model file hashes remain:
 
 Exact reports, R01 observations, input/model hashes, and pre-edit copies are preserved under ignored `.tools/release-preparation-v0.5.0-20261003/`. Core report SHA-256 is `9b3653f760a3d4d5aa26fc55d75cff936c573a203b5860512420341687155214`; R01 report SHA-256 is `0304b1db6d0d3a3a760bdc0c0c7067cc7cd987b153ae92a5d8246a5231dec6b7`. Remote CI, production promotion, live-version confirmation, and tag/Release publication remain pending. No production guest signup or cloud scan/upload/download was performed by this local verification.
 
+### Dependency security patch validation (October 3, 2026)
+
+Next.js and the matching ESLint configuration are patched to `16.3.6`, with the Browserslist override and compatible lockfile updates recorded in the [dependency review](../security/DEPENDENCY_SECURITY.md). The app remains `0.5.0`, model `v4.3.0`. Frozen installation and the historical-runtime verifier pass. The production-dependency audit reports no findings; the full audit retains one development-only `braces` advisory with no published patch. This residual is not suppressed.
+
+Formatting, TypeScript, lint, production static build, all 10 export checks, all 14 tooling tests with 41 assertions, credential/history checks, and the separate scan of new security records passed. The complete core suite passed all 80 cases with zero failures in 7.9 minutes against the isolated export/local mock backend. Application fingerprint: `6118e228f8b97b6418f5d3c88cd2f755c5c11a3e75a01ff4ba6590bf42699734`. Model assets and all 46 notebooks retain their bytes. Corruption checks prove that the archive verifier rejects changed snapshot or ledger bytes. Reports and preservation receipts are saved under ignored `.tools/dependabot-remediation-20261003/`. The previous candidate report remains evidence for its own fingerprint. R03 was not run. No commit, push, deployment, or remote alert closure is claimed.
+
 ## Install and run
 
 Use the project's pinned Bun dependencies and Node.js 24 (Playwright runs through Node):
