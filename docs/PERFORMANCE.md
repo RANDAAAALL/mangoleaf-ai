@@ -81,6 +81,13 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 - **Implementation:** A module-level `hasInitialized` flag persists across React remounts, network reconnections, and `useSync` state updates.
 - **Behavior:** The splash screen renders **only once** on the very first app load. Going offline → online, component remounts, and sync triggers never re-trigger the splash screen.
 
+### 1.9 Console probability tables (`classifier.ts`)
+
+- **Implementation:** Each actual inference prints one collapsed table of the seven class scores in development and production DevTools. A saved duplicate reused without inference does not print another table.
+- **Purpose:** Supports developers, teammates, and technical reviewers who need to inspect accepted or rejected predictions. The result modal retains its existing presentation.
+- **Behavior:** Sorting uses copied values, and rounding applies only to the printed percentages. The original probabilities, class mapping, model files, and rejection thresholds remain unchanged. Scores for one photo are not accuracy measurements.
+- **Cost:** Creates seven diagnostic rows and formats their percentages once per inference; it adds no model pass or network request. Console rendering costs can vary by browser and whether DevTools is open. No device-performance improvement or slowdown has been measured for this change.
+
 ---
 
 ## 2. Frontend React Architecture & DOM Optimizations

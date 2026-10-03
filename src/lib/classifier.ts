@@ -227,23 +227,23 @@ export async function predictMangoDisease(
   const confidence = Math.round(maxProb * 100) / 100;
 
   const accepted = meetsConfidence && meetsMargin && meetsEntropy;
-  // Show every score during local development; sort copies so class indices stay intact.
-  if (process.env.NODE_ENV === "development") {
-    const ranked = Array.from(results, (probability, index) => ({
-      className: CLASSES[index],
-      probability,
-    })).sort((a, b) => b.probability - a.probability);
-    console.groupCollapsed(
-      `Class probabilities (${accepted ? "accepted" : "rejected"})`,
-    );
-    console.table(
-      ranked.map(({ className, probability }) => ({
-        Class: className,
-        Probability: `${(probability * 100).toFixed(2)}%`,
-      })),
-    );
-    console.groupEnd();
-  }
+  // Keep this table in development and production for technical review in DevTools.
+  // Sort copies so class order and raw scores used by rejection rules stay unchanged.
+  const ranked = Array.from(results, (probability, index) => ({
+    className: CLASSES[index],
+    probability,
+  })).sort((a, b) => b.probability - a.probability);
+  console.groupCollapsed(
+    `Class probabilities (${accepted ? "accepted" : "rejected"})`,
+  );
+  // Round only the printed percentages; these are model scores, not accuracy.
+  console.table(
+    ranked.map(({ className, probability }) => ({
+      Class: className,
+      Probability: `${(probability * 100).toFixed(2)}%`,
+    })),
+  );
+  console.groupEnd();
   if (!accepted) {
     console.log(
       `---Rejected: Raw PredictedDisease=${CLASSES[maxIndex]} confidence=${maxProb.toFixed(4)} margin=${margin.toFixed(4)} ` +

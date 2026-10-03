@@ -261,7 +261,7 @@ Entropy is normalized by `Math.log(results.length)` so it stays on a 0-to-1 scal
 
 Root `public/model/` contains the adopted seven-output V4.3.0 Combined model, with fitted confidence 0.70, margin 0, and entropy 0.42 gates. Its class order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold, as defined in `src/lib/constants.ts`. Both healthy outputs reuse the existing `healthy` treatment-guidance key. Original candidate files and earlier model baselines remain preserved; the adoption receipt distinguishes unchanged graph/shard hashes from the relabeled configuration. See [AI model versioning](versions/AI_MODEL_VERSIONING.md).
 
-During local development (`bun run dev`), each inference prints a collapsed browser-console table of all class probabilities, ranked from highest to lowest. The table sorts copies of the scores and rounds only the display percentages. Production builds omit the table. See [TESTING.md](testing/TESTING.md#fixture-and-report-interpretation) for reading it and handling duplicate photos.
+Each inference prints a collapsed browser-console table of all seven class probabilities in development and production, ranked from highest to lowest. This supports technical review through DevTools without adding scores to the result modal. The table sorts copies of the scores and rounds only the display percentages; prediction and rejection still use the original scores. These probabilities describe one photo, not per-class accuracy. An eligible saved duplicate does not run inference or print a new table. See [TESTING.md](testing/TESTING.md#fixture-and-report-interpretation) for reading it and handling duplicate photos.
 
 ### Local persistence
 
