@@ -11,7 +11,7 @@ This experiment tests whether changing training backgrounds improves the existin
 
 The existing [threshold-only v3.1 notebook](../../../../notebooks/experiment/v3.1/MangoLeaf_AI_Threshold_Fitting_v3_1.ipynb) stays unchanged. It uses the original Trial 3 model; its inputs are not interchangeable with these newly trained models. The new fitting notebook reuses its validation-based selection method and adds a contract for the two new training bundles.
 
-The experiment's background model is a candidate `model-v3.1.0`; the control uses `model-v3.1.0-control`. The fitting filename `v3.2` identifies a notebook revision, not another weight update. No deployed model label, application version, or `public/model/` asset changes in this task.
+The experiment's background model is a candidate `model-v3.1.0`; the control uses `model-v3.1.0-control`. The fitting filename `v3.2` identifies a notebook revision, not another weight update. This workflow does not change the deployed model label, application version, or `public/model/` assets.
 
 Archived [training results](../../../../notebooks/experiment/v3.1/MangoLeaf_AI_Training_v3_1_Results.ipynb) and [paired threshold results](../../../../notebooks/experiment/v3.2/MangoLeaf_AI_Threshold_Fitting_v3_2_Results.ipynb) are preserved separately from the clean templates. Review their recorded outputs and bundles; the existence of a result notebook does not establish successful adoption, browser parity, or field accuracy.
 
@@ -153,7 +153,7 @@ python tools/verify-threshold-notebook.py
 
 The new check uses Python's standard library plus Pillow. It validates notebook/worker syntax, environment creation and repair when `ensurepip` is unavailable (with package installation mocked), mask review and immutable inputs, compositing on synthetic images, repeatable background choices, model-input membership, infeasible threshold handling, and the full paired reporting/ZIP flow with synthetic predictions. Evaluation predictions cannot affect saved threshold selection. Grad-CAM checks execute restoration in an empty namespace with mocked Colab/ML imports, verify that evidence files stay unchanged, reject incomplete or changed bundles, and compare preprocessing with the training helper. They do not calculate actual heatmaps.
 
-These checks do not run U2-Net or TensorFlow training, measure cutout quality, or establish model accuracy. Full execution requires the user's Drive assets and Colab runtime. The root Bun/CI workflow does not run these notebooks.
+These checks do not run U2-Net or TensorFlow training, measure cutout quality, or establish model accuracy. Full execution requires the project's Drive assets and a Colab runtime. The root Bun/CI workflow does not run these notebooks.
 
 ## Primary references
 

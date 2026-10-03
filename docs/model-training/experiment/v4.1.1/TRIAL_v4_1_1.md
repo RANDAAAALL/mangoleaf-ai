@@ -1,6 +1,6 @@
 # Guided seven-class experiment v4.1.1
 
-> **Status: completed experimental reproduction; Background candidate preserved.** `v4.1.1` names the guided notebook workflow. Its trained weights use `model-v4.1.1-candidate` and remain experimental. The user adopted [V4.3.0 Combined](../../non-experiment/v4.3.0/TRIAL_v4_3_0.md#current-model-adoption-october-2-2026) as the current application model on October 2, 2026, with app `0.4.9` and model `v4.3.0`. The dated [V4.1.1 restoration](#local-restoration-october-2-2026) and later local retesting remain historical; all original evidence and backups are preserved.
+> **Status: completed experimental reproduction; Background candidate preserved.** `v4.1.1` names the guided notebook workflow. Its trained weights use `model-v4.1.1-candidate` and remain experimental. [V4.3.0 Combined](../../non-experiment/v4.3.0/TRIAL_v4_3_0.md#current-model-adoption-october-2-2026) was adopted as the current application model on October 2, 2026, with app `0.4.9` and model `v4.3.0`. The dated [V4.1.1 restoration](#local-restoration-october-2-2026) and later local retesting remain historical; all original evidence and backups are preserved.
 
 **Local state recorded September 29, 2026:** After the V4.2.0 two-model trial, the app returned to this V4.1.1 Background candidate and direct single-model scan flow. Its five fitted files were again in `public/model/`, and its matching ignored backup remains at `.tools/model-backups/v4.1.1-background-candidate-20260928/`. The V4.2.0 trial is preserved in a separate ignored backup and [evidence report](../v4.2.0/TRIAL_v4_2_0.md); neither experiment is adopted or released.
 
@@ -119,11 +119,11 @@ Fixing missed white-background selections, removing unsuitable scenes, adding tr
 
 ## Local test successor: October 1, 2026
 
-The completed [V4.3.0 Combined experiment](../../non-experiment/v4.3.0/TRIAL_v4_3_0.md) is now installed for local testing at the user's request. This V4.1.1 evidence and its original notebooks/run folders remain unchanged. An additional hash-verified backup of the previous Background assets and matching source snapshots is in ignored `.tools/model-backups/v4.1.1-background-before-v4.3.0-20261001/`; the existing September 28 backup is also preserved. See the [paired comparison](../../non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) for unchanged selected mango decisions and mixed OOD behavior. The change is not an adoption or release.
+The completed [V4.3.0 Combined experiment](../../non-experiment/v4.3.0/TRIAL_v4_3_0.md) is installed for this local test. This V4.1.1 evidence and its original notebooks/run folders remain unchanged. An additional hash-verified backup of the previous Background assets and matching source snapshots is in ignored `.tools/model-backups/v4.1.1-background-before-v4.3.0-20261001/`; the existing September 28 backup is also preserved. See the [paired comparison](../../non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) for unchanged selected mango decisions and mixed OOD behavior. The change is not an adoption or release.
 
 ## Local restoration: October 2, 2026
 
-At the user's request, all five original fitted Background files were restored together from `.tools/model-backups/v4.1.1-background-before-v4.3.0-20261001/model/`. Both saved V4.1.1 bundles and the restored public assets match the original `candidate_models/background/` export byte for byte. The [restoration receipt](artifacts/local_restore_20261002.json) records exact hashes, source paths, settings, and the new V4.3.0 backup.
+All five original fitted Background files were restored together from `.tools/model-backups/v4.1.1-background-before-v4.3.0-20261001/model/`. Both saved V4.1.1 bundles and the restored public assets match the original `candidate_models/background/` export byte for byte. The [restoration receipt](artifacts/local_restore_20261002.json) records exact hashes, source paths, settings, and the new V4.3.0 backup.
 
 The active export is `model-v4.1.1-candidate`, display label `v4.1.1-candidate`, confidence 0.70, margin 0, entropy 0.38, with temperature 1.162061222701274 already folded. The worker uses `mangoleaf-model-cache-v4-1-1-candidate` and evicts the V4.3.0 runtime cache; precache revisions fetch the restored asset bytes. App version remains 0.4.8.
 

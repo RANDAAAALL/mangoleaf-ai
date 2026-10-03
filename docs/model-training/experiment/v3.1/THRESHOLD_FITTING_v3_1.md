@@ -79,7 +79,7 @@ Each results ZIP contains:
 
 The ZIP contains no model weights or image copies. Review its Drive paths before sharing it.
 
-`v3.1` is the requested notebook revision name, using `model-v3.0.0` weights. Under the current [model version policy](../../../versions/AI_MODEL_VERSIONING.md), a threshold-only deployment is a patch, so the candidate config is labelled `model-v3.0.1`. The notebook does not change the deployed app/model version, replace `public/model/`, or alter the original training accuracy record. Review the run and perform the documented model-deployment steps separately if the candidate is adopted.
+`v3.1` identifies the notebook revision, using `model-v3.0.0` weights. Under the current [model version policy](../../../versions/AI_MODEL_VERSIONING.md), a threshold-only deployment is a patch, so the candidate config is labelled `model-v3.0.1`. The notebook does not change the deployed app/model version, replace `public/model/`, or alter the original training accuracy record. Review the run and perform the documented model-deployment steps separately if the candidate is adopted.
 
 The clean template itself makes no measured accuracy, retention, or rejection claim. An archived [result notebook](../../../../notebooks/experiment/v3.1/MangoLeaf_AI_Threshold_Fitting_v3_1_Results.ipynb) is available separately; review its actual outputs and exported evidence before considering adoption. Its presence does not mean the candidate was deployed or passed field testing.
 

@@ -76,6 +76,23 @@ This patch prepares app version `0.4.8`. Scan cards track which image blob owns 
 
 The model remains `v3.0.0`; model assets, class mapping, preprocessing, and rejection thresholds are unchanged. The intended app tag is `v0.4.8`. Record its actual commit after the tag is created.
 
+### v0.4.9: adoption of V4.3.0 Combined
+
+On October 2, 2026, app `0.4.9` adopted the single V4.3.0 Combined model for mango leaves and fruit, replacing the former six-class V3 baseline. Its footer identifies PWA `0.4.9` and model `v4.3.0`. This is the app update between v0.4.8 and the subsequent v0.5.0 cloud-synchronization candidate.
+
+The application changes were:
+
+- Use seven output classes, including separate Healthy Leaf and Healthy Fruit results. Both healthy results read the existing `healthy` treatment-guideline row.
+- Reuse a saved duplicate diagnosis only when its `model_version` exactly matches the active model. Older and unlabeled reports remain in History; uploading their photo again runs current-model inference.
+- Use the adopted model cache `mangoleaf-model-cache-v4-3-0`. Service-worker activation removes superseded model caches, and precache content revisions update the bundled files. Reloading replaces an already loaded model.
+- Align photo-review, seven-class result, bilingual-guidance, uncertain-photo reminder, and footer/About regression coverage with the adopted model. Record the supplied Mango Scab and Bacterial Canker fixture replacements by their hashes.
+
+Adoption selected the completed Combined export; it did not retrain weights or refit its rejection settings. The [AI model adoption record](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026) and [preserved trial report](../model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md#current-model-adoption-october-2-2026) retain the original export identity, numerical settings, hashes, and notebook/evaluation evidence.
+
+The [October 2 local validation record](../testing/TESTING.md#v049-local-validation-october-2-2026) reports formatting, typecheck, lint, production build, export/security checks, ten tooling tests, all 65 core browser cases, and R01's 240 actual predictions. These results identify their original source snapshot and do not establish new field accuracy or certify later cloud-client changes.
+
+**Verified local tag identity:** `v0.4.9` and `model-v4.3.0` both identify commit `9fd175e40b85a805ab482554e351f9686f1f031a`. Local tag verification does not establish remote Release publication or production deployment. Earlier dated pending-status statements remain part of the original adoption record; adding this summary does not change those historical measurements.
+
 ## v0.5.0: private cloud synchronization candidate (October 3, 2026)
 
 **Status: candidate / not released.** App `0.5.0` is a minor feature update for the cloud-ownership transition and local database upgrade. The model remains `v4.3.0`; its five files, seven classes, preprocessing, folded temperature, and fitted gates are unchanged. The footer derives the new app label from `package.json` through the existing build configuration.

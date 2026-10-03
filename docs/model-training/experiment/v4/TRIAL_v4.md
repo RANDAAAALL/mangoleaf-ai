@@ -78,7 +78,7 @@ sooty_mold
 
 The historical split already selected images separately within each source folder before merging healthy labels. V4 uses the original split as the record of which images survived deduplication and where each belongs. It verifies that record using SHA-256 hashes, which identify file contents independently of filenames.
 
-The user's non-duplicate notes contain 62 distinct entries; `DSC_0205.JPG` is listed twice. Their content identities are embedded in the training notebook. Thirteen mango-scab filenames intentionally drop the `non ` prefix. The old and new names are recorded, and matching uses the image contents. These notes do not automatically resolve other similarity flags or establish expert disease labels.
+The supplied non-duplicate notes contain 62 distinct entries; `DSC_0205.JPG` is listed twice. Their content identities are embedded in the training notebook. Thirteen mango-scab filenames intentionally drop the `non ` prefix. The old and new names are recorded, and matching uses the image contents. These notes do not automatically resolve other similarity flags or establish expert disease labels.
 
 The raw dataset and original split are read-only inputs. New copies use seven class folders and retain historical prefixed filenames for stable ordering. Every run gets a separate output folder. The notebook stops if the input contents differ from the reviewed v3 collection; it does not silently resplit a changed dataset. A future dataset revision requires a new reviewed manifest and comparison plan.
 

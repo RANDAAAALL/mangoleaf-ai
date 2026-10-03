@@ -90,7 +90,7 @@ Compare inventories and hashes before proceeding. Preserve the original backup r
 
 These are maintainer tasks, not extra instructions for farmers:
 
-1. In Authentication, **Sign In / Providers**, enable **Allow anonymous sign-ins** and save. The user reported completing this setting on October 2, 2026.
+1. In Authentication, **Sign In / Providers**, enable **Allow anonymous sign-ins** and save. This setting was reported as enabled on October 2, 2026.
 2. Review Auth signup limits and abuse protection. Supabase recommends invisible CAPTCHA or Turnstile for anonymous signup abuse prevention. Enabling a CAPTCHA requirement also requires compatible client integration; do not add a visible farmer challenge without revisiting the agreed user flow.
 3. After backup verification, set the `scans` bucket to **Private** using the Storage dashboard or the supported Storage `updateBucket()` API. Do not update `storage.buckets` or other Storage metadata directly with SQL. Then apply the reviewed [secure cloud SQL](../../supabase/sql/secure-cloud-sync.sql) for the scan ownership schema, least-privilege grants, and owner policies.
 4. Keep guideline SELECT access public, browser writes denied, and Realtime publication membership enabled.
@@ -138,7 +138,7 @@ Before the live transition, the proposed owner policies also passed 30 assertion
 
 ### Verified live configuration
 
-The user reported anonymous sign-ins enabled, then saved the `scans` bucket as private. The live check confirmed `public = false`. The reviewed forward SQL was applied through Supabase MCP as migration `secure_guest_owned_cloud_sync`, history version `20261002152830`, at 15:28:30 UTC / 23:28:30 Manila on October 2, 2026, with a successful result. Only the script's outer BEGIN/COMMIT were omitted because the migration tool supplies its transaction; the remaining SQL was unchanged. The full tracked script has SHA-256 `c6f9ff3622b0769f76bdd5ead5cfce9b7cac81c08ffacb06c95840c54d5d97af`.
+Anonymous sign-ins were reported as enabled before the `scans` bucket was saved as private. The live check confirmed `public = false`. The reviewed forward SQL was applied through Supabase MCP as migration `secure_guest_owned_cloud_sync`, history version `20261002152830`, at 15:28:30 UTC / 23:28:30 Manila on October 2, 2026, with a successful result. Only the script's outer BEGIN/COMMIT were omitted because the migration tool supplies its transaction; the remaining SQL was unchanged. The full tracked script has SHA-256 `c6f9ff3622b0769f76bdd5ead5cfce9b7cac81c08ffacb06c95840c54d5d97af`.
 
 Post-migration verification passed:
 

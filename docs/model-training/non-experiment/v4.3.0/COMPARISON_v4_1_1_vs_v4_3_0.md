@@ -1,6 +1,6 @@
 # V4.1.1 versus V4.3.0: completed exploratory comparison
 
-> **Status: ADOPTED CURRENT MODEL — October 2, 2026.** The user adopted V4.3.0 Combined as the current application model, with app `0.4.9` and model `v4.3.0`. The exact V4.1.1 Background bundle remains preserved in verified backups. The October 1 review, historical table labels, measured results, and comparison figures below retain their original context. Adoption does not establish an overall accuracy improvement or a live deployment. See the [adoption record](TRIAL_v4_3_0.md#current-model-adoption-october-2-2026).
+> **Status: ADOPTED CURRENT MODEL — October 2, 2026.** V4.3.0 Combined was adopted as the current application model, with app `0.4.9` and model `v4.3.0`. The exact V4.1.1 Background bundle remains preserved in verified backups. The October 1 review, historical table labels, measured results, and comparison figures below retain their original context. Adoption does not establish an overall accuracy improvement or a live deployment. See the [adoption record](TRIAL_v4_3_0.md#current-model-adoption-october-2-2026).
 
 ## Historical review: October 1, 2026
 
@@ -8,7 +8,7 @@ Reviewed October 1, 2026. Both experiments use the same seven-class task and the
 
 ## Result and practical conclusion
 
-V4.3.0 is a valid completed experiment, but these results do not establish an overall improvement over V4.1.1 Background. It makes the same final accepted/rejected mango decisions, rejects two more old OOD photos in total, and falsely accepts four more photos from the reused newer OOD report. Its raw mango classification has one additional mistake. Keep both exact candidates for comparison; the requested local V4.3.0 test is not an adoption decision.
+V4.3.0 is a valid completed experiment, but these results do not establish an overall improvement over V4.1.1 Background. It makes the same final accepted/rejected mango decisions, rejects two more old OOD photos in total, and falsely accepts four more photos from the reused newer OOD report. Its raw mango classification has one additional mistake. Keep both exact candidates for comparison; the local V4.3.0 test is not an adoption decision.
 
 | Experiment / arm                         | Confidence / margin / entropy     | Raw correct / 393 | Correct / wrong accepted | Mango rejected | Old OOD falsely accepted / 84 | Reused newer OOD falsely accepted / 32 |
 | ---------------------------------------- | --------------------------------- | ----------------: | -----------------------: | -------------: | ----------------------------: | -------------------------------------: |

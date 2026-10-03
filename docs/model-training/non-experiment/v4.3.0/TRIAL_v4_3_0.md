@@ -1,6 +1,6 @@
 # Adopted seven-class model v4.3.0
 
-> **Status: ADOPTED CURRENT MODEL — October 2, 2026.** The user selected the completed V4.3.0 Combined model as the current application model, replacing V3 as the adopted baseline. App version is `0.4.9`; the model label is `v4.3.0` and the public configuration identifies `model-v4.3.0`. The original graph, weights, fitted gates, and completed evidence are preserved. This records source adoption; live deployment, remote CI, browser/Keras parity, and independent field accuracy are not established by this change. The workflow preparation and dated local trials below remain historical. See the [adoption record](#current-model-adoption-october-2-2026) and unchanged [comparison](COMPARISON_v4_1_1_vs_v4_3_0.md).
+> **Status: ADOPTED CURRENT MODEL — October 2, 2026.** The completed V4.3.0 Combined model was selected as the current application model, replacing V3 as the adopted baseline. App version is `0.4.9`; the model label is `v4.3.0` and the public configuration identifies `model-v4.3.0`. The original graph, weights, fitted gates, and completed evidence are preserved. This records source adoption; live deployment, remote CI, browser/Keras parity, and independent field accuracy are not established by this change. The workflow preparation and dated local trials below remain historical. See the [adoption record](#current-model-adoption-october-2-2026) and unchanged [comparison](COMPARISON_v4_1_1_vs_v4_3_0.md).
 
 **Current app release preparation, October 3, 2026:** PWA candidate `0.5.0` retains this same adopted model. The new app version packages cloud synchronization and documentation changes; it does not rerun training, fitting, or evaluation. The October 2 adoption statement above and its receipt preserve their original `0.4.9` identity. See the [v0.5.0 release record](../../../versions/PWA_VERSIONING.md#v050-private-cloud-synchronization-candidate-october-3-2026).
 
@@ -19,7 +19,7 @@ The seven output classes remain in this order: `anthracnose`, `bacterial_black_s
 
 The single recipe includes the common V4.1.1 flip, rotation, zoom, shear, and global-brightness transforms. It also uses background replacement with probability **30% for an eligible training photo in each epoch**, and localized lighting with probability **30% during training**. The eligibility rule requires an approved white-background original and an approved foreground mask. Rejected or ineligible photos keep their original backgrounds. The effects may occur together; 30% does not mean 30% of all mango images become composites. Common transforms, scene replacement, and local lighting do not alter validation or test pixels. The architecture, class weighting, five head-training epochs, ten fine-tuning epochs, validation checkpoint selection, and validation-only temperature calibration follow V4.1.1.
 
-The intended scene pool is **62 original backgrounds + 138 supplied new backgrounds = 200 scene photos**. These are augmentation scenes, not 200 mango training photos. More scene photos do not increase the number of eligible foregrounds, change the 30% probability, or guarantee that every scene is used. The Colab inventory must establish actual readable counts, identities, duplicates, overlap, and approved counts; the repository cannot inspect the user's Drive upload. Review suitability and use rights for both folders, including the previously noted airplane-view scene in the old pool. Record any exclusions or count difference rather than describing the intended 200 as an observed result.
+The intended scene pool is **62 original backgrounds + 138 supplied new backgrounds = 200 scene photos**. These are augmentation scenes, not 200 mango training photos. More scene photos do not increase the number of eligible foregrounds, change the 30% probability, or guarantee that every scene is used. The Colab inventory must establish actual readable counts, identities, duplicates, overlap, and approved counts; the repository alone cannot establish the contents of the Drive upload. Review suitability and use rights for both folders, including the previously noted airplane-view scene in the old pool. Record any exclusions or count difference rather than describing the intended 200 as an observed result.
 
 New scene inputs and new review decisions make this a changed experiment, rather than a strict V4.1.1 reproduction. New training produces new weights and requires new threshold fitting. Keep all V4.1.1 and V4.2.0 notebooks, records, and results intact.
 
@@ -227,7 +227,9 @@ docs/model-training/non-experiment/v4.3.0/
 
 [`evidence_copy_manifest.json`](artifacts/evidence_copy_manifest.json) maps each untouched copied record/figure to its original relative source, hash, byte count, and run. [`derived_review_manifest.json`](artifacts/review/derived_review_manifest.json) identifies the separate calculations made during this review. Original downloaded folders, clean templates, completed notebooks, model checkpoints, source photos, masks, ZIPs, and staging attempts remain intact. Large binary models and dataset ZIPs stay in the full archive; copied completion ledgers intentionally refer to some source files outside this curated evidence subset.
 
-### Requested local model test and rollback
+<a id="requested-local-model-test-and-rollback"></a>
+
+### Local model test and rollback
 
 `public/model/` contains the **five fitted files** from threshold fitting's `candidate_models/combined/`: `model.json`, `model_config.json`, and three manifest-listed `.bin` shards. They must be copied together. The training-only export has null fitted gates and is not the installation source. All copied graph/shard bytes match training and candidate hashes; temperature is already folded.
 
@@ -248,9 +250,11 @@ This is a local experimental swap with app version `0.4.8`, not a release. Physi
 
 Documentation-impact review updated this guide, the comparison, the V4.1.1 successor note, `README.md`, the experimental notebook index, architecture, performance, model-version policy, and development progress. The source swap changes only the model label in `src/lib/constants.ts` and worker cache identity/eviction in `src/sw.ts`; classifier behavior already reads the bundled configuration. No commit, push, deployment, or release was performed.
 
-## Requested rollback to V4.1.1 Background: October 2, 2026
+<a id="requested-rollback-to-v411-background-october-2-2026"></a>
 
-The user ended this local V4.3.0 test and requested restoration of V4.1.1 Background. Before replacement, the exact five fitted Combined files and seven current source snapshots were copied and hash-verified into ignored `.tools/model-backups/v4.3.0-combined-before-v4.1.1-20261002/`. Every saved model file matches this experiment's original `candidate_models/combined/` export. The backup includes `backup_manifest.json` and `ROLLBACK.md`; source snapshots preserve current UI/guideline work and should not overwrite later edits wholesale.
+## Rollback to V4.1.1 Background: October 2, 2026
+
+This local V4.3.0 test ended, and V4.1.1 Background was restored. Before replacement, the exact five fitted Combined files and seven current source snapshots were copied and hash-verified into ignored `.tools/model-backups/v4.3.0-combined-before-v4.1.1-20261002/`. Every saved model file matches this experiment's original `candidate_models/combined/` export. The backup includes `backup_manifest.json` and `ROLLBACK.md`; source snapshots preserve current UI/guideline work and should not overwrite later edits wholesale.
 
 All five V4.1.1 Background files were restored together to root `public/model/`, with their original confidence 0.70, margin 0, entropy 0.38 and folded temperature. Its active label is `v4.1.1-candidate`; its worker cache is `mangoleaf-model-cache-v4-1-1-candidate`. The V4.3.0 cache is evicted on activation. See the [V4.1.1 restoration record](../../experiment/v4.1.1/TRIAL_v4_1_1.md#local-restoration-october-2-2026) and [exact-hash receipt](../../experiment/v4.1.1/artifacts/local_restore_20261002.json).
 
@@ -258,7 +262,7 @@ This section supersedes the October 1 local installation status, not its measure
 
 ## Local retest restoration: October 2, 2026
 
-At the user's later request, the same verified five-file V4.3.0 Combined bundle was restored from ignored `.tools/model-backups/v4.3.0-combined-before-v4.1.1-20261002/model/` to root `public/model/` for local testing. Its bytes match the completed experiment's original `candidate_models/combined/` export. The [restoration receipt](artifacts/local_restore_20261002.json) records the exact source identities and restored hashes; this restoration does not train a new model or change the frozen results.
+The same verified five-file V4.3.0 Combined bundle was later restored from ignored `.tools/model-backups/v4.3.0-combined-before-v4.1.1-20261002/model/` to root `public/model/` for local testing. Its bytes match the completed experiment's original `candidate_models/combined/` export. The [restoration receipt](artifacts/local_restore_20261002.json) records the exact source identities and restored hashes; this restoration does not train a new model or change the frozen results.
 
 Before replacement, the active V4.1.1 Background bundle and latest source/documentation snapshots were preserved in ignored `.tools/model-backups/v4.1.1-background-before-v4.3.0-retest-20261002/`. Earlier backups, original run folders, historical notebooks, and all curated comparison evidence remain intact. Restore model files, label, and cache identity together when switching candidates; preserve newer application work.
 
@@ -268,9 +272,11 @@ The reused-data comparison remains V4.3.0 raw 386/393 (98.22%) versus V4.1.1 Bac
 
 ## Current model adoption: October 2, 2026
 
+The [v0.4.9 PWA history entry](../../../versions/PWA_VERSIONING.md#v049-adoption-of-v430-combined) summarizes the application changes and verified local tags. This section preserves the model adoption evidence; the [dated local validation record](../../../testing/TESTING.md#v049-local-validation-october-2-2026) retains the original test scope and results.
+
 **Current notebook location:** All four V4.3.0 templates and completed result notebooks are now under [`notebooks/non-experiment/v4.3.0/`](../../../../notebooks/non-experiment/v4.3.0/). The earlier adoption move to `notebooks/v4.3.0/` recorded below remains part of the event history. The later folder grouping preserves every notebook byte, cell output, and original Drive path; `non-experiment/` contains the current adopted model and earlier models kept as evidence.
 
-The user adopted **V4.3.0 Combined** as the current application model, replacing six-class V3 as the adopted baseline. This selects the already completed October 1 run; it does not retrain weights or refit thresholds. App `0.4.9` displays `v4.3.0`. The public configuration uses `model-v4.3.0`, with `exportSourceModelVersion: model-v4.3.0-candidate` preserving the original export identity.
+**V4.3.0 Combined** was adopted as the current application model, replacing six-class V3 as the adopted baseline. This selects the already completed October 1 run; it does not retrain weights or refit thresholds. App `0.4.9` displays `v4.3.0`. The public configuration uses `model-v4.3.0`, with `exportSourceModelVersion: model-v4.3.0-candidate` preserving the original export identity.
 
 The exact graph and three shards retain the hashes in the original [candidate ledger](artifacts/threshold_fitting/candidate_hashes.json). Only adoption metadata in the public `model_config.json` changes, so its new hash is recorded separately in the [adoption receipt](artifacts/adoption_20261002.json). The archived candidate configuration and every earlier hash ledger/receipt keep their original bytes and candidate labels. The seven classes, RGB 224 × 224 input, raw float32 0–255 pixels, internal rescaling, folded temperature `1.1602258301498714`, and fitted gates **confidence 0.70 / margin 0 / normalized entropy 0.42** are unchanged. Temperature must not be applied twice.
 

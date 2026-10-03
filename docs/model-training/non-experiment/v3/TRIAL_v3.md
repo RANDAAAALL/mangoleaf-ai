@@ -2,7 +2,7 @@
 
 > **Notebook location update, October 2, 2026:** All five preserved Trial 3 notebooks now live under [`notebooks/non-experiment/v3/`](../../../../notebooks/non-experiment/v3/). Original paths and resolved recovery statements below remain historical provenance. Use the [notebook index](../../../../notebooks/README.md) for current locations; saved notebook contents and outputs are unchanged.
 
-> **Status update, October 2, 2026:** The user adopted [V4.3.0 Combined](../v4.3.0/TRIAL_v4_3_0.md#current-model-adoption-october-2-2026) as the current application model, replacing six-class V3 as the adopted baseline. App `0.4.9` displays model `v4.3.0`. The Trial 3 weights, notebooks, measurements, and earlier status correction below remain historical evidence; this source adoption does not claim a live deployment.
+> **Status update, October 2, 2026:** [V4.3.0 Combined](../v4.3.0/TRIAL_v4_3_0.md#current-model-adoption-october-2-2026) was adopted as the current application model, replacing six-class V3 as the adopted baseline. App `0.4.9` displays model `v4.3.0`. The Trial 3 weights, notebooks, measurements, and earlier status correction below remain historical evidence; this source adoption does not claim a live deployment.
 
 > **Status correction, September 21, 2026:** The five Trial 3 notebooks were recovered and committed on August 30, 2026. The original “must be re-downloaded” and “commit the four” statements below are historical open items, now resolved; see [AI model versioning](../../../versions/AI_MODEL_VERSIONING.md). Trial 3 remains the current model baseline. The v3.1/v3.2 files under [`notebooks/experiment/`](../../../../notebooks/experiment/README.md) are experimental evidence, not adopted replacements.
 >

@@ -1,6 +1,6 @@
 # Treatment-guideline review and manual replacement draft — 2026-10-02
 
-Status: completed source review and proposed bilingual wording; **not applied to Supabase**. One helper independently checked source pages. Current `public.guidelines` text was read using Supabase MCP on 2026-10-02. All six rows are preserved below; wrapping is normalized for readability.
+Status: completed source review and proposed bilingual wording; **not applied to Supabase**. Source pages were checked independently. Current `public.guidelines` text was read using Supabase MCP on 2026-10-02. All six rows are preserved below; wrapping is normalized for readability.
 
 ## How to use this report
 
@@ -172,7 +172,7 @@ Database ID: `sooty_mold`.
 
 The app now maintains treatment text only through Supabase and its downloaded IndexedDB copy. It does not bundle replacement treatment advice.
 
-`Uncertain / Unrecognized` is a separate diagnosis outcome. It always uses the exact user-approved photo reminder below, before the guideline cache is inspected. Its section heading is “Try another photo” / “Sulayi og laing litrato”. This reminder needs no Supabase row and works offline; it does not alter model thresholds or guarantee recognition after a retake. The loading and unavailable states below apply to accepted class results.
+`Uncertain / Unrecognized` is a separate diagnosis outcome. It always uses the exact approved photo reminder below, before the guideline cache is inspected. Its section heading is “Try another photo” / “Sulayi og laing litrato”. This reminder needs no Supabase row and works offline; it does not alter model thresholds or guarantee recognition after a retake. The loading and unavailable states below apply to accepted class results.
 
 **English uncertain-photo reminder**
 

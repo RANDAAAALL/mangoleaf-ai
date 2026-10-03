@@ -37,7 +37,7 @@ graph TD
 
 - **Setup:** MobileNetV3-Large base model frozen (`trainable = False`), custom classification head attached, and trained with default parameters.
 - **The Failure:** Validation accuracy froze flat at **25.22%** across 15 epochs.
-- **Root Cause 1 (Double-Rescaling):** We applied `rescale=1./255` in the generator, but MobileNetV3-Large has an **internal** rescaling layer. This divided values by 255 twice, reducing pixels to a range of `[0.0, 0.003]` (appearing completely black to the AI).
+- **Root Cause 1 (Double-Rescaling):** The generator applied `rescale=1./255`, but MobileNetV3-Large has an **internal** rescaling layer. This divided values by 255 twice, reducing pixels to a range of `[0.0, 0.003]` (appearing completely black to the AI).
 - **Root Cause 2 (Feature Generalization):** Locking the base layers prevented the model from adjusting its visual "eyes" to detect specific agricultural mango leaf spots that imageNet (general cats/dogs dataset) had never seen.
 
 ### Phase 3: Implementing Two-Stage Fine-Tuning (The Fix)
@@ -103,4 +103,4 @@ const results = tf.tidy(() => {
 
 - **WebGL GPU Execution:** Prediction processes locally in the farmer's browser using the device's hardware acceleration.
 - **Zero Memory Leaks:** The tensor computations are fully enclosed in `tf.tidy()` to immediately dump temporary tensors from VRAM, keeping low-end mobile devices safe from "Aw, Snap!" tab crashes.
-- **70% Confidence Threshold:** A confidence check ensures that any image below 70% probability displays as _"Uncertain / Unrecognized"_, in strict compliance with your system specifications.
+- **70% Confidence Threshold:** A confidence check ensures that any image below 70% probability displays as _"Uncertain / Unrecognized"_, under the project's 70% confidence rejection rule.
