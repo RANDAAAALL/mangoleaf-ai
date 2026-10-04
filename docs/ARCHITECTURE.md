@@ -6,7 +6,7 @@ MangoLeaf AI is a client-heavy, offline-first Next.js 16 application. The browse
 
 ![MangoLeaf AI Architecture](../public/images/mangoleaf-architecture.svg)
 
-**Current candidate:** PWA `0.5.0` retains the adopted V4.3.0 Combined model. The version bump packages the guest-owned private-cloud client, local-history upgrade, and public-guideline separation described below. See the [release record](versions/PWA_VERSIONING.md#v050-private-cloud-synchronization-candidate-october-3-2026) for validation and pending publication status; model adoption and earlier measurements remain dated records.
+**Current candidate:** PWA `0.5.1` retains the adopted V4.3.0 Combined model and packages stable scan-card photo URLs plus the horizontal treatment-guidelines header. The guest-owned private-cloud client, local-history upgrade, and public-guideline separation described below remain in use. See the [release record](versions/PWA_VERSIONING.md#v051-scan-thumbnail-stability-candidate-october-5-2026) and [candidate validation](testing/TESTING.md#v051-candidate-validation-october-5-2026) for validation and pending publication status; model adoption and earlier measurements remain dated records.
 
 ## Test and release boundaries
 
@@ -90,6 +90,7 @@ mangoleaf-ai/
 |   |   `-- tab/                    # Home, history, and about screen content
 |   |-- hooks/
 |   |   |-- usePWAInstall.ts        # PWA installation prompt state and actions
+|   |   |-- useScanPhotoUrl.ts      # Stable card photo URLs and cleanup
 |   |   |-- useScrollLock.ts        # Shared scroll lock for overlapping modals
 |   |   `-- useSync.ts              # IndexedDB and Supabase synchronization
 |   |-- lib/
@@ -101,7 +102,7 @@ mangoleaf-ai/
 |   |   |-- db.ts                   # Dexie schema and scan record types
 |   |   |-- format-time-ago.ts      # Relative timestamp formatting for scan cards
 |   |   |-- get-badge-styles.ts     # Disease-name to badge color class mapping
-|   |   |-- image-hash.ts           # Lightweight original-file SHA-256 fingerprint
+|   |   |-- image-hash.ts           # Lightweight upload/saved-photo SHA-256 fingerprints
 |   |   |-- image-storage.ts        # Canvas compression after diagnosis, without TensorFlow.js
 |   |   |-- supabase-client.ts      # Browser-side Supabase client
 |   |   `-- translations.ts         # English and Cebuano/Bisaya interface text
@@ -235,7 +236,7 @@ When adding a relative-time string, add it to both the `en` and `bis` objects in
 
 ### On-device AI pipeline
 
-`src/app/page.tsx` coordinates photo review and saving. `src/lib/image-hash.ts` hashes files without importing TensorFlow.js, and `src/lib/image-storage.ts` creates the compressed photo saved after diagnosis. `src/lib/classifier.ts` provides browser inference and re-exports both helpers for existing callers. The page imports storage compression directly and dynamically loads the prediction function when diagnosis starts:
+`src/app/page.tsx` coordinates photo review and saving. `src/lib/image-hash.ts` fingerprints upload files and saved-photo Blobs without importing TensorFlow.js, and `src/lib/image-storage.ts` creates the compressed photo saved after diagnosis. `src/lib/classifier.ts` provides browser inference and re-exports both helpers for existing callers. The page imports storage compression directly and dynamically loads the prediction function when diagnosis starts:
 
 1. During initial loading, fetch `/model/model.json` with `tf.loadGraphModel` and `/model/model_config.json` for its rejection settings.
 2. Cache and warm the single seven-class V4.3.0 Combined model once per browser session.
@@ -278,6 +279,12 @@ An `Uncertain / Unrecognized` result is handled before the cached-guideline look
 
 Historical trial and legacy rows remain visible in local history. Duplicate reuse requires the exact active `model_version`, so V4.2.0, the former V4.3.0 candidate identity, V3, and unlabeled legacy rows do not substitute for adopted V4.3.0 inference. This prevents an unidentified older diagnosis from blocking the promoted model. The V4.2.0 route metadata stays local; new owned cloud rows preserve `model_version` without converting older unlabeled diagnoses into current-model reports.
 
+### Scan-card photo display
+
+`scan-card.tsx` uses `useScanPhotoUrl.ts` to own its local photo URL. IndexedDB returns fresh Blob objects after scan metadata changes, even when their bytes are unchanged. For a new wrapper with the same size and MIME type, the hook asynchronously compares SHA-256 fingerprints of the saved photo bytes and caches the displayed photo's fingerprint. An unchanged photo keeps its existing URL and image element. Different bytes replace the URL; size or type changes can replace it immediately. These in-memory fingerprints do not change the original-upload `image_hash` used for duplicate diagnosis checks.
+
+A card keeps its displayed photo while comparison is pending. Newer inputs cancel outdated comparisons, empty photos use the existing fallback, and replaced or unmounted cards release their URLs. No photo hash or display state is added to IndexedDB or the cloud schema. This avoids thumbnail reloads from metadata-only sync without changing inference, model settings, or photo compression.
+
 ### Synchronization
 
 `src/hooks/useSync.ts` coordinates Supabase synchronization:
@@ -292,9 +299,9 @@ Historical trial and legacy rows remain visible in local history. Duplicate reus
 - Subscribes to Realtime changes for the `guidelines` table.
 - Uses a sync lock with one queued follow-up pass, a real 10-second cloud-request timeout, a 15-second session-wait bound, exponential retry while online, and an immediate retry when the app returns to foreground. The guest get-or-create sequence is also serialized across supported tabs with Web Locks.
 
-Supabase is therefore a synchronization and recovery layer; IndexedDB remains the immediate source used by the UI. Guest creation needs a network connection. A failed sign-in, refresh, or upload leaves local scanning available and cloud changes pending. Losing the saved anonymous session also loses access to that guest's cloud records; there is no cross-device account recovery in this design. The live server's private bucket and ownership policies were applied and verified on October 2; the matching client described here is validated locally and awaits deployment.
+Supabase is therefore a synchronization and recovery layer; IndexedDB remains the immediate source used by the UI. Guest creation needs a network connection. A failed sign-in, refresh, or upload leaves local scanning available and cloud changes pending. Losing the saved anonymous session also loses access to that guest's cloud records; there is no cross-device account recovery in this design. The live server's private bucket and ownership policies were applied and verified on October 2. Client validation and release status are recorded for each candidate in the [release guide](versions/PWA_VERSIONING.md#v051-scan-thumbnail-stability-candidate-october-5-2026); local checks do not establish the current production client version.
 
-Older cloud rows/files remain preserved without automatically assigning them to a submitted `device_id`. Their former public image links are not a fallback for private downloads. Existing local image Blobs remain usable. A local-only report without photo bytes keeps its diagnosis and shows “Photo not saved on this device” / “Walay litrato nga natipigan niini nga device”; it does not request the old unowned URL. Recovering that remote photo needs an administrator's explicit decision. The old deployed client cannot sync private scans after the server transition until it receives the matching updated app. See [cloud ownership and recovery](supabase/SECURITY-AND-SYNC.md) for status, verification, and rollout boundaries.
+Older cloud rows/files remain preserved without automatically assigning them to a submitted `device_id`. Their former public image links are not a fallback for private downloads. Existing local image Blobs remain usable. A local-only report without photo bytes keeps its diagnosis and shows “Photo not saved on this device” / “Walay litrato nga natipigan niini nga device”; it does not request the old unowned URL. Recovering that remote photo needs an administrator's explicit decision. Clients using the former public-access design cannot sync private scans after the server transition until updated. See [cloud ownership and recovery](supabase/SECURITY-AND-SYNC.md) for status, verification, and rollout boundaries.
 
 ### PWA and offline caching
 

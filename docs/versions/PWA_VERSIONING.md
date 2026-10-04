@@ -2,7 +2,7 @@
 
 This guide explains the PWA version: the application interface, local/offline behavior, release history, build labels, and deployment procedure. The PWA is the app people use. The separate [AI model versioning guide](AI_MODEL_VERSIONING.md) explains the model weights, training workflows, fitted rejection settings, and model evidence.
 
-**Current repository candidate:** App `0.5.0` retains the adopted V4.3.0 Combined model (`v4.3.0`) and prepares guest-owned private cloud synchronization. This is a candidate, not a publication or deployment record. See the [v0.5.0 record](#v050-private-cloud-synchronization-candidate-october-3-2026), [model adoption history](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026), and [candidate validation](../testing/TESTING.md#v050-candidate-validation-october-3-2026).
+**Current repository candidate:** App `0.5.1` retains the adopted V4.3.0 Combined model (`v4.3.0`) and prepares the scan-thumbnail stability patch. The treatment-guidelines heading and language controls also stay on one row. This is a candidate, not a publication or deployment record. See the [v0.5.1 record](#v051-scan-thumbnail-stability-candidate-october-5-2026), [model adoption history](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026), and [candidate validation](../testing/TESTING.md#v051-candidate-validation-october-5-2026).
 
 ## Reading the release history
 
@@ -36,6 +36,7 @@ v0.4.7  compact history pagination and scan-details badge clipping fix
 v0.4.8  scan-photo URL fix, browser reliability testing, and documentation alignment
 v0.4.9  adopts V4.3.0 Combined, current scan/guidance regressions, and preserved model evidence
 v0.5.0  candidate: guest-owned private cloud synchronization and preserved offline History
+v0.5.1  candidate: stable scan thumbnails and a horizontal treatment-guidelines header
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
@@ -145,6 +146,53 @@ Retain the V4.3.0 model and fitted rejection settings.
 > Local validation passed typecheck, lint, production build, formatting/security checks, 14 tooling tests, 10 export checks, all 80 core browser cases, and R01 with 240 actual predictions.
 
 The local candidate results are recorded in the testing guide. Remote CI and production promotion remain pending. Create the tag on the exact approved tested commit using the procedure below; preparing this text does not create or push a tag, publish a Release, or deploy the app.
+
+## v0.5.1: scan-thumbnail stability candidate (October 5, 2026)
+
+**Status: candidate / not released.** App `0.5.1` is a patch for scan-card photo display and the treatment-guidelines header layout. The app label comes from `package.json` through the existing build configuration. Model `v4.3.0`, its five assets, seven classes, preprocessing, temperature, and rejection settings remain unchanged. No new model tag is required.
+
+### Changes included
+
+- Keep Recent and History thumbnails visible when cloud synchronization changes only a scan's metadata. IndexedDB can return a new Blob object with identical photo bytes; the reusable `useScanPhotoUrl` hook compares those bytes before replacing the displayed URL.
+- Replace the displayed photo when its bytes change, including different photos of equal size. Cancel stale comparisons and release replaced or unmounted photo URLs. Original-upload duplicate checking keeps its existing SHA-256 behavior.
+- Keep the treatment-guidelines heading and English/Bisaya controls side by side on narrow screens.
+- Add a browser regression for scan insertion, cloud metadata updates, and offline deletion. Align architecture, performance, testing, setup, and current-version references with this patch.
+
+This patch does not retrain the model or refit its gates. The photo comparison reads saved bytes asynchronously; its storage and processing cost remains described in [PERFORMANCE.md](../PERFORMANCE.md#21-per-card-blob-url-management-scan-cardtsx).
+
+### Validation and publication
+
+The versioned build must pass formatting/security, typecheck, lint, production build, export verification, tooling tests, the complete core browser suite, and filtered R01 repeated inference. The [October 5 validation record](../testing/TESTING.md#v051-candidate-validation-october-5-2026) identifies the tested source fingerprint and actual results. Earlier thumbnail and release checks retain their original source identities.
+
+**Verified local baseline tag:** `v0.5.0` identifies commit `0139bb4c988a1e17301020a5dd1d0cc37a1f1527`. The current candidate starts from `4eaa33dc1575dc80c1840a1bd340dd28444f949f` plus the uncommitted thumbnail, layout, version, and documentation changes. This local tag check does not establish remote Release publication or production deployment and does not rewrite the October 3 candidate record.
+
+Local validation passed formatting/security, typecheck, lint, production build, all 10 export checks, all 14 tooling tests, all 83 core browser cases, and R01's 240 actual predictions. Tested application fingerprint is `defae7e97f5640eaea888dfc7dfc067ec740521b82e8abd7568cec2623805ca3`; the testing record preserves report hashes and model identity. The candidate commit, remote CI, approved production promotion, live-version confirmation, and `v0.5.1` tag/Release remain pending. Preparing this record does not stage, commit, push, tag, publish, or deploy the app.
+
+### Prepared commit message
+
+```text
+fix: stabilize scan photos for PWA v0.5.1
+
+IndexedDB returns new Blob wrappers during metadata updates.
+Compare saved photo bytes before replacing a card's URL to
+prevent thumbnails from disappearing during synchronization.
+```
+
+### Prepared tag and release description
+
+**App tag:** `v0.5.1`
+
+**Release title:** `MangoLeaf AI v0.5.1 — Stable scan photos`
+
+> Keeps Recent and History thumbnails visible while scans save and synchronize. Changed photos still update, and unused photo URLs are released.
+>
+> Keeps the treatment-guidelines heading and language controls side by side on mobile. Adds thumbnail regression coverage and updates the project guides.
+>
+> The AI model remains V4.3.0 Combined, with unchanged weights, classes, preprocessing, and fitted rejection settings.
+
+Local candidate validation passed formatting/security, typecheck, lint, build, 10 export checks, 14 tooling tests, all 83 core browser cases, and 240 repeated actual predictions. Remote CI and production promotion remain pending.
+
+Create the app tag on the exact approved tested commit after the remaining release steps pass. The prepared notes are a draft until publication is approved.
 
 ## Candidate testing and promotion
 

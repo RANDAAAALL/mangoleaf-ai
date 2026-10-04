@@ -18,6 +18,32 @@ The [v0.4.9 PWA history entry](../versions/PWA_VERSIONING.md#v049-adoption-of-v4
 
 **Live server-security verification (October 2, 2026):** After the photo bucket was saved as private, migration `secure_guest_owned_cloud_sync`, history version `20261002152830`, applied successfully. Catalog checks verified the private bucket, grants, RLS, index, and three scan/one guideline/four Storage policies. Thirty assertions using temporary copies of the applied policy expressions/grants passed and were rolled back; the earlier proposed-policy proof is separate. All original values remain unchanged across 65 scan rows, six guidelines, and 68 Storage object entries, with no missing entries or invented legacy owners. The advisor returned zero findings. Read-only HTTP probes returned 401 for unsigned scans, 200 for all six public guidelines, and 400 for a cache-busted old public photo URL. These checks created no production test users, scan rows, or Storage files, and performed no remote photo writes/deletes/purge. They do not prove every formerly public cached copy disappeared or establish a real guest signup/upload/download session. The matching updated client has not been committed, pushed, or deployed. See [implementation status](../supabase/SECURITY-AND-SYNC.md#implementation-status).
 
+## v0.5.1 candidate validation (October 5, 2026)
+
+**Candidate / not released.** App `0.5.1` retains model `v4.3.0` and packages the scan-thumbnail fix plus the horizontal treatment-guidelines header. The [release record](../versions/PWA_VERSIONING.md#v051-scan-thumbnail-stability-candidate-october-5-2026) records scope and intended tag. Validation uses fresh browser contexts and the isolated local mock backend.
+
+The approved checks are formatting/security, typecheck, lint, production build, export verification, tooling tests, the complete core browser suite, and `bun run test:reliability --grep "R01:"`. R03 is excluded. The versioned local checks passed; earlier October 3/4 reports retain their original fingerprints.
+
+The tested application fingerprint is `defae7e97f5640eaea888dfc7dfc067ec740521b82e8abd7568cec2623805ca3`. Report base commit is `4eaa33dc1575dc80c1840a1bd340dd28444f949f` with uncommitted thumbnail, layout, version, and documentation changes. Both browser reports match the final app input hashes and version `0.5.1`; this identifies the tested working tree separately from its future release commit.
+
+| Check                                                          | Final result                                                                                                                                                         |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bun run format`, `format:check`, `typecheck`, `lint`, `build` | Passed; production static export and service worker generated successfully.                                                                                          |
+| `bun run security:check`                                       | Passed tracked-path and full fetched-history checks.                                                                                                                 |
+| `bun run verify:export`                                        | All 10 exported PWA/model asset checks passed.                                                                                                                       |
+| `bun run test:tooling`                                         | All 14 tests passed, with 41 assertions.                                                                                                                             |
+| `bun run test:e2e`                                             | All 83 cases passed with zero failures, skips, or flaky cases in 6.3 minutes across Chromium desktop/mobile, Firefox desktop, and scoped WebKit mobile UI.           |
+| `bun run test:reliability --grep "R01:"`                       | One Chromium mobile emulation case passed in 48.4 seconds: eight photos × 30 actual predictions; maximum raw-confidence range `0`, maximum net tensor growth `0`.    |
+| Preservation                                                   | All 439 protected source/model/notebook/fixture/hook/workflow/configuration files retain their preparation hashes. The adopted trial's Markdown app pointer changed. |
+
+The new F10 thumbnail regression passed in Chromium desktop/mobile and Firefox. It covered new-scan insertion, cloud metadata updates, and offline deletion. R02 passed in Chromium desktop/mobile using the actual service worker and model. About/footer checks passed in both languages across all four browser projects. The seven October 4 photo-lifecycle checks retain their original record; the hook source is unchanged from that verified fix.
+
+All five model hashes match the values recorded in the October 3 table below. Package metadata changed only its app version; the dependency lockfile and model settings remain unchanged. The first sandboxed build, tooling, security, and browser attempts could not launch required child processes (`EPERM`); authorized reruns passed without code changes. R01 used WebGL through desktop SwiftShader and recorded stable raw/displayed classes. This same-session consistency check does not establish a new accuracy or device-performance result.
+
+Exact reports, R01 observations, input/model hashes, and pre-edit copies are preserved under ignored `.tools/release-preparation-v0.5.1-20261005/`. Core report SHA-256 is `e45d5c0d7db3ba9d9d8c190cf1e0cb71c6f28e09b610656bb90dc89bb7829cba`; R01 report SHA-256 is `91d73df8e80df5abba7eae3ccfa0bca68938142bf1145aa8476fdbed636b234a`.
+
+Remote CI, production promotion, live-version confirmation, and tag/Release publication remain pending.
+
 ## v0.5.0 candidate validation (October 3, 2026)
 
 **Candidate / not released.** App `0.5.0` retains model `v4.3.0` and includes the guest-owned private-cloud client, preserved legacy history, independent public guidelines, documentation moves, and unchanged photo-compression extraction. The [release record](../versions/PWA_VERSIONING.md#v050-private-cloud-synchronization-candidate-october-3-2026) records scope and tag status.
@@ -163,9 +189,19 @@ The Scan Sheet now displays two shared framing/lighting tips above its camera an
 - Select a new photo and check the updated review reminder. Select an eligible duplicate and check that its duplicate message and controls remain unchanged. X, Escape, Retake, and diagnosis keep their existing behavior.
 - Repeat with an already-cached app offline. The tips should require no network request, camera stream, image analysis, or extra model loading. They are advice, not confirmation that a photo is suitable.
 
-The camera and comprehension checks above are retained from the October 2 guidance review; the [v0.5.0 candidate section](#v050-candidate-validation-october-3-2026) defines the newly approved release scope. The local backup for this reversible change is `.tools/ui-backups/photo-guidance-20261001T212013Z/`; restore only this change and rebuild the service worker, preserving newer unrelated work.
+The camera and comprehension checks above are retained from the October 2 guidance review; the [v0.5.1 candidate section](#v051-candidate-validation-october-5-2026) defines the current release scope. The local backup for this reversible change is `.tools/ui-backups/photo-guidance-20261001T212013Z/`; restore only this change and rebuild the service worker, preserving newer unrelated work.
 
 Controlled tests replace only the model response with fixed scores. They exercise the real classifier gates, UI, local storage, and client sync against a mock service. Real-model and offline cases use the actual exported model assets. No test changes the classifier's resizing, normalization, precision, or rejection rules.
+
+## Scan-thumbnail stability: October 4, 2026
+
+`tools/e2e/history.pw.ts` includes a focused F10 regression for thumbnail blinking. It holds the mock photo upload and row insertion separately, then checks that adding a scan and changing owner/path/status metadata keep both cards' photo URLs unchanged. It also records image removal and URL revocation so a photo that disappears and returns cannot pass solely because it is eventually visible. Offline deletion must release the deleted card's URL exactly once while the remaining thumbnail stays unchanged.
+
+The isolated pre-fix probe found different Blob objects containing identical bytes on repeated IndexedDB reads. Three metadata-only writes reloaded four thumbnails on each pass. Follow-up checks must also cover same-size/different-byte replacement photos, pending comparison cancellation, empty photos, unmount cleanup, and hash failure recovery. Review/probe records remain ignored under `.tools/recent-scans-review-20261004/`; they are local diagnostic evidence, not deployed files or model-accuracy results.
+
+**Validation:** `bun run format`, `bun run typecheck`, `bun run lint`, `bun run build`, and all 10 export checks pass. The focused F10/F11, R02, S03, and S04 run passes all **10 cases** across Chromium desktop and mobile emulation. The new F10 case records no thumbnail removals or URL changes during scan insertion and cloud metadata updates. Seven additional local lifecycle checks pass for equal-byte wrapper reuse under React StrictMode, offline comparison, same-size/different-byte replacement, empty photos, superseded comparisons, unmount cancellation, and hashing failure recovery. All seven allocated URLs in that lifecycle check are released exactly once, with no page errors.
+
+The tested working-tree application fingerprint is `7efd73560bed1bb715f16a03036478b659448f92a8505d53f76716a2064c6355`, based on commit `4eaa33dc1575dc80c1840a1bd340dd28444f949f` with the thumbnail fix uncommitted. This record identifies this local source snapshot; earlier reports retain their original identities. No new diagnosis-accuracy or device-performance claim follows from these checks. App remains `0.5.0`, model remains `v4.3.0`, and all five model assets retain their previous hashes.
 
 ## Treatment-guideline availability checks
 

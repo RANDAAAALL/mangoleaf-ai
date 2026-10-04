@@ -1,8 +1,9 @@
-import React, { memo, useState, useEffect } from "react";
+import React, { memo } from "react";
 import { type ScanRecord } from "@/lib/db";
 import { translations, type Language } from "@/lib/translations";
 import { getBadgeStyles } from "@/lib/get-badge-styles";
 import { formatTimeAgo } from "@/lib/format-time-ago";
+import { useScanPhotoUrl } from "@/hooks/useScanPhotoUrl";
 
 interface ScanCardProps {
   scan: ScanRecord;
@@ -25,24 +26,9 @@ export const ScanCard = memo(function ScanCard({
   const badgeClass = getBadgeStyles(scan.disease_name);
   const timeAgoText = formatTimeAgo(scan.updated_at, language);
 
-  const [localImage, setLocalImage] = useState<{
-    blob: Blob;
-    url: string;
-  } | null>(null);
-
-  useEffect(() => {
-    if (imageBlob && imageBlob.size > 0) {
-      const url = URL.createObjectURL(imageBlob);
-      setLocalImage({ blob: imageBlob, url });
-      return () => URL.revokeObjectURL(url);
-    }
-    setLocalImage(null);
-  }, [imageBlob]);
-
-  // Remove stale URLs from the image before effect cleanup revokes them.
-  const displayUrl =
-    (localImage?.blob === imageBlob ? localImage?.url : null) ||
-    imageUrlFallback;
+  // Metadata-only sync updates keep the existing photo URL and avoid blinking.
+  const localImageUrl = useScanPhotoUrl(scan.id, imageBlob);
+  const displayUrl = localImageUrl || imageUrlFallback;
 
   return (
     <div className="bg-white border border-[#e2ebd9] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col group">

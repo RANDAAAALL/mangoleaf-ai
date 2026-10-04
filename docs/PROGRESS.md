@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: October 3, 2026
+Last updated: October 5, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -833,6 +833,20 @@ This file tracks the project work from the first committed implementation throug
   - Added plain-English comments explaining why the table is available, why sorting uses copies, and why display rounding does not change predictions or rejection rules. Updated architecture, performance, testing, and agent guidance. App `0.5.0`, model `v4.3.0`, model assets, preprocessing, and fitted gates remain unchanged. Deployment is separate from this source change.
   - Formatting, TypeScript, lint, the production static build, and all 10 export checks passed. Two focused Chromium desktop M01 cases passed for `healthy_mangoleaf.jpg` and `ood.jpg` against the isolated production export and local mock backend. Tested application fingerprint: `00805230ad1582948203402c0f39d508c870c62a1f5825567cbd8f886c5789ec`, based on commit `952484e8f3cf3b52298a29969856a9cfdeabe706` with this uncommitted change. All five model asset hashes match their pre-build identities. These checks verify application behavior, not model accuracy or device-performance improvement.
 
+- **Stable Recent Scans thumbnails**
+
+  - Added `useScanPhotoUrl.ts` so fresh IndexedDB Blob wrappers with unchanged photo bytes keep their existing thumbnail URLs through metadata-only synchronization.
+  - Reuse the shared SHA-256 helper for in-memory saved-photo comparison while preserving original-file duplicate checks. Equal-size replacement photos still update, canceled comparisons cannot restore old images, and card removal releases its URLs.
+  - Added a browser regression covering new scan insertion, the upload/path/status phases, and offline deletion. Updated architecture, performance, and test documentation. Verification results are recorded in the dated thumbnail section of `docs/testing/TESTING.md`. Formatting, typecheck, lint, production build, and all 10 export checks passed. All 10 focused desktop/mobile browser cases and seven local photo-lifecycle checks passed; the [thumbnail validation record](testing/TESTING.md#scan-thumbnail-stability-october-4-2026) identifies the tested source fingerprint.
+
+### October 5, 2026
+
+- **PWA v0.5.1 release preparation**
+
+  - Prepared app `0.5.1` for the scan-thumbnail stability patch and horizontal treatment-guidelines header. The reusable photo URL hook preserves unchanged thumbnails during synchronization, updates changed photos, and releases unused URLs. Model `v4.3.0` and its fitted settings remain unchanged.
+  - Updated current version references, setup, architecture, performance, testing, and the adopted trial's app pointer. Preserved dated results and original model/notebook identities. Prepared a commit message, intended app tag, and draft release description in the [release record](versions/PWA_VERSIONING.md#v051-scan-thumbnail-stability-candidate-october-5-2026).
+  - Versioned local validation passed formatting/security, typecheck, lint, production build, 10 export checks, 14 tooling tests, all 83 core browser cases, and R01's 240 actual predictions. Both browser reports match application fingerprint `defae7e97f5640eaea888dfc7dfc067ec740521b82e8abd7568cec2623805ca3`; all five model hashes remain unchanged. The [October 5 testing record](testing/TESTING.md#v051-candidate-validation-october-5-2026) preserves the exact evidence. Commit/push, remote CI, production promotion, live-version confirmation, and tag/Release publication remain separate pending steps.
+
 ## Current Notebook Decision
 
 Keep every training notebook, and keep each trial's clean template separate from its completed run. Historical and adopted trial notebooks live in `notebooks/non-experiment/v{n}/`; this includes the current V4.3.0 model and older models. Candidate workflows and completed experimental evidence live in `notebooks/experiment/v{n}/`. The latter are experimental candidates, not shipped or deployed. V4.3.0 moved into the adopted group on October 2, 2026, then joined the other adopted and historical notebooks under `non-experiment/`, with its original cell contents and outputs intact. The original trial folders were moved from the repository root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle; they were added on September 8, 2026. The filenames below are unchanged. Earlier dated entries retain the repository paths that described those events; the current locations are listed here and in the notebook index.
@@ -859,13 +873,13 @@ Keep every training notebook, and keep each trial's clean template separate from
 
 ## Current Adopted Model (v4.3.0)
 
-App candidate `0.5.0` retains the single V4.3.0 Combined TensorFlow.js Graph Model adopted in `0.4.9`. Output order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold. Both healthy outputs use the `healthy` guideline row. The fixed confidence floor is `0.70`, margin is `0`, normalized entropy limit is `0.42`, and temperature `1.1602258301498714` remains folded into the saved weights.
+App candidate `0.5.1` retains the single V4.3.0 Combined TensorFlow.js Graph Model adopted in `0.4.9`. Output order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold. Both healthy outputs use the `healthy` guideline row. The fixed confidence floor is `0.70`, margin is `0`, normalized entropy limit is `0.42`, and temperature `1.1602258301498714` remains folded into the saved weights.
 
 The [preserved report and comparison](model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) record 386/393 raw correct predictions (98.22%), 373 correct and 3 wrong accepted predictions, and 17 mango rejections on reused seven-class test data. Old OOD false accepts are 24/84; reused newer OOD false accepts are 5/32. These are the completed experiment's measurements, not new independent field results. The [testing guide](testing/TESTING.md) distinguishes adoption from completed local automated checks and pending production promotion.
 
 ## Last Released Model Baseline (v3)
 
-The entries below preserve the previously documented V3 release baseline. V4.3.0 was adopted in app `0.4.9` and remains in candidate `0.5.0`. The existing local adoption tags identify commit `9fd175e40b85a805ab482554e351f9686f1f031a`; they do not verify production status. The new release's CI, production promotion, and publication remain pending. V3 measurements remain historical evidence.
+The entries below preserve the previously documented V3 release baseline. V4.3.0 was adopted in app `0.4.9` and remains in candidate `0.5.1`. The existing local adoption tags identify commit `9fd175e40b85a805ab482554e351f9686f1f031a`; they do not verify production status. The new release's CI, production promotion, and publication remain pending. V3 measurements remain historical evidence.
 
 - Architecture: MobileNetV3-Large
 - Runtime format: TensorFlow.js Graph Model, **float32, not quantized**. The WebGL path requests half-float textures. The recorded weight-range check found 0 of 212 tensors above 65,504 and a largest weight of `117.53`; this checks weight range, not every intermediate activation or all GPU arithmetic. Runtime scores and browser parity still require measurement.
@@ -883,7 +897,7 @@ The original test/report data also influenced later threshold and precision-band
 
 ## Next Work
 
-For candidate `0.5.0`, follow the approved [release checklist](versions/PWA_VERSIONING.md#v050-private-cloud-synchronization-candidate-october-3-2026). It uses automated validation and does not schedule later physical-device sessions.
+For candidate `0.5.1`, follow the approved [release checklist](versions/PWA_VERSIONING.md#v051-scan-thumbnail-stability-candidate-october-5-2026). Record the versioned local results, then complete remote CI and approved production promotion before publishing its app tag and Release.
 
 ### Earlier planning notes (historical)
 

@@ -117,7 +117,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
             {/* Treatment Guidelines Section */}
             <div className="border-t border-[#e2ebd9] pt-4 flex flex-col gap-3">
               {/* Guidelines Section Header & Language Toggle */}
-              <div className="flex flex-col justify-center items-center sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div className="flex flex-row items-center justify-between gap-2">
                 <span className="text-xs font-black text-[#143519] uppercase tracking-wider flex items-center gap-1.5">
                   <span>
                     {scan.disease_name === UNCERTAIN_LABEL

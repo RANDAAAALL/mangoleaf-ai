@@ -4,7 +4,7 @@ This guide explains the AI model version: the saved model weights, class list, f
 
 An app update can keep the same model, and a model change does not by itself require an app version bump. Both changes still need the appropriate validation and a new build before deployment.
 
-**Current application candidate, October 3, 2026:** App `0.5.0` retains V4.3.0 Combined (`v4.3.0`) in root `public/model/`. The app release changes cloud synchronization and documentation, not model weights, classes, preprocessing, or fitted gates. Original exports, dated evidence, and earlier rollback backups remain preserved. See the [October 2 adoption record](#v049-adoption-of-v430-combined-october-2-2026) and [v0.5.0 release status](PWA_VERSIONING.md#v050-private-cloud-synchronization-candidate-october-3-2026). The existing local `model-v4.3.0` tag remains the model provenance marker; no new model tag is required.
+**Current application candidate, October 5, 2026:** App `0.5.1` retains V4.3.0 Combined (`v4.3.0`) in root `public/model/`. The app update packages scan-thumbnail stability and the treatment-guidelines header layout. Model weights, classes, preprocessing, and fitted gates remain unchanged. Original exports, dated evidence, and earlier rollback backups remain preserved. See the [October 2 adoption record](#v049-adoption-of-v430-combined-october-2-2026), [v0.5.1 release status](PWA_VERSIONING.md#v051-scan-thumbnail-stability-candidate-october-5-2026), and [v0.5.1 candidate validation](../testing/TESTING.md#v051-candidate-validation-october-5-2026). The existing local `model-v4.3.0` tag remains the model provenance marker; no new model tag is required.
 
 ## Reading the historical records
 

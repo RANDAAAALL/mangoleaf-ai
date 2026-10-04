@@ -2,6 +2,8 @@
 
 This document describes the performance mechanisms implemented in **MangoLeaf AI** (`mangoleaf-ai`). Their effects depend on the image, browser, hardware, and network. Use [TESTING.md](testing/TESTING.md) and the [physical reliability checklist](testing/PHYSICAL_RELIABILITY_CHECKLIST.md) to record measurements for the exact candidate and device.
 
+**Current candidate, October 5, 2026:** App `0.5.1` packages the scan-thumbnail stability fix described below and retains model `v4.3.0`. The [candidate record](versions/PWA_VERSIONING.md#v051-scan-thumbnail-stability-candidate-october-5-2026) tracks release status; [v0.5.1 validation](testing/TESTING.md#v051-candidate-validation-october-5-2026) records checks for the newly labeled build separately from the October 4 thumbnail evidence.
+
 The [October 3, 2026 low-end-device review](#low-end-device-performance-review-october-3-2026) records current source findings, short isolated browser measurements, and prioritized improvements. It separates existing safeguards from changes that have not yet been implemented.
 
 The matrix distinguishes implementation choices from measured outcomes. Earlier instant-loading, fixed-frame-rate, and zero-leak claims were not established device benchmarks. R01 measures repeated-inference consistency; R02 exercises cached offline behavior; R03 records a 30-minute session. None proves field accuracy or performance on every phone.
@@ -18,7 +20,7 @@ The matrix distinguishes implementation choices from measured outcomes. Earlier 
 | Model download          | Single V4.3.0 Combined export is precached locally | Reuses cached files while storage and revisions remain valid.                                                             |
 | Output readback         | `outputTensor.data()`                              | Avoids synchronous readback; does not guarantee a frame rate.                                                             |
 | Stored photos           | WebP with JPEG fallback after inference            | Reduces upload/storage bytes; final sizes vary by image.                                                                  |
-| Blob URLs               | Per-card ownership and cleanup                     | Avoids stale URLs when a photo blob is replaced.                                                                          |
+| Blob URLs               | Per-card content comparison and URL cleanup        | Reuses the thumbnail URL for unchanged photo bytes; replaces it for changed photos.                                       |
 | React rendering         | Memoized components and selected stable callbacks  | Can skip renders when props stay equal; no measured percentage is claimed.                                                |
 | Overlay effects         | Reduced mobile backdrop blur                       | Reduces filter work; target-phone frame rates remain a manual measurement.                                                |
 | Model and canvas reuse  | One cached model instance and one shared canvas    | Avoids repeated initialization/allocation within the page session.                                                        |
@@ -95,8 +97,10 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 ### 2.1 Per-Card Blob URL Management (`scan-card.tsx`)
 
 - **Problem:** Maintaining a centralized `blobUrlMap` in `page.tsx` meant adding or deleting a single scan caused all Blob ObjectURLs across the entire history list to be revoked and regenerated, causing visible image flickering and memory spikes.
-- **Solution:** Blob URL creation is scoped directly inside `scan-card.tsx` using a local `useEffect` linked to `imageBlob`.
-- **Cleanup:** Each `ScanCard` revokes its own `ObjectURL` upon unmounting or when the scan blob changes. Its render checks which blob owns the URL, avoiding reuse of a stale URL while effects update. This targeted cleanup is not proof of zero heap leaks across the application.
+- **Current fix (October 4, 2026):** `scan-card.tsx` delegates photo URLs to `useScanPhotoUrl.ts`. Metadata updates return new Blob wrappers from IndexedDB; the hook compares saved-photo SHA-256 fingerprints before replacing a URL. Equal size alone is insufficient, so different photos of equal size must still update. The displayed fingerprint is cached, and comparisons run only for a changed wrapper with the same size/type. No new decoder work is needed to compare fingerprints.
+- **Cleanup:** Replaced URLs are released after the rendered image switches. Empty photos and unmounted cards release owned URLs; canceled comparisons cannot restore an older photo. If fingerprinting fails, the incoming photo still replaces the displayed copy.
+- **Cost and scope:** Comparison reads a saved photo into an ArrayBuffer and runs Web Crypto asynchronously; it is not free and does not reduce the full History database query. The current fingerprint is kept only in memory. Upload duplicate hashes, model inputs, storage encoding, and cloud records retain their existing behavior. Avoiding reloads is not proof of a temperature, battery, or total-memory improvement.
+- **Regression evidence:** Before the fix, three metadata-only writes to one record caused all four visible thumbnails to reload, 12 reloads total, in an isolated production export. The original recording also shows a blank thumbnail behind the stable result photo at about 8.5 seconds. Follow-up verification is recorded in [thumbnail checks](testing/TESTING.md#scan-thumbnail-stability-october-4-2026).
 
 ### 2.2 Modular Component Refactoring & `React.memo()` Memoization
 
@@ -143,7 +147,7 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 
 - **Strategy:** Serwist precaches the five adopted V4.3.0 Combined model files under `/model/`: `model.json`, `model_config.json`, and three weight shards. The `CacheFirst` runtime rule remains as defence in depth.
 - **Expected effect:** Enables offline model loading after successful service-worker installation and caching, while browser storage remains available. Loading still requires local model initialization; cache eviction, cleared site data, or an incomplete first load can prevent it. R02 and the physical checklist verify this behavior for a recorded environment.
-- **Versioned cache name:** `mangoleaf-model-cache-v4-3-0` for the adopted V4.3.0 Combined model, retained by app candidate `0.5.0`. Activation deletes superseded model caches, including V4.1.1, V4.2.0, and V4.3.0 candidate runtime caches. The active V4.3.0 cache is protected by the activation filter.
+- **Versioned cache name:** `mangoleaf-model-cache-v4-3-0` for the adopted V4.3.0 Combined model, retained by app candidate `0.5.1`. Activation deletes superseded model caches, including V4.1.1, V4.2.0, and V4.3.0 candidate runtime caches. The active V4.3.0 cache is protected by the activation filter.
 - **The precache is the real update mechanism.** Public files receive content-revision hashes in Serwist's precache manifest, which is matched before runtime caching. Replaced weights therefore refetch on next activation. An empty runtime model cache is normal; verify updates in generated `public/sw.js`.
 
 ### 3.2 High-Capacity Offline Database (Dexie.js / IndexedDB)
@@ -346,6 +350,8 @@ A smaller review thumbnail should remain separate from the inference input until
 Application retries and the guideline channel have no explicit hidden-document pause. Installed Supabase Auth already pauses its own refresh timer when hidden; application work and Auth refresh must not be confused.
 
 The sticky header retains mobile backdrop blur. Visible card URLs can also be recreated when queries return fresh Blob objects after metadata-only changes. Cleanup exists; neither point establishes a leak or a measured scrolling regression. Measure those effects before changing styling or cache identity.
+
+**October 4 follow-up:** The [per-card photo fix](#21-per-card-blob-url-management-scan-cardtsx) addresses the fresh-Blob URL churn observed after this review. The historical findings above describe their original source snapshot; the remaining database, synchronization, and blur recommendations are separate work.
 
 ### Safeguards to preserve
 

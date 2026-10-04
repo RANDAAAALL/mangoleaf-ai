@@ -11,6 +11,146 @@ import {
   records,
 } from "./support/fixtures";
 
+declare global {
+  interface Window {
+    mangoThumbnailTrace?: { revoked: string[]; removed: string[] };
+  }
+}
+
+test("F10: Recent thumbnails stay stable through new scans, sync metadata and offline deletion", async ({
+  page,
+  context,
+}) => {
+  await controlledModel(page, scoresFor("Healthy Fruit"));
+  await openApp(page);
+  await runScan(page, photos[0].file);
+  await closeDetails(page);
+  await expect
+    .poll(async () => (await records(page))[0]?._status)
+    .toBe("synced");
+  await page
+    .getByRole("heading", { name: "Recent Scans" })
+    .scrollIntoViewIfNeeded();
+  const thumbnails = page.locator('img[loading="lazy"]');
+  await expect(thumbnails).toHaveCount(1);
+  await expect
+    .poll(() =>
+      thumbnails
+        .first()
+        .evaluate(
+          (image: HTMLImageElement) => image.complete && image.naturalWidth > 0,
+        ),
+    )
+    .toBe(true);
+  const originalUrl = await thumbnails.first().getAttribute("src");
+
+  await page.evaluate(() => {
+    const trace = { revoked: [] as string[], removed: [] as string[] };
+    window.mangoThumbnailTrace = trace;
+    const revoke = URL.revokeObjectURL.bind(URL);
+    URL.revokeObjectURL = (url) => {
+      trace.revoked.push(url);
+      revoke(url);
+    };
+    new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        for (const node of mutation.removedNodes) {
+          if (!(node instanceof Element)) continue;
+          const images = node.matches('img[loading="lazy"]')
+            ? [node]
+            : [...node.querySelectorAll('img[loading="lazy"]')];
+          for (const image of images)
+            trace.removed.push(image.getAttribute("src") || "");
+        }
+      }
+    }).observe(document, { subtree: true, childList: true });
+  });
+
+  let releaseUpload!: () => void;
+  let signalUpload!: () => void;
+  const uploadReleased = new Promise<void>((resolve) => {
+    releaseUpload = resolve;
+  });
+  const uploadStarted = new Promise<void>((resolve) => {
+    signalUpload = resolve;
+  });
+  let releaseInsert!: () => void;
+  let signalInsert!: () => void;
+  const insertReleased = new Promise<void>((resolve) => {
+    releaseInsert = resolve;
+  });
+  const insertStarted = new Promise<void>((resolve) => {
+    signalInsert = resolve;
+  });
+  // Hold the two network phases separately so each real local metadata update
+  // must retain the same thumbnail URL. Eventual visibility alone misses blinking.
+  await page.route("**/__mock__/storage/v1/object/scans/**", async (route) => {
+    if (route.request().method() === "POST") {
+      signalUpload();
+      await uploadReleased;
+    }
+    await route.continue();
+  });
+  await page.route("**/__mock__/rest/v1/scans", async (route) => {
+    if (route.request().method() === "POST") {
+      signalInsert();
+      await insertReleased;
+    }
+    await route.continue();
+  });
+
+  try {
+    await runScan(page, photos[1].file);
+    await closeDetails(page);
+    await uploadStarted;
+    await expect(thumbnails).toHaveCount(2);
+    await expect(thumbnails.nth(1)).toHaveAttribute("src", originalUrl!);
+    const newUrl = await thumbnails.first().getAttribute("src");
+    expect(newUrl).toMatch(/^blob:/);
+    releaseUpload();
+    await insertStarted;
+    await expect(thumbnails.first()).toHaveAttribute("src", newUrl!);
+    await expect(thumbnails.nth(1)).toHaveAttribute("src", originalUrl!);
+    releaseInsert();
+    await expect
+      .poll(async () =>
+        (await records(page)).every((row) => row._status === "synced"),
+      )
+      .toBe(true);
+    await expect(thumbnails.first()).toHaveAttribute("src", newUrl!);
+    await expect(thumbnails.nth(1)).toHaveAttribute("src", originalUrl!);
+    const trace = await page.evaluate(() => window.mangoThumbnailTrace!);
+    expect(trace.removed).toEqual([]);
+    expect(trace.revoked).not.toContain(originalUrl);
+    expect(trace.revoked).not.toContain(newUrl);
+
+    // An offline deletion must release only the deleted card's URL.
+    await context.setOffline(true);
+    await page.getByTitle("Delete scan log").first().click();
+    await expect(thumbnails).toHaveCount(1);
+    await expect(thumbnails.first()).toHaveAttribute("src", originalUrl!);
+    await expect
+      .poll(() =>
+        page.evaluate(
+          (url) =>
+            window.mangoThumbnailTrace!.revoked.filter((value) => value === url)
+              .length,
+          newUrl,
+        ),
+      )
+      .toBe(1);
+    expect(
+      await page.evaluate(
+        (url) => window.mangoThumbnailTrace!.revoked.includes(url!),
+        originalUrl,
+      ),
+    ).toBe(false);
+  } finally {
+    releaseUpload();
+    releaseInsert();
+  }
+});
+
 test("F10/F11: latest four, six per page, search/filter, deletion and page recovery", async ({
   page,
 }) => {
