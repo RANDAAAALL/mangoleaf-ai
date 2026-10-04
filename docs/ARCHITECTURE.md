@@ -109,6 +109,8 @@ mangoleaf-ai/
 |   |-- env.d.ts                    # Types for build-time injected public env values
 |   `-- sw.ts                       # Serwist source configuration
 |-- docs/                           # Detailed engineering and project history
+|   |-- CODEBASE_REVIEW.md           # Shared AI-agent review instructions; attach with your own prompt
+|   |-- local-ignored-files/         # Optional local review/Q&A outputs; not included in Git clones
 |   |-- security/                   # Application dependencies and historical environment risks
 |   |   `-- DEPENDENCY_SECURITY.md   # Advisory review, remediation, and residual findings
 |   |-- supabase/                   # Cloud ownership, configuration, and recovery

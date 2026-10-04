@@ -106,6 +106,7 @@ These versions are preserved experiments; they are not the current application m
 ### Project guides
 
 - [Setup guide](./SETUP.md)
+- [Codebase review guide for a coworker's AI agent](./docs/CODEBASE_REVIEW.md)
 - [Architecture](./docs/ARCHITECTURE.md)
 - [Supabase setup, cloud privacy, and recovery](docs/supabase/SECURITY-AND-SYNC.md)
 - [Performance and optimization notes](./docs/PERFORMANCE.md)

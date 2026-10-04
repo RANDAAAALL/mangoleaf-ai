@@ -153,6 +153,10 @@ Open the printed `trycloudflare.com` link on the other device. The script target
 
 Serwist remains disabled when using `bun run dev` through the link. Use a production export for service-worker and offline-caching checks.
 
+## Optional: review the codebase after setup
+
+Open this repository in your AI coding agent, reference `@docs/CODEBASE_REVIEW.md` or attach the [codebase review guide](docs/CODEBASE_REVIEW.md), and write your own initial request. The guide provides the detailed instructions for a read-only review in plain English. The agent asks how to deliver the analysis and whether to create a separate technical Q&A file, with independent format and location choices. Reports saved under `docs/local-ignored-files/` remain ignored by Git.
+
 ## Production build
 
 ```bash
