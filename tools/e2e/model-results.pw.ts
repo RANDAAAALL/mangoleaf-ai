@@ -10,6 +10,7 @@ import {
   nav,
   attachJson,
   photoPath,
+  historyDetails,
 } from "./support/fixtures";
 import { CLASSES, modelVersion } from "../../src/lib/constants";
 
@@ -102,7 +103,7 @@ for (const photo of photos) {
       page.getByRole("img", { name: prediction.diseaseName, exact: true }),
     ).toBeVisible();
     await nav(page, "History");
-    await page.getByRole("button", { name: "Details", exact: true }).click();
+    await historyDetails(page).click();
     await expectResult(page, prediction.diseaseName, prediction.confidence);
   });
 }

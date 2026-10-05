@@ -2,7 +2,7 @@
 
 This guide explains the PWA version: the application interface, local/offline behavior, release history, build labels, and deployment procedure. The PWA is the app people use. The separate [AI model versioning guide](AI_MODEL_VERSIONING.md) explains the model weights, training workflows, fitted rejection settings, and model evidence.
 
-**Current repository candidate:** App `0.5.1` retains the adopted V4.3.0 Combined model (`v4.3.0`) and prepares the scan-thumbnail stability patch. The treatment-guidelines heading and language controls also stay on one row. This is a candidate, not a publication or deployment record. See the [v0.5.1 record](#v051-scan-thumbnail-stability-candidate-october-5-2026), [model adoption history](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026), and [candidate validation](../testing/TESTING.md#v051-candidate-validation-october-5-2026).
+**Current repository candidate:** App `0.5.2` retains the adopted V4.3.0 Combined model (`v4.3.0`) and prepares responsive Home and History layouts, report selection, and confirmed single/bulk deletion. Filter counts, compact photo tips, and badge/icon refinements are included. This is a candidate, not a publication or deployment record. See the [v0.5.2 record](#v052-scan-history-and-deletion-candidate-october-6-2026) and [model adoption history](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026). Earlier [v0.5.1 validation](../testing/TESTING.md#v051-candidate-validation-october-5-2026) remains evidence for its original build.
 
 ## Reading the release history
 
@@ -37,6 +37,7 @@ v0.4.8  scan-photo URL fix, browser reliability testing, and documentation align
 v0.4.9  adopts V4.3.0 Combined, current scan/guidance regressions, and preserved model evidence
 v0.5.0  candidate: guest-owned private cloud synchronization and preserved offline History
 v0.5.1  candidate: stable scan thumbnails and a horizontal treatment-guidelines header
+v0.5.2  candidate: responsive scan History, selection, and confirmed deletion
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
@@ -193,6 +194,51 @@ prevent thumbnails from disappearing during synchronization.
 Local candidate validation passed formatting/security, typecheck, lint, build, 10 export checks, 14 tooling tests, all 83 core browser cases, and 240 repeated actual predictions. Remote CI and production promotion remain pending.
 
 Create the app tag on the exact approved tested commit after the remaining release steps pass. The prepared notes are a draft until publication is approved.
+
+## v0.5.2: scan History and deletion candidate (October 6, 2026)
+
+**Status: candidate / not released.** App `0.5.2` is a patch within the existing minor line, following the project's precedent for interface refinements and additions. The app label comes from `package.json` through the existing build configuration. Model `v4.3.0`, its five assets, seven classes, preprocessing, temperature, and rejection settings remain unchanged. No new model tag is required.
+
+### Changes included
+
+- Show one recent scan on Home below 768px and up to four at larger widths. History uses five compact thumbnail rows per page below 768px and six photo cards per page at larger widths. Resizing preserves the first scan's position as closely as the new page size allows; deletion returns to a valid page.
+- Add individual selection and Select all for the current matching History results across every page. Search/filter changes clear selection, and newly arriving scans require another deliberate selection action.
+- Use the same English/Bisaya confirmation dialog for a card's trash action and selected-report deletion. Keep the confirmed report IDs fixed, wait for local deletion to finish, and keep the dialog available for retry after a failure. Linked cloud rows/photos use the existing deletion queue, including offline retries.
+- Count each condition among the current search matches before category filtering or pagination. Typing or clearing search resets the category to All, closes the phone filter panel, and returns to page one.
+- Compact the scan-sheet photo tips, keep Cancel visible while the content scrolls, and constrain the desktop sheet width. Refine History badges, shared search/filter/delete/navigation icons, the scan-step icon, and About timeline numbers.
+- Clarify the [treatment-review publication dates and snapshot scope](../treatment-guidelines/TREATMENT-GUIDELINES-REVIEW-2026-10-02.md#source-dates-and-review-scope--2026-10-06-clarification). This documentation clarification does not apply the proposed guidance to Supabase.
+
+### Validation and publication
+
+The approved local scope is formatting, lint, typecheck, the production build, tooling/security/export checks, the core browser suite, and R01 repeatability. The 30-minute R03 session is excluded from this candidate's scope. Results for this versioned build are recorded in [v0.5.2 candidate validation](../testing/TESTING.md#v052-candidate-validation-october-6-2026), separately from the earlier v0.5.1 evidence.
+
+Browser cases now use viewport-specific counts, singular/plural Home headings, accessible per-scan Details names, and explicit deletion confirmation. Coverage preserves thumbnail stability, pending-upload deletion races, offline reports, and private cloud cleanup. The new F17 case checks a report arriving after confirmation, a failed local deletion followed by retry, and offline batch cleanup after reconnection. The [testing guide](../testing/TESTING.md) records actual outcomes. Husky and the existing master-only CI workflow already run their applicable gates and need no pipeline changes for this interface update. R03 locators were maintained without running its excluded session.
+
+**Local validation passed:** All 86 core browser cases, R01's 240 actual predictions, 14 tooling cases, 10 export checks, formatting, security, lint, typecheck, and production build passed for this candidate's source fingerprint. The linked validation record preserves scope, report identities, and evidence limits.
+
+Remaining release gates follow the [candidate testing and promotion procedure](#candidate-testing-and-promotion): CI on the final `master` commit, confirmation of Vercel's manual-promotion setting, promotion of the tested deployment, live-version verification, and the app tag/Release on that tested commit. Remote publication and deployment remain pending.
+
+**Verified baseline:** Local tag `v0.5.1` identifies commit `df038db8b63d2da101b25ab9358fe35f409ac7c1`. A separate read-only GitHub check on October 6 confirmed that [v0.5.1 is published](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.5.1); this does not verify its production deployment or rewrite the October 5 candidate record. Candidate `0.5.2` starts from `8f8004225e6944182b6f118ffc108c6284d25707` plus the October 6 working-tree changes. Its tested application fingerprint and local outcomes are in the [validation record](../testing/TESTING.md#v052-candidate-validation-october-6-2026). Record the final candidate commit and deployment URL before promotion.
+
+### Prepared commit message
+
+```text
+feat: refine History for PWA v0.5.2
+```
+
+### Prepared tag and release description
+
+**App tag:** `v0.5.2`
+
+**Release title:** `MangoLeaf AI v0.5.2 — Scan History and deletion`
+
+> Shows one recent scan on phones and up to four on larger screens. History uses compact phone rows with five reports per page and larger cards with six per page.
+>
+> Adds report selection across History pages and a shared confirmation for single or bulk deletion. Filter options show matching counts, and changing search resets the filter. The scan sheet has compact photo tips and keeps Cancel visible while scrolling.
+>
+> Refines badges and navigation icons. The AI model remains V4.3.0 Combined, with unchanged model files and rejection settings.
+
+Local validation is complete for the recorded working-tree source; final-commit CI, production verification, and publication remain pending. The prepared text does not create a tag, publish a Release, or deploy the app.
 
 ## Candidate testing and promotion
 

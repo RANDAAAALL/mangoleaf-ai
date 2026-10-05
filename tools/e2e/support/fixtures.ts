@@ -233,9 +233,67 @@ export async function waitForMockScanPull(page: Page) {
 
 export async function openApp(page: Page) {
   await page.goto("/");
+  await expect(recentHeading(page)).toBeVisible({ timeout: 90_000 });
+}
+
+export const recentHeading = (page: Page) =>
+  page.getByRole("heading", { name: /^Recent Scans?$/ });
+export const historyDetails = (page: Page) =>
+  page.getByRole("button", { name: /^View details: / });
+
+export async function requestScanDeletion(page: Page, index = 0) {
+  const trashButtons = page
+    .getByTitle(translations.en.deleteScanBtn, { exact: true })
+    .filter({ visible: true });
+  if ((await trashButtons.count()) > 0) {
+    await trashButtons.nth(index).click();
+    return;
+  }
+  // Phone History rows use selection instead of an individual trash button.
+  await page
+    .getByRole("button", {
+      name: translations.en.historySelectBtn,
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole("checkbox", { name: /^Select scan: / })
+    .nth(index)
+    .check();
+  await page
+    .getByRole("button", {
+      name: translations.en.historyDeleteSelectedOneBtn.replace("{n}", "1"),
+      exact: true,
+    })
+    .filter({ visible: true })
+    .click();
+}
+
+export async function confirmScanDeletion(page: Page, count = 1) {
+  const t = translations.en;
+  const dialog = page.getByRole("dialog", {
+    name: (count === 1
+      ? t.historyDeleteConfirmOneTitle
+      : t.historyDeleteConfirmTitle
+    ).replace("{n}", String(count)),
+    exact: true,
+  });
+  await expect(dialog).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Recent Scans", exact: true }),
-  ).toBeVisible({ timeout: 90_000 });
+    dialog.getByText(
+      count === 1
+        ? t.historyDeleteConfirmOneDescription
+        : t.historyDeleteConfirmDescription,
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await expect(
+    dialog.getByRole("button", { name: t.cancelBtn, exact: true }),
+  ).toBeFocused();
+  await dialog
+    .getByRole("button", { name: t.historyDeleteConfirmBtn, exact: true })
+    .click();
+  await expect(dialog).not.toBeVisible();
 }
 
 // Only the isolated HTTP mock accepts these test sessions. Never use this
@@ -294,7 +352,7 @@ export async function choosePhoto(
 ) {
   await nav(page, "Scan");
   await expect(
-    page.getByRole("heading", { name: "Start a Scan" }),
+    page.getByRole("heading", { name: translations.en.scanSheetTitle }),
   ).toBeVisible();
   const choosing = page.waitForEvent("filechooser");
   await page

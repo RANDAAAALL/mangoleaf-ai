@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: October 5, 2026
+Last updated: October 6, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -853,6 +853,39 @@ This file tracks the project work from the first committed implementation throug
   - Preserved the detailed read-only review phases, plain-English explanations, and independent format/location choices for the analysis and optional `TECHNICAL_Q_AND_A` export. Generated repository reports stay under ignored `docs/local-ignored-files/`.
   - Updated setup, navigation, agent instructions, and the documentation tree for the shared guide.
 
+### October 6, 2026
+
+- **PWA v0.5.2 release preparation**
+
+  - Selected app candidate `0.5.2` for the Home/History presentation, search/filter behavior, and shared single/batch deletion described below. Model `v4.3.0` remains unchanged. The [candidate release record](versions/PWA_VERSIONING.md#v052-scan-history-and-deletion-candidate-october-6-2026) identifies the scope and pending validation/publication steps. This is a candidate, not a released or deployed build; the October 5 test results retain their earlier source identity.
+  - Read-only GitHub verification found [v0.5.1 published](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.5.1), with publication timestamp `2026-10-04T17:36:27Z` and app-tag commit `df038db8b63d2da101b25ab9358fe35f409ac7c1`. This establishes GitHub publication of the preceding app release; its production deployment/version remains unverified. Earlier candidate entries retain their original pending status as historical records.
+
+- **Responsive Home and History scan lists**
+
+  - Home now mounts one recent photo card below 768px and up to four on desktop. History shows five thumbnail rows per phone page and six full photo cards per desktop page, using one responsive image element per report. Resizing recalculates the page from its previous first record; deleting or synchronizing away the last page returns to a valid page.
+  - History category counts cover all disease-name search matches before category filtering and pagination. Typing or clearing search resets the category to All, closes the mobile filter bar, returns to page one, and clears selection. Changing category also resets the page and selection. Older-model and unlabeled legacy reports remain available in History.
+
+- **Selected deletion and shared confirmation**
+
+  - Added History selection across pages and Select all for every current matching report. Later arrivals require another selection action. Opening confirmation snapshots the selected IDs, and confirming uses that fixed set so live synchronization cannot enlarge the deletion.
+  - Added shared `DeleteScansModal` for Home and desktop History single trash actions and History batch deletion. Its native modal contains keyboard focus, starts on Cancel, and supports Cancel, X, and Escape before saving. During the local save, dismissal and actions are locked. Errors retain the confirmation for retry; closing returns focus to the original enabled control or the list heading if that control disappeared or became hidden after resizing.
+  - Routed single and batch deletion through `useSync.ts`'s transactional `deleteScans()`: deduplicate IDs, read selected rows together, bulk-delete local-only/unowned rows, and bulk-mark owned rows as hidden `pending-delete` tombstones. One online sync request follows a changed batch; offline tombstones persist for the existing owner-scoped private-photo/cloud-row cleanup and retry path. The dialog waits for local commit rather than completion of cloud cleanup.
+
+- **Scan controls and presentation**
+
+  - Kept the photo-tips panel compact and bilingual, centered the desktop scan sheet within 520px, and placed Cancel outside the scrolling content so it remains visible on short screens. Framing/lighting advice remains static guidance; it does not alter camera selection or model preprocessing.
+  - Unified recognized disease badges around a red background with white text and consistent rounded corners/padding. Healthy and uncertain/fallback badges retain their own styling. Shared search/filter/chevron/trash icons live in the existing icon registry, and the How it works diagnosis step reuses the navigation's Scan icon.
+  - Updated architecture and performance documentation against the source. Fewer mounted Home cards, one responsive photo per History record, and one local batch transaction avoid specific rendering/deletion work, but the complete History query and in-memory filtering/counting remain. No measured speed, memory, heat, battery, inference-accuracy, or physical-device gain is claimed. The adopted `v4.3.0` model, fitted gates, model-aware duplicate reuse, photo compression, and cloud ownership rules remain unchanged. Final candidate labeling and verification are part of release preparation; the October 5 checks apply to their earlier source snapshot, and this entry does not claim publication or deployment.
+
+- **Treatment-source publication dates**
+
+  - Added a dated clarification to the [October 2 source review](treatment-guidelines/TREATMENT-GUIDELINES-REVIEW-2026-10-02.md#source-dates-and-review-scope--2026-10-06-clarification). The original PNS/BAFPS 45:2009 standard and the 2025 explanatory manual are separate publications. The manual's title identifies the older standard; its publication year does not revise that standard's date. Original source citations and the October 2 proposed wording/database snapshot remain preserved.
+
+- **Candidate checks and browser regression coverage**
+
+  - Updated browser expectations for responsive counts, current labels, and deletion confirmation. All 86 core cases passed in 6.4 minutes, including selection across pages, search/filter resets, thumbnail stability, deletion cancellation, resize focus fallback, and offline/cloud cleanup. F17 proved retry after a simulated local transaction failure and preservation of a scan arriving after confirmation opened. Short-screen photo tips keep Cancel fully visible in the tested browser viewports.
+  - R01 passed 240 actual predictions across eight photos in Chromium mobile emulation, with stable class/acceptance, confidence range 0, and tensor growth 0. Formatting, security, lint, typecheck, production build, 10 export checks, and 14 tooling cases also passed. The [validation record](testing/TESTING.md#v052-candidate-validation-october-6-2026) identifies the working-tree fingerprint and reports. R03 was excluded. Husky and CI need no configuration changes; final-commit CI, production verification, and release publication remain pending.
+
 ## Current Notebook Decision
 
 Keep every training notebook, and keep each trial's clean template separate from its completed run. Historical and adopted trial notebooks live in `notebooks/non-experiment/v{n}/`; this includes the current V4.3.0 model and older models. Candidate workflows and completed experimental evidence live in `notebooks/experiment/v{n}/`. The latter are experimental candidates, not shipped or deployed. V4.3.0 moved into the adopted group on October 2, 2026, then joined the other adopted and historical notebooks under `non-experiment/`, with its original cell contents and outputs intact. The original trial folders were moved from the repository root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle; they were added on September 8, 2026. The filenames below are unchanged. Earlier dated entries retain the repository paths that described those events; the current locations are listed here and in the notebook index.
@@ -879,13 +912,13 @@ Keep every training notebook, and keep each trial's clean template separate from
 
 ## Current Adopted Model (v4.3.0)
 
-App candidate `0.5.1` retains the single V4.3.0 Combined TensorFlow.js Graph Model adopted in `0.4.9`. Output order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold. Both healthy outputs use the `healthy` guideline row. The fixed confidence floor is `0.70`, margin is `0`, normalized entropy limit is `0.42`, and temperature `1.1602258301498714` remains folded into the saved weights.
+App candidate `0.5.2` retains the single V4.3.0 Combined TensorFlow.js Graph Model adopted in `0.4.9`. Output order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold. Both healthy outputs use the `healthy` guideline row. The fixed confidence floor is `0.70`, margin is `0`, normalized entropy limit is `0.42`, and temperature `1.1602258301498714` remains folded into the saved weights.
 
 The [preserved report and comparison](model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) record 386/393 raw correct predictions (98.22%), 373 correct and 3 wrong accepted predictions, and 17 mango rejections on reused seven-class test data. Old OOD false accepts are 24/84; reused newer OOD false accepts are 5/32. These are the completed experiment's measurements, not new independent field results. The [testing guide](testing/TESTING.md) distinguishes adoption from completed local automated checks and pending production promotion.
 
 ## Last Released Model Baseline (v3)
 
-The entries below preserve the previously documented V3 release baseline. V4.3.0 was adopted in app `0.4.9` and remains in candidate `0.5.1`. The existing local adoption tags identify commit `9fd175e40b85a805ab482554e351f9686f1f031a`; they do not verify production status. The new release's CI, production promotion, and publication remain pending. V3 measurements remain historical evidence.
+The entries below preserve the previously documented V3 release baseline. The latest verified published GitHub app release is [v0.5.1](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.5.1), which retains the V4.3.0 model; publication does not verify its production deployment. V4.3.0 was adopted in app `0.4.9` and remains in candidate `0.5.2`. The existing local adoption tags identify commit `9fd175e40b85a805ab482554e351f9686f1f031a`; they do not verify production status. The new release's CI, production promotion, and publication remain pending. V3 measurements remain historical evidence.
 
 - Architecture: MobileNetV3-Large
 - Runtime format: TensorFlow.js Graph Model, **float32, not quantized**. The WebGL path requests half-float textures. The recorded weight-range check found 0 of 212 tensors above 65,504 and a largest weight of `117.53`; this checks weight range, not every intermediate activation or all GPU arithmetic. Runtime scores and browser parity still require measurement.
@@ -903,7 +936,7 @@ The original test/report data also influenced later threshold and precision-band
 
 ## Next Work
 
-For candidate `0.5.1`, follow the approved [release checklist](versions/PWA_VERSIONING.md#v051-scan-thumbnail-stability-candidate-october-5-2026). Record the versioned local results, then complete remote CI and approved production promotion before publishing its app tag and Release.
+For candidate `0.5.2`, follow the [release checklist](versions/PWA_VERSIONING.md#v052-scan-history-and-deletion-candidate-october-6-2026). Record the versioned local results, then complete remote CI and approved production promotion before publishing its app tag and Release.
 
 ### Earlier planning notes (historical)
 

@@ -18,6 +18,8 @@ import {
   holdGuidelineReads,
   releaseGuidelineReads,
   waitForMockScanPull,
+  recentHeading,
+  historyDetails,
 } from "./support/fixtures";
 import { CLASSES, modelVersion } from "../../src/lib/constants";
 import { translations } from "../../src/lib/translations";
@@ -37,15 +39,15 @@ test("F01–F05: empty states, scan sheet, picker cancellation and retake", asyn
   ).toBeVisible();
   await nav(page, "Scan");
   await expect(
-    page.getByRole("heading", { name: "Start a Scan" }),
+    page.getByRole("heading", { name: translations.en.scanSheetTitle }),
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: /^Take Photo/ }).filter({ visible: true }),
   ).toHaveCount(isMobile ? 1 : 0);
   await page.getByRole("button", { name: "Cancel", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Start a Scan" })).toHaveCount(
-    0,
-  );
+  await expect(
+    page.getByRole("heading", { name: translations.en.scanSheetTitle }),
+  ).toHaveCount(0);
   await nav(page, "Scan");
   const picking = page.waitForEvent("filechooser");
   await page.getByRole("button", { name: /^Upload Photo/ }).click();
@@ -119,14 +121,12 @@ for (const label of CLASSES) {
       .filter({ visible: true })
       .click();
     await expect(
-      page.getByRole("heading", { name: "Scan History" }),
+      page.getByRole("heading", { name: translations.en.scanHistoryTitle }),
     ).toBeVisible();
-    await page.getByRole("button", { name: "Details", exact: true }).click();
+    await historyDetails(page).click();
     await expectResult(page, label, 0.95);
     await page.reload();
-    await expect(
-      page.getByRole("heading", { name: "Recent Scans" }),
-    ).toBeVisible();
+    await expect(recentHeading(page)).toBeVisible();
     await page.getByRole("button", { name: "Details", exact: true }).click();
     await expectResult(page, label, 0.95);
     expect((await records(page))[0].id).toBe(saved[0].id);

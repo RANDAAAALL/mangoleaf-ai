@@ -25,7 +25,8 @@ const STEP_STYLES: {
     bg: "bg-[#edf6e9]",
     text: "text-[#143519]",
     numBg: "bg-[#277839]",
-    icon: "sparkle",
+    // Reuse the navigation's scan symbol so this step is easy to recognize.
+    icon: "scan",
   },
   {
     border: "border border-[#cfe2c8]",

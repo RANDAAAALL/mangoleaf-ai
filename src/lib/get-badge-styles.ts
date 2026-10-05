@@ -12,7 +12,7 @@ export const getBadgeStyles = (diseaseName: string) => {
     name.includes("sooty") ||
     name.includes("scab")
   ) {
-    return "bg-[#FF2C2C] text-[#F9F6EE] border-[#FF2C2C]";
+    return "bg-rose-700 text-white border-rose-700";
   }
   return "bg-slate-100 text-slate-700 border-slate-200";
 };

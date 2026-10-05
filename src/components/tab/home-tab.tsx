@@ -5,13 +5,14 @@ import { HowItWorksSteps } from "@/components/scan/how-it-works-steps";
 import { DiseaseCoverageCard } from "@/components/scan/disease-coverage-card";
 import { ScanHistoryList } from "@/components/scan/scan-history-list";
 
+// Pass up to four newest reports. The list shows only one below 768px.
 const HOME_PREVIEW_COUNT = 4;
 
 interface HomeTabProps {
   scans: ScanRecord[];
   language: Language;
   onSelectScan: (scan: ScanRecord) => void;
-  onDeleteScan: (id: string) => void;
+  onDeleteScan: (id: string) => Promise<void>;
   onViewAllHistory: () => void;
   onScanPress: () => void;
 }

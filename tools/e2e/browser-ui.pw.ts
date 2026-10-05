@@ -10,11 +10,14 @@ test("R04: cross-browser navigation and mobile scan controls remain usable", asy
   await openApp(page);
   await nav(page, "History");
   await expect(
-    page.getByRole("heading", { name: "Scan History", exact: true }),
+    page.getByRole("heading", {
+      name: translations.en.scanHistoryTitle,
+      exact: true,
+    }),
   ).toBeVisible();
   await nav(page, "Scan");
   await expect(
-    page.getByRole("heading", { name: "Start a Scan" }),
+    page.getByRole("heading", { name: translations.en.scanSheetTitle }),
   ).toBeVisible();
   // Native camera behavior is checked manually; this only verifies the correct control is reachable.
   await expect(
@@ -25,10 +28,39 @@ test("R04: cross-browser navigation and mobile scan controls remain usable", asy
       .getByRole("button", { name: /^Upload Photo/ })
       .filter({ visible: true }),
   ).toHaveCount(1);
-  await page.getByRole("button", { name: "Cancel", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Start a Scan" })).toHaveCount(
-    0,
-  );
+  const photoTips = page.getByRole("heading", {
+    name: translations.en.scanSheetTipsTitle,
+    exact: true,
+  });
+  await expect(photoTips).toHaveCount(1);
+  await expect(photoTips).toBeVisible();
+  const cancelButton = page.getByRole("button", {
+    name: translations.en.cancelBtn,
+    exact: true,
+  });
+  await expect(cancelButton).toBeInViewport({ ratio: 1 });
+  const originalViewport = page.viewportSize()!;
+  await page.setViewportSize({ ...originalViewport, height: 480 });
+  // The content may scroll on short screens; Cancel must remain reachable.
+  await expect(cancelButton).toBeInViewport({ ratio: 1 });
+  if (originalViewport.width >= 768) {
+    await expect
+      .poll(() =>
+        page
+          .getByRole("heading", { name: translations.en.scanSheetTitle })
+          .evaluate(
+            (heading) =>
+              heading.closest(".fixed")?.getBoundingClientRect().width ??
+              Infinity,
+          ),
+      )
+      .toBeLessThanOrEqual(520);
+  }
+  await page.setViewportSize(originalViewport);
+  await cancelButton.click();
+  await expect(
+    page.getByRole("heading", { name: translations.en.scanSheetTitle }),
+  ).toHaveCount(0);
 });
 
 test("R04: About and footer show the current app and model versions in both languages", async ({

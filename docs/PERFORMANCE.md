@@ -2,7 +2,9 @@
 
 This document describes the performance mechanisms implemented in **MangoLeaf AI** (`mangoleaf-ai`). Their effects depend on the image, browser, hardware, and network. Use [TESTING.md](testing/TESTING.md) and the [physical reliability checklist](testing/PHYSICAL_RELIABILITY_CHECKLIST.md) to record measurements for the exact candidate and device.
 
-**Current candidate, October 5, 2026:** App `0.5.1` packages the scan-thumbnail stability fix described below and retains model `v4.3.0`. The [candidate record](versions/PWA_VERSIONING.md#v051-scan-thumbnail-stability-candidate-october-5-2026) tracks release status; [v0.5.1 validation](testing/TESTING.md#v051-candidate-validation-october-5-2026) records checks for the newly labeled build separately from the October 4 thumbnail evidence.
+**Current candidate / not released, October 6, 2026:** App `0.5.2` packages responsive Home/History scan lists and shared single/batch deletion while retaining the scan-thumbnail stability fix and model `v4.3.0`. The [candidate record](versions/PWA_VERSIONING.md#v052-scan-history-and-deletion-candidate-october-6-2026) tracks release status. The [v0.5.1 validation](testing/TESTING.md#v051-candidate-validation-october-5-2026) and October 4 thumbnail evidence retain their original build identities.
+
+The [October 6 responsive-list and deletion update](#responsive-scan-lists-and-batch-deletion-october-6-2026) records source-established avoided work and the remaining full-history query. It has no new speed, memory, heat, battery, or physical-device measurements. The October 5 results identify an earlier build.
 
 The [October 3, 2026 low-end-device review](#low-end-device-performance-review-october-3-2026) records current source findings, short isolated browser measurements, and prioritized improvements. It separates existing safeguards from changes that have not yet been implemented.
 
@@ -12,25 +14,27 @@ The matrix distinguishes implementation choices from measured outcomes. Earlier 
 
 ## Performance mechanisms and expected effects
 
-| Mechanism               | Current implementation                             | Expected effect or evidence limit                                                                                         |
-| ----------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| TensorFlow.js loading   | Dynamic classifier imports                         | Defers classifier code loading; total downloads and startup timing still need measurement.                                |
-| Input tensor size       | Canvas resizes to 224x224 before tensor creation   | 150,528 channel values instead of 36 million for a 12MP RGB image; this is not total application memory.                  |
-| GPU textures            | `WEBGL_FORCE_F16_TEXTURES`                         | Uses half-float render textures on the WebGL path; score parity must be measured.                                         |
-| Model download          | Single V4.3.0 Combined export is precached locally | Reuses cached files while storage and revisions remain valid.                                                             |
-| Output readback         | `outputTensor.data()`                              | Avoids synchronous readback; does not guarantee a frame rate.                                                             |
-| Stored photos           | WebP with JPEG fallback after inference            | Reduces upload/storage bytes; final sizes vary by image.                                                                  |
-| Blob URLs               | Per-card content comparison and URL cleanup        | Reuses the thumbnail URL for unchanged photo bytes; replaces it for changed photos.                                       |
-| React rendering         | Memoized components and selected stable callbacks  | Can skip renders when props stay equal; no measured percentage is claimed.                                                |
-| Overlay effects         | Reduced mobile backdrop blur                       | Reduces filter work; target-phone frame rates remain a manual measurement.                                                |
-| Model and canvas reuse  | One cached model instance and one shared canvas    | Avoids repeated initialization/allocation within the page session.                                                        |
-| Database access         | Indexed scan lookups and guideline `bulkPut()`     | Guideline writes are batched; full scan collections are still materialized during History queries and cloud refreshes.    |
-| Fonts and modal bundles | Font swapping and dynamic Details import           | Shows fallback text and defers some UI code.                                                                              |
-| Duplicate photos        | SHA-256 lookup before inference                    | Reuses an active saved report; not a new prediction.                                                                      |
-| Cloud request timeout   | 10-second abort timer with retries                 | Limits a stalled request attempt; total synchronization time is not capped at 10 seconds.                                 |
-| Concurrent sync         | Lock and one queued follow-up pass                 | Serializes sync work while preserving new pending mutations.                                                              |
-| Cloud identity          | Reused anonymous guest session for private scans   | Adds background Auth requests; diagnosis and local History do not wait for them. Device/network impact needs measurement. |
-| Connection hints        | Supabase preconnect and DNS-prefetch               | May reduce connection setup delay; network measurements are needed.                                                       |
+| Mechanism               | Current implementation                               | Expected effect or evidence limit                                                                                                   |
+| ----------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| TensorFlow.js loading   | Dynamic classifier imports                           | Defers classifier code loading; total downloads and startup timing still need measurement.                                          |
+| Input tensor size       | Canvas resizes to 224x224 before tensor creation     | 150,528 channel values instead of 36 million for a 12MP RGB image; this is not total application memory.                            |
+| GPU textures            | `WEBGL_FORCE_F16_TEXTURES`                           | Uses half-float render textures on the WebGL path; score parity must be measured.                                                   |
+| Model download          | Single V4.3.0 Combined export is precached locally   | Reuses cached files while storage and revisions remain valid.                                                                       |
+| Output readback         | `outputTensor.data()`                                | Avoids synchronous readback; does not guarantee a frame rate.                                                                       |
+| Stored photos           | WebP with JPEG fallback after inference              | Reduces upload/storage bytes; final sizes vary by image.                                                                            |
+| Blob URLs               | Per-card content comparison and URL cleanup          | Reuses the thumbnail URL for unchanged photo bytes; replaces it for changed photos.                                                 |
+| React rendering         | Memoized components and selected stable callbacks    | Can skip renders when props stay equal; no measured percentage is claimed.                                                          |
+| Responsive scan lists   | One/four Home cards and five/six History entries     | Mounts only the viewport's preview/page; phone History reuses one image per row. The parent still reads all active scans.           |
+| Overlay effects         | Reduced mobile backdrop blur                         | Reduces filter work; target-phone frame rates remain a manual measurement.                                                          |
+| Model and canvas reuse  | One cached model instance and one shared canvas      | Avoids repeated initialization/allocation within the page session.                                                                  |
+| Database access         | Indexed scan lookups and guideline `bulkPut()`       | Guideline writes are batched; full scan collections are still materialized during History queries and cloud refreshes.              |
+| Local batch deletion    | One Dexie transaction and one sync request per batch | Avoids invoking one local deletion transaction and sync trigger for each selected ID; cloud cleanup still processes queued records. |
+| Fonts and modal bundles | Font swapping and dynamic Details import             | Shows fallback text and defers some UI code.                                                                                        |
+| Duplicate photos        | SHA-256 lookup before inference                      | Reuses an active saved report; not a new prediction.                                                                                |
+| Cloud request timeout   | 10-second abort timer with retries                   | Limits a stalled request attempt; total synchronization time is not capped at 10 seconds.                                           |
+| Concurrent sync         | Lock and one queued follow-up pass                   | Serializes sync work while preserving new pending mutations.                                                                        |
+| Cloud identity          | Reused anonymous guest session for private scans     | Adds background Auth requests; diagnosis and local History do not wait for them. Device/network impact needs measurement.           |
+| Connection hints        | Supabase preconnect and DNS-prefetch                 | May reduce connection setup delay; network measurements are needed.                                                                 |
 
 ---
 
@@ -112,7 +116,7 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 ### 2.3 Dexie Reverse Query Optimization (`page.tsx`)
 
 - **Implementation:** The `_status` index selects active scans, but `sortBy("updated_at")` then materializes the complete result and sorts it in JavaScript. Installed Dexie copies that array before sorting; the following `reverse()` reverses the sorted array. This runs on qualifying live-query updates, rather than on every unrelated React render.
-- **Limit:** Four Home cards and six History cards limit rendering only. The parent query still reads every active full scan record, including its photo Blob, even on About. The [dated query comparison](#history-query-measurements) explains why limits should eventually be applied while reading IndexedDB. That alternative has been measured in isolation, not implemented in the app. See [Dexie's sortBy documentation](<https://dexie.org/docs/Collection/Collection.sortBy()>) for the sorting behavior.
+- **Limit:** Home mounts one card below 768px and up to four on desktop; History mounts five records per phone page and six per desktop page. These are rendering limits. The parent query still reads every active full scan record, including its photo Blob, even on About. The [dated query comparison](#history-query-measurements) explains why limits should eventually be applied while reading IndexedDB. That alternative has been measured in isolation, not implemented in the app. See [Dexie's sortBy documentation](<https://dexie.org/docs/Collection/Collection.sortBy()>) for the sorting behavior.
 
 ### 2.4 Mobile Overlay Backdrop Blur Removal
 
@@ -139,6 +143,13 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 - **Implementation:** Uses `import type * as tf from "@tensorflow/tfjs"` in `page.tsx`.
 - **Impact:** TensorFlow.js is no longer pulled into the main page bundle for type-only usage.
 
+### 2.8 Responsive scan presentation (`scan-history-list.tsx`, `scan-card.tsx`)
+
+- **Mounted cards:** Home passes at most four newest records to the shared list, which mounts one below 768px and up to four on desktop. The extra phone cards are absent from the React subtree, so they create no photo URLs or image elements. History mounts five records per phone page and six per desktop page.
+- **One responsive photo:** History uses a 56px thumbnail row on phones and a full photo card on desktop with one image element per record, preserving the existing lazy image loading and photo-URL lifecycle. Thumbnail dimensions do not resize the saved Blob or prove that the browser decodes fewer pixels.
+- **Search and counts:** Search matches are memoized separately from category filtering. Category counts cover all search matches across pages, while Home skips category counting because it has no filter controls. Search resets All, page one, the phone filter panel, and selection. History still scans the full in-memory result for search and category totals; this is not a bounded IndexedDB search.
+- **Selection and layout:** Selected IDs persist across pages; Select all captures the current filtered result IDs. Confirmation freezes those IDs before deletion. History containers use `transition-colors` while their selection layout changes; Home retains its existing `transition-all`. No target-device rendering or interaction-time benchmark is established by these source changes.
+
 ---
 
 ## 3. PWA Offline Infrastructure & Network Caching
@@ -147,7 +158,7 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 
 - **Strategy:** Serwist precaches the five adopted V4.3.0 Combined model files under `/model/`: `model.json`, `model_config.json`, and three weight shards. The `CacheFirst` runtime rule remains as defence in depth.
 - **Expected effect:** Enables offline model loading after successful service-worker installation and caching, while browser storage remains available. Loading still requires local model initialization; cache eviction, cleared site data, or an incomplete first load can prevent it. R02 and the physical checklist verify this behavior for a recorded environment.
-- **Versioned cache name:** `mangoleaf-model-cache-v4-3-0` for the adopted V4.3.0 Combined model, retained by app candidate `0.5.1`. Activation deletes superseded model caches, including V4.1.1, V4.2.0, and V4.3.0 candidate runtime caches. The active V4.3.0 cache is protected by the activation filter.
+- **Versioned cache name:** `mangoleaf-model-cache-v4-3-0` for the adopted V4.3.0 Combined model, retained by app candidate `0.5.2`. Activation deletes superseded model caches, including V4.1.1, V4.2.0, and V4.3.0 candidate runtime caches. The active V4.3.0 cache is protected by the activation filter.
 - **The precache is the real update mechanism.** Public files receive content-revision hashes in Serwist's precache manifest, which is matched before runtime caching. Replaced weights therefore refetch on next activation. An empty runtime model cache is normal; verify updates in generated `public/sw.js`.
 
 ### 3.2 High-Capacity Offline Database (Dexie.js / IndexedDB)
@@ -161,6 +172,7 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 - **Guidelines Sync:** A successful full download replaces the cached snapshot with `clear()` and `bulkPut()` in one IndexedDB transaction. This also removes rows deleted remotely when their Realtime event was missed. A failed download does not clear cached advice.
 - **Guidelines Display:** Scan details read the existing live-query cache and perform no additional network request. Downloaded advice remains available offline; missing or blank text uses a translated status message. The bundled treatment dictionary has been removed, so guideline revisions are maintained in Supabase and arrive through successful synchronization. No download-time or bundle-size benchmark was measured for this change.
 - **Scans Sync:** Remote cloud IDs are matched through the local `cloud_id` index. Photos already present as Blobs are reused; missing private photos are downloaded and saved with metadata in guarded transactions. Each result is rechecked after the network request so a concurrent local deletion is not replaced by the restored row.
+- **Local Scan Deletion:** `deleteScans()` deduplicates the requested IDs, uses `bulkGet()` in one read/write transaction, removes local-only/unowned rows with `bulkDelete()`, and marks owned rows as hidden `pending-delete` tombstones with `bulkUpdate()`. Single deletion delegates to this path. A changed batch triggers one online sync request after commit; offline tombstones remain queued. This reduces repeated local transaction/trigger work compared with invoking single deletion for every selection. The existing private owner checks and cloud retry/cleanup path still apply to each queued record, and no batch timing or network saving is measured here.
 
 ### 3.4 Duplicate Photo Checker (SHA-256 Image Hash)
 
@@ -201,12 +213,12 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 
 ### 4.1 Solid Backgrounds on Scroll List Cards (`scan-card.tsx`)
 
-- **Current implementation:** Scan cards use a solid `bg-white` background without a backdrop-blur filter. The older `bg-slate-900/95` value belongs to the previous dark UI.
+- **Current implementation:** Home and desktop History cards use a solid `bg-white` background without a backdrop-blur filter. Phone History uses separated thumbnail rows. The older `bg-slate-900/95` value belongs to the previous dark UI.
 - **Expected effect:** Avoids a backdrop filter on every card; scrolling smoothness still needs device measurement.
 
 ### 4.2 Targeted CSS Transitions
 
-- **Current implementation:** Many controls use `transition-colors` or `transition-transform`; some containers, including scan cards, still use `transition-all`.
+- **Current implementation:** Many controls use `transition-colors` or `transition-transform`; History rows/cards use `transition-colors` as selection changes their layout, while Home cards and some other containers still use `transition-all`.
 - **Expected effect:** Restricts the properties animated by those controls. Color changes can require repainting, so these classes are not proof that all transitions run only in the compositor.
 
 ### 4.3 Clean Text Justification Engine
@@ -238,6 +250,18 @@ The [V4.3.0 report](model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) preser
 > **Note on AI accuracy:** The **97.46%** figure describes the recorded Trial 3 evaluation on 393 images. It is not a measured accuracy guarantee for browser inference or farm photos. Storage compression happens after prediction, but preprocessing, numeric precision, and rejection gates can affect runtime results. Browser consistency and UI tests do not establish diagnostic accuracy.
 >
 > The three trial figures are not a trend line. Trial 2 scored 98.25% on a test set that contained near-duplicate copies of its own training images, so part of that score measured memorization. Perceptual-hash deduplication removed the duplicates before splitting, which is why Trial 2.1's 97.12% on 417 images is the honest figure rather than a regression. Trial 3 then changed the image pool, so its 97.46% is measured on a different 393-image test set again. Each number describes its own test set and none of them is a higher or lower version of another. See [model-training/non-experiment/v3/TRIAL_v3.md](model-training/non-experiment/v3/TRIAL_v3.md) for the previous released model and [model-training/non-experiment/v2.1/TRIAL_v2_1.md](model-training/non-experiment/v2.1/TRIAL_v2_1.md) for the deduplication work. V4 through V4.3.0 use seven classes; their reused-set results describe a different task and still need independent field evaluation.
+
+---
+
+## Responsive scan lists and batch deletion: October 6, 2026
+
+The current source reduces the mobile Home preview from four mounted cards to one and shows five compact History rows per page while retaining six desktop cards. One responsive image serves each History record. Category counts use search matches across every page, and Home skips those counts. Batch deletion uses one local transaction and requests synchronization once after a changed batch rather than once for every selected scan. These are source-established changes in work performed, not measured improvements in inference, scrolling, deletion latency, memory, temperature, or battery life.
+
+The parent live query still materializes and sorts every active scan, including photo Blobs. Search and category counting still work on that complete array. The October 3 database-query measurements therefore remain evidence for their original snapshot; reducing mounted cards does not implement its proposed bounded queries. Cloud cleanup also retains its existing per-record owner checks, photo/row removal, and retry behavior.
+
+The shared native deletion dialog waits for the local transaction, locks dismissal/actions during saving, and keeps a failed confirmation available for retry. Its confirmed IDs cannot expand when new scans arrive. The compact photo-tips sheet keeps Cancel visible while its content scrolls. Disease-badge colors/padding and the reused Scan icon are presentation changes. Current-model duplicate reuse, older and unlabeled History reports, classifier inputs, model files, rejection gates, and post-inference photo compression keep their established behavior.
+
+The [v0.5.2 validation record](testing/TESTING.md#v052-candidate-validation-october-6-2026) identifies the current functional checks and R01 run. R01 completed 240 actual predictions with stable class/acceptance, confidence range 0, and no net tensor growth in that browser session. These results do not measure scrolling speed, deletion latency, total browser memory, temperature, or battery life. Earlier benchmarks and fingerprints remain tied to their original builds; this update adds no new performance benchmark.
 
 ---
 

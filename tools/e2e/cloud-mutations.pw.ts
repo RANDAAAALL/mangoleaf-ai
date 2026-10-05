@@ -1,12 +1,15 @@
 import { test, expect } from "@playwright/test";
 import {
   closeDetails,
+  confirmScanDeletion,
   controlledModel,
+  historyDetails,
   mockGuestToken,
   nav,
   openApp,
   photos,
   records,
+  requestScanDeletion,
   runScan,
   scoresFor,
 } from "./support/fixtures";
@@ -51,13 +54,12 @@ test("S03: deleting during a private upload does not resurrect a row or orphan i
   const pending = (await records(page))[0];
   expect(pending.owner_id).toBeTruthy();
   await nav(page, "History");
-  await page.getByTitle("Delete scan log").click();
+  await requestScanDeletion(page);
+  await confirmScanDeletion(page);
   await expect
     .poll(async () => (await records(page))[0]?._status)
     .toBe("pending-delete");
-  await expect(
-    page.getByRole("button", { name: "Details", exact: true }),
-  ).toHaveCount(0);
+  await expect(historyDetails(page)).toHaveCount(0);
   releaseUpload();
   await expect.poll(() => records(page), { timeout: 20_000 }).toEqual([]);
   const headers = { Authorization: `Bearer ${await mockGuestToken(page)}` };
@@ -104,14 +106,13 @@ test("S04: failed private photo deletion keeps its tombstone until cleanup succe
     await route.continue();
   });
   await nav(page, "History");
-  await page.getByTitle("Delete scan log").click();
+  await requestScanDeletion(page);
+  await confirmScanDeletion(page);
   await attempted;
   await expect
     .poll(async () => (await records(page))[0]?._status)
     .toBe("pending-delete");
-  await expect(
-    page.getByRole("button", { name: "Details", exact: true }),
-  ).toHaveCount(0);
+  await expect(historyDetails(page)).toHaveCount(0);
   const headers = { Authorization: `Bearer ${await mockGuestToken(page)}` };
   expect(
     (

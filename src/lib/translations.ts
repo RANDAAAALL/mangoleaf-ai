@@ -45,21 +45,62 @@ export const translations = {
     HowItWorksTitle: "How it works?",
 
     // Scan History Section
-    recentScansTitle: "Recent Scans",
-    scanHistoryTitle: "Scan History",
+    recentScansTitle: "Recent Scan",
+    // Desktop uses the plural heading when more than one card is displayed.
+    recentScanDesktopTitle: "Recent Scan",
+    recentScansDesktopTitle: "Recent Scans",
+    scanHistoryTitle: "Scan history",
     pageOfTotal: "Page {n} of {total}",
     previousPage: "Previous page",
     nextPage: "Next page",
     searchPlaceholder: "Search by name...",
-    filterAll: "≡ Filter All",
+    filterAll: "All",
+    historyFilterBtn: "Filters",
+    historyFilterLabel: "Filter scans",
+    historyFilterActiveBtn: "Filters: {name}",
+    historyFilterOptionCount: "{name} ({n})",
+    historyFilterAnthracnose: "Anthracnose",
+    historyFilterHealthy: "Healthy",
+    historyFilterSooty: "Sooty Mold",
+    historyFilterScab: "Mango Scab",
+    historyFilterCanker: "Bacterial Canker",
+    historyFilterBlack: "Bacterial Black Spot",
+    historyFilterUncertain: "Uncertain",
     viewAllHistory: "View All History",
     viewAllHistoryShort: "View All",
     noScanHistoryTitle: "No Scan History Yet",
     noScanHistoryText:
       "No previous scans recorded on this device. Upload or take a photo to run your first diagnosis!",
+    historySelectBtn: "Select",
+    historySelectAllResultsBtn: "Select all",
+    historySelectAllCountBtn: "Select all ({n})",
+    historyCancelSelectionBtn: "Cancel",
+    // English uses a singular label for one scan; Bisaya shares one counted form.
+    historyDeleteSelectedBtn: "Delete {n} scans",
+    historyDeleteSelectedOneBtn: "Delete {n} scan",
+    historyDeleteSelectedCountBtn: "Delete ({n})",
+    historySelectedCount: "{n} selected",
+    historySelectionHint: "Select all includes matching scans on every page.",
+    historySelectScanLabel: "Select scan: {name}",
+    historyDetailsScanLabel: "View details: {name}",
+    historyDeleteConfirmTitle: "Delete selected scans ({n})?",
+    historyDeleteConfirmOneTitle: "Delete selected scan ({n})?",
+    historyDeleteConfirmDescription:
+      "The selected reports and saved photos will be deleted. This cannot be undone. Linked cloud copies are removed after a successful sync.",
+    historyDeleteConfirmOneDescription:
+      "The selected report and saved photo will be deleted. This cannot be undone. Linked cloud copies are removed after a successful sync.",
+    historyDeleteConfirmBtn: "Delete",
+    historyDeletingBtn: "Deleting...",
+    historyDeleteFailed:
+      "The selected scans could not be deleted. Please try again.",
+    historyDeleteOneFailed:
+      "The selected scan could not be deleted. Please try again.",
+    historyNoMatchingResults: "No scans match your search or filter.",
 
     // Card & Scan Labels
     detailsBtn: "Details",
+    deleteScanBtn: "Delete scan",
+    deleteScanLabel: "Delete scan: {name}",
     justNow: "Just now",
     yesterday: "Yesterday",
     // Relative-time templates. {n} is replaced with the number by formatTimeAgo.
@@ -160,7 +201,8 @@ export const translations = {
 
     // Bottom Navigation & Scan Sheet
     navScan: "Scan",
-    scanSheetTitle: "Start a Scan",
+    scanSheetTitle: "Select Scan Option",
+    scanSheetTipsTitle: "Photo tips",
     scanSheetFramingLabel: "Framing:",
     scanSheetFramingTip:
       "Keep one whole mango leaf or fruit visible and close enough to see damaged areas.",
@@ -234,20 +276,61 @@ export const translations = {
 
     // Scan History Section
     recentScansTitle: "Bag-ong Scan",
-    scanHistoryTitle: "Mga nangaging Scan",
+    recentScanDesktopTitle: "Bag-ong Scan",
+    recentScansDesktopTitle: "Mga Bag-ong Scan",
+    scanHistoryTitle: "Mga nangaging scan",
     pageOfTotal: "Panid {n} sa {total}",
     previousPage: "Miaging panid",
     nextPage: "Sunod nga panid",
     searchPlaceholder: "Pangitaa pinaagi sa pangalan...",
-    filterAll: "≡ I-filter Tanan",
+    filterAll: "Tanan",
+    historyFilterBtn: "Mga filter",
+    historyFilterLabel: "I-filter ang mga scan",
+    historyFilterActiveBtn: "Mga filter: {name}",
+    historyFilterOptionCount: "{name} ({n})",
+    historyFilterAnthracnose: "Anthracnose",
+    historyFilterHealthy: "Himsog",
+    historyFilterSooty: "Sooty Mold",
+    historyFilterScab: "Mango Scab",
+    historyFilterCanker: "Bacterial Canker",
+    historyFilterBlack: "Bacterial Black Spot",
+    historyFilterUncertain: "Dili Sigurado",
     viewAllHistory: "Tan-awa Ang Tanang History",
     viewAllHistoryShort: "Tan-awa Tanan",
     noScanHistoryTitle: "Wala pay Nangaging Scan",
     noScanHistoryText:
       "Wala pay nangaging scan nga nakarecord sa kini nga device. Pag-upload o paglitrato og unsa ka dahon o bunga sa mangga aron masugdan ang pag-scan!",
+    historySelectBtn: "Pilia",
+    historySelectAllResultsBtn: "Pilia tanan",
+    historySelectAllCountBtn: "Pilia tanan ({n})",
+    historyCancelSelectionBtn: "I-kansela",
+    historyDeleteSelectedBtn: "I-delete ang {n} ka scan",
+    historyDeleteSelectedOneBtn: "I-delete ang {n} ka scan",
+    historyDeleteSelectedCountBtn: "I-delete ({n})",
+    historySelectedCount: "{n} gipili",
+    historySelectionHint:
+      "Ang pagpili sa tanan apil ang mga scan nga nagtugma sa matag panid.",
+    historySelectScanLabel: "Pilia ang scan: {name}",
+    historyDetailsScanLabel: "Tan-awa ang detalye: {name}",
+    historyDeleteConfirmTitle: "I-delete ang mga gipiling scan ({n})?",
+    historyDeleteConfirmOneTitle: "I-delete ang gipiling scan ({n})?",
+    historyDeleteConfirmDescription:
+      "I-delete ang mga gipiling report ug natipig nga litrato. Dili na kini mabalik. Ang mga konektadong kopya sa cloud i-delete human sa malampusong pag-sync.",
+    historyDeleteConfirmOneDescription:
+      "I-delete ang gipiling report ug natipig nga litrato. Dili na kini mabalik. Ang mga konektadong kopya sa cloud i-delete human sa malampusong pag-sync.",
+    historyDeleteConfirmBtn: "I-delete",
+    historyDeletingBtn: "Ginadelete...",
+    historyDeleteFailed:
+      "Wala mapapas ang mga gipiling scan. Palihug sulayi pag-usab.",
+    historyDeleteOneFailed:
+      "Wala mapapas ang gipiling scan. Palihug sulayi pag-usab.",
+    historyNoMatchingResults:
+      "Walay scan nga nagtugma sa imong gipangita o filter.",
 
     // Card & Scan Labels
     detailsBtn: "Detalye",
+    deleteScanBtn: "I-delete ang scan",
+    deleteScanLabel: "I-delete ang scan: {name}",
     justNow: "Karon lang",
     yesterday: "Gahapon",
     // Relative-time templates. {n} is replaced with the number by formatTimeAgo.
@@ -351,7 +434,8 @@ export const translations = {
 
     // Bottom Navigation & Scan Sheet
     navScan: "I-scan",
-    scanSheetTitle: "Magsugod og Scan",
+    scanSheetTitle: "Pili sa duha ka Scan",
+    scanSheetTipsTitle: "Mga tip sa litrato",
     scanSheetFramingLabel: "Pagpahimutang:",
     scanSheetFramingTip:
       "Siguroha nga makita ang tibuok usa ka dahon o bunga sa mangga. Duola aron klarong makita ang mga bahin nga adunay kadaot.",

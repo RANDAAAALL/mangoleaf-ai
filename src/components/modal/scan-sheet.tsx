@@ -248,9 +248,10 @@ export const ScanSheet = memo(function ScanSheet({
         }}
       />
 
+      {/* Auto margins center the desktop panel without competing with the vertical drag transform. */}
       <div
         ref={sheetRef}
-        className={`fixed bottom-0 left-0 right-0 z-50 max-h-[calc(100dvh-1rem)] flex flex-col bg-white rounded-t-3xl shadow-2xl touch-none will-change-transform ${sheetMotionClass}`}
+        className={`fixed bottom-0 left-0 right-0 z-50 max-h-[calc(100dvh-1rem)] md:mx-auto md:max-w-[520px] flex flex-col bg-white rounded-t-3xl shadow-2xl touch-none will-change-transform ${sheetMotionClass}`}
         style={{
           paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))",
           transform: sheetTransform,
@@ -265,26 +266,37 @@ export const ScanSheet = memo(function ScanSheet({
         </div>
 
         {/* Only the content scrolls; the drag handle stays available on short screens. */}
-        <div className="min-h-0 overflow-y-auto px-6 pb-4 flex flex-col gap-4 touch-auto">
+        <div className="min-h-0 overflow-y-auto px-6 flex flex-col gap-3 touch-auto">
           <h3 className="shrink-0 text-lg font-bold text-[#143519] text-center">
             {t.scanSheetTitle}
           </h3>
 
           {/* Shared advice applies to both camera capture and existing gallery photos. */}
-          <ul className="shrink-0 space-y-2 rounded-2xl border border-[#d2e2c4] bg-[#f0f7eb] p-3 text-left text-xs leading-relaxed text-[#526856]">
-            <li>
-              <span className="font-bold text-[#143519]">
-                {t.scanSheetFramingLabel}
-              </span>{" "}
-              {t.scanSheetFramingTip}
-            </li>
-            <li>
-              <span className="font-bold text-[#143519]">
-                {t.scanSheetLightingLabel}
-              </span>{" "}
-              {t.scanSheetLightingTip}
-            </li>
-          </ul>
+          <div className="shrink-0 space-y-2 rounded-2xl border border-[#d2e2c4] bg-[#f0f7eb] p-3 text-left">
+            <h4 className="flex items-center gap-2 text-[13px] font-bold text-[#143519]">
+              <Icon
+                name="about"
+                size={16}
+                className="shrink-0"
+                aria-hidden="true"
+              />
+              {t.scanSheetTipsTitle}
+            </h4>
+            <ul className="space-y-1.5 text-xs sm:text-[13px] leading-[1.45] text-[#526856]">
+              <li>
+                <span className="font-bold text-[#143519]">
+                  {t.scanSheetFramingLabel}
+                </span>{" "}
+                {t.scanSheetFramingTip}
+              </li>
+              <li>
+                <span className="font-bold text-[#143519]">
+                  {t.scanSheetLightingLabel}
+                </span>{" "}
+                {t.scanSheetLightingTip}
+              </li>
+            </ul>
+          </div>
 
           {/* Auto rows, not grid-rows-2: the camera card is md:hidden, and an
               explicit second row would still reserve its gap on desktop. */}
@@ -328,7 +340,10 @@ export const ScanSheet = memo(function ScanSheet({
               </div>
             </button>
           </div>
+        </div>
 
+        {/* Cancel stays visible while the photo options and tips scroll on short screens. */}
+        <div className="shrink-0 px-6 pt-3 touch-auto">
           <button
             onClick={onClose}
             className="shrink-0 w-full py-3 bg-slate-100 text-slate-600 font-bold rounded-xl text-sm cursor-pointer hover:bg-slate-200 transition-colors"

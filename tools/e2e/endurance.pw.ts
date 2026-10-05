@@ -8,6 +8,10 @@ import {
   records,
   nav,
   attachJson,
+  recentHeading,
+  historyDetails,
+  requestScanDeletion,
+  confirmScanDeletion,
 } from "./support/fixtures";
 import { writeFileSync } from "node:fs";
 
@@ -30,7 +34,7 @@ test("R03: thirty-minute mixed-use session with fresh real predictions", async (
     expect(await records(page)).toHaveLength(1);
     await closeDetails(page);
     await nav(page, "History");
-    await page.getByRole("button", { name: "Details", exact: true }).click();
+    await historyDetails(page).click();
     await closeDetails(page);
     // Delete this test record so the next upload must perform inference again.
     await expect
@@ -38,14 +42,13 @@ test("R03: thirty-minute mixed-use session with fresh real predictions", async (
         (await records(page)).every((row) => row._status === "synced"),
       )
       .toBe(true);
-    await page.getByTitle("Delete scan log").click();
+    await requestScanDeletion(page);
+    await confirmScanDeletion(page);
     await expect.poll(async () => (await records(page)).length).toBe(0);
     await nav(page, "Home");
     if (cycles.length % 10 === 9) {
       await page.reload();
-      await expect(
-        page.getByRole("heading", { name: "Recent Scans" }),
-      ).toBeVisible();
+      await expect(recentHeading(page)).toBeVisible();
     }
     const heapBytes = await page.evaluate(
       () =>

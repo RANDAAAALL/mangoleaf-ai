@@ -2,6 +2,8 @@
 
 These tests cover the scan workflow and the manuscript's reliability paragraph. R01–R04 are project test IDs, not research-objective numbers from the manuscript. Physical-device results and model accuracy require their own evidence; a green browser suite alone does not establish either.
 
+**Current release candidate:** App `0.5.2`, model `v4.3.0`, is a candidate and is not released. The [release record](../versions/PWA_VERSIONING.md#v052-scan-history-and-deletion-candidate-october-6-2026) and October 6 scope below identify its validation. Earlier dated candidate entries preserve the status and evidence recorded for those source snapshots.
+
 **Historical V4.1.1 rollback (September 29, 2026):** The app again uses one seven-class V4.1.1 Background model and opens its scan sheet directly, without an organ choice. The completed [V4.2.0 two-model trial](../model-training/experiment/v4.2.0/TRIAL_v4_2_0.md#completed-results-and-comparison-september-29-2026) is retained as evidence and an ignored local backup. Existing single-model browser fixtures and cases were not changed or run for this rollback; prior test results do not certify the restored working tree. This rollback verifies TypeScript, lint, and build. Photo hashes stay unchanged; local rows marked with the V4.2.0 model version remain in history but are not reused as V4.1.1 diagnoses.
 
 **Historical local V4.3.0 retest (October 2, 2026):** Root `public/model/` contained the verified single seven-class Combined candidate, with display label `v4.3.0-candidate` and gates 0.70 / 0 / 0.42. The app kept the direct scan sheet and latest photo guidance/Bisaya text. V4.1.1 Background was preserved for rollback. See the [restoration receipt](../model-training/non-experiment/v4.3.0/artifacts/local_restore_20261002.json). Existing browser cases, fixtures, hooks, and workflows remained unchanged and were not rerun for that local swap. Typecheck, lint, and build passed for that task. Prior model results and automated observations did not certify the restored candidate; browser parity, independent accuracy/OOD evidence, and physical-device checks remained pending.
@@ -17,6 +19,28 @@ The [v0.4.9 PWA history entry](../versions/PWA_VERSIONING.md#v049-adoption-of-v4
 **Local cloud-security candidate validation (October 2, 2026):** The updated guest-session/private-photo client passed TypeScript, lint, production build, formatting, Git diff checks, all 14 tooling tests with 41 assertions (including four guest-session tests), all 10 exported-asset checks, and the credential/history security scan. All 80 core cases passed with zero failures in 7.4 minutes across Chromium desktop/mobile, Firefox desktop, and scoped WebKit mobile coverage; S01–S05 use the isolated local mock backend. This full run preceded the test-only S05 fixture correction to native IndexedDB version 70 for Dexie's version 7 and the added class/confidence/model-label assertions. The tightened S05 then passed three focused Chromium desktop/mobile and Firefox cases in 8.1 seconds; no second full suite is claimed. Final application input fingerprint remains `a316d8017d732e678704809b74289e3100beb4896611e8760f883ec78a923f71`. All 342 protected files retain their hashes, including 43 notebooks, model assets, Git hooks, and GitHub workflows; 418 local links/anchors across 35 documents resolved before the live-migration documentation update; that later check passed with 419 links/anchors. The earlier adoption validation above remains evidence for its original source snapshot.
 
 **Live server-security verification (October 2, 2026):** After the photo bucket was saved as private, migration `secure_guest_owned_cloud_sync`, history version `20261002152830`, applied successfully. Catalog checks verified the private bucket, grants, RLS, index, and three scan/one guideline/four Storage policies. Thirty assertions using temporary copies of the applied policy expressions/grants passed and were rolled back; the earlier proposed-policy proof is separate. All original values remain unchanged across 65 scan rows, six guidelines, and 68 Storage object entries, with no missing entries or invented legacy owners. The advisor returned zero findings. Read-only HTTP probes returned 401 for unsigned scans, 200 for all six public guidelines, and 400 for a cache-busted old public photo URL. These checks created no production test users, scan rows, or Storage files, and performed no remote photo writes/deletes/purge. They do not prove every formerly public cached copy disappeared or establish a real guest signup/upload/download session. The matching updated client has not been committed, pushed, or deployed. See [implementation status](../supabase/SECURITY-AND-SYNC.md#implementation-status).
+
+## v0.5.2 candidate validation (October 6, 2026)
+
+**Candidate / not released.** App `0.5.2` retains model `v4.3.0` and adds responsive Home/History lists, category counts, cross-page selection, shared single/batch deletion confirmation, and compact photo tips with a visible Cancel action. The [release record](../versions/PWA_VERSIONING.md#v052-scan-history-and-deletion-candidate-october-6-2026) records the scope and intended tag.
+
+The approved browser scope is the complete core suite and `bun run test:reliability --grep "R01:"`; the 30-minute R03 session is excluded. Core cases cover desktop/mobile presentation, mocked synchronization, real-worker offline behavior, and the new History/deletion controls. R01 must run actual inference rather than reuse duplicate reports. All automated scans use fresh browser contexts and the isolated local mock backend. Browser emulation does not establish physical-device performance.
+
+The versioned local checks below identify working-tree application fingerprint `a160ae53dff0970dc8651d4c0068a4ae4deb45b3f4ce84b3f4012cfada6867cb`, based on commit `8f8004225e6944182b6f118ffc108c6284d25707` plus the uncommitted candidate changes. All five model assets match that committed baseline. The October 4/5 reports remain evidence for their original builds. A final candidate commit, remote CI, and deployment verification remain separate steps.
+
+| Check                                                          | Current status                                                                                                                                          |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Formatting/security, TypeScript, lint, production static build | Passed locally. History and the uncommitted diff/new modal were scanned with redacted output.                                                           |
+| Export verification and tooling tests                          | Passed: 10 export checks; 14 tooling cases and 41 assertions.                                                                                           |
+| Complete core browser suite                                    | Passed: all 86 cases in 6.4 minutes; zero failures or flaky results across Chromium desktop/mobile, Firefox desktop, and scoped WebKit mobile coverage. |
+| R01 repeated actual inference                                  | Passed: 240 predictions across eight photos in Chromium mobile emulation; no class/acceptance variation, confidence range 0, and tensor growth 0.       |
+| R03 extended use                                               | Excluded from this candidate's approved run.                                                                                                            |
+
+The existing pipeline needs no change for this UI update: pre-commit formats staged files; pre-push runs security, TypeScript, lint, and formatting checks; `master` push CI additionally builds/verifies the static export and runs the core browser suite against its isolated backend. R01 remains an explicit command. Local checks, remote CI, GitHub publication, and production promotion/version confirmation are separate outcomes.
+
+R01 completed in 53.0 seconds. Its report is under ignored `playwright-report/reliability/` with JSON results in `test-results/reliability/results.json`; the latter records input hashes and the repeatability attachment. Stable scores and tensors establish same-session consistency, not diagnosis accuracy or total browser memory. Core reports use the separate `e2e/` folders.
+
+The complete core run also passed the updated Home/History counts, cross-page selection, search/filter resets, Cancel/X/Escape preservation, short-screen Cancel visibility, and resize focus fallback. F17 verified a late arrival remained outside the confirmed deletion, one local transaction failure retained the dialog for retry, and reconnect removed only the two queued cloud rows/photos. Earlier incomplete runs exposed stale test wording and a failure simulation installed too late; those test setup issues were corrected before the final 86-case pass. These local results do not establish remote CI or deployment.
 
 ## v0.5.1 candidate validation (October 5, 2026)
 
@@ -140,24 +164,40 @@ Long reliability sessions do not run on every push. `bun run test:tooling` still
 
 ## Functional cases
 
-| ID      | Action and expected result                                                                                                                                                |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| F01     | Empty Recent and History show the empty-state message.                                                                                                                    |
-| F02     | Scan opens its sheet; Cancel closes it without creating a record.                                                                                                         |
-| F03     | Upload Photo opens its file input and previews the chosen bytes.                                                                                                          |
-| F04     | Mobile Take Photo selects the camera input with `capture="environment"`; desktop hides that control. Native camera behavior remains manual.                               |
-| F05     | Empty file selection stores nothing; Retake reopens the same picker. X or Escape closes review and clears the selected photo without opening a picker or saving a record. |
-| F06     | Each of seven controlled accepted predictions shows the photo, class, and confidence.                                                                                     |
-| F07     | Rejected result shows its photo and uncertain label; raw class/confidence/margin/entropy are report-only.                                                                 |
-| F08–F09 | Saved result appears in Recent and History; Details shows matching data.                                                                                                  |
-| F10     | Recent shows the latest four records; History shows six per page.                                                                                                         |
-| F11     | Search/filter and previous/next navigation work; deleting the last item on a page recovers to a valid page.                                                               |
-| F12     | Reload preserves records and photos.                                                                                                                                      |
-| F13     | Re-uploading identical bytes shows "Photo already scanned" in the preview. Retake, Cancel, X, and View saved result work; no new record or inference is created.          |
-| F14     | Long result badges stay inside the photo and Close stays reachable at narrow, landscape, and desktop sizes.                                                               |
-| F15     | A Healthy Fruit result moves from loading to unavailable advice, then uses the downloaded mock `healthy` row and remains readable offline in English/Bisaya.              |
-| F16     | Uncertain-result photo reminders and headings work in English/Bisaya with pending, empty, downloaded, and offline guideline states.                                       |
-| M01     | All eight supplied photos run through the real model and app; record predicted/expected labels and score diagnostics separately from UI assertions.                       |
+| ID      | Action and expected result                                                                                                                                                    |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| F01     | Empty Recent and History show the empty-state message.                                                                                                                        |
+| F02     | Scan opens its sheet; Cancel closes it without creating a record.                                                                                                             |
+| F03     | Upload Photo opens its file input and previews the chosen bytes.                                                                                                              |
+| F04     | Mobile Take Photo selects the camera input with `capture="environment"`; desktop hides that control. Native camera behavior remains manual.                                   |
+| F05     | Empty file selection stores nothing; Retake reopens the same picker. X or Escape closes review and clears the selected photo without opening a picker or saving a record.     |
+| F06     | Each of seven controlled accepted predictions shows the photo, class, and confidence.                                                                                         |
+| F07     | Rejected result shows its photo and uncertain label; raw class/confidence/margin/entropy are report-only.                                                                     |
+| F08–F09 | Saved result appears in Recent and History; the mobile History row and desktop Details action show matching data.                                                             |
+| F10     | Below 768px, Home shows the newest one card and History shows five rows per page. At or above 768px, Home shows up to four cards and History six cards per page.              |
+| F11     | Search/category counts and previous/next navigation work; typing search resets All and closes mobile filters. Confirmed deletion of the last page returns to a valid page.    |
+| F12     | Reload preserves records and photos.                                                                                                                                          |
+| F13     | Re-uploading identical bytes shows "Photo already scanned" in the preview. Retake, Cancel, X, and View saved result work; no new record or inference is created.              |
+| F14     | Long result badges stay inside the photo and Close stays reachable at narrow, landscape, and desktop sizes.                                                                   |
+| F15     | A Healthy Fruit result moves from loading to unavailable advice, then uses the downloaded mock `healthy` row and remains readable offline in English/Bisaya.                  |
+| F16     | Uncertain-result photo reminders and headings work in English/Bisaya with pending, empty, downloaded, and offline guideline states.                                           |
+| F17     | Select reports across History pages or Select all matching results; shared single/batch confirmation supports cancellation, fixed IDs, busy locking, retry, and focus return. |
+| F18     | Compact bilingual photo tips appear before camera/gallery actions; Cancel remains visible while short-screen content scrolls and desktop keeps the bounded centered sheet.    |
+| M01     | All eight supplied photos run through the real model and app; record predicted/expected labels and score diagnostics separately from UI assertions.                           |
+
+### v0.5.2 History, deletion, and photo-tips scope (October 6, 2026)
+
+Use both languages, narrow/desktop viewports, fresh contexts, and the local mock backend. Seed enough mixed-category records to cover multiple pages, including earlier model labels and an unlabeled legacy report. Controlled scores establish UI behavior, not model accuracy.
+
+- Check Home's one/four mounted-card limit and History's five/six page size on either side of 768px. Mobile History uses thumbnail rows with a tappable photo/text area; desktop retains photo cards and Details/trash controls. Resizing keeps the previous first record on its recalculated page, and losing the last page leaves a valid page.
+- Count each category over all disease-name search matches before the category filter and pagination. Both healthy classes count as Healthy. Typing or clearing search resets All, page one, selection, and the mobile filter bar; changing category resets page one and selection. A search with no matches shows the translated empty-results message.
+- Select reports on multiple pages, return between pages, and confirm the selected count stays correct. Select all includes every current matching report across pages. A new arriving report must remain unselected until another selection action; records removed from the results must lose their selection. Changing search or category clears the selection.
+- Open confirmation from a Home trash action, desktop History trash action, and History selected-delete action. Check singular/plural wording and the snapshotted count. Cancel, X, and Escape must close without changing records. Focus starts on Cancel, stays inside the native modal, and returns to the initiating enabled control or the list heading if that control disappeared.
+- While the local deletion save is held open, Delete, Cancel, and X remain disabled; Escape must not dismiss it, and background controls stay blocked. Repeated Delete must not start another local save. Introduce a local save failure, check the translated error, and retry the same confirmed IDs. A new scan arriving while confirmation is open must not join the deletion.
+- Check offline single/batch deletion of local-only, unowned, and owned scans. Local-only/unowned rows are removed; owned rows disappear from visible History but retain their pending-deletion marker until cloud cleanup succeeds. Reconnect through the local mock and check photo/row cleanup, retry, and no restored deleted records. Existing owner authorization and upload-race cases remain relevant.
+- Open the photo-tips sheet in both languages at narrow, short/landscape, and desktop sizes. Tips appear once before the picker actions; the drag handle and Cancel remain visible while the middle content scrolls. Desktop keeps the centered panel within 520px. Cancel creates no scan. The advice works offline and does not start a camera stream, alter pixels, or invoke inference.
+
+These are current acceptance conditions. Passing results must be recorded for the final `0.5.2` source; prior F10/F11 and cloud-race reports retain their dated evidence limits.
 
 ### v0.4.9 regression scope (October 2, 2026)
 
@@ -189,11 +229,13 @@ The Scan Sheet now displays two shared framing/lighting tips above its camera an
 - Select a new photo and check the updated review reminder. Select an eligible duplicate and check that its duplicate message and controls remain unchanged. X, Escape, Retake, and diagnosis keep their existing behavior.
 - Repeat with an already-cached app offline. The tips should require no network request, camera stream, image analysis, or extra model loading. They are advice, not confirmation that a photo is suitable.
 
-The camera and comprehension checks above are retained from the October 2 guidance review; the [v0.5.1 candidate section](#v051-candidate-validation-october-5-2026) defines the current release scope. The local backup for this reversible change is `.tools/ui-backups/photo-guidance-20261001T212013Z/`; restore only this change and rebuild the service worker, preserving newer unrelated work.
+The camera and comprehension checks above are retained from the October 2 guidance review; the [v0.5.2 candidate section](#v052-candidate-validation-october-6-2026) defines the current release scope. The local backup for this reversible change is `.tools/ui-backups/photo-guidance-20261001T212013Z/`; restore only this change and rebuild the service worker, preserving newer unrelated work.
 
 Controlled tests replace only the model response with fixed scores. They exercise the real classifier gates, UI, local storage, and client sync against a mock service. Real-model and offline cases use the actual exported model assets. No test changes the classifier's resizing, normalization, precision, or rejection rules.
 
 ## Scan-thumbnail stability: October 4, 2026
+
+**Historical snapshot:** This section preserves the October 4 test design and measurements. The October 6 scope above adds responsive counts and shared deletion confirmation to the current cases; their results must identify the final candidate separately.
 
 `tools/e2e/history.pw.ts` includes a focused F10 regression for thumbnail blinking. It holds the mock photo upload and row insertion separately, then checks that adding a scan and changing owner/path/status metadata keep both cards' photo URLs unchanged. It also records image removal and URL revocation so a photo that disappears and returns cannot pass solely because it is eventually visible. Offline deletion must release the deleted card's URL exactly once while the remaining thumbnail stays unchanged.
 

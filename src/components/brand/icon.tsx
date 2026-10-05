@@ -17,7 +17,12 @@ export type IconName =
   | "camera-outline"
   | "sparkle"
   | "clipboard-check"
-  | "arrow-right";
+  | "arrow-right"
+  | "chevron-right"
+  | "chevron-down"
+  | "search"
+  | "filter"
+  | "trash";
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   name: IconName;
@@ -51,6 +56,24 @@ const FA_PATHS: Record<string, string> = {
  */
 const STROKE_24_SHAPES: Partial<Record<IconName, React.ReactNode>> = {
   close: <path d="M6 6l12 12M18 6L6 18" />,
+  "chevron-right": <path d="m9 5 7 7-7 7" />,
+  "chevron-down": <path d="m7 10 5 5 5-5" />,
+  search: (
+    <>
+      <circle cx="10" cy="10" r="7" />
+      <path d="m15 15 6 6" />
+    </>
+  ),
+  filter: (
+    <>
+      <path d="M4 7h3m4 0h9M4 17h9m4 0h3" />
+      <circle cx="9" cy="7" r="2" />
+      <circle cx="15" cy="17" r="2" />
+    </>
+  ),
+  trash: (
+    <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+  ),
   // Camera viewfinder. Kept separate from the filled FontAwesome `camera` glyph
   // above, which has a different weight and viewBox.
   "camera-outline": (

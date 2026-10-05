@@ -9,6 +9,8 @@ import {
   nav,
   attachJson,
   mockGuestToken,
+  recentHeading,
+  historyDetails,
 } from "./support/fixtures";
 import { createHash } from "node:crypto";
 
@@ -35,9 +37,7 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
   await nav(page, "Home");
   // Static-export HTML enters the runtime cache on a controlled online visit.
   await page.reload();
-  await expect(
-    page.getByRole("heading", { name: "Recent Scans" }),
-  ).toBeVisible();
+  await expect(recentHeading(page)).toBeVisible();
   const required = await page.evaluate(async () => {
     const model = await (await fetch("/model/model.json")).json();
     return [
@@ -84,9 +84,7 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
   });
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Recent Scans" })).toBeVisible(
-    { timeout: 90_000 },
-  );
+  await expect(recentHeading(page)).toBeVisible({ timeout: 90_000 });
   await expect(
     page.getByRole("button", { name: "Details", exact: true }),
   ).toHaveCount(1);
@@ -116,9 +114,13 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
     ),
   ).toBe(true);
   await page.reload();
+  await expect(recentHeading(page)).toBeVisible();
+  // Home mounts one phone preview; History must still retain both offline reports.
   await expect(
     page.getByRole("button", { name: "Details", exact: true }),
-  ).toHaveCount(2);
+  ).toHaveCount((page.viewportSize()?.width ?? 0) < 768 ? 1 : 2);
+  await nav(page, "History");
+  await expect(historyDetails(page)).toHaveCount(2);
   for (const path of required) expect(hits).toContain(path);
   await attachJson(info, "offline-evidence", {
     requiredCachedAssets: required,

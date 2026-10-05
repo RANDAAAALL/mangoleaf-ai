@@ -57,7 +57,7 @@ function findDuplicateScan(imageHash: string) {
 }
 
 export default function Home() {
-  const { createScan, deleteScan } = useSync();
+  const { createScan, deleteScan, deleteScans } = useSync();
 
   const { showInstallButton, installApp } = usePWAInstall();
 
@@ -517,6 +517,7 @@ export default function Home() {
                 language={language}
                 onSelectScan={setSelectedScan}
                 onDeleteScan={deleteScan}
+                onDeleteScans={deleteScans}
                 onScanPress={openScanSheet}
               />
             )}

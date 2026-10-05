@@ -178,25 +178,52 @@ export function useSync() {
     [deviceId, sync],
   );
 
-  const deleteScan = useCallback(
-    async (id: string) => {
-      await db.transaction("rw", db.scans, async () => {
-        const scan = await db.scans.get(id);
-        if (!scan) return;
-        if (scan._status === "local-only" || !scan.owner_id) {
-          await db.scans.delete(id);
-        } else {
-          // A claimed pending insert may already be uploading. Keep a hidden
-          // tombstone until both its private object and server row are removed.
-          await db.scans.update(id, {
-            _status: "pending-delete",
-            updated_at: new Date().toISOString(),
-          });
+  const deleteScans = useCallback(
+    async (ids: string[]) => {
+      const uniqueIds = [...new Set(ids)];
+      if (uniqueIds.length === 0) return;
+
+      // Read and change the selected rows in one transaction. An upload cannot
+      // claim an unowned row between this ownership check and its deletion.
+      const changed = await db.transaction("rw", db.scans, async () => {
+        const scans = await db.scans.bulkGet(uniqueIds);
+        const localIds: string[] = [];
+        const ownedIds: string[] = [];
+        for (const scan of scans) {
+          if (!scan) continue;
+          if (scan._status === "local-only" || !scan.owner_id) {
+            localIds.push(scan.id);
+          } else if (scan._status !== "pending-delete") {
+            // A claimed photo may already be uploading. Keep its hidden row
+            // until the existing sync queue removes the cloud row and photo.
+            ownedIds.push(scan.id);
+          }
         }
+
+        if (localIds.length > 0) await db.scans.bulkDelete(localIds);
+        if (ownedIds.length > 0) {
+          const updatedAt = new Date().toISOString();
+          await db.scans.bulkUpdate(
+            ownedIds.map((id) => ({
+              key: id,
+              changes: {
+                _status: "pending-delete" as const,
+                updated_at: updatedAt,
+              },
+            })),
+          );
+        }
+        return localIds.length + ownedIds.length > 0;
       });
-      if (navigator.onLine) void sync();
+      // One request serves the whole batch; offline deletions remain queued.
+      if (changed && navigator.onLine) void sync();
     },
     [sync],
+  );
+
+  const deleteScan = useCallback(
+    (id: string) => deleteScans([id]),
+    [deleteScans],
   );
 
   useEffect(() => {
@@ -255,7 +282,7 @@ export function useSync() {
   }, [isOnline, syncGuidelines]);
 
   return useMemo(
-    () => ({ createScan, deleteScan, triggerSync: sync }),
-    [createScan, deleteScan, sync],
+    () => ({ createScan, deleteScan, deleteScans, triggerSync: sync }),
+    [createScan, deleteScan, deleteScans, sync],
   );
 }

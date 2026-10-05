@@ -9,7 +9,7 @@
 
 MangoLeaf AI is an offline-first progressive web application that helps identify possible diseases affecting mango leaves and fruit. Classification runs in the browser with TensorFlow.js, scans are stored locally in IndexedDB, and pending records synchronize with Supabase when connectivity is available.
 
-**Current app model: V4.3.0 Combined.** One model identifies seven classes covering mango leaves and fruit. **App version: v0.5.1 (candidate / not released).**
+**Current app model: V4.3.0 Combined.** One model identifies seven classes covering mango leaves and fruit. **App version: v0.5.2 (candidate / not released).**
 
 ## Features
 
@@ -18,6 +18,9 @@ MangoLeaf AI is an offline-first progressive web application that helps identify
 - Review the predicted condition, confidence score, and treatment guidance.
 - Switch treatment guidance between English and Cebuano/Bisaya.
 - Keep a local scan history that remains available offline.
+- Browse one recent scan on phones or up to four on larger screens; History shows five compact rows per page on phones and six cards per page on larger screens.
+- Search History, inspect condition-filter counts, select matching reports across pages, and confirm single or bulk deletion.
+- Read compact photo tips in the scan sheet, with Cancel kept visible while its content scrolls.
 - Check exact-file duplicates before diagnosis; retake, cancel, or open the saved result from photo review.
 - Compress stored images to WebP with a JPEG fallback.
 - Synchronize private scan records and photos through an automatic guest session; no registration screen is required.
@@ -25,9 +28,11 @@ MangoLeaf AI is an offline-first progressive web application that helps identify
 - Read downloaded treatment guidelines offline; missing guidance shows an English/Bisaya status message rather than bundled treatment advice.
 - Install the app on supported devices as a PWA.
 
-[App `0.4.9`](docs/versions/PWA_VERSIONING.md#v049-adoption-of-v430-combined) adopted the seven-class V4.3.0 Combined model (`v4.3.0`) on October 2, 2026, replacing the former six-class V3 baseline. The single scan flow remains in use, with separate Healthy Fruit and Healthy Leaf results. The [adopted trial report](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) and [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) preserve export provenance, fitted gates, and model hashes. Its [comparison with V4.1.1](docs/model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) reports mixed reused-set results; adoption does not establish improved field accuracy. App `0.5.1` packages scan-thumbnail stability and a horizontal treatment-guidelines header while retaining the private-cloud client and this model. See the [v0.5.1 candidate record](docs/versions/PWA_VERSIONING.md#v051-scan-thumbnail-stability-candidate-october-5-2026) for scope and publication status, and [v0.5.1 validation](docs/testing/TESTING.md#v051-candidate-validation-october-5-2026) for the labeled build's check results. Earlier trials and rollback backups remain preserved.
+[App `0.4.9`](docs/versions/PWA_VERSIONING.md#v049-adoption-of-v430-combined) adopted the seven-class V4.3.0 Combined model (`v4.3.0`) on October 2, 2026, replacing the former six-class V3 baseline. The single scan flow remains in use, with separate Healthy Fruit and Healthy Leaf results. The [adopted trial report](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) and [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) preserve export provenance, fitted gates, and model hashes. Its [comparison with V4.1.1](docs/model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) reports mixed reused-set results; adoption does not establish improved field accuracy. App `0.5.2` prepares responsive Home and History layouts, report selection with confirmed deletion, filter counts, compact photo tips, and badge/icon refinements. See the [v0.5.2 candidate record](docs/versions/PWA_VERSIONING.md#v052-scan-history-and-deletion-candidate-october-6-2026) for scope and pending release checks. The [v0.5.1 validation](docs/testing/TESTING.md#v051-candidate-validation-october-5-2026) remains evidence for the earlier thumbnail-stability build. Earlier trials and rollback backups remain preserved.
 
-The [cloud-security update](docs/supabase/SECURITY-AND-SYNC.md#implementation-status) adds guest-owned private scans while preserving the local scan flow. Its private backup and October 2 local checks passed, with additional [v0.5.0 candidate evidence](docs/testing/TESTING.md#v050-candidate-validation-october-3-2026) preserved separately. The October 2 server verification confirmed the private Supabase bucket and owner policies, with original cloud records/files retained. Older clients can still scan locally and read public guidance, but cannot synchronize private scans until updated. Production client status is separate from these local checks; the [v0.5.1 record](docs/versions/PWA_VERSIONING.md#v051-scan-thumbnail-stability-candidate-october-5-2026) tracks this candidate's pending release steps.
+The [cloud-security update](docs/supabase/SECURITY-AND-SYNC.md#implementation-status) adds guest-owned private scans while preserving the local scan flow. Its private backup and October 2 local checks passed, with additional [v0.5.0 candidate evidence](docs/testing/TESTING.md#v050-candidate-validation-october-3-2026) preserved separately. The October 2 server verification confirmed the private Supabase bucket and owner policies, with original cloud records/files retained. Older clients can still scan locally and read public guidance, but cannot synchronize private scans until updated. Production client status is separate from these local checks; the [v0.5.2 record](docs/versions/PWA_VERSIONING.md#v052-scan-history-and-deletion-candidate-october-6-2026) tracks this candidate's pending release steps.
+
+The [treatment-source date clarification](docs/treatment-guidelines/TREATMENT-GUIDELINES-REVIEW-2026-10-02.md#source-dates-and-review-scope--2026-10-06-clarification) distinguishes the 2025 BAFS explanatory manual from the underlying 2009 GAP standard. Five of the review's six named publications fall within five years of October 6, 2026. The original standard is older, and the review's proposed wording is separate from its October 2 database snapshot; the clarification does not verify today's live guidance.
 
 ## Technology
 

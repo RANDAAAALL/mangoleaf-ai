@@ -1,176 +1,474 @@
-import { useState, memo, useMemo } from "react";
+import {
+  useState,
+  memo,
+  useMemo,
+  useRef,
+  useCallback,
+  useId,
+  useEffect,
+} from "react";
 import { type ScanRecord } from "@/lib/db";
 import { ScanCard } from "./scan-card";
 import { translations, type Language } from "@/lib/translations";
-import { UNCERTAIN_LABEL } from "@/lib/constants";
 import { Icon } from "@/components/brand/icon";
+import { DeleteScansModal } from "@/components/modal/delete-scans-modal";
 
 interface ScanHistoryListProps {
   scans: ScanRecord[];
   language: Language;
   onSelectScan: (scan: ScanRecord) => void;
-  onDeleteScan: (id: string) => void;
+  onDeleteScan: (id: string) => Promise<void>;
+  onDeleteScans?: (ids: string[]) => Promise<void>;
   onViewAllHistory?: () => void;
   onScanPress?: () => void;
   isFullHistoryPage?: boolean;
 }
 
-const ITEMS_PER_PAGE = 6;
+const MOBILE_ITEMS_PER_PAGE = 5;
+const DESKTOP_ITEMS_PER_PAGE = 6;
+const MOBILE_HOME_PREVIEW_COUNT = 1;
+const DESKTOP_HOME_PREVIEW_COUNT = 4;
 
 export const ScanHistoryList = memo(function ScanHistoryList({
   scans,
   language,
   onSelectScan,
   onDeleteScan,
+  onDeleteScans,
   onViewAllHistory,
   onScanPress,
   isFullHistoryPage = false,
 }: ScanHistoryListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("all");
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    itemsPerPage: isFullHistoryPage
+      ? MOBILE_ITEMS_PER_PAGE
+      : MOBILE_HOME_PREVIEW_COUNT,
+  });
+  const { currentPage, itemsPerPage } = pagination;
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [confirmationIds, setConfirmationIds] = useState<string[] | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteFailed, setDeleteFailed] = useState(false);
+  const deletingRef = useRef(false);
+  const historyHeadingRef = useRef<HTMLHeadingElement>(null);
+  const filterPanelId = useId();
+  const filterSelectId = useId();
+  const selectionHintId = useId();
+
+  useEffect(() => {
+    // Read the viewport after hydration, using the layout's md breakpoint.
+    const desktopQuery = window.matchMedia("(min-width: 768px)");
+    const updatePageSize = () => {
+      const nextPageSize = isFullHistoryPage
+        ? desktopQuery.matches
+          ? DESKTOP_ITEMS_PER_PAGE
+          : MOBILE_ITEMS_PER_PAGE
+        : desktopQuery.matches
+          ? DESKTOP_HOME_PREVIEW_COUNT
+          : MOBILE_HOME_PREVIEW_COUNT;
+      setPagination((current) => {
+        if (current.itemsPerPage === nextPageSize) return current;
+        // Keep the old page's first scan on screen when the page size changes.
+        const firstScanIndex = (current.currentPage - 1) * current.itemsPerPage;
+        return {
+          currentPage: Math.floor(firstScanIndex / nextPageSize) + 1,
+          itemsPerPage: nextPageSize,
+        };
+      });
+    };
+
+    desktopQuery.addEventListener("change", updatePageSize);
+    updatePageSize();
+    // Remove the listener when the list unmounts or switches between tabs.
+    return () => desktopQuery.removeEventListener("change", updatePageSize);
+  }, [isFullHistoryPage]);
 
   const t = translations[language];
   const hasUserScans = scans.length > 0;
 
   // Search and filter apply on the History tab only. On Home the list is short
   // enough that neither control is shown.
-  const filteredScans = useMemo(() => {
+  const searchMatchedScans = useMemo(() => {
     if (!isFullHistoryPage) return scans;
-    return scans.filter((scan) => {
-      const matchesSearch = scan.disease_name
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
-      const matchesFilter =
-        filterCategory === "all" ||
-        scan.disease_name.toLowerCase().includes(filterCategory.toLowerCase());
-      return matchesSearch && matchesFilter;
-    });
-  }, [scans, searchQuery, filterCategory, isFullHistoryPage]);
+    return scans.filter((scan) =>
+      scan.disease_name.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+  }, [scans, searchQuery, isFullHistoryPage]);
+
+  // Count all search matches before the category filter or pagination. Choosing
+  // a category must not hide the totals available in the other categories.
+  const filterOptions = useMemo(
+    () =>
+      [
+        { value: "all", label: t.filterAll },
+        { value: "anthracnose", label: t.historyFilterAnthracnose },
+        { value: "healthy", label: t.historyFilterHealthy },
+        { value: "sooty", label: t.historyFilterSooty },
+        { value: "scab", label: t.historyFilterScab },
+        { value: "canker", label: t.historyFilterCanker },
+        { value: "black", label: t.historyFilterBlack },
+        // Rejected scans keep the existing word, outside the model classes.
+        { value: "uncertain", label: t.historyFilterUncertain },
+      ].map((option) => ({
+        ...option,
+        // Home does not show filters, so it does not need these counts.
+        count: !isFullHistoryPage
+          ? 0
+          : option.value === "all"
+            ? searchMatchedScans.length
+            : searchMatchedScans.reduce(
+                (count, scan) =>
+                  count +
+                  Number(
+                    scan.disease_name.toLowerCase().includes(option.value),
+                  ),
+                0,
+              ),
+      })),
+    [searchMatchedScans, t, isFullHistoryPage],
+  );
+  const activeFilterLabel = filterOptions.find(
+    (option) => option.value === filterCategory,
+  )?.label;
+
+  const filteredScans = useMemo(() => {
+    if (!isFullHistoryPage || filterCategory === "all") {
+      return searchMatchedScans;
+    }
+    return searchMatchedScans.filter((scan) =>
+      scan.disease_name.toLowerCase().includes(filterCategory.toLowerCase()),
+    );
+  }, [searchMatchedScans, filterCategory, isFullHistoryPage]);
+
+  const matchingIds = useMemo(
+    () => new Set(filteredScans.map((scan) => scan.id)),
+    [filteredScans],
+  );
+  const activeSelectedIds = selectedIds.filter((id) => matchingIds.has(id));
+  const selectedIdSet = new Set(activeSelectedIds);
+  // Live synchronization can remove a selected scan. Forget its selection so
+  // a later record with that ID cannot become selected without another click.
+  if (activeSelectedIds.length !== selectedIds.length) {
+    setSelectedIds(activeSelectedIds);
+  }
+
+  const toggleSelection = useCallback((id: string) => {
+    setSelectedIds((current) =>
+      current.includes(id)
+        ? current.filter((selectedId) => selectedId !== id)
+        : [...current, id],
+    );
+  }, []);
+
+  const cancelSelection = () => {
+    setSelectionMode(false);
+    setSelectedIds([]);
+    setDeleteFailed(false);
+    historyHeadingRef.current?.focus({ preventScroll: true });
+  };
+
+  const selectAllMatching = () => {
+    // Capture the current matching IDs across pages. Later arrivals need
+    // another deliberate selection action.
+    setSelectedIds(filteredScans.map((scan) => scan.id));
+  };
+
+  const openDeleteConfirmation = () => {
+    setDeleteFailed(false);
+    setConfirmationIds([...activeSelectedIds]);
+  };
+
+  const openSingleDeleteConfirmation = useCallback((id: string) => {
+    if (deletingRef.current) return;
+    // The trash button only opens this same confirmation. Keep its one ID
+    // fixed even if new scans arrive before the user presses Delete.
+    setDeleteFailed(false);
+    setConfirmationIds([id]);
+  }, []);
+
+  const handleConfirmDelete = async () => {
+    if (
+      !confirmationIds?.length ||
+      deletingRef.current ||
+      (!onDeleteScans && confirmationIds.length !== 1)
+    ) {
+      return;
+    }
+    // Freeze the confirmed IDs. New arrivals and other pages cannot expand the
+    // deletion while the local transaction is waiting to finish.
+    const idsToDelete = [...confirmationIds];
+    deletingRef.current = true;
+    setIsDeleting(true);
+    setDeleteFailed(false);
+    try {
+      // Await the local save for either one trash-button scan or a batch.
+      // Closing early would hide a failed deletion instead of offering retry.
+      if (onDeleteScans) await onDeleteScans(idsToDelete);
+      else await onDeleteScan(idsToDelete[0]);
+      setSelectedIds([]);
+      setSelectionMode(false);
+      setConfirmationIds(null);
+    } catch {
+      // Keep the confirmation and selection available for a deliberate retry.
+      setDeleteFailed(true);
+    } finally {
+      deletingRef.current = false;
+      setIsDeleting(false);
+    }
+  };
 
   // Keep the selected page valid when deletion or sync removes the last page.
-  const totalPages = Math.ceil(filteredScans.length / ITEMS_PER_PAGE) || 1;
+  const totalPages = Math.ceil(filteredScans.length / itemsPerPage) || 1;
   if (currentPage > totalPages) {
-    setCurrentPage(totalPages);
+    setPagination((current) => ({ ...current, currentPage: totalPages }));
   }
 
   const visibleScans = useMemo(() => {
     if (!isFullHistoryPage) {
-      return filteredScans.slice(0, 4);
+      // Render one Home card on phones and up to four on desktop. Extra phone
+      // cards are not mounted, so their photos do not need loading.
+      return filteredScans.slice(0, itemsPerPage);
     }
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredScans.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredScans, currentPage, isFullHistoryPage]);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredScans.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredScans, currentPage, itemsPerPage, isFullHistoryPage]);
 
   // Back to page 1 on every search or filter change, otherwise a user sitting on
   // page 4 of the old results would land on a page the new results do not have.
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1);
+    // Typing or clearing search starts with all conditions so an old filter
+    // cannot hide matching scans.
+    setFilterCategory("all");
+    // Close the phone's filter bar and return its icon to the inactive state.
+    setFiltersOpen(false);
+    setPagination((current) => ({ ...current, currentPage: 1 }));
+    setSelectedIds([]);
+    setDeleteFailed(false);
   };
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFilterCategory(e.target.value);
-    setCurrentPage(1);
+    setPagination((current) => ({ ...current, currentPage: 1 }));
+    setSelectedIds([]);
+    setDeleteFailed(false);
   };
 
   return (
-    <div className="flex flex-col gap-5 sm:gap-6">
-      {/* Responsive Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        {/* Row 1 / Left: Title */}
-        <div className="flex items-center justify-between w-full">
-          <h3
-            className={`text-xl sm:text-2xl font-black text-[#143519] tracking-tight ${
-              isFullHistoryPage ? "w-full text-center sm:text-left" : ""
-            }`}
+    <div className="flex flex-col gap-3 sm:gap-6">
+      {isFullHistoryPage ? (
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:flex md:flex-wrap md:justify-between">
+          <div
+            className={
+              selectionMode
+                ? "col-span-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-2xl bg-[#eaf3e5] p-2 md:flex md:w-full md:flex-wrap md:gap-3 md:p-3"
+                : "contents"
+            }
           >
-            {isFullHistoryPage ? t.scanHistoryTitle : t.recentScansTitle}
-          </h3>
-
-          {!isFullHistoryPage && onViewAllHistory && (
-            <button
-              onClick={onViewAllHistory}
-              className="text-xs font-bold text-[#277839] hover:underline flex items-center cursor-pointer shrink-0 sm:hidden"
-            >
-              <span>{t.viewAllHistoryShort}</span>
-            </button>
-          )}
-        </div>
-
-        {/* Row 2 on Mobile / Right side on Desktop: Search & Filter OR Desktop View All link */}
-        {isFullHistoryPage ? (
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
-            {/* Search bar */}
-            <div className="relative w-full sm:w-64">
-              <svg
-                className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#738a77]"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
+            <div className="flex min-w-0 items-center gap-2">
+              {selectionMode && (
+                <button
+                  type="button"
+                  aria-label={t.historyCancelSelectionBtn}
+                  onClick={cancelSelection}
+                  disabled={isDeleting}
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-[#143519] cursor-pointer hover:bg-[#eaf3e5] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839] disabled:cursor-wait disabled:opacity-50"
+                >
+                  <Icon name="close" size={22} aria-hidden="true" />
+                </button>
+              )}
+              <h3
+                ref={historyHeadingRef}
+                tabIndex={-1}
+                className="min-w-0 rounded-sm text-lg font-black tracking-tight text-[#143519] break-words md:text-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839]"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
+                {selectionMode ? (
+                  <span aria-live="polite" aria-atomic="true">
+                    {t.historySelectedCount.replace(
+                      "{n}",
+                      String(activeSelectedIds.length),
+                    )}
+                  </span>
+                ) : (
+                  t.scanHistoryTitle
+                )}
+              </h3>
+            </div>
+
+            {selectionMode && onDeleteScans ? (
+              <>
+                <button
+                  type="button"
+                  onClick={selectAllMatching}
+                  aria-describedby={selectionHintId}
+                  disabled={isDeleting || filteredScans.length === 0}
+                  className="min-h-11 min-w-11 rounded-xl px-3 py-2 text-sm font-bold text-[#277839] cursor-pointer hover:bg-[#eaf3e5] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839] disabled:cursor-default disabled:opacity-50 md:ml-auto md:border md:border-[#277839] md:bg-white md:px-4"
+                >
+                  <span className="md:hidden">
+                    {t.historySelectAllResultsBtn}
+                  </span>
+                  <span className="hidden md:inline">
+                    {t.historySelectAllCountBtn.replace(
+                      "{n}",
+                      String(filteredScans.length),
+                    )}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={openDeleteConfirmation}
+                  disabled={isDeleting || activeSelectedIds.length === 0}
+                  className="hidden min-h-11 items-center justify-center gap-2 rounded-xl bg-rose-700 px-4 py-2 text-sm font-bold text-white cursor-pointer hover:bg-rose-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 disabled:cursor-default disabled:opacity-50 md:inline-flex"
+                >
+                  <Icon name="trash" size={16} aria-hidden="true" />
+                  {t.historyDeleteSelectedCountBtn.replace(
+                    "{n}",
+                    String(activeSelectedIds.length),
+                  )}
+                </button>
+              </>
+            ) : (
+              <>
+                {onDeleteScans && (
+                  <button
+                    type="button"
+                    aria-pressed={selectionMode}
+                    onClick={() => {
+                      setSelectionMode(true);
+                      historyHeadingRef.current?.focus({ preventScroll: true });
+                    }}
+                    disabled={!hasUserScans || isDeleting}
+                    className="min-h-11 min-w-11 shrink-0 rounded-xl bg-[#277839] px-3 py-2 text-sm font-bold text-white cursor-pointer hover:bg-[#1f622d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839] disabled:cursor-default disabled:opacity-50 md:order-3 md:border md:border-[#277839] md:bg-white md:px-4 md:text-[#277839] md:hover:bg-[#f0f7eb]"
+                  >
+                    {t.historySelectBtn}
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+          <div
+            className={`col-span-2 grid min-w-0 grid-cols-[minmax(0,1fr)_2.75rem] gap-2.5 ${selectionMode ? "md:hidden" : "md:order-2 md:ml-auto md:flex md:items-center"}`}
+          >
+            <div className="relative min-w-0 md:w-52">
+              <Icon
+                name="search"
+                size={17}
+                aria-hidden="true"
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#738a77]"
+              />
               <input
                 type="text"
+                aria-label={t.searchPlaceholder}
                 placeholder={t.searchPlaceholder}
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full pl-9 pr-3 py-2.5 sm:py-2 bg-white border border-[#d2e2c4] rounded-xl text-xs font-semibold text-[#143519] placeholder-[#738a77] focus:outline-none focus:border-[#277839] transition-colors shadow-xs"
+                disabled={isDeleting}
+                className="min-h-11 w-full rounded-xl border border-[#d2e2c4] bg-white py-2.5 pr-3 pl-9 text-xs font-semibold text-[#143519] placeholder-[#738a77] shadow-xs transition-colors focus:outline-none focus:border-[#277839] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839]"
               />
             </div>
-
-            {/* Filter selector */}
-            <div className="relative w-full sm:w-auto">
+            <button
+              type="button"
+              aria-label={
+                filterCategory === "all"
+                  ? t.historyFilterBtn
+                  : t.historyFilterActiveBtn.replace(
+                      "{name}",
+                      activeFilterLabel || t.filterAll,
+                    )
+              }
+              aria-expanded={filtersOpen}
+              aria-controls={filterPanelId}
+              onClick={() => setFiltersOpen((open) => !open)}
+              disabled={isDeleting}
+              className={`relative flex h-11 w-11 items-center justify-center rounded-xl border text-[#277839] cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839] disabled:cursor-wait disabled:opacity-50 md:hidden ${filtersOpen || filterCategory !== "all" ? "border-[#277839] bg-[#eaf3e5]" : "border-[#d2e2c4] bg-white hover:bg-[#f0f7eb]"}`}
+            >
+              <Icon name="filter" size={21} aria-hidden="true" />
+              {filterCategory !== "all" && (
+                <span
+                  aria-hidden="true"
+                  className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-[#277839]"
+                />
+              )}
+            </button>
+            <div
+              id={filterPanelId}
+              className={`relative col-span-2 min-w-0 ${filtersOpen ? "block" : "hidden"} md:block`}
+            >
+              <label htmlFor={filterSelectId} className="sr-only">
+                {t.historyFilterLabel}
+              </label>
               <select
+                id={filterSelectId}
                 value={filterCategory}
                 onChange={handleFilterChange}
-                className="w-full appearance-none py-2.5 pl-3 pr-11 sm:py-2 bg-white border border-[#d2e2c4] rounded-xl text-xs font-semibold text-[#143519] focus:outline-none focus:border-[#277839] transition-colors shadow-xs cursor-pointer"
+                disabled={isDeleting}
+                className="min-h-11 w-full appearance-none rounded-xl border border-[#d2e2c4] bg-white py-2.5 pr-11 pl-3 text-xs font-semibold text-[#143519] shadow-xs transition-colors cursor-pointer focus:outline-none focus:border-[#277839] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839]"
               >
-                <option value="all">{t.filterAll}</option>
-                <option value="anthracnose">Anthracnose</option>
-                <option value="healthy">Healthy</option>
-                <option value="sooty">Sooty Mold</option>
-                <option value="scab">Mango Scab</option>
-                <option value="canker">Bacterial Canker</option>
-                <option value="black">Bacterial Black Spot</option>
-                {/* Rejected scans. Not a class, so it is listed last and matched on
-                    the one word no real class name contains. */}
-                <option value="uncertain">{UNCERTAIN_LABEL}</option>
+                {filterOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {t.historyFilterOptionCount
+                      .replace("{name}", option.label)
+                      .replace("{n}", String(option.count))}
+                  </option>
+                ))}
               </select>
-              <svg
+              <Icon
+                name="chevron-down"
+                size={16}
                 aria-hidden="true"
-                className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#277839]"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-              >
-                <path d="m7 10 5 5 5-5" />
-              </svg>
+                className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#277839]"
+              />
             </div>
           </div>
-        ) : (
-          /* View All History link on Home Screen (Desktop view) */
-          onViewAllHistory && (
+        </div>
+      ) : (
+        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+          <div className="flex items-center justify-between w-full">
+            <h3
+              ref={historyHeadingRef}
+              tabIndex={-1}
+              className="rounded-sm text-xl sm:text-2xl font-black text-[#143519] tracking-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839]"
+            >
+              {/* Phones keep their existing heading. Desktop wording follows
+                  the displayed cards as scans are added or removed. */}
+              <span className="md:hidden">{t.recentScansTitle}</span>
+              <span className="hidden md:inline">
+                {visibleScans.length > 1
+                  ? t.recentScansDesktopTitle
+                  : t.recentScanDesktopTitle}
+              </span>
+            </h3>
+            {onViewAllHistory && (
+              <button
+                onClick={onViewAllHistory}
+                className="text-xs font-bold text-[#277839] hover:underline flex items-center cursor-pointer shrink-0 sm:hidden"
+              >
+                <span>{t.viewAllHistoryShort}</span>
+              </button>
+            )}
+          </div>
+          {onViewAllHistory && (
             <button
               onClick={onViewAllHistory}
               className="hidden sm:flex text-xs font-bold text-[#277839] items-center cursor-pointer shrink-0"
             >
               <span>{t.viewAllHistory}</span>
             </button>
-          )
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
-      {/* Text-Only Empty State (when 0 scans exist on device) */}
+      {isFullHistoryPage && selectionMode && (
+        <p id={selectionHintId} className="sr-only">
+          {t.historySelectionHint}
+        </p>
+      )}
+
       {!hasUserScans ? (
         <div className="bg-[#eaf3e5] border border-[#d3e3ca] p-6 sm:p-12 rounded-3xl text-center flex flex-col items-center justify-center gap-2 shadow-xs">
           <Icon name="history" size={27} />
@@ -180,9 +478,8 @@ export const ScanHistoryList = memo(function ScanHistoryList({
           <p className="text-xs text-[#526856] max-w-md">
             {t.noScanHistoryText}
           </p>
-          {/* Desktop-only way out of the empty state. The scan FAB lives in the
-              bottom navigation, which is md:hidden, so without this a desktop
-              visitor with no scans has nothing here to click. */}
+          {/* The mobile scan action lives in the bottom navigation. Desktop
+              needs an explicit action when no scan cards exist yet. */}
           {onScanPress && (
             <button
               type="button"
@@ -194,10 +491,13 @@ export const ScanHistoryList = memo(function ScanHistoryList({
             </button>
           )}
         </div>
+      ) : filteredScans.length === 0 ? (
+        <p role="status" className="py-8 text-center text-sm text-[#526856]">
+          {t.historyNoMatchingResults}
+        </p>
       ) : (
-        /* Responsive Grid for Scans (Max 6 per page on History Screen [3 cols x 2 rows], Max 4 on Home Screen [4 cols]) */
         <div
-          className={`grid gap-4 sm:gap-6 ${!isFullHistoryPage ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}
+          className={`grid ${isFullHistoryPage ? "grid-cols-1 md:grid-cols-2 md:gap-6 lg:grid-cols-3" : "w-full max-w-sm grid-cols-1 gap-4 sm:gap-6 md:max-w-none md:grid-cols-4"}`}
         >
           {visibleScans.map((scan) => (
             <ScanCard
@@ -209,23 +509,33 @@ export const ScanHistoryList = memo(function ScanHistoryList({
               }
               language={language}
               onSelect={onSelectScan}
-              onDelete={onDeleteScan}
+              onDelete={openSingleDeleteConfirmation}
+              compact={isFullHistoryPage}
+              selectionMode={isFullHistoryPage && selectionMode}
+              selected={selectedIdSet.has(scan.id)}
+              disabled={isDeleting}
+              onToggleSelection={toggleSelection}
             />
           ))}
         </div>
       )}
 
-      {/* Compact pagination stays on one row on narrow screens. */}
+      {/* History uses five records on mobile and six at the md breakpoint. */}
       {isFullHistoryPage && hasUserScans && totalPages > 1 && (
         <nav
           aria-label={t.scanHistoryTitle}
-          className="flex items-center justify-center gap-3 pt-6 w-full"
+          className="flex items-center justify-center gap-3 pt-2 w-full"
         >
           <button
             type="button"
             aria-label={t.previousPage}
-            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-            disabled={currentPage === 1}
+            onClick={() =>
+              setPagination((current) => ({
+                ...current,
+                currentPage: Math.max(current.currentPage - 1, 1),
+              }))
+            }
+            disabled={currentPage === 1 || isDeleting}
             className="h-11 w-11 shrink-0 rounded-xl border border-[#d2e2c4] bg-white text-[#143519] text-lg font-bold transition-colors hover:bg-[#f0f7eb] cursor-pointer disabled:bg-[#eaf3e5] disabled:text-[#738a77] disabled:cursor-not-allowed"
           >
             <span aria-hidden="true">&lt;</span>
@@ -242,13 +552,45 @@ export const ScanHistoryList = memo(function ScanHistoryList({
           <button
             type="button"
             aria-label={t.nextPage}
-            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-            disabled={currentPage === totalPages}
+            onClick={() =>
+              setPagination((current) => ({
+                ...current,
+                currentPage: Math.min(current.currentPage + 1, totalPages),
+              }))
+            }
+            disabled={currentPage === totalPages || isDeleting}
             className="h-11 w-11 shrink-0 rounded-xl border border-[#d2e2c4] bg-white text-[#143519] text-lg font-bold transition-colors hover:bg-[#f0f7eb] cursor-pointer disabled:bg-[#eaf3e5] disabled:text-[#738a77] disabled:cursor-not-allowed"
           >
             <span aria-hidden="true">&gt;</span>
           </button>
         </nav>
+      )}
+
+      {isFullHistoryPage && selectionMode && onDeleteScans && (
+        <button
+          type="button"
+          onClick={openDeleteConfirmation}
+          disabled={isDeleting || activeSelectedIds.length === 0}
+          className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-rose-700 px-4 py-3 text-sm font-bold text-white cursor-pointer hover:bg-rose-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 disabled:cursor-default disabled:opacity-50 md:hidden"
+        >
+          <Icon name="trash" size={17} aria-hidden="true" />
+          {(activeSelectedIds.length === 1
+            ? t.historyDeleteSelectedOneBtn
+            : t.historyDeleteSelectedBtn
+          ).replace("{n}", String(activeSelectedIds.length))}
+        </button>
+      )}
+
+      {confirmationIds && (
+        <DeleteScansModal
+          count={confirmationIds.length}
+          language={language}
+          isDeleting={isDeleting}
+          hasError={deleteFailed}
+          onConfirm={() => void handleConfirmDelete()}
+          onCancel={() => setConfirmationIds(null)}
+          fallbackFocusRef={historyHeadingRef}
+        />
       )}
     </div>
   );

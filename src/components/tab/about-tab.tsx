@@ -76,14 +76,14 @@ export const AboutTab = memo(function AboutTab({
   ];
   const timeline = [
     {
-      number: "01",
+      number: "1",
       title: t.aboutResearchTitle,
       description: t.aboutResearchDesc,
     },
-    { number: "02", title: t.aboutDataTitle, description: t.aboutDataDesc },
-    { number: "03", title: t.aboutAiStepTitle, description: t.aboutAiStepDesc },
+    { number: "2", title: t.aboutDataTitle, description: t.aboutDataDesc },
+    { number: "3", title: t.aboutAiStepTitle, description: t.aboutAiStepDesc },
     {
-      number: "04",
+      number: "4",
       title: t.aboutApplicationTitle,
       description: t.aboutApplicationDesc,
     },

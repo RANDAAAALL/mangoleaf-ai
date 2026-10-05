@@ -11,6 +11,7 @@ import {
   savedPhotoSize,
   photos,
   nav,
+  historyDetails,
 } from "./support/fixtures";
 
 test.beforeEach(async ({ context }) => {
@@ -147,9 +148,7 @@ test("S02: failed guest sign-in does not block diagnosis or public guidelines", 
   expect(saved[0]._status).toBe("pending-insert");
   expect(await savedPhotoSize(page, saved[0].id)).toBeGreaterThan(0);
   await nav(page, "History");
-  await expect(
-    page.getByRole("button", { name: "Details", exact: true }),
-  ).toHaveCount(1);
+  await expect(historyDetails(page)).toHaveCount(1);
 });
 
 test("S05: upgrading legacy IndexedDB keeps local history and does not claim old cloud photos", async ({
