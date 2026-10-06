@@ -2,7 +2,7 @@
 
 These tests cover the scan workflow and the manuscript's reliability paragraph. R01–R04 are project test IDs, not research-objective numbers from the manuscript. Physical-device results and model accuracy require their own evidence; a green browser suite alone does not establish either.
 
-**Current release candidate:** App `0.5.2`, model `v4.3.0`, is a candidate and is not released. The [release record](../versions/PWA_VERSIONING.md#v052-scan-history-and-deletion-candidate-october-6-2026) and October 6 scope below identify its validation. Earlier dated candidate entries preserve the status and evidence recorded for those source snapshots.
+**Current release candidate:** App `0.5.3`, model `v4.3.0`, is a candidate and is not released. The [release record](../versions/PWA_VERSIONING.md#v053-guideline-update-ordering-candidate-october-7-2026) and versioned validation below identify its scope. Earlier dated entries preserve the status and evidence recorded for those source snapshots.
 
 **Historical V4.1.1 rollback (September 29, 2026):** The app again uses one seven-class V4.1.1 Background model and opens its scan sheet directly, without an organ choice. The completed [V4.2.0 two-model trial](../model-training/experiment/v4.2.0/TRIAL_v4_2_0.md#completed-results-and-comparison-september-29-2026) is retained as evidence and an ignored local backup. Existing single-model browser fixtures and cases were not changed or run for this rollback; prior test results do not certify the restored working tree. This rollback verifies TypeScript, lint, and build. Photo hashes stay unchanged; local rows marked with the V4.2.0 model version remain in history but are not reused as V4.1.1 diagnoses.
 
@@ -20,6 +20,41 @@ The [v0.4.9 PWA history entry](../versions/PWA_VERSIONING.md#v049-adoption-of-v4
 
 **Live server-security verification (October 2, 2026):** After the photo bucket was saved as private, migration `secure_guest_owned_cloud_sync`, history version `20261002152830`, applied successfully. Catalog checks verified the private bucket, grants, RLS, index, and three scan/one guideline/four Storage policies. Thirty assertions using temporary copies of the applied policy expressions/grants passed and were rolled back; the earlier proposed-policy proof is separate. All original values remain unchanged across 65 scan rows, six guidelines, and 68 Storage object entries, with no missing entries or invented legacy owners. The advisor returned zero findings. Read-only HTTP probes returned 401 for unsigned scans, 200 for all six public guidelines, and 400 for a cache-busted old public photo URL. These checks created no production test users, scan rows, or Storage files, and performed no remote photo writes/deletes/purge. They do not prove every formerly public cached copy disappeared or establish a real guest signup/upload/download session. The matching updated client has not been committed, pushed, or deployed. See [implementation status](../supabase/SECURITY-AND-SYNC.md#implementation-status).
 
+## v0.5.3 candidate validation (October 7, 2026)
+
+**Candidate / not released.** App `0.5.3` packages the guideline-ordering fix and network-only guideline HTTP reads while retaining model `v4.3.0`. The app label is rebuilt from `package.json`; no environment-variable override or model relabel is needed.
+
+The approved versioned checks are formatting/security, TypeScript, lint, production build, export verification, all tooling cases, the complete core browser suite, and `bun run test:reliability --grep "R01:"`. The 30-minute R03 session is excluded. Browser scans use fresh contexts and the isolated local mock backend. R01 executes the actual model rather than reusing duplicate diagnoses.
+
+The initial `0.5.2` guideline implementation passed 106 core cases and 26 tooling cases under fingerprint `17cf8febe8c0b6c5b1e8ac7e669f4f28df687f66f76c13a79a2171a3ef3136ef`. Those results remain in the [initial ordering record](#guideline-update-ordering-october-7-2026) and do not certify this new version label/build. Prior HTML/JSON reports were preserved under ignored `.tools/release-validation-v0.5.3-20261007/before-version-bump/` before the versioned commands replaced their normal report folders.
+
+**Versioned local results:** The following checks passed for app `0.5.3` and model `v4.3.0`, with application input fingerprint `b116df9958424036c66d80fb151e8ec44bf4a07838b73022e17f2bb47dd5a661`. Report base commit is `ee91cf693fd52acb6f882f2c049a3b2ddd599a1f` plus the uncommitted candidate changes; the report input hashes identify the tested files.
+
+| Check                                         | Result                                                                                                                                                       |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Formatting and security scan                  | Passed. The security scan covered tracked paths and full fetched Git history.                                                                                |
+| TypeScript, lint, and production static build | Passed in the required order.                                                                                                                                |
+| Export verification                           | All 10 checks passed.                                                                                                                                        |
+| Tooling tests                                 | All 26 passed, including 12 guideline-ordering cases; 84 assertions.                                                                                         |
+| Complete core browser suite                   | 106 passed, one declared Firefox G07 worker skip, zero unexpected failures or flaky results; 9.6 minutes (576,312 ms). G07 passed in both Chromium projects. |
+| R01 repeated actual inference                 | One Chromium mobile-emulation case passed in 53.6 seconds: eight photos, 30 predictions each, 240 predictions total.                                         |
+
+R01 recorded stable raw/displayed classes and acceptance for each photo, maximum raw-confidence range `0`, and maximum net tensor growth per photo `0`. The browser was Chromium `153.0.8010.12`, with TensorFlow.js `4.22.0`, the WebGL backend, forced Float16, and an ANGLE SwiftShader renderer. This is same-session browser consistency evidence, not a model-accuracy estimate, phone-performance measurement, or measurement of all browser/native memory. No R03 session ran.
+
+All five model files match the earlier tested bundle:
+
+| Model file                          | SHA-256                                                            |
+| ----------------------------------- | ------------------------------------------------------------------ |
+| `public/model/model.json`           | `f5ebdd96893513f05d78126880e9a56a94c4750f75b02a2ee2fb7d3792c8267b` |
+| `public/model/model_config.json`    | `40216b04bf0e3f303e0d23beb7059cfec3d43ac6e01be35a3431600443c37d0c` |
+| `public/model/group1-shard1of3.bin` | `04e1e18a28cb414442c66617a0bc0cbdff2e93116d08d0a170f04b30572bf09c` |
+| `public/model/group1-shard2of3.bin` | `0432d0dc9a25e4d2d0048aa5c8120076c05466a6363bd2d5a0c5e5ee4fd34954` |
+| `public/model/group1-shard3of3.bin` | `a0fab950ece352711e938467d6bf5f6aaed6c48b5ee1e37812b0a7192399292b` |
+
+The full versioned reports are preserved in ignored `.tools/release-validation-v0.5.3-20261007/final/reports.zip`; all 67 archived files were verified against their source bytes. A ZIP avoids Windows path-length failures when copying deeply nested photo attachments. Decoded R01 observations, input hashes, model hashes, and a validation summary are saved beside the archive. Core report SHA-256 is `8ede50d1c3b7e45b0a49832e914f622fd834641eb678b2488a058f8de5e92179`; R01 report SHA-256 is `a25e6513657ebec4db9b3a3624dd07ee8c35345c63db6e7fd889b8251724ce57`. Both reports identify the same application fingerprint. Sandbox process-launch restrictions required the build, security/tooling checks, and browser checks to run outside the sandbox; these restrictions were not application failures.
+
+Local candidate validation is complete. Final-commit CI, staged production promotion/live-version verification, and publication remain separate pending outcomes. No deployment is claimed by these local checks.
+
 ## v0.5.2 candidate validation (October 6, 2026)
 
 **Candidate / not released.** App `0.5.2` retains model `v4.3.0` and adds responsive Home/History lists, category counts, cross-page selection, shared single/batch deletion confirmation, and compact photo tips with a visible Cancel action. The [release record](../versions/PWA_VERSIONING.md#v052-scan-history-and-deletion-candidate-october-6-2026) records the scope and intended tag.
@@ -33,6 +68,7 @@ The versioned local checks below identify working-tree application fingerprint `
 | Formatting/security, TypeScript, lint, production static build | Passed locally. History and the uncommitted diff/new modal were scanned with redacted output.                                                           |
 | Export verification and tooling tests                          | Passed: 10 export checks; 14 tooling cases and 41 assertions.                                                                                           |
 | Complete core browser suite                                    | Passed: all 86 cases in 6.4 minutes; zero failures or flaky results across Chromium desktop/mobile, Firefox desktop, and scoped WebKit mobile coverage. |
+| R03 extended use                                               | Not run; excluded from the authorized scope.                                                                                                            |
 | R01 repeated actual inference                                  | Passed: 240 predictions across eight photos in Chromium mobile emulation; no class/acceptance variation, confidence range 0, and tensor growth 0.       |
 | R03 extended use                                               | Excluded from this candidate's approved run.                                                                                                            |
 
@@ -197,7 +233,7 @@ Use both languages, narrow/desktop viewports, fresh contexts, and the local mock
 - Check offline single/batch deletion of local-only, unowned, and owned scans. Local-only/unowned rows are removed; owned rows disappear from visible History but retain their pending-deletion marker until cloud cleanup succeeds. Reconnect through the local mock and check photo/row cleanup, retry, and no restored deleted records. Existing owner authorization and upload-race cases remain relevant.
 - Open the photo-tips sheet in both languages at narrow, short/landscape, and desktop sizes. Tips appear once before the picker actions; the drag handle and Cancel remain visible while the middle content scrolls. Desktop keeps the centered panel within 520px. Cancel creates no scan. The advice works offline and does not start a camera stream, alter pixels, or invoke inference.
 
-These are current acceptance conditions. Passing results must be recorded for the final `0.5.2` source; prior F10/F11 and cloud-race reports retain their dated evidence limits.
+These acceptance conditions remain in use for the current candidate. Passing results must be recorded for its final versioned source; the original `0.5.2`, F10/F11, and cloud-race reports retain their dated evidence limits.
 
 ### v0.4.9 regression scope (October 2, 2026)
 
@@ -229,7 +265,7 @@ The Scan Sheet now displays two shared framing/lighting tips above its camera an
 - Select a new photo and check the updated review reminder. Select an eligible duplicate and check that its duplicate message and controls remain unchanged. X, Escape, Retake, and diagnosis keep their existing behavior.
 - Repeat with an already-cached app offline. The tips should require no network request, camera stream, image analysis, or extra model loading. They are advice, not confirmation that a photo is suitable.
 
-The camera and comprehension checks above are retained from the October 2 guidance review; the [v0.5.2 candidate section](#v052-candidate-validation-october-6-2026) defines the current release scope. The local backup for this reversible change is `.tools/ui-backups/photo-guidance-20261001T212013Z/`; restore only this change and rebuild the service worker, preserving newer unrelated work.
+The camera and comprehension checks above are retained from the October 2 guidance review; the [v0.5.3 candidate section](#v053-candidate-validation-october-7-2026) defines the current release scope. The local backup for this reversible change is `.tools/ui-backups/photo-guidance-20261001T212013Z/`; restore only this change and rebuild the service worker, preserving newer unrelated work.
 
 Controlled tests replace only the model response with fixed scores. They exercise the real classifier gates, UI, local storage, and client sync against a mock service. Real-model and offline cases use the actual exported model assets. No test changes the classifier's resizing, normalization, precision, or rejection rules.
 
@@ -255,6 +291,38 @@ Use an isolated browser/profile and mock backend for these checks. A successfull
 - Download guidance successfully, go offline, and reopen details. The saved guidance should remain readable even if later synchronization fails.
 - Supply whitespace-only English text and valid Bisaya text, then reverse the fields. Only the blank language should show the unavailable message.
 - Verify Healthy Leaf and Healthy Fruit both use the `healthy` row. Update a mock guideline, reconnect and sync, then confirm the displayed copy updates without changing application code.
+
+## Guideline update ordering: October 7, 2026
+
+Use the isolated local mock backend and fresh browser contexts. This is a client ordering regression, not evidence that a live farmer received outdated advice. The October 6 candidate results identify their original application fingerprint and do not verify this later source change.
+
+The [guideline manager cases](../../tools/guidelines-sync.test.mjs) cover direct changes, both arrival orders, repeated events, download/local-write failures, offline cleanup, subscription readiness, and conflicting local snapshots. They use controlled values rather than live Supabase data.
+
+The focused browser cases are [G01–G07 in guideline-sync.pw.ts](../../tools/e2e/guideline-sync.pw.ts). G01–G06 exercise the real SDK subscription callback in Chromium desktop/mobile and Firefox; G07 allows the actual worker in Chromium. The mock controls table changes, WebSocket delivery, held HTTP responses, and failed follow-ups. It does not reproduce Supabase server authorization or establish production event-delivery guarantees.
+
+- Hold an HTTP response containing guidance B. Deliver a Realtime INSERT/UPDATE containing C before releasing that response. C must reach IndexedDB and the UI directly; the held result must not replace it. One protected follow-up GET must reconcile the complete set after the attempt finishes or fails.
+- Save the HTTP result first, then deliver C through Realtime. C must replace the local row directly without an extra GET solely for that event. No millisecond threshold or special reconnect state should control this distinction.
+- Repeat the overlap with DELETE and INSERT, multiple rapid notifications, and a failed follow-up. Deleted rows must not return, new values must remain available, repeated notifications must share the follow-up, and a failed request must preserve saved advice for retry.
+- Delay the local HTTP commit as well as the network response. A received event during that save must abort and roll back the older full-set transaction rather than expose a partial replacement. An unrelated database failure must remain a failed attempt, not be mistaken for an intentional discard. Write a changed guideline through another tab while a GET is pending; the final snapshot comparison must reject the conflicting result.
+- Go offline or unmount the synchronization hook during pending work. The old task must not install stale guidance afterward. Reconnect and establish the subscription, including changes made before listening became ready; a full refresh must reconcile missed edits/deletions. This cleanup scope is separate from a temporary socket interruption while the browser remains online.
+- Activate the real service worker after seeding an old guideline HTTP response. Confirm cleanup removes that response, later guideline REST requests use the network, and a failed request preserves IndexedDB advice instead of accepting the old HTTP response as fresh. Application/model asset caching and private-cloud bypass rules remain intact.
+- Keep public guidance available when guest sign-in fails. Use both languages and verify accepted guidance, missing/blank language fields, and uncertain-photo reminders retain their established behavior.
+
+**Local validation, October 7, 2026:** These checks identify application input fingerprint `17cf8febe8c0b6c5b1e8ac7e669f4f28df687f66f76c13a79a2171a3ef3136ef`, based on commit `ee91cf693fd52acb6f882f2c049a3b2ddd599a1f` plus the uncommitted working tree. App/model labels remain `0.5.2` / `v4.3.0`.
+
+The existing local `v0.5.2` tag identifies that baseline commit and excludes this fix. These results concern later, unreleased working-tree code, not an amendment or recertification of that tag. A future release must receive a new app version/tag and identify its final tested commit.
+
+| Check                                                           | Result                                                                                                                                                                          |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Guideline manager cases and existing tooling                    | All 26 cases passed, including 12 guideline-ordering cases.                                                                                                                     |
+| Focused G01–G07 browser suite                                   | 20 passed; the one Firefox worker case was skipped by its declared Chromium scope. G01–G06 passed in Chromium desktop/mobile and Firefox; G07 passed in both Chromium projects. |
+| Formatting, security, TypeScript, lint, production static build | Passed locally.                                                                                                                                                                 |
+| Export verification                                             | All 10 checks passed.                                                                                                                                                           |
+| Complete core browser suite                                     | 106 passed and one declared Firefox G07 worker skip in 9.9 minutes (593,726 ms), with zero unexpected failures or flaky results.                                                |
+
+The focused and complete browser results exercise actual SDK callbacks and, in G07, worker activation/cache cleanup and network-only requests. They do not establish a production incident, remote Supabase event guarantees, physical-device performance, or deployment. Final complete-suite reports are in ignored `playwright-report/e2e/` and `test-results/e2e/results.json`; that run replaced the focused reports. No reliability command was run for this fix, so earlier R01 measurements remain tied to their original source. No release or production deployment is established by this section.
+
+An initial complete-suite attempt was stopped at the existing F15/F16 loading fixture: its artificial hold on guideline reads also blocked the new before-fetch baseline read. The test setup now releases those held reads before waiting for queued synchronization. Loading, unavailable-language, uncertain-reminder, and offline assertions remain intact and passed in the final complete run. This correction changed test ordering, not the application fingerprint or inference behavior. No runtime source changed after the verified production build.
 
 ## Cloud ownership and offline checks
 

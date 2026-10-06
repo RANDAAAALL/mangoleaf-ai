@@ -22,6 +22,14 @@ const rows = new Map();
 const objects = new Map();
 const sessions = new Map();
 const refreshTokens = new Map();
+const guidelines = new Map();
+const realtimeSockets = new Set();
+const heldGuidelineReads = [];
+let holdNextGuidelineRead = false;
+let failNextGuidelineRead = false;
+let guidelineReadCount = 0;
+let guidelineJoinCount = 0;
+let guidelineEventCount = 0;
 const signingKey = randomUUID();
 const headers = {
   "Cache-Control": "no-store",
@@ -30,6 +38,81 @@ const headers = {
     "connect-src 'self' blob: ws://127.0.0.1:4173; object-src 'none'",
 };
 const json = (value, status = 200) => Response.json(value, { status, headers });
+function realtimeMessage(socket, joinRef, ref, topic, event, payload) {
+  socket.send(
+    JSON.stringify(
+      socket.data.format === "array"
+        ? [joinRef, ref, topic, event, payload]
+        : { join_ref: joinRef, ref, topic, event, payload },
+    ),
+  );
+}
+function guidelineState() {
+  return {
+    reads: guidelineReadCount,
+    joins: guidelineJoinCount,
+    events: guidelineEventCount,
+    held: heldGuidelineReads.length,
+    connections: [...realtimeSockets].flatMap((socket) =>
+      [...socket.data.subscriptions.values()].some((channel) =>
+        channel.filters.some((filter) => filter.table === "guidelines"),
+      )
+        ? [socket.data.id]
+        : [],
+    ),
+  };
+}
+function publishGuidelineChange(eventType, row, skipConnectionId) {
+  const previous = guidelines.get(row.id);
+  if (eventType === "DELETE") guidelines.delete(row.id);
+  else guidelines.set(row.id, row);
+  guidelineEventCount += 1;
+  let recipients = 0;
+  for (const socket of realtimeSockets) {
+    if (socket.data.id === skipConnectionId) continue;
+    for (const [topic, channel] of socket.data.subscriptions) {
+      const ids = channel.filters
+        .filter(
+          (filter) =>
+            filter.schema === "public" &&
+            filter.table === "guidelines" &&
+            (filter.event === "*" || filter.event === eventType),
+        )
+        .map((filter) => filter.id);
+      if (ids.length === 0) continue;
+      // Use the installed SDK's actual Postgres Changes wire format, not a
+      // browser callback injected by a test. DELETE exposes its primary key.
+      realtimeMessage(
+        socket,
+        channel.joinRef,
+        null,
+        topic,
+        "postgres_changes",
+        {
+          ids,
+          data: {
+            schema: "public",
+            table: "guidelines",
+            commit_timestamp: new Date().toISOString(),
+            type: eventType,
+            errors: null,
+            columns: [
+              "id",
+              "disease_name",
+              "guidelines_en",
+              "guidelines_bis",
+            ].map((name) => ({ name, type: "text" })),
+            record: eventType === "DELETE" ? {} : row,
+            old_record:
+              eventType === "INSERT" ? {} : { id: previous?.id ?? row.id },
+          },
+        },
+      );
+      recipients += 1;
+    }
+  }
+  return recipients;
+}
 function guestSession(user = null, refreshToken = randomUUID()) {
   const timestamp = Math.floor(Date.now() / 1000);
   user ??= {
@@ -104,8 +187,52 @@ Bun.serve({
     const url = new URL(request.url);
     const path = decodeURIComponent(url.pathname);
     if (path.startsWith("/__mock__/realtime/")) {
-      if (server.upgrade(request)) return;
+      if (
+        server.upgrade(request, {
+          data: { id: randomUUID(), format: "array", subscriptions: new Map() },
+        })
+      )
+        return;
       return new Response("WebSocket required", { status: 400 });
+    }
+    if (path === "/__test__/guidelines") {
+      if (request.method === "GET") return json(guidelineState());
+      if (request.method !== "POST")
+        return json({ error: "POST required" }, 405);
+      const control = await request.json();
+      if (control.action === "reset") {
+        // Release old requests before resetting so a failed test cannot leave
+        // the shared local server waiting during the next fresh context.
+        heldGuidelineReads.splice(0).forEach((reading) => reading.release());
+        guidelines.clear();
+        for (const row of control.rows ?? []) guidelines.set(row.id, row);
+        holdNextGuidelineRead = false;
+        failNextGuidelineRead = false;
+        guidelineReadCount = 0;
+        guidelineJoinCount = 0;
+        guidelineEventCount = 0;
+      } else if (control.action === "hold") {
+        holdNextGuidelineRead = true;
+      } else if (control.action === "release") {
+        heldGuidelineReads.splice(0).forEach((reading) => reading.release());
+      } else if (control.action === "fail") {
+        failNextGuidelineRead = true;
+      } else if (control.action === "change") {
+        if (!["INSERT", "UPDATE", "DELETE"].includes(control.eventType))
+          return json({ error: "Invalid guideline event" }, 400);
+        const recipients = publishGuidelineChange(
+          control.eventType,
+          control.row,
+          control.skipConnectionId,
+        );
+        return json({ ...guidelineState(), recipients });
+      } else if (control.action === "disconnect") {
+        for (const socket of realtimeSockets)
+          socket.close(1012, "Test reconnect");
+      } else {
+        return json({ error: "Unknown guideline control" }, 400);
+      }
+      return json(guidelineState());
     }
     if (path === "/__test__/ready")
       return json({ fingerprint: build.fingerprint });
@@ -139,10 +266,21 @@ Bun.serve({
       const user = guest(request);
       return user ? json(user) : json({ error: "Not authenticated" }, 401);
     }
-    if (path === "/__mock__/rest/v1/guidelines")
-      return request.method === "GET"
-        ? json([])
-        : json({ error: "Read only" }, 403);
+    if (path === "/__mock__/rest/v1/guidelines") {
+      if (request.method !== "GET") return json({ error: "Read only" }, 403);
+      guidelineReadCount += 1;
+      if (failNextGuidelineRead) {
+        failNextGuidelineRead = false;
+        return json({ message: "Deliberate guideline refresh failure" }, 503);
+      }
+      // Capture the rows now, then optionally deliver that older snapshot late.
+      const snapshot = [...guidelines.values()];
+      if (holdNextGuidelineRead) {
+        holdNextGuidelineRead = false;
+        await new Promise((release) => heldGuidelineReads.push({ release }));
+      }
+      return json(snapshot);
+    }
     if (path === "/__mock__/rest/v1/scans") {
       const user = guest(request);
       if (!user) return json({ message: "Not authenticated" }, 401);
@@ -240,33 +378,42 @@ Bun.serve({
     return localFile(exportRoot, path === "/" ? "index.html" : path.slice(1));
   },
   websocket: {
+    open(socket) {
+      realtimeSockets.add(socket);
+    },
+    close(socket) {
+      realtimeSockets.delete(socket);
+    },
     message(socket, data) {
       const message = JSON.parse(String(data));
       // Supabase's Phoenix transport uses the JSON array serializer.
-      if (Array.isArray(message)) {
-        const [joinRef, ref, topic, event] = message;
-        if (event === "phx_join" || event === "heartbeat")
-          socket.send(
-            JSON.stringify([
-              joinRef,
-              ref,
-              topic,
-              "phx_reply",
-              { status: "ok", response: { postgres_changes: [] } },
-            ]),
-          );
-      } else if (
-        message.event === "phx_join" ||
-        message.event === "heartbeat"
-      ) {
-        socket.send(
-          JSON.stringify({
-            topic: message.topic,
-            ref: message.ref,
-            event: "phx_reply",
-            payload: { status: "ok", response: { postgres_changes: [] } },
-          }),
+      socket.data.format = Array.isArray(message) ? "array" : "object";
+      const [joinRef, ref, topic, event, payload] = Array.isArray(message)
+        ? message
+        : [
+            message.join_ref,
+            message.ref,
+            message.topic,
+            message.event,
+            message.payload,
+          ];
+      if (event === "phx_join") {
+        const filters = (payload.config?.postgres_changes ?? []).map(
+          (filter, index) => ({ ...filter, id: index + 1 }),
         );
+        socket.data.subscriptions.set(topic, { joinRef, filters });
+        if (filters.some((filter) => filter.table === "guidelines"))
+          guidelineJoinCount += 1;
+        realtimeMessage(socket, joinRef, ref, topic, "phx_reply", {
+          status: "ok",
+          response: { postgres_changes: filters },
+        });
+      } else if (event === "heartbeat" || event === "phx_leave") {
+        if (event === "phx_leave") socket.data.subscriptions.delete(topic);
+        realtimeMessage(socket, joinRef, ref, topic, "phx_reply", {
+          status: "ok",
+          response: {},
+        });
       }
     },
   },

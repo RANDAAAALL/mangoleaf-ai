@@ -1,9 +1,13 @@
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { guidelinesClient, supabase } from "@/lib/supabase-client";
-import { db } from "@/lib/db";
+import { db, type DiseaseGuideline } from "@/lib/db";
 import { modelVersion } from "@/lib/constants";
 import { getCloudOwnerId, peekCloudOwnerId } from "@/lib/cloud-session";
 import { syncPrivateScans } from "@/lib/cloud-sync";
+import {
+  createGuidelineSyncManager,
+  sameGuidelineSnapshot,
+} from "@/lib/guidelines-sync";
 
 const SYNC_RETRY_DELAYS_MS = [10_000, 30_000, 60_000, 300_000];
 
@@ -27,7 +31,47 @@ export function useSync() {
 
   const isSyncingRef = useRef(false);
   const syncRequestedRef = useRef(false);
-  const guidelinesTaskRef = useRef<Promise<boolean> | null>(null);
+  const [guidelinesSync] = useState(() =>
+    createGuidelineSyncManager({
+      isOnline: () => typeof navigator !== "undefined" && navigator.onLine,
+      readSnapshot: () => db.guidelines.toArray(),
+      fetchSnapshot: async () => {
+        const { data, error } = await guidelinesClient
+          .from("guidelines")
+          .select("id,disease_name,guidelines_en,guidelines_bis");
+        if (error) throw error;
+        if (!data) throw new Error("Guideline response has no snapshot.");
+        return data as DiseaseGuideline[];
+      },
+      replaceSnapshot: (rows, baseline, canWrite) =>
+        db
+          .transaction("rw", db.guidelines, async (transaction) => {
+            const stored = await db.guidelines.toArray();
+            // Another tab may have saved advice while this tab was downloading.
+            if (!canWrite() || !sameGuidelineSnapshot(stored, baseline)) {
+              return false;
+            }
+            await db.guidelines.clear();
+            await db.guidelines.bulkPut(rows);
+            // Roll back this snapshot if a notification arrived during saving.
+            if (!canWrite()) transaction.abort();
+            return true;
+          })
+          .catch((error) => {
+            if (error?.name === "AbortError" && !canWrite()) return false;
+            throw error;
+          }),
+      applyChange: async (change) => {
+        if (change.type === "DELETE") {
+          await db.guidelines.delete(change.id);
+        } else {
+          await db.guidelines.put(change.guideline);
+        }
+      },
+      onError: (error) =>
+        console.warn("Public guideline synchronization deferred:", error),
+    }),
+  );
   const retryAttemptRef = useRef(0);
   const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const syncRef = useRef<() => Promise<void>>(async () => {});
@@ -52,33 +96,10 @@ export function useSync() {
     }, delay);
   }, []);
 
-  const syncGuidelines = useCallback((): Promise<boolean> => {
-    if (!guidelinesTaskRef.current) {
-      guidelinesTaskRef.current = (async () => {
-        try {
-          const { data, error } = await guidelinesClient
-            .from("guidelines")
-            .select("id,disease_name,guidelines_en,guidelines_bis");
-          if (error) throw error;
-          if (data) {
-            // Replace only after a successful full fetch. Offline or failed
-            // requests retain cached advice; missed remote deletions reconcile.
-            await db.transaction("rw", db.guidelines, async () => {
-              await db.guidelines.clear();
-              await db.guidelines.bulkPut(data);
-            });
-          }
-          return true;
-        } catch (error) {
-          console.warn("Public guideline synchronization deferred:", error);
-          return false;
-        }
-      })().finally(() => {
-        guidelinesTaskRef.current = null;
-      });
-    }
-    return guidelinesTaskRef.current;
-  }, []);
+  const syncGuidelines = useCallback(
+    () => guidelinesSync.refresh(),
+    [guidelinesSync],
+  );
 
   const sync = useCallback(async () => {
     if (!navigator.onLine) return;
@@ -228,13 +249,18 @@ export function useSync() {
 
   useEffect(() => {
     if (!isOnline) {
+      guidelinesSync.pause();
       clearScheduledRetry();
       return;
     }
+    guidelinesSync.resume();
     retryAttemptRef.current = 0;
     const timer = setTimeout(() => void sync(), 0);
-    return () => clearTimeout(timer);
-  }, [clearScheduledRetry, isOnline, sync]);
+    return () => {
+      clearTimeout(timer);
+      guidelinesSync.pause();
+    };
+  }, [clearScheduledRetry, guidelinesSync, isOnline, sync]);
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {
@@ -249,6 +275,7 @@ export function useSync() {
 
   useEffect(() => {
     if (!isOnline) return;
+    let active = true;
     const channel = guidelinesClient
       .channel("supabase-realtime-guidelines")
       .on(
@@ -259,27 +286,41 @@ export function useSync() {
           new: Record<string, unknown>;
           old: Record<string, unknown>;
         }) => {
+          if (!active) return;
           const { eventType, new: next, old: previous } = payload;
+          let saved = true;
           if (eventType === "INSERT" || eventType === "UPDATE") {
-            await db.guidelines.put({
-              id: String(next.id),
-              disease_name: String(next.disease_name),
-              guidelines_en: String(next.guidelines_en),
-              guidelines_bis: String(next.guidelines_bis),
+            saved = await guidelinesSync.receive({
+              type: eventType,
+              guideline: {
+                id: String(next.id),
+                disease_name: String(next.disease_name),
+                guidelines_en: String(next.guidelines_en),
+                guidelines_bis: String(next.guidelines_bis),
+              },
             });
           } else if (eventType === "DELETE") {
-            await db.guidelines.delete(String(previous.id));
+            saved = await guidelinesSync.receive({
+              type: "DELETE",
+              id: String(previous.id),
+            });
           }
+          if (!saved && active && navigator.onLine) scheduleRetry();
         },
       )
       .subscribe((status) => {
         // Reconcile edits missed while the Realtime connection was unavailable.
-        if (status === "SUBSCRIBED") void syncGuidelines();
+        if (status === "SUBSCRIBED" && active) {
+          void guidelinesSync.refresh(true).then((saved) => {
+            if (!saved && active && navigator.onLine) scheduleRetry();
+          });
+        }
       });
     return () => {
+      active = false;
       void guidelinesClient.removeChannel(channel);
     };
-  }, [isOnline, syncGuidelines]);
+  }, [guidelinesSync, isOnline, scheduleRetry]);
 
   return useMemo(
     () => ({ createScan, deleteScan, deleteScans, triggerSync: sync }),

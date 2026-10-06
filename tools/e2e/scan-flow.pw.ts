@@ -222,7 +222,6 @@ test("F15: accepted results load saved guidance, download advice and reopen it o
   await initialPull;
   const savedScanPull = waitForMockScanPull(page);
   await runScan(page, photos[0].file);
-  await savedScanPull;
   const modal = page.locator("div.fixed.inset-0").filter({
     has: page.getByRole("button", { name: "English", exact: true }),
   });
@@ -237,6 +236,8 @@ test("F15: accepted results load saved guidance, download advice and reopen it o
     modal.getByText(translations.bis.guidelinesLoading, { exact: true }),
   ).toBeVisible();
   await releaseGuidelineReads(page);
+  // The held guidance baseline delays queued sync until these reads resume.
+  await savedScanPull;
   await expect(
     modal.getByText(translations.bis.guidelinesUnavailable, { exact: true }),
   ).toBeVisible();
@@ -371,7 +372,6 @@ test("F16: uncertain results keep photo guidance across pending, empty and downl
     page,
     photos.find((photo) => photo.expectedKind === "ood")!.file,
   );
-  await savedScanPull;
   const modal = page.locator("div.fixed.inset-0").filter({
     has: page.getByRole("button", { name: "English", exact: true }),
   });
@@ -404,6 +404,8 @@ test("F16: uncertain results keep photo guidance across pending, empty and downl
   };
   await checkReminder();
   await releaseGuidelineReads(page);
+  // The held guidance baseline delays queued sync until these reads resume.
+  await savedScanPull;
   await checkReminder();
   const advice = {
     id: "uncertain_/_unrecognized",

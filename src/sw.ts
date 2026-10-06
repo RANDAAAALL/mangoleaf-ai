@@ -32,13 +32,19 @@ function isPrivateCloudRequest(url: URL) {
   );
 }
 
+function isGuidelineRequest(url: URL) {
+  return /\/rest\/v1\/guidelines(?:\/|$)/.test(url.pathname);
+}
+
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   skipWaiting: true,
   clientsClaim: true,
   runtimeCaching: [
     {
-      matcher: ({ url }) => isPrivateCloudRequest(url),
+      // IndexedDB keeps offline advice. An old HTTP cache must not look fresh.
+      matcher: ({ url }) =>
+        isPrivateCloudRequest(url) || isGuidelineRequest(url),
       handler: new NetworkOnly(),
     },
     {
@@ -61,7 +67,7 @@ self.addEventListener("activate", (event) => {
         (name) => caches.delete(name).catch(() => false),
       ),
       // Remove cloud responses cached by workers installed before ownership
-      // checks existed. Public guidance and model caches remain available.
+      // checks existed, plus old guideline HTTP responses. IndexedDB advice stays.
       caches
         .keys()
         .then((names) =>
@@ -73,8 +79,10 @@ self.addEventListener("activate", (event) => {
                 const requests = await cache.keys();
                 await Promise.all(
                   requests
-                    .filter((request) =>
-                      isPrivateCloudRequest(new URL(request.url)),
+                    .filter(
+                      (request) =>
+                        isPrivateCloudRequest(new URL(request.url)) ||
+                        isGuidelineRequest(new URL(request.url)),
                     )
                     .map((request) => cache.delete(request)),
                 );

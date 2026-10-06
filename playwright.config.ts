@@ -30,7 +30,7 @@ export default defineConfig({
   // .pw.ts keeps browser tests separate from bun test ./tools.
   testMatch: reliability
     ? /(?:repeatability|endurance)\.pw\.ts/
-    : /(?:browser-ui|scan-flow|history|model-results|offline|cloud-security|cloud-mutations)\.pw\.ts/,
+    : /(?:browser-ui|scan-flow|history|model-results|offline|cloud-security|cloud-mutations|guideline-sync)\.pw\.ts/,
   fullyParallel: false,
   workers: 1,
   retries: 0,
@@ -83,7 +83,7 @@ export default defineConfig({
       name: "webkit-mobile",
       use: { ...devices["iPhone 13"] },
       testIgnore:
-        /(?:history|scan-flow|model-results|offline|cloud-security|cloud-mutations|repeatability|endurance)\.pw\.ts/,
+        /(?:history|scan-flow|model-results|offline|cloud-security|cloud-mutations|guideline-sync|repeatability|endurance)\.pw\.ts/,
     },
   ],
   webServer: {

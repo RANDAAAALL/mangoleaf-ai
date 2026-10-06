@@ -2,7 +2,7 @@
 
 This guide explains the PWA version: the application interface, local/offline behavior, release history, build labels, and deployment procedure. The PWA is the app people use. The separate [AI model versioning guide](AI_MODEL_VERSIONING.md) explains the model weights, training workflows, fitted rejection settings, and model evidence.
 
-**Current repository candidate:** App `0.5.2` retains the adopted V4.3.0 Combined model (`v4.3.0`) and prepares responsive Home and History layouts, report selection, and confirmed single/bulk deletion. Filter counts, compact photo tips, and badge/icon refinements are included. This is a candidate, not a publication or deployment record. See the [v0.5.2 record](#v052-scan-history-and-deletion-candidate-october-6-2026) and [model adoption history](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026). Earlier [v0.5.1 validation](../testing/TESTING.md#v051-candidate-validation-october-5-2026) remains evidence for its original build.
+**Current repository candidate:** App `0.5.3` retains the adopted V4.3.0 Combined model (`v4.3.0`) and prepares protected guideline HTTP downloads, direct Realtime writes, and network-only guideline HTTP caching. Saved offline advice remains in IndexedDB. See the [v0.5.3 record](#v053-guideline-update-ordering-candidate-october-7-2026) and [model adoption history](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026). This is a candidate, not a publication or deployment record. Earlier dated validation remains evidence for its original build.
 
 ## Reading the release history
 
@@ -38,6 +38,7 @@ v0.4.9  adopts V4.3.0 Combined, current scan/guidance regressions, and preserved
 v0.5.0  candidate: guest-owned private cloud synchronization and preserved offline History
 v0.5.1  candidate: stable scan thumbnails and a horizontal treatment-guidelines header
 v0.5.2  candidate: responsive scan History, selection, and confirmed deletion
+v0.5.3  candidate: protected guideline HTTP/Realtime updates and offline advice
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
@@ -239,6 +240,57 @@ feat: refine History for PWA v0.5.2
 > Refines badges and navigation icons. The AI model remains V4.3.0 Combined, with unchanged model files and rejection settings.
 
 Local validation is complete for the recorded working-tree source; final-commit CI, production verification, and publication remain pending. The prepared text does not create a tag, publish a Release, or deploy the app.
+
+## Unreleased guideline synchronization fix (October 7, 2026)
+
+The working tree adds protection against an older full HTTP guidance response replacing an overlapping Realtime update. Ordinary Realtime INSERT/UPDATE/DELETE events still save directly without another GET for that event. Changes observed during unfinished HTTP work invalidate its snapshot and share a protected follow-up download; the commit also checks for changes saved by another tab. Guideline REST reads bypass service-worker caches, while IndexedDB keeps offline advice.
+
+At initial implementation, the working-tree package label remained `0.5.2` and the model remained `v4.3.0`. The existing local `v0.5.2` tag belongs to the earlier source and excludes this fix. The subsequent [v0.5.3 candidate](#v053-guideline-update-ordering-candidate-october-7-2026) gives the change its own app version without moving that tag. The model files, treatment text, and Supabase schema are unchanged.
+
+The October 6 checks above describe their original fingerprint. The [initial guideline-ordering validation](../testing/TESTING.md#guideline-update-ordering-october-7-2026) preserves the pre-version-bump fingerprint; the candidate below has separate versioned validation.
+
+## v0.5.3: guideline update ordering candidate (October 7, 2026)
+
+**Status: candidate / not released.** App `0.5.3` is a patch for guideline synchronization and service-worker HTTP caching. Its displayed version comes from `package.json` through the existing build configuration. Model `v4.3.0`, its five assets, seven classes, preprocessing, folded temperature, and fitted rejection settings remain unchanged.
+
+### Changes included
+
+- Keep ordinary Realtime INSERT/UPDATE/DELETE changes writing directly to IndexedDB. An event observed during an unfinished guidance download/save prevents that older HTTP snapshot from replacing the received advice and schedules a protected follow-up GET.
+- Share active downloads, combine repeated overlap notifications, order local writes, and compare the saved starting snapshot inside the final transaction. Changes saved by another tab can invalidate an older result; a late observed event rolls back the unfinished snapshot save.
+- Reconcile after subscription readiness, invalidate stale work during offline/unmount cleanup, and retain saved advice after failed requests while using the existing retries.
+- Make guideline REST reads network-only in the worker and remove older cached guideline HTTP responses. IndexedDB remains the offline advice store.
+- Add guideline-ordering unit and browser regressions and maintain the loading fixtures. Update release, architecture, synchronization, performance, testing, setup, and plain-English Q&A references.
+
+This protects changes observed during overlapping client work. It does not establish a live production incident or a universal ordering guarantee for delayed or unseen server events. No treatment wording or Supabase schema/policy is changed.
+
+### Validation and publication
+
+The versioned scope is formatting/security, TypeScript, lint, production build, export verification, tooling tests, the complete core browser suite, and R01 actual-inference repeatability. R03 is excluded. Results belong in [v0.5.3 candidate validation](../testing/TESTING.md#v053-candidate-validation-october-7-2026), separately from the earlier `0.5.2` implementation fingerprint.
+
+The existing local `v0.5.2` tag identifies baseline commit `ee91cf693fd52acb6f882f2c049a3b2ddd599a1f`. Candidate `0.5.3` starts from that commit plus the working-tree guideline fix and version preparation. Its tested application fingerprint is `b116df9958424036c66d80fb151e8ec44bf4a07838b73022e17f2bb47dd5a661`. Local versioned validation passed formatting/security, typecheck, lint, production build, 10 export checks, 26 tooling cases, 106 core browser cases with one declared Firefox worker skip, and R01's 240 actual predictions. The testing record preserves report and model hashes. Record the final candidate commit and deployment URL before promotion. Final-commit CI, staged-production verification/promotion, and publication remain separate release steps. Husky and master-only CI already run their applicable checks; the expanded core suite is selected through `playwright.config.ts`.
+
+### Prepared commit message
+
+```text
+fix: preserve guideline updates for PWA v0.5.3
+
+Prevent older HTTP snapshots from replacing advice received through
+Realtime. Keep offline advice and protect changes from other tabs.
+```
+
+### Prepared tag and release description
+
+**App tag:** `v0.5.3`
+
+**Release title:** `MangoLeaf AI v0.5.3 — Reliable guideline updates`
+
+> Prevents an older guideline download from replacing an update already received through Realtime. Normal Realtime updates continue to save directly, while overlapping changes share a protected follow-up download.
+>
+> Keeps downloaded advice available offline, protects changes made by another open tab, and removes stale guideline HTTP caches.
+>
+> The AI model remains V4.3.0 Combined, with unchanged model files and diagnosis settings.
+
+The tag and notes are prepared text. Create the app tag on the exact tested commit after the candidate release procedure passes; no new model tag is needed. Publication and deployment are not established by preparing these files.
 
 ## Candidate testing and promotion
 
