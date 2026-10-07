@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: October 6, 2026
+Last updated: October 7, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -903,6 +903,13 @@ This file tracks the project work from the first committed implementation throug
   - Prepared the commit message, intended `v0.5.3` tag, release title, and description in the [candidate record](versions/PWA_VERSIONING.md#v053-guideline-update-ordering-candidate-october-7-2026). Preserved the initial implementation results and earlier reports before repeating the versioned checks. The 30-minute R03 session is excluded.
   - Versioned validation passed formatting/security, typecheck, lint, production build, 10 export checks, 26 tooling cases, and 106 core browser cases with one declared Firefox worker skip. R01 passed 240 actual predictions in 53.6 seconds, with stable classes/acceptance, confidence range 0, and tensor growth 0. No R03 session ran. [TESTING.md](testing/TESTING.md#v053-candidate-validation-october-7-2026) records fingerprint `b116df9958424036c66d80fb151e8ec44bf4a07838b73022e17f2bb47dd5a661`, report hashes, unchanged model hashes, and local evidence preservation. Final-commit CI, production promotion/live-version verification, and publication remain separate steps. Preparing candidate files does not create a commit, tag, Release, or deployment.
 
+- **Release-status clarification and PWA v0.5.4 preparation**
+
+  - Recorded the maintainer's October 7 confirmation that `v0.5.0`–`v0.5.3` were published and used, with `v0.5.3` currently live. Corrected the current release overview while preserving the original dated candidate sections, anchors, pending-status records, and evaluation evidence. The confirmation supplies no historical deployment timestamps and is separate from remote CI or production-operation verification.
+  - Prepared app `0.5.4` to skip clearing and rewriting identical full HTTP guidance. The save transaction keeps the event-counter and starting-local-snapshot safeguards first, then compares all four saved guidance fields with the downloaded set. Row order alone does not count as a change; changed text, additions, and deletions still use the existing guarded atomic replacement. Identical guidance returns success rather than scheduling a retry.
+  - Kept direct Realtime row handling, overlap follow-up downloads, failed-download recovery, private scans, and network-only guideline HTTP requests unchanged. The checker still receives the full HTTP response and does not eliminate downloads. Model `v4.3.0`, its five files, class order, preprocessing, temperature, and fitted gates remain unchanged; no Supabase schema or manuscript was changed.
+  - Updated current references, architecture, performance, synchronization, testing, and the ignored technical Q&A, including two older answers that described every accepted download as a rewrite. Prepared the commit message, intended `v0.5.4` tag, title, and description in the [prepared release record](versions/PWA_VERSIONING.md#v054-unchanged-guidance-check-prepared-release-october-7-2026). Local baseline HEAD/tag `v0.5.3` identify `7899fd81e83256c695246dbc733bfcce0155f69f`. Versioned local validation passed formatting/security, typecheck, lint, build, 10 export checks, 28 tooling cases, 32 focused guideline cases, and 118 core browser cases; each browser suite has one declared Firefox worker-test skip and no unexpected failures. Filtered R01 passed 240 actual predictions with stable results and zero net tensor growth. [TESTING.md](testing/TESTING.md#v054-release-validation-october-7-2026) records fingerprint `c519472be5cc4335fbcd8e0dfca0e705ca88b6d9a6cb66f33bc657516f0074d7`, report/model hashes, and the verified 67-file evidence archive. The 30-minute R03 session was not run. App `0.5.4` is a prepared release awaiting CI and production promotion; this preparation does not publish or deploy it.
+
 ## Current Notebook Decision
 
 Keep every training notebook, and keep each trial's clean template separate from its completed run. Historical and adopted trial notebooks live in `notebooks/non-experiment/v{n}/`; this includes the current V4.3.0 model and older models. Candidate workflows and completed experimental evidence live in `notebooks/experiment/v{n}/`. The latter are experimental candidates, not shipped or deployed. V4.3.0 moved into the adopted group on October 2, 2026, then joined the other adopted and historical notebooks under `non-experiment/`, with its original cell contents and outputs intact. The original trial folders were moved from the repository root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle; they were added on September 8, 2026. The filenames below are unchanged. Earlier dated entries retain the repository paths that described those events; the current locations are listed here and in the notebook index.
@@ -929,13 +936,13 @@ Keep every training notebook, and keep each trial's clean template separate from
 
 ## Current Adopted Model (v4.3.0)
 
-App candidate `0.5.3` retains the single V4.3.0 Combined TensorFlow.js Graph Model adopted in `0.4.9`. Output order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold. Both healthy outputs use the `healthy` guideline row. The fixed confidence floor is `0.70`, margin is `0`, normalized entropy limit is `0.42`, and temperature `1.1602258301498714` remains folded into the saved weights.
+App `0.5.4` retains the single V4.3.0 Combined TensorFlow.js Graph Model adopted in `0.4.9`. Output order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold. Both healthy outputs use the `healthy` guideline row. The fixed confidence floor is `0.70`, margin is `0`, normalized entropy limit is `0.42`, and temperature `1.1602258301498714` remains folded into the saved weights.
 
 The [preserved report and comparison](model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) record 386/393 raw correct predictions (98.22%), 373 correct and 3 wrong accepted predictions, and 17 mango rejections on reused seven-class test data. Old OOD false accepts are 24/84; reused newer OOD false accepts are 5/32. These are the completed experiment's measurements, not new independent field results. The [testing guide](testing/TESTING.md) distinguishes adoption from completed local automated checks and pending production promotion.
 
 ## Last Released Model Baseline (v3)
 
-The entries below preserve the previously documented V3 release baseline. The October 6 read-only GitHub check confirmed [v0.5.1](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.5.1), which retains the V4.3.0 model; publication does not verify its production deployment. V4.3.0 was adopted in app `0.4.9` and remains in candidate `0.5.3`. The existing local adoption tags identify commit `9fd175e40b85a805ab482554e351f9686f1f031a`; they do not verify production status. The new release's CI, production promotion, and publication remain pending. V3 measurements remain historical evidence.
+The entries below preserve the previously documented V3 release baseline. The October 6 read-only GitHub check confirmed [v0.5.1](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.5.1). The later [October 7 release-status confirmation](versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) records published `v0.5.0`–`v0.5.3` and live `v0.5.3` as reported by the maintainer. V4.3.0 was adopted in app `0.4.9` and remains in `0.5.4`. The existing local adoption tags identify commit `9fd175e40b85a805ab482554e351f9686f1f031a`; they are model-provenance evidence. The new `0.5.4` release's CI, production promotion, and publication remain pending. V3 measurements remain historical evidence.
 
 - Architecture: MobileNetV3-Large
 - Runtime format: TensorFlow.js Graph Model, **float32, not quantized**. The WebGL path requests half-float textures. The recorded weight-range check found 0 of 212 tensors above 65,504 and a largest weight of `117.53`; this checks weight range, not every intermediate activation or all GPU arithmetic. Runtime scores and browser parity still require measurement.
@@ -953,7 +960,7 @@ The original test/report data also influenced later threshold and precision-band
 
 ## Next Work
 
-For candidate `0.5.3`, follow the [release checklist](versions/PWA_VERSIONING.md#v053-guideline-update-ordering-candidate-october-7-2026). Record the versioned local results, then complete remote CI and approved production promotion before publishing its app tag and Release.
+For `0.5.4`, follow the [release checklist](versions/PWA_VERSIONING.md#v054-unchanged-guidance-check-prepared-release-october-7-2026). Record the versioned local results, then complete remote CI and approved production promotion before publishing its app tag and Release. The earlier reported live version remains `0.5.3` until that new release is deployed.
 
 ### Earlier planning notes (historical)
 

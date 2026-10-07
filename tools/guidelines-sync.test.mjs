@@ -266,4 +266,51 @@ describe("guideline HTTP and Realtime ordering", () => {
     }
     expect(original).toEqual(copy);
   });
+
+  test("snapshot comparison distinguishes added, deleted and empty guidance", () => {
+    const first = advice("A");
+    const second = advice("B", "scab");
+    expect(sameGuidelineSnapshot([], [])).toBe(true);
+    expect(sameGuidelineSnapshot([first], [])).toBe(false);
+    expect(sameGuidelineSnapshot([], [first])).toBe(false);
+    expect(sameGuidelineSnapshot([first], [first, second])).toBe(false);
+    expect(sameGuidelineSnapshot([first, second], [first])).toBe(false);
+    expect(sameGuidelineSnapshot([first, second], [first, first])).toBe(false);
+    expect(
+      sameGuidelineSnapshot([first, second], structuredClone([first, second])),
+    ).toBe(true);
+  });
+
+  test("a successful no-op snapshot finishes without another GET or error", async () => {
+    const snapshot = [advice("A")];
+    const fetched = structuredClone(snapshot);
+    const errors = [];
+    let requests = 0;
+    let replacements = 0;
+    const manager = createGuidelineSyncManager({
+      isOnline: () => true,
+      readSnapshot: async () => snapshot,
+      fetchSnapshot: async () => {
+        requests += 1;
+        return fetched;
+      },
+      // Returning true also means an adapter checked guidance and needed no
+      // writes. Actual IndexedDB write suppression is proved in browser cases.
+      replaceSnapshot: async (rows, baseline, canWrite) => {
+        expect(rows).toBe(fetched);
+        expect(baseline).toBe(snapshot);
+        expect(canWrite()).toBe(true);
+        replacements += 1;
+        return true;
+      },
+      applyChange: async () => {
+        throw new Error("No Realtime change expected");
+      },
+      onError: (error) => errors.push(error),
+    });
+    expect(await manager.refresh()).toBe(true);
+    expect(requests).toBe(1);
+    expect(replacements).toBe(1);
+    expect(errors).toEqual([]);
+  });
 });

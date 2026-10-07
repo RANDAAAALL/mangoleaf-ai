@@ -51,6 +51,9 @@ export function useSync() {
             if (!canWrite() || !sameGuidelineSnapshot(stored, baseline)) {
               return false;
             }
+            // An unchanged download is successful; keep the saved advice as is.
+            if (sameGuidelineSnapshot(stored, rows)) return true;
+
             await db.guidelines.clear();
             await db.guidelines.bulkPut(rows);
             // Roll back this snapshot if a notification arrived during saving.

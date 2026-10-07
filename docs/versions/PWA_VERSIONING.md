@@ -2,13 +2,19 @@
 
 This guide explains the PWA version: the application interface, local/offline behavior, release history, build labels, and deployment procedure. The PWA is the app people use. The separate [AI model versioning guide](AI_MODEL_VERSIONING.md) explains the model weights, training workflows, fitted rejection settings, and model evidence.
 
-**Current repository candidate:** App `0.5.3` retains the adopted V4.3.0 Combined model (`v4.3.0`) and prepares protected guideline HTTP downloads, direct Realtime writes, and network-only guideline HTTP caching. Saved offline advice remains in IndexedDB. See the [v0.5.3 record](#v053-guideline-update-ordering-candidate-october-7-2026) and [model adoption history](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026). This is a candidate, not a publication or deployment record. Earlier dated validation remains evidence for its original build.
+**Current prepared release:** App `0.5.4` retains the adopted V4.3.0 Combined model (`v4.3.0`) and adds a check that skips rewriting identical downloaded guidance after the existing HTTP/Realtime safeguards pass. Saved offline advice remains in IndexedDB. See the [v0.5.4 record](#v054-unchanged-guidance-check-prepared-release-october-7-2026) and [model adoption history](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026). This release awaits CI and production promotion. The reported live version is `v0.5.3`, as recorded below. Earlier dated validation remains evidence for its original build.
 
 ## Reading the release history
 
 **Dependency security, October 3, 2026:** The local `0.5.0` candidate now selects Next.js and its ESLint configuration `16.3.6`, overrides Browserslist to `4.28.7`, and records compatible transitive security patches in `bun.lock`. App/model labels remain `0.5.0` / `v4.3.0`. The [dependency review](../security/DEPENDENCY_SECURITY.md) records a clean production-dependency audit and one unresolved development-only `braces` advisory. Earlier candidate validation remains tied to its original dependency snapshot; new checks and remote release status are recorded separately.
 
-The records below retain earlier app changes and their original status. Historical references to V3 or an earlier candidate describe those entries' dates. An intended version in the list is not proof that it was released or deployed; use the recorded commit, tag, and completed evidence to identify a published build. This documentation split does not change either version label.
+The records below retain earlier app changes and their original status at the time of preparation. Historical references to V3 or an earlier candidate describe those entries' dates. Candidate labels do not change automatically when a build is deployed; the dated confirmation below corrects the current overview without rewriting original validation records. Use recorded commits, tags, deployment identities, and completed evidence to identify an exact build. This documentation split does not change either version label.
+
+## Release status confirmation (October 7, 2026)
+
+The maintainer confirmed that `v0.5.0`, `v0.5.1`, `v0.5.2`, and `v0.5.3` were published and used, and that users are currently using live `v0.5.3`. The current release list therefore marks those versions as released. Their original candidate sections, anchors, pending-status wording, and measured evidence remain dated preparation history rather than the current production status.
+
+This is a reported release/deployment confirmation. It does not supply historical deployment timestamps, independently verify remote CI or production behavior, or turn earlier local tests into production evaluation. Local `v0.5.3` and HEAD identify baseline commit `7899fd81e83256c695246dbc733bfcce0155f69f`; that source identity is separate from the reported production state. The prepared `v0.5.4` release awaits CI and production promotion.
 
 ## App Releases
 
@@ -35,10 +41,11 @@ v0.4.6  unified How it works card styling
 v0.4.7  compact history pagination and scan-details badge clipping fix
 v0.4.8  scan-photo URL fix, browser reliability testing, and documentation alignment
 v0.4.9  adopts V4.3.0 Combined, current scan/guidance regressions, and preserved model evidence
-v0.5.0  candidate: guest-owned private cloud synchronization and preserved offline History
-v0.5.1  candidate: stable scan thumbnails and a horizontal treatment-guidelines header
-v0.5.2  candidate: responsive scan History, selection, and confirmed deletion
-v0.5.3  candidate: protected guideline HTTP/Realtime updates and offline advice
+v0.5.0  released: guest-owned private cloud synchronization and preserved offline History
+v0.5.1  released: stable scan thumbnails and a horizontal treatment-guidelines header
+v0.5.2  released: responsive scan History, selection, and confirmed deletion
+v0.5.3  released / reported live: protected guideline HTTP/Realtime updates and offline advice
+v0.5.4  prepared / awaiting CI and production promotion: skip unchanged HTTP guidance writes while preserving update ordering
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
@@ -291,6 +298,48 @@ Realtime. Keep offline advice and protect changes from other tabs.
 > The AI model remains V4.3.0 Combined, with unchanged model files and diagnosis settings.
 
 The tag and notes are prepared text. Create the app tag on the exact tested commit after the candidate release procedure passes; no new model tag is needed. Publication and deployment are not established by preparing these files.
+
+## v0.5.4: unchanged guidance check prepared release (October 7, 2026)
+
+**Status: prepared release / awaiting CI and production promotion.** App `0.5.4` is a patch following the reported live `0.5.3` version. Its displayed version comes from `package.json` through the existing build configuration. Model `v4.3.0`, its five assets, seven classes, preprocessing, folded temperature, and fitted rejection settings remain unchanged. No new model tag is needed.
+
+### Changes included
+
+- Compare a valid full HTTP guidance response with the current IndexedDB guidance set inside the existing save transaction. Reuse `sameGuidelineSnapshot` to compare every ID, disease name, English field, and Bisaya field. Ignore row order; additions and deletions still count as differences.
+- Run the event-counter and starting-snapshot protections before the unchanged-content check. A result affected by a Realtime event, another tab, or invalidated work must still be discarded and follow existing recovery behavior.
+- Finish identical downloads successfully without calling `clear()` or `bulkPut()`. Saved advice and its current display remain available; an unchanged response is not an error and does not trigger a retry solely because its content matches.
+- Save a different valid complete set through the existing atomic replacement. This retains reconciliation of changes missed offline, including removed rows.
+- Keep direct Realtime INSERT/UPDATE/DELETE handling, the guarded follow-up GET, failed-download recovery, and network-only guideline HTTP reads unchanged. HTTP still downloads the complete set before comparing it; this is a local-write optimization, not a server-version protocol or download-elimination change.
+- Add regression coverage for identical content, reordered rows, changed fields, additions/deletions, and overlap protection. Update affected guides and the ignored technical Q&A.
+
+The check does not change the Supabase schema, treatment wording, guest identity, private scan synchronization, or model behavior. Avoided writes are established by the code and applicable checks; no measured phone speed, heat, battery, or memory gain is claimed.
+
+### Validation and identity
+
+The approved scope is formatting/security, TypeScript, lint, production build, export verification, tooling tests, the complete core browser suite, and filtered R01 actual inference. The 30-minute R03 session is excluded. Use [v0.5.4 prepared release validation](../testing/TESTING.md#v054-release-validation-october-7-2026) for this build's results and application fingerprint. The earlier `v0.5.3` reports retain their original identity and do not certify this changed build.
+
+**Baseline:** Local HEAD and tag `v0.5.3` identify `7899fd81e83256c695246dbc733bfcce0155f69f`. App `0.5.4` starts from that commit plus the checker, version, test, and documentation changes. Local validation passed formatting/security, TypeScript, lint, production build, 10 export checks, 28 tooling cases with 98 assertions, all 32 focused guideline cases, and 118 core browser cases. Both browser runs include one declared Firefox worker-test skip and zero unexpected failures. Filtered R01 passed 240 actual predictions with stable per-photo results and zero net tensor growth. Tested application fingerprint is `c519472be5cc4335fbcd8e0dfca0e705ca88b6d9a6cb66f33bc657516f0074d7`; the testing record preserves report hashes and unchanged model hashes. Final-commit CI, staged-production verification/promotion, live-version confirmation, and `v0.5.4` publication remain separate release steps. Husky and the existing master-only CI already select the applicable checks; no hook or workflow expansion is required solely for this checker.
+
+### Prepared commit message
+
+```text
+perf: skip unchanged guidance for PWA v0.5.4
+
+Avoid clearing and rewriting identical HTTP guidance while preserving
+Realtime ordering and changes saved by another tab.
+```
+
+### Prepared tag and release notes
+
+**App tag:** `v0.5.4`
+
+**Release title:** `MangoLeaf AI v0.5.4 — Skip unchanged guideline saves`
+
+> Checks a successful guidance download against the advice already saved on the device. Identical records and English/Bisaya text finish successfully without replacing the local copy; changed, added, or removed guidance still updates offline storage.
+>
+> Preserves HTTP/Realtime overlap protection, direct Realtime updates, and advice after failed downloads. HTTP still retrieves the complete guidance set. The V4.3.0 Combined model and diagnosis settings remain unchanged.
+
+The tag and notes are prepared text. Create the app tag on the exact tested commit after the release procedure passes. Preparing files does not create a commit, tag, GitHub Release, or production deployment.
 
 ## Candidate testing and promotion
 

@@ -17,6 +17,12 @@ import { translations } from "../../src/lib/translations";
 declare global {
   interface Window {
     mangoGuidelineWrites?: { id: string; advice: string | null }[];
+    mangoGuidelineWriteAttempts?: {
+      operation: "clear" | "put" | "delete";
+      id?: string;
+      advice?: string;
+    }[];
+    mangoGuidelineCompletedTransactions?: number;
   }
 }
 
@@ -99,12 +105,46 @@ async function settleReads(request: APIRequestContext) {
 async function observeCommittedWrites(page: Page) {
   await page.addInitScript(() => {
     window.mangoGuidelineWrites = [];
+    window.mangoGuidelineWriteAttempts = [];
+    window.mangoGuidelineCompletedTransactions = 0;
+    const transaction = IDBDatabase.prototype.transaction;
+    const clear = IDBObjectStore.prototype.clear;
     const put = IDBObjectStore.prototype.put;
     const remove = IDBObjectStore.prototype.delete;
+    IDBDatabase.prototype.transaction = function (
+      ...args: Parameters<typeof transaction>
+    ) {
+      const result = transaction.apply(this, args);
+      if (
+        result.mode === "readwrite" &&
+        result.objectStoreNames.contains("guidelines")
+      ) {
+        result.addEventListener(
+          "complete",
+          () => {
+            window.mangoGuidelineCompletedTransactions! += 1;
+          },
+          { once: true },
+        );
+      }
+      return result;
+    };
+    IDBObjectStore.prototype.clear = function (
+      ...args: Parameters<typeof clear>
+    ) {
+      if (this.name === "guidelines")
+        window.mangoGuidelineWriteAttempts!.push({ operation: "clear" });
+      return clear.apply(this, args);
+    };
     IDBObjectStore.prototype.put = function (...args: Parameters<typeof put>) {
       const result = put.apply(this, args);
       if (this.name === "guidelines") {
         const row = args[0] as { id: string; guidelines_en: string };
+        window.mangoGuidelineWriteAttempts!.push({
+          operation: "put",
+          id: row.id,
+          advice: row.guidelines_en,
+        });
         // Log only committed writes. A result eventually becoming C does not
         // prove that an older B was never saved in between.
         this.transaction.addEventListener(
@@ -126,6 +166,7 @@ async function observeCommittedWrites(page: Page) {
       const result = remove.apply(this, args);
       if (this.name === "guidelines") {
         const id = String(args[0]);
+        window.mangoGuidelineWriteAttempts!.push({ operation: "delete", id });
         this.transaction.addEventListener(
           "complete",
           () => {
@@ -137,6 +178,27 @@ async function observeCommittedWrites(page: Page) {
       return result;
     };
   });
+}
+
+async function writeObservation(page: Page) {
+  return page.evaluate(() => ({
+    attempts: window.mangoGuidelineWriteAttempts!,
+    completedTransactions: window.mangoGuidelineCompletedTransactions!,
+  }));
+}
+
+async function finishHeldRefresh(
+  page: Page,
+  request: APIRequestContext,
+  previousTransactions: number,
+) {
+  await control(request, { action: "release" });
+  // A completed readwrite transaction proves the HTTP save/check finished,
+  // even when identical guidance required no clear or put calls at all.
+  await expect
+    .poll(async () => (await writeObservation(page)).completedTransactions)
+    .toBeGreaterThan(previousTransactions);
+  await settleReads(request);
 }
 async function prepare(page: Page, request: APIRequestContext) {
   await observeCommittedWrites(page);
@@ -396,6 +458,170 @@ test("G06: another tab's Realtime write protects shared IndexedDB from held old 
   await expect.poll(() => localGuidelines(peer)).toEqual([advice("C")]);
   await attachJson(info, "shared-guideline-state", await control(request));
   await peer.close();
+});
+
+test("G08: identical HTTP guidance and reordered rows finish without clear or put calls", async ({
+  page,
+  request,
+}, info) => {
+  const rows = [advice("A"), advice("A", "mango_scab")];
+  await control(request, { action: "reset", rows });
+  await prepare(page, request);
+  const evidence = [];
+  for (const incoming of [rows, [...rows].reverse()]) {
+    // Reset changes the mock table silently; only the measured HTTP response
+    // can reconcile these rows. Array order must not manufacture a change.
+    await control(request, { action: "reset", rows: incoming });
+    await startHeldRefresh(page, request);
+    const before = await writeObservation(page);
+    const response = page.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname === "/__mock__/rest/v1/guidelines" &&
+        response.status() === 200,
+    );
+    await finishHeldRefresh(page, request, before.completedTransactions);
+    expect(await (await response).json()).toEqual(incoming);
+    const after = await writeObservation(page);
+    expect(after.attempts).toEqual(before.attempts);
+    await expect.poll(() => localGuidelines(page)).toEqual(rows);
+    await expectAdvice(page, rows[0]);
+    expect((await control(request)).reads).toBe(1);
+    evidence.push({ incoming, before, after });
+  }
+  await attachJson(info, "unchanged-guidance-no-writes", evidence);
+});
+
+test("G09: English, Bisaya, names, additions, deletions and an empty HTTP set remain meaningful changes", async ({
+  page,
+  request,
+}, info) => {
+  await prepare(page, request);
+  const english = { ...advice("A"), guidelines_en: "Changed English only." };
+  const bisaya = { ...english, guidelines_bis: "Nausab ang tambag sa Bisaya." };
+  const renamed = { ...bisaya, disease_name: "Renamed mango advice" };
+  const scab = advice("added", "mango_scab");
+  const evidence = [];
+  for (const rows of [
+    [english],
+    [bisaya],
+    [renamed],
+    [renamed, scab],
+    [scab],
+    [],
+  ]) {
+    await control(request, { action: "reset", rows });
+    await startHeldRefresh(page, request);
+    const before = await writeObservation(page);
+    await finishHeldRefresh(page, request, before.completedTransactions);
+    await expect.poll(() => localGuidelines(page)).toEqual(rows);
+    const after = await writeObservation(page);
+    const attempts = after.attempts.slice(before.attempts.length);
+    expect(
+      attempts.filter((attempt) => attempt.operation === "clear"),
+    ).toHaveLength(1);
+    expect(
+      attempts.filter((attempt) => attempt.operation === "put"),
+    ).toHaveLength(rows.length);
+    expect((await control(request)).reads).toBe(1);
+    evidence.push({ rows, attempts });
+  }
+  await expect(
+    details(page).getByText(translations.en.guidelinesUnavailable, {
+      exact: true,
+    }),
+  ).toBeVisible();
+  // An authoritative empty set deletes saved advice once; repeating that empty
+  // set should then succeed without issuing a second clear operation.
+  await control(request, { action: "reset", rows: [] });
+  await startHeldRefresh(page, request);
+  const beforeEmpty = await writeObservation(page);
+  await finishHeldRefresh(page, request, beforeEmpty.completedTransactions);
+  expect((await writeObservation(page)).attempts).toEqual(beforeEmpty.attempts);
+  await expect.poll(() => localGuidelines(page)).toEqual([]);
+  expect((await control(request)).reads).toBe(1);
+  await attachJson(info, "changed-guidance-and-empty-set", evidence);
+});
+
+test("G10: identical overlap follow-up checks the complete set without rewriting Realtime C", async ({
+  page,
+  request,
+}, info) => {
+  await prepare(page, request);
+  const connection = (await control(request)).connections[0];
+  await control(request, {
+    action: "change",
+    eventType: "UPDATE",
+    row: advice("B"),
+    skipConnectionId: connection,
+  });
+  const heldReads = await startHeldRefresh(page, request);
+  await control(request, {
+    action: "change",
+    eventType: "UPDATE",
+    row: advice("C"),
+  });
+  await expectAdvice(page, advice("C"));
+  const before = await writeObservation(page);
+  await finishHeldRefresh(page, request, before.completedTransactions);
+  const after = await writeObservation(page);
+  expect(after.attempts).toEqual(before.attempts);
+  expect((await control(request)).reads).toBe(heldReads + 1);
+  await expectAdvice(page, advice("C"));
+  await expectNoRegression(page, advice("C"), advice("B"));
+  await attachJson(info, "identical-overlap-follow-up", {
+    network: await control(request),
+    before,
+    after,
+  });
+});
+
+test("G11: overlap follow-up still saves a missed Scab update alongside Realtime Anthracnose", async ({
+  page,
+  request,
+}, info) => {
+  const oldScab = advice("old Scab", "mango_scab");
+  const newScab = advice("new Scab", "mango_scab");
+  await control(request, { action: "reset", rows: [advice("A"), oldScab] });
+  await prepare(page, request);
+  const connection = (await control(request)).connections[0];
+  const missed = await control(request, {
+    action: "change",
+    eventType: "UPDATE",
+    row: newScab,
+    skipConnectionId: connection,
+  });
+  expect(missed.recipients).toBe(0);
+  const heldReads = await startHeldRefresh(page, request);
+  await control(request, {
+    action: "change",
+    eventType: "UPDATE",
+    row: advice("C"),
+  });
+  await expectAdvice(page, advice("C"));
+  await expect
+    .poll(() => localGuidelines(page))
+    .toEqual([advice("C"), oldScab]);
+  const before = await writeObservation(page);
+  await finishHeldRefresh(page, request, before.completedTransactions);
+  await expect
+    .poll(() => localGuidelines(page))
+    .toEqual([advice("C"), newScab]);
+  const after = await writeObservation(page);
+  const attempts = after.attempts.slice(before.attempts.length);
+  expect(
+    attempts.filter((attempt) => attempt.operation === "clear"),
+  ).toHaveLength(1);
+  expect(
+    attempts.filter((attempt) => attempt.operation === "put"),
+  ).toHaveLength(2);
+  expect((await control(request)).reads).toBe(heldReads + 1);
+  await expectAdvice(page, advice("C"));
+  await expectNoRegression(page, advice("C"), advice("A"));
+  await attachJson(info, "overlap-follow-up-with-missed-row", {
+    network: await control(request),
+    saved: await localGuidelines(page),
+    attempts,
+  });
 });
 
 test.describe("Guideline worker cache", () => {
