@@ -4,6 +4,64 @@ These tests cover the scan workflow and the manuscript's reliability paragraph. 
 
 **Current prepared release:** App `0.5.5`, model `v4.3.0`. The [release record](../versions/PWA_VERSIONING.md#v055-guided-camera-and-installation-prepared-release-october-10-2026) and [versioned validation](#v055-release-validation-october-10-2026) identify its scope and evidence. Preparation does not establish publication or production promotion. The [October 7 release-status confirmation](../versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) preserves the earlier publication and live-version report. Earlier dated entries retain their original status, versions, fingerprints, and results.
 
+## Next.js security revalidation (October 10, 2026)
+
+App `0.5.5` retains model `v4.3.0`. The security follow-up patches Next.js and its ESLint configuration from `16.3.6` to `16.3.8`, selects compatible `sharp@0.35.5` and `source-map-js@1.2.2` lockfile repairs, and disables the development-only Next.js MCP endpoint through `experimental.mcpServer: false`. The independent GitHub MCP connector is unaffected. See the [six-alert review and retained findings](../security/DEPENDENCY_SECURITY.md).
+
+**Source identity:** Base commit `5cad2ff15efa66d045642432c34b8846dcaabcfc` contains the previously prepared release. The dependency/configuration and camera-focus changes are subsequent uncommitted inputs. Package, lockfile, and Next configuration participate in the application fingerprint, so the preceding `ee16e498efd838f997372482b8b5770301ae81d541b27707b1235b51dfa80191` report does not certify this revision. Keep its original results and archives below; record this revision separately.
+
+| Check                                                         | Security-follow-up evidence                                                                                                                                                                     |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Six reported Next.js alerts                                   | Exact GitHub MCP alert metadata names `16.3.8` as the patched version for all six; installed framework/lint pins now match it.                                                                  |
+| Additional compatible repairs                                 | Bun repaired `sharp` and `source-map-js` within their existing dependency ranges. No unrelated framework/model upgrade or audit ignore was used.                                                |
+| Frozen installation                                           | Passed; 452 installs across 525 packages checked without changes.                                                                                                                               |
+| Full dependency audit                                         | Two findings remain: `braces` (high) and `sprintf-js` (moderate), with no published fixes. Audit exits 1 and neither finding is suppressed. A clean production dependency graph is not claimed. |
+| Formatting, TypeScript, lint, production build, and export    | Passed in the required order; one existing unused-import warning remains, and all 10 export checks passed.                                                                                      |
+| Local development MCP endpoint                                | Passed: loopback POST to `/_next/mcp` returns 404 both without Origin and with an allowed tunnel Origin; normal app/manifest GETs return 200.                                                   |
+| Tooling/security/archive checks                               | Passed: 28 tooling tests, 98 assertions, tracked-path/full-history secret checks, and 14,117 historical bytes verified against both ledgers.                                                    |
+| Complete core browser suite and filtered R01                  | Passed: 187 core cases, four declared skips, no failures/flaky results; R01 ran 240 actual predictions with stable classes/acceptance, zero confidence range and tensor growth.                 |
+| R03 30-minute session                                         | Excluded from execution as requested, including a shortened substitute.                                                                                                                         |
+| Physical device, final-commit CI, publication, and deployment | Record these outcomes separately; local browser and dependency results do not establish them.                                                                                                   |
+
+### CI camera failures and repair
+
+The supplied [Linux CI run](https://github.com/RANDAAAALL/mangoleaf-ai/actions/runs/37980742698) tested committed baseline `5cad2ff15efa66d045642432c34b8846dcaabcfc`: 183 passes, four failures, four declared skips, and 1,496,590 ms of core-browser execution. The supplied extracted reports identify that failed run and remain unchanged. GitHub's upload log records artifact ZIP SHA-256 `a74adb44775c686492d73cf904f1b55790b1501e67b3dd99ca171a53eb6f81d9`; the original compressed ZIP is not present in the supplied folder at final review, so this is a recorded GitHub identity rather than a newly recomputed local archive checksum. That failed run is preserved as evidence, not relabeled as successful.
+
+C01, C04, and C05 displayed the permission-blocked message during controlled tests configured to allow or defer permission. The fixture previously patched a method on the native `navigator.mediaDevices` object when that API existed; Windows WebKit instead received an owned replacement because its API was absent. The fixture now installs one owned `{ getUserMedia }` object on every controlled platform, and the launcher asserts that its request counter advances. This addresses the observed escape into native permission handling without changing production camera permissions. Source review of [Playwright's pinned WebKit revision](https://github.com/microsoft/playwright/blob/v1.63.0/browser_patches/webkit/UPSTREAM_CONFIG.sh) found [weak JavaScript wrapper storage](https://github.com/WebKit/WebKit/blob/4d05d732e5a84f32675bef4cc135a2e7a9269a87/Source/WebCore/bindings/js/ScriptWrappable.h#L57) and [MediaDevices retention tied to devicechange listeners](https://github.com/WebKit/WebKit/blob/4d05d732e5a84f32675bef4cc135a2e7a9269a87/Source/WebCore/Modules/mediastream/MediaDevices.cpp#L477). The fixture held no stable JavaScript reference or such listener, so collection/recreation can lose its method override. This is a source-supported lifetime explanation; the trace does not record the exact garbage-collection event.
+
+C03 exposed a separate focus requirement. A forced focus escape reproduced a failure on Windows: the modal returned focus to its container while Close was the only enabled action. The camera now returns escaped focus to its first visible enabled button, with the container retained as the fallback when no action exists. The original Tab/Shift+Tab, late-stream cleanup, and launcher-focus checks remain.
+
+All 16 focused C01/C03/C04/C05 checks passed on the installed Windows Chromium, Firefox, and WebKit projects in 41.2 seconds. Camera reports now attach controlled request, stream-assignment, playback, native-error, button, and keyboard/focus observations. Collection is best-effort so a lost page does not obscure the original failure. Controlled mocks do not establish native-camera behavior; C07's actual synthetic-stream playback and C08's unsupported-API check remain separate. No assertion was removed and no skip was added to hide these failures.
+
+An initial complete local attempt also caught S05's global missing-photo locator matching two placeholders before the preserved thumbnail URL resolved. The test now waits for that retained thumbnail before checking the one genuinely missing photo. All migration, owner-isolation, and no-legacy-download assertions remain; the focused check passed in all three applicable browser projects. The interrupted evidence remains preserved and is not counted as a complete pass.
+
+The [CI workflow](../../.github/workflows/ci.yml) retains the core suite on `master` pushes and prints Node/Bun/Playwright/runtime versions. Its application job has a **45-minute maximum budget** for installation, build, browser setup, core tests, and evidence upload. The failed job already took about 29 minutes against the previous 30-minute budget. This budget does not extend or invoke R03: **R03 remains a separate 30-minute session and is excluded from this task and CI**.
+
+This revision's Windows application fingerprint is `2ccdfaede198d91f39c4aa5ca65eabae85869382edcad9fffef3a0feb2127f7d`. It includes the uncommitted changes and differs from the failed Linux run's fingerprint `3c1ffbe6ff501783cf8e0a1ff50f0644bc3efad44706c5117472b3e9f4997566`. Fingerprints identify exact working-file bytes, including platform line endings; do not infer cross-platform byte identity or carry a pass between them. The corrected Linux CI run remains pending publication of the reviewed revision.
+
+The production-only dependency audit exits 1 with one moderate `sprintf-js` advisory; `braces` belongs to the development graph. No formatter signatures were found in the 34 rebuilt browser JavaScript files, consistent with source review, but that narrower observation does not clear the installed dependency finding. All five source/export model assets, 47 notebooks, and 358 scientific artifact/figure files retain the pre-task baseline bytes. The camera focus component is the only changed file under `src/`; classifier preprocessing and fitted settings remain unchanged.
+
+### Completed follow-up evidence
+
+The complete revised core suite passed **187 cases**, with **four declared skips**, **zero unexpected failures**, and **zero flaky results**, in 15.6 minutes. It tested the isolated production export with fresh browser contexts and the local mock backend. These Windows results do not replace the pending corrected Linux CI run.
+
+| Browser project    | Passed | Declared skips | Failed | Flaky |
+| ------------------ | ------ | -------------- | ------ | ----- |
+| `chromium-desktop` | 60     | 0              | 0      | 0     |
+| `chromium-mobile`  | 60     | 0              | 0      | 0     |
+| `firefox-desktop`  | 49     | 2              | 0      | 0     |
+| `webkit-mobile`    | 18     | 2              | 0      | 0     |
+
+Filtered R01 (`bun run test:reliability --grep "R01:"`) passed 240 actual predictions: 8 photos, 30 predictions each, in Chromium mobile emulation. Raw/displayed classes and acceptance remained stable; maximum confidence range was 0, and maximum net tensor growth was 0. Its report took 51.5 seconds. These are repeatability and lifecycle observations, not a model-accuracy or physical-camera measurement.
+
+Both reports identify base commit `5cad2ff15efa66d045642432c34b8846dcaabcfc` plus the uncommitted follow-up inputs and application fingerprint `2ccdfaede198d91f39c4aa5ca65eabae85869382edcad9fffef3a0feb2127f7d`. Core report SHA-256 is `b0f04b9665f53b07f91bc10dd7721dc44aeeb3c6197e93383a712fece54bf1e9`; R01 report SHA-256 is `41fd5b0204bac6ef56415533717be52a478a0aac80a5871c00ea5e40afc38161`. All report application-input hashes were checked against the final working files. Test/fixture/workflow hashes and decoded observations are recorded separately beside the reports.
+
+The final reports remain under ignored `.tools/dependabot-next-20261010/final/`. Its `reports.zip` contains 101 files verified against their source bytes, with SHA-256 `7bfaf3f373bd412d6be65073901dbc49a9e562018fdd1f03f77e3ec6303426ec`. Original failed CI, reproduced focus failure, focused passes, interrupted S05 attempt, and the initial v0.5.5 archive remain separate. R03 was not run, including a shortened substitute; its protocol remains 30 minutes.
+
+### Initial v0.5.5 evidence remains separate
+
+The following v0.5.5 record describes the completed preparation before this dependency/configuration follow-up. Its measurements and preserved report identities remain unchanged.
+
 ## v0.5.5 release validation (October 10, 2026)
 
 **Prepared release.** App `0.5.5` packages the guided live camera with full-frame capture, review and source-specific Retake, stream cleanup, bilingual installation instructions, desktop QR guidance, and phone/desktop scan-layout refinements. Phone History shows four reports per page; desktop History retains six. Phone selection deletion precedes pagination, and full photo cards reserve a 4:3 image area across viewport changes. Per-class probabilities remain developer-console diagnostics; the result modal does not expose the full probability table.

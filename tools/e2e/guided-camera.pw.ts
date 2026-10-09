@@ -15,6 +15,10 @@ import { translations, type Language } from "../../src/lib/translations";
 
 interface CameraControl {
   constraints: MediaStreamConstraints[];
+  streamAssignments: number;
+  playCalls: number;
+  nativeVideoErrors: number[];
+  tabEvents: { shift: boolean; prevented: boolean; active: string }[];
   stops: number;
   draws: number[][];
   encodesCompleted: number;
@@ -73,6 +77,10 @@ async function mockCamera(
     };
     const control: CameraControl = {
       constraints: [],
+      streamAssignments: 0,
+      playCalls: 0,
+      nativeVideoErrors: [],
+      tabEvents: [],
       stops: 0,
       draws: [],
       encodesCompleted: 0,
@@ -101,6 +109,27 @@ async function mockCamera(
       },
     };
     window.mangoCameraControl = control;
+    // Keep native-media failures and completed keyboard handling visible in CI.
+    document.addEventListener(
+      "error",
+      (event) => {
+        if (event.target instanceof HTMLVideoElement)
+          control.nativeVideoErrors.push(event.target.error?.code ?? 0);
+      },
+      true,
+    );
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Tab") return;
+      setTimeout(() => {
+        const active = document.activeElement;
+        control.tabEvents.push({
+          shift: event.shiftKey,
+          prevented: event.defaultPrevented,
+          active:
+            active?.getAttribute("aria-label") ?? active?.tagName ?? "none",
+        });
+      }, 0);
+    });
     Object.defineProperty(document, "visibilityState", {
       configurable: true,
       get: () => (hidden ? "hidden" : "visible"),
@@ -153,17 +182,12 @@ async function mockCamera(
         );
       return Promise.resolve(stream);
     };
-    // Windows WebKit lacks this API. Supply the controlled capability here;
-    // C08 separately verifies the application's real unsupported path.
-    if (!navigator.mediaDevices) {
-      Object.defineProperty(navigator, "mediaDevices", {
-        configurable: true,
-        value: {},
-      });
-    }
-    Object.defineProperty(navigator.mediaDevices, "getUserMedia", {
+    // Own the complete capability on every platform. Linux WebKit reached
+    // native permission handling when only its returned object's method changed.
+    // C07 covers real playback separately; C08 covers the unsupported API.
+    Object.defineProperty(navigator, "mediaDevices", {
       configurable: true,
-      value: getUserMedia,
+      value: { getUserMedia },
     });
     Object.defineProperty(HTMLMediaElement.prototype, "srcObject", {
       configurable: true,
@@ -171,6 +195,7 @@ async function mockCamera(
         return attached.get(this) ?? null;
       },
       set(value: MediaStream | null) {
+        if (value) control.streamAssignments += 1;
         attached.set(this, value);
       },
     });
@@ -182,6 +207,7 @@ async function mockCamera(
       play: {
         configurable: true,
         value() {
+          control.playCalls += 1;
           videos.add(this);
           queueMicrotask(deliverFrames);
           return Promise.resolve();
@@ -221,6 +247,55 @@ async function mockCamera(
   }, options);
 }
 
+test.afterEach(async ({ page }, info) => {
+  if (page.isClosed()) return;
+  const state = await page
+    .evaluate(() => {
+      const control = window.mangoCameraControl;
+      if (!control) return null;
+      const video = document.querySelector("video");
+      const dialog = video?.closest('[role="dialog"]');
+      return {
+        constraints: control.constraints,
+        streamAssignments: control.streamAssignments,
+        playCalls: control.playCalls,
+        nativeVideoErrors: control.nativeVideoErrors,
+        tabEvents: control.tabEvents,
+        stops: control.stops,
+        draws: control.draws,
+        video: video
+          ? {
+              attached: video.srcObject !== null,
+              width: video.videoWidth,
+              height: video.videoHeight,
+              readyState: video.readyState,
+              paused: video.paused,
+              error: video.error?.code ?? null,
+            }
+          : null,
+        status: dialog?.querySelector('[role="status"]')?.textContent ?? null,
+        buttons: Array.from(
+          dialog?.querySelectorAll("button") ?? [],
+          (button) => ({
+            name: button.getAttribute("aria-label") ?? button.textContent,
+            disabled: button.disabled,
+          }),
+        ),
+        activeElement: {
+          tag: document.activeElement?.tagName,
+          role: document.activeElement?.getAttribute("role"),
+          name: document.activeElement?.getAttribute("aria-label"),
+        },
+      };
+    })
+    .catch(() => ({ collectionError: "Camera page became unavailable." }));
+  if (state)
+    await info.attach("controlled-camera-state.json", {
+      body: JSON.stringify(state, null, 2),
+      contentType: "application/json",
+    });
+});
+
 async function openCamera(page: Page, language: Language = "en") {
   const t = translations[language];
   await nav(page, t.navScan);
@@ -232,6 +307,14 @@ async function openCamera(page: Page, language: Language = "en") {
     exact: true,
   });
   await expect(camera).toBeVisible();
+  if (await page.evaluate(() => Boolean(window.mangoCameraControl))) {
+    // Prove the controlled request ran, rather than waiting on native permission.
+    await expect
+      .poll(() =>
+        page.evaluate(() => window.mangoCameraControl.constraints.length),
+      )
+      .toBeGreaterThan(0);
+  }
   return camera;
 }
 
@@ -251,13 +334,13 @@ test("C01: guided capture keeps full frame, waits for Run, and Retake opens a ne
   await openApp(page);
   let camera = await openCamera(page);
   await expect(camera).toHaveCSS("background-color", "rgb(237, 246, 233)");
-  await expect(camera.getByRole("button")).toHaveCount(2);
   const capture = () =>
     camera.getByRole("button", {
       name: translations.en.guidedCameraCaptureBtn,
       exact: true,
     });
   await expect(capture()).toBeEnabled();
+  await expect(camera.getByRole("button")).toHaveCount(2);
   const guide = camera.locator('div[aria-hidden="true"]');
   await expect(guide).toBeVisible();
   for (const viewport of [
@@ -366,12 +449,12 @@ test("C02: captured photo reaches one controlled diagnosis through existing revi
   });
   await openApp(page);
   const camera = await openCamera(page);
-  await camera
-    .getByRole("button", {
-      name: translations.en.guidedCameraCaptureBtn,
-      exact: true,
-    })
-    .click();
+  const capture = camera.getByRole("button", {
+    name: translations.en.guidedCameraCaptureBtn,
+    exact: true,
+  });
+  await expect(capture).toBeEnabled();
+  await capture.click();
   await page
     .getByRole("button", { name: translations.en.runDiagnosisBtn, exact: true })
     .click();
@@ -405,6 +488,11 @@ test("C03: closing pending permission stops late stream and restores launcher fo
   await expect(close).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(close).toBeFocused();
+  // If the browser moves focus outside the modal, return to its enabled action.
+  await page.evaluate(() => {
+    document.querySelector<HTMLButtonElement>("button")!.focus();
+  });
+  await expect(close).toBeFocused();
   await camera
     .getByRole("button", { name: translations.en.closeBtn, exact: true })
     .click();
@@ -437,12 +525,12 @@ test("C04: backgrounding stops camera and ignores delayed capture encoding", asy
   await controlledModel(page, scoresFor("Healthy Fruit"));
   await openApp(page);
   const camera = await openCamera(page);
-  await camera
-    .getByRole("button", {
-      name: translations.en.guidedCameraCaptureBtn,
-      exact: true,
-    })
-    .click();
+  const capture = camera.getByRole("button", {
+    name: translations.en.guidedCameraCaptureBtn,
+    exact: true,
+  });
+  await expect(capture).toBeEnabled();
+  await capture.click();
   await expect
     .poll(() => page.evaluate(() => window.mangoCameraControl.draws.length))
     .toBe(1);

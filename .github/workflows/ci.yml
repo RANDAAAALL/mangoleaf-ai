@@ -44,7 +44,8 @@ jobs:
   check:
     name: Check application
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    # The core suite took 24.9 minutes on Linux; leave room for builds and browsers.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
         with:
@@ -72,6 +73,10 @@ jobs:
         run: bun run verify:export
       - name: Install browser dependencies
         run: node node_modules/@playwright/test/cli.js install --with-deps chromium firefox webkit
+      - name: Record browser test runtime
+        run: |
+          node -e "console.log(JSON.stringify({platform:process.platform,node:process.version,playwright:require('@playwright/test/package.json').version},null,2))"
+          bun --version
       # Core cases include guided camera and installation, using the local mock backend.
       # R01/R03 stay explicit local runs; CI never starts the 30-minute session.
       - name: Test camera, installation, desktop, mobile, and offline workflows

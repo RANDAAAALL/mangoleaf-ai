@@ -14,6 +14,10 @@ const withSerwist = withSerwistInit({
 const nextConfig: NextConfig = {
   output: "export",
   allowedDevOrigins: ["*.trycloudflare.com"],
+  experimental: {
+    // Public development tunnels do not need the DevTools MCP endpoint.
+    mcpServer: false,
+  },
   env: {
     // Sourced from package.json "version" so the footer label always matches
     // the committed release. Override only for one-off preview builds.

@@ -30,9 +30,9 @@ bun run security:install
 
 ## Dependency security and archived training records
 
-The root app uses Next.js and its ESLint configuration at `16.3.6`. `package.json` overrides Browserslist to `4.28.7` because the installed Serwist release pins an affected version. The committed Bun lockfile records the remaining compatible security updates. Use the frozen installation command above to reproduce these selections.
+The root app pins Next.js and its ESLint configuration to `16.3.8` for the October 10 framework security patch. `package.json` retains the Browserslist `4.28.7` override introduced by the October 3 review. Use the frozen installation command above to reproduce the committed Bun lockfile selections. The [dependency security review](docs/security/DEPENDENCY_SECURITY.md) records advisory scope and current audit evidence.
 
-Run `bun run security:dependencies` for an online package-vulnerability audit. This is separate from the credential/history scanner, `bun run security:check`. The October 3 full dependency audit retains one high-severity finding in development-only `braces`; there is no published patched version. Do not interpret that nonzero exit as a scanner malfunction or add an ignore rule. The [dependency security review](docs/security/DEPENDENCY_SECURITY.md) records its caller, precautions, all 113 original Dependabot alerts, and verification status.
+Run `bun run security:dependencies` for an online package-vulnerability audit. This is separate from the credential/history scanner, `bun run security:check`. The October 10 full audit retains two findings without published fixes: development-only `braces` (high) and `sprintf-js` (moderate). The production-only audit retains `sprintf-js`; it does not establish that the exported browser app executes the affected formatter. Keep unresolved findings visible; a nonzero audit exit is not a scanner malfunction or a reason to add an ignore rule. The dependency security review preserves all 113 original Dependabot alerts and subsequent review evidence.
 
 The saved Colab `colab-runtime-snapshot.txt` is a historical package inventory, not a supported installation file. Do not pass it to `pip install -r`; its original versions have unresolved advisories. `bun run verify:training-archive` checks its unchanged bytes against the original training ledgers. A new training session requires a separately reviewed, patched environment and compatibility checks.
 
@@ -127,6 +127,8 @@ Open `http://localhost:3000`.
 
 Serwist is disabled in development to prevent stale service-worker caches. Test production caching and offline behavior from a production build served over HTTPS or localhost.
 
+`next.config.ts` also sets `experimental.mcpServer: false`, disabling Next.js's built-in development endpoint at `/_next/mcp`. This removes development project and log access through that endpoint, including when a tunnel is running. It does not configure or disable an agent's separate GitHub MCP connector.
+
 ### Optional: temporary link to the local app
 
 Use this option to try the app on a phone or another computer through a temporary internet link. The app still runs on your development computer, which must stay on with both terminals running. For local development on the same computer, use `bun run dev` and open `http://localhost:3000`; the tunnel is optional.
@@ -152,6 +154,8 @@ bun run tunnel
 ```
 
 Open the printed `trycloudflare.com` link on the other device. The script targets port 3000, so the app must be running on that port. Anyone with the link can access this development server until you stop the tunnel with `Ctrl+C`. Quick Tunnels are temporary development links; see [Cloudflare's guide](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/).
+
+The configured `*.trycloudflare.com` development-origin allowance supports the tunnel's browser requests; it does not authenticate visitors. Disabling the Next.js MCP endpoint does not make the public tunnel private.
 
 Serwist remains disabled when using `bun run dev` through the link. Use a production export for service-worker and offline-caching checks.
 

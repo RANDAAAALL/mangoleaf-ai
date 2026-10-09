@@ -2,7 +2,7 @@
 
 ## Next.js 16 source of truth
 
-This repository uses Next.js 16.3.6. APIs, conventions, and file structure may differ from older Next.js versions. Before changing Next.js code or configuration, read the relevant installed guide under `node_modules/next/dist/docs/` and follow current deprecation notices.
+This repository uses Next.js 16.3.8. APIs, conventions, and file structure may differ from older Next.js versions. Before changing Next.js code or configuration, read the relevant installed guide under `node_modules/next/dist/docs/` and follow current deprecation notices.
 
 ## Project context
 
@@ -12,6 +12,7 @@ This repository uses Next.js 16.3.6. APIs, conventions, and file structure may d
 - Cloud scan access must use the verified Supabase guest `owner_id`, not the caller-controlled browser `device_id`. Keep guest sign-in and cloud retries separate from local diagnosis and public guideline downloads.
 - Keep scan photos in the private `scans` bucket under the verified owner's folder. Store the bucket path and offline Blob, never a permanent public link or an expiring signed URL for new scans. Never automatically assign legacy cloud records to a guest using a device UUID.
 - Serwist generates `public/sw.js` from `src/sw.ts` during builds.
+- Keep `experimental.mcpServer: false` in `next.config.ts` so the development server does not expose `/_next/mcp` through public tunnels. This setting is independent of agent GitHub MCP connectors; allowed development origins are not authentication.
 
 ## Conventions
 

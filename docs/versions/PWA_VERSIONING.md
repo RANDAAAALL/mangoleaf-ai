@@ -389,8 +389,16 @@ The release commit, remote CI, staged deployment identity, production-domain set
 > Refines History with four photos per mobile page, six at the desktop breakpoint, a selected-photo delete action above mobile pagination, and reserved thumbnail space for older Safari. Newly saved results are matched to their photo and active model. Full class probabilities stay in technical diagnostics.
 >
 > Updates camera and installation regression coverage, the mixed-use reliability protocol, master-only CI, and project documentation. Preserves the completed V4.4.0 experiment and its evidence after local testing; the application retains V4.3.0 Combined with unchanged weights, classes, preprocessing, temperature, and rejection settings.
+>
+> Applies the Next.js 16.3.8 security patch, compatible Sharp/source-map-js repairs, and disables the unused development MCP endpoint. Repairs controlled camera tests and modal focus containment, with runtime and camera diagnostics in CI. Remaining dependency findings stay documented.
 
 Use the exact approved, tested commit when creating the tag through the procedure below. Add the completed validation and deployment identity to the published record; the prepared description does not assert that publication, deployment, or physical-device evaluation has already occurred.
+
+### Next.js security follow-up (October 10, 2026)
+
+The maintainer committed the prepared release at `5cad2ff15efa66d045642432c34b8846dcaabcfc`. A later authenticated GitHub MCP review identified six root Next.js alerts, all fixed in `16.3.8`. The subsequent local changes pin both Next.js and its ESLint configuration to that version, repair compatible Sharp and source-map-js dependencies, and disable the unused development MCP endpoint for the public-tunnel workflow.
+
+App/model labels remain `0.5.5` / `v4.3.0`; no existing tag is moved. The [security review](../security/DEPENDENCY_SECURITY.md) keeps the two unpatchable braces/sprintf-js findings visible. The earlier release validation above belongs to its original dependency/configuration fingerprint. The [security revalidation record](../testing/TESTING.md#nextjs-security-revalidation-october-10-2026) identifies this revision's new checks and reports. Camera follow-up also fixes the controlled media capability, restores escaped modal focus to an enabled action, and gives the complete CI job 45 minutes for setup/build/core checks. R03 remains a separate 30-minute protocol and is excluded from CI and this task. Local verification passed 187 core cases with four declared skips, filtered R01's 240 actual predictions, and the formatting/security/type/lint/build/export/tooling/archive checks. The new reports identify application fingerprint `2ccdfaede198d91f39c4aa5ca65eabae85869382edcad9fffef3a0feb2127f7d`; the corrected Linux CI result remains pending. GitHub alert re-evaluation and production deployment require the corresponding reviewed changes to be published through the release procedure.
 
 ## Candidate testing and promotion
 

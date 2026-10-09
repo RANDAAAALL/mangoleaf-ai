@@ -37,7 +37,11 @@ export const GuidedCamera = memo(function GuidedCamera({
 
     const containFocus = (event: FocusEvent) => {
       if (event.target instanceof Node && !dialog.contains(event.target)) {
-        dialog.focus({ preventScroll: true });
+        // Restore an actionable control when browser focus leaves the modal.
+        const first = Array.from(
+          dialog.querySelectorAll<HTMLButtonElement>("button:not(:disabled)"),
+        ).find((button) => button.getClientRects().length > 0);
+        (first ?? dialog).focus({ preventScroll: true });
       }
     };
 

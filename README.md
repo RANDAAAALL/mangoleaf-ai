@@ -44,7 +44,7 @@ The [treatment-source date clarification](docs/treatment-guidelines/TREATMENT-GU
 
 ## Technology
 
-- Next.js 16 App Router and React 19
+- Next.js 16.3.8 App Router and React 19
 - Bun and TypeScript
 - Tailwind CSS 4
 - TensorFlow.js
@@ -64,6 +64,8 @@ bun run dev
 ```
 
 Then open `http://localhost:3000` on the same computer. This is the usual way to run the app locally.
+
+Next.js's built-in development MCP endpoint is disabled in `next.config.ts`. This setting is independent of an agent's GitHub MCP connector. See the [dependency security review](docs/security/DEPENDENCY_SECURITY.md) for the October 10 framework patch and its validation status.
 
 The Supabase values in `.env.local` must be replaced before cloud synchronization will work. See [SETUP.md](./SETUP.md) for the complete local setup, Supabase requirements, static-export notes, and pre-commit checks.
 
@@ -88,6 +90,8 @@ bun run tunnel
 ```
 
 Open the temporary `trycloudflare.com` link printed in Terminal 2. Anyone with that link can reach your local development server while the tunnel runs. Stop it with `Ctrl+C` when finished. See [Cloudflare's Quick Tunnel guide](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/) and the [setup notes](./SETUP.md#optional-temporary-link-to-the-local-app).
+
+The development-origin allowance supports browser requests through the tunnel; it does not authenticate visitors. The tunnel remains public with the Next.js development MCP endpoint disabled.
 
 ## Documentation
 

@@ -238,6 +238,10 @@ test("S05: upgrading legacy IndexedDB keeps local history and does not claim old
   }
   expect(await savedPhotoSize(page, withPhoto)).toBeGreaterThan(0);
   await nav(page, "History");
+  // Both cards briefly show placeholders while the preserved Blob URL loads.
+  await expect(
+    page.getByRole("img", { name: "Healthy Leaf", exact: true }),
+  ).toBeVisible();
   await expect(
     page.getByText("Photo not saved on this device", { exact: true }),
   ).toBeVisible();
