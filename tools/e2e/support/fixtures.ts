@@ -233,9 +233,14 @@ export async function waitForMockScanPull(page: Page) {
 
 export async function openApp(page: Page) {
   await page.goto("/");
-  await expect(recentHeading(page)).toBeVisible({ timeout: 90_000 });
+  await expect(homeHeading(page)).toBeVisible({ timeout: 90_000 });
 }
 
+export const homeHeading = (page: Page) =>
+  page.getByRole("heading", {
+    name: translations.en.HowItWorksTitle,
+    exact: true,
+  });
 export const recentHeading = (page: Page) =>
   page.getByRole("heading", { name: /^Recent Scans?$/ });
 export const historyDetails = (page: Page) =>
@@ -338,30 +343,34 @@ export async function savedPhotoSize(page: Page, id: string): Promise<number> {
   );
 }
 export async function nav(page: Page, label: string) {
+  const originalViewport = page.viewportSize()!;
+  const phoneHistory =
+    originalViewport.width >= 768 && label === translations.en.navHistory;
+  // Wider layouts promote Download. Activate History through its phone-width
+  // launcher, then retain the original layout for History/table assertions.
+  if (phoneHistory)
+    await page.setViewportSize({ ...originalViewport, width: 767 });
   await page
     .getByRole("button", { name: label, exact: true })
     .filter({ visible: true })
     .first()
     .click();
+  if (phoneHistory) await page.setViewportSize(originalViewport);
 }
-export async function choosePhoto(
-  page: Page,
-  file: string,
-  camera = false,
-  duplicate = false,
-) {
+export async function choosePhoto(page: Page, file: string, duplicate = false) {
+  const originalViewport = page.viewportSize()!;
+  // Photo selection is a phone-width action. Restore desktop layout before
+  // diagnosis and History assertions so those checks keep their original scope.
+  if (originalViewport.width >= 768)
+    await page.setViewportSize({ ...originalViewport, width: 767 });
   await nav(page, "Scan");
   await expect(
     page.getByRole("heading", { name: translations.en.scanSheetTitle }),
   ).toBeVisible();
   const choosing = page.waitForEvent("filechooser");
-  await page
-    .getByRole("button", { name: camera ? /^Take Photo/ : /^Upload Photo/ })
-    .click();
+  await page.getByRole("button", { name: /^Upload Photo/ }).click();
   const chooser = await choosing;
-  expect(await chooser.element().getAttribute("id")).toBe(
-    camera ? "scan-camera-input" : "scan-gallery-input",
-  );
+  expect(await chooser.element().getAttribute("id")).toBe("scan-gallery-input");
   await chooser.setFiles(photoPath(file));
   await expect(
     page.getByRole("heading", {
@@ -376,6 +385,8 @@ export async function choosePhoto(
     exact: true,
   });
   await expect(preview).toBeVisible();
+  if (originalViewport.width >= 768)
+    await page.setViewportSize(originalViewport);
   const hash = await preview.evaluate(async (element: HTMLImageElement) => {
     const bytes = await (await fetch(element.src)).arrayBuffer();
     return Array.from(

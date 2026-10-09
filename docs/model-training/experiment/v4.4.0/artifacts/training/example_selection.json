@@ -1,0 +1,133 @@
+{
+  "seed": 42,
+  "subset": "val",
+  "images": [
+    {
+      "id": "a557157b1e887d6f8f70",
+      "pool": "mango",
+      "sourceRelativePath": "anthracnose/verified mango leaf disease 21.jpg",
+      "sha256": "a557157b1e887d6f8f7067efbaa97447074114b2967c3c2337656d1936b45102",
+      "bytes": 1948118,
+      "decodedRgbSha256": "2ce9f3b8190ebbdc3b4344cd6c36af25b2614551b1cf114dbbf69c74f78e81af",
+      "phash": "c0c0ea5f3b0e787c",
+      "dimensions": [
+        2129,
+        4624
+      ],
+      "readable": true,
+      "label": "anthracnose",
+      "groupId": "a557157b1e887d6f8f70",
+      "subset": "val",
+      "relativePath": "val/anthracnose/a557157b1e887d6f8f70__verified mango leaf disease 21.jpg"
+    },
+    {
+      "id": "1c19c1ea4164df5e0df9",
+      "pool": "mango",
+      "sourceRelativePath": "bacterial_black_spot/Bc162.jpg",
+      "sha256": "1c19c1ea4164df5e0df93cf4a185c5d34f04f90d9dbf94a44e7f57d66749ace0",
+      "bytes": 29602,
+      "decodedRgbSha256": "51fabff3e6396b74bbc236261b3fee75281c08d4e6dbaf6540baed301d32e8e6",
+      "phash": "bf3be063c160c7e0",
+      "dimensions": [
+        256,
+        256
+      ],
+      "readable": true,
+      "label": "bacterial_black_spot",
+      "groupId": "1c19c1ea4164df5e0df9",
+      "subset": "val",
+      "relativePath": "val/bacterial_black_spot/1c19c1ea4164df5e0df9__Bc162.jpg"
+    },
+    {
+      "id": "c02eacdc101c9b121186",
+      "pool": "mango",
+      "sourceRelativePath": "bacterial_canker/IMG_20211106_142820 (Custom).jpg",
+      "sha256": "c02eacdc101c9b1211867833b818acdd3402c741819dfeedd474d1619baa64fb",
+      "bytes": 35829,
+      "decodedRgbSha256": "49cf2c9d8135fa7af74f6048aa86dbae8a79fd4061fc9d92460b56971c0a75c3",
+      "phash": "e712d964b26984db",
+      "dimensions": [
+        320,
+        240
+      ],
+      "readable": true,
+      "label": "bacterial_canker",
+      "groupId": "c02eacdc101c9b121186",
+      "subset": "val",
+      "relativePath": "val/bacterial_canker/c02eacdc101c9b121186__IMG_20211106_142820 (Custom).jpg"
+    },
+    {
+      "id": "9872562f0d3dfe137e0d",
+      "pool": "mango",
+      "sourceRelativePath": "healthy_fruit/DSC_1021.JPG",
+      "sha256": "9872562f0d3dfe137e0db5edfbaeaa602aef7444aacded8d18ce9de1bfbf5390",
+      "bytes": 1040860,
+      "decodedRgbSha256": "ec2ee8fb08012c520232090cacae8efba0befbec4bfeb6a0c75536854441bed3",
+      "phash": "96dd61704c4358ef",
+      "dimensions": [
+        2644,
+        3641
+      ],
+      "readable": true,
+      "label": "healthy_fruit",
+      "groupId": "9872562f0d3dfe137e0d",
+      "subset": "val",
+      "relativePath": "val/healthy_fruit/9872562f0d3dfe137e0d__DSC_1021.JPG"
+    },
+    {
+      "id": "e2e68e23f0fd8f88b999",
+      "pool": "mango",
+      "sourceRelativePath": "healthy_leaf/HealthyLeaf_2.jpg",
+      "sha256": "e2e68e23f0fd8f88b999c0740cb577e126e78de61fa1fe71772d908ea2fc6375",
+      "bytes": 17710,
+      "decodedRgbSha256": "85b975352840f4425702c103519c813164a475acea41f970ab9a68de09990a1a",
+      "phash": "c01f34e6f067e946",
+      "dimensions": [
+        140,
+        350
+      ],
+      "readable": true,
+      "label": "healthy_leaf",
+      "groupId": "e2e68e23f0fd8f88b999",
+      "subset": "val",
+      "relativePath": "val/healthy_leaf/e2e68e23f0fd8f88b999__HealthyLeaf_2.jpg"
+    },
+    {
+      "id": "da1e429fc670c52fd75b",
+      "pool": "mango",
+      "sourceRelativePath": "mango_scab/DSC_0281.JPG",
+      "sha256": "da1e429fc670c52fd75ba8cfe37b019606841ee7e012182f5696895e1ba13132",
+      "bytes": 211009,
+      "decodedRgbSha256": "951d7e30d9d3473a1d610bbbe3d2629080e572b3f30342a7a71a2f52089cf80d",
+      "phash": "8ad43997b08f479c",
+      "dimensions": [
+        1088,
+        1620
+      ],
+      "readable": true,
+      "label": "mango_scab",
+      "groupId": "da1e429fc670c52fd75b",
+      "subset": "val",
+      "relativePath": "val/mango_scab/da1e429fc670c52fd75b__DSC_0281.JPG"
+    },
+    {
+      "id": "7dfd201d72ea78a4557f",
+      "pool": "mango",
+      "sourceRelativePath": "sooty_mold/DSC_1029.JPG",
+      "sha256": "7dfd201d72ea78a4557fdc5c5bddb594af538ff0270e020e73c9f382b3fa6f74",
+      "bytes": 181004,
+      "decodedRgbSha256": "a6698ef28581ca192dff1d5a6389854dba72fb6906ede8264245297ba51b0b76",
+      "phash": "b0cb25d7692219f6",
+      "dimensions": [
+        830,
+        1758
+      ],
+      "readable": true,
+      "label": "sooty_mold",
+      "groupId": "7dfd201d72ea78a4557f",
+      "subset": "val",
+      "relativePath": "val/sooty_mold/7dfd201d72ea78a4557f__DSC_1029.JPG"
+    }
+  ],
+  "selectionBeforePredictions": true
+}

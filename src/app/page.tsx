@@ -5,9 +5,11 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { db, type ScanRecord, type DiseaseGuideline } from "@/lib/db";
 import { useSync } from "@/hooks/useSync";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
+import { useInstallGuide } from "@/hooks/useInstallGuide";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { computeImageHash } from "@/lib/image-hash";
 import { compressImageForStorage } from "@/lib/image-storage";
+import type { DiagnosisResult } from "@/lib/classifier";
 import type * as tf from "@tensorflow/tfjs";
 import { modelVersion, UNCERTAIN_LABEL } from "@/lib/constants";
 import { translations, type Language } from "@/lib/translations";
@@ -21,7 +23,9 @@ import { HistoryTab } from "@/components/tab/history-tab";
 import { AboutTab } from "@/components/tab/about-tab";
 import { LegalModal } from "@/components/modal/legal-modal";
 import { ScanSheet } from "@/components/modal/scan-sheet";
+import { InstallGuideOverlay } from "@/components/modal/install-guide-overlay";
 import { DiagnosticScanner } from "@/components/scan/diagnostic-scanner";
+import { GuidedCamera } from "@/components/scan/guided-camera";
 import { Footer } from "@/components/layout/footer";
 import dynamic from "next/dynamic";
 
@@ -38,6 +42,12 @@ const ScanDetailsModal = dynamic(() =>
 let hasInitialized = false;
 
 type AppTab = "home" | "history" | "about";
+
+// Probability rows exist only for the selected fresh result;
+// they are not saved to History or cloud storage.
+type SelectedScanRecord = ScanRecord & {
+  diagnosedResultTabular?: DiagnosisResult["diagnosedResultTabular"];
+};
 
 type PhotoCheck =
   | { status: "idle" | "checking" | "error" }
@@ -59,7 +69,19 @@ function findDuplicateScan(imageHash: string) {
 export default function Home() {
   const { createScan, deleteScan, deleteScans } = useSync();
 
-  const { showInstallButton, installApp } = usePWAInstall();
+  const {
+    showInstallButton,
+    installApp,
+    isInstalled,
+    isInstalling,
+    installError,
+  } = usePWAInstall();
+  const {
+    isOpen: isInstallGuideOpen,
+    platform: installPlatform,
+    openGuide: openInstallGuide,
+    closeGuide: closeInstallGuide,
+  } = useInstallGuide();
 
   // Which tab is showing
   const [activeTab, setActiveTab] = useState<AppTab>("home");
@@ -121,9 +143,15 @@ export default function Home() {
     "privacy" | "terms" | null
   >(null);
   const [isScanSheetOpen, setIsScanSheetOpen] = useState(false);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
   const closeScanSheet = useCallback(() => setIsScanSheetOpen(false), []);
   const openScanSheet = useCallback(
     (event?: React.MouseEvent<HTMLButtonElement>) => {
+      // Wider layouts direct new scans to the phone installation guide.
+      if (window.matchMedia("(min-width: 48rem)").matches) {
+        openInstallGuide(event);
+        return;
+      }
       // Capture the persistent launcher before the sheet/native picker takes focus.
       scanLauncherRef.current =
         event?.currentTarget ??
@@ -132,13 +160,44 @@ export default function Home() {
           : null);
       setIsScanSheetOpen(true);
     },
-    [],
+    [openInstallGuide],
   );
 
-  const [selectedScan, setSelectedScan] = useState<ScanRecord | null>(null);
+  useEffect(() => {
+    if (!isScanSheetOpen) return;
+    const desktop = window.matchMedia("(min-width: 48rem)");
+    const handleWidthChange = () => {
+      if (!desktop.matches) return;
+      setIsScanSheetOpen(false);
+      openInstallGuide();
+    };
+    handleWidthChange();
+    if (typeof desktop.addEventListener === "function") {
+      desktop.addEventListener("change", handleWidthChange);
+    } else {
+      desktop.addListener(handleWidthChange);
+    }
+    return () => {
+      if (typeof desktop.removeEventListener === "function") {
+        desktop.removeEventListener("change", handleWidthChange);
+      } else {
+        desktop.removeListener(handleWidthChange);
+      }
+    };
+  }, [isScanSheetOpen, openInstallGuide]);
+
+  const [selectedScan, setSelectedScan] = useState<SelectedScanRecord | null>(
+    null,
+  );
 
   useEffect(() => {
-    if (previewUrl || selectedScan || !restoreReviewFocusRef.current) return;
+    if (
+      previewUrl ||
+      selectedScan ||
+      isCameraOpen ||
+      !restoreReviewFocusRef.current
+    )
+      return;
     restoreReviewFocusRef.current = false;
     const launcher = scanLauncherRef.current;
     const target =
@@ -146,7 +205,7 @@ export default function Home() {
         ? launcher
         : mainRef.current;
     target?.focus({ preventScroll: true });
-  }, [previewUrl, selectedScan]);
+  }, [previewUrl, selectedScan, isCameraOpen]);
 
   // Read from localStorage on first render. Bisaya is the default because the
   // intended users read it more comfortably than English.
@@ -207,10 +266,11 @@ export default function Home() {
     return map;
   }, [cachedGuidelines]);
 
-  useScrollLock(Boolean(previewUrl || selectedScan || legalModalType));
+  useScrollLock(
+    Boolean(previewUrl || selectedScan || legalModalType || isCameraOpen),
+  );
 
-  // Which picker was used last (camera, gallery, desktop), so Retake reopens
-  // that same one rather than guessing.
+  // Retake reopens the live camera or the same file picker used last.
   const lastPickerIdRef = useRef<string | null>(null);
 
   const clearPhoto = useCallback(() => {
@@ -249,21 +309,49 @@ export default function Home() {
     }
   }, [updatePhotoCheck]);
 
-  // A photo has been taken or chosen
-  const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (!file || scanInFlightRef.current) return;
+  // Captured photos and uploads share duplicate checking and photo review.
+  const selectPhoto = useCallback(
+    (file: File, source: string) => {
+      if (scanInFlightRef.current) return;
       restoreReviewFocusRef.current = false;
       clearPhoto();
-      lastPickerIdRef.current = e.target.id;
-      e.target.value = "";
+      lastPickerIdRef.current = source;
+      setIsCameraOpen(false);
       selectedFileRef.current = file;
       previewUrlRef.current = URL.createObjectURL(file);
       setPreviewUrl(previewUrlRef.current);
       void checkSelectedPhoto();
     },
     [clearPhoto, checkSelectedPhoto],
+  );
+
+  const handleFileChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file || scanInFlightRef.current) return;
+      const pickerId = event.target.id;
+      event.target.value = "";
+      selectPhoto(file, pickerId);
+    },
+    [selectPhoto],
+  );
+
+  const openGuidedCamera = useCallback(() => {
+    if (scanInFlightRef.current) return;
+    restoreReviewFocusRef.current = false;
+    clearPhoto();
+    setIsScanSheetOpen(false);
+    setIsCameraOpen(true);
+  }, [clearPhoto]);
+
+  const closeGuidedCamera = useCallback(() => {
+    restoreReviewFocusRef.current = true;
+    setIsCameraOpen(false);
+  }, []);
+
+  const handleCameraCapture = useCallback(
+    (file: File) => selectPhoto(file, "guided-camera"),
+    [selectPhoto],
   );
 
   const closePhotoReview = useCallback(() => {
@@ -278,6 +366,11 @@ export default function Home() {
     const pickerId = lastPickerIdRef.current;
     restoreReviewFocusRef.current = true;
     clearPhoto();
+    if (pickerId === "guided-camera") {
+      restoreReviewFocusRef.current = false;
+      setIsCameraOpen(true);
+      return;
+    }
     if (pickerId) {
       const input = document.getElementById(
         pickerId,
@@ -372,7 +465,11 @@ export default function Home() {
       if (request !== photoRequestRef.current) return;
 
       setScanningProgress(45);
-      const { diseaseName, confidence } = await predictMangoDisease(model, img);
+      const {
+        diseaseName,
+        confidence,
+        // diagnosedResultTabular
+      } = await predictMangoDisease(model, img);
       if (request !== photoRequestRef.current) return;
 
       setScanningProgress(75);
@@ -386,11 +483,16 @@ export default function Home() {
       await createScan(diseaseName, confidence, storageBlob, check.hash);
       if (request !== photoRequestRef.current) return;
 
-      const newestScan = await db.scans.orderBy("updated_at").last();
+      // Match this photo and active model so
+      // scores cannot be attached to another photo's newer report.
+      const savedScan = await findDuplicateScan(check.hash);
       if (request !== photoRequestRef.current) return;
       clearPhoto();
-      if (newestScan) {
-        setSelectedScan(newestScan);
+      if (savedScan) {
+        setSelectedScan({
+          ...savedScan,
+          // diagnosedResultTabular,
+        });
       }
     } catch (err) {
       console.error("AI classification error:", err);
@@ -463,28 +565,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#f6faf1] text-[#143519] font-sans flex flex-col justify-between">
-      <div>
+      <div inert={isInstallGuideOpen}>
         {/* Top Header: mobile = minimal logo, desktop = full nav */}
         <TopHeader
           language={language}
-          showInstallButton={showInstallButton}
+          showInstallButton={!isInstalled}
           activeTab={activeTab}
           onTabChange={handleTabChange}
           onLanguageChange={setLanguage}
-          onInstall={installApp}
+          onInstall={openInstallGuide}
           onLogoClick={() => handleTabChange("home")}
-          onScanPress={openScanSheet}
         />
 
-        {/* Hidden file inputs for scan sheet + retake flow */}
-        <input
-          type="file"
-          accept="image/*"
-          capture="environment"
-          onChange={handleFileChange}
-          id="scan-camera-input"
-          className="hidden"
-        />
+        {/* Hidden gallery input for the scan sheet and upload retake flow. */}
         <input
           type="file"
           accept="image/*"
@@ -508,6 +601,7 @@ export default function Home() {
                 onDeleteScan={deleteScan}
                 onViewAllHistory={handleViewAllHistory}
                 onScanPress={openScanSheet}
+                onDownload={openInstallGuide}
               />
             )}
 
@@ -530,11 +624,35 @@ export default function Home() {
       </div>
 
       {/* Scan Sheet (bottom sheet triggered by center FAB) */}
-      <ScanSheet
-        isOpen={isScanSheetOpen}
-        language={language}
-        onClose={closeScanSheet}
-      />
+      {!isInstallGuideOpen && (
+        <ScanSheet
+          isOpen={isScanSheetOpen}
+          language={language}
+          onClose={closeScanSheet}
+          onCamera={openGuidedCamera}
+        />
+      )}
+
+      {isInstallGuideOpen && (
+        <InstallGuideOverlay
+          language={language}
+          platform={installPlatform}
+          canInstall={showInstallButton}
+          isInstalled={isInstalled}
+          isInstalling={isInstalling}
+          installError={installError}
+          onInstall={installApp}
+          onClose={closeInstallGuide}
+        />
+      )}
+
+      {isCameraOpen && (
+        <GuidedCamera
+          language={language}
+          onCapture={handleCameraCapture}
+          onClose={closeGuidedCamera}
+        />
+      )}
 
       {/* Photo Preview & AI Scanning Overlay (from DiagnosticScanner) */}
       {previewUrl && (
@@ -553,7 +671,6 @@ export default function Home() {
           }
           scanningProgress={scanningProgress}
           language={language}
-          onFileChange={handleFileChange}
           onRunDiagnosis={runDiagnosis}
           onRetake={handleRetake}
           onClose={closePhotoReview}
@@ -566,6 +683,7 @@ export default function Home() {
       {selectedScan && (
         <ScanDetailsModal
           scan={selectedScan}
+          // diagnosedResultTabular={selectedScan.diagnosedResultTabular}
           imageUrl={selectedScanImageUrl}
           language={language}
           guidelineText={getGuidelineForScan(selectedScan.disease_name)}
@@ -582,20 +700,22 @@ export default function Home() {
       />
 
       {/* Footer */}
-      <Footer
-        language={language}
-        onOpenPrivacy={() => setLegalModalType("privacy")}
-        onOpenTerms={() => setLegalModalType("terms")}
-      />
+      <div inert={isInstallGuideOpen}>
+        <Footer
+          language={language}
+          onOpenPrivacy={() => setLegalModalType("privacy")}
+          onOpenTerms={() => setLegalModalType("terms")}
+        />
 
-      {/* Bottom Navigation Bar */}
-      <BottomNav
-        activeTab={activeTab}
-        language={language}
-        onTabChange={handleTabChange}
-        onScanPress={openScanSheet}
-        onLanguageToggle={() => setLanguage(language === "en" ? "bis" : "en")}
-      />
+        {/* Bottom Navigation Bar */}
+        <BottomNav
+          activeTab={activeTab}
+          language={language}
+          onTabChange={handleTabChange}
+          onScanPress={openScanSheet}
+          onLanguageToggle={() => setLanguage(language === "en" ? "bis" : "en")}
+        />
+      </div>
     </div>
   );
 }

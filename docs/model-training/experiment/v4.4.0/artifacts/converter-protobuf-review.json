@@ -1,0 +1,70 @@
+{
+  "scope": "Actual generated Python imports and message serialization from official Linux wheels, executed locally on Windows; native YDF, TensorFlow.js conversion, and Colab GPU execution not tested.",
+  "records": [
+    {
+      "ydfVersion": "0.16.0",
+      "wheel": "ydf-0.16.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "wheelSha256": "bcde164ce4443705be556df59fc5cb6800e34feee000fcc38e53c4015dcece50",
+      "wheelUrl": "https://files.pythonhosted.org/packages/c6/92/33d30485af23be651ce3744cdf541676e1a526ed7ea2e481c55d36a3d25c/ydf-0.16.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "protobufRuntime": "5.29.6",
+      "returnCode": 1,
+      "result": "Reproduced gencode 6.31.1 / runtime 5.29.6 VersionError"
+    },
+    {
+      "ydfVersion": "0.11.0",
+      "wheel": "ydf-0.11.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "wheelSha256": "d4178b24d7830137a9fcf89f813367a03c535dcb484ce76f7bb3145d2ea9ac63",
+      "wheelUrl": "https://files.pythonhosted.org/packages/3b/01/26ab8270e6dfb24282f36cb6d302832c0a63c92cb1fc16ca90bba33c9139/ydf-0.11.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "protobufRuntime": "5.29.6",
+      "returnCode": 0,
+      "result": {
+        "protobuf": "5.29.6",
+        "generatedModulesImported": 40,
+        "messageRoundTripPassed": true
+      }
+    }
+  ],
+  "date": "2026-10-08",
+  "experiment": "v4.4.0",
+  "localPython": "3.12.1",
+  "localPlatform": "Windows",
+  "resolvedLinuxPackageCount": 82,
+  "resolvedPackageChanges": {
+    "ydf": {
+      "previous": "0.16.0",
+      "revised": "0.11.0"
+    }
+  },
+  "metadataSources": [
+    {
+      "name": "tensorflow",
+      "version": "2.19.0",
+      "url": "https://pypi.org/pypi/tensorflow/2.19.0/json",
+      "sha256": "77ebe504473ec4855fb8bc4a5a2579c947834ce00d22793391e24cbbee5d7e73"
+    },
+    {
+      "name": "tensorflow-decision-forests",
+      "version": "1.12.0",
+      "url": "https://pypi.org/pypi/tensorflow-decision-forests/1.12.0/json",
+      "sha256": "dd22db87f73f0017624183f1ef0549197a1dcbccafcb69f00fb0db9219efcb20"
+    },
+    {
+      "name": "ydf",
+      "version": "0.11.0",
+      "url": "https://pypi.org/pypi/ydf/0.11.0/json",
+      "sha256": "3de27adb8a5c630cfdae11f431819dfae8ecb42690a76b9587d7a26f077c634d"
+    },
+    {
+      "name": "ydf",
+      "version": "0.16.0",
+      "url": "https://pypi.org/pypi/ydf/0.16.0/json",
+      "sha256": "0041724ea1aad1cd9b683d4ef25ef4dd4608ff4227b8f7b79aa3d2bae302c9bd"
+    },
+    {
+      "name": "protobuf",
+      "version": "5.29.6",
+      "url": "https://pypi.org/pypi/protobuf/5.29.6/json",
+      "sha256": "6f5608458abc6afaf7bd49ababa74cccb0425feb17737446151d231b4887a542"
+    }
+  ]
+}

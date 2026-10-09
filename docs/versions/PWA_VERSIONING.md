@@ -2,9 +2,17 @@
 
 This guide explains the PWA version: the application interface, local/offline behavior, release history, build labels, and deployment procedure. The PWA is the app people use. The separate [AI model versioning guide](AI_MODEL_VERSIONING.md) explains the model weights, training workflows, fitted rejection settings, and model evidence.
 
-**Current prepared release:** App `0.5.4` retains the adopted V4.3.0 Combined model (`v4.3.0`) and adds a check that skips rewriting identical downloaded guidance after the existing HTTP/Realtime safeguards pass. Saved offline advice remains in IndexedDB. See the [v0.5.4 record](#v054-unchanged-guidance-check-prepared-release-october-7-2026) and [model adoption history](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026). This release awaits CI and production promotion. The reported live version is `v0.5.3`, as recorded below. Earlier dated validation remains evidence for its original build.
+**Current prepared release:** App `0.5.5` adds guided camera capture, photo review and retake, device-specific installation guidance, and responsive History refinements. It retains the adopted V4.3.0 Combined model (`v4.3.0`) and the existing local-first diagnosis, synchronization, and guidance safeguards. See the [v0.5.5 record](#v055-guided-camera-and-installation-prepared-release-october-10-2026) and [model adoption history](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026). This is a prepared release, with publication and production promotion recorded separately from preparation. The last reported live version is `v0.5.3`; local tag `v0.5.4` identifies commit `341a065c0288e196578b970a6e5ac402915ed417`. Earlier dated validation remains evidence for its original build.
 
 ## Reading the release history
+
+### Local development changes, October 9, 2026
+
+The current working tree adds a full-screen guided camera preview with framing advice, capture, photo review, and retake. It also replaces the Home recent-scan section and desktop History/Scan actions at 768px and wider with an Install prompt and installation guide. Phone scanning and History remain available. The guide chooses iOS/Android instructions from device identity, separately from responsive layout and browser-native install-event support; its desktop QR opens `https://mangoleafai.vercel.app/?install=1`.
+
+The maintainer tested the V4.4.0 candidate locally and then requested restoration of V4.3.0. The model assets and display label are restored, with cleanup of the temporary candidate cache. See the [model rollback record](AI_MODEL_VERSIONING.md#v440-local-test-completed-v430-restored-october-9-2026), [camera architecture](../ARCHITECTURE.md#guided-camera-capture), and [development progress](../PROGRESS.md#october-9-2026).
+
+These are local changes under the existing `0.5.4` label. The October 7 prepared-release checks describe their original source fingerprint and do not validate this later working tree. No new release version, tag, publication, or production promotion is recorded here. A future release must identify and validate its final source/build, including the applicable browser and physical-device checks.
 
 **Dependency security, October 3, 2026:** The local `0.5.0` candidate now selects Next.js and its ESLint configuration `16.3.6`, overrides Browserslist to `4.28.7`, and records compatible transitive security patches in `bun.lock`. App/model labels remain `0.5.0` / `v4.3.0`. The [dependency review](../security/DEPENDENCY_SECURITY.md) records a clean production-dependency audit and one unresolved development-only `braces` advisory. Earlier candidate validation remains tied to its original dependency snapshot; new checks and remote release status are recorded separately.
 
@@ -46,6 +54,7 @@ v0.5.1  released: stable scan thumbnails and a horizontal treatment-guidelines h
 v0.5.2  released: responsive scan History, selection, and confirmed deletion
 v0.5.3  released / reported live: protected guideline HTTP/Realtime updates and offline advice
 v0.5.4  prepared / awaiting CI and production promotion: skip unchanged HTTP guidance writes while preserving update ordering
+v0.5.5  prepared release: guided camera capture, installation guidance, and responsive History refinements
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
@@ -340,6 +349,48 @@ Realtime ordering and changes saved by another tab.
 > Preserves HTTP/Realtime overlap protection, direct Realtime updates, and advice after failed downloads. HTTP still retrieves the complete guidance set. The V4.3.0 Combined model and diagnosis settings remain unchanged.
 
 The tag and notes are prepared text. Create the app tag on the exact tested commit after the release procedure passes. Preparing files does not create a commit, tag, GitHub Release, or production deployment.
+
+## v0.5.5: guided camera and installation prepared release (October 10, 2026)
+
+**Status: prepared release / publication and production promotion pending.** The maintainer selected app `0.5.5` as the next PWA release. Its displayed label comes from `package.json` through the existing build configuration. The model remains `v4.3.0`; its five assets, seven-class order, full-photo 224 × 224 preprocessing, folded temperature, and fitted rejection settings remain unchanged. No new model tag is required. This release selection does not establish completed deployment or evaluation.
+
+### Changes included
+
+- Replace the camera file-picker handoff with an in-app live preview and framing advice. The square guide occupies 75% of the displayed camera image's shorter side; it helps the user frame the whole leaf or fruit and does not crop the captured photo. Capture preserves the complete available frame, then opens photo review. Diagnosis starts only when the user selects Run Diagnosis; Retake reopens the camera or the previously used gallery picker.
+- Release camera tracks after capture, close, backgrounding, and unmount. Cancel stale permission and encoding results, require a ready frame before capture, and provide localized recovery for unsupported access, permission denial, unavailable hardware, interrupted streams, and capture errors. Returning from the background requires an explicit restart. The browser decides the actual camera resolution from the requested preferences.
+- Add an accessible installation guide with iOS/Android instructions selected from device identity, native installation only after an explicit supported button press, keyboard focus containment, and focus restoration. At 768px and wider, Home and navigation emphasize phone installation instead of scan entry points. The desktop QR opens `https://mangoleafai.vercel.app/?install=1`; this flag opens guidance rather than automatically installing the app.
+- Show four History records per page on narrow screens and six at the desktop breakpoint. Put the mobile selected-photo delete action above pagination. Reserve thumbnail space from its width to avoid flex/aspect-ratio sizing problems in older Safari. Existing confirmation, local deletion, synchronization, and model-aware duplicate reuse remain in place.
+- Match a newly saved result to the selected photo hash and active model before opening it. Full class probabilities remain technical diagnostics in DevTools and test reports; they are not presented as measured accuracy or exposed in the result modal.
+- Extend guided-camera and installation browser coverage. Align the R03 mixed-use protocol with camera/gallery review, retake, track cleanup, and actual inference; keep the core suite in the master-only GitHub workflow and use the pinned Playwright CLI through Node. The 30-minute R03 case was not executed during this preparation.
+- Preserve the completed V4.4.0 experimental notebooks, selected scientific figures, result artifacts, and source provenance after local testing and restoration of V4.3.0. Update architecture, performance, setup, testing, release guidance, the V4.3.0 split table, and the local technical Q&A. V4.4.0 remains an experimental model rather than the model shipped by this release.
+
+The camera guide does not change model input cropping or rejection gates. Diagnosis and saved History remain local-first; the temporary model-size image is not the stored scan photo. These changes do not alter the Supabase schema, cloud ownership rules, treatment advice, or model-training results.
+
+### Validation and identity
+
+**Baseline:** Local HEAD and app tag `v0.5.4` both identify `341a065c0288e196578b970a6e5ac402915ed417`. The prepared `0.5.5` build includes subsequent source, test, version, and documentation changes. October 7 and October 9 results retain their original source fingerprints and do not certify the versioned `0.5.5` build.
+
+The [v0.5.5 validation record](../testing/TESTING.md#v055-release-validation-october-10-2026) records this release's actual local checks, final application fingerprint, report identities, and unchanged model hashes. Local formatting/security, TypeScript, lint, production build, all 10 export checks, 28 tooling cases, 187 core browser cases with four declared skips, and filtered R01 with 240 actual predictions passed against the final versioned build. Lint retains one existing unused-import warning; no earlier pass is counted as a new result. The approved preparation scope excludes executing R03, including a shortened session. Camera hardware, installed iOS/Android behavior, OS/browser versions, and background behavior require their own recorded evidence in the [physical-device checklist](../testing/PHYSICAL_RELIABILITY_CHECKLIST.md).
+
+The release commit, remote CI, staged deployment identity, production-domain setting, applicable device evidence, approved promotion, live-version confirmation, and tag/Release publication remain separately recorded release steps. Preparing these files does not create a commit, tag, GitHub Release, or production deployment.
+
+### Prepared tag and release description
+
+**App tag:** `v0.5.5`
+
+**Release title:** `MangoLeaf AI v0.5.5 — Guided camera and installation`
+
+**Release description:**
+
+> Adds an in-app camera preview with framing guidance, full-frame capture, photo review, and retake. Camera access ends after capture, close, or backgrounding, with clear recovery instructions when access fails. Diagnosis still starts only after the user selects Run Diagnosis.
+>
+> Adds English/Bisaya installation guidance for Android and iOS, an optional native install action where supported, and a desktop QR that opens the phone guide. Wider layouts emphasize installation while phone layouts retain scanning and History.
+>
+> Refines History with four photos per mobile page, six at the desktop breakpoint, a selected-photo delete action above mobile pagination, and reserved thumbnail space for older Safari. Newly saved results are matched to their photo and active model. Full class probabilities stay in technical diagnostics.
+>
+> Updates camera and installation regression coverage, the mixed-use reliability protocol, master-only CI, and project documentation. Preserves the completed V4.4.0 experiment and its evidence after local testing; the application retains V4.3.0 Combined with unchanged weights, classes, preprocessing, temperature, and rejection settings.
+
+Use the exact approved, tested commit when creating the tag through the procedure below. Add the completed validation and deployment identity to the published record; the prepared description does not assert that publication, deployment, or physical-device evaluation has already occurred.
 
 ## Candidate testing and promotion
 

@@ -24,7 +24,7 @@ interface ScanHistoryListProps {
   isFullHistoryPage?: boolean;
 }
 
-const MOBILE_ITEMS_PER_PAGE = 5;
+const MOBILE_ITEMS_PER_PAGE = 4;
 const DESKTOP_ITEMS_PER_PAGE = 6;
 const MOBILE_HOME_PREVIEW_COUNT = 1;
 const DESKTOP_HOME_PREVIEW_COUNT = 4;
@@ -520,7 +520,23 @@ export const ScanHistoryList = memo(function ScanHistoryList({
         </div>
       )}
 
-      {/* History uses five records on mobile and six at the md breakpoint. */}
+      {/* Delete button for mobile only */}
+      {isFullHistoryPage && selectionMode && onDeleteScans && (
+        <button
+          type="button"
+          onClick={openDeleteConfirmation}
+          disabled={isDeleting || activeSelectedIds.length === 0}
+          className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-rose-700 px-4 py-3 text-sm font-bold text-white cursor-pointer hover:bg-rose-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 disabled:cursor-default disabled:opacity-50 md:hidden"
+        >
+          <Icon name="trash" size={17} aria-hidden="true" />
+          {(activeSelectedIds.length === 1
+            ? t.historyDeleteSelectedOneBtn
+            : t.historyDeleteSelectedBtn
+          ).replace("{n}", String(activeSelectedIds.length))}
+        </button>
+      )}
+
+      {/* History uses four records on mobile and six at the md breakpoint. */}
       {isFullHistoryPage && hasUserScans && totalPages > 1 && (
         <nav
           aria-label={t.scanHistoryTitle}
@@ -564,21 +580,6 @@ export const ScanHistoryList = memo(function ScanHistoryList({
             <span aria-hidden="true">&gt;</span>
           </button>
         </nav>
-      )}
-
-      {isFullHistoryPage && selectionMode && onDeleteScans && (
-        <button
-          type="button"
-          onClick={openDeleteConfirmation}
-          disabled={isDeleting || activeSelectedIds.length === 0}
-          className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-rose-700 px-4 py-3 text-sm font-bold text-white cursor-pointer hover:bg-rose-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 disabled:cursor-default disabled:opacity-50 md:hidden"
-        >
-          <Icon name="trash" size={17} aria-hidden="true" />
-          {(activeSelectedIds.length === 1
-            ? t.historyDeleteSelectedOneBtn
-            : t.historyDeleteSelectedBtn
-          ).replace("{n}", String(activeSelectedIds.length))}
-        </button>
       )}
 
       {confirmationIds && (

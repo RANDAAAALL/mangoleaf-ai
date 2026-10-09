@@ -9,6 +9,7 @@ interface ScanSheetProps {
   isOpen: boolean;
   language: Language;
   onClose: () => void;
+  onCamera: () => void;
 }
 
 const DISMISS_THRESHOLD_PX = 80;
@@ -19,6 +20,7 @@ export const ScanSheet = memo(function ScanSheet({
   isOpen,
   language,
   onClose,
+  onCamera,
 }: ScanSheetProps) {
   const t = translations[language];
   const sheetRef = useRef<HTMLDivElement>(null);
@@ -83,14 +85,8 @@ export const ScanSheet = memo(function ScanSheet({
   useScrollLock(shouldRender);
 
   const handleCamera = () => {
-    const input = document.getElementById(
-      "scan-camera-input",
-    ) as HTMLInputElement | null;
-    if (input) {
-      input.value = "";
-      input.click();
-    }
     onClose();
+    onCamera();
   };
 
   const handleGallery = () => {
@@ -301,10 +297,7 @@ export const ScanSheet = memo(function ScanSheet({
           {/* Auto rows, not grid-rows-2: the camera card is md:hidden, and an
               explicit second row would still reserve its gap on desktop. */}
           <div className="shrink-0 grid gap-3">
-            {/* Camera capture is mobile-only. A desktop browser ignores
-                capture="environment", so this card would open the same file
-                dialog as Upload Photo while implying a camera. The input itself
-                stays mounted in page.tsx for the retake flow. */}
+            {/* The mobile camera opens a guided live preview. */}
             <button
               onClick={handleCamera}
               className="md:hidden flex flex-col items-center gap-3 p-5 bg-[#277839] text-white rounded-2xl shadow-md cursor-pointer active:scale-[0.97] transition-transform"

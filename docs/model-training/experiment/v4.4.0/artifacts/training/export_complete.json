@@ -1,0 +1,28 @@
+{
+  "format": "graph-model",
+  "quantized": false,
+  "attempt": "export_attempts/20261009T013010Z-5b7b9b31",
+  "calibratedModelSha256": "ef35b24ac863a60337b74a0ef41b0e9a9f11fa04969dc78d8d09fb0ff8e2e77a",
+  "artifacts": {
+    "tfjs_model/group1-shard1of3.bin": {
+      "sha256": "7556aa72d204fc94247b34740aeb5c1714f0f89ab40e7f8fb26c63185adf0584",
+      "bytes": 4194304
+    },
+    "tfjs_model/group1-shard2of3.bin": {
+      "sha256": "9c2d3cf8498755a132137717d6a3db5781a1f68c48e063d670fdcd1cc2ad8e4f",
+      "bytes": 4194304
+    },
+    "tfjs_model/group1-shard3of3.bin": {
+      "sha256": "96d346cd859c37dd205c6e3ee373e307d413997000a23063e24cc3aebc5c4a31",
+      "bytes": 3497804
+    },
+    "tfjs_model/model.json": {
+      "sha256": "863514697e5f20ea33567290f94c47ec9580f7ac4e9dd6ba572e5923be908c3e",
+      "bytes": 228393
+    },
+    "tfjs_model/model_config.json": {
+      "sha256": "64ee1a20e7c940a9bba5e6953e8042c952130fe0f3bf14deb8f956129a1ef952",
+      "bytes": 911
+    }
+  }
+}

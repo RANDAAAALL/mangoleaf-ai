@@ -1,45 +1,57 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-// Chromium-only event, not in the standard. Firefox and iOS Safari never fire
-// it, so the install button simply never appears there.
+// Supporting browsers provide this event. iOS uses Home Screen instructions.
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
-/** Reports whether the app can be installed, and opens the saved prompt. */
+/** Keep a native install request available until an explicit button tap. */
 export function usePWAInstall() {
   const [installPrompt, setInstallPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstalled, setIsInstalled] = useState<boolean>(false);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [isInstalling, setIsInstalling] = useState(false);
+  const [installError, setInstallError] = useState(false);
+  const installingRef = useRef(false);
 
   useEffect(() => {
-    // Already running as an installed app? Then no install button is needed.
-    // The second test is the iOS Safari equivalent of display-mode.
+    const standalone = window.matchMedia("(display-mode: standalone)");
     const checkStandalone = () => {
-      const isStandalone =
-        window.matchMedia("(display-mode: standalone)").matches ||
+      if (
+        standalone.matches ||
         (window.navigator as unknown as Record<string, unknown>).standalone ===
-          true;
-      setIsInstalled(Boolean(isStandalone));
+          true
+      ) {
+        setIsInstalled(true);
+        setInstallPrompt(null);
+      }
     };
 
     checkStandalone();
 
-    // Capture the PWA install prompt event
+    // Native install eligibility can arrive after the guide has opened.
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setInstallPrompt(e as BeforeInstallPromptEvent);
+      setInstallError(false);
     };
 
     // Capture successful installation event
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setInstallPrompt(null);
+      setInstallError(false);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", handleAppInstalled);
+    // Older Safari exposes the legacy MediaQueryList listener methods.
+    if (typeof standalone.addEventListener === "function") {
+      standalone.addEventListener("change", checkStandalone);
+    } else {
+      standalone.addListener(checkStandalone);
+    }
 
     return () => {
       window.removeEventListener(
@@ -47,25 +59,41 @@ export function usePWAInstall() {
         handleBeforeInstallPrompt,
       );
       window.removeEventListener("appinstalled", handleAppInstalled);
+      if (typeof standalone.removeEventListener === "function") {
+        standalone.removeEventListener("change", checkStandalone);
+      } else {
+        standalone.removeListener(checkStandalone);
+      }
     };
   }, []);
 
-  const installApp = async () => {
-    if (!installPrompt) return;
+  const installApp = useCallback(async () => {
+    if (!installPrompt || isInstalled || installingRef.current) return;
 
-    // Trigger the native browser install prompt
-    await installPrompt.prompt();
-    const { outcome } = await installPrompt.userChoice;
-
-    if (outcome === "accepted") {
-      setIsInstalled(true);
-    }
+    installingRef.current = true;
+    setIsInstalling(true);
+    setInstallError(false);
+    // A native prompt event is single-use, including after cancellation.
     setInstallPrompt(null);
-  };
+
+    try {
+      // Call within the tap handler; URL loading never calls this.
+      await installPrompt.prompt();
+      await installPrompt.userChoice;
+      // appinstalled/standalone confirms installation, rather than acceptance.
+    } catch {
+      setInstallError(true);
+    } finally {
+      installingRef.current = false;
+      setIsInstalling(false);
+    }
+  }, [installPrompt, isInstalled]);
 
   return {
     showInstallButton: Boolean(installPrompt) && !isInstalled,
     installApp,
     isInstalled,
+    isInstalling,
+    installError,
   };
 }

@@ -22,6 +22,7 @@ const OUTDATED_MODEL_CACHES = [
   "mangoleaf-model-cache-v4-1-1-candidate",
   "mangoleaf-model-cache-v4-2-0-dual-experiment",
   "mangoleaf-model-cache-v4-3-0-candidate",
+  "mangoleaf-model-cache-v4-4-0-candidate",
 ];
 
 // Private cloud responses must be authorized on every request. IndexedDB,

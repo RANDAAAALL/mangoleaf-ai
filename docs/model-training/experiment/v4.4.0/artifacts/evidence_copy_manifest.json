@@ -1,0 +1,676 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-09T11:02:27.852592+00:00",
+  "experimentVersion": "v4.4.0",
+  "status": "Completed experimental evidence; local candidate trial declined by user on 2026-10-09; not adopted or deployed",
+  "sourceArchive": "C:/Users/My Pc/Desktop/workspace/capstone/model/brain/v4.4.0",
+  "sourceRuns": {
+    "training": "v4-4-0-training-20261009T005929Z-28e79277",
+    "threshold_fitting": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d"
+  },
+  "copyPolicy": "Curated important evidence only. Files copied byte for byte, never moved or rewritten. Original paths inside receipts remain historical identities.",
+  "files": [
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/training_complete.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/training_complete.json",
+      "sha256": "fd2adc7262697fa0064c67475a5160b53affa7dddf57816d4ebc1fb93d86a1a0",
+      "bytes": 47303,
+      "completionReceiptContainsFile": false,
+      "verification": "matches original bytes; source identity recorded separately"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/training_state.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/training_state.json",
+      "sha256": "2fb24cff05d6d2728b624d6a8844245488a0f91da07d11e5f887da8b61a910af",
+      "bytes": 38638,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/training_started.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/training_started.json",
+      "sha256": "38fb6122e1c18cbb565f1c68f385a07956281bf36de8ab2949bad192bb93d206",
+      "bytes": 145,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/frozen_inputs.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/frozen_inputs.json",
+      "sha256": "13fedafb8b3d2badac1775dc97ef8ceead569cf39246965ca3d2ffb2880013a2",
+      "bytes": 37393,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/calibration_complete.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/calibration_complete.json",
+      "sha256": "d11323514994fb79ba0e5adb1696d80295f9dc8eb12007a9a7b694db4af7fe52",
+      "bytes": 548,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/export_complete.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/export_complete.json",
+      "sha256": "dcf036aa17534e434cad382e6594ad69c7918558e8c11071fe553e3d67f2b7e4",
+      "bytes": 983,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/plan.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/plan.json",
+      "sha256": "83483ae7f21963ba6a06dcdcc47f2cf41e7439e55a79fdc198ddc54c5230a055",
+      "bytes": 12490,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/runtime.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/runtime.json",
+      "sha256": "054db38785f8d752d7473c0eb01780068a3b6e0d552d748455a473f168530195",
+      "bytes": 10124,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/requirements_snapshot.txt",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/requirements_snapshot.txt",
+      "sha256": "4419c2571156e9b603fc746269e2dff0b20a4a6eaed27a8ea879be8d582cd970",
+      "bytes": 2058,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/converter_requirements_snapshot.txt",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/converter_requirements_snapshot.txt",
+      "sha256": "eb95db363f2e8ae3b0c6229e4a8dcc980f9469c015eccb048d6e3ebb1dd3cf5a",
+      "bytes": 1442,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/initial_weights.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/initial_weights.json",
+      "sha256": "da6f38368b7bdb909b4fcab87593ed5f7e260cfa6364239d89d3c7920880deed",
+      "bytes": 160,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/stage1_selection.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/stage1_selection.json",
+      "sha256": "32558263f671bd20ceb590ba2ad83ce3d27f53bcc0093df9910025e8a4dc3fa4",
+      "bytes": 80,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/stage2_selection.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/stage2_selection.json",
+      "sha256": "5b656f0fe4ac2b498c0b0019fd122de0fda6b9a83303a0ecefe4b4b69d055ac2",
+      "bytes": 81,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/training_history.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/training_history.json",
+      "sha256": "8d656acbbe96a6ca2c3c63144cb59034052723616cc605d1a8d2eaf3b23e3c4a",
+      "bytes": 3449,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/temperature.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/temperature.json",
+      "sha256": "6dbd598e9f73b5c3bec9695ec79aa3285c13e3acd4ec28302e506b691815fa22",
+      "bytes": 395,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/class_names.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/class_names.json",
+      "sha256": "b96d0d53ca197fa056bf6e161f273009c9d93aa12371cea0339f2e09cf1ffcea",
+      "bytes": 137,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/class_weights.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/class_weights.json",
+      "sha256": "0ffc28f5bffb8512d590990ef360e87f4df5268ef29a8b14d3515d6c0c05b0de",
+      "bytes": 273,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/split_review.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/split_review.json",
+      "sha256": "259cb4a23b307be5b0c81a3ef70947cd1630e319cf53d083c3262d6e3f00188f",
+      "bytes": 706,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/duplicate_review.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/duplicate_review.json",
+      "sha256": "e3029f8996bd5a27c92318b2e9630f20587064f707c3ec6711e2b43555d3fad1",
+      "bytes": 137944,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/reviewed_images.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/reviewed_images.json",
+      "sha256": "e91ba42c835bdb10403c630237f2a9bfabe32563edc8bec5a5a5cc55adc36f70",
+      "bytes": 13840,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/white_background_review.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/white_background_review.json",
+      "sha256": "3a5c49c1840e539aea7e90f102f83a88cb913e2196df54ad54de138d5c1268b1",
+      "bytes": 4843,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/mask_review.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/mask_review.json",
+      "sha256": "2e6ae31185634b65b6d462a2f7c114edc424f0bb23c2dc6c94a841b99b6adad3",
+      "bytes": 704,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/mask_inventory.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/mask_inventory.json",
+      "sha256": "c5b9906e549f8fae4cc67cb43f30ea33791fd8e68ae4531f3121e0ffcfee9194",
+      "bytes": 37686,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/scene_review.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/scene_review.json",
+      "sha256": "807fadf678edf5eb4c71f9253b2dee5eba4e7cc37c366410a169cd068a150d18",
+      "bytes": 6446,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/lighting_review.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/lighting_review.json",
+      "sha256": "445ff6f16032abd7fd5f1d05392cf9d640d90191f004d5a290f23f4e138927ec",
+      "bytes": 55,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/example_selection.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/example_selection.json",
+      "sha256": "4e60e2ca5a4eed5d206730cfeaa23545342e37040b2df762010a1c9726ef1fab",
+      "bytes": 4522,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/illustration_masks/review.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/illustration_masks/review.csv",
+      "sha256": "ffe1a27b4fb77070cda19be518bb7321e1308b376b17bf1fbc1f1c33da104ffc",
+      "bytes": 1722,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/runtime_preflight/runtime-preflight-complete.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/runtime_preflight/runtime-preflight-complete.json",
+      "sha256": "52a858bf8bf277e9459906c9c45f3ac389d5c99b14ee8c7df94845bfe4fd6e21",
+      "bytes": 9257,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/runtime_preflight/conversion-probe.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/runtime_preflight/conversion-probe.json",
+      "sha256": "65f5183b0360289b25695d3712b76316e9870bc50dda31c9bc168c94b347f62d",
+      "bytes": 699,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/runtime_preflight/training-audit-summary.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/runtime_preflight/training-audit-summary.json",
+      "sha256": "58e60af0729aabd14ef266ea92d11308511be99c03f0c4fc91be0a4bfee85bb4",
+      "bytes": 221,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/runtime_preflight/tools-audit-summary.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/runtime_preflight/tools-audit-summary.json",
+      "sha256": "96e11afc95351afe208a62cf61a6c69c311c47211b7dcdfbe6eb8de353bb8156",
+      "bytes": 220,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/runtime_preflight/converter-audit-summary.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/runtime_preflight/converter-audit-summary.json",
+      "sha256": "e258999d65fdad9c1751b237bdcd773e740df4727163b6873afeebbbd48775ef",
+      "bytes": 13183,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/runtime_preflight/tools-runtime-lock.txt",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/runtime_preflight/tools-runtime-lock.txt",
+      "sha256": "c90d9ad4cddaf994be887890e07b08d7db88d9784ea8636392bce15d038537be",
+      "bytes": 561,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/threshold_fitting_complete.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/threshold_fitting_complete.json",
+      "sha256": "8b16abaad78a4bff57590d4fa2dfffc4e8a9902306695b795e87c644820edf23",
+      "bytes": 7382,
+      "completionReceiptContainsFile": false,
+      "verification": "matches original bytes; source identity recorded separately"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/runtime.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/runtime.json",
+      "sha256": "12a80aeb7f483bc6b8c5bbb68d77c2b977db10153d2370a5e48bbe33727942da",
+      "bytes": 4137,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/input_lock.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/input_lock.json",
+      "sha256": "842d9cdf432a33f8bbba6171733cf338f9a972a45fc14178f323aa77e3dce339",
+      "bytes": 150,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/evaluation_inputs.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/evaluation_inputs.json",
+      "sha256": "4bd66304186e4a6f3bd94706c73835cc42b2fe4378ad6c636c670721efadab97",
+      "bytes": 92402,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/selection_lock.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/selection_lock.json",
+      "sha256": "11fdf83db8219f171b1ac940d5967791201a53620a1395ba1c91707e4a5c2838",
+      "bytes": 334,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/evaluation_lock.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/evaluation_lock.json",
+      "sha256": "142b6327fdbfe71bfd57aeed4dbaecf1e0998145d2f8a07bfbaa4633a4d779b3",
+      "bytes": 330,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/evaluation_started.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/evaluation_started.json",
+      "sha256": "346fca68b070f972a44c7b6f27da2ef8fe6b869f31cf0e8ee663efc0150b692e",
+      "bytes": 335,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/selected_thresholds.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/selected_thresholds.json",
+      "sha256": "c0ae3ecef5ab0f289525b5a1eaea6b182778b0c7f503611f0bc31dbb2fae1d03",
+      "bytes": 1302,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/evaluation.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/evaluation.json",
+      "sha256": "87c77fdeddf54015ac6db9d121c35557016f04ab3b1fb16f5871f40fc818ae59",
+      "bytes": 20042,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/candidate_hashes.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/candidate_hashes.json",
+      "sha256": "04bd03c235388190a323372d1306f1a1a5cd324ade677056cf17dc3b6f0927a9",
+      "bytes": 666,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/candidate_model/model_config.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/candidate_model/model_config.json",
+      "sha256": "e443d674c645450390b01599ac65c3dba513488ab60f9ffdf10787026a300fa9",
+      "bytes": 1343,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/ood_assignments.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/ood_assignments.csv",
+      "sha256": "769d9fba7774d25ce2892edfe29feae83c584c67e4853b771b6ed5c0e8986bc2",
+      "bytes": 27867,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/ood_review.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/ood_review.csv",
+      "sha256": "5e5acf696eb006d8d6bffc365d573b2ce20b77ced6c302ddc364d9d5ce955eb4",
+      "bytes": 60492,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/similarity_review.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/similarity_review.csv",
+      "sha256": "e84ebe489d6388e148be00676b124aa760c43159ffaa63660a7706fc92f2471b",
+      "bytes": 107,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/threshold_search.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/threshold_search.csv",
+      "sha256": "33ba8372787f3efb3b63d602ae747a30b6daa12806a40bd72132c8a8a3b156fa",
+      "bytes": 560692,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/validation_predictions.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/validation_predictions.csv",
+      "sha256": "24d48639750a71e2d5564432e01bad7bd6091bf208afa0c3ba9d36cd3e46706c",
+      "bytes": 167165,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/ood_tuning_predictions.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/ood_tuning_predictions.csv",
+      "sha256": "4c337f4eee71b73393239270bbc59af81e44973c9d841952ad71c650be7991ed",
+      "bytes": 37978,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/mango_test_predictions.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/mango_test_predictions.csv",
+      "sha256": "ece292b6cc55b09791da6973daf1e95063fd911ec192f13b694474df10c355c3",
+      "bytes": 167674,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/ood_report_predictions.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/ood_report_predictions.csv",
+      "sha256": "fb00be97b5bdd211bf0f90c2b9d245ca1380719b8428d577c958a87b35dad8b5",
+      "bytes": 38030,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/confidence_only_mango_test_predictions.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/confidence_only_mango_test_predictions.csv",
+      "sha256": "89e5f6c37652efbdaaa7f9ab72fa3558412a22e4a74432c2fee4cdf8ae83fd0a",
+      "bytes": 167502,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/confidence_only_ood_report_predictions.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/confidence_only_ood_report_predictions.csv",
+      "sha256": "7304ef78238b5d915166ff728a510b49125948db510c5f010ea23c3a3e1e8434",
+      "bytes": 37546,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/raw_per_class_metrics.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/raw_per_class_metrics.csv",
+      "sha256": "343c31de4c7e66fb9008e3611993553988840f87855eb621c0b3e72ef9b09b06",
+      "bytes": 511,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/rejection_aware_per_class_metrics.csv",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/threshold_fitting/rejection_aware_per_class_metrics.csv",
+      "sha256": "2dd3556d79e07d09cabfa512bc75ea0120942c5fdd8d15d1749ad2323a8b21df",
+      "bytes": 498,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/figures/figure_manifest.json",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/figure_manifest.json",
+      "sha256": "73acff194c6b2e2e5c57278f9d7bbca43b0fb22616ee358aa2e0c6bb1871f1b9",
+      "bytes": 5734,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/figures/training_accuracy.png",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/figures/training/training_accuracy.png",
+      "sha256": "e054b402534cb14cfc903d86ce5770e1f248017bbcf23c9e217430936da4e1c3",
+      "bytes": 83440,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/figures/training_loss.png",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/figures/training/training_loss.png",
+      "sha256": "cbb4e5c2c33c5f9b192db6ba3a2df9d40cfe66d9824473a7c16b286967d10844",
+      "bytes": 91837,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/figures/augmentation_preview.png",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/figures/training/augmentation_preview.png",
+      "sha256": "a693ef635d6a693b300fc56aedac5abdbf7833c814b2f5eb47bdeb76c3831c6c",
+      "bytes": 3157794,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-training-20261009T005929Z-28e79277",
+      "sourceRelativePath": "training/v4-4-0-training-20261009T005929Z-28e79277/figures/grad_cam.png",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/figures/training/grad_cam.png",
+      "sha256": "6ea83b8a5f32b747939ab73bc0c7063e5e09ee4a04bd2d7023a87b06bb2e492f",
+      "bytes": 4430598,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/figures/confusion_matrix.png",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/figures/threshold_fitting/confusion_matrix.png",
+      "sha256": "5ee0f1be4e69bd1ba0ff18c08f68ad10c45f8c588ff0e817d2490b8ff0f314a9",
+      "bytes": 124525,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/figures/confusion_matrix_with_rejection.png",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/figures/threshold_fitting/confusion_matrix_with_rejection.png",
+      "sha256": "6a8f0f1c283e8356ace791392eb4491956bc73d3a1250abf5bc58e4e885e381f",
+      "bytes": 132215,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/figures/per_class_metrics.png",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/figures/threshold_fitting/per_class_metrics.png",
+      "sha256": "59a59e2ac3eede33ddc8edc29ef369d0ef56bf32bcf600e42e6d4442280934b9",
+      "bytes": 131392,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/figures/per_class_metrics_with_rejection.png",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/figures/threshold_fitting/per_class_metrics_with_rejection.png",
+      "sha256": "ea68262d5acce6a2431b4053339ae90bbcefdea49ee91850c37dd5fdd4e87e9c",
+      "bytes": 133709,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    },
+    {
+      "sourceRun": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "sourceRelativePath": "threshold_fitting/v4-4-0-thresholds-20261009T024417Z-dc2cf99d/figures/threshold_search.png",
+      "repositoryPath": "docs/model-training/experiment/v4.4.0/figures/threshold_fitting/threshold_search.png",
+      "sha256": "547e243cb4745f5af099c01a3eaab1d669fc845e89f49a0c69e3e48be6600b2a",
+      "bytes": 107789,
+      "completionReceiptContainsFile": true,
+      "verification": "matches original bytes and completed-run receipt"
+    }
+  ],
+  "copiedFileCount": 66,
+  "copiedBytes": 10181826,
+  "completedNotebooks": [
+    {
+      "repositoryPath": "notebooks/experiment/v4.4.0/MangoLeaf_AI_Training_v4_4_0_Post_Training.ipynb",
+      "sha256": "c3d4daea2711fa967dade2357ffb9fcb2fceafdda0022c4fc7f9ab0c8617dfd4",
+      "bytes": 22467749,
+      "preserved": true,
+      "copiedByThisTask": false
+    },
+    {
+      "repositoryPath": "notebooks/experiment/v4.4.0/MangoLeaf_AI_Threshold_Fitting_v4_4_0_Results.ipynb",
+      "sha256": "5397dc466236de64363bfe7edb1d77640cc880ea27794a94c1f7003cb36d7b27",
+      "bytes": 16995804,
+      "preserved": true,
+      "copiedByThisTask": false
+    }
+  ],
+  "originalPreservation": {
+    "before": {
+      "files": 6781,
+      "bytes": 1716614134,
+      "treeManifestSha256": "c1727ec73763d70d69c80764da8cf1ed56c34c2365c2bfa24005ef0ebfff373a",
+      "treeManifestEncoding": "UTF-8 JSON; sorted relative POSIX paths; sha256 and bytes; sort_keys=True, separators=(',', ':')"
+    },
+    "after": {
+      "files": 6781,
+      "bytes": 1716614134,
+      "treeManifestSha256": "c1727ec73763d70d69c80764da8cf1ed56c34c2365c2bfa24005ef0ebfff373a",
+      "treeManifestEncoding": "UTF-8 JSON; sorted relative POSIX paths; sha256 and bytes; sort_keys=True, separators=(',', ':')"
+    },
+    "allOriginalPathsHashesAndSizesUnchanged": true
+  },
+  "completionReceiptVerification": [
+    {
+      "run": "v4-4-0-training-20261009T005929Z-28e79277",
+      "receipt": "training_complete.json",
+      "sha256": "fd2adc7262697fa0064c67475a5160b53affa7dddf57816d4ebc1fb93d86a1a0",
+      "verifiedArtifacts": 296,
+      "result": "all original artifact hashes and sizes match"
+    },
+    {
+      "run": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "receipt": "threshold_fitting_complete.json",
+      "sha256": "8b16abaad78a4bff57590d4fa2dfffc4e8a9902306695b795e87c644820edf23",
+      "verifiedArtifacts": 41,
+      "result": "all original artifact hashes and sizes match"
+    }
+  ],
+  "omittedSourceCategories": [
+    "raw source photos and dataset image folders",
+    "dataset_split.zip",
+    "Keras weights/checkpoints and TensorFlow.js model graph/shards",
+    "candidate_model.zip",
+    "foreground mask images and arrays",
+    "review contact sheets and numbered/lighting preview folders",
+    "failed runs and export staging attempts",
+    "large repeated raw/image inventories and duplicate-pair audit",
+    "seven repetitive per-class augmentation sheets; overview retained",
+    "duplicated environment/install logs and full provider audit; recorded hashes and derived host status retained"
+  ],
+  "partialArchiveNotice": "Original receipts and figure manifest intentionally refer to additional files retained only in the original archive. This subset verifies recorded results; it cannot independently retrain or load the full model.",
+  "derivedReview": {
+    "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/review/verification_summary.json",
+    "sha256": "10dc0e82cabbd1376f109e4f975d2fd8ab97b5dccca1632a6bb03e435852eb37",
+    "bytes": 9280,
+    "originalSourceFile": false
+  }
+}

@@ -7,6 +7,55 @@ export const translations = {
     navAbout: "About",
     navHistory: "History",
     installApp: "Install App",
+    downloadApp: "Install",
+    downloadPromptTitle: "Install Now",
+    downloadPromptDescription:
+      "Open MangoLeaf AI on your phone and add it to your Home Screen for quick access.",
+
+    // Installation guide
+    installGuideDesktopTitle: "Install MangoLeaf AI on your phone",
+    installGuideMobileTitle: "Install MangoLeaf AI",
+    installGuideDescription:
+      "Add MangoLeaf AI to your Home Screen for quick access. You can also keep using it in your browser.",
+    installGuideQRDescription:
+      "Scan this QR code using your phone camera, then tap the website link.",
+    installGuideQRAlt: "QR code to open MangoLeaf AI on your phone",
+    installGuideWebsiteLink: "Open MangoLeaf AI website",
+    installGuideAndroid: "Android",
+    installGuideIOS: "iPhone / iPad",
+    installGuideAndroidOpen: "Open the website",
+    installGuideAndroidOpenDescription:
+      "Open the QR link in your phone browser, such as Chrome.",
+    installGuideAndroidInstall: "Tap Install",
+    installGuideAndroidInstallDescription:
+      "Tap Install on this guide when the button is available.",
+    installGuideConfirm: "Confirm installation",
+    installGuideConfirmDescription:
+      "Choose Install in the browser confirmation, then find MangoLeaf AI on your Home Screen or app list.",
+    installGuideManualAndroid:
+      "If the Install button is unavailable, open your browser menu and look for Install app or Add to Home screen. If neither appears, continue in your browser.",
+    installGuideIOSBrowser:
+      "Use Safari for these steps. If you opened the link in another browser and cannot find Add to Home Screen, open the website in Safari.",
+    installGuideIOSShare: "Tap Share",
+    installGuideIOSShareDescription:
+      "Tap the Share icon in Safari. If it is hidden, open the browser menu first.",
+    installGuideIOSHome: "Add to Home Screen",
+    installGuideIOSHomeDescription:
+      "Scroll through the Share menu and choose Add to Home Screen.",
+    installGuideIOSAdd: "Tap Add",
+    installGuideIOSAddDescription:
+      "Confirm the app name, then tap Add. Open MangoLeaf AI from your Home Screen.",
+    installGuideFallbackTitle: "Install from your browser menu",
+    installGuideFallbackDescription:
+      "Look for Install app or Add to Home screen in your browser menu. If installation is not offered, you can keep using MangoLeaf AI in this browser.",
+    installGuideInstall: "Install",
+    installGuideInstalling: "Opening install prompt...",
+    installGuideContinue: "Continue in Browser",
+    installGuideInstalled: "MangoLeaf AI is already installed",
+    installGuideInstalledDescription:
+      "Open it from your Home Screen or continue here in your browser.",
+    installGuideInstallError:
+      "The installation prompt could not open. Use your browser menu or continue in your browser.",
 
     // Scanner Section
     desktopHeroHeadline: "Diagnose Mango Diseases Instantly",
@@ -21,6 +70,31 @@ export const translations = {
     browseFilesBtn: "Browse Files",
     snapCameraBtn: "Snap Camera",
     openGalleryBtn: "Open Gallery",
+
+    // Live camera and its visual positioning guide
+    guidedCameraTitle: "Take a Photo",
+    guidedCameraHint:
+      "Center one whole mango leaf or fruit inside the box. Hold steady and use good light.",
+    guidedCameraGuideNote:
+      "The box guides positioning. The photo includes the full camera view.",
+    guidedCameraStarting: "Opening camera...",
+    guidedCameraCaptureBtn: "Capture Photo",
+    guidedCameraCapturing: "Capturing photo...",
+    guidedCameraRetryBtn: "Open camera again",
+    guidedCameraUnsupported:
+      "Live camera is unavailable here. Close this screen and choose Upload Photo.",
+    guidedCameraPermissionDenied:
+      "Camera access was blocked. Allow camera access in browser settings, then try again.",
+    guidedCameraUnavailable:
+      "Camera is unavailable or in use. Close other camera apps, then try again.",
+    guidedCameraStartFailed:
+      "The camera preview could not start. Try again, or close this screen and choose Upload Photo.",
+    guidedCameraCaptureFailed:
+      "The photo could not be captured. Open the camera again, or close this screen and choose Upload Photo.",
+    guidedCameraPaused:
+      "Camera stopped while the app was in the background. Open it again when ready.",
+    guidedCameraInterrupted:
+      "Camera connection stopped. Open it again to continue.",
 
     // AI Scanning Progress Overlay
     runningAI: "Running AI classification...",
@@ -125,6 +199,9 @@ export const translations = {
     ],
 
     // Scan Details Modal
+    classProbabilityHeading: "Model class probabilities",
+    classColumn: "Class",
+    probabilityColumn: "Probability",
     diagnosisPrefix: "Diagnosis:",
     scannedOnPrefix: "Scanned on",
     scorePrefix: "Score:",
@@ -236,6 +313,56 @@ export const translations = {
     navAbout: "Bahin",
     navHistory: "Dating Scan",
     installApp: "I-install ang App",
+    downloadApp: "I-install",
+    downloadPromptTitle: "I-install Karon",
+    downloadPromptDescription:
+      "Ablihi ang MangoLeaf AI sa imong telepono ug idugang kini sa imong Home Screen aron dali maablihan.",
+
+    // Installation guide
+    installGuideDesktopTitle: "I-install ang MangoLeaf AI sa imong telepono",
+    installGuideMobileTitle: "I-install ang MangoLeaf AI",
+    installGuideDescription:
+      "Idugang ang MangoLeaf AI sa imong Home Screen aron dali maablihan. Mahimo usab kini gamiton sa imong browser.",
+    installGuideQRDescription:
+      "I-scan kini nga QR code gamit ang kamera sa imong telepono, dayon i-tap ang link sa website.",
+    installGuideQRAlt:
+      "QR code aron maablihan ang MangoLeaf AI sa imong telepono",
+    installGuideWebsiteLink: "Ablihi ang website sa MangoLeaf AI",
+    installGuideAndroid: "Android",
+    installGuideIOS: "iPhone / iPad",
+    installGuideAndroidOpen: "Ablihi ang website",
+    installGuideAndroidOpenDescription:
+      "Ablihi ang link gikan sa QR code sa browser sa imong telepono, sama sa Chrome.",
+    installGuideAndroidInstall: "I-tap ang Install",
+    installGuideAndroidInstallDescription:
+      "I-tap ang Install niini nga giya kung makita ang buton.",
+    installGuideConfirm: "Kumpirmaha ang pag-install",
+    installGuideConfirmDescription:
+      "Pilia ang Install sa kumpirmasyon sa browser, dayon pangitaa ang MangoLeaf AI sa imong Home Screen o listahan sa mga app.",
+    installGuideManualAndroid:
+      "Kung walay Install nga buton, ablihi ang menu sa imong browser ug pangitaa ang Install app o Add to Home screen. Kung wala kining duha, padayon sa browser.",
+    installGuideIOSBrowser:
+      "Gamit og Safari alang niini nga mga lakang. Kung naa sa laing browser ug walay Add to Home Screen, ablihi ang website sa Safari.",
+    installGuideIOSShare: "I-tap ang Share",
+    installGuideIOSShareDescription:
+      "I-tap ang Share nga icon sa Safari. Kung wala kini makita, ablihi una ang menu sa browser.",
+    installGuideIOSHome: "Add to Home Screen",
+    installGuideIOSHomeDescription:
+      "I-scroll ang menu sa Share ug pilia ang Add to Home Screen.",
+    installGuideIOSAdd: "I-tap ang Add",
+    installGuideIOSAddDescription:
+      "Kumpirmaha ang ngalan sa app, dayon i-tap ang Add. Ablihi ang MangoLeaf AI gikan sa imong Home Screen.",
+    installGuideFallbackTitle: "I-install gikan sa menu sa browser",
+    installGuideFallbackDescription:
+      "Pangitaa ang Install app o Add to Home screen sa menu sa imong browser. Kung walay kapilian sa pag-install, mahimo gihapon gamiton ang MangoLeaf AI sa browser.",
+    installGuideInstall: "I-install",
+    installGuideInstalling: "Giablihan ang kumpirmasyon sa pag-install...",
+    installGuideContinue: "Padayon sa Browser",
+    installGuideInstalled: "Na-install na ang MangoLeaf AI",
+    installGuideInstalledDescription:
+      "Ablihi kini gikan sa imong Home Screen o padayon dinhi sa imong browser.",
+    installGuideInstallError:
+      "Wala maablihan ang kumpirmasyon sa pag-install. Gamit ang menu sa browser o padayon sa browser.",
 
     // Scanner Section
     desktopHeroHeadline: "Pag-diagnose sa Sakit sa Mangga Dihadiha",
@@ -250,6 +377,31 @@ export const translations = {
     browseFilesBtn: "Pangitaa sa File",
     snapCameraBtn: "Litrato sa Kamera",
     openGalleryBtn: "Ablihi ang Gallery",
+
+    // Live camera and its visual positioning guide
+    guidedCameraTitle: "Pagkuha og Litrato",
+    guidedCameraHint:
+      "Ibutang sa tunga sa kahon ang usa ka tibuok dahon o bunga sa mangga. Ipirme ang kamera ug gamita ang maayong kahayag.",
+    guidedCameraGuideNote:
+      "Giya sa pagpahimutang ang kahon. Apil sa litrato ang tibuok makita sa kamera.",
+    guidedCameraStarting: "Giablihan ang kamera...",
+    guidedCameraCaptureBtn: "Kuhaa ang Litrato",
+    guidedCameraCapturing: "Gikuha ang litrato...",
+    guidedCameraRetryBtn: "Ablihi pag-usab ang kamera",
+    guidedCameraUnsupported:
+      'Dili magamit dinhi ang live camera. Isira kini nga screen ug pilia ang "I-upload ang Litrato".',
+    guidedCameraPermissionDenied:
+      "Gibabagan ang access sa kamera. Tugoti ang kamera sa mga setting sa browser, dayon sulayi pag-usab.",
+    guidedCameraUnavailable:
+      "Dili magamit o gigamit ang kamera. Isira ang ubang app nga naggamit sa kamera, dayon sulayi pag-usab.",
+    guidedCameraStartFailed:
+      'Wala masugdi ang preview sa kamera. Sulayi pag-usab, o isira kini nga screen ug pilia ang "I-upload ang Litrato".',
+    guidedCameraCaptureFailed:
+      'Wala makuha ang litrato. Ablihi pag-usab ang kamera, o isira kini nga screen ug pilia ang "I-upload ang Litrato".',
+    guidedCameraPaused:
+      "Mihunong ang kamera samtang naa sa background ang app. Ablihi kini pag-usab kung andam na.",
+    guidedCameraInterrupted:
+      "Mihunong ang koneksyon sa kamera. Ablihi kini pag-usab aron makapadayon.",
 
     // AI Scanning Progress Overlay
     runningAI: "Nag-classify sa AI...",
@@ -356,6 +508,9 @@ export const translations = {
     ],
 
     // Scan Details Modal
+    classProbabilityHeading: "Mga probabilidad sa klase sa modelo",
+    classColumn: "Klase",
+    probabilityColumn: "Probabilidad",
     diagnosisPrefix: "Diagnosis:",
     scannedOnPrefix: "Na-scan niadtong",
     scorePrefix: "Puntos:",

@@ -2,6 +2,10 @@ import * as tf from "@tensorflow/tfjs";
 import { CLASSES, UNCERTAIN_LABEL } from "./constants";
 
 export interface DiagnosisResult {
+  diagnosedResultTabular: {
+    Class: string;
+    Probability: string;
+  }[];
   diseaseName: string;
   confidence: number;
 }
@@ -243,6 +247,14 @@ export async function predictMangoDisease(
       Probability: `${(probability * 100).toFixed(2)}%`,
     })),
   );
+
+  // Format a copy for display only;
+  // the raw scores and rejection checks above remain unchanged.
+  const diagnosedResultTabular = ranked.map(({ className, probability }) => ({
+    Class: className,
+    Probability: `${(probability * 100).toFixed(2)}%`,
+  }));
+
   console.groupEnd();
   if (!accepted) {
     console.log(
@@ -254,6 +266,7 @@ export async function predictMangoDisease(
   const diseaseName = accepted ? CLASSES[maxIndex] : UNCERTAIN_LABEL;
 
   return {
+    diagnosedResultTabular,
     diseaseName,
     confidence,
   };

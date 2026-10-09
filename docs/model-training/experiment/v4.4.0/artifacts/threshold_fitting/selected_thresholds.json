@@ -1,0 +1,39 @@
+{
+  "experimentVersion": "v4.4.0",
+  "status": "feasible",
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": 0.0,
+    "entropyThreshold": 0.3
+  },
+  "trainingCompleteSha256": "fd2adc7262697fa0064c67475a5160b53affa7dddf57816d4ebc1fb93d86a1a0",
+  "evaluationInputsSha256": "4bd66304186e4a6f3bd94706c73835cc42b2fe4378ad6c636c670721efadab97",
+  "modelSha256": "ef35b24ac863a60337b74a0ef41b0e9a9f11fa04969dc78d8d09fb0ff8e2e77a",
+  "modelWeightDigest": "18f9a146b8583ad88bc6964ea27d27b723775fa53662349e4738f4a129fccc98",
+  "temperature": 1.0101912885132576,
+  "temperatureAlreadyFolded": true,
+  "confidenceFixed": 0.7,
+  "minimumValidationRetention": 0.95,
+  "gridStep": 0.01,
+  "searchRows": 10201,
+  "tieBreakOrder": [
+    "more OOD rejected",
+    "more mango validation accepted",
+    "lower margin",
+    "higher maximum entropy"
+  ],
+  "retentionIncludesIncorrectPredictions": true,
+  "reportingUsedForFitting": false,
+  "testUsedForFitting": false,
+  "reuseStatus": "Reused study photos. Report-only assignment in this run; not pristine external evidence.",
+  "frozenAt": "2026-10-09T03:08:53.959186+00:00"
+}

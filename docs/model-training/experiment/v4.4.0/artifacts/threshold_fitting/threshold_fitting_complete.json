@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "experimentVersion": "v4.4.0",
+  "status": "completed threshold experiment; not adopted or deployed",
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments (1)/v4.4.0/training/v4-4-0-training-20261009T005929Z-28e79277",
+  "trainingCompleteSha256": "fd2adc7262697fa0064c67475a5160b53affa7dddf57816d4ebc1fb93d86a1a0",
+  "selectionSha256": "c0ae3ecef5ab0f289525b5a1eaea6b182778b0c7f503611f0bc31dbb2fae1d03",
+  "evaluationSha256": "87c77fdeddf54015ac6db9d121c35557016f04ab3b1fb16f5871f40fc818ae59",
+  "evaluationInputsSha256": "4bd66304186e4a6f3bd94706c73835cc42b2fe4378ad6c636c670721efadab97",
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": 0.0,
+    "entropyThreshold": 0.3
+  },
+  "oodCounts": {
+    "ood_tune": 100,
+    "ood_report": 100
+  },
+  "modelWeightsChangedByThisNotebook": false,
+  "reuseStatus": "Reused study photos. Report-only assignment in this run; not pristine external evidence.",
+  "browserPredictionParityMeasured": false,
+  "artifacts": {
+    "candidate_hashes.json": {
+      "sha256": "04bd03c235388190a323372d1306f1a1a5cd324ade677056cf17dc3b6f0927a9",
+      "bytes": 666
+    },
+    "candidate_model/group1-shard1of3.bin": {
+      "sha256": "7556aa72d204fc94247b34740aeb5c1714f0f89ab40e7f8fb26c63185adf0584",
+      "bytes": 4194304
+    },
+    "candidate_model/group1-shard2of3.bin": {
+      "sha256": "9c2d3cf8498755a132137717d6a3db5781a1f68c48e063d670fdcd1cc2ad8e4f",
+      "bytes": 4194304
+    },
+    "candidate_model/group1-shard3of3.bin": {
+      "sha256": "96d346cd859c37dd205c6e3ee373e307d413997000a23063e24cc3aebc5c4a31",
+      "bytes": 3497804
+    },
+    "candidate_model/model.json": {
+      "sha256": "863514697e5f20ea33567290f94c47ec9580f7ac4e9dd6ba572e5923be908c3e",
+      "bytes": 228393
+    },
+    "candidate_model/model_config.json": {
+      "sha256": "e443d674c645450390b01599ac65c3dba513488ab60f9ffdf10787026a300fa9",
+      "bytes": 1343
+    },
+    "candidate_model.zip": {
+      "sha256": "ec069a5dcd4be8aef0e0150c549ac0bf9f0c79b2dae11888f35039827357c08e",
+      "bytes": 11096124
+    },
+    "confidence_only_mango_test_predictions.csv": {
+      "sha256": "89e5f6c37652efbdaaa7f9ab72fa3558412a22e4a74432c2fee4cdf8ae83fd0a",
+      "bytes": 167502
+    },
+    "confidence_only_ood_report_predictions.csv": {
+      "sha256": "7304ef78238b5d915166ff728a510b49125948db510c5f010ea23c3a3e1e8434",
+      "bytes": 37546
+    },
+    "evaluation.json": {
+      "sha256": "87c77fdeddf54015ac6db9d121c35557016f04ab3b1fb16f5871f40fc818ae59",
+      "bytes": 20042
+    },
+    "evaluation_inputs.json": {
+      "sha256": "4bd66304186e4a6f3bd94706c73835cc42b2fe4378ad6c636c670721efadab97",
+      "bytes": 92402
+    },
+    "evaluation_lock.json": {
+      "sha256": "142b6327fdbfe71bfd57aeed4dbaecf1e0998145d2f8a07bfbaa4633a4d779b3",
+      "bytes": 330
+    },
+    "evaluation_started.json": {
+      "sha256": "346fca68b070f972a44c7b6f27da2ef8fe6b869f31cf0e8ee663efc0150b692e",
+      "bytes": 335
+    },
+    "figures/confusion_matrix.png": {
+      "sha256": "5ee0f1be4e69bd1ba0ff18c08f68ad10c45f8c588ff0e817d2490b8ff0f314a9",
+      "bytes": 124525
+    },
+    "figures/confusion_matrix_with_rejection.png": {
+      "sha256": "6a8f0f1c283e8356ace791392eb4491956bc73d3a1250abf5bc58e4e885e381f",
+      "bytes": 132215
+    },
+    "figures/per_class_metrics.png": {
+      "sha256": "59a59e2ac3eede33ddc8edc29ef369d0ef56bf32bcf600e42e6d4442280934b9",
+      "bytes": 131392
+    },
+    "figures/per_class_metrics_with_rejection.png": {
+      "sha256": "ea68262d5acce6a2431b4053339ae90bbcefdea49ee91850c37dd5fdd4e87e9c",
+      "bytes": 133709
+    },
+    "figures/threshold_search.png": {
+      "sha256": "547e243cb4745f5af099c01a3eaab1d669fc845e89f49a0c69e3e48be6600b2a",
+      "bytes": 107789
+    },
+    "input_lock.json": {
+      "sha256": "842d9cdf432a33f8bbba6171733cf338f9a972a45fc14178f323aa77e3dce339",
+      "bytes": 150
+    },
+    "mango_test_predictions.csv": {
+      "sha256": "ece292b6cc55b09791da6973daf1e95063fd911ec192f13b694474df10c355c3",
+      "bytes": 167674
+    },
+    "ood_assignments.csv": {
+      "sha256": "769d9fba7774d25ce2892edfe29feae83c584c67e4853b771b6ed5c0e8986bc2",
+      "bytes": 27867
+    },
+    "ood_inventory.json": {
+      "sha256": "076db6cbdcc17926cfece92864b076b65d6b7f2086018c0417ac0747b76d9639",
+      "bytes": 77667
+    },
+    "ood_report_predictions.csv": {
+      "sha256": "fb00be97b5bdd211bf0f90c2b9d245ca1380719b8428d577c958a87b35dad8b5",
+      "bytes": 38030
+    },
+    "ood_review.csv": {
+      "sha256": "5e5acf696eb006d8d6bffc365d573b2ce20b77ced6c302ddc364d9d5ce955eb4",
+      "bytes": 60492
+    },
+    "ood_tuning_predictions.csv": {
+      "sha256": "4c337f4eee71b73393239270bbc59af81e44973c9d841952ad71c650be7991ed",
+      "bytes": 37978
+    },
+    "raw_per_class_metrics.csv": {
+      "sha256": "343c31de4c7e66fb9008e3611993553988840f87855eb621c0b3e72ef9b09b06",
+      "bytes": 511
+    },
+    "rejection_aware_per_class_metrics.csv": {
+      "sha256": "2dd3556d79e07d09cabfa512bc75ea0120942c5fdd8d15d1749ad2323a8b21df",
+      "bytes": 498
+    },
+    "review_contact_sheets/ood_01.jpg": {
+      "sha256": "adb9aaafcf8fa8b466742a0aed02b85dc453b76e9840f8c6a147f2a526f749ca",
+      "bytes": 344351
+    },
+    "review_contact_sheets/ood_02.jpg": {
+      "sha256": "ecea6af7cf8637650661b35e44a48472d617cb6af50bebeff1e53d1b405acafc",
+      "bytes": 375180
+    },
+    "review_contact_sheets/ood_03.jpg": {
+      "sha256": "48c339bd92f55a086982a47f3a31c25ae32acedf88df493683b9609ce47b6324",
+      "bytes": 450329
+    },
+    "review_contact_sheets/ood_04.jpg": {
+      "sha256": "a32afe0aac62fc302a1e7b8a45aee682175feeab9a372215d5ffdced84b4f8da",
+      "bytes": 378375
+    },
+    "review_contact_sheets/ood_05.jpg": {
+      "sha256": "4d178fba48c8dcf78be61658480325537c3802526bf4dbfb6dca7d98eb3dd7dd",
+      "bytes": 380380
+    },
+    "review_contact_sheets/ood_06.jpg": {
+      "sha256": "dcf0ba8520242cb9441a2da225bf80e8c055577622f89c85a8febc7e4e044b2b",
+      "bytes": 354499
+    },
+    "review_contact_sheets/ood_07.jpg": {
+      "sha256": "ac9773067c2e827cace3da4affc1b7aa62b837f4112196393b767382f9d01405",
+      "bytes": 339120
+    },
+    "review_contact_sheets/ood_08.jpg": {
+      "sha256": "b4efa914d9ea0090ca952d84a8441793d56f0b7a2d0982c4f7823251daf2ec24",
+      "bytes": 344781
+    },
+    "runtime.json": {
+      "sha256": "12a80aeb7f483bc6b8c5bbb68d77c2b977db10153d2370a5e48bbe33727942da",
+      "bytes": 4137
+    },
+    "selected_thresholds.json": {
+      "sha256": "c0ae3ecef5ab0f289525b5a1eaea6b182778b0c7f503611f0bc31dbb2fae1d03",
+      "bytes": 1302
+    },
+    "selection_lock.json": {
+      "sha256": "11fdf83db8219f171b1ac940d5967791201a53620a1395ba1c91707e4a5c2838",
+      "bytes": 334
+    },
+    "similarity_review.csv": {
+      "sha256": "e84ebe489d6388e148be00676b124aa760c43159ffaa63660a7706fc92f2471b",
+      "bytes": 107
+    },
+    "threshold_search.csv": {
+      "sha256": "33ba8372787f3efb3b63d602ae747a30b6daa12806a40bd72132c8a8a3b156fa",
+      "bytes": 560692
+    },
+    "validation_predictions.csv": {
+      "sha256": "24d48639750a71e2d5564432e01bad7bd6091bf208afa0c3ba9d36cd3e46706c",
+      "bytes": 167165
+    }
+  },
+  "finishedAt": "2026-10-09T03:10:44.621554+00:00"
+}

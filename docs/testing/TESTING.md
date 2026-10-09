@@ -2,7 +2,65 @@
 
 These tests cover the scan workflow and the manuscript's reliability paragraph. R01–R04 are project test IDs, not research-objective numbers from the manuscript. Physical-device results and model accuracy require their own evidence; a green browser suite alone does not establish either.
 
-**Current prepared release:** App `0.5.4`, model `v4.3.0`, is prepared and awaits CI and production promotion. The [release record](../versions/PWA_VERSIONING.md#v054-unchanged-guidance-check-prepared-release-october-7-2026) and versioned validation below identify its scope. The [October 7 release-status confirmation](../versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) records published `v0.5.0`–`v0.5.3` and reported live `v0.5.3`. Earlier dated candidate entries preserve preparation status and evidence for their original source snapshots rather than current deployment status.
+**Current prepared release:** App `0.5.5`, model `v4.3.0`. The [release record](../versions/PWA_VERSIONING.md#v055-guided-camera-and-installation-prepared-release-october-10-2026) and [versioned validation](#v055-release-validation-october-10-2026) identify its scope and evidence. Preparation does not establish publication or production promotion. The [October 7 release-status confirmation](../versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) preserves the earlier publication and live-version report. Earlier dated entries retain their original status, versions, fingerprints, and results.
+
+## v0.5.5 release validation (October 10, 2026)
+
+**Prepared release.** App `0.5.5` packages the guided live camera with full-frame capture, review and source-specific Retake, stream cleanup, bilingual installation instructions, desktop QR guidance, and phone/desktop scan-layout refinements. Phone History shows four reports per page; desktop History retains six. Phone selection deletion precedes pagination, and full photo cards reserve a 4:3 image area across viewport changes. Per-class probabilities remain developer-console diagnostics; the result modal does not expose the full probability table.
+
+The active model remains V4.3.0 Combined (`v4.3.0`): all five restored assets, seven-class order, 224×224 preprocessing, folded temperature, and confidence/margin/entropy gates `0.70 / 0 / 0.42` retain their adopted values. The declined V4.4.0 trial remains an archive under the experiment folders. This app release does not adopt a different model or change Supabase schema/policies.
+
+**Final local identity:** App `0.5.5`, model `v4.3.0`, application input fingerprint `ee16e498efd838f997372482b8b5770301ae81d541b27707b1235b51dfa80191`. Both final reports identify base commit `341a065c0288e196578b970a6e5ac402915ed417` plus the uncommitted release changes; this is not a new release commit or tag. The October 7 `0.5.4` and October 9 rollback reports below remain evidence for their own inputs; changing the version label does not carry those passes into this release. Browser automation uses fresh contexts, the isolated export, and the local mock backend. It must not send test scans to production Supabase.
+
+| Check                                                                | Current evidence                                                                                                                                    |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Formatting, security, and tooling                                    | Passed: pinned Prettier, Gitleaks 8.30.1 tracked-path/history checks, and all 28 tooling cases with 98 assertions.                                  |
+| TypeScript, lint, and production build                               | Passed in the required order; the build regenerated `public/sw.js`. Lint retains one existing unused `DiagnosisResult` import warning.              |
+| Export assets and model preservation                                 | All 10 export checks passed; the five exported model files match the unchanged source model hashes. Historical runtime-archive verification passed. |
+| Core browser suite, including camera and installation                | Passed: 187 cases, four declared skips, zero unexpected failures or flaky results; 18.3 minutes (1,097,848 ms).                                     |
+| R01 repeated actual inference                                        | Passed: one Chromium mobile-emulation case; eight photos, 30 actual predictions each, 240 predictions total; 62.3 seconds.                          |
+| R03 30-minute session                                                | Not run during this preparation, as requested; no shortened substitute. The aligned protocol remains available.                                     |
+| Physical device and installation evidence                            | Open; record actual observations in the physical checklist.                                                                                         |
+| Final-commit CI, publication, production promotion, and live version | Separate release steps; not established by local preparation.                                                                                       |
+
+Record report locations, result counts, application fingerprint, model hashes, and any warnings with each completed check. Keep device, OS/browser, installed-PWA mode, camera permissions, actual installation, offline capture, and background behavior attached to their own observations; synthetic browser signals do not establish those physical outcomes.
+
+### Completed browser evidence
+
+| Browser project           |  Passed | Declared skips |
+| ------------------------- | ------: | -------------: |
+| Chromium desktop          |      60 |              0 |
+| Chromium mobile emulation |      60 |              0 |
+| Firefox desktop           |      49 |              2 |
+| WebKit mobile emulation   |      18 |              2 |
+| **Total**                 | **187** |          **4** |
+
+C07's synthetic canvas-stream playback check is scoped to Chromium, so Firefox and WebKit skip it. Firefox also skips G07's worker-cache case; installed Chromium covers that path. Windows WebKit skips C02's controlled camera-to-diagnosis case because it does not complete this TensorFlow.js inference path. Its remaining guided-camera and installation UI cases passed. None of these skips is counted as a pass or as physical-phone evidence.
+
+All 16 M01 observations matched their supplied provisional labels, with the actual classifier's class, confidence, photo hash, and model identity preserved in the saved result and UI. This is smoke evidence, not an accuracy estimate. The test now checks the desktop installation Home and reopens the saved photo from History; phone Home still shows its recent scan. The mobile History expectation matches the current four-report page size.
+
+Filtered R01 used Chromium `153.0.8010.12`, TensorFlow.js `4.22.0`, WebGL with forced Float16, and the ANGLE SwiftShader software renderer. Raw/displayed classes and acceptance stayed stable for every photo. Maximum raw-confidence range and maximum net tensor growth per photo were both `0`. These observations cover same-session regression consistency; they do not measure phone speed, all browser/native memory, or model accuracy.
+
+### Preserved identities and reports
+
+All five source model files still match the pre-preparation baseline and the production export. The 47 notebook files and 358 scientific artifact/figure files also retain their baseline bytes. Historical runtime-archive verification matched 14,117 original bytes against both preserved ledgers.
+
+| Model asset                         | SHA-256                                                            |
+| ----------------------------------- | ------------------------------------------------------------------ |
+| `public/model/group1-shard1of3.bin` | `04e1e18a28cb414442c66617a0bc0cbdff2e93116d08d0a170f04b30572bf09c` |
+| `public/model/group1-shard2of3.bin` | `0432d0dc9a25e4d2d0048aa5c8120076c05466a6363bd2d5a0c5e5ee4fd34954` |
+| `public/model/group1-shard3of3.bin` | `a0fab950ece352711e938467d6bf5f6aaed6c48b5ee1e37812b0a7192399292b` |
+| `public/model/model.json`           | `f5ebdd96893513f05d78126880e9a56a94c4750f75b02a2ee2fb7d3792c8267b` |
+| `public/model/model_config.json`    | `40216b04bf0e3f303e0d23beb7059cfec3d43ac6e01be35a3431600443c37d0c` |
+
+The completed core and R01 JSON/HTML reports are preserved in ignored `.tools/release-v0.5.5-20261010/final/reports.zip`; all 101 archived files were verified against their source bytes. Archive SHA-256: `a431261715db81ea7847d013acac1fd7535eb108e4bb3ffd5af6b0fcca576015`. The same folder keeps the copied JSON reports, decoded model/R01 observations, test/CI input hashes, archive manifest, and `verification.json`.
+
+- Core JSON report SHA-256: `8ac57688f36824098a1d91058e84c9db614497bfa04af561d005da2a96fe3f54`.
+- R01 JSON report SHA-256: `1da489002646c4e7c8c083670cde75c9906b61113554035a2c8305ddcadc0081`.
+
+The initial core attempt stopped after obsolete desktop Home thumbnail expectations failed. Prediction, saved-photo identity, and result assertions had passed before those UI expectations. The test-only correction preserves those assertions and checks the saved image in History. Interrupted case traces are retained in `.tools/release-v0.5.5-20261010/initial-core.zip`, SHA-256 `0e7333e52f1632a8d09c8cc3a2179148be7124775cfc32a95a5be22da84ca8c1`; that archive is not a completed initial-run report. The complete rerun above passed against the same application fingerprint.
+
+Local validation is complete. R03 was not executed, including a shortened substitute. Physical-device observations remain open in the [physical checklist](PHYSICAL_RELIABILITY_CHECKLIST.md); final-commit CI, exact deployment/domain-setting confirmation, approved promotion, live-version verification, and tag/Release publication remain separate release steps. Status is **prepared release / awaiting CI and production promotion**.
 
 **Historical V4.1.1 rollback (September 29, 2026):** The app again uses one seven-class V4.1.1 Background model and opens its scan sheet directly, without an organ choice. The completed [V4.2.0 two-model trial](../model-training/experiment/v4.2.0/TRIAL_v4_2_0.md#completed-results-and-comparison-september-29-2026) is retained as evidence and an ignored local backup. Existing single-model browser fixtures and cases were not changed or run for this rollback; prior test results do not certify the restored working tree. This rollback verifies TypeScript, lint, and build. Photo hashes stay unchanged; local rows marked with the V4.2.0 model version remain in history but are not reused as V4.1.1 diagnoses.
 
@@ -19,6 +77,16 @@ The [v0.4.9 PWA history entry](../versions/PWA_VERSIONING.md#v049-adoption-of-v4
 **Local cloud-security candidate validation (October 2, 2026):** The updated guest-session/private-photo client passed TypeScript, lint, production build, formatting, Git diff checks, all 14 tooling tests with 41 assertions (including four guest-session tests), all 10 exported-asset checks, and the credential/history security scan. All 80 core cases passed with zero failures in 7.4 minutes across Chromium desktop/mobile, Firefox desktop, and scoped WebKit mobile coverage; S01–S05 use the isolated local mock backend. This full run preceded the test-only S05 fixture correction to native IndexedDB version 70 for Dexie's version 7 and the added class/confidence/model-label assertions. The tightened S05 then passed three focused Chromium desktop/mobile and Firefox cases in 8.1 seconds; no second full suite is claimed. Final application input fingerprint remains `a316d8017d732e678704809b74289e3100beb4896611e8760f883ec78a923f71`. All 342 protected files retain their hashes, including 43 notebooks, model assets, Git hooks, and GitHub workflows; 418 local links/anchors across 35 documents resolved before the live-migration documentation update; that later check passed with 419 links/anchors. The earlier adoption validation above remains evidence for its original source snapshot.
 
 **Live server-security verification (October 2, 2026):** After the photo bucket was saved as private, migration `secure_guest_owned_cloud_sync`, history version `20261002152830`, applied successfully. Catalog checks verified the private bucket, grants, RLS, index, and three scan/one guideline/four Storage policies. Thirty assertions using temporary copies of the applied policy expressions/grants passed and were rolled back; the earlier proposed-policy proof is separate. All original values remain unchanged across 65 scan rows, six guidelines, and 68 Storage object entries, with no missing entries or invented legacy owners. The advisor returned zero findings. Read-only HTTP probes returned 401 for unsigned scans, 200 for all six public guidelines, and 400 for a cache-busted old public photo URL. These checks created no production test users, scan rows, or Storage files, and performed no remote photo writes/deletes/purge. They do not prove every formerly public cached copy disappeared or establish a real guest signup/upload/download session. The matching updated client has not been committed, pushed, or deployed. See [implementation status](../supabase/SECURITY-AND-SYNC.md#implementation-status).
+
+## Local rollback and camera alignment validation (October 9, 2026)
+
+The maintainer declined the temporary V4.4.0 model trial and requested restoration of V4.3.0. All five restored model files and the exported `out/model/` files match the verified pre-trial V4.3.0 hashes. The display label is `v4.3.0`; the service worker uses its matching cache and removes the temporary V4.4.0 candidate cache on activation. App label remains `0.5.4`; this working tree is separate from the October 7 prepared-release fingerprint and is not a new production release.
+
+Formatting, TypeScript, lint, the production static build, all 10 export checks, and historical runtime-archive verification passed. Lint retains the existing unused `DiagnosisResult` import warning in `scan-details-modal.tsx`. The focused command `bun run test:e2e --project=chromium-mobile --project=webkit-mobile --grep 'C0[1-8]:|I0[1-8]:|M01:'` passed **40 cases with two declared Windows WebKit skips and no failures**. C02's TFJS camera inference and C07's Chromium-only synthetic stream are the skipped cases. These checks cover camera lifecycle, installation layout/platform wording, and eight actual-model scan fixtures; controlled UI conditions and provisional fixture labels do not establish field accuracy or physical iOS/Android behavior.
+
+The tested application fingerprint is `7ffccaf4e1d1106b8664b4728a06a9da03e0d056dc54c87b9423c7ca8373fda1`. The completed focused JSON report SHA-256 is `2e86e03a3513dadb2883aa56605b2143b5cec1927e2eb6c0cdf25ea7dc2f1e36`. Reports and attachments are preserved under ignored `.tools/v440-closeout-20261009/focused-browser/`; current runner output is under `test-results/e2e/`. All 47 existing notebooks and all 66 curated V4.4.0 source copies retain their bytes. The archive manifest separately verifies that all 6,781 original downloaded files remained unchanged.
+
+**R03 was aligned, not executed, including no shortened run.** Type/lint checks and `node node_modules/@playwright/test/cli.js test --project=chromium-mobile --grep 'R03:' --list --reporter=line` with `MANGOLEAF_RELIABILITY=1` verify its definition is collectible. The reporter flag prevents listing from replacing completed JSON/HTML evidence. R03 still requires an explicitly authorized full 30-minute execution; synthetic camera support and physical-device evidence remain separate limits. GitHub CI's core suite includes camera and installation cases, with pinned Playwright browser installation through Node; no R03 command was added. Remote CI was not run by this local task.
 
 ## v0.5.4 release validation (October 7, 2026)
 
@@ -195,12 +263,12 @@ Use the project's pinned Bun dependencies and Node.js 24 (Playwright runs throug
 
 ```bash
 bun install --frozen-lockfile
-bunx --no-install playwright install chromium firefox webkit
+node node_modules/@playwright/test/cli.js install chromium firefox webkit
 bun run test:e2e
 bun run test:report
 ```
 
-On Linux, install browser system dependencies with `bunx --no-install playwright install --with-deps chromium firefox webkit`.
+On Linux, install browser system dependencies with `node node_modules/@playwright/test/cli.js install --with-deps chromium firefox webkit`. CI uses this pinned Node entry point and runs the core camera/install suite through `bun run test:e2e`; it does not invoke the 30-minute R03 testcase.
 
 `test:e2e` builds an isolated production static export under ignored `.test-app/`, starts its local server, runs tests, and stops the server. It reuses that build only when application/configuration/dependency/model input hashes match. It does not use `next dev` or `next start`, and does not overwrite `out/` or the production service worker. The local test backend is compiled into this private copy. Never deploy `.test-app/`.
 
@@ -247,26 +315,26 @@ Long reliability sessions do not run on every push. `bun run test:tooling` still
 
 ## Functional cases
 
-| ID      | Action and expected result                                                                                                                                                    |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| F01     | Empty Recent and History show the empty-state message.                                                                                                                        |
-| F02     | Scan opens its sheet; Cancel closes it without creating a record.                                                                                                             |
-| F03     | Upload Photo opens its file input and previews the chosen bytes.                                                                                                              |
-| F04     | Mobile Take Photo selects the camera input with `capture="environment"`; desktop hides that control. Native camera behavior remains manual.                                   |
-| F05     | Empty file selection stores nothing; Retake reopens the same picker. X or Escape closes review and clears the selected photo without opening a picker or saving a record.     |
-| F06     | Each of seven controlled accepted predictions shows the photo, class, and confidence.                                                                                         |
-| F07     | Rejected result shows its photo and uncertain label; raw class/confidence/margin/entropy are report-only.                                                                     |
-| F08–F09 | Saved result appears in Recent and History; the mobile History row and desktop Details action show matching data.                                                             |
-| F10     | Below 768px, Home shows the newest one card and History shows five rows per page. At or above 768px, Home shows up to four cards and History six cards per page.              |
-| F11     | Search/category counts and previous/next navigation work; typing search resets All and closes mobile filters. Confirmed deletion of the last page returns to a valid page.    |
-| F12     | Reload preserves records and photos.                                                                                                                                          |
-| F13     | Re-uploading identical bytes shows "Photo already scanned" in the preview. Retake, Cancel, X, and View saved result work; no new record or inference is created.              |
-| F14     | Long result badges stay inside the photo and Close stays reachable at narrow, landscape, and desktop sizes.                                                                   |
-| F15     | A Healthy Fruit result moves from loading to unavailable advice, then uses the downloaded mock `healthy` row and remains readable offline in English/Bisaya.                  |
-| F16     | Uncertain-result photo reminders and headings work in English/Bisaya with pending, empty, downloaded, and offline guideline states.                                           |
-| F17     | Select reports across History pages or Select all matching results; shared single/batch confirmation supports cancellation, fixed IDs, busy locking, retry, and focus return. |
-| F18     | Compact bilingual photo tips appear before camera/gallery actions; Cancel remains visible while short-screen content scrolls and desktop keeps the bounded centered sheet.    |
-| M01     | All eight supplied photos run through the real model and app; record predicted/expected labels and score diagnostics separately from UI assertions.                           |
+| ID      | Action and expected result                                                                                                                                                                          |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| F01     | Empty phone Recent and History show the empty-state message; desktop Home omits the Recent heading.                                                                                                 |
+| F02     | Phone Scan opens its sheet; Cancel closes it without creating a record. At 768px and above, Install opens its guide and scan/upload entry controls are hidden.                                      |
+| F03     | Upload Photo opens its file input and previews the chosen bytes.                                                                                                                                    |
+| F04     | Below 768px, Take Photo opens the guided live camera; Capture passes a full-frame photo to review. The Take Photo control is hidden on wider screens. Physical camera behavior remains manual.      |
+| F05     | Empty file selection stores nothing; Retake reopens the live camera or same upload picker used for the photo. X or Escape closes review and clears the selected photo without saving a record.      |
+| F06     | Each of seven controlled accepted predictions shows the photo, class, and confidence.                                                                                                               |
+| F07     | Rejected result shows its photo and uncertain label; raw class/confidence/margin/entropy are report-only.                                                                                           |
+| F08–F09 | Saved result appears in Recent and History; the mobile History row and desktop Details action show matching data.                                                                                   |
+| F10     | Below 768px, Home shows the newest one card and History shows four rows per page. At or above 768px, Home shows Install without Recent/View All History labels; History retains six cards per page. |
+| F11     | Search/category counts and previous/next navigation work; typing search resets All and closes mobile filters. Confirmed deletion of the last page returns to a valid page.                          |
+| F12     | Reload preserves records and photos.                                                                                                                                                                |
+| F13     | Re-uploading identical bytes shows "Photo already scanned" in the preview. Retake, Cancel, X, and View saved result work; no new record or inference is created.                                    |
+| F14     | Long result badges stay inside the photo and Close stays reachable at narrow, landscape, and desktop sizes.                                                                                         |
+| F15     | A Healthy Fruit result moves from loading to unavailable advice, then uses the downloaded mock `healthy` row and remains readable offline in English/Bisaya.                                        |
+| F16     | Uncertain-result photo reminders and headings work in English/Bisaya with pending, empty, downloaded, and offline guideline states.                                                                 |
+| F17     | Select reports across History pages or Select all matching results; shared single/batch confirmation supports cancellation, fixed IDs, busy locking, retry, and focus return.                       |
+| F18     | Compact bilingual photo tips appear before camera/gallery actions; Cancel remains visible while short-screen content scrolls and desktop keeps the bounded centered sheet.                          |
+| M01     | All eight supplied photos run through the real model and app; record predicted/expected labels and score diagnostics separately from UI assertions.                                                 |
 
 ### v0.5.2 History, deletion, and photo-tips scope (October 6, 2026)
 
@@ -280,7 +348,7 @@ Use both languages, narrow/desktop viewports, fresh contexts, and the local mock
 - Check offline single/batch deletion of local-only, unowned, and owned scans. Local-only/unowned rows are removed; owned rows disappear from visible History but retain their pending-deletion marker until cloud cleanup succeeds. Reconnect through the local mock and check photo/row cleanup, retry, and no restored deleted records. Existing owner authorization and upload-race cases remain relevant.
 - Open the photo-tips sheet in both languages at narrow, short/landscape, and desktop sizes. Tips appear once before the picker actions; the drag handle and Cancel remain visible while the middle content scrolls. Desktop keeps the centered panel within 520px. Cancel creates no scan. The advice works offline and does not start a camera stream, alter pixels, or invoke inference.
 
-These acceptance conditions remain in use for the current candidate. Passing results must be recorded for its final versioned source; the original `0.5.2`, F10/F11, and cloud-race reports retain their dated evidence limits.
+The History, deletion, and photo-tip conditions remain in use for the current release, with four phone History reports per page and six on desktop. The October 8 responsive Install flow replaces the desktop Home preview and desktop scan entry described in this historical scope; current F01–F05/F10 expectations above and `tools/e2e/install-guide.pw.ts` cover that change. Passing results must identify the final versioned source; the original `0.5.2`, F10/F11, and cloud-race reports retain their dated evidence limits.
 
 ### v0.4.9 regression scope (October 2, 2026)
 
@@ -312,9 +380,38 @@ The Scan Sheet now displays two shared framing/lighting tips above its camera an
 - Select a new photo and check the updated review reminder. Select an eligible duplicate and check that its duplicate message and controls remain unchanged. X, Escape, Retake, and diagnosis keep their existing behavior.
 - Repeat with an already-cached app offline. The tips should require no network request, camera stream, image analysis, or extra model loading. They are advice, not confirmation that a photo is suitable.
 
-The camera and comprehension checks above are retained from the October 2 guidance review; the [v0.5.4 prepared release section](#v054-release-validation-october-7-2026) defines the current release scope. The local backup for this reversible change is `.tools/ui-backups/photo-guidance-20261001T212013Z/`; restore only this change and rebuild the service worker, preserving newer unrelated work.
+The camera and comprehension checks above are retained from the October 2 guidance review; the [v0.5.5 prepared release section](#v055-release-validation-october-10-2026) defines the current release scope. The local backup for this reversible change is `.tools/ui-backups/photo-guidance-20261001T212013Z/`; restore only this change and rebuild the service worker, preserving newer unrelated work.
 
 Controlled tests replace only the model response with fixed scores. They exercise the real classifier gates, UI, local storage, and client sync against a mock service. Real-model and offline cases use the actual exported model assets. No test changes the classifier's resizing, normalization, precision, or rejection rules.
+
+## Guided live camera (October 8, 2026)
+
+**Documentation completed October 9, 2026.** Below 768px, Take Photo opens the browser's live camera dialog instead of a native-camera file picker. The square is a positioning guide; Capture preserves the entire video frame and opens ordinary photo review. Run AI Diagnosis remains a separate action. Camera Retake opens a new stream, and upload Retake reopens the gallery input. The flow uses secure-context and camera-API capability checks on both iOS and Android; viewport width does not establish the operating system or camera support.
+
+Run the focused cases with `bun run test:e2e --grep "C0[1-8]:"`. They use the isolated export and local mock backend. `tools/e2e/guided-camera.pw.ts` includes:
+
+- **C01:** a full-frame 1280×720 capture, correctly sized and centered guide in portrait/landscape, no prediction or saved scan before Run, stream release, camera Retake, and Escape dismissal.
+- **C02:** one captured photo passes through existing review to one controlled diagnosis and one saved record.
+- **C03:** closing a pending permission request stops its late stream, contains keyboard focus, restores launcher focus, and handles permission completion after backgrounding.
+- **C04:** backgrounding releases the camera and ignores a delayed JPEG encoding result without creating review or a scan.
+- **C05:** missing video data keeps Capture disabled; a later frame enables it; ended tracks and `pagehide` release hardware; retry opens a new stream.
+- **C06:** denied permission displays the Bisaya message, closes cleanly, and permits a gallery upload with unchanged source bytes.
+- **C07:** Chromium plays and captures a real browser video element using a synthetic canvas stream, preserving 1280×720 dimensions and releasing its track.
+- **C08:** a missing camera API displays the unsupported state without an ineffective retry button; Close returns to the usable Upload Photo option.
+
+The preserved October 8 local run recorded **27 passed, two declared skips, zero unexpected failures, and zero flaky cases** in 59.3 seconds. Its application fingerprint is `310dde190e5bd9a9efbb79c66259d27525f35fccc7c4852df0715064917c7be5`; the ignored `.tools/guided-camera-review/verification.json` identifies the snapshot and preservation check. The later camera-style check recorded 18 passed and one declared skip in 49.1 seconds, with preserved-file hashes unchanged, under `.tools/guided-camera-style-review/verification.json`. These are earlier focused runs, not certification of subsequent working-tree changes or a completed release.
+
+Controlled camera tests replace media acquisition/playback and class scores while retaining real JPEG encoding and photo decoding. C07 exercises actual video playback from a synthetic source, not a phone camera. Windows WebKit skips C02's TFJS inference, and C07 is scoped to Chromium. No camera quality, disease accuracy, heat, battery, lens choice, physical iOS/Android compatibility, or 30-minute R03 result is established by these checks.
+
+Use the [physical camera checklist](PHYSICAL_RELIABILITY_CHECKLIST.md#r04-m01-guided-camera-gallery-and-layout) on each recorded iOS/Android browser and installed-PWA combination. Check HTTPS, permission denial/recovery, portrait/landscape and safe areas, full-frame capture, camera and gallery Retake, Close before permission completes, background/resume, and OS camera-indicator cleanup. A secure localhost test does not prove that a phone's plain-HTTP LAN URL supports live camera. After the app/model are cached, test offline capture and diagnosis separately from cloud synchronization. There is no automatic native-camera fallback; close live capture and choose Upload Photo when it is unsupported.
+
+## Responsive installation guide (v0.5.5)
+
+`tools/e2e/install-guide.pw.ts` covers the installation guide through controlled browser signals. At 768px and above, Home and the header direct users to installation, with Android/iOS instructions and a QR link. Below 768px, detected platform identity chooses phone instructions; an actual `beforeinstallprompt` event separately controls native install availability. Both languages, Close/Continue in Browser, keyboard focus, prompt dismissal/failure, late prompt availability, and standalone/appinstalled signals belong to the core CI scope.
+
+The QR points to `https://mangoleafai.vercel.app/?install=1`, including when opened from localhost. Test that the flag opens the guide once, is removed without losing other query values/hash/history state, and does not invoke a native prompt automatically. Installed standalone mode consumes the arrival flag without reopening the guide. A single-use native prompt requires an explicit user tap; accepting its choice alone is not the app's installed-state confirmation.
+
+Actual Safari Share/Add to Home Screen, Android browser-menu installation, QR scanning, OS/browser support, installed-PWA launch, rotation, and safe-area control reachability require recorded observations in [R04-M03](PHYSICAL_RELIABILITY_CHECKLIST.md#r04-m03-installation-guide-and-installed-launch). Browser emulation and user-agent strings establish wording and layout coverage, not physical installation results.
 
 ## Scan-thumbnail stability: October 4, 2026
 
@@ -413,40 +510,51 @@ For debugging or technical-defense review, open the browser's developer console 
 
 ## Reliability protocol
 
-| ID  | Automated scope                                                                                                                                                                  | Pass condition / limitation                                                                                                                                                                                                                                                                         |
-| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| R01 | 30 sequential actual classifier calls per photo in one browser session; duplicate lookup is not involved.                                                                        | Stable raw top class and displayed class/acceptance; confidence range no greater than 0.001; no net tensor growth. This is a predeclared regression tolerance, not proof across devices or cold starts.                                                                                             |
-| R02 | Activate the real worker, confirm cached page/config/model shards, save a scan online, disconnect, reload history, diagnose a different unscanned file, reload again, reconnect. | History/photos survive; new inference and storage succeed offline; queued rows and exact uploaded photo bytes are verified on the local mock after reconnect. Initial caching is required. Automated SW instrumentation runs on Chromium.                                                           |
-| R03 | 30-minute loop of real inference, Details, History, deletion, and periodic reloads.                                                                                              | No unexpected errors/crashes, stuck scans, or incorrect record counts. Records are deliberately deleted after checks so later uploads cannot use duplicate shortcuts. Durations and available heap measurements are recorded for review, not presented as a validated memory/performance threshold. |
-| R04 | Chromium desktop/mobile and Firefox run scan workflows; WebKit runs navigation and mobile-control checks only because its Windows runner cannot exercise this WebGL TFJS path.   | Viewport/browser coverage only. Actual device models, OS/browser versions, inference, camera permissions, heat, and background behavior need manual checks.                                                                                                                                         |
+| ID  | Automated scope                                                                                                                                                                     | Pass condition / limitation                                                                                                                                                                                                                                                                                        |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| R01 | 30 sequential actual classifier calls per photo in one browser session; duplicate lookup is not involved.                                                                           | Stable raw top class and displayed class/acceptance; confidence range no greater than 0.001; no net tensor growth. This is a predeclared regression tolerance, not proof across devices or cold starts.                                                                                                            |
+| R02 | Activate the real worker, confirm cached page/config/model shards, save a scan online, disconnect, reload history, diagnose a different unscanned file, reload again, reconnect.    | History/photos survive; new inference and storage succeed offline; queued rows and exact uploaded photo bytes are verified on the local mock after reconnect. Initial caching is required. Automated SW instrumentation runs on Chromium.                                                                          |
+| R03 | 30-minute loop alternating original gallery uploads and guided-camera captures from synthetic live video, actual model inference, Details, History, deletion, and periodic reloads. | Capture/Retake performs no inference or save; streams stop before review; each diagnosed cycle runs one actual prediction. Accepted/uncertain UI matches the saved row. Deleted records cannot bypass later inference. Durations and available heap values are observations, not validated performance thresholds. |
+| R04 | Chromium desktop/mobile and Firefox run scan workflows; WebKit runs navigation and mobile-control checks only because its Windows runner cannot exercise this WebGL TFJS path.      | Viewport/browser coverage only. Actual device models, OS/browser versions, inference, camera permissions, heat, and background behavior need manual checks.                                                                                                                                                        |
 
 Test inputs, repetitions, and pass conditions should be fixed before formal evaluation. Do not loosen them after failure merely to obtain a pass. Record investigated failures and any revised protocol as a new evaluation run.
 
 The manuscript calls for extended use but does not specify a duration. The development team selected 30 minutes as this project's R03 protocol; it is not a duration required by the manuscript.
 
-R03 writes `endurance-progress.json` after each completed cycle inside its ignored test output. It preserves partial evidence if a laptop, browser, or runner stops early; only a completed 30-minute report is an R03 pass.
+R03 writes `endurance-progress.json` at startup, before each cycle, after each completed cycle, and when the session completes or throws. It preserves completed cycles and the active photo/source if the session stops early; partial evidence never resumes a run or counts as a pass. A completed report requires at least 30 minutes and both capture sources.
+
+### R03 guided-camera alignment (October 9, 2026)
+
+**Updated protocol; not executed.** The user requested alignment with the new guided camera and explicitly excluded running R03. No full or shortened R03 session was run for this update. Static checks and test discovery do not establish an endurance pass; the earlier dated reports above retain their original scope.
+
+`tools/e2e/endurance.pw.ts` retains its 30-minute duration and explicit reliability-only scope. Each supplied fixture is exercised through gallery upload and then guided capture before the next fixture is selected. Camera cycles use the same small canvas-stream approach as C07: local fixture pixels feed a real 1280×720 browser video stream; the actual camera component performs its full-frame JPEG encoding, ordinary photo review, and Retake. The first capture is discarded, Retake opens a new stream in the landscape viewport, and the second capture is diagnosed only after an explicit Run AI Diagnosis action. Both acquired tracks must stop and the live-track count must return to zero before diagnosis.
+
+The test never replaces model scores. It counts the production classifier's probability-report event to require exactly one actual prediction per diagnosed cycle, verifies the active model label and selected-photo hash, checks the displayed accepted/uncertain result and confidence against the saved row, confirms a nonempty saved photo, reopens History Details, and deletes the record before the next cycle. Gallery hashes identify original fixture bytes; camera hashes identify the generated JPEG, which is a transformed image and must not be claimed as the original-byte prediction. Progress records include source/capture hashes, source type, result/acceptance, prediction count, camera starts/stops, Retake count, photo bytes, cycle duration, and available JavaScript heap size.
+
+This automated protocol uses Chromium desktop/mobile emulation, a synthetic camera, and the local mock backend. It does not establish physical camera permissions, actual lens selection, OS camera-indicator cleanup, autofocus or image quality, installed-PWA background behavior, airplane-mode capture, heat, battery, or model accuracy. The [physical R03 checklist](PHYSICAL_RELIABILITY_CHECKLIST.md#r03-m01-30-minute-mixed-use-session) requires a future session mixing real live capture, Retake, gallery, permission recovery, rotation, camera background/reopen, and cached offline diagnosis. Core C01–C08 camera and install-guide cases remain separate CI coverage; R03 is not added to GitHub CI or Husky.
 
 ## Physical-device checklist
 
-Use [PHYSICAL_RELIABILITY_CHECKLIST.md](PHYSICAL_RELIABILITY_CHECKLIST.md) as the fillable result sheet for every candidate, device, browser, and test date. Fill all expected/actual results; do not pre-mark passes. Record commit ID, deployment URL, input fingerprint/model hashes, app/model versions, test date, tester, device model, OS, browser/version, installed-PWA or browser mode, network condition, photo hash, evidence location, and pass/fail/blocker reason. [PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md](PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md) shows answer style only; it is not evidence.
+Use [PHYSICAL_RELIABILITY_CHECKLIST.md](PHYSICAL_RELIABILITY_CHECKLIST.md) as the fillable result sheet for every release build, device, browser, and test date. Fill all expected/actual results; do not pre-mark passes. Record commit ID, deployment URL, input fingerprint/model hashes, app/model versions, test date, tester, device model, OS, browser/version, installed-PWA or browser mode, network condition, photo hash, evidence location, and pass/fail/blocker reason. [PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md](PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md) shows answer style only; it is not evidence.
 
-Run core E2E and the full automated reliability suite (R01 and R03) for the candidate before recording physical-device results. If R01 and R03 run separately, preserve each report before the next run replaces it. For checklist statuses, an observed application crash or incorrect behavior is `Fail`; an observation prevented by missing access, inputs, or evidence is `Blocked`. A recorded failure takes precedence over a block when summarizing a case.
+Run core E2E and the full automated reliability suite (R01 and R03) for the release build before recording physical-device results. If R01 and R03 run separately, preserve each report before the next run replaces it. For checklist statuses, an observed application crash or incorrect behavior is `Fail`; an observation prevented by missing access, inputs, or evidence is `Blocked`. A recorded failure takes precedence over a block when summarizing a case.
 
 The supplied inference harness is served on this computer's loopback address only. Physical testers can use the checklist's delete-and-reupload procedure; running the harness on a phone would require a separately configured device-capable runner. The manual procedure records displayed label/acceptance and visible confidence, not automated R01's raw-score tolerance.
 
-| Case    | Steps                                                                                                                                                                                  | Expected result                                                                                                                                                         |
-| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| R01-M01 | Run repeatability on real-device hardware using a device-capable runner/harness; alternatively use a dedicated test browser/profile and clear only its test history between reuploads. | Each trial really invokes inference; record class/acceptance and score variation. Reopening a duplicate report is not evidence. Re-cache before any later offline case. |
-| R02-M01 | Load and scan online; wait for caching. Enable airplane mode and ensure Wi-Fi is also off. Close/reopen installed PWA, inspect history, then scan a different photo.                   | App opens, photos/history remain, new diagnosis saves offline. Record app/model version to rule out stale caches.                                                       |
-| R02-M02 | Reconnect and observe pending test scans and any test deletions.                                                                                                                       | Changes eventually synchronize without duplicate or resurrected records. Use a designated test backend/device identity and verify server state.                         |
-| R03-M01 | Use app for at least 30 minutes: scan, navigate, rotate, background/resume, switch network, and reopen.                                                                                | No crashes, lost records, persistent freeze, or stuck scanner. Record heat/slowdown and timing observations.                                                            |
-| R04-M01 | Take Photo, grant/deny permission, cancel picker, upload from gallery, Retake, rotate, and view each result.                                                                           | Correct picker and photo; controls/badges remain usable. Denial/cancellation does not create a scan or leave it stuck.                                                  |
-| R04-M02 | Repeat checklist on each available target phone/OS/browser combination.                                                                                                                | Report exactly what was tested; one emulated browser is not coverage of all phones.                                                                                     |
+| Case    | Steps                                                                                                                                                                                  | Expected result                                                                                                                                                                      |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| R01-M01 | Run repeatability on real-device hardware using a device-capable runner/harness; alternatively use a dedicated test browser/profile and clear only its test history between reuploads. | Each trial really invokes inference; record class/acceptance and score variation. Reopening a duplicate report is not evidence. Re-cache before any later offline case.              |
+| R02-M01 | Load and scan online; wait for caching. Enable airplane mode and ensure Wi-Fi is also off. Close/reopen installed PWA, inspect history, then scan a different photo.                   | App opens, photos/history remain, new diagnosis saves offline. Record app/model version to rule out stale caches.                                                                    |
+| R02-M02 | Reconnect and observe pending test scans and any test deletions.                                                                                                                       | Changes eventually synchronize without duplicate or resurrected records. Use a designated test backend/device identity and verify server state.                                      |
+| R03-M01 | Use app for at least 30 minutes: scan, navigate, rotate, background/resume, switch network, and reopen.                                                                                | No crashes, lost records, persistent freeze, or stuck scanner. Record heat/slowdown and timing observations.                                                                         |
+| R04-M01 | Open guided camera, grant/deny permission, capture/close, background/resume, upload from gallery, Retake, rotate, and view each result.                                                | Full-frame capture and usable controls; camera releases on Close/background. Denial/cancellation creates no scan. Camera Retake reopens live preview; upload Retake reopens gallery. |
+| R04-M02 | Repeat checklist on each available target phone/OS/browser combination.                                                                                                                | Report exactly what was tested; one emulated browser is not coverage of all phones.                                                                                                  |
+| R04-M03 | Follow iOS/Android installation instructions, scan the QR, dismiss/reopen the guide, rotate, and launch the installed PWA on each recorded browser/device.                             | Actual installation and launch are recorded separately from guide layout; controls stay reachable, and unsupported native installation retains browser-menu guidance.                |
 
 Manual result template:
 
 ```text
-Candidate / commit / deployment URL:
+Release build / commit / deployment URL:
 App version / model version / model hashes:
 Device / OS / browser / mode / network:
 Tester / date / photo hashes:
@@ -472,6 +580,6 @@ The [v4.1 background and lighting guide](../model-training/experiment/v4.1/TRIAL
 
 ## Release decision
 
-See [PWA versioning](../versions/PWA_VERSIONING.md#candidate-testing-and-promotion) for candidate labels, evidence, Vercel staging, and exact-commit promotion. Updating a version or pushing candidate documentation is not evidence that testing passed. CI, reliability, physical-device checks, and model evaluation each cover different release requirements.
+See [PWA versioning](../versions/PWA_VERSIONING.md#candidate-testing-and-promotion) for version labels, evidence, Vercel staging, and exact-commit promotion. Updating a version or pushing prepared-release documentation is not evidence that testing passed. CI, reliability, physical-device checks, and model evaluation each cover different release requirements.
 
 References: [Playwright CI](https://playwright.dev/docs/ci), [emulation](https://playwright.dev/docs/emulation), [service workers](https://playwright.dev/docs/service-workers), and [Vercel staged promotion](https://vercel.com/docs/deployments/promoting-a-deployment#staging-and-promoting-a-production-deployment).

@@ -11,7 +11,6 @@ interface TopHeaderProps {
   onLanguageChange: (lang: Language) => void;
   onInstall: () => void;
   onLogoClick: () => void;
-  onScanPress: () => void;
 }
 
 export const TopHeader = memo(function TopHeader({
@@ -22,7 +21,6 @@ export const TopHeader = memo(function TopHeader({
   onLanguageChange,
   onInstall,
   onLogoClick,
-  onScanPress,
 }: TopHeaderProps) {
   const t = translations[language];
 
@@ -48,7 +46,7 @@ export const TopHeader = memo(function TopHeader({
         {showInstallButton && (
           <button
             onClick={onInstall}
-            aria-label={t.installApp}
+            aria-label={t.downloadApp}
             className="md:hidden p-2 bg-[#277839] text-white rounded-xl shadow-sm cursor-pointer"
           >
             <Icon name="install" size={18} fill="#ffffff" />
@@ -66,15 +64,12 @@ export const TopHeader = memo(function TopHeader({
             >
               {t.navHome}
             </button>
-            {/* Scan is an action, not a tab: it opens the scan sheet, so it
-                deliberately has no active state. On mobile the same action is
-                the bottom-navigation FAB, which is why this nav is the only
-                place it appears on desktop. */}
+            {/* The desktop action opens the phone QR guide regardless of install support. */}
             <button
-              onClick={onScanPress}
+              onClick={onInstall}
               className="hover:text-[#277839] transition-colors cursor-pointer"
             >
-              {t.navScan}
+              {t.downloadApp}
             </button>
             <button
               onClick={() => onTabChange("about")}
@@ -84,27 +79,9 @@ export const TopHeader = memo(function TopHeader({
             >
               {t.navAbout}
             </button>
-            <button
-              onClick={() => onTabChange("history")}
-              className={`hover:text-[#277839] transition-colors cursor-pointer ${
-                activeTab === "history" ? "text-[#277839] font-bold" : ""
-              }`}
-            >
-              {t.navHistory}
-            </button>
           </nav>
 
           <div className="flex items-center gap-3">
-            {showInstallButton && (
-              <button
-                onClick={onInstall}
-                className="text-xs px-3.5 py-2 bg-[#277839] text-white font-bold rounded-xl hover:bg-[#1f622d] transition-colors shadow-sm cursor-pointer flex items-center gap-1.5"
-              >
-                <Icon name="install" size={16} fill="#ffffff" />
-                {t.installApp}
-              </button>
-            )}
-
             <button
               onClick={() => onLanguageChange(language === "en" ? "bis" : "en")}
               className="flex items-center gap-1.5 px-3.5 py-2 bg-white border border-[#1b3d20] rounded-xl text-xs font-bold text-[#1b3d20] hover:bg-[#f0f7eb] transition-all cursor-pointer shadow-xs"

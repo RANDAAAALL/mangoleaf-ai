@@ -19,6 +19,21 @@ There is no separate figures notebook. The suggested order is training Steps 1 t
 
 The seven output classes remain in this order: `anthracnose`, `bacterial_black_spot`, `bacterial_canker`, `healthy_fruit`, `healthy_leaf`, `mango_scab`, `sooty_mold`. Preserve the saved per-class approximate **70% training / 15% validation / 15% test** membership; do not draw a new split. The expected totals are **1,819 train, 391 validation, and 393 test** mango photos. Training verifies those identities and counts using the completed V4.1.1 run's saved split ZIP and records.
 
+**Recorded mango dataset split:** The completed V4.3.0 [input manifest](artifacts/training/input_manifest.json) records the following counts for the **2,603 unique mango photos after deduplication**. The percentages are approximate because whole photos are assigned per class; the table shows the saved membership rather than newly calculating a split.
+
+| Mango class          | Training (~70%) | Validation (~15%) | Test (~15%) | Total photos |
+| -------------------- | --------------: | ----------------: | ----------: | -----------: |
+| Anthracnose          |             339 |                73 |          73 |          485 |
+| Bacterial Black Spot |             207 |                44 |          45 |          296 |
+| Bacterial Canker     |             343 |                74 |          74 |          491 |
+| Healthy Fruit        |              77 |                16 |          17 |          110 |
+| Healthy Leaf         |             347 |                75 |          75 |          497 |
+| Mango Scab           |             157 |                34 |          34 |          225 |
+| Sooty Mold           |             349 |                75 |          75 |          499 |
+| **Total**            |       **1,819** |           **391** |     **393** |    **2,603** |
+
+These are distinct mango source photos, not augmentation presentations. Replacement scene photos and OOD photos belong to separate collections and are not included in this split.
+
 The single recipe includes the common V4.1.1 flip, rotation, zoom, shear, and global-brightness transforms. It also uses background replacement with probability **30% for an eligible training photo in each epoch**, and localized lighting with probability **30% during training**. The eligibility rule requires an approved white-background original and an approved foreground mask. Rejected or ineligible photos keep their original backgrounds. The effects may occur together; 30% does not mean 30% of all mango images become composites. Common transforms, scene replacement, and local lighting do not alter validation or test pixels. The architecture, class weighting, five head-training epochs, ten fine-tuning epochs, validation checkpoint selection, and validation-only temperature calibration follow V4.1.1.
 
 The intended scene pool is **62 original backgrounds + 138 supplied new backgrounds = 200 scene photos**. These are augmentation scenes, not 200 mango training photos. More scene photos do not increase the number of eligible foregrounds, change the 30% probability, or guarantee that every scene is used. The Colab inventory must establish actual readable counts, identities, duplicates, overlap, and approved counts; the repository alone cannot establish the contents of the Drive upload. Review suitability and use rights for both folders, including the previously noted airplane-view scene in the old pool. Record any exclusions or count difference rather than describing the intended 200 as an observed result.

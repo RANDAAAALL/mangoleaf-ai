@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "scope": "execution gate",
+  "returnCode": 0,
+  "findings": [],
+  "skipped": [],
+  "collectionError": null,
+  "installedPackageCount": 107,
+  "operationReviews": [],
+  "executionAllowed": true
+}

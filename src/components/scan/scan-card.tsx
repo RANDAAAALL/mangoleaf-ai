@@ -72,20 +72,21 @@ export const ScanCard = memo(function ScanCard({
         </label>
       )}
 
-      {/* One photo element serves the mobile row and desktop card. */}
+      {/* Reserve photo height from its width. Older Safari can mis-size an
+          aspect-ratio child inside a flex card after the viewport changes. */}
       <div
-        className={`relative bg-[#f0f5eb] overflow-hidden ${compact ? "h-14 w-14 shrink-0 rounded-xl md:aspect-[4/3] md:h-auto md:w-full md:rounded-none" : "aspect-[4/3]"}`}
+        className={`relative shrink-0 bg-[#f0f5eb] overflow-hidden ${compact ? "h-14 w-14 rounded-xl md:h-auto md:w-full md:rounded-none md:pt-[75%]" : "w-full pt-[75%]"}`}
       >
         {displayUrl ? (
           <img
             src={displayUrl}
             alt={scan.disease_name}
             loading="lazy"
-            className={`w-full h-full object-cover transition-transform duration-300 ${compact ? "md:group-hover:scale-103" : "group-hover:scale-103"}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ${compact ? "md:group-hover:scale-103" : "group-hover:scale-103"}`}
           />
         ) : (
           <div
-            className={`w-full h-full flex flex-col items-center justify-center text-center text-[#738a77] text-xs font-semibold bg-[#eef5e9] ${compact ? "p-1 md:p-4" : "p-4"}`}
+            className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center text-center text-[#738a77] text-xs font-semibold bg-[#eef5e9] ${compact ? "p-1 md:p-4" : "p-4"}`}
           >
             <Icon
               name="gallery"

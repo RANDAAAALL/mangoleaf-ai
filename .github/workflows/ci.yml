@@ -71,9 +71,10 @@ jobs:
       - name: Verify exported PWA and model files
         run: bun run verify:export
       - name: Install browser dependencies
-        run: bunx --no-install playwright install --with-deps chromium firefox webkit
-      # Core browser cases use an isolated export and local mock backend.
-      - name: Test desktop, mobile, and offline scan workflows
+        run: node node_modules/@playwright/test/cli.js install --with-deps chromium firefox webkit
+      # Core cases include guided camera and installation, using the local mock backend.
+      # R01/R03 stay explicit local runs; CI never starts the 30-minute session.
+      - name: Test camera, installation, desktop, mobile, and offline workflows
         run: bun run test:e2e
       - name: Save browser reports and failure traces
         if: ${{ !cancelled() }}

@@ -2,6 +2,8 @@
 
 This guide covers local development and the external services required by the current application.
 
+The current prepared app release is `0.5.5`, with model `v4.3.0`. Version labels come from repository files; no additional environment variable or Supabase schema change is required for the guided-camera and installation-guide release.
+
 ## Prerequisites
 
 - [Bun](https://bun.sh/) available on the command line (CI uses 1.4.0)
@@ -212,7 +214,7 @@ Tooling regression tests cover secret/file history checks and export assets. The
 Use Node.js 24 alongside Bun. Install the pinned browser binaries once after `bun install`:
 
 ```bash
-bunx --no-install playwright install chromium firefox webkit
+node node_modules/@playwright/test/cli.js install chromium firefox webkit
 bun run test:e2e
 bun run test:report
 ```
@@ -221,13 +223,15 @@ On Linux, include `--with-deps` when installing browsers. `test:e2e` prepares a 
 
 Run `bun run test:reliability` explicitly for 30 real predictions per supplied photo and a 30-minute mixed-use session. It defaults to one emulated Chromium phone; select another supported project explicitly to repeat measurements. These long checks are not in Husky or per-push CI. Reports are under ignored `playwright-report/` and `test-results/`; preserve formal evidence before rerunning. See [TESTING.md](docs/testing/TESTING.md) for case IDs, report-only rejection diagnostics, fixture labels, limitations, and the manual physical-device checklist.
 
+The core CI suite includes guided-camera and installation-guide cases. R03 now alternates gallery uploads and synthetic guided-camera captures, including photo review, Retake, stream cleanup, and actual inference. Updating this protocol does not execute it; the October 9 alignment task did not run R03. Physical camera/lens behavior, permission recovery, OS background behavior, and cached offline capture still require recorded phone checks. For manual camera use, open HTTPS or localhost; an ordinary HTTP LAN address cannot provide the live camera API.
+
 For why `.test-app/`, `.tools/`, `playwright-report/`, and `test-results/` appear locally, what creates them, and what happens if you remove them, see [local generated folders](docs/testing/TESTING.md#local-generated-folders).
 
 ## Staged releases on Vercel
 
 To review each `master` deployment before it serves users, open Vercel **Settings > Environments > Production > Branch Tracking**, keep `master`, and disable **Auto-assign Custom Production Domains**. Confirm the dashboard setting; these repository changes do not configure Vercel. Builds remain Production/Staged until manually promoted. The previous Current deployment keeps serving the production domain.
 
-Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Candidate version labels and documentation may be pushed before approval, but must not claim an unreleased version has shipped. Follow the [candidate release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion) and [v0.5.4 prepared release validation](docs/testing/TESTING.md#v054-release-validation-october-7-2026). Earlier dated results remain evidence for their original builds. The [October 7 release-status confirmation](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) records the previously published versions and the reported live `v0.5.3` baseline.
+Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Prepared version labels and documentation may be pushed before approval, but must not claim an unpublished version has shipped. Follow the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion) and [v0.5.5 prepared release validation](docs/testing/TESTING.md#v055-release-validation-october-10-2026). Earlier dated results remain evidence for their original builds. The [October 7 release-status confirmation](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) preserves its earlier publication and live-version report.
 
 ## Threshold-fitting notebook inputs
 
@@ -245,7 +249,7 @@ For the completed **V4.2.0 two-model experiment**, follow the [leaf/fruit Colab 
 
 ## Common setup issues
 
-App `0.5.4` uses the adopted [V4.3.0 Combined model](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md), with display label `v4.3.0` and saved gates 0.70 / 0 / 0.42. Keep its five fitted files together in root `public/model/`. Adoption changes the configuration's release identity and status; the graph, shards, class order, preprocessing, temperature, and numerical gates remain those of the completed Combined export. The [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) records the original and adopted identities/hashes. No retraining is needed to run these files. Restart the development server after a swap and reload the page to replace the in-memory model. For production-preview testing, rebuild and wait for the new worker to activate, then reload. The exact pre-adoption state is preserved in ignored `.tools/release-backups/v0.4.9-model-v4.3.0-20261002/before/`; earlier V3 and V4.1.1 rollback bundles remain. Promotion of `0.5.4` is separate from the already reported live `0.5.3` baseline.
+App `0.5.5` uses the adopted [V4.3.0 Combined model](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md), with display label `v4.3.0` and saved gates 0.70 / 0 / 0.42. Keep its five fitted files together in root `public/model/`. Adoption changes the configuration's release identity and status; the graph, shards, class order, preprocessing, temperature, and numerical gates remain those of the completed Combined export. The [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) records the original and adopted identities/hashes. No retraining is needed to run these files. Restart the development server after a swap and reload the page to replace the in-memory model. For production-preview testing, rebuild and wait for the new worker to activate, then reload. The exact pre-adoption state is preserved in ignored `.tools/release-backups/v0.4.9-model-v4.3.0-20261002/before/`; earlier V3 and V4.1.1 rollback bundles remain. See the [v0.5.5 release record](docs/versions/PWA_VERSIONING.md#v055-guided-camera-and-installation-prepared-release-october-10-2026) for publication and promotion status.
 
 - If a push reports a missing scanner, run `bun run security:install`. If the hook cannot find Bun, make Bun available to the terminal or Git GUI's PATH and restart that application.
 - For a shallow clone, run `git fetch --unshallow` before scanning. If hooks were not registered during dependency installation, run `bun run prepare` and confirm `git config --get core.hooksPath` prints `.husky/_`.

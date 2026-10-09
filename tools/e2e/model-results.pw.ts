@@ -99,10 +99,21 @@ for (const photo of photos) {
       contentType: "image/png",
     });
     await closeDetails(page);
-    await expect(
-      page.getByRole("img", { name: prediction.diseaseName, exact: true }),
-    ).toBeVisible();
+    const savedPhoto = page.getByRole("img", {
+      name: prediction.diseaseName,
+      exact: true,
+    });
+    if (page.viewportSize()!.width >= 768) {
+      // Desktop Home directs users to install; saved photos remain in History.
+      await expect(savedPhoto).toHaveCount(0);
+      await expect(
+        page.getByRole("heading", { name: "Install Now", exact: true }),
+      ).toBeVisible();
+    } else {
+      await expect(savedPhoto).toBeVisible();
+    }
     await nav(page, "History");
+    await expect(savedPhoto).toBeVisible();
     await historyDetails(page).click();
     await expectResult(page, prediction.diseaseName, prediction.confidence);
   });

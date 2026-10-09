@@ -1,0 +1,363 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-09T11:02:15.816208+00:00",
+  "kind": "derived archive review, not an original Colab receipt",
+  "experimentVersion": "v4.4.0",
+  "completedRunReceiptVerification": [
+    {
+      "run": "v4-4-0-training-20261009T005929Z-28e79277",
+      "receipt": "training_complete.json",
+      "sha256": "fd2adc7262697fa0064c67475a5160b53affa7dddf57816d4ebc1fb93d86a1a0",
+      "verifiedArtifacts": 296,
+      "result": "all original artifact hashes and sizes match"
+    },
+    {
+      "run": "v4-4-0-thresholds-20261009T024417Z-dc2cf99d",
+      "receipt": "threshold_fitting_complete.json",
+      "sha256": "8b16abaad78a4bff57590d4fa2dfffc4e8a9902306695b795e87c644820edf23",
+      "verifiedArtifacts": 41,
+      "result": "all original artifact hashes and sizes match"
+    }
+  ],
+  "dataset": {
+    "rawCount": 5098,
+    "uniqueByteHashes": 2649,
+    "retainedDecodedIdentities": 2649,
+    "exactCopiesRemoved": 2449,
+    "similarityPairs": 36,
+    "relatedGroups": 2613,
+    "splitCounts": {
+      "train": 1854,
+      "val": 398,
+      "test": 397
+    },
+    "perClassSplitCounts": {
+      "train": {
+        "anthracnose": 346,
+        "bacterial_black_spot": 209,
+        "bacterial_canker": 350,
+        "healthy_fruit": 82,
+        "healthy_leaf": 352,
+        "mango_scab": 161,
+        "sooty_mold": 354
+      },
+      "val": {
+        "anthracnose": 74,
+        "bacterial_black_spot": 45,
+        "bacterial_canker": 75,
+        "healthy_fruit": 18,
+        "healthy_leaf": 75,
+        "mango_scab": 35,
+        "sooty_mold": 76
+      },
+      "test": {
+        "anthracnose": 74,
+        "bacterial_black_spot": 45,
+        "bacterial_canker": 75,
+        "healthy_fruit": 18,
+        "healthy_leaf": 75,
+        "mango_scab": 34,
+        "sooty_mold": 76
+      }
+    },
+    "splitGroupOverlap": false
+  },
+  "augmentationReview": {
+    "collectedScenes": 225,
+    "approvedScenes": 225,
+    "eligibleTrainingMasks": 167,
+    "approvedTrainingMasks": 19,
+    "approvedTrainingMasksByClass": {
+      "anthracnose": 1,
+      "bacterial_canker": 5,
+      "healthy_leaf": 4,
+      "sooty_mold": 9
+    },
+    "approvedDisplayMasks": 2,
+    "illustrationDecisions": {
+      "skip": 7
+    }
+  },
+  "mangoTest": {
+    "total": 397,
+    "rawCorrect": 380,
+    "accepted": 374,
+    "correctAccepted": 366,
+    "wrongAccepted": 8,
+    "rejected": 23,
+    "rawAccuracy": 0.9571788413098237,
+    "acceptedOnlyAccuracy": 0.9786096256684492,
+    "correctAcceptedFractionOfAllPhotos": 0.9219143576826196,
+    "rawConfusionMatrix": [
+      [
+        74,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        36,
+        0,
+        0,
+        0,
+        9,
+        0
+      ],
+      [
+        0,
+        0,
+        75,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        18,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        74,
+        0,
+        0
+      ],
+      [
+        0,
+        6,
+        0,
+        0,
+        0,
+        28,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        75
+      ]
+    ],
+    "rejectionAwareConfusionMatrix": [
+      [
+        74,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        29,
+        0,
+        0,
+        0,
+        6,
+        0,
+        10
+      ],
+      [
+        0,
+        0,
+        75,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        18,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        74,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        21,
+        0,
+        13
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        75,
+        0
+      ]
+    ],
+    "rejectedRawCorrect": 14,
+    "rejectedRawWrong": 9,
+    "matricesAndPerClassMetricsMatchOriginalEvaluation": true
+  },
+  "oodReviewLimits": {
+    "reviewedPhotos": 200,
+    "blankCaptureGroups": 200,
+    "allSourceNotesAreGenericMixedOrigin": true,
+    "recordedRoleGroupOverlap": false,
+    "subjectIndependenceEstablished": false,
+    "externalFieldAccuracyEstablished": false
+  },
+  "historicalProviderAudit": {
+    "status": "unresolved",
+    "scope": "provider host report; not a worker approval",
+    "findingPackages": 20,
+    "hostPackagesModified": false,
+    "boundary": "Package isolation does not patch or sandbox the Colab host.",
+    "fullProviderAuditCopied": false,
+    "fullProviderAuditRemainsInOriginalSource": true
+  },
+  "comparisonWithV430": {
+    "wholeTestV430": {
+      "total": 393,
+      "rawCorrect": 386,
+      "accepted": 376,
+      "correctAccepted": 373,
+      "wrongAccepted": 3,
+      "rejected": 17,
+      "rawAccuracy": 0.9821882951653944,
+      "acceptedOnlyAccuracy": 0.9920212765957447,
+      "correctAcceptedFractionOfAllPhotos": 0.9491094147582697
+    },
+    "wholeTestV440": {
+      "total": 397,
+      "rawCorrect": 380,
+      "accepted": 374,
+      "correctAccepted": 366,
+      "wrongAccepted": 8,
+      "rejected": 23,
+      "rawAccuracy": 0.9571788413098237,
+      "acceptedOnlyAccuracy": 0.9786096256684492,
+      "correctAcceptedFractionOfAllPhotos": 0.9219143576826196
+    },
+    "sharedMangoTestPhotos": 59,
+    "sharedTestV430": {
+      "total": 59,
+      "rawCorrect": 58,
+      "accepted": 57,
+      "correctAccepted": 56,
+      "wrongAccepted": 1,
+      "rejected": 2,
+      "rawAccuracy": 0.9830508474576272,
+      "acceptedOnlyAccuracy": 0.9824561403508771,
+      "correctAcceptedFractionOfAllPhotos": 0.9491525423728814
+    },
+    "sharedTestV440": {
+      "total": 59,
+      "rawCorrect": 58,
+      "accepted": 58,
+      "correctAccepted": 57,
+      "wrongAccepted": 1,
+      "rejected": 1,
+      "rawAccuracy": 0.9830508474576272,
+      "acceptedOnlyAccuracy": 0.9827586206896551,
+      "correctAcceptedFractionOfAllPhotos": 0.9661016949152542
+    },
+    "sharedOodReportingPhotos": 60,
+    "sharedOodFalseAcceptsV430": 18,
+    "sharedOodFalseAcceptsV440": 20,
+    "wholeOodV430": {
+      "total": 116,
+      "falseAccepted": 29
+    },
+    "wholeOodV440": {
+      "total": 100,
+      "falseAccepted": 31
+    },
+    "mangoIdentitiesV430": 2603,
+    "mangoIdentitiesV440": 2649,
+    "sharedMangoIdentities": 2603,
+    "addedMangoIdentitiesV440": 46,
+    "limit": "Fresh split membership and OOD role reassignment prevent direct whole-set ranking; shared subsets are small and reused study photos."
+  },
+  "derivedSourceIdentities": [
+    {
+      "path": "training/v4-4-0-training-20261009T005929Z-28e79277/input_manifest.json",
+      "location": "original downloaded v4.4.0 evidence",
+      "sha256": "b5ea363ce2d1c85516e08202285e1a594a103a8a83ff2ec9480dec4a5a3873f8",
+      "bytes": 1718747
+    },
+    {
+      "path": "training/v4-4-0-training-20261009T005929Z-28e79277/duplicate_audit.json",
+      "location": "original downloaded v4.4.0 evidence",
+      "sha256": "b1ff82c381f32759e4b6cb227daae49033aa4581e6d356b6dd05b41c047bc4e1",
+      "bytes": 2629505
+    },
+    {
+      "path": "training/v4-4-0-training-20261009T005929Z-28e79277/runtime_preflight/host-review.json",
+      "location": "original downloaded v4.4.0 evidence",
+      "sha256": "b8e88f9aae46f3c0935cb320160f27a587d336ae351ea1964973908561f66456",
+      "bytes": 468794
+    },
+    {
+      "path": "docs/model-training/non-experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/selected_mango_test_predictions.csv",
+      "location": "repository historical evidence",
+      "sha256": "f2e68e138fc2953ff975ed24cb6082103bfead1bdd89ff7f2083c2a2157bcccd",
+      "bytes": 273328
+    },
+    {
+      "path": "docs/model-training/non-experiment/v4.3.0/artifacts/training/source_records/input_manifest.json",
+      "location": "repository historical evidence",
+      "sha256": "3d103e66cba4edcadc1aae97a1e49aaa655e4f1cd1d3de6531d148de4b913631",
+      "bytes": 1354287
+    },
+    {
+      "path": "docs/model-training/non-experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/selected_old_ood_report_predictions.csv",
+      "location": "repository historical evidence",
+      "sha256": "536944dd080c2fd91408f78aee212ac9d74ccffb773b844538d3c115e91e6cf8",
+      "bytes": 35825
+    },
+    {
+      "path": "docs/model-training/non-experiment/v4.3.0/artifacts/threshold_fitting/arms/combined/selected_new_ood_report_predictions.csv",
+      "location": "repository historical evidence",
+      "sha256": "de09b9a9d8937e06069557c4720c63bcb388d1498941313a92a3ae19311f0605",
+      "bytes": 14078
+    }
+  ],
+  "checksNotRun": [
+    "new training",
+    "new model inference",
+    "complete browser/Keras probability parity",
+    "physical-phone reliability",
+    "field accuracy study"
+  ]
+}

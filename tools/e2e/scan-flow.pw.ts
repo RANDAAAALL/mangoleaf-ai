@@ -19,6 +19,7 @@ import {
   releaseGuidelineReads,
   waitForMockScanPull,
   recentHeading,
+  homeHeading,
   historyDetails,
 } from "./support/fixtures";
 import { CLASSES, modelVersion } from "../../src/lib/constants";
@@ -26,24 +27,44 @@ import { translations } from "../../src/lib/translations";
 
 test("F01–F05: empty states, scan sheet, picker cancellation and retake", async ({
   page,
-  isMobile,
 }) => {
   await controlledModel(page, scoresFor("Healthy Fruit"));
   await openApp(page);
-  await expect(
-    page.getByText("No Scan History Yet", { exact: true }),
-  ).toBeVisible();
+  if (page.viewportSize()!.width < 768)
+    await expect(
+      page.getByText("No Scan History Yet", { exact: true }),
+    ).toBeVisible();
+  else await expect(recentHeading(page)).toHaveCount(0);
   await nav(page, "History");
   await expect(
     page.getByText("No Scan History Yet", { exact: true }),
   ).toBeVisible();
+  const originalViewport = page.viewportSize()!;
+  if (originalViewport.width >= 768) {
+    await expect(
+      page.getByRole("button", { name: "Scan", exact: true }),
+    ).toHaveCount(0);
+    await expect(
+      page.getByRole("button", { name: /^Upload Photo/ }),
+    ).toHaveCount(0);
+    await nav(page, translations.en.downloadApp);
+    await expect(
+      page.getByRole("dialog", {
+        name: translations.en.installGuideDesktopTitle,
+        exact: true,
+      }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Close", exact: true }).click();
+    // Continue photo-picker checks at a permitted viewport without bypassing UI.
+    await page.setViewportSize({ ...originalViewport, width: 767 });
+  }
   await nav(page, "Scan");
   await expect(
     page.getByRole("heading", { name: translations.en.scanSheetTitle }),
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: /^Take Photo/ }).filter({ visible: true }),
-  ).toHaveCount(isMobile ? 1 : 0);
+  ).toHaveCount(1);
   await page.getByRole("button", { name: "Cancel", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: translations.en.scanSheetTitle }),
@@ -64,20 +85,15 @@ test("F01–F05: empty states, scan sheet, picker cancellation and retake", asyn
     await expect(page.getByRole("dialog")).toHaveCount(0);
     expect(await records(page)).toHaveLength(0);
   }
-  await choosePhoto(page, photos[0].file, isMobile);
-  if (isMobile)
-    await expect(page.locator("#scan-camera-input")).toHaveAttribute(
-      "capture",
-      "environment",
-    );
+  // Guided-camera cases cover live capture and Retake; this checks uploads.
+  await choosePhoto(page, photos[0].file);
   const retaking = page.waitForEvent("filechooser");
   await page.getByRole("button", { name: "Retake", exact: true }).click();
   const chooser = await retaking;
-  expect(await chooser.element().getAttribute("id")).toBe(
-    isMobile ? "scan-camera-input" : "scan-gallery-input",
-  );
+  expect(await chooser.element().getAttribute("id")).toBe("scan-gallery-input");
   await chooser.setFiles(photoPath(photos[1].file));
   expect(await records(page)).toHaveLength(0);
+  await page.setViewportSize(originalViewport);
   await page.getByRole("button", { name: "Run AI Diagnosis" }).click();
   await expectResult(page, "Healthy Fruit", 0.95);
 });
@@ -110,6 +126,11 @@ for (const label of CLASSES) {
       contentType: "image/png",
     });
     await closeDetails(page);
+    const originalViewport = page.viewportSize()!;
+    if (originalViewport.width >= 768) {
+      await expect(recentHeading(page)).toHaveCount(0);
+      await page.setViewportSize({ ...originalViewport, width: 767 });
+    }
     await expect(
       page.getByRole("button", { name: "Details", exact: true }),
     ).toHaveCount(1);
@@ -123,12 +144,17 @@ for (const label of CLASSES) {
     await expect(
       page.getByRole("heading", { name: translations.en.scanHistoryTitle }),
     ).toBeVisible();
+    await page.setViewportSize(originalViewport);
     await historyDetails(page).click();
     await expectResult(page, label, 0.95);
     await page.reload();
+    await expect(homeHeading(page)).toBeVisible();
+    if (originalViewport.width >= 768)
+      await page.setViewportSize({ ...originalViewport, width: 767 });
     await expect(recentHeading(page)).toBeVisible();
     await page.getByRole("button", { name: "Details", exact: true }).click();
     await expectResult(page, label, 0.95);
+    await page.setViewportSize(originalViewport);
     expect((await records(page))[0].id).toBe(saved[0].id);
   });
 }
@@ -160,7 +186,7 @@ test("F07/F13/F14: rejection diagnostics and duplicate review preserve the saved
   await closeDetails(page);
   const review = page.getByRole("dialog");
   for (const dismiss of ["cancel", "close", "retake"] as const) {
-    await choosePhoto(page, photo.file, false, true);
+    await choosePhoto(page, photo.file, true);
     await expect(
       review.getByRole("button", { name: "Run AI Diagnosis" }),
     ).toHaveCount(0);
@@ -184,7 +210,7 @@ test("F07/F13/F14: rejection diagnostics and duplicate review preserve the saved
     expect(await records(page)).toHaveLength(1);
     expect(rejectionLogs).toHaveLength(1);
   }
-  await choosePhoto(page, photo.file, false, true);
+  await choosePhoto(page, photo.file, true);
   await review
     .getByRole("button", { name: "View saved result", exact: true })
     .click();
@@ -270,7 +296,8 @@ test("F15: accepted results load saved guidance, download advice and reopen it o
   await advicePull;
   await context.setOffline(true);
   await closeDetails(page);
-  await page.getByRole("button", { name: "Details", exact: true }).click();
+  await nav(page, "History");
+  await historyDetails(page).click();
   await expect(
     modal.getByText(advice.guidelines_en, { exact: true }),
   ).toBeVisible();
@@ -455,7 +482,8 @@ test("F16: uncertain results keep photo guidance across pending, empty and downl
   await advicePull;
   await context.setOffline(true);
   await closeDetails(page);
-  await page.getByRole("button", { name: "Details", exact: true }).click();
+  await nav(page, "History");
+  await historyDetails(page).click();
   await checkReminder();
   await expect(
     modal.getByText(advice.guidelines_en, { exact: true }),

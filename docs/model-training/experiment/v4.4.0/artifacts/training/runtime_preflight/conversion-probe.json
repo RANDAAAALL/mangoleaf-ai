@@ -1,0 +1,19 @@
+{
+  "trainingPython": "/content/mangoleaf-v440-runtime/20261008T233922Z-dd9e1866/training/bin/python",
+  "trainingPrefix": "/content/mangoleaf-v440-runtime/20261008T233922Z-dd9e1866/training",
+  "trainingVersions": {
+    "tensorflow": "2.19.0",
+    "keras": "3.15.1",
+    "numpy": "2.1.3",
+    "Pillow": "12.3.0",
+    "scipy": "1.16.3"
+  },
+  "gpuCount": 1,
+  "gpuOperationDevice": "/job:localhost/replica:0/task:0/device:GPU:0",
+  "weights": "random initialization; weights=None",
+  "trainingEpochs": 0,
+  "savedModelMaximumAbsoluteDifference": 0.0,
+  "tfjsConversionCompleted": true,
+  "browserProbabilityParity": "not measured by this preflight",
+  "accuracy": "not measured by this preflight"
+}

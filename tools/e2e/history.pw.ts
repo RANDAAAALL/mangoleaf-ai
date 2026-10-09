@@ -12,6 +12,7 @@ import {
   mockGuestToken,
   nav,
   recentHeading,
+  homeHeading,
   records,
   requestScanDeletion,
   savedPhotoSize,
@@ -37,15 +38,12 @@ test("F10: visible thumbnails stay stable through new scans, sync metadata and o
   await expect
     .poll(async () => (await records(page))[0]?._status)
     .toBe("synced");
-  await expect(
-    page.getByRole("heading", { name: "Recent Scan", exact: true }),
-  ).toBeVisible();
-  const desktop = page.viewportSize()!.width >= 768;
-  // Phone Home mounts one card. History keeps both photos mounted for this proof.
-  if (!desktop) await nav(page, "History");
-  const heading = desktop
-    ? recentHeading(page)
-    : page.getByRole("heading", { name: "Scan history", exact: true });
+  // History keeps both photos mounted. Wider Home now shows the Download card.
+  await nav(page, "History");
+  const heading = page.getByRole("heading", {
+    name: "Scan history",
+    exact: true,
+  });
   await heading.scrollIntoViewIfNeeded();
   const thumbnails = page.locator('img[loading="lazy"]');
   await expect(thumbnails).toHaveCount(1);
@@ -174,8 +172,8 @@ test("F10/F11: responsive previews, search/filter, selection, deletion and page 
 }) => {
   test.setTimeout(180_000);
   const desktop = page.viewportSize()!.width >= 768;
-  const homeCount = desktop ? 4 : 1;
-  const pageSize = desktop ? 6 : 5;
+  const homeCount = 1;
+  const pageSize = desktop ? 6 : 4;
   const lastPageCount = 7 - pageSize;
   await controlledModel(page, scoresFor("Healthy Fruit"));
   await openApp(page);
@@ -183,12 +181,20 @@ test("F10/F11: responsive previews, search/filter, selection, deletion and page 
     await runScan(page, photo.file);
     await closeDetails(page);
   }
+  const originalViewport = page.viewportSize()!;
+  if (desktop) {
+    await expect(recentHeading(page)).toHaveCount(0);
+    await expect(
+      page.getByRole("button", { name: "Details", exact: true }),
+    ).toHaveCount(0);
+    await page.setViewportSize({ ...originalViewport, width: 767 });
+  }
   await expect(
     page.getByRole("button", { name: "Details", exact: true }),
   ).toHaveCount(homeCount);
   await expect(
     page.getByRole("heading", {
-      name: desktop ? "Recent Scans" : "Recent Scan",
+      name: "Recent Scan",
       exact: true,
     }),
   ).toBeVisible();
@@ -243,6 +249,7 @@ test("F10/F11: responsive previews, search/filter, selection, deletion and page 
     await closeDetails(page);
   }
   await nav(page, "History");
+  await page.setViewportSize(originalViewport);
   await expect(historyDetails(page)).toHaveCount(pageSize);
   await expect(page.getByText("Page 1 of 2", { exact: true })).toBeVisible();
   await expect(
@@ -407,7 +414,7 @@ test("F10/F11: responsive previews, search/filter, selection, deletion and page 
   await expect(selectedScans).toHaveCount(0);
   await expect.poll(savedState).toEqual(beforeCancellation);
 
-  // Delete the whole last page: one desktop scan or two phone scans.
+  // Delete the whole last page: one desktop scan or three phone scans.
   await page.getByRole("button", { name: "Select", exact: true }).click();
   await expect(selectedScans).toHaveCount(lastPageCount);
   for (const checkbox of await selectedScans.all()) await checkbox.check();
@@ -426,7 +433,7 @@ test("F10/F11: responsive previews, search/filter, selection, deletion and page 
   await expect(historyDetails(page)).toHaveCount(pageSize);
   await expect(page.getByRole("button", { name: "Next page" })).toHaveCount(0);
   await page.reload();
-  await expect(recentHeading(page)).toBeVisible();
+  await expect(homeHeading(page)).toBeVisible();
   await nav(page, "History");
   await expect(historyDetails(page)).toHaveCount(pageSize);
 });

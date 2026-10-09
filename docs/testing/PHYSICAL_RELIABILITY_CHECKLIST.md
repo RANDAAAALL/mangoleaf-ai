@@ -1,6 +1,6 @@
 # MangoLeaf AI physical reliability checklist
 
-Use one completed copy for each candidate, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data.
+Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current prepared app release is `0.5.5`, with model `v4.3.0`; fill results only after observing the recorded build.
 
 Do not mark a case as passed before every required observation is recorded. Use `Pass`, `Fail`, or `Blocked`; explain every failure or block.
 
@@ -10,9 +10,11 @@ Use `Pass` when all required observations meet their expected behavior, `Fail` w
 
 Need an answer-format example? See [PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md](PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md). Its values are fictional and must never be submitted as physical-test evidence.
 
-## Candidate and tester record
+<a id="candidate-and-tester-record"></a>
 
-- [ ] Candidate commit ID:
+## Release and tester record
+
+- [ ] Release commit ID:
 - [ ] Deployment URL tested (HTTPS):
 - [ ] Application version shown in footer:
 - [ ] Model version shown in footer:
@@ -30,13 +32,13 @@ Need an answer-format example? See [PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md](PH
 
 ## Before testing
 
-- [ ] Candidate deployment is exact commit recorded above.
+- [ ] Tested deployment is exact commit recorded above.
 - [ ] Deployment uses HTTPS. Do not use a LAN `http://` URL for service-worker testing.
 - [ ] Footer shows recorded application and model versions.
 - [ ] Device has enough storage and battery for 30-minute session.
 - [ ] Use a designated test browser profile or device. Do not mix research evidence with personal scan history.
-- [ ] Run core automated checks for same candidate: `bun run test:e2e`.
-- [ ] Run R01 and R03 automated checks for same candidate: `bun run test:reliability`.
+- [ ] Run core automated checks for same release build: `bun run test:e2e`.
+- [ ] Run R01 and R03 automated checks for same release build: `bun run test:reliability`.
 - [ ] Record automated report location:
 
 ## R01-M01: repeated prediction consistency
@@ -83,7 +85,7 @@ Use two different photos. Photo B must not have been scanned on this device befo
 
 ### Online preparation
 
-- [ ] Open candidate while online.
+- [ ] Open recorded release build while online.
 - [ ] Wait for app and model to finish initial loading.
 - [ ] Scan Photo A:
 - [ ] Photo A result appears in Recent Scans and History, including its image.
@@ -119,30 +121,52 @@ End time:
 
 Use real scans. To avoid duplicate shortcuts, choose different photos or delete each completed test record before its next use. Include Details, History, navigation, rotation, background/resume, and network changes.
 
-| Time   | Action completed                                    | Result / observation | Crash, freeze, lost record, or stuck scan? | Heat / battery / slowdown notes | Pass / Fail / Blocked |
-| ------ | --------------------------------------------------- | -------------------- | ------------------------------------------ | ------------------------------- | --------------------- |
-| 0 min  | Open app; scan; open Details and History            |                      |                                            |                                 |                       |
-| 10 min | Scan; delete test record; rotate device; reopen app |                      |                                            |                                 |                       |
-| 20 min | Scan; background then resume; change network state  |                      |                                            |                                 |                       |
-| 30 min | Scan; verify History; reopen app                    |                      |                                            |                                 |                       |
+**October 9, 2026 protocol update:** Mix actual guided-camera capture and gallery uploads. Synthetic-camera automation does not satisfy these observations. The protocol was aligned with the new camera; no full or shortened R03 session was run for that update. Record results only after this physical session occurs.
+
+| Time   | Action completed                                              | Result / observation | Crash, freeze, lost record, or stuck scan? | Heat / battery / slowdown notes | Pass / Fail / Blocked |
+| ------ | ------------------------------------------------------------- | -------------------- | ------------------------------------------ | ------------------------------- | --------------------- |
+| 0 min  | Open app; guided capture; review/Retake; Run; Details/History |                      |                                            |                                 |                       |
+| 10 min | Gallery scan; delete test record; rotate; reopen app          |                      |                                            |                                 |                       |
+| 20 min | Camera background/reopen; capture; cached offline diagnosis   |                      |                                            |                                 |                       |
+| 30 min | Capture/gallery scan; verify History; reconnect/reopen        |                      |                                            |                                 |                       |
 
 - [ ] Session lasted at least 30 minutes.
 - [ ] No crash or browser-tab reload occurred unexpectedly.
 - [ ] No scan stayed permanently in progress.
 - [ ] No confirmed local record or photo was lost.
 - [ ] No navigation control became unusable.
+- [ ] Both actual guided-camera capture and gallery upload occurred; every counted diagnosis required an explicit Run action and fresh inference.
+- [ ] Camera Retake discarded review and reopened live preview without saving or predicting; gallery Retake reopened its picker.
+- [ ] Camera streams stopped after Capture, Close, and backgrounding; record OS camera-indicator behavior and observed delays.
+- [ ] Permission denial left the app usable; permission recovery and retry were observed, with no invented pass if browser settings prevented the check.
+- [ ] After app/model caching, capture and diagnosis worked offline; reconnection preserved expected History and queued synchronization.
+- [ ] Camera-start/capture delays, device rotation, heat, battery, and interruptions were recorded as observations rather than inferred from desktop tests.
 - [ ] R03 result: Pass / Fail / Blocked — reason and evidence location:
 
-## R04-M01: native camera, gallery, and layout
+<a id="r04-m01-native-camera-gallery-and-layout"></a>
+
+## R04-M01: guided camera, gallery, and layout
+
+Take Photo now opens a live browser camera below 768px; it does not launch the old native-camera picker. Complete these checks on both the recorded iOS and Android environments, including browser-tab and installed-PWA modes where required. Desktop browser emulation and synthetic camera streams do not satisfy physical observations.
 
 ### Camera and picker
 
-- [ ] Tap Take Photo; native camera opens.
-- [ ] Grant camera permission; capture photo; correct preview appears.
-- [ ] Deny camera permission; app remains usable and does not create a scan.
-- [ ] Cancel native camera or picker; app does not create a scan.
+- [ ] Use HTTPS; below 768px, tap Take Photo and grant browser permission. Live preview appears and Capture becomes available only after a frame is ready.
+- [ ] Record camera/lens selected and delivered frame dimensions; the rear-camera preference does not guarantee a specific lens or 1280×720 output.
+- [ ] Verify the centered guide stays inside the displayed image in portrait and landscape; letterboxing does not place the guide outside the image.
+- [ ] Capture includes the full camera frame, including areas outside the guide; the guide itself is not burned into the photo.
+- [ ] Captured photo opens review; no scan is saved and no diagnosis starts until Run AI Diagnosis is pressed.
+- [ ] Deny camera permission; meaningful message appears, Close works, Upload Photo remains available, and no scan is created.
+- [ ] Allow camera permission again through browser settings and retry; capture can recover without duplicate streams.
+- [ ] Close before permission completes; any late camera stream stops without opening review or creating a scan.
+- [ ] Close an active preview; the OS camera-use indicator clears. Record the observed delay.
+- [ ] Background the app while preview is open; camera stops. Return to the paused message, then explicitly reopen; no automatic stream restart occurs.
+- [ ] If interruption can be reproduced, disconnect or end camera access; Capture disables and retry recovers. Otherwise record this observation as blocked.
+- [ ] If live capture is unsupported, the translated message and Close work; choose Upload Photo from the scan sheet. No native-camera fallback is promised.
+- [ ] Close camera or cancel the upload picker; no scan is created and the initiating control regains usable focus.
 - [ ] Upload from gallery; selected photo preview matches source.
-- [ ] Tap Retake; same camera or gallery source opens again.
+- [ ] Camera Retake discards review and opens a fresh live preview; upload Retake reopens the gallery picker. No stale preview or saved record appears after cancellation.
+- [ ] After initial caching, repeat camera capture and diagnosis in airplane mode; local result and photo remain available. Cloud synchronization is checked separately in R02-M02.
 
 ### Result and layout
 
@@ -152,6 +176,9 @@ Use real scans. To avoid duplicate shortcuts, choose different photos or delete 
 - [ ] History search, filter, pagination, Details, and delete work.
 - [ ] Portrait layout works.
 - [ ] Landscape layout works.
+- [ ] Camera Close and Capture remain reachable around iOS/Android safe areas, browser controls, and the installed PWA's viewport.
+- [ ] English/Bisaya framing, permission/error, paused, Capture, and retry text display correctly.
+- [ ] With available assistive technology or keyboard, dialog title/status can be read, focus stays inside camera, and Escape closes it. Record unavailable access as blocked.
 - [ ] Long disease badge stays inside image.
 - [ ] Details close control remains reachable.
 - [ ] R04-M01 result: Pass / Fail / Blocked — reason and evidence location:
@@ -166,11 +193,26 @@ Complete one row for every physical environment tested. Do not claim untested co
 |        |              |                   |            |     |     |     |     |                   |       |
 |        |              |                   |            |     |     |     |     |                   |       |
 
+## R04-M03: installation guide and installed launch
+
+Record actual installation outcomes for the same release build and browser. An emulated phone user-agent or controlled `appinstalled` event is not physical installation evidence.
+
+- [ ] Below 768px, open Install in English and Bisaya; the detected platform's instructions are appropriate for the recorded browser/device.
+- [ ] On iOS Safari, follow Share, Add to Home Screen, and Add; record actual menu wording and whether launch opens in installed-PWA mode.
+- [ ] On Android, use the offered native install action or documented browser-menu fallback; record the browser's available controls and installation outcome.
+- [ ] If native installation is unavailable, browser-menu instructions and Continue in Browser remain usable; record the limitation without claiming an installation pass.
+- [ ] Where a native install prompt is available, dismiss it and verify the app does not immediately repeat it. A further prompt requires a newly offered browser event.
+- [ ] On a wide display, both Android/iOS instructions and the QR are visible; scan the QR with a physical phone and record that the public `?install=1` page opens its guide without an automatic native prompt.
+- [ ] Close, Escape where available, and Continue in Browser dismiss the guide; background controls and scrolling work afterward.
+- [ ] In portrait, landscape, and installed-PWA mode, Close remains reachable around browser controls and safe areas; guide contents can scroll without losing that control.
+- [ ] Launch the installed app, verify the footer's app/model versions, and record whether installed status is recognized in that launch context.
+- [ ] R04-M03 result: Pass / Fail / Blocked — reason and evidence location:
+
 ## Final decision
 
 - [ ] All required cases have a recorded result.
 - [ ] All failures and blocks have issue links or written reasons.
-- [ ] Automated reports, physical evidence, commit ID, deployment URL, and versions match same candidate.
-- [ ] Final decision: Candidate may proceed to release decision / Candidate blocked from release — reason and evidence location:
+- [ ] Automated reports, physical evidence, commit ID, deployment URL, and versions match same release build.
+- [ ] Final decision: Release may proceed to publication / Release blocked from publication — reason and evidence location:
 
-See [TESTING.md](TESTING.md) for automated scope and limitations. See [PWA versioning](../versions/PWA_VERSIONING.md#candidate-testing-and-promotion) for candidate promotion and tagging order.
+See [TESTING.md](TESTING.md) for automated scope and limitations. See [PWA versioning](../versions/PWA_VERSIONING.md#candidate-testing-and-promotion) for promotion and tagging order.

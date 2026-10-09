@@ -1,0 +1,5 @@
+{
+  "sha256": "9b1831ba354d11ade78a7152217e8029efd96042ccfa7dc13c478c2a31698dd8",
+  "source": "ImageNet backbone plus freshly initialized head",
+  "seed": 42
+}

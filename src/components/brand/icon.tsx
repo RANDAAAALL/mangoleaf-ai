@@ -22,7 +22,13 @@ export type IconName =
   | "chevron-down"
   | "search"
   | "filter"
-  | "trash";
+  | "trash"
+  | "android"
+  | "phone"
+  | "share-ios"
+  | "home-add"
+  | "browser"
+  | "menu";
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   name: IconName;
@@ -55,6 +61,42 @@ const FA_PATHS: Record<string, string> = {
  * hardcodes either.
  */
 const STROKE_24_SHAPES: Partial<Record<IconName, React.ReactNode>> = {
+  android: (
+    <>
+      <path d="m7 4-2-3m12 3 2-3M4 11a8 8 0 0116 0v1H4zM6 12v7h12v-7M8 19v3m8-3v3M3 14v4m18-4v4" />
+      <path d="M8 8h.01M16 8h.01" />
+    </>
+  ),
+  phone: (
+    <>
+      <rect x="6" y="2" width="12" height="20" rx="3" />
+      <path d="M10 5h4m-3 14h2" />
+    </>
+  ),
+  "share-ios": (
+    <>
+      <path d="M8 8H5v14h14V8h-3M12 15V2m-4 4 4-4 4 4" />
+    </>
+  ),
+  "home-add": (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="3" />
+      <path d="M12 7v10M7 12h10" />
+    </>
+  ),
+  browser: (
+    <>
+      <rect x="2" y="3" width="20" height="18" rx="2" />
+      <path d="M2 8h20M6 5.5h.01M9 5.5h.01M6 13h12M6 17h8" />
+    </>
+  ),
+  menu: (
+    <>
+      <circle cx="12" cy="5" r="1" />
+      <circle cx="12" cy="12" r="1" />
+      <circle cx="12" cy="19" r="1" />
+    </>
+  ),
   close: <path d="M6 6l12 12M18 6L6 18" />,
   "chevron-right": <path d="m9 5 7 7-7 7" />,
   "chevron-down": <path d="m7 10 5 5 5-5" />,

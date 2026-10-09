@@ -1,0 +1,46 @@
+{
+  "modelVersion": "model-v4.4.0-candidate",
+  "experimentVersion": "v4.4.0",
+  "status": "experimental candidate; not adopted or deployed",
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "inputSize": [
+    224,
+    224
+  ],
+  "inputRange": [
+    0,
+    255
+  ],
+  "inputDtype": "float32",
+  "preprocessing": "TensorFlow RGB decode; Pillow EXIF RGB for WebP; bilinear 224x224 without antialias; float32 0-255; MobileNet rescales internally",
+  "temperature": 1.0101912885132576,
+  "temperatureFoldedIntoWeights": true,
+  "quantized": false,
+  "browserParityStatus": "pending actual browser comparison before adoption",
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": 0.0,
+    "entropyThreshold": 0.3
+  },
+  "selectionSha256": "c0ae3ecef5ab0f289525b5a1eaea6b182778b0c7f503611f0bc31dbb2fae1d03",
+  "evaluationSha256": "87c77fdeddf54015ac6db9d121c35557016f04ab3b1fb16f5871f40fc818ae59",
+  "trainingCompleteSha256": "fd2adc7262697fa0064c67475a5160b53affa7dddf57816d4ebc1fb93d86a1a0",
+  "browserPredictionParityMeasured": false
+}

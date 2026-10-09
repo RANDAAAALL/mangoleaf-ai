@@ -114,8 +114,21 @@ export const AboutTab = memo(function AboutTab({
             onClick={onScanPress}
             className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-extrabold text-[#1b5e28] shadow-sm transition-colors hover:bg-[#eef8eb] active:scale-98"
           >
-            <Icon name="scan" size={18} strokeWidth={2.5} />
-            {t.aboutScanLeafCta}
+            <Icon
+              name="scan"
+              size={18}
+              strokeWidth={2.5}
+              className="md:hidden"
+              aria-hidden="true"
+            />
+            <Icon
+              name="install"
+              size={18}
+              className="hidden md:block"
+              aria-hidden="true"
+            />
+            <span className="md:hidden">{t.aboutScanLeafCta}</span>
+            <span className="hidden md:inline">{t.downloadApp}</span>
           </button>
         </div>
       </section>
@@ -283,8 +296,21 @@ export const AboutTab = memo(function AboutTab({
             onClick={onScanPress}
             className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#277839] px-5 py-2.5 text-sm font-extrabold text-white shadow-sm transition-colors hover:bg-[#1f622d] active:scale-98"
           >
-            <Icon name="scan" size={18} strokeWidth={2.5} />
-            {t.aboutScanLeafCta}
+            <Icon
+              name="scan"
+              size={18}
+              strokeWidth={2.5}
+              className="md:hidden"
+              aria-hidden="true"
+            />
+            <Icon
+              name="install"
+              size={18}
+              className="hidden md:block"
+              aria-hidden="true"
+            />
+            <span className="md:hidden">{t.aboutScanLeafCta}</span>
+            <span className="hidden md:inline">{t.downloadApp}</span>
           </button>
         </div>
       </section>

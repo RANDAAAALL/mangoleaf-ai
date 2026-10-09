@@ -1,0 +1,979 @@
+{
+  "experimentVersion": "v4.4.0",
+  "status": "experimental; not adopted or deployed",
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments (1)/v4.4.0/training/v4-4-0-training-20261009T005929Z-28e79277",
+  "trainingCompleteSha256": "fd2adc7262697fa0064c67475a5160b53affa7dddf57816d4ebc1fb93d86a1a0",
+  "selectionSha256": "c0ae3ecef5ab0f289525b5a1eaea6b182778b0c7f503611f0bc31dbb2fae1d03",
+  "evaluationInputsSha256": "4bd66304186e4a6f3bd94706c73835cc42b2fe4378ad6c636c670721efadab97",
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": 0.0,
+    "entropyThreshold": 0.3
+  },
+  "mangoValidation": {
+    "total": 398,
+    "accepted": 380,
+    "rejected": 18,
+    "retention": 0.9547738693467337,
+    "rawAccuracy": 0.9673366834170855,
+    "correctAcceptedFractionOfAllPhotos": 0.9422110552763819,
+    "acceptedOnlyAccuracy": 0.9868421052631579,
+    "rawPerClassMetrics": [
+      {
+        "className": "anthracnose",
+        "precision": 0.9866666666666667,
+        "recall": 1.0,
+        "f1Score": 0.9932885906040269,
+        "support": 74,
+        "truePositive": 74,
+        "falsePositive": 1,
+        "falseNegative": 0
+      },
+      {
+        "className": "bacterial_black_spot",
+        "precision": 0.9230769230769231,
+        "recall": 0.8,
+        "f1Score": 0.8571428571428571,
+        "support": 45,
+        "truePositive": 36,
+        "falsePositive": 3,
+        "falseNegative": 9
+      },
+      {
+        "className": "bacterial_canker",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1Score": 1.0,
+        "support": 75,
+        "truePositive": 75,
+        "falsePositive": 0,
+        "falseNegative": 0
+      },
+      {
+        "className": "healthy_fruit",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1Score": 1.0,
+        "support": 18,
+        "truePositive": 18,
+        "falsePositive": 0,
+        "falseNegative": 0
+      },
+      {
+        "className": "healthy_leaf",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1Score": 1.0,
+        "support": 75,
+        "truePositive": 75,
+        "falsePositive": 0,
+        "falseNegative": 0
+      },
+      {
+        "className": "mango_scab",
+        "precision": 0.7804878048780488,
+        "recall": 0.9142857142857143,
+        "f1Score": 0.8421052631578947,
+        "support": 35,
+        "truePositive": 32,
+        "falsePositive": 9,
+        "falseNegative": 3
+      },
+      {
+        "className": "sooty_mold",
+        "precision": 1.0,
+        "recall": 0.9868421052631579,
+        "f1Score": 0.9933774834437086,
+        "support": 76,
+        "truePositive": 75,
+        "falsePositive": 0,
+        "falseNegative": 1
+      }
+    ],
+    "rejectionAwarePerClassMetrics": [
+      {
+        "className": "anthracnose",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1Score": 1.0,
+        "support": 74,
+        "truePositive": 74,
+        "falsePositive": 0,
+        "falseNegative": 0
+      },
+      {
+        "className": "bacterial_black_spot",
+        "precision": 0.9428571428571428,
+        "recall": 0.7333333333333333,
+        "f1Score": 0.8250000000000001,
+        "support": 45,
+        "truePositive": 33,
+        "falsePositive": 2,
+        "falseNegative": 12
+      },
+      {
+        "className": "bacterial_canker",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1Score": 1.0,
+        "support": 75,
+        "truePositive": 75,
+        "falsePositive": 0,
+        "falseNegative": 0
+      },
+      {
+        "className": "healthy_fruit",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1Score": 1.0,
+        "support": 18,
+        "truePositive": 18,
+        "falsePositive": 0,
+        "falseNegative": 0
+      },
+      {
+        "className": "healthy_leaf",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1Score": 1.0,
+        "support": 75,
+        "truePositive": 75,
+        "falsePositive": 0,
+        "falseNegative": 0
+      },
+      {
+        "className": "mango_scab",
+        "precision": 0.8928571428571429,
+        "recall": 0.7142857142857143,
+        "f1Score": 0.7936507936507937,
+        "support": 35,
+        "truePositive": 25,
+        "falsePositive": 3,
+        "falseNegative": 10
+      },
+      {
+        "className": "sooty_mold",
+        "precision": 1.0,
+        "recall": 0.9868421052631579,
+        "f1Score": 0.9933774834437086,
+        "support": 76,
+        "truePositive": 75,
+        "falsePositive": 0,
+        "falseNegative": 1
+      }
+    ],
+    "rawConfusionMatrix": [
+      [
+        74,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        36,
+        0,
+        0,
+        0,
+        9,
+        0
+      ],
+      [
+        0,
+        0,
+        75,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        18,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        75,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        0,
+        0,
+        32,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        75
+      ]
+    ],
+    "rejectionAwareConfusionMatrix": [
+      [
+        74,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        33,
+        0,
+        0,
+        0,
+        3,
+        0,
+        9
+      ],
+      [
+        0,
+        0,
+        75,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        18,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        75,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        0,
+        0,
+        0,
+        25,
+        0,
+        8
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        75,
+        1
+      ]
+    ],
+    "matrixRowLabels": [
+      "anthracnose",
+      "bacterial_black_spot",
+      "bacterial_canker",
+      "healthy_fruit",
+      "healthy_leaf",
+      "mango_scab",
+      "sooty_mold"
+    ],
+    "rejectionMatrixColumnLabels": [
+      "anthracnose",
+      "bacterial_black_spot",
+      "bacterial_canker",
+      "healthy_fruit",
+      "healthy_leaf",
+      "mango_scab",
+      "sooty_mold",
+      "rejected"
+    ],
+    "denominatorNote": "All true mango photos remain in support. Rejected true mango photos count as missed class predictions."
+  },
+  "oodTuning": {
+    "total": 100,
+    "falseAccepted": 23,
+    "rejected": 77,
+    "falseAcceptRate": 0.23,
+    "rejectionRate": 0.77
+  },
+  "mangoTest": {
+    "total": 397,
+    "accepted": 374,
+    "rejected": 23,
+    "retention": 0.9420654911838791,
+    "rawAccuracy": 0.9571788413098237,
+    "correctAcceptedFractionOfAllPhotos": 0.9219143576826196,
+    "acceptedOnlyAccuracy": 0.9786096256684492,
+    "rawPerClassMetrics": [
+      {
+        "className": "anthracnose",
+        "precision": 0.9866666666666667,
+        "recall": 1.0,
+        "f1Score": 0.9932885906040269,
+        "support": 74,
+        "truePositive": 74,
+        "falsePositive": 1,
+        "falseNegative": 0
+      },
+      {
+        "className": "bacterial_black_spot",
+        "precision": 0.8571428571428571,
+        "recall": 0.8,
+        "f1Score": 0.8275862068965518,
+        "support": 45,
+        "truePositive": 36,
+        "falsePositive": 6,
+        "falseNegative": 9
+      },
+      {
+        "className": "bacterial_canker",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1Score": 1.0,
+        "support": 75,
+        "truePositive": 75,
+        "falsePositive": 0,
+        "falseNegative": 0
+      },
+      {
+        "className": "healthy_fruit",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1Score": 1.0,
+        "support": 18,
+        "truePositive": 18,
+        "falsePositive": 0,
+        "falseNegative": 0
+      },
+      {
+        "className": "healthy_leaf",
+        "precision": 1.0,
+        "recall": 0.9866666666666667,
+        "f1Score": 0.9932885906040269,
+        "support": 75,
+        "truePositive": 74,
+        "falsePositive": 0,
+        "falseNegative": 1
+      },
+      {
+        "className": "mango_scab",
+        "precision": 0.7368421052631579,
+        "recall": 0.8235294117647058,
+        "f1Score": 0.7777777777777778,
+        "support": 34,
+        "truePositive": 28,
+        "falsePositive": 10,
+        "falseNegative": 6
+      },
+      {
+        "className": "sooty_mold",
+        "precision": 1.0,
+        "recall": 0.9868421052631579,
+        "f1Score": 0.9933774834437086,
+        "support": 76,
+        "truePositive": 75,
+        "falsePositive": 0,
+        "falseNegative": 1
+      }
+    ],
+    "rejectionAwarePerClassMetrics": [
+      {
+        "className": "anthracnose",
+        "precision": 0.9866666666666667,
+        "recall": 1.0,
+        "f1Score": 0.9932885906040269,
+        "support": 74,
+        "truePositive": 74,
+        "falsePositive": 1,
+        "falseNegative": 0
+      },
+      {
+        "className": "bacterial_black_spot",
+        "precision": 1.0,
+        "recall": 0.6444444444444445,
+        "f1Score": 0.7837837837837839,
+        "support": 45,
+        "truePositive": 29,
+        "falsePositive": 0,
+        "falseNegative": 16
+      },
+      {
+        "className": "bacterial_canker",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1Score": 1.0,
+        "support": 75,
+        "truePositive": 75,
+        "falsePositive": 0,
+        "falseNegative": 0
+      },
+      {
+        "className": "healthy_fruit",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1Score": 1.0,
+        "support": 18,
+        "truePositive": 18,
+        "falsePositive": 0,
+        "falseNegative": 0
+      },
+      {
+        "className": "healthy_leaf",
+        "precision": 1.0,
+        "recall": 0.9866666666666667,
+        "f1Score": 0.9932885906040269,
+        "support": 75,
+        "truePositive": 74,
+        "falsePositive": 0,
+        "falseNegative": 1
+      },
+      {
+        "className": "mango_scab",
+        "precision": 0.75,
+        "recall": 0.6176470588235294,
+        "f1Score": 0.6774193548387097,
+        "support": 34,
+        "truePositive": 21,
+        "falsePositive": 7,
+        "falseNegative": 13
+      },
+      {
+        "className": "sooty_mold",
+        "precision": 1.0,
+        "recall": 0.9868421052631579,
+        "f1Score": 0.9933774834437086,
+        "support": 76,
+        "truePositive": 75,
+        "falsePositive": 0,
+        "falseNegative": 1
+      }
+    ],
+    "rawConfusionMatrix": [
+      [
+        74,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        36,
+        0,
+        0,
+        0,
+        9,
+        0
+      ],
+      [
+        0,
+        0,
+        75,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        18,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        74,
+        0,
+        0
+      ],
+      [
+        0,
+        6,
+        0,
+        0,
+        0,
+        28,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        75
+      ]
+    ],
+    "rejectionAwareConfusionMatrix": [
+      [
+        74,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        29,
+        0,
+        0,
+        0,
+        6,
+        0,
+        10
+      ],
+      [
+        0,
+        0,
+        75,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        18,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        74,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        21,
+        0,
+        13
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        75,
+        0
+      ]
+    ],
+    "matrixRowLabels": [
+      "anthracnose",
+      "bacterial_black_spot",
+      "bacterial_canker",
+      "healthy_fruit",
+      "healthy_leaf",
+      "mango_scab",
+      "sooty_mold"
+    ],
+    "rejectionMatrixColumnLabels": [
+      "anthracnose",
+      "bacterial_black_spot",
+      "bacterial_canker",
+      "healthy_fruit",
+      "healthy_leaf",
+      "mango_scab",
+      "sooty_mold",
+      "rejected"
+    ],
+    "denominatorNote": "All true mango photos remain in support. Rejected true mango photos count as missed class predictions."
+  },
+  "oodReport": {
+    "total": 100,
+    "falseAccepted": 31,
+    "rejected": 69,
+    "falseAcceptRate": 0.31,
+    "rejectionRate": 0.69
+  },
+  "confidenceOnlyReference": {
+    "mangoTest": {
+      "total": 397,
+      "accepted": 380,
+      "rejected": 17,
+      "retention": 0.9571788413098237,
+      "rawAccuracy": 0.9571788413098237,
+      "correctAcceptedFractionOfAllPhotos": 0.929471032745592,
+      "acceptedOnlyAccuracy": 0.9710526315789474,
+      "rawPerClassMetrics": [
+        {
+          "className": "anthracnose",
+          "precision": 0.9866666666666667,
+          "recall": 1.0,
+          "f1Score": 0.9932885906040269,
+          "support": 74,
+          "truePositive": 74,
+          "falsePositive": 1,
+          "falseNegative": 0
+        },
+        {
+          "className": "bacterial_black_spot",
+          "precision": 0.8571428571428571,
+          "recall": 0.8,
+          "f1Score": 0.8275862068965518,
+          "support": 45,
+          "truePositive": 36,
+          "falsePositive": 6,
+          "falseNegative": 9
+        },
+        {
+          "className": "bacterial_canker",
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1Score": 1.0,
+          "support": 75,
+          "truePositive": 75,
+          "falsePositive": 0,
+          "falseNegative": 0
+        },
+        {
+          "className": "healthy_fruit",
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1Score": 1.0,
+          "support": 18,
+          "truePositive": 18,
+          "falsePositive": 0,
+          "falseNegative": 0
+        },
+        {
+          "className": "healthy_leaf",
+          "precision": 1.0,
+          "recall": 0.9866666666666667,
+          "f1Score": 0.9932885906040269,
+          "support": 75,
+          "truePositive": 74,
+          "falsePositive": 0,
+          "falseNegative": 1
+        },
+        {
+          "className": "mango_scab",
+          "precision": 0.7368421052631579,
+          "recall": 0.8235294117647058,
+          "f1Score": 0.7777777777777778,
+          "support": 34,
+          "truePositive": 28,
+          "falsePositive": 10,
+          "falseNegative": 6
+        },
+        {
+          "className": "sooty_mold",
+          "precision": 1.0,
+          "recall": 0.9868421052631579,
+          "f1Score": 0.9933774834437086,
+          "support": 76,
+          "truePositive": 75,
+          "falsePositive": 0,
+          "falseNegative": 1
+        }
+      ],
+      "rejectionAwarePerClassMetrics": [
+        {
+          "className": "anthracnose",
+          "precision": 0.9866666666666667,
+          "recall": 1.0,
+          "f1Score": 0.9932885906040269,
+          "support": 74,
+          "truePositive": 74,
+          "falsePositive": 1,
+          "falseNegative": 0
+        },
+        {
+          "className": "bacterial_black_spot",
+          "precision": 1.0,
+          "recall": 0.6444444444444445,
+          "f1Score": 0.7837837837837839,
+          "support": 45,
+          "truePositive": 29,
+          "falsePositive": 0,
+          "falseNegative": 16
+        },
+        {
+          "className": "bacterial_canker",
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1Score": 1.0,
+          "support": 75,
+          "truePositive": 75,
+          "falsePositive": 0,
+          "falseNegative": 0
+        },
+        {
+          "className": "healthy_fruit",
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1Score": 1.0,
+          "support": 18,
+          "truePositive": 18,
+          "falsePositive": 0,
+          "falseNegative": 0
+        },
+        {
+          "className": "healthy_leaf",
+          "precision": 1.0,
+          "recall": 0.9866666666666667,
+          "f1Score": 0.9932885906040269,
+          "support": 75,
+          "truePositive": 74,
+          "falsePositive": 0,
+          "falseNegative": 1
+        },
+        {
+          "className": "mango_scab",
+          "precision": 0.7058823529411765,
+          "recall": 0.7058823529411765,
+          "f1Score": 0.7058823529411765,
+          "support": 34,
+          "truePositive": 24,
+          "falsePositive": 10,
+          "falseNegative": 10
+        },
+        {
+          "className": "sooty_mold",
+          "precision": 1.0,
+          "recall": 0.9868421052631579,
+          "f1Score": 0.9933774834437086,
+          "support": 76,
+          "truePositive": 75,
+          "falsePositive": 0,
+          "falseNegative": 1
+        }
+      ],
+      "rawConfusionMatrix": [
+        [
+          74,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          36,
+          0,
+          0,
+          0,
+          9,
+          0
+        ],
+        [
+          0,
+          0,
+          75,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          18,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          74,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0,
+          0,
+          0,
+          28,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          75
+        ]
+      ],
+      "rejectionAwareConfusionMatrix": [
+        [
+          74,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          29,
+          0,
+          0,
+          0,
+          9,
+          0,
+          7
+        ],
+        [
+          0,
+          0,
+          75,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          18,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          74,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          24,
+          0,
+          10
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          75,
+          0
+        ]
+      ],
+      "matrixRowLabels": [
+        "anthracnose",
+        "bacterial_black_spot",
+        "bacterial_canker",
+        "healthy_fruit",
+        "healthy_leaf",
+        "mango_scab",
+        "sooty_mold"
+      ],
+      "rejectionMatrixColumnLabels": [
+        "anthracnose",
+        "bacterial_black_spot",
+        "bacterial_canker",
+        "healthy_fruit",
+        "healthy_leaf",
+        "mango_scab",
+        "sooty_mold",
+        "rejected"
+      ],
+      "denominatorNote": "All true mango photos remain in support. Rejected true mango photos count as missed class predictions."
+    },
+    "oodReport": {
+      "total": 100,
+      "falseAccepted": 46,
+      "rejected": 54,
+      "falseAcceptRate": 0.46,
+      "rejectionRate": 0.54
+    }
+  },
+  "reuseStatus": "Reused study photos. Report-only assignment in this run; not pristine external evidence.",
+  "supportedDatasetStatus": "Fresh grouped split of existing study mango photographs; not independently collected field accuracy.",
+  "browserPredictionParityMeasured": false,
+  "finishedAt": "2026-10-09T03:09:25.730960+00:00"
+}
