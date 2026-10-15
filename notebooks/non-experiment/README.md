@@ -1,6 +1,6 @@
 # Current and older model notebooks
 
-**Current repository model: V4.5.0.** Prepared app `0.6.0` uses seven classes and confidence-only rejection at 0.70; margin and entropy are disabled. See the [current model report](../../docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) for preserved results and adoption identity. Production release validation and deployment remain pending.
+**Current repository model: V4.5.0.** Prepared app `0.6.1` uses seven classes and confidence-only rejection at 0.70; margin and entropy are disabled. See the [current model report](../../docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) for preserved results and adoption identity. Production release validation and deployment remain pending.
 
 This folder contains the current adopted model and older models kept as evidence. A version being here does not mean the app still uses it.
 

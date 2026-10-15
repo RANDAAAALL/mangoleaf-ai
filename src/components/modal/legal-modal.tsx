@@ -77,12 +77,14 @@ export const LegalModal = memo(function LegalModal({
             </>
           ) : (
             <>
+              <p className="font-semibold">{t.termsUpdated}</p>
               <p className="font-semibold">{t.termsIntro}</p>
               <p>
                 <strong>{t.termsScopeTitle}</strong> {t.termsScopeText}
               </p>
               <p>
-                <strong>{t.termsConfidenceTitle}</strong> {t.diagnosticScope}
+                <strong>{t.termsConfidenceTitle}</strong>{" "}
+                {t.termsConfidenceText}
               </p>
               <p>
                 <strong>{t.termsGuidanceTitle}</strong> {t.termsGuidanceText}

@@ -158,6 +158,20 @@ for (const label of CLASSES) {
   });
 }
 
+test("F07: a rounded 70% badge preserves a below-threshold uncertain result", async ({
+  page,
+}) => {
+  // Display rounding must not turn a rejected raw score into an accepted class.
+  await controlledModel(page, [0.6999, 0.1001, 0.08, 0.04, 0.03, 0.025, 0.025]);
+  await openApp(page);
+  const photo = photos.find((item) => item.expectedKind === "ood")!;
+  await runScan(page, photo.file);
+  await expectResult(page, uncertain, 0.7);
+  const [saved] = await records(page);
+  expect(saved.disease_name).toBe(uncertain);
+  expect(saved.confidence).toBe(0.7);
+});
+
 test("F07/F13/F14: rejection diagnostics and duplicate review preserve the saved result", async ({
   page,
 }, info) => {

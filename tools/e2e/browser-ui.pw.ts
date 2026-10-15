@@ -101,6 +101,31 @@ test("R04: About and footer show the current app and model versions in both lang
       .replace("{appVersion}", `v${packageInfo.version}`)
       .replace("{modelVersion}", modelVersion);
     await expect(page.getByText(versions, { exact: true })).toBeVisible();
+    for (const type of ["privacy", "terms"] as const) {
+      await page
+        .getByRole("button", {
+          name: type === "privacy" ? t.privacyPolicy : t.termsOfService,
+          exact: true,
+        })
+        .click();
+      const legal = page.getByRole("dialog");
+      await expect(legal).toBeVisible();
+      if (type === "privacy") {
+        // Legal copy must still describe local History rather than guest sync.
+        await expect(legal).toContainText(t.privacySections[1].text);
+        await expect(legal).toContainText(t.privacySections[3].text);
+      } else {
+        await expect(legal).toContainText(t.termsUpdated);
+        await expect(legal).toContainText(t.termsConfidenceText);
+        await expect(legal).not.toContainText(
+          /Republic Act No\. 8293|DOST-PHREB/,
+        );
+      }
+      await legal
+        .getByRole("button", { name: t.legalCloseBtn, exact: true })
+        .click();
+      await expect(legal).toHaveCount(0);
+    }
   }
 });
 

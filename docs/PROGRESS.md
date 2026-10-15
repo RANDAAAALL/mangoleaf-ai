@@ -1048,6 +1048,22 @@ This file tracks the project work from the first committed implementation throug
   - Standalone native probes preserved plain/canvas/reconstructed Blobs in Chromium and Firefox and reproduced the same error in Windows WebKit without application code. [Testing record](testing/TESTING.md#v060-ci-browser-follow-up-october-16-2026) distinguishes local evidence from the pending corrected Linux CI run. App/model versions and application code remain unchanged; no full or shortened R03 session is run.
   - G07 passed six repeated Chromium checks. Final R04, with a native PNG probe matching its layout photo, passed nine repeated Chromium/Firefox checks and recorded three exact-error WebKit skips. Formatting/typecheck/lint/build and all 10 export checks passed; model/application input hashes remain unchanged. Focused reports and test-source hashes are under ignored `.tools/ci-v0.6.0-20261016/`. The normal build regenerated `public/sw.js`; no commit, tag, push, or corrected remote CI result is claimed by this repair.
 
+- **V5.0.0 inventory compatibility for preserved MPO camera photos**
+  - Traced the reported Step 4 `Unsupported image encoding.` failure to a helper allowlist that rejected JPEG-named MPO files. The downloaded parent contains 11 mango and eight approved OE MPOs; their file identities and primary-image RGB, dimensions, and pHash identities match the original manifests.
+  - Updated the decoder to read the primary MPO picture while retaining file/pixel limits, rejecting ordinary animations, and identifying paths in format/resource errors. Updated both clean V5 notebook helper fingerprints and documented how to resume with a fresh attempt. Original inputs, V4.5.0 evidence, the application, and confidence-only rejection remain unchanged.
+  - Reproduced the failure before the fix; all 31 focused notebook/safeguard tests pass afterward. The Colab inventory retry and subsequent training remain pending; no new model result or full/shortened R03 session is claimed.
+
+- **V5.0.0 inventory pixel-bound follow-up**
+  - Investigated the later Step 4 failure on a single-picture 9,216 by 6,912 JPEG. Fourteen approved OE originals exceed the helper's previous 40-megapixel cap; the largest has 63,700,992 pixels. Aligned the bounded decoder with those frozen inputs using a 64-megapixel cap, keeping the 32 MiB file limit and animation checks.
+  - Separated pixel-bound errors from animation errors, added coverage for all frozen manifest dimensions/file sizes, updated both notebook helper fingerprints, and documented another fresh-attempt retry. No original image conversion, source-data change, model-input change, application change, or rejection-rule change is part of this fix.
+  - All 32 focused safeguard tests pass. Fully decoded and checked all 4,660 retained parent photos locally against their frozen file/RGB/dimensions/pHash identities with no mismatches; the separate 500 OOD records fit the bounds by saved metadata and still require current Drive-byte verification. Colab retry/training remains pending. No full or shortened R03 session was run.
+
+- **PWA v0.6.1 uncertain-score and Terms preparation**
+  - Prepared the requested confidence badge for Uncertain / Unrecognized scan details, updated shared browser expectations, and added a raw 0.6999 regression proving that a rounded 70% display does not change rejection.
+  - Reviewed Privacy Policy against local-only History and retained its already aligned content. Updated English/Bisaya Terms with score/rounding meaning, a revision date, current advice availability, and responsible-use wording instead of a blanket compliance claim.
+  - Set the candidate app label to 0.6.1 and aligned current version references and release guidance. Model V4.5.0, its assets and 0.70 confidence-only rule remain the same. Validation is recorded in [TESTING.md](testing/TESTING.md#v061-uncertain-result-scores-october-16-2026); commit, tag, CI, and deployment remain separate. No full or shortened R03 session is part of this task.
+  - Formatting/typecheck/lint/build and all 10 export checks passed. All 34 focused browser cases passed with no skips or failures, including the raw-score rounding boundary and both legal dialogs in both languages. Active/exported model hashes remain unchanged; 437 local documentation links passed. The validation record preserves the exact source fingerprint, and the physical checklist remains available for the maintainer's later device results.
+
 ## Current Notebook Decision
 
 Keep every training notebook, and keep each trial's clean template separate from its completed run. Historical and adopted trial notebooks live in `notebooks/non-experiment/v{n}/`; this includes the current V4.5.0 model and older models. Candidate workflows and completed experimental evidence live in `notebooks/experiment/v{n}/`. The latter are experimental candidates, not shipped or deployed. V4.5.0's notebooks moved into the adopted/historical group on October 16, 2026, with original cells and outputs intact. The original trial folders were moved from the repository root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle; they were added on September 8, 2026. The filenames below are unchanged. Earlier dated entries retain the repository paths that described those events; the current locations are listed here and in the notebook index.
@@ -1079,7 +1095,7 @@ Keep every training notebook, and keep each trial's clean template separate from
 
 ## Current Adopted Model (v4.5.0)
 
-Prepared app `0.6.0` uses the adopted V4.5.0 TensorFlow.js Graph Model in repository source. Output order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold. Both healthy outputs use the `healthy` guideline row. The selected rejection rule is confidence >= `0.70`; margin and entropy are disabled. Temperature `0.8002093839891747` is folded into the saved weights. V4.3.0 remains available as a verified rollback model.
+Prepared app `0.6.1` uses the adopted V4.5.0 TensorFlow.js Graph Model in repository source. Output order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold. Both healthy outputs use the `healthy` guideline row. The selected rejection rule is confidence >= `0.70`; margin and entropy are disabled. Temperature `0.8002093839891747` is folded into the saved weights. V4.3.0 remains available as a verified rollback model.
 
 The [V4.5.0 report](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) records the confidence-only reference: 377/397 correct accepted mango diagnoses (94.96% of all inputs), 12 wrong accepted, eight rejected, and nine false accepts among 250 OOD reporting photos. These saved-study measurements do not establish independent field accuracy. The [testing guide](testing/TESTING.md) records browser checks separately from scientific evaluation and production promotion.
 
@@ -1107,7 +1123,7 @@ The original test/report data also influenced later threshold and precision-band
 
 ## Next Work
 
-For `0.6.0`, follow the [prepared release record](versions/PWA_VERSIONING.md#v060-local-history-and-v450-prepared-release-october-16-2026). Record versioned local results and applicable camera/device evidence, complete final-commit CI and approved production promotion, then publish the app tag and Release for the exact tested commit. The last reported live version remains `0.5.3` until a later deployment is confirmed.
+For `0.6.1`, follow the [prepared release record](versions/PWA_VERSIONING.md#v061-uncertain-result-scores-prepared-release-october-16-2026). Record versioned local results and applicable camera/device evidence, complete final-commit CI and approved production promotion, then publish the app tag and Release for the exact tested commit. The last reported live version remains `0.5.3` until a later deployment is confirmed.
 
 ### Earlier planning notes (historical)
 

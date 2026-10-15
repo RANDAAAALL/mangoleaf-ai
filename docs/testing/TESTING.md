@@ -75,7 +75,7 @@ Record a physical low-end phone's device/OS/browser/PWA identity, progress stage
 
 These tests cover the scan workflow and the manuscript's reliability paragraph. R01–R04 are project test IDs, not research-objective numbers from the manuscript. Physical-device results and model accuracy require their own evidence; a green browser suite alone does not establish either.
 
-**Current repository source:** Prepared app `0.6.0`, model `v4.5.0`, confidence-only threshold 0.70. Margin and entropy gates are disabled. The October 16 model adoption and subsequent version-correction checks are recorded above; production release and physical-device validation remain pending. Earlier dated entries retain their original identities and results.
+**Current repository source:** Prepared app `0.6.1`, model `v4.5.0`, confidence-only threshold 0.70. Margin and entropy gates are disabled. The [v0.6.1 checks](#v061-uncertain-result-scores-october-16-2026) identify this patch separately from the earlier adoption and version-correction evidence. Production release and physical-device validation remain pending. Earlier dated entries retain their original identities and results.
 
 ## Next.js security revalidation (October 10, 2026)
 
@@ -511,7 +511,7 @@ The Scan Sheet now displays two shared framing/lighting tips above its camera an
 - Select a new photo and check the updated review reminder. Select an eligible duplicate and check that its duplicate message and controls remain unchanged. X, Escape, Retake, and diagnosis keep their existing behavior.
 - Repeat with an already-cached app offline. The tips should require no network request, camera stream, image analysis, or extra model loading. They are advice, not confirmation that a photo is suitable.
 
-The camera and comprehension checks above are retained from the October 2 guidance review; the [v0.5.5 prepared release section](#v055-release-validation-october-10-2026) preserves the later guided-camera scope, and the [v0.6.0 version-correction record](#v060-version-correction-october-16-2026) identifies the current prepared release. The local backup for this reversible change is `.tools/ui-backups/photo-guidance-20261001T212013Z/`; restore only this change and rebuild the service worker, preserving newer unrelated work.
+The camera and comprehension checks above are retained from the October 2 guidance review; the [v0.5.5 prepared release section](#v055-release-validation-october-10-2026) preserves the later guided-camera scope, and the [v0.6.1 record](#v061-uncertain-result-scores-october-16-2026) identifies the current prepared release. The local backup for this reversible change is `.tools/ui-backups/photo-guidance-20261001T212013Z/`; restore only this change and rebuild the service worker, preserving newer unrelated work.
 
 Controlled tests replace only the model response with fixed scores. They exercise the real classifier gates, UI, local storage, and client sync against a mock service. Real-model and offline cases use the actual exported model assets. No test changes the classifier's resizing, normalization, precision, or rejection rules.
 
@@ -718,3 +718,15 @@ The focused M01/R02 UI runner was stopped after its first M01 case timed out wai
 [Machine-readable validation](../model-training/non-experiment/v4.5.0/artifacts/local_test_validation.json) and [browser observations](../model-training/non-experiment/v4.5.0/artifacts/local_browser_model_smoke.json) record the fingerprint `f9513153d710f85b1eede17302d389486167174b8dc02ab03e94157c5b228efc`, source/asset hashes, browser/backend, and explicit limits. WebGL uses forced float16 textures in these observations. Browser/Keras probability parity remains unmeasured.
 
 The maintainer explicitly excludes the 30-minute R03 testcase and any shortened substitute; the reliability runner is not used. Physical-device/native-camera tests are not implied. The intentional scan-sheet/translation testing edits remain unchanged and are not documented as a feature release.
+
+## v0.6.1 uncertain result scores (October 16, 2026)
+
+Prepared app `0.6.1` retains model `v4.5.0` and confidence >=0.70 only. Scan details now show the stored highest class percentage for rejected as well as accepted reports. The shared browser assertion expects that badge for either outcome; it still verifies the diagnosis label and visible photo. A controlled 0.6999 raw-score case verifies that a displayed 70% remains Uncertain and is saved that way. This is UI/rejection-boundary evidence, not a disease-accuracy measurement.
+
+The existing bilingual About/footer browser case also opens Privacy Policy and Terms in each language. It verifies current local-storage/privacy wording, the Terms revision date and confidence explanation, closes each dialog, and rejects the earlier blanket compliance wording. The Privacy Policy content already matches the application and retains its October 15 date; Terms changed on October 16.
+
+Formatting, typecheck, lint, the production build, and all 10 export checks passed. The focused command `bun run test:e2e --grep "F06|F07|F16|About and footer"` passed **34 cases with zero skips, failures, or flaky results** in 113.4 seconds. Chromium desktop/mobile and Firefox covered accepted results, History/reload, uncertain display/reuse, the rounding boundary, and offline photo guidance; those three profiles plus WebKit mobile opened both legal dialogs in English and Bisaya and displayed app `v0.6.1` / model `v4.5.0`. Scan inference cases are outside the existing Windows WebKit scope; its four-profile inclusion here is UI coverage.
+
+Base commit `b0118c1d154c083c5745da673ef9be2a8e421746` identifies the starting source; uncommitted application fingerprint `97c1a8f6c76b5e482e9699591b8128b6ca8ce44e6e28cdb66d235566db4c33b6` identifies the tested inputs. All five active and exported model/configuration files match their hashes and sizes in the [adoption receipt](../model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json). All 437 local Markdown links in changed documents passed path/anchor checks. Ignored `.tools/release-v0.6.1-20261016/` preserves the focused JSON report, input hashes, model hashes, and `validation.json`; `public/sw.js` was regenerated by the build. Typecheck, lint, and focused browser execution needed access to installed dependencies outside the sandbox.
+
+The full core suite and final-commit remote CI were not run in this task. Remote CI, approved deployment promotion, live-version confirmation, and physical-device evidence remain separate. Record the later device results in [the physical checklist](PHYSICAL_RELIABILITY_CHECKLIST.md). R03 and shortened substitutes were not run for this task.

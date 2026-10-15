@@ -114,7 +114,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
               {scan.disease_name}
             </span>
             {/* AI Confidence Score Badge */}
-            {scan.disease_name !== UNCERTAIN_LABEL && (
+            {scan.disease_name && (
               <span
                 className={`shrink-0 text-[11px] leading-snug font-black uppercase px-2 py-1 ${badgeClass} backdrop-blur-md rounded-full shadow-sm tracking-wide`}
               >

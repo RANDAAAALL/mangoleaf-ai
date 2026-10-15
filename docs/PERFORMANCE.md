@@ -207,7 +207,7 @@ Focused candidate checks and remaining physical-device requirements are recorded
 
 - **Strategy:** Serwist precaches the five adopted V4.5.0 model files under `/model/`: `model.json`, `model_config.json`, and three weight shards. The `CacheFirst` runtime rule remains as defence in depth.
 - **Expected effect:** Enables offline model loading after successful service-worker installation and caching, while browser storage remains available. Loading still requires local model initialization; cache eviction, cleared site data, or an incomplete first load can prevent it. R02 and the physical checklist verify this behavior for a recorded environment.
-- **Versioned cache name:** `mangoleaf-model-cache-v4-5-0` for the adopted V4.5.0 model, retained by prepared app `0.6.0`. Activation deletes superseded model caches, including former V4.3.0 and V4.5.0 candidate runtime caches. The active V4.5.0 cache is protected by the activation filter.
+- **Versioned cache name:** `mangoleaf-model-cache-v4-5-0` for the adopted V4.5.0 model, retained by prepared app `0.6.1`. Activation deletes superseded model caches, including former V4.3.0 and V4.5.0 candidate runtime caches. The active V4.5.0 cache is protected by the activation filter.
 - **The precache is the real update mechanism.** Public files receive content-revision hashes in Serwist's precache manifest, which is matched before runtime caching. Replaced weights therefore refetch on next activation. An empty runtime model cache is normal; verify updates in generated `public/sw.js`.
 
 ### 3.2 High-Capacity Offline Database (Dexie.js / IndexedDB)

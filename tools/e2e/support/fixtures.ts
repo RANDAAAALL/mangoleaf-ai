@@ -468,11 +468,9 @@ export async function expectResult(
       ),
     )
     .toBe(true);
-  if (label !== uncertain)
-    await expect(
-      modal.getByText(`${Math.round(confidence * 100)}%`, { exact: true }),
-    ).toBeVisible();
-  else await expect(modal.getByText(/^\d+%$/)).toHaveCount(0);
+  await expect(
+    modal.getByText(`${Math.round(confidence * 100)}%`, { exact: true }),
+  ).toBeVisible();
   // Bounding boxes catch badges that exist in the DOM but are clipped by the photo.
   const photoBox = await image.boundingBox();
   const badgeBox = await modal.getByText(label, { exact: true }).boundingBox();

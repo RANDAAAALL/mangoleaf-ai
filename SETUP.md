@@ -2,7 +2,7 @@
 
 This guide covers local development and the external services required by the current application.
 
-The repository uses prepared app version `0.6.0` and adopted model `v4.5.0`, with confidence >=0.70 as the only rejection gate. Margin and entropy gates are disabled. V5.0.0 is untrained and on standby. Production release/deployment status remains separate; version labels come from repository files.
+The repository uses prepared app version `0.6.1` and adopted model `v4.5.0`, with confidence >=0.70 as the only rejection gate. Margin and entropy gates are disabled. V5.0.0 is untrained and on standby. Production release/deployment status remains separate; version labels come from repository files.
 
 ## Prerequisites
 
@@ -203,7 +203,7 @@ For why `.test-app/`, `.tools/`, `playwright-report/`, and `test-results/` appea
 
 To review each `master` deployment before it serves users, open Vercel **Settings > Environments > Production > Branch Tracking**, keep `master`, and disable **Auto-assign Custom Production Domains**. Confirm the dashboard setting; these repository changes do not configure Vercel. Builds remain Production/Staged until manually promoted. The previous Current deployment keeps serving the production domain.
 
-Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Prepared version labels and documentation may be pushed before approval, but must not claim an unpublished version has shipped. Follow the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion) and [v0.6.0 version-correction validation](docs/testing/TESTING.md#v060-version-correction-october-16-2026). Earlier dated results remain evidence for their original builds. The [October 7 release-status confirmation](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) preserves its earlier publication and live-version report.
+Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Prepared version labels and documentation may be pushed before approval, but must not claim an unpublished version has shipped. Follow the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion) and [v0.6.1 validation](docs/testing/TESTING.md#v061-uncertain-result-scores-october-16-2026). Earlier dated results remain evidence for their original builds. The [October 7 release-status confirmation](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) preserves its earlier publication and live-version report.
 
 ## Threshold-fitting notebook inputs
 
@@ -227,11 +227,11 @@ The intended first run needs the original labeled mango collection, the separate
 
 The new notebooks update pip first and explicitly patch seven helper packages that the initial Colab audit found vulnerable. Use a fresh runtime when the template's package plan changes; an old setup receipt intentionally stops. The [dependency-repair instructions](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#if-step-2-reports-unresolved-training-dependencies) also cover continuing the older copy that stopped before training. Colab's Recommended image alone does not replace those fixes or establish compatibility; check its actual Python version and run every setup gate.
 
-The V5.0.0 notebooks are prepared but untrained and on standby; they do not change `public/model/`. Colab runtime/audit, GPU, conversion, training, and evaluation remain pending. V4.5.0 is the repository's adopted model in prepared app `0.6.0`.
+The V5.0.0 notebooks are prepared but untrained and on standby; they do not change `public/model/`. Colab runtime/audit, GPU, conversion, training, and evaluation remain pending. V4.5.0 is the repository's adopted model in prepared app `0.6.1`.
 
 ## Common setup issues
 
-The adopted model in prepared app `0.6.0` is [V4.5.0](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md), with label `v4.5.0` and confidence-only threshold 0.70. Margin and entropy are disabled. Keep all five model files together in root `public/model/`. The [adoption receipt](docs/model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json) records hashes and the verified V4.3.0 rollback. No retraining is required to use the saved weights. After a model swap, restart the development server and reload the page to replace the in-memory model; for production-preview testing, rebuild, wait for the worker to activate, then reload. Production release validation and promotion remain pending.
+The adopted model in prepared app `0.6.1` is [V4.5.0](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md), with label `v4.5.0` and confidence-only threshold 0.70. Margin and entropy are disabled. Keep all five model files together in root `public/model/`. The [adoption receipt](docs/model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json) records hashes and the verified V4.3.0 rollback. No retraining is required to use the saved weights. After a model swap, restart the development server and reload the page to replace the in-memory model; for production-preview testing, rebuild, wait for the worker to activate, then reload. Production release validation and promotion remain pending.
 
 - If a push reports a missing scanner, run `bun run security:install`. If the hook cannot find Bun, make Bun available to the terminal or Git GUI's PATH and restart that application.
 - For a shallow clone, run `git fetch --unshallow` before scanning. If hooks were not registered during dependency installation, run `bun run prepare` and confirm `git config --get core.hooksPath` prints `.husky/_`.

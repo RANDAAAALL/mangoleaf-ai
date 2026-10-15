@@ -2,7 +2,7 @@
 
 This guide explains the PWA version: the application interface, local/offline behavior, release history, build labels, and deployment procedure. The PWA is the app people use. The separate [AI model versioning guide](AI_MODEL_VERSIONING.md) explains the model weights, training workflows, fitted rejection settings, and model evidence.
 
-**Current repository preparation:** PWA `0.6.0` is the prepared application release, with adopted model V4.5.0 (`v4.5.0`) and confidence >=0.70 only. Margin and entropy gates are disabled. The [version-correction record](#v060-local-history-and-v450-prepared-release-october-16-2026) supersedes the earlier `0.5.5` preparation label without moving an existing tag. Release validation and production promotion remain pending. The [model adoption record](AI_MODEL_VERSIONING.md#current-adopted-model-v450-october-16-2026) preserves exact assets and evidence; earlier app release records retain their original build identities.
+**Current repository preparation:** PWA `0.6.1` is the prepared score-display patch, retaining adopted model V4.5.0 (`v4.5.0`) and confidence >=0.70 only. Margin and entropy gates are disabled. The [v0.6.1 release record](#v061-uncertain-result-scores-prepared-release-october-16-2026) identifies the candidate separately from the preserved [v0.6.0 preparation](#v060-local-history-and-v450-prepared-release-october-16-2026). Final-commit CI and production promotion remain separate; earlier validation and publication records retain their original identities.
 
 ## Reading the release history
 
@@ -56,6 +56,7 @@ v0.5.3  released / reported live: protected guideline HTTP/Realtime updates and 
 v0.5.4  prepared / awaiting CI and production promotion: skip unchanged HTTP guidance writes while preserving update ordering
 v0.5.5  prepared release: guided camera capture, installation guidance, and responsive History refinements
 v0.6.0  prepared release: V4.5.0 confidence-only model and local-only History with storage-full recovery
+v0.6.1  prepared patch: uncertain result scores and bilingual Terms clarification; same V4.5.0 model
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
@@ -488,3 +489,31 @@ git push origin model-vX.Y.Z
 ```
 
 Do not attach large raw datasets to GitHub Releases unless the dataset license and file size are appropriate. Keep release notes focused on what changed, what was tested, and what should be treated as the current baseline.
+
+## v0.6.1: uncertain result scores prepared release (October 16, 2026)
+
+**Status: prepared candidate; final-commit CI, release approval, and production promotion are pending.** App `0.6.1` displays the saved highest mango-class percentage in scan details for Uncertain / Unrecognized reports as well as accepted results. This is a display change, not an extra model class or a change to the acceptance rule. A rejected raw score just below 0.70 can round to a displayed 70%; the rejection label remains Uncertain.
+
+The English and Bisaya Terms explain that distinction, add an October 16 revision date, describe saved-versus-refreshed treatment advice, and use responsible-use/content-rights wording rather than claiming blanket statutory or research-ethics compliance. Privacy Policy was reviewed against the current local-only flow and already matches it: no account, local report/photo storage, public guideline requests, browser-data-loss limits, and no automatic cloud recovery. Its unchanged content retains the October 15 date. This review does not establish legal certification or verify remote provider settings.
+
+The PWA retains model `v4.5.0`, the same model/configuration hashes, confidence >=0.70 only, existing model-cache identity, and local-only History. No model retraining or new model tag is part of this patch. The generated worker must come from the final production build.
+
+Separate commits in the same prepared source also repair V5.0.0 image inventory for the preserved MPO and large OE originals, and refresh the README walkthrough link. These workflow repairs do not train or adopt V5.0.0. Shared progress notes can be committed with the final app preparation so the staging groups need no partial-file selection.
+
+The [v0.6.1 testing record](../testing/TESTING.md#v061-uncertain-result-scores-october-16-2026) records checks for the final source. Earlier 0.6.0 passes do not certify this rebuilt patch. The existing master-only CI still runs its core browser suite without executing the separate 30-minute R03 session.
+
+### Prepared commit and release text
+
+**App commit:** `fix: show uncertain scores in v0.6.1`
+
+**App tag:** `v0.6.1`
+
+**Release title:** `MangoLeaf AI v0.6.1 - Uncertain result scores`
+
+**Release description draft:**
+
+> Displays the highest mango-class confidence score on Uncertain / Unrecognized scan details as well as accepted diagnoses. Updates English and Bisaya Terms to explain the score, rounding, and responsible use; the reviewed Privacy Policy continues to describe local-only History.
+>
+> Retains the V4.5.0 model and 70% confidence-only rejection rule. Refreshes the walkthrough link and fixes image compatibility in the separate V5.0.0 preparation workflow; V5.0.0 remains untrained and is not adopted.
+
+Commit the prepared groups, push the final source, and complete the [release procedure](#candidate-testing-and-promotion). Create this tag/Release only for the exact approved tested commit; do not move `v0.6.0` or tag an intermediate commit. Preparing this description does not publish or promote a deployment.

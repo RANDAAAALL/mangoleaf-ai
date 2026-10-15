@@ -364,18 +364,21 @@ export const translations = {
         text: "You can delete saved reports and photos from History. Deletion is permanent in this browser. Earlier app versions may have uploaded cloud copies; this version does not download or delete those earlier copies.",
       },
     ],
+    termsUpdated: "Last updated: October 16, 2026",
     termsIntro:
       "Terms of Service & Usage Guidelines | Philippine Carabao Mango Diagnostic System",
     termsScopeTitle: "1. Scope of Application:",
     termsScopeText:
       "MangoLeaf AI is specifically designed to assist Filipino smallholder farmers in detecting pre-harvest diseases affecting Philippine Carabao Mango (Mangifera indica L.) leaves and green fruit.",
     termsConfidenceTitle: "2. Diagnostic AI Confidence Threshold:",
+    termsConfidenceText:
+      "The highest mango-class score must be at least 70% before rounding for a diagnosis to be accepted. Below that, the result is Uncertain / Unrecognized. Its percentage is still the highest mango-class score, not a score for an extra Uncertain class or a guarantee of correctness. Rounding can display 70% even when the original score was below the cutoff and the result remains Uncertain.",
     termsGuidanceTitle: "3. Treatment Guidance Disclaimer:",
     termsGuidanceText:
-      "All disease treatment protocols and reminders provided in this app are sourced from standardized agricultural guidelines published by DOST-PCAARRD and BAFS. Recommendations serve as advisory decision support and do not replace professional agricultural extension services.",
-    termsEthicsTitle: "4. Intellectual Property & Ethical Standards:",
+      "Treatment guidance draws on reviewed agricultural references, including DOST-PCAARRD and BAFS materials. It provides general decision support and does not replace advice from qualified local agricultural professionals. Updated advice requires a working connection; offline users see the guidance already saved on their device.",
+    termsEthicsTitle: "4. Responsible Use and Content Rights:",
     termsEthicsText:
-      "Developed in compliance with Republic Act No. 8293 (Intellectual Property Code of the Philippines) and DOST-PHREB research ethics standards.",
+      "Use only photographs you own or have permission to use, and respect content licenses and source attribution. AI results are advisory and are not professional certification.",
   },
   bis: {
     // Navigation
@@ -747,16 +750,19 @@ export const translations = {
         text: "Mahimo nimong i-delete ang natipig nga report ug litrato sa Dating Scan. Permanente kini niini nga browser. Posibleng naka-upload og kopya sa cloud ang karaang bersyon sa app; dili na i-download o i-delete niini nga bersyon ang maong karaang mga kopya.",
       },
     ],
+    termsUpdated: "Kataposang gi-update: Oktubre 16, 2026",
     termsIntro: "Mga Termino sa Paggamit | Sistema sa Diagnosis sa Mangga",
     termsScopeTitle: "1. Sakop sa Paggamit:",
     termsScopeText:
       "Ang MangoLeaf AI gidisenyo alang sa mga mag-uuma sa mangga sa Pilipinas aron makatabang sa pag-diagnose sa pre-harvest nga sakit sa dahon ug prutas sa Carabao Mango (Mangifera indica L.).",
     termsConfidenceTitle: "2. AI Confidence Threshold sa Diagnosis:",
+    termsConfidenceText:
+      "Dawaton lamang ang diagnosis kon ang pinakataas nga score sa klase sa mangga labing menos 70% sa wala pa i-round. Kon ubos niini, Uncertain / Unrecognized ang resulta. Ang porsiyento mao gihapon ang pinakataas nga score sa klase sa mangga, dili score sa dugang nga Uncertain nga klase o garantiya nga husto ang resulta. Tungod sa pag-round, mahimong 70% ang makita bisan ubos sa limitasyon ang orihinal nga score ug Uncertain gihapon ang resulta.",
     termsGuidanceTitle: "3. Pahinumdom sa Pagtambal:",
     termsGuidanceText:
-      "Ang tanang gabay sa pagtambal gikan sa mga opisyal nga giya sa DOST-PCAARRD ug BAFS. Nagserbisyo kini isip tambag sa pag-atiman ug dili puli sa opisyal nga konsultasyon sa kapunongan sa agrikultura.",
-    termsEthicsTitle: "4. Propetikal nga Katungod (IP Code):",
+      "Ang giya sa pagtambal naggikan sa gisusi nga mga reperensiya sa agrikultura, lakip ang mga materyal sa DOST-PCAARRD ug BAFS. Kinatibuk-ang tabang kini sa pagdesisyon ug dili puli sa tambag sa kwalipikadong lokal nga eksperto sa agrikultura. Kinahanglan og koneksiyon aron makuha ang bag-ong tambag; kon offline, ang daang giya nga natipig sa device ang makita.",
+    termsEthicsTitle: "4. Responsableng Paggamit ug Katungod sa Sulod:",
     termsEthicsText:
-      "Gi-develop subay sa Republic Act No. 8293 (Intellectual Property Code sa Pilipinas) ug etikong sumbanan sa DOST-PHREB.",
+      "Gamita lamang ang mga litrato nga imo o gitugotan ka nga gamiton, ug tahora ang lisensya ug pag-ila sa gigikanan sa sulod. Tambag lamang ang resulta sa AI ug dili kini propesyonal nga sertipikasyon.",
   },
 };
