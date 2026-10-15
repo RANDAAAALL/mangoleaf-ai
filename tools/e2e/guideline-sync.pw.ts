@@ -5,7 +5,6 @@ import {
   attachJson,
   controlledModel,
   details,
-  mockGuestToken,
   openApp,
   photos,
   runScan,
@@ -87,7 +86,7 @@ async function expectAdvice(page: Page, row: DiseaseGuideline) {
 async function settleReads(request: APIRequestContext) {
   let last = -1;
   let stable = 0;
-  // Startup may request another pass after guest sign-in or channel readiness.
+  // Startup may request another pass after channel readiness.
   // Observe the completed baseline before measuring requests caused by an event.
   await expect
     .poll(
@@ -207,7 +206,6 @@ async function prepare(page: Page, request: APIRequestContext) {
   await expect
     .poll(async () => (await control(request)).connections.length)
     .toBe(1);
-  await expect.poll(async () => Boolean(await mockGuestToken(page))).toBe(true);
   // Controlled scores open the actual treatment UI without claiming accuracy.
   await runScan(page, photos[0].file);
   await expectAdvice(page, advice("A"));

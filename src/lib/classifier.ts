@@ -30,6 +30,47 @@ interface ModelConfigThresholds {
 let cachedModel: tf.GraphModel | null = null;
 let loadingPromise: Promise<tf.GraphModel> | null = null;
 let sharedCanvas: HTMLCanvasElement | null = null;
+let inferencePending = false;
+let initializationPending = false;
+
+/** A recovery deadline for GPU warmup, independent of model asset downloads. */
+export const MODEL_WARMUP_TIMEOUT_MS = 60_000;
+
+export class WarmupTimeoutError extends Error {
+  readonly code = "MODEL_WARMUP_TIMEOUT";
+
+  constructor() {
+    super("On-device model warmup exceeded its recovery deadline.");
+    this.name = "WarmupTimeoutError";
+  }
+}
+
+export class InitializationBusyError extends Error {
+  readonly code = "INITIALIZATION_BUSY";
+
+  constructor() {
+    super("The previous on-device model warmup is still running.");
+    this.name = "InitializationBusyError";
+  }
+}
+
+export function isMangoInitializationPending(): boolean {
+  return initializationPending;
+}
+
+export class InferenceBusyError extends Error {
+  readonly code = "INFERENCE_BUSY";
+
+  constructor() {
+    super("The previous on-device prediction is still running.");
+    this.name = "InferenceBusyError";
+  }
+}
+
+/** An aborted caller does not cancel TensorFlow.js's underlying GPU read. */
+export function isMangoInferencePending(): boolean {
+  return inferencePending;
+}
 
 // Null until model_config.json is read, so only the confidence check runs. That
 // is the intended default: the notebook exports null for both whenever it had no
@@ -79,6 +120,53 @@ async function loadModelConfig(): Promise<void> {
   }
 }
 
+/** Reject a stalled caller while the original read retains all GPU resources. */
+function warmMangoModel(model: tf.GraphModel): Promise<tf.GraphModel> {
+  initializationPending = true;
+  const started = performance.now();
+  let timeoutError: WarmupTimeoutError | null = null;
+
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      timeoutError = new WarmupTimeoutError();
+      reject(timeoutError);
+    }, MODEL_WARMUP_TIMEOUT_MS);
+
+    const operation = (async () => {
+      try {
+        const warmupOutput = tf.tidy(() => {
+          const dummyTensor = tf.zeros([1, 224, 224, 3]);
+          return model.predict(dummyTensor) as tf.Tensor;
+        });
+        try {
+          // predict() submits GPU work; readback confirms it has finished.
+          await warmupOutput.data();
+        } finally {
+          warmupOutput.dispose();
+        }
+        // Driver/shader work can block timers. Never cache an overdue model.
+        if (
+          timeoutError ||
+          performance.now() - started >= MODEL_WARMUP_TIMEOUT_MS
+        ) {
+          throw timeoutError ?? new WarmupTimeoutError();
+        }
+        cachedModel = model;
+        return model;
+      } catch (error) {
+        model.dispose();
+        throw error;
+      } finally {
+        clearTimeout(timer);
+        initializationPending = false;
+      }
+    })();
+    // Consume late success/failure after the caller's timeout. The operation
+    // alone releases the output, graph, and initialization gate after readback.
+    operation.then(resolve, reject);
+  });
+}
+
 /**
  * Loads the TensorFlow.js Graph Model from the public directory and runs one
  * dummy prediction to compile the WebGL shaders up front. Cached at module level
@@ -95,16 +183,29 @@ export async function loadMangoModel(): Promise<tf.GraphModel> {
     console.log("---Model load already in progress — awaiting...---");
     return loadingPromise;
   }
+  if (initializationPending) throw new InitializationBusyError();
 
   loadingPromise = (async () => {
     console.log("---Initializing TensorFlow.js engine...---");
 
-    // Halves GPU texture memory on phones. Trial 3 ships float32 weight shards;
-    // this setting only changes how WebGL stores them on device, and leaves the
-    // model artifact untouched. Remove it if a very old GPU renders incorrectly.
-    tf.env().set("WEBGL_FORCE_F16_TEXTURES", true);
+    // TensorFlow.js selects 32-bit WebGL textures when supported and uses
+    // 16-bit textures on devices limited to that precision. This capability
+    // choice does not retry after a 32-bit memory-allocation failure.
+    // Keep the explicit default override commented for reference.
+    // tf.env().set("WEBGL_FORCE_F16_TEXTURES", false);
+    // Rollback: uncomment the next line to force 16-bit textures again.
+    // tf.env().set("WEBGL_FORCE_F16_TEXTURES", true);
 
     await tf.ready();
+
+    if (typeof tf.getBackend === "function" && tf.getBackend() === "webgl") {
+      const float32Capable = tf.env().getBool("WEBGL_RENDER_FLOAT32_CAPABLE");
+      const float32Enabled = tf.env().getBool("WEBGL_RENDER_FLOAT32_ENABLED");
+      console.info(
+        `---WebGL texture precision: ${float32Enabled ? "32-bit" : "16-bit"}; ` +
+          `32-bit capable=${float32Capable}.---`,
+      );
+    }
 
     // Fetched together, not one after the other. The config is only 567 bytes,
     // but on rural 3G a sequential request adds a round trip before the GPU
@@ -122,17 +223,18 @@ export async function loadMangoModel(): Promise<tf.GraphModel> {
 
     // Compile the shaders now, so the first real scan is not the one that pays.
     console.log("---Warming up GPU WebGL shaders...---");
-    tf.tidy(() => {
-      const dummyTensor = tf.zeros([1, 224, 224, 3]);
-      model.predict(dummyTensor);
-    });
+    const warmedModel = await warmMangoModel(model);
     console.log("---GPU model warmup complete.---");
 
-    cachedModel = model;
-    return model;
+    return warmedModel;
   })();
 
-  return loadingPromise;
+  try {
+    return await loadingPromise;
+  } finally {
+    // A failed load must be retryable; concurrent callers still share this load.
+    loadingPromise = null;
+  }
 }
 
 /**
@@ -164,12 +266,49 @@ function downscaleToCanvas(
  * Two speed decisions worth knowing:
  * - Photos are downscaled to 224x224 on a canvas before becoming a tensor, so no
  *   multi-megabyte GPU allocation is made from a raw camera shot.
- * - Results are read with async data(), not blocking dataSync(), so the UI thread
- *   keeps running.
+ * - Results use async data(), so GPU readback can yield to the UI. Canvas work
+ *   and predict() shader submission still run synchronously on the main thread.
  */
 export async function predictMangoDisease(
   model: tf.GraphModel,
   imgElement: HTMLImageElement,
+  signal?: AbortSignal,
+): Promise<DiagnosisResult> {
+  signal?.throwIfAborted();
+  if (inferencePending) throw new InferenceBusyError();
+
+  inferencePending = true;
+  const operation = runPrediction(model, imgElement, signal).finally(() => {
+    inferencePending = false;
+  });
+  if (!signal) return operation;
+
+  // Cancel only the caller's wait. Keep the tensor and the busy gate until the
+  // original read settles, and handle that late settlement after cancellation.
+  return new Promise<DiagnosisResult>((resolve, reject) => {
+    const onAbort = () => {
+      signal.removeEventListener("abort", onAbort);
+      reject(signal.reason);
+    };
+    signal.addEventListener("abort", onAbort, { once: true });
+    operation.then(
+      (result) => {
+        signal.removeEventListener("abort", onAbort);
+        resolve(result);
+      },
+      (error) => {
+        signal.removeEventListener("abort", onAbort);
+        reject(error);
+      },
+    );
+    if (signal.aborted) onAbort();
+  });
+}
+
+async function runPrediction(
+  model: tf.GraphModel,
+  imgElement: HTMLImageElement,
+  signal?: AbortSignal,
 ): Promise<DiagnosisResult> {
   // 1. Downscale on the CPU canvas first. A 12MP photo (4000x3000) is 36 million
   //    floats; 224x224 is 150K, roughly 240x smaller.
@@ -187,9 +326,15 @@ export async function predictMangoDisease(
     return model.predict(batched) as tf.Tensor;
   });
 
-  // 3. async data() keeps animations smooth; dataSync() would block the thread
-  const results = await outputTensor.data();
-  outputTensor.dispose();
+  // 3. Release the retained output after readback succeeds or fails. Aborting
+  //    the caller must not dispose a tensor while the GPU still owns its read.
+  let results: Awaited<ReturnType<tf.Tensor["data"]>>;
+  try {
+    results = await outputTensor.data();
+  } finally {
+    outputTensor.dispose();
+  }
+  signal?.throwIfAborted();
 
   // Top two probabilities in one pass. The runner-up feeds the margin check.
   let maxIndex = 0;
@@ -256,12 +401,12 @@ export async function predictMangoDisease(
   }));
 
   console.groupEnd();
-  if (!accepted) {
-    console.log(
-      `---Rejected: Raw PredictedDisease=${CLASSES[maxIndex]} confidence=${maxProb.toFixed(4)} margin=${margin.toFixed(4)} ` +
-        `entropy=${normalizedEntropy.toFixed(4)}---`,
-    );
-  }
+  // if (!accepted) {
+  console.log(
+    `---${accepted ? "Accepted" : "Rejected"}: Raw PredictedDisease=${CLASSES[maxIndex]} confidence=${maxProb.toFixed(4)} margin=${margin.toFixed(4)} ` +
+      `entropy=${normalizedEntropy.toFixed(4)}---`,
+  );
+  // }
 
   const diseaseName = accepted ? CLASSES[maxIndex] : UNCERTAIN_LABEL;
 

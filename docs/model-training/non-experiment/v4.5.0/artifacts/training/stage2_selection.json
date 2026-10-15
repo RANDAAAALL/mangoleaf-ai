@@ -1,0 +1,6 @@
+{
+  "stage": 2,
+  "selectedEpoch": 14,
+  "validationLoss": 0.08137136697769165,
+  "criterion": "clean unweighted mango validation cross-entropy"
+}

@@ -8,12 +8,10 @@ import {
   records,
   nav,
   attachJson,
-  mockGuestToken,
   recentHeading,
   homeHeading,
   historyDetails,
 } from "./support/fixtures";
-import { createHash } from "node:crypto";
 
 test.use({ serviceWorkers: "allow" });
 test("R02: real service worker reloads history and diagnoses a new photo offline", async ({
@@ -31,7 +29,7 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
   await expect
     .poll(async () => {
       const saved = await records(page);
-      return saved.length === 1 && saved[0]._status === "synced";
+      return saved.length === 1 && saved[0]._status === "local-only";
     })
     .toBe(true);
   await nav(page, "History");
@@ -110,7 +108,7 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
   expect(
     saved.some(
       (row) =>
-        row.image_hash === photos[1].sha256 && row._status === "pending-insert",
+        row.image_hash === photos[1].sha256 && row._status === "local-only",
     ),
   ).toBe(true);
   await page.reload();
@@ -140,7 +138,7 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
           const synced = await records(page);
           return (
             synced.length === 2 &&
-            synced.every((row) => row._status === "synced")
+            synced.every((row) => row._status === "local-only")
           );
         } catch (error) {
           if (String(error).includes("Execution context was destroyed"))
@@ -151,78 +149,26 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
       { timeout: 30_000 },
     )
     .toBe(true);
-  // Read the mock independently: a local synced flag alone cannot prove delivery.
-  const synced = await records(page);
-  expect(synced.map((row) => row.id).sort()).toEqual(
+  const reconnected = await records(page);
+  expect(reconnected.map((row) => row.id).sort()).toEqual(
     saved.map((row) => row.id).sort(),
   );
-  const response = await page.request.get("/__mock__/rest/v1/scans", {
-    params: { owner_id: "eq." + synced[0].owner_id },
-    headers: { Authorization: `Bearer ${await mockGuestToken(page)}` },
-  });
-  expect(response.ok()).toBe(true);
-  const remote = await response.json();
-  expect(remote).toHaveLength(2);
-  for (const row of synced) {
-    expect(remote).toContainEqual(
-      expect.objectContaining({
-        id: row.cloud_id,
-        disease_name: row.disease_name,
-        confidence: row.confidence,
-        image_url: row.image_url,
-        image_hash: row.image_hash,
-        owner_id: row.owner_id,
-        storage_path: row.storage_path,
-        model_version: row.model_version,
-        device_id: row.device_id,
-        updated_at: row.updated_at,
-      }),
-    );
-    expect(row.image_url).toBeNull();
-    expect(row.storage_path).toMatch(/^[0-9a-f-]+\/[0-9a-f-]+\.(webp|jpg)$/);
-    const uploaded = await page.request.get(
-      `/__mock__/storage/v1/object/authenticated/scans/${row.storage_path}`,
-      { headers: { Authorization: `Bearer ${await mockGuestToken(page)}` } },
-    );
-    expect(uploaded.ok()).toBe(true);
-    const localHash = await page.evaluate(
-      (id) =>
-        new Promise<string>((resolve, reject) => {
-          const opening = indexedDB.open("MangoLeafDB");
-          opening.onerror = () => reject(opening.error);
-          opening.onsuccess = () => {
-            const database = opening.result;
-            const query = database
-              .transaction("scans")
-              .objectStore("scans")
-              .get(id);
-            query.onerror = () => {
-              database.close();
-              reject(query.error);
-            };
-            query.onsuccess = () => {
-              database.close();
-              (query.result.image_blob as Blob)
-                .arrayBuffer()
-                .then((bytes) => crypto.subtle.digest("SHA-256", bytes))
-                .then((hash) =>
-                  resolve(
-                    Array.from(new Uint8Array(hash))
-                      .map((byte) => byte.toString(16).padStart(2, "0"))
-                      .join(""),
-                  ),
-                )
-                .catch(reject);
-            };
-          };
-        }),
-      row.id,
-    );
-    expect(
-      createHash("sha256")
-        .update(await uploaded.body())
-        .digest("hex"),
-    ).toBe(localHash);
-  }
-  await attachJson(info, "reconnected-mock-records", remote);
+  expect(
+    reconnected.every(
+      (row) =>
+        row._status === "local-only" &&
+        !row.owner_id &&
+        !row.cloud_id &&
+        !row.storage_path,
+    ),
+  ).toBe(true);
+  await attachJson(
+    info,
+    "reconnected-local-records",
+    reconnected.map((row) => ({
+      id: row.id,
+      image_hash: row.image_hash,
+      status: row._status,
+    })),
+  );
 });

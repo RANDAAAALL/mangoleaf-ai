@@ -1,0 +1,17 @@
+{
+  "temperature": 0.8002093839891747,
+  "temperatureFoldedIntoWeights": true,
+  "foldCount": 1,
+  "fitSubset": "val",
+  "fitIncludesOE": false,
+  "fitIncludesOOD": false,
+  "validationCount": 398,
+  "beforeNll": 0.08137134983245638,
+  "afterNll": 0.07882078208323891,
+  "searchBounds": [
+    0.25,
+    20.0
+  ],
+  "keepUnitTemperatureUnlessImproved": true,
+  "validationProbabilityOrder": "input_manifest.json images subset=val in listed order"
+}

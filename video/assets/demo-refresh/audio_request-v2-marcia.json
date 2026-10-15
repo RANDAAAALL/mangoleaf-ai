@@ -1,0 +1,93 @@
+{
+  "version": "v2-marcia-single-voice",
+  "provider": "heygen",
+  "voice": "05f19352e8f74b0392a8f411eba40de1",
+  "voice_label": "Marcia (same public HeyGen voice ID used by v3)",
+  "speed": 1.08,
+  "source_policy": "Reuse the existing HeyGen WAVs generated with the v3 voice ID; no Edge TTS clips are referenced by the composition.",
+  "lines": [
+    {
+      "id": "v2-marcia-info-01-title",
+      "text": "MangoLeaf AI",
+      "source": "assets/voice/v2-marcia-info-01-title.wav",
+      "derived_from": "assets/voice/v2-01-overview.wav",
+      "note": "Short branded title sting trimmed from the existing v3-voice WAV so the opening uses one speaker without a pre-scene Edge clip."
+    },
+    {
+      "id": "v2-marcia-info-02-overview",
+      "text": "MangoLeaf AI helps mango farmers check mango leaves and Mango Green Fruit with on-device AI, even offline.",
+      "source": "assets/voice/v2-01-overview.wav"
+    },
+    {
+      "id": "v2-marcia-info-03-classes",
+      "text": "It recognizes five disease classes: Anthracnose, Bacterial Canker, Sooty Mold, Bacterial Black Spot, and Mango Scab, plus Healthy Leaf and Healthy Fruit.",
+      "source": "assets/voice/v2-02-conditions.wav"
+    },
+    {
+      "id": "v2-marcia-info-04-stack",
+      "text": "It is built with Next.js, React, Bun, TypeScript, Tailwind CSS, TensorFlow.js, Dexie, IndexedDB, Supabase, and Serwist. The model is MobileNetV3-Large.",
+      "source": "assets/voice/v2-03-stack.wav"
+    },
+    {
+      "id": "v2-marcia-info-05-walkthrough",
+      "text": "This demo follows one simple path: scan, take a photo, review the diagnosed result, open Scan History, then view the scan detail modal.",
+      "source": "assets/voice/v2-04-scope.wav"
+    },
+    {
+      "id": "v2-marcia-demo-01-intro",
+      "text": "MangoLeaf AI helps mango farmers check mango leaves and Mango Green Fruit with on-device AI, even offline.",
+      "source": "assets/voice/v2-05-intro.wav"
+    },
+    {
+      "id": "v2-marcia-demo-02-take-photo",
+      "text": "Read the Photo Tips, then choose Take Photo for this simple demo. Capture one clear mango leaf or Mango Green Fruit.",
+      "source": "assets/voice/v2-06-take-photo.wav"
+    },
+    {
+      "id": "v2-marcia-demo-03-capture",
+      "text": "Center one whole mango in the Green Box Guidance, then capture your photo.",
+      "source": "assets/voice/v2-07-capture.wav"
+    },
+    {
+      "id": "v2-marcia-demo-04-review",
+      "text": "Review your photo. After that, tap Run AI Diagnosis to start the on-device check.",
+      "source": "assets/voice/v2-08-review.wav"
+    },
+    {
+      "id": "v2-marcia-demo-05-wait",
+      "text": "Please wait a moment while the on-device model checks your photo. After that, review the result.",
+      "source": "assets/voice/v2-09-wait.wav"
+    },
+    {
+      "id": "v2-marcia-demo-06-result",
+      "text": "Review the predicted condition, Confidence Score, and treatment guidance in English.",
+      "source": "assets/voice/v2-10-result.wav"
+    },
+    {
+      "id": "v2-marcia-demo-07-bisaya",
+      "text": "Switch to Bisaya to share these treatment steps.",
+      "source": "assets/voice/v2-11-bisaya.wav"
+    },
+    {
+      "id": "v2-marcia-demo-08-history",
+      "text": "Your saved scans stay in Scan History for a quick return.",
+      "source": "assets/voice/v2-12-history.wav"
+    },
+    {
+      "id": "v2-marcia-demo-09-open-scan",
+      "text": "Open a saved scan to review the photo, result, and treatment guidance.",
+      "source": "assets/voice/v2-13-open-scan.wav"
+    },
+    {
+      "id": "v2-marcia-demo-10-language",
+      "text": "Switch the guidance to Bisaya when it helps.",
+      "source": "assets/voice/v2-14-language.wav"
+    },
+    {
+      "id": "v2-marcia-demo-11-bisaya-close",
+      "text": "Clear Bisaya guidance helps Mango Farmers choose next steps.",
+      "source": "assets/voice/v2-15-bisaya-close.wav"
+    }
+  ],
+  "bgm": "assets/audio/bgm-demo-v2single.wav"
+}

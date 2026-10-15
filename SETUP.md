@@ -2,7 +2,7 @@
 
 This guide covers local development and the external services required by the current application.
 
-The current prepared app release is `0.5.5`, with model `v4.3.0`. Version labels come from repository files; no additional environment variable or Supabase schema change is required for the guided-camera and installation-guide release.
+The repository uses prepared app version `0.6.0` and adopted model `v4.5.0`, with confidence >=0.70 as the only rejection gate. Margin and entropy gates are disabled. V5.0.0 is untrained and on standby. Production release/deployment status remains separate; version labels come from repository files.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ The current prepared app release is `0.5.5`, with model `v4.3.0`. Version labels
 - Git and Node.js 24 for local tooling; Git for Windows supplies the hook shell
 - `tar` for scanner installation (included with current Windows, macOS, and typical Linux installations)
 - A modern browser with IndexedDB, Web Workers, Web Crypto, Canvas, and WebGL support
-- A Supabase project if cloud synchronization is required
+- A Supabase project for public treatment-guideline downloads and Realtime updates
 - Optional: [Cloudflared](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/) available on the command line for `bun run tunnel`
 
 Confirm Bun is installed:
@@ -54,8 +54,8 @@ Configure these values in `.env.local`:
 
 | Variable                               | Required       | Purpose                                |
 | -------------------------------------- | -------------- | -------------------------------------- |
-| `NEXT_PUBLIC_SUPABASE_URL`             | For cloud sync | Supabase project API URL.              |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | For cloud sync | Supabase browser-safe publishable key. |
+| `NEXT_PUBLIC_SUPABASE_URL`             | For guidelines | Supabase project API URL.              |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | For guidelines | Supabase browser-safe publishable key. |
 
 Version labels are not environment variables. The footer app version is derived
 from the `version` field in `package.json` by `next.config.ts`, and the model
@@ -68,50 +68,18 @@ Do not commit `.env.local`. It is already covered by `.gitignore`.
 
 ## Configure Supabase
 
-The synchronization code expects the following resources:
+The current local-only History candidate needs these Supabase resources:
 
-- Anonymous sign-ins enabled under Authentication, **Sign In / Providers**.
-- A private Storage bucket named `scans`, with owner-restricted object policies.
-- A `scans` table for guest-owned scan metadata, with owner-restricted RLS policies.
-- A `guidelines` table for English and Cebuano/Bisaya treatment guidance.
-- Public read-only access to `guidelines`; browser clients cannot edit treatment text.
-- Realtime enabled for the `guidelines` table if live guidance updates are required.
+- A `public.guidelines` table containing `id`, `disease_name`, `guidelines_en`, and `guidelines_bis`.
+- Public SELECT access for published guidance, with RLS enabled and no browser write access.
+- The `guidelines` table in the Realtime publication for live INSERT/UPDATE/DELETE notifications.
+- The project URL and a browser-safe publishable key from `.env.local`; never a secret or service-role key.
 
-The cloud client creates and reuses an anonymous guest session in the background. Farmers do not enter an email or password. Local diagnosis and History remain available while that session or a cloud request is pending; public treatment-guideline reads do not depend on guest sign-in.
+Anonymous sign-ins, a cloud `scans` table, and a Storage bucket are not prerequisites for this candidate. Scan reports and compressed photo Blobs stay in IndexedDB online and offline. Initial offline use still requires the app/model assets and treatment guidance to have finished downloading while online. Browser storage is shared with other site data and has a browser-managed quota.
 
-The scan schema keeps the prediction metadata, browser label, and a separate verified owner. The following is a field overview, not a standalone secure setup script:
+The candidate does not delete existing cloud resources or change dashboard settings. Keep the existing private bucket, RLS, users, and backups intact until a separately authorized cleanup. Earlier clients may still use them. The [security and preservation guide](docs/supabase/SECURITY-AND-SYNC.md#local-only-history-candidate-october-15-2026) records the transition and rollback boundary; the SQL overview remains historical maintenance material, not a new-project prerequisite.
 
-```sql
-create table public.scans (
-  id uuid primary key,
-  disease_name text not null,
-  confidence float8 not null,
-  image_url text, -- retained for legacy rows; new photos use a private object path
-  storage_path text,
-  owner_id uuid,
-  model_version text,
-  image_hash text,
-  updated_at timestamptz not null default now(),
-  device_id uuid not null
-);
-```
-
-It reads these `guidelines` fields:
-
-```sql
-create table public.guidelines (
-  id text primary key,
-  disease_name text not null,
-  guidelines_en text not null,
-  guidelines_bis text not null
-);
-```
-
-An old row may have a null `owner_id` so its data can be retained without inventing ownership. New browser inserts must match the signed guest's `auth.uid()`. `device_id` is not an ownership credential. New photo paths sit under that guest's directory, and downloads require a matching session. See [Supabase security and recovery](./docs/supabase/SECURITY-AND-SYNC.md) for the reviewed policies, legacy records, private backups, rollout order, and verification status. Do not execute the schema overview alone and assume that grants, RLS, and Storage have been secured.
-
-The same public project URL and browser-safe key remain sufficient. Never use a service-role or secret key in browser code. Enabling anonymous sign-ins alone does not replace the previously broad policies. If the database is secured before the matching app is deployed, an older UUID-only client cannot synchronize private scans; its local scans and publicly readable guidance continue to work.
-
-The current project's October 2 owner-security migration and private bucket are applied and verified. The matching client changes remain local until deployment. Follow the [implementation status](./docs/supabase/SECURITY-AND-SYNC.md#implementation-status) for the migration identity, preserved data, and remaining rollout step; do not recreate or replace the existing cloud tables to repeat this setup.
+When storage prevents saving, the app offers Open History, Retry save, and Discard unsaved result. Retry reuses the completed prediction and same record ID. The unsaved result exists only in memory until local commit; reloading or closing the page loses it. Deleting reports requires the user's explicit choice. Clearing all site data removes local reports and photos and does not trigger a cloud restore.
 
 Maintain treatment text in `public.guidelines` only. Use the existing IDs `anthracnose`, `bacterial_black_spot`, `bacterial_canker`, `mango_scab`, `sooty_mold`, and `healthy`; Healthy Leaf and Healthy Fruit both read `healthy`. Populate both language fields with nonblank text. The [dated source review](./docs/treatment-guidelines/TREATMENT-GUIDELINES-REVIEW-2026-10-02.md) contains proposed replacements for manual review and entry; it has not applied them to Supabase.
 
@@ -209,7 +177,7 @@ Findings show filenames, lines, rules, and commit IDs without credential values.
 
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs only for pushes to `master`, including merges. Its `security` job installs the same scanner, tests the tooling, and scans the full fetched history. Its independent `check` job installs frozen dependencies, runs typecheck, lint, formatting checks, and webpack build in order, then verifies exported PWA/model files. It also installs Playwright browsers, tests an isolated static export, and saves reports/failure traces for 14 days. Both have read-only repository permission; newer pushes cancel unfinished older runs. No video dependencies or training notebooks are executed.
 
-CI sets `HUSKY=0` because it invokes checks directly. The build uses the existing public-client fallback settings and requires no production credentials; it is not a deployment artifact for cloud synchronization. Production builds still need the public Supabase values described above. App/model version labels remain sourced from code. The workflow does not deploy, change Dependabot settings, or gate an independent hosting deployment. It starts after GitHub receives a push and does not inspect pushes isolated on other branches. Local hooks can be skipped, so keep both layers. The hook deliberately excludes production build and export verification because the build is slower and downloads Google Fonts. CI runs these checks automatically; developers still run the required local build before committing and can run `bun run verify:export` afterward.
+CI sets `HUSKY=0` because it invokes checks directly. The build uses the existing public-client fallback settings and requires no production credentials; it is not a deployment artifact for public guideline access. Production builds still need the public Supabase values described above. App/model version labels remain sourced from code. The workflow does not deploy, change Dependabot settings, or gate an independent hosting deployment. It starts after GitHub receives a push and does not inspect pushes isolated on other branches. Local hooks can be skipped, so keep both layers. The hook deliberately excludes production build and export verification because the build is slower and downloads Google Fonts. CI runs these checks automatically; developers still run the required local build before committing and can run `bun run verify:export` afterward.
 
 Tooling regression tests cover secret/file history checks and export assets. They do not test camera capture, browser inference, offline reloads, or Supabase synchronization.
 
@@ -235,7 +203,7 @@ For why `.test-app/`, `.tools/`, `playwright-report/`, and `test-results/` appea
 
 To review each `master` deployment before it serves users, open Vercel **Settings > Environments > Production > Branch Tracking**, keep `master`, and disable **Auto-assign Custom Production Domains**. Confirm the dashboard setting; these repository changes do not configure Vercel. Builds remain Production/Staged until manually promoted. The previous Current deployment keeps serving the production domain.
 
-Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Prepared version labels and documentation may be pushed before approval, but must not claim an unpublished version has shipped. Follow the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion) and [v0.5.5 prepared release validation](docs/testing/TESTING.md#v055-release-validation-october-10-2026). Earlier dated results remain evidence for their original builds. The [October 7 release-status confirmation](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) preserves its earlier publication and live-version report.
+Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Prepared version labels and documentation may be pushed before approval, but must not claim an unpublished version has shipped. Follow the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion) and [v0.6.0 version-correction validation](docs/testing/TESTING.md#v060-version-correction-october-16-2026). Earlier dated results remain evidence for their original builds. The [October 7 release-status confirmation](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) preserves its earlier publication and live-version report.
 
 ## Threshold-fitting notebook inputs
 
@@ -251,13 +219,27 @@ For the seven-class experiment with separate background and localized-lighting a
 
 For the completed **V4.2.0 two-model experiment**, follow the [leaf/fruit Colab guide and evidence report](docs/model-training/experiment/v4.2.0/TRIAL_v4_2_0.md). It uses the same source folders and preserved split, with Bacterial Canker assigned to the leaf group. If reproducing it, run each training notebook, then its matching threshold notebook, then return to the training notebook's saved-result figure steps. Check the actual Google Drive contents before starting. The local two-model app trial has ended; its files are preserved in ignored `.tools/model-backups/v4.2.0-dual-experiment-20260929/`. **Only leaf had a feasible fitted candidate**; neither model was deployed or released.
 
+## V4.5.0 Outlier Exposure notebook setup
+
+For the fresh OE experiment, follow the [V4.5.0 Colab guide](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md). Its clean training and threshold-fitting notebooks use ordinary Colab cells and an explicit package plan; do not install any archived requirements snapshot. Under **Runtime > Change runtime type**, keep **Python 3**, choose a GPU such as **T4**, and select **Runtime Version 2026.04**. Google's [runtime list](https://research.google.com/colaboratory/runtime-version-faq.html) identifies this image as Python 3.12.13 with TensorFlow 2.19.0. If that image is unavailable, use another listed Python 3.11/3.12 runtime. The generic Python 3 label and GPU choice do not set the Python minor version. Check the version printed by setup, follow the package restart instruction, and mount the original account's Drive. Read the printed and resolved paths before starting a run.
+
+The intended first run needs the original labeled mango collection, the separate `mangoleafai_oe_images` training collection, and 500 reserved photos in `mango_ood_test_v4_4_0` after adding 300 to its existing 200. The full OOD inventory must be declared before training and stay separate from OE photos. New outputs remain under the existing `MyDrive/mangoleaf_experiments/v4.5.0/` parent. Finish and seal training before opening threshold fitting; paste the completed run folder name without a leading `/training/`. CSV reviews require replacing the actual CSV, not saving a separate native Google Sheet.
+
+The new notebooks update pip first and explicitly patch seven helper packages that the initial Colab audit found vulnerable. Use a fresh runtime when the template's package plan changes; an old setup receipt intentionally stops. The [dependency-repair instructions](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#if-step-2-reports-unresolved-training-dependencies) also cover continuing the older copy that stopped before training. Colab's Recommended image alone does not replace those fixes or establish compatibility; check its actual Python version and run every setup gate.
+
+The V5.0.0 notebooks are prepared but untrained and on standby; they do not change `public/model/`. Colab runtime/audit, GPU, conversion, training, and evaluation remain pending. V4.5.0 is the repository's adopted model in prepared app `0.6.0`.
+
 ## Common setup issues
 
-App `0.5.5` uses the adopted [V4.3.0 Combined model](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md), with display label `v4.3.0` and saved gates 0.70 / 0 / 0.42. Keep its five fitted files together in root `public/model/`. Adoption changes the configuration's release identity and status; the graph, shards, class order, preprocessing, temperature, and numerical gates remain those of the completed Combined export. The [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) records the original and adopted identities/hashes. No retraining is needed to run these files. Restart the development server after a swap and reload the page to replace the in-memory model. For production-preview testing, rebuild and wait for the new worker to activate, then reload. The exact pre-adoption state is preserved in ignored `.tools/release-backups/v0.4.9-model-v4.3.0-20261002/before/`; earlier V3 and V4.1.1 rollback bundles remain. See the [v0.5.5 release record](docs/versions/PWA_VERSIONING.md#v055-guided-camera-and-installation-prepared-release-october-10-2026) for publication and promotion status.
+The adopted model in prepared app `0.6.0` is [V4.5.0](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md), with label `v4.5.0` and confidence-only threshold 0.70. Margin and entropy are disabled. Keep all five model files together in root `public/model/`. The [adoption receipt](docs/model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json) records hashes and the verified V4.3.0 rollback. No retraining is required to use the saved weights. After a model swap, restart the development server and reload the page to replace the in-memory model; for production-preview testing, rebuild, wait for the worker to activate, then reload. Production release validation and promotion remain pending.
 
 - If a push reports a missing scanner, run `bun run security:install`. If the hook cannot find Bun, make Bun available to the terminal or Git GUI's PATH and restart that application.
 - For a shallow clone, run `git fetch --unshallow` before scanning. If hooks were not registered during dependency installation, run `bun run prepare` and confirm `git config --get core.hooksPath` prints `.husky/_`.
-- If scans remain local, verify the Supabase URL, key, `scans` table, and Storage bucket.
+- Scan reports are intentionally local. For a storage-full warning, delete chosen History reports and retry saving before reloading the page.
 - If guidelines do not update, verify the `guidelines` table, select policy, and Realtime publication.
 - If the model does not load, confirm `public/model/model.json` and all referenced weight shards are present.
 - If offline behavior seems stale during development, test a fresh production build because the service worker is intentionally disabled by `next dev`.
+
+## V4.5.0 completed local candidate test (October 12, 2026)
+
+At that time, the five browser assets in `public/model/` temporarily identified `model-v4.5.0-candidate` and used confidence 0.70, margin 0, entropy 0.40. This is historical evidence; the current adopted configuration uses confidence 0.70 only. See the current adoption guide above.

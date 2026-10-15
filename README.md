@@ -4,12 +4,20 @@
 </h1>
 
 <p align="center">
-  <video src="https://github.com/user-attachments/assets/aa0b1b2c-b1c8-403b-bdcf-2e15da83f343" controls></video>
+  <video src="https://github.com/user-attachments/assets/2ccc4a01-1aa2-478d-8cf6-1b8bd035f894" controls></video>
 </p>
 
-MangoLeaf AI is an offline-first progressive web application that helps identify possible diseases affecting mango leaves and fruit. Classification runs in the browser with TensorFlow.js, scans are stored locally in IndexedDB, and pending records synchronize with Supabase when connectivity is available.
+MangoLeaf AI is an offline-first progressive web application that helps identify possible diseases affecting mango leaves and fruit. Classification runs in the browser with TensorFlow.js, scan reports and compressed photos stay in this browser's IndexedDB, and Supabase publishes shared treatment guidelines.
 
-**Current app model: V4.3.0 Combined.** One model identifies seven classes covering mango leaves and fruit. **Repository app version: v0.5.5 (prepared release).** This release packages guided camera capture, responsive installation instructions, and scan-layout refinements. Local preparation, publication, and production promotion are separate steps; see the [v0.5.5 release record](docs/versions/PWA_VERSIONING.md#v055-guided-camera-and-installation-prepared-release-october-10-2026) and [versioned validation](docs/testing/TESTING.md#v055-release-validation-october-10-2026). The [October 7 release-status confirmation](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) preserves the maintainer's earlier publication and live-version report.
+**Current repository model: V4.5.0; prepared PWA version: `0.6.0`.** It uses the 0.70 confidence gate only; margin and entropy rejection are disabled. The [v0.6.0 release record](docs/versions/PWA_VERSIONING.md#v060-local-history-and-v450-prepared-release-october-16-2026) tracks the app version correction separately from the preserved [V4.5.0 trial](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) and [model version guide](docs/versions/AI_MODEL_VERSIONING.md). Release validation, physical-device evaluation, and production deployment are separate and pending. V5.0.0 remains untrained and on standby.
+
+## Local-only History candidate (October 15, 2026)
+
+This working tree stores scan reports and compressed photo Blobs only in this browser's IndexedDB. Supabase supplies public treatment guidelines through HTTP GET and Realtime; the app does not create guest sessions, upload scans/photos, pull private History, or queue cloud deletions. This is a source candidate, not a deployment or release announcement. Existing cloud tables, photos, users, policies, and Auth settings were left unchanged.
+
+Existing local report IDs, photos, hashes, model labels, and legacy metadata are preserved. Version 9 removes unused scan indexes without rewriting those records. Previously hidden `pending-delete` rows stay hidden. New reports have `local-only` status; older status values are retained as historical fields and do not trigger cloud work. Clearing site data, browser eviction, or losing the device can remove local History; there is no account or automatic cloud recovery.
+
+If a scan cannot save because browser storage is full, the translated dialog says so explicitly. Open History retains that unsaved result in memory while the user chooses reports to delete. Retry save uses the same prepared record ID and photo without running inference again. Discard releases the unsaved result; no report is automatically deleted. Reloading or closing the page loses an unsaved result. Other database errors retain the existing failure handling.
 
 ## Features
 
@@ -23,22 +31,24 @@ MangoLeaf AI is an offline-first progressive web application that helps identify
 - Read compact photo tips in the scan sheet, with Cancel kept visible while its content scrolls.
 - Check exact-file duplicates before diagnosis; retake, cancel, or open the saved result from photo review.
 - Compress stored images to WebP with a JPEG fallback.
-- Synchronize private scan records and photos through an automatic guest session; no registration screen is required.
-- Download public treatment guidelines independently of guest sign-in and keep their saved copy available offline.
+- Save scan reports and photos locally, with an explicit storage-full dialog and a retry that reuses the completed prediction.
+- Download public treatment guidelines through HTTP and Realtime, and keep their saved copy available offline.
 - Protect received guideline updates from older overlapping downloads and changes made by another open tab.
 - Skip rewriting saved guidance when a valid full download contains exactly the same records and text.
 - Read downloaded treatment guidelines offline; missing guidance shows an English/Bisaya status message rather than bundled treatment advice.
 - Install the app on supported devices as a PWA.
 
+**Historical local candidate test, October 12, 2026:** V4.5.0 was temporarily installed as `v4.5.0-candidate` with its original fitted gates for reversible evaluation. The October 16 adoption supersedes that temporary state; see the current model record above.
+
 **Local development state, October 9, 2026:** The V4.4.0 candidate completed training and threshold fitting, was tested locally, and was declined by the maintainer. The verified V4.3.0 model, label, and fitted settings are restored in `public/model/`. [V4.4.0 results and figures](docs/model-training/experiment/v4.4.0/TRIAL_v4_4_0.md#completed-results-and-local-rollback-october-9-2026) remain experimental evidence. Original downloaded runs and completed notebooks are preserved.
 
-App `0.5.5` includes the [guided camera](docs/ARCHITECTURE.md#guided-camera-capture) and [responsive installation guide](docs/ARCHITECTURE.md#installation-guide), first implemented under the earlier local `0.5.4` label. Desktop installation shows both platform instructions and a QR link to the public website; phone instructions use detected iOS/Android identity, while native install support is determined separately by the browser's install event. Phone History now shows four reports per page, with its selection-delete action above pagination; wider History retains six. Photo cards reserve their image height when the viewport changes. The [October 9 development record](docs/versions/PWA_VERSIONING.md#local-development-changes-october-9-2026) retains its original validation identity.
+The [guided camera](docs/ARCHITECTURE.md#guided-camera-capture) and [responsive installation guide](docs/ARCHITECTURE.md#installation-guide), prepared in app `0.5.5` and first implemented under the earlier local `0.5.4` label, remain part of `0.6.0`. Desktop installation shows both platform instructions and a QR link to the public website; phone instructions use detected iOS/Android identity, while native install support is determined separately by the browser's install event. Phone History now shows four reports per page, with its selection-delete action above pagination; wider History retains six. Photo cards reserve their image height when the viewport changes. The [October 9 development record](docs/versions/PWA_VERSIONING.md#local-development-changes-october-9-2026) retains its original validation identity.
 
 [App `0.4.9`](docs/versions/PWA_VERSIONING.md#v049-adoption-of-v430-combined) adopted the seven-class V4.3.0 Combined model (`v4.3.0`) on October 2, 2026, replacing the former six-class V3 baseline. The single scan flow remains in use, with separate Healthy Fruit and Healthy Leaf results. The [adopted trial report](docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) and [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) preserve export provenance, fitted gates, and model hashes. Its [comparison with V4.1.1](docs/model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) reports mixed reused-set results; adoption does not establish improved field accuracy. App `0.5.2` introduced responsive Home and History layouts, report selection with confirmed deletion, filter counts, compact photo tips, and badge/icon refinements. See the [v0.5.2 candidate record](docs/versions/PWA_VERSIONING.md#v052-scan-history-and-deletion-candidate-october-6-2026) for its dated scope and release checks. The [v0.5.1 validation](docs/testing/TESTING.md#v051-candidate-validation-october-5-2026) remains evidence for the earlier thumbnail-stability build. Earlier trials and rollback backups remain preserved.
 
 App `0.5.3` introduced protected guideline downloads and direct Realtime updates, network-only guideline HTTP reads, and retained offline advice. Its [dated preparation record](docs/versions/PWA_VERSIONING.md#v053-guideline-update-ordering-candidate-october-7-2026) retains the original candidate evidence. App `0.5.4` adds a content check before an accepted HTTP response is saved: identical guidance finishes successfully without clearing or rewriting IndexedDB. HTTP still downloads the complete guidance set, and direct Realtime updates keep their existing behavior. See the [v0.5.4 prepared release record](docs/versions/PWA_VERSIONING.md#v054-unchanged-guidance-check-prepared-release-october-7-2026) and [reported release status](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026).
 
-The [cloud-security update](docs/supabase/SECURITY-AND-SYNC.md#implementation-status) adds guest-owned private scans while preserving the local scan flow. Its private backup and October 2 local checks passed, with additional [v0.5.0 candidate evidence](docs/testing/TESTING.md#v050-candidate-validation-october-3-2026) preserved separately. The October 2 server verification confirmed the private Supabase bucket and owner policies, with original cloud records/files retained. Older clients can still scan locally and read public guidance, but cannot synchronize private scans until updated. The [October 7 release-status confirmation](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) records the published versions separately from those earlier local checks; the [v0.5.5 record](docs/versions/PWA_VERSIONING.md#v055-guided-camera-and-installation-prepared-release-october-10-2026) tracks the current prepared release.
+The historical [cloud-security update](docs/supabase/SECURITY-AND-SYNC.md#implementation-status) adds guest-owned private scans while preserving the local scan flow. Its private backup and October 2 local checks passed, with additional [v0.5.0 candidate evidence](docs/testing/TESTING.md#v050-candidate-validation-october-3-2026) preserved separately. The October 2 server verification confirmed the private Supabase bucket and owner policies, with original cloud records/files retained. Older clients can still scan locally and read public guidance, but cannot synchronize private scans until updated. The [October 7 release-status confirmation](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) records the published versions separately from those earlier local checks; the [v0.6.0 record](docs/versions/PWA_VERSIONING.md#v060-local-history-and-v450-prepared-release-october-16-2026) tracks the current prepared release with local-only History.
 
 The [treatment-source date clarification](docs/treatment-guidelines/TREATMENT-GUIDELINES-REVIEW-2026-10-02.md#source-dates-and-review-scope--2026-10-06-clarification) distinguishes the 2025 BAFS explanatory manual from the underlying 2009 GAP standard. Five of the review's six named publications fall within five years of October 6, 2026. The original standard is older, and the review's proposed wording is separate from its October 2 database snapshot; the clarification does not verify today's live guidance.
 
@@ -49,7 +59,7 @@ The [treatment-source date clarification](docs/treatment-guidelines/TREATMENT-GU
 - Tailwind CSS 4
 - TensorFlow.js
 - Dexie / IndexedDB
-- Supabase Database, Storage, and Realtime
+- Supabase Database and Realtime for public treatment guidelines
 - Serwist service worker
 
 ## Quick start
@@ -67,7 +77,7 @@ Then open `http://localhost:3000` on the same computer. This is the usual way to
 
 Next.js's built-in development MCP endpoint is disabled in `next.config.ts`. This setting is independent of an agent's GitHub MCP connector. See the [dependency security review](docs/security/DEPENDENCY_SECURITY.md) for the October 10 framework patch and its validation status.
 
-The Supabase values in `.env.local` must be replaced before cloud synchronization will work. See [SETUP.md](./SETUP.md) for the complete local setup, Supabase requirements, static-export notes, and pre-commit checks.
+The Supabase values in `.env.local` must be replaced before public treatment-guideline downloads and Realtime updates will work. See [SETUP.md](./SETUP.md) for the complete local setup, Supabase requirements, static-export notes, and pre-commit checks.
 
 Dependency installation registers Husky hooks. Before commits, `lint-staged` formats staged files with the project's Prettier configuration and includes the fixes in the commit; no editor extension is required. The separate scanner setup downloads a pinned, checksum-verified Gitleaks binary into ignored `.tools/`. Pushes check Git history for secrets and forbidden files, TypeScript, linting, and formatting locally. GitHub repeats these checks and verifies the app on pushes to `master`; see [local checks and CI](./SETUP.md#local-security-checks-and-github-ci).
 
@@ -95,19 +105,20 @@ The development-origin allowance supports browser requests through the tunnel; i
 
 ## Documentation
 
-### Current model used by the app
+### Current model in the repository
 
-**V4.3.0 Combined is the current application model.** These links describe its training, results, and saved files. Production promotion is tracked separately in the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion).
+**V4.5.0 OE is the adopted repository model**, using confidence >=0.70 only. The saved confidence-only reference is not a field-accuracy claim. Production promotion is tracked separately in the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion).
 
-- [V4.3.0 current model report and saved results](./docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md)
-- [V4.3.0 training notebooks and completed runs](./notebooks/non-experiment/v4.3.0/)
-- [V4.3.0 compared with V4.1.1](./docs/model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md)
+- [V4.5.0 current model report and saved results](./docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md)
+- [V4.5.0 training notebooks and completed runs](./notebooks/non-experiment/v4.5.0/)
+- [V4.3.0 historical report and rollback provenance](./docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md)
 
 ### Experimental models
 
-These versions are preserved experiments; they are not the current application model.
+V5.0.0 remains an untrained candidate workflow on standby. Repository adoption of V4.5.0 is complete; production deployment remains separate.
 
 - [All experimental training notebooks](./notebooks/experiment/README.md)
+- [V4.5.0 Outlier Exposure inputs, notebooks, and run guide](./docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md)
 - [V4.1 experiment results](./docs/model-training/experiment/v4.1/TRIAL_v4_1.md#completed-result-and-local-test)
 - [V4.1.1 repeated training and results](./docs/model-training/experiment/v4.1.1/TRIAL_v4_1_1.md)
 - [V4.2.0 separate leaf and fruit model results](./docs/model-training/experiment/v4.2.0/TRIAL_v4_2_0.md)

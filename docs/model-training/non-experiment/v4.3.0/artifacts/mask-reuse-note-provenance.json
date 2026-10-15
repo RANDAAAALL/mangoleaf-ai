@@ -1,0 +1,16 @@
+{
+  "recordType": "repository-only historical mask reuse note mapping",
+  "recordedOn": "2026-10-10",
+  "trainingRunId": "v4-3-0-training-20261001T112311Z-961e5eb7",
+  "originalFilename": "mask_requirements.txt",
+  "originalSourceRelative": "training/v4-3-0-training-20261001T112311Z-961e5eb7/mask_requirements.txt",
+  "originalRepositoryPath": "docs/model-training/experiment/v4.3.0/artifacts/training/mask_requirements.txt",
+  "repositoryPath": "docs/model-training/non-experiment/v4.3.0/artifacts/training/mask-reuse-note.txt",
+  "sha256": "29957def0785c27fe001212447045683659123d01b0aae9779935b6e3da1d070",
+  "bytes": 104,
+  "installable": false,
+  "trainingCompleteSha256": "b59585c2f574318997a507331fe36a003674c18e6efd6064c8d65755e627297e",
+  "evidenceCopyManifestSha256": "20c87c2c60d6ed60bae5d9f0212a7efae8230b8dd273b3bc0bcaa0b47c19530f",
+  "reason": "The original file records that reviewed masks were reused and no segmentation environment was executed. Its prose is not an installable pip requirements list; the repository archive name prevents dependency scanners from interpreting it as one.",
+  "originalRecordsPreserved": true
+}

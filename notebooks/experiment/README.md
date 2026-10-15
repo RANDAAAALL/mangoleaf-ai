@@ -4,10 +4,11 @@
 
 This folder holds candidate notebook workflows and completed experimental evidence. A completed notebook does not automatically change application assets or deployment. An explicit local candidate test may copy verified model files after preserving a rollback backup; adoption and release still follow the model-version policy.
 
-V4.3.0 Combined was adopted as the current application model on October 2, 2026. Its unchanged clean templates and completed result notebooks now live under [`notebooks/non-experiment/v4.3.0/`](../non-experiment/v4.3.0/); see the [adopted and historical notebook index](../README.md) and [current-model record](../../docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md#current-model-adoption-october-2-2026). The `non-experiment/` group contains both the current adopted model and older models; the workflows below retain their experimental status.
+V4.5.0 is the current repository model; V4.3.0 is preserved as a previous model. Adopted and historical notebooks live under `notebooks/non-experiment/`; see the [notebook index](../README.md) and [V4.5.0 adoption record](../../docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026). Workflows remaining below are experimental candidates.
 
 Folder versions identify notebook workflows, not model versions:
 
+- `v5.0.0/` contains the prepared OE fine-tuning and evaluation notebooks plus their helper. V5.0.0 is untrained and on standby; this folder is preparation only. See the [V5.0.0 guide](../../docs/model-training/experiment/v5.0.0/TRIAL_v5_0_0.md). No model weights or evaluation results exist.
 - `v3.1/` contains the threshold-only workflow against the shipped Trial 3 weights and the background-replacement training experiment. See the [background experiment guide](../../docs/model-training/experiment/v3.1/TRIAL_v3_1.md) and [original-weight threshold guide](../../docs/model-training/experiment/v3.1/THRESHOLD_FITTING_v3_1.md).
 - `v3.2/` contains paired threshold fitting for the v3.1 experiment models. See the [paired fitting guide](../../docs/model-training/experiment/v3.2/TRIAL_v3_2.md).
 - `v4/` contains seven-class training and separate threshold fitting, with healthy leaves and healthy fruits separated. See the [v4 upload and run guide](../../docs/model-training/experiment/v4/TRIAL_v4.md).
@@ -27,4 +28,4 @@ Use the matching guide in [`docs/model-training/experiment/`](../../docs/model-t
 
 The folder now also contains the unchanged [completed training notebook](v4.4.0/MangoLeaf_AI_Training_v4_4_0_Post_Training.ipynb) and [completed threshold-fitting notebook](v4.4.0/MangoLeaf_AI_Threshold_Fitting_v4_4_0_Results.ipynb). Actual Colab completion, saved metrics, and selected scientific figures are documented in the [trial report](../../docs/model-training/experiment/v4.4.0/TRIAL_v4_4_0.md#completed-results-and-local-rollback-october-9-2026). Original downloaded run folders remain intact; the repository holds a curated evidence copy with source hashes rather than raw datasets and full model exports.
 
-The maintainer completed the temporary local candidate test and chose to restore V4.3.0. V4.4.0 remains in `experiment/`; no adoption, new app release, or production deployment is recorded. Earlier pending execution notes above retain their October 8 preparation context and do not describe these completed run identities.
+The maintainer completed the temporary V4.4.0 local candidate test and chose to restore V4.3.0 at that time. V4.4.0 remains in `experiment/`; the later V4.5.0 adoption is recorded separately. Earlier pending execution notes above retain their October 8 preparation context and do not describe these completed run identities.

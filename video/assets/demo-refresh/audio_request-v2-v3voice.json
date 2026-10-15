@@ -1,0 +1,23 @@
+{
+  "version": "v2-v3voice",
+  "demo_voice_source": "assets/voice/refresh-*.wav (the narration stems used to render MangoLeafAI-walkthrough-v3.mp4)",
+  "info_voice_provider": "edge-tts",
+  "info_voice": "en-US-JennyNeural",
+  "info_rate": "+8%",
+  "lines": [
+    { "id": "v3voice-info-01-title", "text": "What is MangoLeaf AI?" },
+    { "id": "v3voice-info-02-overview", "text": "MangoLeaf AI is a Progressive Web Application that helps Mango Farmers automate the classification of Mango Leaf and Mango Green Fruit conditions, even offline. It requires no login or registration, works offline, runs on-device AI diagnosis, provides English and Bisaya treatment guidance, and includes Scan History." },
+    { "id": "refresh-01-intro", "source": "assets/voice/refresh-01-intro.wav" },
+    { "id": "refresh-02-take-photo", "source": "assets/voice/refresh-02-take-photo.wav" },
+    { "id": "refresh-03-capture", "source": "assets/voice/refresh-03-capture.wav" },
+    { "id": "refresh-04-review", "source": "assets/voice/refresh-04-review.wav" },
+    { "id": "refresh-05-wait", "source": "assets/voice/refresh-05-wait.wav" },
+    { "id": "refresh-06-result", "source": "assets/voice/refresh-06-result.wav" },
+    { "id": "refresh-07-bisaya", "source": "assets/voice/refresh-07-bisaya.wav" },
+    { "id": "refresh-08-history-intro", "source": "assets/voice/refresh-08-history-intro.wav" },
+    { "id": "refresh-09-open-scan", "source": "assets/voice/refresh-09-open-scan.wav" },
+    { "id": "refresh-10-change-language", "source": "assets/voice/refresh-10-change-language.wav" },
+    { "id": "refresh-11-bisaya-close", "source": "assets/voice/refresh-11-bisaya-close.wav" }
+  ],
+  "bgm": "assets/audio/bgm-demo-v2r.wav"
+}

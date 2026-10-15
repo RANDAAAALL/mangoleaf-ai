@@ -1,0 +1,33 @@
+{
+  "version": "v2-v3voice",
+  "demo_voice_source": "MangoLeafAI-walkthrough-v3.mp4 narration stems preserved as refresh WAVs",
+  "info_voice_provider": "edge-tts",
+  "info_voice_id": "en-US-JennyNeural",
+  "info_rate": "+8%",
+  "voices": [
+    { "id": "v3voice-info-01-title", "path": "assets/voice/v3voice-info-01-title.wav", "duration_s": 2.136000 },
+    { "id": "v3voice-info-02-overview", "path": "assets/voice/v3voice-info-02-overview.wav", "duration_s": 19.200000 },
+    { "id": "v2r-info-04-classes", "path": "assets/voice/v2r-info-04-classes.wav", "duration_s": 10.104014 },
+    { "id": "v2r-info-05-stack", "path": "assets/voice/v2r-info-05-stack.wav", "duration_s": 14.136009 },
+    { "id": "v2r-info-06-walkthrough", "path": "assets/voice/v2r-info-06-walkthrough.wav", "duration_s": 10.344014 },
+    { "id": "refresh-01-intro", "path": "assets/voice/refresh-01-intro.wav", "duration_s": 5.720816 },
+    { "id": "refresh-02-take-photo", "path": "assets/voice/refresh-02-take-photo.wav", "duration_s": 5.642449 },
+    { "id": "refresh-03-capture", "path": "assets/voice/refresh-03-capture.wav", "duration_s": 5.511837 },
+    { "id": "refresh-04-review", "path": "assets/voice/refresh-04-review.wav", "duration_s": 4.179592 },
+    { "id": "refresh-05-wait", "path": "assets/voice/refresh-05-wait.wav", "duration_s": 4.858776 },
+    { "id": "refresh-06-result", "path": "assets/voice/refresh-06-result.wav", "duration_s": 4.780408 },
+    { "id": "refresh-07-bisaya", "path": "assets/voice/refresh-07-bisaya.wav", "duration_s": 4.205714 },
+    { "id": "refresh-08-history-intro", "path": "assets/voice/refresh-08-history-intro.wav", "duration_s": 4.414694 },
+    { "id": "refresh-09-open-scan", "path": "assets/voice/refresh-09-open-scan.wav", "duration_s": 4.466939 },
+    { "id": "refresh-10-change-language", "path": "assets/voice/refresh-10-change-language.wav", "duration_s": 3.395918 },
+    { "id": "refresh-11-bisaya-close", "path": "assets/voice/refresh-11-bisaya-close.wav", "duration_s": 4.702041 }
+  ],
+  "composition": {
+    "duration_s": 127.029221,
+    "fps": 60,
+    "info_starts_s": [4.000000, 6.486000, 26.036000, 36.490014, 50.976023],
+    "demo_start_s": 61.820037,
+    "voice_starts_s": [61.920037, 68.500853, 75.003302, 81.375139, 86.414731, 91.653507, 97.293915, 103.199629, 108.474323, 113.801262, 117.577180],
+    "click_starts_s": [68.220853, 74.723302, 81.095139, 86.134731, 97.013915, 102.079629, 102.919629, 108.194323, 113.521262]
+  }
+}

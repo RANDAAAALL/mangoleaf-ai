@@ -1,0 +1,147 @@
+{
+  "seed": 42,
+  "subset": "val",
+  "images": [
+    {
+      "id": "ee9676472204c9cdd083",
+      "pool": "mango",
+      "sourceRelativePath": "anthracnose/DSC_0488.JPG",
+      "sha256": "ee9676472204c9cdd0830dce3be63a9d47e646ecb9d2c70126ddcdac063e4ecd",
+      "decodedRgbSha256": "802844f08f0fc1b7a07bb269cda0fa80540576d7537eab5edefcdc11c7356448",
+      "bytes": 384253,
+      "phash": "9e94f06a6bc1a327",
+      "dimensions": [
+        1036,
+        1982
+      ],
+      "label": "anthracnose",
+      "groupId": "ee9676472204c9cdd083",
+      "captureGroup": "",
+      "sourceGroup": "",
+      "subset": "val",
+      "relativePath": "val/anthracnose/ee9676472204c9cdd083__DSC_0488.JPG"
+    },
+    {
+      "id": "33409e67c75bacf91843",
+      "pool": "mango",
+      "sourceRelativePath": "bacterial_black_spot/Bc81.jpg",
+      "sha256": "33409e67c75bacf918435cb60888283900c137071edf76dab3b0aa6a0faac233",
+      "decodedRgbSha256": "2e3a1f8f8d7ba4f37115465bca0be7cddc9af8789bec7343808403edefd73d3d",
+      "bytes": 28816,
+      "phash": "a4b9dcd0d8ccc1cd",
+      "dimensions": [
+        256,
+        256
+      ],
+      "label": "bacterial_black_spot",
+      "groupId": "33409e67c75bacf91843",
+      "captureGroup": "",
+      "sourceGroup": "",
+      "subset": "val",
+      "relativePath": "val/bacterial_black_spot/33409e67c75bacf91843__Bc81.jpg"
+    },
+    {
+      "id": "09778a641c62fbc9511e",
+      "pool": "mango",
+      "sourceRelativePath": "bacterial_canker/IMG_20211106_142856 (Custom).jpg",
+      "sha256": "09778a641c62fbc9511eaf17ff5e2bb2bae843dd2eeb4807e41a66a49b5a84ae",
+      "decodedRgbSha256": "1eae4a9753cd4d0db968cad64078937b210c4be280ad2144240323dd29669c13",
+      "bytes": 37702,
+      "phash": "f3198ccecec69324",
+      "dimensions": [
+        320,
+        240
+      ],
+      "label": "bacterial_canker",
+      "groupId": "09778a641c62fbc9511e",
+      "captureGroup": "",
+      "sourceGroup": "",
+      "subset": "val",
+      "relativePath": "val/bacterial_canker/09778a641c62fbc9511e__IMG_20211106_142856 (Custom).jpg"
+    },
+    {
+      "id": "bccae50356a84611268b",
+      "pool": "mango",
+      "sourceRelativePath": "healthy_fruit/723624552_976005712089787_680463173797746853_n.jpg",
+      "sha256": "bccae50356a84611268b9fd0b5f5bf5517b222ac223d298084b121e169550b64",
+      "decodedRgbSha256": "f367cd18f85e38676e5537c1f067456724e0e3a6ec94b08c9bd0be1726f062ba",
+      "bytes": 35051,
+      "phash": "f79257c04aff2a02",
+      "dimensions": [
+        375,
+        595
+      ],
+      "label": "healthy_fruit",
+      "groupId": "bccae50356a84611268b",
+      "captureGroup": "",
+      "sourceGroup": "",
+      "subset": "val",
+      "relativePath": "val/healthy_fruit/bccae50356a84611268b__723624552_976005712089787_680463173797746853_n.jpg"
+    },
+    {
+      "id": "90a7907f7a259e404f6b",
+      "pool": "mango",
+      "sourceRelativePath": "healthy_leaf/HealthyLeaf_1.jpg",
+      "sha256": "90a7907f7a259e404f6bb8c6558bb1081f2d2942249ebb5cac4b747a2f989e0c",
+      "decodedRgbSha256": "5e58edbb37fcb19c79a4fd986fe9f40a07e7667257e61caea2c18483d12b7758",
+      "bytes": 22432,
+      "phash": "c0b42bf63f0327f0",
+      "dimensions": [
+        153,
+        392
+      ],
+      "label": "healthy_leaf",
+      "groupId": "90a7907f7a259e404f6b",
+      "captureGroup": "",
+      "sourceGroup": "",
+      "subset": "val",
+      "relativePath": "val/healthy_leaf/90a7907f7a259e404f6b__HealthyLeaf_1.jpg"
+    },
+    {
+      "id": "6e99067feab48b78d0e0",
+      "pool": "mango",
+      "sourceRelativePath": "mango_scab/verified mango disease 67.jpg",
+      "sha256": "6e99067feab48b78d0e0c4260e342c1b64673dab00a5c18099310bb9053f1dd7",
+      "decodedRgbSha256": "1ca0cf0fc9526a94f3a1a2d6b5db6d4c572db8bdfb21a78112d02e53617ae1cf",
+      "bytes": 3271606,
+      "phash": "aa87bd3e2ae86321",
+      "dimensions": [
+        5152,
+        3231
+      ],
+      "label": "mango_scab",
+      "groupId": "6e99067feab48b78d0e0",
+      "captureGroup": "",
+      "sourceGroup": "",
+      "subset": "val",
+      "relativePath": "val/mango_scab/6e99067feab48b78d0e0__verified mango disease 67.jpg"
+    },
+    {
+      "id": "6c1c6c90f2dbfdb3ab1d",
+      "pool": "mango",
+      "sourceRelativePath": "sooty_mold/IMG_20260219_134935.jpg",
+      "sha256": "6c1c6c90f2dbfdb3ab1d451b90a9ce2769222aaa237bb820bf55f782e63498d5",
+      "decodedRgbSha256": "efb622e70ac0f9bc58b09367d9124fc96c8a513d94c33c619af82f072b37785b",
+      "bytes": 509925,
+      "phash": "ed12ec72a5a855ac",
+      "dimensions": [
+        1119,
+        2623
+      ],
+      "label": "sooty_mold",
+      "groupId": "6c1c6c90f2dbfdb3ab1d",
+      "captureGroup": "",
+      "sourceGroup": "",
+      "subset": "val",
+      "relativePath": "val/sooty_mold/6c1c6c90f2dbfdb3ab1d__IMG_20260219_134935.jpg"
+    }
+  ],
+  "selectionBeforePredictions": true,
+  "namedOriginalFilenames": {
+    "anthracnose": "DSC_0488.JPG",
+    "sooty_mold": "IMG_20260219_134935.jpg",
+    "healthy_leaf": "HealthyLeaf_1.jpg",
+    "mango_scab": "verified mango disease 67.jpg",
+    "healthy_fruit": "723624552_976005712089787_680463173797746853_n.jpg"
+  }
+}

@@ -151,7 +151,7 @@ export const ScanHistoryList = memo(function ScanHistoryList({
   );
   const activeSelectedIds = selectedIds.filter((id) => matchingIds.has(id));
   const selectedIdSet = new Set(activeSelectedIds);
-  // Live synchronization can remove a selected scan. Forget its selection so
+  // Deletion in another tab can remove a selected scan. Forget its selection so
   // a later record with that ID cannot become selected without another click.
   if (activeSelectedIds.length !== selectedIds.length) {
     setSelectedIds(activeSelectedIds);
@@ -222,7 +222,7 @@ export const ScanHistoryList = memo(function ScanHistoryList({
     }
   };
 
-  // Keep the selected page valid when deletion or sync removes the last page.
+  // Keep the selected page valid when deletion removes the last page.
   const totalPages = Math.ceil(filteredScans.length / itemsPerPage) || 1;
   if (currentPage > totalPages) {
     setPagination((current) => ({ ...current, currentPage: totalPages }));
@@ -504,9 +504,6 @@ export const ScanHistoryList = memo(function ScanHistoryList({
               key={scan.id}
               scan={scan}
               imageBlob={scan.image_blob || null}
-              imageUrlFallback={
-                scan._status === "local-only" ? null : scan.image_url
-              }
               language={language}
               onSelect={onSelectScan}
               onDelete={openSingleDeleteConfirmation}

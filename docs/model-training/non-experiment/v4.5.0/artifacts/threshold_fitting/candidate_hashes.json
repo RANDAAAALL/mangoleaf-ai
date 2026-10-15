@@ -1,0 +1,22 @@
+{
+  "group1-shard1of3.bin": {
+    "sha256": "3afb04fb4e127cdbe19f71e396966ddab8eb136522ebd1bc4c9eabfd68032692",
+    "bytes": 4194304
+  },
+  "group1-shard2of3.bin": {
+    "sha256": "72671218e2f2370306f99e28df46873e3063cab258463a1c9a4aec7e2b6dd619",
+    "bytes": 4194304
+  },
+  "group1-shard3of3.bin": {
+    "sha256": "075e1eabdb172384f5c5df496b211d5463eee12bc54cec6ca1d40ab0a73225d2",
+    "bytes": 3497804
+  },
+  "model.json": {
+    "sha256": "0fd24e1f0f6bd5595566b8f4aec130808fbd510208ed82abbdc4d319fd2aa2a1",
+    "bytes": 228393
+  },
+  "model_config.json": {
+    "sha256": "01caf6c73bd8223c82ce501dcff8d4df9dc906fb39e88860a021ee0602b14306",
+    "bytes": 1388
+  }
+}

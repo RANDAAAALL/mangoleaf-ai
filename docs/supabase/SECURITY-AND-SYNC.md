@@ -1,6 +1,22 @@
-# Cloud scan ownership, offline use, and recovery
+# Supabase guidelines, preserved cloud data, and recovery
 
-Supabase stores the cloud copies of scan records and photos, and publishes the shared English/Bisaya treatment guidelines. IndexedDB remains the application's local source of truth. A farmer can diagnose and save a photo locally without waiting for a cloud connection.
+## Local-only History candidate (October 15, 2026)
+
+The current source uses Supabase only for public guideline SELECT and Realtime notifications. The app creates no guest session and sends no scan, photo upload/download, or cloud deletion requests. Reports and compressed photo Blobs remain local in IndexedDB. Existing server tables, private Storage photos, Auth users, policies, and anonymous-sign-in settings were not changed or deleted.
+
+The historical security implementation below remains evidence for earlier cloud clients and the retained cloud archive. Its configuration checklist is not a prerequisite for the local-only candidate. New project setup needs only the guideline table, least-privilege public read access, Realtime publication, and browser-safe project settings from [SETUP.md](../../SETUP.md#configure-supabase).
+
+### Preservation and rollback boundary
+
+Dexie v9 drops unused scan indexes without rewriting reports. Existing IDs, Blobs, hashes, model labels, status values, and historical owner/cloud/path/device references remain. Old `pending-delete` records remain hidden and do not run remote cleanup. A new local deletion removes only the selected local report/photo; it does not delete a preserved remote archive.
+
+An older v8-only application cannot simply reopen a database upgraded to v9. A rollback must retain a v9-compatible schema and the preserved fields while deliberately restoring its old behavior; do not downgrade, clear, or recreate IndexedDB. Re-enabling cloud code would also need renewed guest ownership/security review, because old retained status values are no longer an active queue. Preserve the reviewed source baseline and backup before rollback.
+
+No automatic recovery exists after local site data is cleared, evicted, or lost with the device. Retained historical server data is not automatically assigned to a newly generated UUID. Any administrator-assisted recovery or cleanup requires a separate authorized preservation plan. Disabling anonymous sign-ins alone would neither remove old Auth users nor delete their scan/photo data; no such dashboard action was performed here.
+
+## Historical cloud client and security implementation (October 2–14, 2026)
+
+The earlier client synchronized scan reports and photos through verified guests. The following rules, SQL, evidence, and deployment notes describe that implementation and remain intact for preserved cloud resources.
 
 For a plain-English explanation of the maintenance files, start with the [SQL folder guide](../../supabase/sql/README.md). It distinguishes the forward change, verification checks, and optional cloud-write pause.
 

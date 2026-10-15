@@ -1,0 +1,5 @@
+
+warning: The `--system` flag has no effect, `uv venv` always ignores virtual environments when finding a Python interpreter; did you mean `--no-managed-python`?
+Using CPython 3.11.17
+Creating virtual environment at: mangoleaf-v450-converter/v4-5-0-training-20261011T063913Z-40b7b0fe
+Activate with: source mangoleaf-v450-converter/v4-5-0-training-20261011T063913Z-40b7b0fe/bin/activate

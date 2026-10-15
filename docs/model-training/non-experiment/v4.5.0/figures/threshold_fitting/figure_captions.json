@@ -1,0 +1,7 @@
+{
+  "confusion_matrix.png": "Raw seven-class predictions before rejection. Rows are actual classes; columns are predicted classes. Each right-panel row sums to 100%; its diagonal is class recall. This is existing-study test evidence.",
+  "confusion_matrix_with_rejection.png": "All true mango test photos remain in the denominator. The Rejected column shows missed diagnoses; diagonal row percentages are rejection-aware recall. Rejection is a gate, not an eighth trained class.",
+  "per_class_metrics.png": "Blue precision: how often a predicted class is correct. Orange recall: how many real class photos were found. Green F1 balances both. Support n is the actual class count; bar labels are rounded for display only.",
+  "per_class_metrics_with_rejection.png": "All true mango test photos remain in class support. Rejected mango photos count as missed class predictions. The dashed line is correct accepted predictions divided by all test photos, not accepted-only accuracy.",
+  "threshold_search.png": "One slice of the two-dimensional margin/entropy search. The frozen choice must retain at least 95% of mango validation photos. OOD reporting and mango test scores were never used to choose this point."
+}

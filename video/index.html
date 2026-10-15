@@ -6,359 +6,278 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       * { box-sizing: border-box; }
-      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #f6faf1; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #f7faf2; }
       body { color: #143519; font-family: Inter, system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
-      .canvas { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #f6faf1; }
-      
-      /* Subtle ambient agrarian lighting & grid */
-      .bg-orbit { position: absolute; width: 850px; height: 850px; border-radius: 50%; filter: blur(70px); opacity: .45; pointer-events: none; }
-      .bg-orbit.one { left: -240px; top: -220px; background: #dcefd4; }
-      .bg-orbit.two { right: -260px; bottom: -280px; background: #fde1bc; }
-      .field-lines { position: absolute; inset: 0; opacity: .35; background-image: linear-gradient(#dfead8 1.5px, transparent 1.5px), linear-gradient(90deg, #dfead8 1.5px, transparent 1.5px); background-size: 88px 88px; mask-image: linear-gradient(to bottom, transparent 5%, black 25%, black 75%, transparent 95%); pointer-events: none; }
-      
-      .footer { position: absolute; right: 76px; bottom: 38px; left: 76px; display: flex; justify-content: space-between; color: #435e49; font-size: 14px; font-weight: 600; letter-spacing: .2px; z-index: 10; opacity: 0; }
-
-      /* Scene Sections */
-      .scene { position: absolute; inset: 0; width: 1920px; height: 1080px; }
-      .clip { overflow: hidden; }
-      
-      /* Brand Splash (Scene 0) */
-      .splash-card { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50; }
-      .loader-mark { position: relative; display: grid; place-items: center; width: 130px; height: 130px; margin-bottom: 24px; }
-      .loader-ring { position: absolute; inset: 0; border: 6px solid #e2ebd9; border-top-color: #277839; border-radius: 50%; }
-      .loader-mark svg { position: relative; width: 64px; height: 64px; }
-      .loader-title { font-size: 52px; font-weight: 850; letter-spacing: -1.5px; margin: 0; color: #143519; }
-
-      /* Left Text Column for Step Narratives - Floating Typography */
-      .copy-col { position: absolute; left: 140px; top: 220px; width: 680px; z-index: 20; opacity: 0; }
-      .kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.6px; color: #1f682f; background: #e3f1df; padding: 6px 14px; border-radius: 20px; margin-bottom: 24px; }
-      .title-lg { font-size: 54px; line-height: 1.08; font-weight: 850; letter-spacing: -1.5px; color: #143519; margin: 0 0 20px 0; }
-      .desc-md { font-size: 23px; line-height: 1.45; color: #35533c; font-weight: 550; margin: 0; max-width: 620px; }
-      
-      /* Intro Feature Text List - Floating pure text only (No cards, no icons) */
-      .pill-list { display: flex; flex-direction: column; gap: 16px; margin-top: 36px; }
-      .pill { font-size: 22px; font-weight: 700; color: #1e4a24; line-height: 1.4; opacity: 0; }
-
-      /* Right Fixed Mobile Mockup Frame (STRICT ZERO MOVEMENT, NO NOTCH) */
-      .phone-frame { position: absolute; right: 120px; top: 96px; width: 420px; height: 882px; z-index: 30; opacity: 0; }
-      .phone-bezel { position: relative; width: 100%; height: 100%; background: #1a221b; border-radius: 54px; padding: 12px; box-shadow: 0 35px 80px -15px rgba(17, 38, 22, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.15) inset; overflow: hidden; }
-      .phone-screen { position: relative; width: 396px; height: 858px; border-radius: 42px; overflow: hidden; background: #ffffff; }
-      
-      /* Screenshot Layers inside screen (Exact 1080x2340 -> 396x858 aspect ratio) */
-      .shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }
-      #shot-1 { opacity: 1; }
-
-      /* Precise Interactive Arrow Pointer */
-      .pointer { position: absolute; top: 0; left: 0; z-index: 45; pointer-events: none; opacity: 0; transform-origin: 5.67px 4.25px; }
-      .pointer svg { width: 34px; height: 34px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35)); }
-      .pointer-ring { position: absolute; width: 44px; height: 44px; border-radius: 50%; border: 3px solid #277839; top: 0; left: 0; margin-left: -22px; margin-top: -22px; opacity: 0; pointer-events: none; z-index: 44; }
-
-      /* Finale Brand Outro (Pure leaf SVG mark without green container box) */
-      .finale { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50; opacity: 0; text-align: center; }
-      .finale-inner { max-width: 1300px; width: 100%; display: flex; flex-direction: column; align-items: center; }
-      .finale-logo { display: flex; align-items: center; justify-content: center; width: 76px; height: 76px; margin: 0 auto 24px auto; }
-      .finale-logo svg { width: 76px; height: 76px; display: block; }
-      .finale-title { font-size: 60px; font-weight: 850; letter-spacing: -2px; color: #143519; margin: 0 0 16px 0; }
-      .finale-tagline { font-size: 25px; line-height: 1.4; color: #35533c; font-weight: 550; margin: 0 0 36px 0; }
-      .finale-points { display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 24px; flex-wrap: nowrap; }
-      .finale-point { font-size: 19px; font-weight: 700; color: #1b4b24; display: inline-flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.85); padding: 12px 24px; border-radius: 14px; border: 1px solid #d4e6cf; box-shadow: 0 6px 20px rgba(20, 53, 25, 0.05); white-space: nowrap; flex-shrink: 0; }
-      .point-check { color: #277839; font-weight: 900; }
+      .canvas { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: linear-gradient(118deg, #f7faf2 0%, #f3f8ee 56%, #fbf5e9 100%); }
+      .orbit { position: absolute; width: 850px; height: 850px; border-radius: 50%; filter: blur(70px); opacity: .4; pointer-events: none; }
+      .orbit-a { left: -280px; top: -260px; background: #dcefd4; }
+      .orbit-b { right: -330px; bottom: -340px; background: #fde3bf; }
+      .grid { position: absolute; inset: 0; opacity: .22; background-image: linear-gradient(#dfead8 1px, transparent 1px), linear-gradient(90deg, #dfead8 1px, transparent 1px); background-size: 88px 88px; mask-image: linear-gradient(to bottom, transparent 3%, black 24%, black 74%, transparent 96%); }
+      .copy { position: absolute; left: 142px; top: 246px; width: 760px; z-index: 15; opacity: 0; }
+      .eyebrow { display: inline-flex; align-items: center; color: #216c32; background: #e7f2e3; border: 1px solid #d5e7d0; border-radius: 30px; padding: 10px 18px; font-size: 15px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; }
+      .title { max-width: 740px; margin: 28px 0 20px; font-size: 57px; line-height: 1.06; letter-spacing: -2px; font-weight: 830; }
+      .desc { max-width: 700px; margin: 0; color: #425c47; font-size: 25px; line-height: 1.48; font-weight: 500; }
+      .info { position: absolute; inset: 0; z-index: 16; display: flex; align-items: center; justify-content: center; padding: 170px 120px 140px; text-align: center; opacity: 0; }
+      .info-inner { width: 100%; max-width: 1540px; margin: 0 auto; }
+      .info-title { max-width: 1700px; margin: 0 auto 22px; font-size: 72px; line-height: 1.04; letter-spacing: -2.5px; font-weight: 850; }
+      .info-title-only { font-size: 72px; }
+      .info-desc { max-width: 1450px; margin: 0 auto; color: #425c47; font-size: 26px; line-height: 1.45; font-weight: 520; }
+      .info-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 28px auto 0; max-width: 1550px; }
+      .info-tag { padding: 12px 17px; border: 1px solid #c9dfc3; border-radius: 14px; background: #eaf5e6; color: #315438; font-size: 18px; font-weight: 750; box-shadow: 0 8px 24px rgba(20,53,25,.05); }
+      .info-tag b { color: #277839; margin-right: 9px; }
+      .condition-panel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 72px; margin: 42px auto 0; max-width: 1480px; padding: 0; }
+      .condition-group h3 { margin: 0 0 14px; color: #1e6831; font-size: 24px; }
+      .condition-group p { margin: 10px 0; color: #38583e; font-size: 21px; line-height: 1.35; }
+      .healthy-row { grid-column: auto; padding: 0; border: 0; color: #315438; font-size: 21px; font-weight: 700; }
+      .stack-list { display: grid; grid-template-columns: repeat(5, max-content); justify-content: center; gap: 12px; max-width: 1660px; margin: 32px auto 0; }
+      .stack-item { padding: 12px 16px; border: 1px solid #c9dfc3; border-radius: 14px; background: #eaf5e6; color: #315438; font-size: 18px; font-weight: 700; }
+      .model-chip { display: flex; width: max-content; margin: 24px auto 0; padding: 13px 20px; border: 1px solid #c9dfc3; border-radius: 14px; background: #eaf5e6; color: #315438; font-size: 20px; font-weight: 800; }
+      .flow { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin: 32px auto 0; max-width: 1540px; }
+      .flow-step { padding: 14px 18px; border: 1px solid #c9dfc3; border-radius: 14px; background: #eaf5e6; color: #315438; font-size: 18px; font-weight: 750; box-shadow: 0 8px 24px rgba(20,53,25,.05); }
+      .flow-arrow { color: #277839; font-size: 28px; font-weight: 800; }
+      .phone-frame { position: absolute; top: 88px; right: 150px; width: 420px; height: 882px; z-index: 30; opacity: 0; }
+      .phone-bezel { position: relative; width: 100%; height: 100%; padding: 12px; overflow: hidden; border-radius: 52px; background: #17221a; box-shadow: 0 34px 85px -18px rgba(17,38,22,.42), 0 0 0 1px rgba(255,255,255,.4) inset; }
+      .phone-screen { position: relative; width: 396px; height: 858px; overflow: hidden; border-radius: 41px; background: #fff; }
+      .screen-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }
+      #screen-landing { opacity: 0; }
+      .recording { background: #fff; }
+      .pointer { position: absolute; left: 0; top: 0; z-index: 48; width: 34px; height: 38px; pointer-events: none; opacity: 0; transform-origin: 4px 4px; filter: drop-shadow(0 2px 2px rgba(0,0,0,.18)); }
+      .pointer svg { width: 34px; height: 38px; display: block; }
+      .pointer-ring { position: absolute; z-index: 47; left: 0; top: 0; width: 42px; height: 42px; margin-left: -21px; margin-top: -21px; border-radius: 50%; border: 3px solid #277839; opacity: 0; pointer-events: none; }
+      #splash { background: linear-gradient(118deg, #f7faf2 0%, #f3f8ee 56%, #fbf5e9 100%); }
+      #loader-mark { width: 78px; height: 78px; opacity: 0; }
+      .finale { position: absolute; inset: 0; z-index: 55; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; opacity: 0; }
+      .finale-mark { width: 90px; height: 90px; margin-bottom: 20px; }
+      .finale-title { margin: 0 0 14px; color: #143519; font-size: 62px; line-height: 1; font-weight: 850; letter-spacing: -2px; }
+      .finale-tagline { margin: 0; color: #425f47; font-size: 26px; font-weight: 550; }
+      .finale-points { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; max-width: 1580px; margin-top: 40px; }
+      .finale-point { padding: 13px 18px; border: 1px solid #c9dfc3; border-radius: 14px; background: #eaf5e6; color: #315438; font-size: 17px; font-weight: 700; box-shadow: 0 5px 20px rgba(20,53,25,.05); }
+      .finale-point b { color: #277839; margin-right: 8px; }
     </style>
   </head>
   <body>
-    <div id="main" class="canvas" data-composition-id="main" data-width="1920" data-height="1080">
-      <div class="bg-orbit one" data-layout-allow-overflow></div>
-      <div class="bg-orbit two" data-layout-allow-overflow></div>
-      <div class="field-lines"></div>
-
-      <!-- SCENE 0: Brand Splash (0 - 4.0s) -->
-      <div id="splash-card" class="splash-card">
-        <div class="loader-mark">
-          <div id="loader-ring" class="loader-ring"></div>
-          <div id="loader-logo">
-            <svg viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M10.3125 21.2809C9.625 21.2809 8.93229 21.2028 8.23438 21.0465C7.53646 20.8903 6.82292 20.6663 6.09375 20.3746C6.34375 17.8538 7.07292 15.4996 8.28125 13.3121C9.48958 11.1246 11.0417 9.19757 12.9375 7.5309C10.6458 8.69757 8.66146 10.2392 6.98438 12.1559C5.30729 14.0726 4.13542 16.2601 3.46875 18.7184C3.38542 18.6559 3.30729 18.5882 3.23438 18.5153C3.16146 18.4424 3.08333 18.3642 3 18.2809C2.02083 17.3017 1.27604 16.208 0.765625 14.9996C0.255208 13.7913 0 12.5309 0 11.2184C0 9.80173 0.28125 8.44757 0.84375 7.1559C1.40625 5.86423 2.1875 4.7184 3.1875 3.7184C4.875 2.0309 7.0625 0.931941 9.75 0.421524C12.4375 -0.0888928 16.2083 -0.135768 21.0625 0.280899C21.4375 5.26007 21.375 9.05694 20.875 11.6715C20.375 14.2861 19.2917 16.4267 17.625 18.0934C16.6042 19.1142 15.4635 19.9007 14.2031 20.4528C12.9427 21.0049 11.6458 21.2809 10.3125 21.2809Z" fill="#0D631B"/></svg>
-          </div>
+      <div id="main" class="canvas" data-composition-id="main" data-start="0" data-duration="167.29" data-width="1920" data-height="1080" data-fps="60">
+      <div class="orbit orbit-a" data-layout-allow-overflow></div><div class="orbit orbit-b" data-layout-allow-overflow></div><div class="grid"></div>
+      <div id="splash" style="position:absolute;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div style="position:relative;display:grid;place-items:center;width:130px;height:130px;margin-bottom:24px">
+          <div id="loader-ring" style="position:absolute;inset:0;border:6px solid #e2ebd9;border-top-color:#277839;border-radius:50%"></div>
+          <img id="loader-mark" src="assets/images/mangoleaf-icon.svg" alt="" />
         </div>
-        <h1 id="loader-title" class="loader-title">MangoLeaf AI</h1>
+        <h1 id="loader-title" style="margin:0;color:#143519;font-size:52px;font-weight:850;letter-spacing:-1.5px;opacity:0">MangoLeaf AI</h1>
       </div>
-
-      <!-- LEFT COLUMN: Step Narratives -->
-      <!-- Scene 1: Intro (4.0 - 10.6s) -->
-      <div id="s1-copy" class="copy-col">
-        <div class="kicker">Smart Disease Classifier</div>
-        <h2 class="title-lg">Protect Your Harvest with Edge AI</h2>
-        <p class="desc-md">Fast, offline-ready diagnosis designed specifically for Philippine Carabao mango growers.</p>
-        <div class="pill-list">
-          <div id="p1" class="pill">100% On-Device TensorFlow.js Inference</div>
-          <div id="p2" class="pill">Instant Results without Cellular Data</div>
-          <div id="p3" class="pill">Bilingual Guidance in English & Bisaya</div>
-        </div>
-      </div>
-
-      <!-- Scene 2: Step 1 (11.8 - 19.5s) -->
-      <div id="s2-copy" class="copy-col">
-        <div class="kicker">Step 1 • Capture Leaf or Fruit</div>
-        <h2 class="title-lg">Take a Photo or Select from Gallery</h2>
-        <p class="desc-md">Take a clear and proper single photo of a mango leaf or fruit in daylight, or choose an existing image from your gallery.</p>
-      </div>
-
-      <!-- Scene 3: Step 2 (19.8 - 28.8s) -->
-      <div id="s3-copy" class="copy-col">
-        <div class="kicker">Step 2 • Run Diagnosis</div>
-        <h2 class="title-lg">Instant On-Device AI Classification</h2>
-        <p class="desc-md">TensorFlow.js processes the leaf image locally in your browser with zero latency and complete privacy.</p>
-      </div>
-
-      <!-- Scene 4: Step 3 (29.0 - 37.0s) -> Kicker updated per user request -->
-      <div id="s4-copy" class="copy-col">
-        <div class="kicker">Step 3 • Diagnosis Result</div>
-        <h2 class="title-lg">Clear Identification & Confidence</h2>
-        <p class="desc-md">Identifies Anthracnose and other critical foliar diseases with high confidence scores and symptoms breakdown.</p>
-      </div>
-
-      <!-- Scene 5: Step 4 (37.2 - 45.0s) -->
-      <div id="s5-copy" class="copy-col">
-        <div class="kicker">Step 4 • Bilingual Action</div>
-        <h2 class="title-lg">Actionable Treatment in Bisaya & English</h2>
-        <p class="desc-md">Switch to Cebuano/Bisaya with one tap so local farmers and farmhands can understand immediate treatment steps.</p>
-      </div>
-
-      <!-- Scene 6: Step 5 (45.2 - 50.8s) -->
-      <div id="s6-copy" class="copy-col">
-        <div class="kicker">Step 5 • Scan History</div>
-        <h2 class="title-lg">Track Previous Scans Over Time</h2>
-        <p class="desc-md">Every diagnosis is saved locally in IndexedDB and syncs to Supabase whenever connectivity returns.</p>
-      </div>
-
-      <!-- FIXED PHONE MOCKUP (STRICT ZERO MOVEMENT, NO NOTCH) -->
-      <div id="phone-fixed" class="phone-frame">
-        <div class="phone-bezel">
-          <div class="phone-screen">
-            <!-- 7 Real App Screenshots -->
-            <img id="shot-1" class="shot" src="assets/images/1_mobile-landing-page.jpg" alt="Landing Page" />
-            <img id="shot-2" class="shot" src="assets/images/2_Start_A_Scan.jpg" alt="Start Scan Drawer" />
-            <img id="shot-3" class="shot" src="assets/images/3_Review_A_Photo.jpg" alt="Review Photo" />
-            <img id="shot-4" class="shot" src="assets/images/4_AI_Classification_Running.jpg" alt="AI Classification" />
-            <img id="shot-5" class="shot" src="assets/images/6_Diagnosed_Result_EN.jpg" alt="Result EN" />
-            <img id="shot-6" class="shot" src="assets/images/5_Diagnosed_Result_BIS.jpg" alt="Result BIS" />
-            <img id="shot-7" class="shot" src="assets/images/7_Scan_History_Results.jpg" alt="Scan History" />
-
-            <!-- Interactive Pointer & Click Ripple -->
-            <div id="pointer" class="pointer">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M4 3L11.5 21L14.5 13.5L22 10.5L4 3Z" fill="#143519" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div id="pointer-ring" class="pointer-ring" data-layout-allow-overflow></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Outro Brand Finale (Single horizontal line, pure leaf SVG mark) -->
-      <div id="finale" class="finale">
-        <div class="finale-inner">
-          <div class="finale-logo">
-            <svg viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M10.3125 21.2809C9.625 21.2809 8.93229 21.2028 8.23438 21.0465C7.53646 20.8903 6.82292 20.6663 6.09375 20.3746C6.34375 17.8538 7.07292 15.4996 8.28125 13.3121C9.48958 11.1246 11.0417 9.19757 12.9375 7.5309C10.6458 8.69757 8.66146 10.2392 6.98438 12.1559C5.30729 14.0726 4.13542 16.2601 3.46875 18.7184C3.38542 18.6559 3.30729 18.5882 3.23438 18.5153C3.16146 18.4424 3.08333 18.3642 3 18.2809C2.02083 17.3017 1.27604 16.208 0.765625 14.9996C0.255208 13.7913 0 12.5309 0 11.2184C0 9.80173 0.28125 8.44757 0.84375 7.1559C1.40625 5.86423 2.1875 4.7184 3.1875 3.7184C4.875 2.0309 7.0625 0.931941 9.75 0.421524C12.4375 -0.0888928 16.2083 -0.135768 21.0625 0.280899C21.4375 5.26007 21.375 9.05694 20.875 11.6715C20.375 14.2861 19.2917 16.4267 17.625 18.0934C16.6042 19.1142 15.4635 19.9007 14.2031 20.4528C12.9427 21.0049 11.6458 21.2809 10.3125 21.2809Z" fill="#0D631B"/></svg>
-          </div>
-          <h2 class="finale-title">MangoLeaf AI</h2>
-          <p class="finale-tagline">Technology that works where the mango farmer works.</p>
-          <div class="finale-points">
-            <div id="f-pt-1" class="finale-point"><span class="point-check">✓</span> On-Device Offline AI Diagnosis</div>
-            <div id="f-pt-2" class="finale-point"><span class="point-check">✓</span> Bisaya & English Guidance</div>
-            <div id="f-pt-3" class="finale-point"><span class="point-check">✓</span> Scan History</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer"><span>Carabao Mango Disease Classifier</span><span>Offline-First Progressive Web App</span></div>
-
-      <!-- SOUND DESIGN: BGM + HEYGEN VOICE TRACKS -->
-      <audio id="bgm" src="assets/audio/bgm.wav" data-start="0" data-duration="56.5" data-track-index="15"></audio>
-      <audio id="voice-intro" src="assets/voice/01-intro.wav" data-start="4.0" data-duration="6.55" data-track-index="20" data-volume="1"></audio>
-      <audio id="voice-photo" src="assets/voice/02-step-photo.wav" data-start="11.8" data-duration="7.00" data-track-index="21" data-volume="1"></audio>
-      <audio id="voice-diagnosis" src="assets/voice/03-step-diagnosis.wav" data-start="20.0" data-duration="7.95" data-track-index="22" data-volume="1"></audio>
-      <audio id="voice-results" src="assets/voice/04-step-results.wav" data-start="29.2" data-duration="7.00" data-track-index="23" data-volume="1"></audio>
-      <audio id="voice-guidance" src="assets/voice/05-step-guidance.wav" data-start="37.4" data-duration="6.80" data-track-index="24" data-volume="1"></audio>
-      <audio id="voice-history" src="assets/voice/06-scan-history.wav" data-start="45.4" data-duration="4.00" data-track-index="25" data-volume="1"></audio>
-
-      <!-- PRECISE HIGH-VOLUME CLICK SOUND EFFECTS (Step 1 Scan FAB, Step 2 Run Diag, Step 4 Bisaya) -->
-      <audio id="sfx-click-1" src="assets/audio/click.wav" data-start="12.5" data-duration="0.18" data-track-index="30" data-volume="1"></audio>
-      <audio id="sfx-click-2" src="assets/audio/click.wav" data-start="21.4" data-duration="0.18" data-track-index="31" data-volume="1"></audio>
-      <audio id="sfx-click-3" src="assets/audio/click.wav" data-start="39.0" data-duration="0.18" data-track-index="32" data-volume="1"></audio>
+      <section id="info-1" class="info info-title-screen"><div class="info-inner"><h2 class="info-title info-title-only">What is MangoLeaf AI?</h2></div></section>
+      <section id="info-2" class="info info-combined"><div class="info-inner"><h2 class="info-title">Field-Ready Mango Health Diagnostic.</h2><p class="info-desc">MangoLeaf AI is Progressive Web Application that helps Mango Farmers to Automate the Classification of the Mango Leaf and Green Fruit conditions even offline.</p><div class="info-tags"><div class="info-tag"><b>✓</b>No Login/Register</div><div class="info-tag"><b>✓</b>Offline Functional</div><div class="info-tag"><b>✓</b>On-device-AI-Diagnosis</div><div class="info-tag"><b>✓</b>English + Bisaya treatment guidance</div><div class="info-tag"><b>✓</b>Scan History</div></div></div></section>
+      <section id="info-3" class="info"><div class="info-inner"><h2 class="info-title">Support 7 classes</h2><div class="condition-panel"><div class="condition-group"><h3>Leaf Diseases</h3><p>Anthracnose</p><p>Sooty Mold</p><p>Bacterial Canker</p></div><div class="condition-group"><h3>Fruit Diseases</h3><p>Mango Scab</p><p>Bacterial Black Spot</p></div><div class="condition-group healthy-row"><h3>Healthy</h3><p>Healthy Leaf</p><p>Healthy Fruit</p></div></div></div></section>
+      <section id="info-4" class="info"><div class="info-inner"><h2 class="info-title">MangoLeaf AI Offline-First Tech Stack</h2><div class="stack-list"><span class="stack-item">Next.js</span><span class="stack-item">React</span><span class="stack-item">Bun</span><span class="stack-item">TypeScript</span><span class="stack-item">Tailwind CSS</span><span class="stack-item">TensorFlow.js</span><span class="stack-item">Dexie</span><span class="stack-item">IndexedDB</span><span class="stack-item">Supabase</span><span class="stack-item">Serwist</span></div><div class="model-chip">Model: MobileNetV3-Large</div></div></section>
+      <section id="info-5" class="info"><div class="info-inner"><h2 class="info-title">Simple Walkthrough</h2><p class="info-desc">We will show one straightforward path: scan, take a photo, view the diagnosed result, open Scan History, then view the scan detail modal.</p><div class="flow"><span class="flow-step">Scan</span><span class="flow-arrow">→</span><span class="flow-step">Take a photo</span><span class="flow-arrow">→</span><span class="flow-step">View result</span><span class="flow-arrow">→</span><span class="flow-step">Scan History</span><span class="flow-arrow">→</span><span class="flow-step">Scan details</span></div></div></section>
+      <section id="copy-1" class="copy"><div class="eyebrow">Start with one clear photo</div><h2 class="title">A clear view of Mango.</h2><p class="desc">MangoLeaf AI checks a Mango Leaf or Mango Green Fruit right on your phone, even when you are offline.</p></section>
+      <section id="copy-2" class="copy"><div class="eyebrow">Step 1 · Choose a photo</div><h2 class="title">Capture a Mango Leaf or Mango Green Fruit.</h2><p class="desc">Read the Photo Tips, then use Take Photo for this simple demo. Keep one whole Mango Leaf or Mango Green Fruit in even light.</p></section>
+      <section id="copy-3" class="copy"><div class="eyebrow">Step 2 · Frame the mango</div><h2 class="title">Center the subject in the Green Box Guidance.</h2><p class="desc">Hold steady and use good light so the camera can capture a clear Mango Green Fruit view.</p></section>
+      <section id="copy-4" class="copy"><div class="eyebrow">Step 3 · Review your photo</div><h2 class="title">Check the photo before diagnosis.</h2><p class="desc">Make sure one whole Mango Leaf or Mango Green Fruit is visible. After that, tap Run AI Diagnosis to start the on-device check.</p></section>
+      <section id="copy-5" class="copy"><div class="eyebrow">Step 4 · On-device diagnosis</div><h2 class="title">Your photo is being checked.</h2><p class="desc">Please wait a moment while the on-device model checks your photo. After that, review the result.</p></section>
+      <section id="copy-6" class="copy"><div class="eyebrow">Result · English guidance</div><h2 class="title">Understand the predicted condition.</h2><p class="desc">See the predicted condition, Confidence Score, and treatment guidance in English.</p></section>
+      <section id="copy-7" class="copy"><div class="eyebrow">Result · Bisaya guidance</div><h2 class="title">Treatment Guidelines steps in Bisaya.</h2><p class="desc">Switch language with One tap so Mango Farmers can understand immediate treatment steps.</p></section>
+      <section id="copy-8" class="copy"><div class="eyebrow">History · Saved scans</div><h2 class="title">Return to a saved scan.</h2><p class="desc">Your Scan History keeps earlier results close at hand for a quick review.</p></section>
+      <section id="copy-9" class="copy"><div class="eyebrow">History · Scan details</div><h2 class="title">Open the photo and its result.</h2><p class="desc">Select a saved scan to view its image, diagnosis, and treatment details together.</p></section>
+      <section id="copy-10" class="copy"><div class="eyebrow">Result · Bisaya guidance</div><h2 class="title">Choose the language that helps.</h2><p class="desc">English and Bisaya treatment guidance are available from the scan details.</p></section>
+      <section id="copy-11" class="copy"><div class="eyebrow">A local tool for Mango Farmers</div><h2 class="title">Clear guidance, ready for the field.</h2><p class="desc">MangoLeaf AI brings offline diagnosis, Scan History, and Bisaya guidance together.</p></section>
+      <div id="phone" class="phone-frame"><div class="phone-bezel"><div class="phone-screen">
+        <img id="screen-landing" class="screen-media" src="assets/demo-refresh/source/01-landing.jpg" alt="MangoLeaf AI home screen" />
+        <video id="scan-video" class="screen-media recording clip" src="assets/demo-refresh/source/02-scan-option-cfr.mp4" muted playsinline preload="auto" data-start="86.08" data-duration="2.833" data-track-index="2"></video>
+        <img id="scan-hold" class="screen-media" src="assets/demo-refresh/source/02-scan-option-hold.jpg" alt="Scan options" />
+      <video id="camera-video" class="screen-media recording clip" src="assets/demo-refresh/source/03-camera-preview.mp4" muted playsinline preload="auto" data-start="95.64" data-duration="3.567" data-track-index="3"></video>
+        <img id="camera-hold" class="screen-media" src="assets/demo-refresh/source/03-camera-preview-hold.jpg" alt="Camera preview with mango centered" />
+        <img id="screen-review" class="screen-media" src="assets/demo-refresh/source/04-review-photo.jpg" alt="Review the captured mango photo" />
+      <video id="diagnosis-video" class="screen-media recording clip" src="assets/demo-refresh/source/05-diagnosis-progress.mp4" muted playsinline preload="auto" data-start="119.52" data-duration="0.533" data-track-index="4"></video>
+        <img id="diagnosis-hold" class="screen-media" src="assets/demo-refresh/source/05-diagnosis-progress-hold.jpg" alt="AI diagnosis progress" />
+        <img id="screen-english" class="screen-media" src="assets/demo-refresh/source/06-result-english.jpg" alt="Healthy mango result and English treatment guidance" />
+        <img id="screen-bisaya" class="screen-media" src="assets/demo-refresh/source/08-result-bisaya.jpg" alt="Bisaya treatment guidance" />
+        <img id="screen-history" class="screen-media" src="assets/demo-refresh/source/07-history-list.jpg" alt="Saved scan history" />
+        <div id="pointer-ring" class="pointer-ring"></div>
+        <div id="pointer" class="pointer" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M2 1.5 2.4 22l5.2-5.1 3.4 8.4 3.5-1.5-3.6-8.4 7.3-.1L2 1.5Z" fill="#17351d" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+      </div></div></div>
+      <div id="finale" class="finale"><img class="finale-mark" src="assets/images/mangoleaf-icon.svg" alt="" /><h2 class="finale-title">MangoLeaf AI</h2><p class="finale-tagline">Technology that works where the mango farmer works.</p><div class="finale-points"><div class="finale-point"><b>✓</b>No Login/Register</div><div class="finale-point"><b>✓</b>Offline Functional</div><div class="finale-point"><b>✓</b>On-device-AI-Diagnosis</div><div class="finale-point"><b>✓</b>English + Bisaya treatment guidance</div><div class="finale-point"><b>✓</b>Scan History</div></div></div>
+      <audio id="bgm" class="clip" src="assets/audio/bgm-demo-v2kitten.wav" data-start="0" data-duration="167.29" data-track-index="1" data-volume="0.22"></audio>
+      <audio id="voice-1" class="clip" src="assets/voice/v2kitten-current-demo-01-intro.wav" data-start="78.5" data-duration="6.82" data-track-index="20" data-volume="1"></audio>
+      <audio id="voice-2" class="clip" src="assets/voice/v2kitten-current-demo-02-take-photo.wav" data-start="86.18" data-duration="8.7" data-track-index="21" data-volume="1"></audio>
+      <audio id="voice-3" class="clip" src="assets/voice/v2kitten-current-demo-03-capture.wav" data-start="95.74" data-duration="9.66" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice-4" class="clip" src="assets/voice/v2kitten-current-demo-04-review.wav" data-start="106.26" data-duration="12.5" data-track-index="23" data-volume="1"></audio>
+      <audio id="voice-5" class="clip" src="assets/voice/v2kitten-current-demo-05-wait.wav" data-start="119.62" data-duration="6.22" data-track-index="24" data-volume="1"></audio>
+      <audio id="voice-6" class="clip" src="assets/voice/v2kitten-current-demo-06-result.wav" data-start="126.22" data-duration="6.42" data-track-index="25" data-volume="1"></audio>
+      <audio id="voice-7" class="clip" src="assets/voice/v2kitten-current-demo-07-bisaya.wav" data-start="133.5" data-duration="5.9" data-track-index="26" data-volume="1"></audio>
+      <audio id="voice-8" class="clip" src="assets/voice/v2kitten-current-demo-08-history.wav" data-start="141.1" data-duration="5.14" data-track-index="27" data-volume="1"></audio>
+      <audio id="voice-9" class="clip" src="assets/voice/v2kitten-current-demo-09-open-scan.wav" data-start="147.1" data-duration="5.74" data-track-index="28" data-volume="1"></audio>
+      <audio id="voice-10" class="clip" src="assets/voice/v2kitten-current-demo-10-language.wav" data-start="153.7" data-duration="4.46" data-track-index="29" data-volume="1"></audio>
+      <audio id="voice-11" class="clip" src="assets/voice/v2kitten-current-demo-11-bisaya-close.wav" data-start="158.54" data-duration="5.9" data-track-index="30" data-volume="1"></audio>
+      <audio id="voice-info-1" class="clip" src="assets/voice/v2kitten-current-info-01-title.wav" data-start="4" data-duration="2.5" data-track-index="10" data-volume="1"></audio>
+      <audio id="voice-info-2" class="clip" src="assets/voice/v2kitten-current-info-02-overview.wav" data-start="6.85" data-duration="22.42" data-track-index="11" data-volume="1"></audio>
+      <audio id="voice-info-3" class="clip" src="assets/voice/v2kitten-current-info-03-classes.wav" data-start="29.62" data-duration="13.82" data-track-index="13" data-volume="1"></audio>
+      <audio id="voice-info-4" class="clip" src="assets/voice/v2kitten-current-info-04-stack.wav" data-start="43.79" data-duration="19.38" data-track-index="14" data-volume="1"></audio>
+      <audio id="voice-info-5" class="clip" src="assets/voice/v2kitten-current-info-05-walkthrough.wav" data-start="63.52" data-duration="14.38" data-track-index="15" data-volume="1"></audio>
+      <audio id="click-1" class="clip" src="assets/audio/click.wav" data-start="85.9" data-duration="0.18" data-track-index="40" data-volume="0.8"></audio>
+      <audio id="click-2" class="clip" src="assets/audio/click.wav" data-start="95.46" data-duration="0.18" data-track-index="41" data-volume="0.8"></audio>
+      <audio id="click-3" class="clip" src="assets/audio/click.wav" data-start="105.98" data-duration="0.18" data-track-index="42" data-volume="0.8"></audio>
+      <audio id="click-4" class="clip" src="assets/audio/click.wav" data-start="119.34" data-duration="0.18" data-track-index="43" data-volume="0.8"></audio>
+      <audio id="click-5" class="clip" src="assets/audio/click.wav" data-start="133.22" data-duration="0.18" data-track-index="44" data-volume="0.8"></audio>
+      <audio id="click-6" class="clip" src="assets/audio/click.wav" data-start="139.98" data-duration="0.18" data-track-index="45" data-volume="0.8"></audio>
+      <audio id="click-7" class="clip" src="assets/audio/click.wav" data-start="140.82" data-duration="0.18" data-track-index="46" data-volume="0.8"></audio>
+      <audio id="click-8" class="clip" src="assets/audio/click.wav" data-start="146.82" data-duration="0.18" data-track-index="47" data-volume="0.8"></audio>
+      <audio id="click-9" class="clip" src="assets/audio/click.wav" data-start="153.42" data-duration="0.18" data-track-index="48" data-volume="0.8"></audio>
     </div>
-
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
-      tl.set('#pointer', { transformOrigin: '5.67px 4.25px' }, 0);
-      tl.set('#pointer-ring', { transformOrigin: 'center center' }, 0);
-
-      // AMBIENT BACKGROUND GLOW DRIFT ACROSS ENTIRE TIMELINE (0s - 56.5s)
-      tl.to('.bg-orbit.one', { x: 50, y: 30, duration: 28, ease: 'sine.inOut' }, 0);
-      tl.to('.bg-orbit.one', { x: 0, y: 0, duration: 28.5, ease: 'sine.inOut' }, 28);
-      tl.to('.bg-orbit.two', { x: -40, y: -20, duration: 28, ease: 'sine.inOut' }, 0);
-      tl.to('.bg-orbit.two', { x: 0, y: 0, duration: 28.5, ease: 'sine.inOut' }, 28);
-
-      // SIDECHAIN DUCKING SCHEDULE FOR BGM
-      tl.set('#bgm', { volume: 0.35 }, 0);
-      
-      // Scene 1: Intro (4.0s - 10.55s)
-      tl.to('#bgm', { volume: 0.12, duration: 0.25, ease: 'sine.inOut' }, 3.75);
-
-      // Gap between Scene 1 and Scene 2: 10.55s - 11.8s (1.25s calm breathing room!)
-      tl.to('#bgm', { volume: 0.32, duration: 0.4, ease: 'sine.inOut' }, 10.70);
-      tl.to('#bgm', { volume: 0.12, duration: 0.25, ease: 'sine.inOut' }, 11.60);
-
-      // Gap between Scene 2 and Scene 3: 18.80s - 20.0s (1.20s breathing room)
-      tl.to('#bgm', { volume: 0.30, duration: 0.4, ease: 'sine.inOut' }, 18.80);
-      tl.to('#bgm', { volume: 0.12, duration: 0.25, ease: 'sine.inOut' }, 19.75);
-
-      // Gap between Scene 3 and Scene 4: 27.95s - 29.2s (1.25s breathing room)
-      tl.to('#bgm', { volume: 0.30, duration: 0.4, ease: 'sine.inOut' }, 28.00);
-      tl.to('#bgm', { volume: 0.12, duration: 0.25, ease: 'sine.inOut' }, 29.00);
-
-      // Gap between Scene 4 and Scene 5: 36.20s - 37.4s (1.20s breathing room)
-      tl.to('#bgm', { volume: 0.28, duration: 0.35, ease: 'sine.inOut' }, 36.30);
-      tl.to('#bgm', { volume: 0.12, duration: 0.25, ease: 'sine.inOut' }, 37.20);
-
-      // Gap between Scene 5 and Scene 6: 44.20s - 45.4s (1.20s breathing room)
-      tl.to('#bgm', { volume: 0.28, duration: 0.35, ease: 'sine.inOut' }, 44.30);
-      tl.to('#bgm', { volume: 0.12, duration: 0.25, ease: 'sine.inOut' }, 45.20);
-
-      // Scene 6: Step 5 Scan History (45.4s - 49.40s) & Finale swell
-      tl.to('#bgm', { volume: 0.38, duration: 0.6, ease: 'sine.inOut' }, 49.50);
-      tl.to('#bgm', { volume: 0, duration: 1.5, ease: 'sine.in' }, 55.0);
-
-      // SCENE 0: Brand Splash (0 - 4.0s)
-      tl.fromTo('#loader-ring', { rotation: 0 }, { rotation: 1080, duration: 3.5, ease: 'power2.inOut' }, 0);
-      tl.fromTo('#loader-logo', { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: 'back.out(1.4)' }, 0.2);
-      tl.fromTo('#loader-title', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0.5);
-      tl.to('#loader-logo', { scale: 1.06, duration: 0.4, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 2.0);
-      tl.to('#splash-card', { opacity: 0, duration: 0.45, ease: 'power2.inOut' }, 3.55);
-      tl.set('#splash-card', { opacity: 0 }, 4.0);
-
-      // Persistent Footer and Fixed Phone Mockup enter at t=4.0s
-      tl.to(['.footer', '#phone-fixed'], { opacity: 1, duration: 0.6, ease: 'power2.out' }, 4.0);
-
-      // SCENE 1: Intro (4.0 - 10.6s)
-      tl.fromTo('#s1-copy', { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 4.2);
-      tl.fromTo('#p1', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 5.2);
-      tl.fromTo('#p2', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 6.6);
-      tl.to('#s1-copy .kicker', { scale: 1.05, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 7.6);
-      tl.fromTo('#p3', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 8.4);
-      tl.to('#p2', { color: '#15803d', x: 6, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 9.5);
-      tl.to('#s1-copy .desc-md', { opacity: 0.85, duration: 0.3, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 10.1);
-      tl.to('#s1-copy', { x: -20, opacity: 0, duration: 0.45, ease: 'power2.in' }, 10.6);
-      tl.set('#s1-copy', { opacity: 0 }, 11.2);
-
-      // SCENE 2: Step 1 - Capture Leaf or Fruit (11.8 - 19.5s)
-      tl.fromTo('#s2-copy', { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 11.8);
-      
-      // 1. Arrow enters from bottom-right and glides directly to the white reticle circle of the Scan FAB (target: x: 198, y: 750)
-      tl.fromTo('#pointer', { x: 250, y: 790, opacity: 0 }, { x: 192.3, y: 745.8, opacity: 1, duration: 0.6, ease: 'power2.out' }, 11.9);
-      // Tap instant at 12.5s: Click SFX 1 fires, squish & ripple ring centered on reticle
-      tl.set('#pointer-ring', { x: 198, y: 750 }, 12.5);
-      tl.fromTo('#pointer-ring', { scale: 0.2, opacity: 0.9 }, { scale: 1.1, opacity: 0, duration: 0.35, ease: 'power2.out' }, 12.5);
-      tl.to('#pointer', { scale: 0.88, duration: 0.10, yoyo: true, repeat: 1 }, 12.5);
-
-      // 2. Start a Scan modal drawer (#shot-2) pops up immediately upon click at 12.55s
-      tl.to('#shot-2', { opacity: 1, duration: 0.45, ease: 'power2.inOut' }, 12.55);
-
-      // 3. Calm hover motion 1: Arrow glides smoothly to hover 'Upload Photo' card at (x: 192, y: 624)
-      tl.to('#pointer', { x: 192, y: 624, duration: 0.85, ease: 'power2.out' }, 12.7);
-      // Gentle calm breathing hover drift on 'Upload Photo' (NO CLICK)
-      tl.to('#pointer', { y: 618, duration: 0.75, ease: 'sine.inOut' }, 13.55);
-
-      // 4. Calm hover motion 2: Arrow glides smoothly up to 'Take Photo' card at (x: 192, y: 465)
-      tl.to('#pointer', { x: 192, y: 465, duration: 0.95, ease: 'power2.inOut' }, 14.35);
-      // Gentle calm breathing hover drift on 'Take Photo' (NO CLICK)
-      tl.to('#pointer', { y: 459, duration: 0.85, ease: 'sine.inOut' }, 15.35);
-      
-      // Arrow fades out smoothly after hovering both buttons
-      tl.to('#pointer', { opacity: 0, duration: 0.5, ease: 'power2.in' }, 16.3);
-
-      // Micro-motions on copy to maintain continuous scene vitality (<1.8s intervals)
-      tl.to('#s2-copy .kicker', { scale: 1.05, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 17.2);
-      tl.to('#s2-copy .desc-md', { opacity: 0.85, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 18.0);
-      tl.to('#s2-copy', { x: -20, opacity: 0, duration: 0.4, ease: 'power2.in' }, 18.9);
-      tl.set('#s2-copy', { opacity: 0 }, 19.5);
-
-      // SCENE 3: Step 2 - AI Diagnosis (19.8 - 28.8s)
-      // Switch to shot-3 (Review Photo) at t=19.8s
-      tl.to('#shot-3', { opacity: 1, duration: 0.35, ease: 'power2.inOut' }, 19.8);
-      tl.fromTo('#s3-copy', { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 20.0);
-
-      // Pointer glides to 'Run AI Diagnosis' button, centered directly on letter 'D' / vertical center at (x: 193, y: 568)
-      // Real button bounds: y 551 to 592 (vertical center: 571.5). Letter 'D' center: (193, 568).
-      tl.fromTo('#pointer', { x: 187.3, y: 640, opacity: 0 }, { x: 187.3, y: 563.8, opacity: 1, duration: 0.85, ease: 'power3.out' }, 20.5);
-      
-      // Tap instant at 21.4s: click ripple & squish centered on letter 'D' (Click SFX 2)
-      tl.set('#pointer-ring', { x: 193, y: 568 }, 21.4);
-      tl.fromTo('#pointer-ring', { scale: 0.2, opacity: 0.9 }, { scale: 0.85, opacity: 0, duration: 0.4, ease: 'power2.out' }, 21.4);
-      tl.to('#pointer', { scale: 0.88, duration: 0.12, yoyo: true, repeat: 1 }, 21.4);
-      tl.to('#pointer', { opacity: 0, duration: 0.35, ease: 'power2.in' }, 21.9);
-      // In-place crossfade to shot-4 (AI Classification Running)
-      tl.to('#shot-4', { opacity: 1, duration: 0.35, ease: 'power2.inOut' }, 21.45);
-      
-      // Continuous micro-motion throughout inference (<1.8s intervals)
-      tl.to('#s3-copy .kicker', { scale: 1.05, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 23.2);
-      tl.to('#s3-copy .desc-md', { opacity: 0.85, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 25.0);
-      tl.to('#s3-copy .kicker', { scale: 1.04, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 26.6);
-      tl.to('#s3-copy', { x: -20, opacity: 0, duration: 0.4, ease: 'power2.in' }, 28.1);
-      tl.set('#s3-copy', { opacity: 0 }, 28.8);
-
-      // SCENE 4: Step 3 - Accurate Diagnosis (29.0 - 37.0s)
-      // Switch to shot-5 (Diagnosed Result in English) at t=29.0s
-      tl.to('#shot-5', { opacity: 1, duration: 0.35, ease: 'power2.inOut' }, 29.0);
-      tl.fromTo('#s4-copy', { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 29.2);
-      tl.to('#s4-copy .desc-md', { opacity: 0.88, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 31.0);
-      tl.to('#s4-copy .kicker', { scale: 1.05, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 32.8);
-      tl.to('#s4-copy .desc-md', { opacity: 0.85, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 34.8);
-      tl.to('#s4-copy', { x: -20, opacity: 0, duration: 0.4, ease: 'power2.in' }, 36.3);
-      tl.set('#s4-copy', { opacity: 0 }, 37.0);
-
-      // SCENE 5: Step 4 - Bilingual Guidance (37.2 - 45.0s)
-      tl.fromTo('#s5-copy', { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 37.4);
-
-      // Pointer glides to 'Bisaya' language toggle button at (x: 156, y: 398)
-      tl.fromTo('#pointer', { x: 184, y: 460, opacity: 0 }, { x: 156, y: 398, opacity: 1, duration: 0.85, ease: 'power3.out' }, 38.1);
-      // Tap instant at 39.0s: click ripple & squish (Click SFX 3)
-      tl.set('#pointer-ring', { x: 162, y: 402 }, 39.0);
-      tl.fromTo('#pointer-ring', { scale: 0.2, opacity: 0.9 }, { scale: 1.3, opacity: 0, duration: 0.4, ease: 'power2.out' }, 39.0);
-      tl.to('#pointer', { scale: 0.88, duration: 0.12, yoyo: true, repeat: 1 }, 39.0);
-      tl.to('#pointer', { opacity: 0, duration: 0.35, ease: 'power2.in' }, 39.5);
-      // In-place crossfade to shot-6 (Diagnosed Result in Bisaya)
-      tl.to('#shot-6', { opacity: 1, duration: 0.35, ease: 'power2.inOut' }, 39.05);
-      
-      tl.to('#s5-copy .kicker', { scale: 1.05, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 41.2);
-      tl.to('#s5-copy .desc-md', { opacity: 0.85, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 42.8);
-      tl.to('#s5-copy', { x: -20, opacity: 0, duration: 0.4, ease: 'power2.in' }, 44.3);
-      tl.set('#s5-copy', { opacity: 0 }, 45.0);
-
-      // SCENE 6: Step 5 - Scan History (45.2 - 50.8s)
-      // Switch to shot-7 (Scan History Results) at t=45.2s
-      tl.to('#shot-7', { opacity: 1, duration: 0.35, ease: 'power2.inOut' }, 45.2);
-      tl.fromTo('#s6-copy', { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, 45.4);
-      tl.to('#s6-copy .kicker', { scale: 1.05, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 47.0);
-      tl.to('#s6-copy .desc-md', { opacity: 0.85, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 48.8);
-
-      // Outro transition (50.4s - 50.8s)
-      tl.to(['#s6-copy', '#phone-fixed'], { opacity: 0, duration: 0.45, ease: 'power2.in' }, 50.4);
-      tl.set(['#s6-copy', '#phone-fixed'], { opacity: 0 }, 50.8);
-
-      // SCENE 7: Finale Brand Outro (50.8 - 56.5s)
-      tl.to('#finale', { opacity: 1, duration: 0.5, ease: 'power2.out' }, 50.8);
-      tl.fromTo('#finale .finale-inner', { scale: 0.94 }, { scale: 1, duration: 0.55, ease: 'back.out(1.4)' }, 50.8);
-      tl.fromTo(['#f-pt-1', '#f-pt-2', '#f-pt-3'], { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, stagger: 0.1, ease: 'power3.out' }, 51.1);
-      tl.to(['#f-pt-1', '#f-pt-2', '#f-pt-3'], { y: -3, duration: 0.3, stagger: 0.12, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 52.3);
-      tl.to('.finale-logo', { scale: 1.06, duration: 0.4, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 53.6);
-      tl.to('.finale-tagline', { opacity: 0.85, duration: 0.4, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 54.8);
-      tl.to('.finale-title', { scale: 1.02, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 55.6);
-
-      // Timeline holds until exactly 56.5s
-      tl.set('#finale', {}, 56.5);
-
-      window.__timelines['main'] = tl;
+      const show = (sel, at, duration = .14) => tl.to(sel, { opacity: 1, duration }, at);
+      const hide = (sel, at, duration = .14) => tl.to(sel, { opacity: 0, duration }, at);
+      const enterCopy = (n, at) => tl.fromTo("#copy-" + n, { x: -24, opacity: 0 }, { x: 0, opacity: 1, duration: .42, ease: "power3.out" }, at);
+      const leaveCopy = (n, at) => tl.to("#copy-" + n, { opacity: 0, x: -14, duration: .09, ease: "power2.in" }, at);
+      const enterInfo = (n, at) => tl.fromTo("#info-" + n, { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, at);
+      const leaveInfo = (n, at) => tl.to("#info-" + n, { y: -12, opacity: 0, duration: .18, ease: "power2.in" }, at);
+      const swap = (from, to, at) => { hide(from, at); show(to, at); };
+      const copyText = {
+        1: { eyebrow: "Start with one clear photo", title: "A clear view of Mango.", desc: "MangoLeaf AI checks a Mango Leaf or Mango Green Fruit right on your phone, even when you are offline." },
+        2: { eyebrow: "Step 1 - Choose a photo", title: "Capture a Mango Leaf or Mango Green Fruit.", desc: "Read the Photo Tips, then use Take Photo for this simple demo. Keep one whole Mango Leaf or Mango Green Fruit in even light." },
+        3: { eyebrow: "Step 2 - Frame the mango", title: "Center the subject in the Green Box Guidance.", desc: "Hold steady and use good light so the camera can capture a clear Mango Green Fruit view." },
+        4: { eyebrow: "Step 3 - Review your photo", title: "Check the photo before diagnosis.", desc: "Make sure one whole Mango Leaf or Mango Green Fruit is visible. After that, tap Run AI Diagnosis to start the on-device check." },
+        5: { eyebrow: "Step 4 - On-device diagnosis", title: "Your photo is being checked.", desc: "Please wait a moment while the on-device model checks your photo. After that, review the result." },
+        6: { eyebrow: "Result - English guidance", title: "Understand the predicted condition.", desc: "See the predicted condition, Confidence Score, and treatment guidance in English." },
+        7: { eyebrow: "Result - Bisaya guidance", title: "Treatment Guidelines steps in Bisaya.", desc: "Switch language with One tap so Mango Farmers can understand immediate treatment steps." },
+        8: { eyebrow: "History - Saved scans", title: "Return to a saved scan.", desc: "Your Scan History keeps earlier results close at hand for a quick review." },
+        9: { eyebrow: "History - Scan details", title: "Open the photo and its result.", desc: "Select a saved scan to view its image, diagnosis, and treatment details together." },
+        10: { eyebrow: "Result - Bisaya guidance", title: "Choose the language that helps.", desc: "English and Bisaya treatment guidance are available from the scan details." },
+        11: { eyebrow: "A local tool for Mango Farmers", title: "Clear guidance, ready for the field.", desc: "MangoLeaf AI brings offline diagnosis, Scan History, and Bisaya guidance together." }
+      };
+      Object.entries(copyText).forEach(([n, text]) => {
+        const copy = document.querySelector("#copy-" + n);
+        copy.querySelector(".eyebrow").textContent = text.eyebrow;
+        copy.querySelector(".title").textContent = text.title;
+        copy.querySelector(".desc").textContent = text.desc;
+      });
+      const infoVoiceClips = Array.from({ length: 5 }, (_, i) => document.querySelector("#voice-info-" + (i + 1)));
+      const infoVoiceDurations = infoVoiceClips.map((clip) => Number(clip.dataset.duration));
+      const voiceClips = Array.from({ length: 11 }, (_, i) => document.querySelector("#voice-" + (i + 1)));
+      const voiceDurations = voiceClips.map((clip) => Number(clip.dataset.duration));
+      const infoStarts = [4];
+      for (let i = 1; i < infoVoiceClips.length; i += 1) infoStarts[i] = infoStarts[i - 1] + infoVoiceDurations[i - 1] + .35;
+      const lastInfo = infoVoiceClips.length - 1;
+      const demoStart = infoStarts[lastInfo] + infoVoiceDurations[lastInfo] + .5;
+      const sceneStarts = [demoStart];
+      const voiceStarts = [];
+      const tapTimes = Array(9).fill(null);
+      let landingAt = 0;
+      for (let i = 0; i < voiceClips.length; i += 1) {
+        voiceStarts[i] = sceneStarts[i] + .1;
+        const voiceEnd = voiceStarts[i] + voiceDurations[i];
+        if (i === 10) break;
+        if (i === 4) {
+          sceneStarts[5] = voiceEnd + .28;
+          continue;
+        }
+        if (i === 6) {
+          tapTimes[5] = voiceEnd + .58;
+          landingAt = tapTimes[5] + .14;
+          tapTimes[6] = landingAt + .7;
+          sceneStarts[7] = tapTimes[6] + .18;
+          continue;
+        }
+        if (i === 9) {
+          sceneStarts[10] = voiceEnd + .28;
+          continue;
+        }
+        const clickIndex = i <= 3 ? i : i === 5 ? 4 : i === 7 ? 7 : i === 8 ? 8 : null;
+        if (clickIndex === null) continue;
+        tapTimes[clickIndex] = voiceEnd + .58;
+        sceneStarts[i + 1] = tapTimes[clickIndex] + .18;
+      }
+      const outroAt = voiceStarts[10] + voiceDurations[10] + .25;
+      const showTap = (at, x, y, killAt) => {
+        const travel = .56;
+        tl.fromTo("#pointer", { x: x + 58, y: y + 56, opacity: 0 }, { x: x - 3, y: y - 3, opacity: 1, duration: travel, ease: "power2.out" }, at - travel);
+        tl.set("#pointer-ring", { x, y }, at);
+        tl.fromTo("#pointer-ring", { scale: .2, opacity: .9 }, { scale: 1.05, opacity: 0, duration: .22, ease: "power2.out" }, at);
+        tl.set("#pointer", { opacity: 0 }, at);
+        tl.set("#pointer-ring", { opacity: 0 }, killAt);
+      };
+      const tapAndHide = (index, x, y, killAt, copyNumber) => {
+        showTap(tapTimes[index], x, y, killAt);
+        if (copyNumber) leaveCopy(copyNumber, tapTimes[index] + .05);
+      };
+      tl.to(".orbit-a", { x: 46, y: 28, duration: 44, ease: "sine.inOut" }, 0);
+      tl.to(".orbit-a", { x: 0, y: 0, duration: 44, ease: "sine.inOut" }, 44);
+      tl.to(".orbit-a", { x: -28, y: -18, duration: 26, ease: "sine.inOut" }, 88);
+      tl.to(".orbit-b", { x: -42, y: -22, duration: 44, ease: "sine.inOut" }, 0);
+      tl.to(".orbit-b", { x: 0, y: 0, duration: 44, ease: "sine.inOut" }, 44);
+      tl.to(".orbit-b", { x: 32, y: 18, duration: 26, ease: "sine.inOut" }, 88);
+      tl.to(".orbit-a", { x: 18, y: 10, duration: 12, ease: "sine.inOut" }, 114);
+      tl.to(".orbit-b", { x: -18, y: -10, duration: 12, ease: "sine.inOut" }, 114);
+      tl.to(".orbit-a", { x: -10, y: -6, duration: 10, ease: "sine.inOut" }, 126);
+      tl.to(".orbit-b", { x: 10, y: 6, duration: 10, ease: "sine.inOut" }, 126);
+      tl.to(".orbit-a", { x: 8, y: 4, duration: 9.5, ease: "sine.inOut" }, 136);
+      tl.to(".orbit-b", { x: -8, y: -4, duration: 9.5, ease: "sine.inOut" }, 136);
+      tl.to(".orbit-a", { x: -6, y: -3, duration: 10, ease: "sine.inOut" }, 145.5);
+      tl.to(".orbit-b", { x: 6, y: 3, duration: 10, ease: "sine.inOut" }, 145.5);
+      tl.to(".orbit-a", { x: 6, y: 3, duration: 10, ease: "sine.inOut" }, 155.5);
+      tl.to(".orbit-b", { x: -6, y: -3, duration: 10, ease: "sine.inOut" }, 155.5);
+      tl.to(".grid", { x: 12, y: 5, duration: 20, ease: "sine.inOut" }, 0);
+      tl.to(".grid", { x: 0, y: 0, duration: 20, ease: "sine.inOut" }, 20);
+      tl.to(".grid", { x: -12, y: -5, duration: 20, ease: "sine.inOut" }, 40);
+      tl.to(".grid", { x: 0, y: 0, duration: 20, ease: "sine.inOut" }, 60);
+      tl.to(".grid", { x: 10, y: 4, duration: 20, ease: "sine.inOut" }, 80);
+      tl.to(".grid", { x: 0, y: 0, duration: 20, ease: "sine.inOut" }, 100);
+      tl.to("#loader-ring", { rotation: 1080, duration: 3.5, ease: "power2.inOut" }, 0);
+      tl.fromTo("#loader-mark", { scale: .8, opacity: 0 }, { scale: 1, opacity: 1, duration: .8, ease: "back.out(1.4)" }, .2);
+      tl.fromTo("#loader-title", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .8, ease: "power3.out" }, .5);
+      hide("#splash", 3.6, .4);
+      for (let i = 0; i < infoVoiceClips.length; i += 1) {
+        enterInfo(i + 1, infoStarts[i]);
+        if (i < infoVoiceClips.length - 1) leaveInfo(i + 1, infoStarts[i] + infoVoiceDurations[i] + .12);
+      }
+      leaveInfo(infoVoiceClips.length, demoStart - .14);
+      show("#phone", demoStart, .55);
+      show("#screen-landing", sceneStarts[0], .16);
+      enterCopy(1, voiceStarts[0]);
+      tapAndHide(0, 198, 764, sceneStarts[1], 1);
+      swap("#screen-landing", "#scan-video", sceneStarts[1]);
+      enterCopy(2, voiceStarts[1]);
+      swap("#scan-video", "#scan-hold", sceneStarts[1] + Number(document.querySelector("#scan-video").dataset.duration) - .14);
+      tapAndHide(1, 198, 495, sceneStarts[2], 2);
+      swap("#scan-hold", "#camera-video", sceneStarts[2]);
+      enterCopy(3, voiceStarts[2]);
+      swap("#camera-video", "#camera-hold", sceneStarts[2] + Number(document.querySelector("#camera-video").dataset.duration) - .14);
+      tapAndHide(2, 204, 764, sceneStarts[3], 3);
+      swap("#camera-hold", "#screen-review", sceneStarts[3]);
+      enterCopy(4, voiceStarts[3]);
+      tapAndHide(3, 215, 580, sceneStarts[4], 4);
+      swap("#screen-review", "#diagnosis-video", sceneStarts[4]);
+      enterCopy(5, voiceStarts[4]);
+      swap("#diagnosis-video", "#diagnosis-hold", sceneStarts[4] + Number(document.querySelector("#diagnosis-video").dataset.duration) - .14);
+      leaveCopy(5, voiceStarts[4] + voiceDurations[4] + .08);
+      swap("#diagnosis-hold", "#screen-english", sceneStarts[5]);
+      enterCopy(6, voiceStarts[5]);
+      tapAndHide(4, 252, 465, sceneStarts[6], 6);
+      swap("#screen-english", "#screen-bisaya", sceneStarts[6]);
+      enterCopy(7, voiceStarts[6]);
+      tapAndHide(5, 198, 731, landingAt, 7);
+      swap("#screen-bisaya", "#screen-landing", landingAt);
+      showTap(tapTimes[6], 281, 785, sceneStarts[7]);
+      swap("#screen-landing", "#screen-history", sceneStarts[7]);
+      enterCopy(8, voiceStarts[7]);
+      tapAndHide(7, 350, 286, sceneStarts[8], 8);
+      swap("#screen-history", "#screen-english", sceneStarts[8]);
+      enterCopy(9, voiceStarts[8]);
+      tapAndHide(8, 252, 465, sceneStarts[9], 9);
+      swap("#screen-english", "#screen-bisaya", sceneStarts[9]);
+      enterCopy(10, voiceStarts[9]);
+      leaveCopy(10, sceneStarts[10] - .02);
+      enterCopy(11, voiceStarts[10]);
+      tl.to("#bgm", { volume: .12, duration: .35, ease: "sine.inOut" }, 4.02);
+      tl.to("#bgm", { volume: .18, duration: .4, ease: "sine.inOut" }, outroAt - .2);
+      tl.to(["#copy-11", "#phone"], { opacity: 0, duration: .2, ease: "power2.in" }, outroAt);
+      show("#finale", outroAt, .3);
+      tl.to("#bgm", { volume: 0, duration: 1.4, ease: "sine.in" }, outroAt + .6);
+      tl.to(".finale-mark", { scale: 1.04, duration: .55, yoyo: true, repeat: 1, ease: "sine.inOut" }, outroAt + .25);
+      tl.to("#finale", { y: -4, duration: 1.4, yoyo: true, repeat: 1, ease: "sine.inOut" }, outroAt + .5);
+      window.__timelines.main = tl;
     </script>
-  </body>
+    </body>
 </html>

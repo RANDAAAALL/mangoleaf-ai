@@ -1,0 +1,1 @@
+Select a saved scan to view its image, diagnosis, and treatment details together.

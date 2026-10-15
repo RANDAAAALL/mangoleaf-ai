@@ -1,0 +1,38 @@
+{
+  "modelVersion": "model-v4.5.0-candidate",
+  "experimentVersion": "v4.5.0",
+  "status": "experimental candidate; rejection thresholds not fitted",
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "inputSize": [
+    224,
+    224
+  ],
+  "inputRange": [
+    0,
+    255
+  ],
+  "inputDtype": "float32",
+  "preprocessing": "RGB decode; bilinear 224x224 without antialias; float32 0-255; MobileNetV3 internal rescaling",
+  "temperature": 0.8002093839891747,
+  "temperatureFoldedIntoWeights": true,
+  "quantized": false,
+  "browserParityStatus": "pending actual browser comparison before adoption",
+  "trainingObjective": "mango supervision plus uniform-target Outlier Exposure"
+}

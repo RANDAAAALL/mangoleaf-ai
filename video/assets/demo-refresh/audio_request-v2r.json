@@ -1,0 +1,26 @@
+{
+  "version": "v2r",
+  "provider": "edge-tts",
+  "voice": "en-US-JennyNeural",
+  "rate": "+8%",
+  "lines": [
+    { "id": "v2r-info-01-title", "text": "What is MangoLeaf AI? A field-ready mango health diagnostic for mango farmers." },
+    { "id": "v2r-info-02-diagnostic", "text": "Field-Ready Mango Health Diagnostic. MangoLeaf AI helps mango farmers to automate the classification of the mango leaf and green fruit conditions even offline." },
+    { "id": "v2r-info-03-benefits", "text": "MangoLeaf AI requires no login or registration. It works offline, runs on-device AI diagnosis, provides English and Bisaya treatment guidance, and keeps Scan History." },
+    { "id": "v2r-info-04-classes", "text": "MangoLeaf AI supports seven classes: Anthracnose, Sooty Mold, Bacterial Canker, Mango Scab, Bacterial Black Spot, Healthy Leaf, and Healthy Fruit." },
+    { "id": "v2r-info-05-stack", "text": "MangoLeaf AI Offline-First Tech Stack includes Next.js, React, Bun, TypeScript, Tailwind CSS, TensorFlow.js, Dexie, IndexedDB, Supabase, Serwist, and MobileNetV3-Large." },
+    { "id": "v2r-info-06-walkthrough", "text": "Simple Walkthrough. We will show one straightforward path: scan, take a photo, view the diagnosed result, open Scan History, then view the scan detail modal." },
+    { "id": "v2r-demo-01-intro", "text": "MangoLeaf AI checks a Mango Leaf or Mango Green Fruit right on your phone, even when you are offline." },
+    { "id": "v2r-demo-02-take-photo", "text": "Read the Photo Tips, then use Take Photo for this simple demo. Keep one whole Mango Leaf or Mango Green Fruit in even light." },
+    { "id": "v2r-demo-03-capture", "text": "Center one whole Mango Green Fruit in the Green Box Guidance, then capture your photo." },
+    { "id": "v2r-demo-04-review", "text": "Review your photo. After that, tap Run AI Diagnosis to start the on-device check." },
+    { "id": "v2r-demo-05-wait", "text": "Please wait a moment while the on-device model checks your photo. After that, review the result." },
+    { "id": "v2r-demo-06-result", "text": "Review the predicted condition, Confidence Score, and treatment guidance in English." },
+    { "id": "v2r-demo-07-bisaya", "text": "Switch language with One tap so Mango Farmers can understand immediate treatment steps." },
+    { "id": "v2r-demo-08-history", "text": "Your saved scans stay in Scan History for a quick return." },
+    { "id": "v2r-demo-09-open-scan", "text": "Open a saved scan to review the photo, result, and treatment guidance." },
+    { "id": "v2r-demo-10-language", "text": "Switch the guidance to Bisaya when it helps." },
+    { "id": "v2r-demo-11-bisaya-close", "text": "Clear Bisaya guidance helps Mango Farmers choose next steps." }
+  ],
+  "bgm": "assets/audio/bgm-demo-v2r.wav"
+}

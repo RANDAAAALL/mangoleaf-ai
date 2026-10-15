@@ -1,0 +1,11 @@
+{
+  "trainedMangoEpochs": 0,
+  "uniformTargetClassCount": 7,
+  "beforeLoss": 4.32534646987915,
+  "afterLoss": 4.247402667999268,
+  "beforeMaximumProbability": 0.9611431956291199,
+  "afterMaximumProbability": 0.9574165344238281,
+  "finiteNonzeroGradient": true,
+  "plainClassifierRoundTripPassed": true,
+  "accuracyOrOodRejectionMeasured": false
+}

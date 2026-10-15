@@ -9,7 +9,6 @@ import {
   closeDetails,
   confirmScanDeletion,
   historyDetails,
-  mockGuestToken,
   nav,
   recentHeading,
   homeHeading,
@@ -27,7 +26,7 @@ declare global {
   }
 }
 
-test("F10: visible thumbnails stay stable through new scans, sync metadata and offline deletion", async ({
+test("F10: visible thumbnails stay stable through new local scans and offline deletion", async ({
   page,
   context,
 }) => {
@@ -37,7 +36,7 @@ test("F10: visible thumbnails stay stable through new scans, sync metadata and o
   await closeDetails(page);
   await expect
     .poll(async () => (await records(page))[0]?._status)
-    .toBe("synced");
+    .toBe("local-only");
   // History keeps both photos mounted. Wider Home now shows the Download card.
   await nav(page, "History");
   const heading = page.getByRole("heading", {
@@ -80,91 +79,40 @@ test("F10: visible thumbnails stay stable through new scans, sync metadata and o
     }).observe(document, { subtree: true, childList: true });
   });
 
-  let releaseUpload!: () => void;
-  let signalUpload!: () => void;
-  const uploadReleased = new Promise<void>((resolve) => {
-    releaseUpload = resolve;
-  });
-  const uploadStarted = new Promise<void>((resolve) => {
-    signalUpload = resolve;
-  });
-  let releaseInsert!: () => void;
-  let signalInsert!: () => void;
-  const insertReleased = new Promise<void>((resolve) => {
-    releaseInsert = resolve;
-  });
-  const insertStarted = new Promise<void>((resolve) => {
-    signalInsert = resolve;
-  });
-  // Hold the two network phases separately so each real local metadata update
-  // must retain the same thumbnail URL. Eventual visibility alone misses blinking.
-  await page.route("**/__mock__/storage/v1/object/scans/**", async (route) => {
-    if (route.request().method() === "POST") {
-      signalUpload();
-      await uploadReleased;
-    }
-    await route.continue();
-  });
-  await page.route("**/__mock__/rest/v1/scans", async (route) => {
-    if (route.request().method() === "POST") {
-      signalInsert();
-      await insertReleased;
-    }
-    await route.continue();
-  });
+  await runScan(page, photos[1].file);
+  await closeDetails(page);
+  await expect(heading).toBeVisible();
+  await expect(thumbnails).toHaveCount(2);
+  await expect(thumbnails.nth(1)).toHaveAttribute("src", originalUrl!);
+  const newUrl = await thumbnails.first().getAttribute("src");
+  expect(newUrl).toMatch(/^blob:/);
+  const trace = await page.evaluate(() => window.mangoThumbnailTrace!);
+  expect(trace.removed).toEqual([]);
+  expect(trace.revoked).not.toContain(originalUrl);
+  expect(trace.revoked).not.toContain(newUrl);
 
-  try {
-    await runScan(page, photos[1].file);
-    await closeDetails(page);
-    await expect(heading).toBeVisible();
-    await uploadStarted;
-    await expect(thumbnails).toHaveCount(2);
-    await expect(thumbnails.nth(1)).toHaveAttribute("src", originalUrl!);
-    const newUrl = await thumbnails.first().getAttribute("src");
-    expect(newUrl).toMatch(/^blob:/);
-    releaseUpload();
-    await insertStarted;
-    await expect(thumbnails.first()).toHaveAttribute("src", newUrl!);
-    await expect(thumbnails.nth(1)).toHaveAttribute("src", originalUrl!);
-    releaseInsert();
-    await expect
-      .poll(async () =>
-        (await records(page)).every((row) => row._status === "synced"),
-      )
-      .toBe(true);
-    await expect(thumbnails.first()).toHaveAttribute("src", newUrl!);
-    await expect(thumbnails.nth(1)).toHaveAttribute("src", originalUrl!);
-    const trace = await page.evaluate(() => window.mangoThumbnailTrace!);
-    expect(trace.removed).toEqual([]);
-    expect(trace.revoked).not.toContain(originalUrl);
-    expect(trace.revoked).not.toContain(newUrl);
-
-    // An offline deletion must release only the deleted card's URL.
-    await context.setOffline(true);
-    await requestScanDeletion(page);
-    await confirmScanDeletion(page);
-    await expect(thumbnails).toHaveCount(1);
-    await expect(thumbnails.first()).toHaveAttribute("src", originalUrl!);
-    await expect
-      .poll(() =>
-        page.evaluate(
-          (url) =>
-            window.mangoThumbnailTrace!.revoked.filter((value) => value === url)
-              .length,
-          newUrl,
-        ),
-      )
-      .toBe(1);
-    expect(
-      await page.evaluate(
-        (url) => window.mangoThumbnailTrace!.revoked.includes(url!),
-        originalUrl,
+  await context.setOffline(true);
+  await requestScanDeletion(page);
+  await confirmScanDeletion(page);
+  await expect(thumbnails).toHaveCount(1);
+  await expect(thumbnails.first()).toHaveAttribute("src", originalUrl!);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        (url) =>
+          window.mangoThumbnailTrace!.revoked.filter((value) => value === url)
+            .length,
+        newUrl,
       ),
-    ).toBe(false);
-  } finally {
-    releaseUpload();
-    releaseInsert();
-  }
+    )
+    .toBe(1);
+  expect(
+    await page.evaluate(
+      (url) => window.mangoThumbnailTrace!.revoked.includes(url!),
+      originalUrl,
+    ),
+  ).toBe(false);
+  expect(await records(page)).toHaveLength(1);
 });
 
 test("F10/F11: responsive previews, search/filter, selection, deletion and page recovery", async ({
@@ -304,12 +252,12 @@ test("F10/F11: responsive previews, search/filter, selection, deletion and page 
     ).toHaveAttribute("aria-expanded", "false");
     await expect(categoryFilter).not.toBeVisible();
   }
-  // Wait for upload sync so this case tests deletion of a persisted record.
+  // Confirm all local commits before exercising deletion.
   await expect
     .poll(async () => {
       const saved = await records(page);
       return (
-        saved.length === 7 && saved.every((row) => row._status === "synced")
+        saved.length === 7 && saved.every((row) => row._status === "local-only")
       );
     })
     .toBe(true);
@@ -483,16 +431,12 @@ test("F17: offline batch deletion keeps its selected IDs through a local failure
     .poll(async () => {
       const saved = await records(page);
       return (
-        saved.length === 2 && saved.every((scan) => scan._status === "synced")
+        saved.length === 2 &&
+        saved.every((scan) => scan._status === "local-only")
       );
     })
     .toBe(true);
   const originalScans = await records(page);
-  for (const scan of originalScans) {
-    expect(scan.owner_id).toBeTruthy();
-    expect(scan.cloud_id).toBeTruthy();
-    expect(scan.storage_path).toBeTruthy();
-  }
   await nav(page, "History");
   await expect(historyDetails(page)).toHaveCount(2);
   await context.setOffline(true);
@@ -516,7 +460,7 @@ test("F17: offline batch deletion keeps its selected IDs through a local failure
   });
   await expect(dialog).toBeVisible();
 
-  // Insert an unowned local report after the confirmation has captured its IDs.
+  // Insert another local report after the confirmation has captured its IDs.
   const arrival = await page.evaluate(
     (sourceId) =>
       new Promise<{ id: string; photoBytes: number }>((resolve, reject) => {
@@ -555,10 +499,10 @@ test("F17: offline batch deletion keeps its selected IDs through a local failure
               new CustomEvent("x-storagemutated-1", {
                 detail: {
                   "idb://MangoLeafDB/scans/": { d: 1, from: id, to: id },
-                  "idb://MangoLeafDB/scans/_status": {
+                  "idb://MangoLeafDB/scans/updated_at": {
                     d: 1,
-                    from: "local-only",
-                    to: "local-only",
+                    from: "",
+                    to: "\uffff",
                   },
                 },
               }),
@@ -586,7 +530,7 @@ test("F17: offline batch deletion keeps its selected IDs through a local failure
       .map((scan) => ({ id: scan.id, status: scan._status }))
       .sort((a, b) => a.id.localeCompare(b.id));
   const beforeFailure = [
-    ...originalScans.map((scan) => ({ id: scan.id, status: "synced" })),
+    ...originalScans.map((scan) => ({ id: scan.id, status: "local-only" })),
     { id: arrival.id, status: "local-only" },
   ].sort((a, b) => a.id.localeCompare(b.id));
 
@@ -604,15 +548,9 @@ test("F17: offline batch deletion keeps its selected IDs through a local failure
 
   await confirmScanDeletion(page, 2);
   expect(await page.evaluate(() => window.mangoDeleteFailures)).toBe(1);
-  await expect.poll(rowStatuses).toEqual(
-    [
-      ...originalScans.map((scan) => ({
-        id: scan.id,
-        status: "pending-delete",
-      })),
-      { id: arrival.id, status: "local-only" },
-    ].sort((a, b) => a.id.localeCompare(b.id)),
-  );
+  await expect
+    .poll(rowStatuses)
+    .toEqual([{ id: arrival.id, status: "local-only" }]);
   await expect(historyDetails(page)).toHaveCount(1);
   await expect(
     page.getByRole("button", {
@@ -626,20 +564,6 @@ test("F17: offline batch deletion keeps its selected IDs through a local failure
   await expect
     .poll(rowStatuses, { timeout: 20_000 })
     .toEqual([{ id: arrival.id, status: "local-only" }]);
-  const headers = { Authorization: `Bearer ${await mockGuestToken(page)}` };
-  for (const scan of originalScans) {
-    const remote = await page.request.get("/__mock__/rest/v1/scans", {
-      headers,
-      params: { id: "eq." + scan.cloud_id },
-    });
-    expect(remote.ok()).toBe(true);
-    expect(await remote.json()).toEqual([]);
-    const photo = await page.request.get(
-      `/__mock__/storage/v1/object/authenticated/scans/${scan.storage_path}`,
-      { headers },
-    );
-    expect(photo.status()).toBe(404);
-  }
   await expect(historyDetails(page)).toHaveCount(1);
   expect(await savedPhotoSize(page, arrival.id)).toBe(arrival.photoBytes);
 });

@@ -1,0 +1,1 @@
+Field-Ready Mango Health Diagnostic. MangoLeaf AI is a Progressive Web Application that helps Mango Farmers automate the classification of Mango Leaf and Mango Green Fruit conditions, even offline. It requires no login or registration, works offline, runs on-device AI diagnosis, provides English and Bisaya treatment guidance, and includes Scan History.

@@ -1,0 +1,74 @@
+{
+  "version": "v2-single-voice",
+  "provider": "edge-tts",
+  "voice": "en-US-JennyNeural",
+  "rate": "+14%",
+  "purpose": "One consistent semi-calm narrator across every scene; no HeyGen narrator stems.",
+  "lines": [
+    {
+      "id": "v2single-info-01-title",
+      "text": "What is MangoLeaf AI?"
+    },
+    {
+      "id": "v2single-info-02-overview",
+      "text": "Field-Ready Mango Health Diagnostic. MangoLeaf AI is a Progressive Web Application that helps Mango Farmers automate the classification of Mango Leaf and Mango Green Fruit conditions, even offline. It requires no login or registration, works offline, runs on-device AI diagnosis, provides English and Bisaya treatment guidance, and includes Scan History."
+    },
+    {
+      "id": "v2single-info-03-classes",
+      "text": "Support 7 classes. Leaf Diseases include Anthracnose, Sooty Mold, and Bacterial Canker. Fruit Diseases include Mango Scab and Bacterial Black Spot. Healthy results are Healthy Leaf and Healthy Fruit."
+    },
+    {
+      "id": "v2single-info-04-stack",
+      "text": "MangoLeaf AI Offline-First Tech Stack. Next.js, React, Bun, TypeScript, and Tailwind CSS. TensorFlow.js, Dexie, IndexedDB, Supabase, and Serwist. Model: MobileNet V3 Large."
+    },
+    {
+      "id": "v2single-info-05-walkthrough",
+      "text": "Simple Walkthrough. We will show one straightforward path: scan, take a photo, view the diagnosed result, open Scan History, then view the scan detail modal."
+    },
+    {
+      "id": "v2single-demo-01-intro",
+      "text": "MangoLeaf AI checks a Mango Leaf or Mango Green Fruit right on your phone, even when you are offline."
+    },
+    {
+      "id": "v2single-demo-02-take-photo",
+      "text": "Read the Photo Tips, then use Take Photo for this simple demo. Keep one whole Mango Leaf or Mango Green Fruit in even light."
+    },
+    {
+      "id": "v2single-demo-03-capture",
+      "text": "Center the subject in the Green Box Guidance. Hold steady and use good light so the camera can capture a clear Mango Green Fruit view."
+    },
+    {
+      "id": "v2single-demo-04-review",
+      "text": "Review your photo. Make sure one whole Mango Leaf or Mango Green Fruit is visible. After that, tap Run AI Diagnosis to start the on-device check."
+    },
+    {
+      "id": "v2single-demo-05-wait",
+      "text": "Please wait a moment while the on-device model checks your photo. After that, review the result."
+    },
+    {
+      "id": "v2single-demo-06-result",
+      "text": "See the predicted condition, Confidence Score, and treatment guidance in English."
+    },
+    {
+      "id": "v2single-demo-07-bisaya",
+      "text": "Switch language with One tap so Mango Farmers can understand immediate treatment steps."
+    },
+    {
+      "id": "v2single-demo-08-history",
+      "text": "Your Scan History keeps earlier results close at hand for a quick review."
+    },
+    {
+      "id": "v2single-demo-09-open-scan",
+      "text": "Select a saved scan to view its image, diagnosis, and treatment details together."
+    },
+    {
+      "id": "v2single-demo-10-language",
+      "text": "English and Bisaya treatment guidance are available from the scan details."
+    },
+    {
+      "id": "v2single-demo-11-bisaya-close",
+      "text": "MangoLeaf AI brings offline diagnosis, Scan History, and Bisaya guidance together."
+    }
+  ],
+  "bgm": "assets/audio/bgm-demo-v2single.wav"
+}

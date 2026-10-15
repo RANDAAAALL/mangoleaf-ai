@@ -9,6 +9,14 @@ import { useInstallGuide } from "@/hooks/useInstallGuide";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { computeImageHash } from "@/lib/image-hash";
 import { compressImageForStorage } from "@/lib/image-storage";
+import { isStorageQuotaError, prepareLocalScan } from "@/lib/local-scans";
+import {
+  DiagnosisTimeoutError,
+  loadDiagnosisImage,
+  runDiagnosisStep,
+  type DiagnosisStage,
+  type DiagnosisError,
+} from "@/lib/diagnosis-step";
 import type { DiagnosisResult } from "@/lib/classifier";
 import type * as tf from "@tensorflow/tfjs";
 import { modelVersion, UNCERTAIN_LABEL } from "@/lib/constants";
@@ -17,11 +25,14 @@ import { translations, type Language } from "@/lib/translations";
 // Modular UI Components matching Figma Design System
 import { SplashScreen } from "@/components/layout/splash-screen";
 import { TopHeader } from "@/components/layout/top-header";
+import { ModelStatusBanner } from "@/components/layout/model-status-banner";
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { HomeTab } from "@/components/tab/home-tab";
 import { HistoryTab } from "@/components/tab/history-tab";
 import { AboutTab } from "@/components/tab/about-tab";
 import { LegalModal } from "@/components/modal/legal-modal";
+import { StorageFullModal } from "@/components/modal/storage-full-modal";
+import { UnsavedScanNotice } from "@/components/scan/unsaved-scan-notice";
 import { ScanSheet } from "@/components/modal/scan-sheet";
 import { InstallGuideOverlay } from "@/components/modal/install-guide-overlay";
 import { DiagnosticScanner } from "@/components/scan/diagnostic-scanner";
@@ -44,7 +55,7 @@ let hasInitialized = false;
 type AppTab = "home" | "history" | "about";
 
 // Probability rows exist only for the selected fresh result;
-// they are not saved to History or cloud storage.
+// they are not saved to History.
 type SelectedScanRecord = ScanRecord & {
   diagnosedResultTabular?: DiagnosisResult["diagnosedResultTabular"];
 };
@@ -89,28 +100,33 @@ export default function Home() {
 
   // The loaded model, and whether it is still arriving
   const [model, setModel] = useState<tf.GraphModel | null>(null);
+  const [modelLoadFailed, setModelLoadFailed] = useState(false);
   const [isModelLoading, setIsModelLoading] =
     useState<boolean>(!hasInitialized);
 
   // Start loading the model as soon as the app opens, so it is ready before the
-  // first scan. A failure here is logged, never thrown: the rest of the app
-  // still works without it.
+  // first scan. A failure leaves History available and offers reload recovery.
   useEffect(() => {
-    if (hasInitialized) return;
+    let cancelled = false;
 
     async function initModel() {
       try {
         const { loadMangoModel } = await import("@/lib/classifier");
         const loadedModel = await loadMangoModel();
+        if (cancelled) return;
         setModel(loadedModel);
         hasInitialized = true;
       } catch (err) {
         console.error("Error loading TensorFlow.js model:", err);
+        if (!cancelled) setModelLoadFailed(true);
       } finally {
-        setIsModelLoading(false);
+        if (!cancelled) setIsModelLoading(false);
       }
     }
     initModel();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // The photo being scanned right now
@@ -122,6 +138,7 @@ export default function Home() {
   const [photoCheck, setPhotoCheck] = useState<PhotoCheck>({ status: "idle" });
   const photoCheckRef = useRef<PhotoCheck>({ status: "idle" });
   const scanInFlightRef = useRef(false);
+  const scanAbortRef = useRef<AbortController | null>(null);
   const scanLauncherRef = useRef<HTMLElement | null>(null);
   const restoreReviewFocusRef = useRef(false);
   const mainRef = useRef<HTMLElement>(null);
@@ -134,11 +151,22 @@ export default function Home() {
   useEffect(() => {
     return () => {
       photoRequestRef.current += 1;
+      scanAbortRef.current?.abort(
+        new DOMException("Diagnosis view closed.", "AbortError"),
+      );
       if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
     };
   }, []);
   const [isScanning, setIsScanning] = useState(false);
   const [scanningProgress, setScanningProgress] = useState(0);
+  const [scanningStage, setScanningStage] = useState<DiagnosisStage>("prepare");
+  const [scanError, setScanError] = useState<DiagnosisError | null>(null);
+  const [unsavedScan, setUnsavedScan] = useState<ScanRecord | null>(null);
+  const [isStorageFullOpen, setIsStorageFullOpen] = useState(false);
+  const [isRetryingSave, setIsRetryingSave] = useState(false);
+  const [saveRetryError, setSaveRetryError] = useState<
+    "quota" | "failed" | "timeout" | null
+  >(null);
   const [legalModalType, setLegalModalType] = useState<
     "privacy" | "terms" | null
   >(null);
@@ -147,6 +175,10 @@ export default function Home() {
   const closeScanSheet = useCallback(() => setIsScanSheetOpen(false), []);
   const openScanSheet = useCallback(
     (event?: React.MouseEvent<HTMLButtonElement>) => {
+      if (unsavedScan) {
+        setIsStorageFullOpen(true);
+        return;
+      }
       // Wider layouts direct new scans to the phone installation guide.
       if (window.matchMedia("(min-width: 48rem)").matches) {
         openInstallGuide(event);
@@ -160,7 +192,7 @@ export default function Home() {
           : null);
       setIsScanSheetOpen(true);
     },
-    [openInstallGuide],
+    [openInstallGuide, unsavedScan],
   );
 
   useEffect(() => {
@@ -195,6 +227,7 @@ export default function Home() {
       previewUrl ||
       selectedScan ||
       isCameraOpen ||
+      isStorageFullOpen ||
       !restoreReviewFocusRef.current
     )
       return;
@@ -205,7 +238,7 @@ export default function Home() {
         ? launcher
         : mainRef.current;
     target?.focus({ preventScroll: true });
-  }, [previewUrl, selectedScan, isCameraOpen]);
+  }, [previewUrl, selectedScan, isCameraOpen, isStorageFullOpen]);
 
   // Read from localStorage on first render. Bisaya is the default because the
   // intended users read it more comfortably than English.
@@ -223,16 +256,15 @@ export default function Home() {
     }
   }, []);
 
-  // Live query: re-runs by itself whenever IndexedDB changes. Scans awaiting
-  // deletion are left out so a deleted scan disappears at once, before the
-  // server has confirmed anything.
+  // Legacy deletion tombstones remain hidden; current deletions remove local
+  // rows immediately. Read dates through the index instead of sorting in JS.
   const scansQuery = useLiveQuery(
     () =>
       db.scans
-        .where("_status")
-        .notEqual("pending-delete")
-        .sortBy("updated_at")
-        .then((results) => results.reverse()),
+        .orderBy("updated_at")
+        .reverse()
+        .filter((scan) => scan._status !== "pending-delete")
+        .toArray(),
     [],
   );
   const activeScans = useMemo(() => scansQuery ?? [], [scansQuery]);
@@ -241,10 +273,9 @@ export default function Home() {
     if (selectedScan?.image_blob && selectedScan.image_blob.size > 0) {
       return URL.createObjectURL(selectedScan.image_blob);
     }
-    // Unowned legacy cloud links cannot be used after the bucket is private.
-    return selectedScan?._status === "local-only"
-      ? null
-      : selectedScan?.image_url || null;
+    // Retained cloud metadata is historical. Photos are read only from this
+    // browser's Blob; an expired or private legacy URL is never requested.
+    return null;
   }, [selectedScan]);
 
   useEffect(() => {
@@ -267,7 +298,13 @@ export default function Home() {
   }, [cachedGuidelines]);
 
   useScrollLock(
-    Boolean(previewUrl || selectedScan || legalModalType || isCameraOpen),
+    Boolean(
+      previewUrl ||
+      selectedScan ||
+      legalModalType ||
+      isCameraOpen ||
+      isStorageFullOpen,
+    ),
   );
 
   // Retake reopens the live camera or the same file picker used last.
@@ -281,6 +318,7 @@ export default function Home() {
     previewUrlRef.current = null;
     photoHashRef.current = null;
     setPreviewUrl(null);
+    setScanError(null);
     updatePhotoCheck({ status: "idle" });
     const picker = document.getElementById(lastPickerIdRef.current ?? "");
     if (picker instanceof HTMLInputElement) picker.value = "";
@@ -313,6 +351,10 @@ export default function Home() {
   const selectPhoto = useCallback(
     (file: File, source: string) => {
       if (scanInFlightRef.current) return;
+      if (unsavedScan) {
+        setIsStorageFullOpen(true);
+        return;
+      }
       restoreReviewFocusRef.current = false;
       clearPhoto();
       lastPickerIdRef.current = source;
@@ -322,7 +364,7 @@ export default function Home() {
       setPreviewUrl(previewUrlRef.current);
       void checkSelectedPhoto();
     },
-    [clearPhoto, checkSelectedPhoto],
+    [clearPhoto, checkSelectedPhoto, unsavedScan],
   );
 
   const handleFileChange = useCallback(
@@ -338,11 +380,15 @@ export default function Home() {
 
   const openGuidedCamera = useCallback(() => {
     if (scanInFlightRef.current) return;
+    if (unsavedScan) {
+      setIsStorageFullOpen(true);
+      return;
+    }
     restoreReviewFocusRef.current = false;
     clearPhoto();
     setIsScanSheetOpen(false);
     setIsCameraOpen(true);
-  }, [clearPhoto]);
+  }, [clearPhoto, unsavedScan]);
 
   const closeGuidedCamera = useCallback(() => {
     restoreReviewFocusRef.current = true;
@@ -389,7 +435,7 @@ export default function Home() {
     const request = ++photoRequestRef.current;
     updatePhotoCheck({ status: "checking" });
     try {
-      // Another tab or sync may have deleted the saved report since selection.
+      // Another tab may have deleted the saved report since selection.
       const existingScan = await findDuplicateScan(check.hash);
       if (request !== photoRequestRef.current) return;
       if (existingScan) {
@@ -409,6 +455,12 @@ export default function Home() {
     }
   }, [clearPhoto, updatePhotoCheck]);
 
+  const cancelDiagnosis = useCallback(() => {
+    scanAbortRef.current?.abort(
+      new DOMException("Diagnosis cancelled.", "AbortError"),
+    );
+  }, []);
+
   // Recheck the local report index, then infer, compress and save a new photo.
   const runDiagnosis = useCallback(async () => {
     const file = selectedFileRef.current;
@@ -425,81 +477,137 @@ export default function Home() {
     // Ref guards rapid clicks before React renders the scanning state.
     scanInFlightRef.current = true;
     const request = photoRequestRef.current;
+    const controller = new AbortController();
+    scanAbortRef.current = controller;
+    setScanError(null);
     setIsScanning(true);
+    setScanningStage("prepare");
     setScanningProgress(15);
     let inferenceImageUrl: string | null = null;
+    const photoResource: { image: HTMLImageElement | null } = { image: null };
+    let inferencePending: (() => boolean) | undefined;
+    let preparedScan: ScanRecord | null = null;
 
     try {
       // Reports from a different model still need fresh inference. The same
       // current/legacy eligibility rule applies both here and during review.
-      let existingScan: ScanRecord | undefined;
-      try {
-        existingScan = await findDuplicateScan(check.hash);
-      } catch (err) {
-        if (request === photoRequestRef.current) {
-          console.error("Photo duplicate recheck failed:", err);
-          updatePhotoCheck({ status: "error" });
-        }
-        return;
-      }
+      const prepared = await runDiagnosisStep(
+        controller,
+        "prepare",
+        async (signal) => {
+          const existingScan = await findDuplicateScan(check.hash);
+          signal.throwIfAborted();
+          if (existingScan)
+            return { existingScan, classifier: null, image: null };
+          const classifier = await import("@/lib/classifier");
+          signal.throwIfAborted();
+          inferencePending = classifier.isMangoInferencePending;
+          inferenceImageUrl = URL.createObjectURL(file);
+          const image = await loadDiagnosisImage(inferenceImageUrl, signal);
+          photoResource.image = image;
+          return { existingScan: null, classifier, image };
+        },
+      );
       if (request !== photoRequestRef.current) return;
-      if (existingScan) {
+      if (prepared.existingScan) {
         updatePhotoCheck({
           status: "ready",
           hash: check.hash,
-          duplicate: existingScan,
+          duplicate: prepared.existingScan,
         });
         return;
       }
 
-      const { predictMangoDisease } = await import("@/lib/classifier");
-      if (request !== photoRequestRef.current) return;
+      if (!prepared.classifier || !prepared.image) return;
+      const { predictMangoDisease } = prepared.classifier;
+      const img = prepared.image;
 
-      const img = new Image();
-      inferenceImageUrl = URL.createObjectURL(file);
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = inferenceImageUrl!;
-      });
-      if (request !== photoRequestRef.current) return;
-
+      setScanningStage("analyze");
       setScanningProgress(45);
-      const {
-        diseaseName,
-        confidence,
-        // diagnosedResultTabular
-      } = await predictMangoDisease(model, img);
+      const { diseaseName, confidence, diagnosedResultTabular } =
+        await runDiagnosisStep(controller, "analyze", (signal) =>
+          predictMangoDisease(model, img, signal),
+        );
       if (request !== photoRequestRef.current) return;
 
+      setScanningStage("process");
       setScanningProgress(75);
       // Shrink it before saving. Inference already ran on the full image, so
       // nothing is lost by storing the smaller copy.
-      const storageBlob = await compressImageForStorage(img, 1000, 0.75);
+      const storageBlob = await runDiagnosisStep(
+        controller,
+        "process",
+        (signal) => compressImageForStorage(img, 1000, 0.75, signal),
+      );
       if (request !== photoRequestRef.current) return;
 
+      setScanningStage("save");
       setScanningProgress(90);
+      const scanToSave = prepareLocalScan({
+        diseaseName,
+        confidence,
+        imageBlob: storageBlob,
+        imageHash: check.hash,
+      });
+      preparedScan = scanToSave;
 
-      await createScan(diseaseName, confidence, storageBlob, check.hash);
+      const savedScan = await runDiagnosisStep(controller, "save", (signal) =>
+        createScan(scanToSave, signal),
+      );
       if (request !== photoRequestRef.current) return;
 
-      // Match this photo and active model so
-      // scores cannot be attached to another photo's newer report.
-      const savedScan = await findDuplicateScan(check.hash);
-      if (request !== photoRequestRef.current) return;
+      // The committed record identifies this exact save without another DB lookup.
+      // clearPhoto invalidates the request; finish its UI state before doing so.
+      setIsScanning(false);
+      setScanningProgress(0);
       clearPhoto();
       if (savedScan) {
         setSelectedScan({
           ...savedScan,
-          // diagnosedResultTabular,
+          diagnosedResultTabular,
         });
       }
     } catch (err) {
-      console.error("AI classification error:", err);
+      if (request !== photoRequestRef.current) return;
+      if (preparedScan && isStorageQuotaError(err)) {
+        // Keep only the compressed photo/result for a same-ID save retry.
+        // Releasing the original preview also keeps the two dialogs separate.
+        setIsScanning(false);
+        setScanningProgress(0);
+        clearPhoto();
+        setUnsavedScan(preparedScan);
+        setSaveRetryError(null);
+        setIsStorageFullOpen(true);
+        console.warn(
+          "[Diagnosis] local storage quota reached; result unsaved.",
+        );
+        return;
+      }
+      const isPending =
+        inferencePending?.() ||
+        (err instanceof Error &&
+          "code" in err &&
+          err.code === "INFERENCE_BUSY");
+      const cancelled =
+        err instanceof DOMException && err.name === "AbortError";
+      setScanError(
+        isPending
+          ? "inference-pending"
+          : err instanceof DiagnosisTimeoutError
+            ? "timeout"
+            : cancelled
+              ? "cancelled"
+              : "failed",
+      );
+      if (!cancelled) console.error("[Diagnosis] failed:", err);
     } finally {
       scanInFlightRef.current = false;
-      setIsScanning(false);
-      setScanningProgress(0);
+      if (scanAbortRef.current === controller) scanAbortRef.current = null;
+      if (request === photoRequestRef.current) {
+        setIsScanning(false);
+        setScanningProgress(0);
+      }
+      photoResource.image?.removeAttribute("src");
       if (inferenceImageUrl) {
         URL.revokeObjectURL(inferenceImageUrl);
       }
@@ -559,6 +667,59 @@ export default function Home() {
     [handleTabChange],
   );
 
+  const manageStorage = useCallback(() => {
+    if (scanInFlightRef.current) return;
+    setIsStorageFullOpen(false);
+    handleTabChange("history");
+    requestAnimationFrame(() =>
+      mainRef.current?.focus({ preventScroll: true }),
+    );
+  }, [handleTabChange]);
+
+  const discardUnsavedScan = useCallback(() => {
+    if (scanInFlightRef.current) return;
+    restoreReviewFocusRef.current = true;
+    setUnsavedScan(null);
+    setIsStorageFullOpen(false);
+    setSaveRetryError(null);
+  }, []);
+
+  const retryUnsavedScan = useCallback(async () => {
+    if (!unsavedScan || scanInFlightRef.current) return;
+    scanInFlightRef.current = true;
+    const controller = new AbortController();
+    scanAbortRef.current = controller;
+    setIsStorageFullOpen(true);
+    setIsRetryingSave(true);
+    setSaveRetryError(null);
+    try {
+      const savedScan = await runDiagnosisStep(controller, "save", (signal) =>
+        createScan(unsavedScan, signal),
+      );
+      setUnsavedScan(null);
+      setIsStorageFullOpen(false);
+      setSelectedScan(savedScan);
+    } catch (error) {
+      if (
+        controller.signal.aborted &&
+        !(error instanceof DiagnosisTimeoutError)
+      )
+        return;
+      setSaveRetryError(
+        isStorageQuotaError(error)
+          ? "quota"
+          : error instanceof DiagnosisTimeoutError
+            ? "timeout"
+            : "failed",
+      );
+      console.warn("[Diagnosis] retry could not save the local result:", error);
+    } finally {
+      scanInFlightRef.current = false;
+      if (scanAbortRef.current === controller) scanAbortRef.current = null;
+      setIsRetryingSave(false);
+    }
+  }, [unsavedScan, createScan]);
+
   if (isModelLoading) {
     return <SplashScreen />;
   }
@@ -592,6 +753,19 @@ export default function Home() {
           tabIndex={-1}
           className="max-w-7xl mx-auto px-6 py-8 pb-28 md:pb-8 flex flex-col outline-none"
         >
+          {modelLoadFailed && (
+            <ModelStatusBanner
+              language={language}
+              onReload={() => window.location.reload()}
+            />
+          )}
+          {unsavedScan && (
+            <UnsavedScanNotice
+              language={language}
+              onRetry={retryUnsavedScan}
+              onDiscard={discardUnsavedScan}
+            />
+          )}
           <div key={activeTab} className="tab-panel-fade-in flex flex-col">
             {activeTab === "home" && (
               <HomeTab
@@ -670,8 +844,12 @@ export default function Home() {
             !photoCheck.duplicate
           }
           scanningProgress={scanningProgress}
+          scanningStage={scanningStage}
+          scanError={scanError}
           language={language}
           onRunDiagnosis={runDiagnosis}
+          onCancelDiagnosis={cancelDiagnosis}
+          onReloadApp={() => window.location.reload()}
           onRetake={handleRetake}
           onClose={closePhotoReview}
           onViewSavedResult={viewSavedResult}
@@ -680,6 +858,17 @@ export default function Home() {
       )}
 
       {/* Selected Scan Details Modal */}
+      {unsavedScan && isStorageFullOpen && (
+        <StorageFullModal
+          language={language}
+          isSaving={isRetryingSave}
+          error={saveRetryError}
+          onManageHistory={manageStorage}
+          onRetry={retryUnsavedScan}
+          onDiscard={discardUnsavedScan}
+        />
+      )}
+
       {selectedScan && (
         <ScanDetailsModal
           scan={selectedScan}

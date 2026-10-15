@@ -1,0 +1,5 @@
+
+Using Python 3.11.17 environment at: mangoleaf-v450-converter/v4-5-0-training-20261011T063913Z-40b7b0fe
+error: No solution found when resolving dependencies
+  cause: Because wheel==0.46.3 depends on packaging>=24.0 and you require wheel==0.46.3, we can conclude that you require packaging>=24.0.
+         And because you require packaging==23.2, we can conclude that your requirements are unsatisfiable.

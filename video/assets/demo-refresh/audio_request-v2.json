@@ -1,0 +1,25 @@
+{
+  "version": "v2",
+  "provider": "heygen",
+  "voice": "05f19352e8f74b0392a8f411eba40de1",
+  "lang": "en",
+  "speed": 1.08,
+  "lines": [
+    { "id": "v2-01-overview", "text": "MangoLeaf AI helps mango farmers check mango leaves and Mango Green Fruit with on-device AI, even offline." },
+    { "id": "v2-02-conditions", "text": "It recognizes five disease classes: Anthracnose, Bacterial Canker, Sooty Mold, Bacterial Black Spot, and Mango Scab, plus Healthy Leaf and Healthy Fruit." },
+    { "id": "v2-03-stack", "text": "It is built with Next.js, React, Bun, TypeScript, Tailwind CSS, TensorFlow.js, Dexie, IndexedDB, Supabase, and Serwist. The model is MobileNetV3-Large." },
+    { "id": "v2-04-scope", "text": "This demo follows one simple path: scan, take a photo, review the diagnosed result, open Scan History, then view the scan detail modal." },
+    { "id": "v2-05-intro", "text": "MangoLeaf AI checks mango health right on your phone, even offline." },
+    { "id": "v2-06-take-photo", "text": "Read the Photo Tips, then choose Take Photo for this simple demo. Capture one clear mango leaf or Mango Green Fruit." },
+    { "id": "v2-07-capture", "text": "Center one whole mango in the Green Box Guidance, then capture your photo." },
+    { "id": "v2-08-review", "text": "Review your photo. After that, tap Run AI Diagnosis to start the on-device check." },
+    { "id": "v2-09-wait", "text": "Please wait a moment while the on-device model checks your photo. After that, review the result." },
+    { "id": "v2-10-result", "text": "Review the predicted condition, Confidence Score, and treatment guidance in English." },
+    { "id": "v2-11-bisaya", "text": "Switch to Bisaya to share these treatment steps." },
+    { "id": "v2-12-history", "text": "Your saved scans stay in Scan History for a quick return." },
+    { "id": "v2-13-open-scan", "text": "Open a saved scan to review the photo, result, and treatment guidance." },
+    { "id": "v2-14-language", "text": "Switch the guidance to Bisaya when it helps." },
+    { "id": "v2-15-bisaya-close", "text": "Clear Bisaya guidance helps Mango Farmers choose next steps." }
+  ],
+  "bgm": "assets/audio/bgm-demo-v2.wav"
+}

@@ -1,0 +1,24 @@
+{
+  "version": "v2",
+  "tts_provider": "heygen",
+  "voice_id": "05f19352e8f74b0392a8f411eba40de1",
+  "speed": 1.08,
+  "bgm": "assets/audio/bgm-demo-v2.wav",
+  "voices": [
+    { "id": "v2-01-overview", "path": "assets/voice/v2-01-overview.wav", "duration_s": 8.385306, "words": "assets/voice/v2-01-overview.words.json" },
+    { "id": "v2-02-conditions", "path": "assets/voice/v2-02-conditions.wav", "duration_s": 11.937959, "words": "assets/voice/v2-02-conditions.words.json" },
+    { "id": "v2-03-stack", "path": "assets/voice/v2-03-stack.wav", "duration_s": 15.568980, "words": "assets/voice/v2-03-stack.words.json" },
+    { "id": "v2-04-scope", "path": "assets/voice/v2-04-scope.wav", "duration_s": 9.430204, "words": "assets/voice/v2-04-scope.words.json" },
+    { "id": "v2-05-intro", "path": "assets/voice/v2-05-intro.wav", "duration_s": 6.608980, "words": "assets/voice/v2-05-intro.words.json" },
+    { "id": "v2-06-take-photo", "path": "assets/voice/v2-06-take-photo.wav", "duration_s": 9.848163, "words": "assets/voice/v2-06-take-photo.words.json" },
+    { "id": "v2-07-capture", "path": "assets/voice/v2-07-capture.wav", "duration_s": 5.746939, "words": "assets/voice/v2-07-capture.words.json" },
+    { "id": "v2-08-review", "path": "assets/voice/v2-08-review.wav", "duration_s": 7.862857, "words": "assets/voice/v2-08-review.words.json" },
+    { "id": "v2-09-wait", "path": "assets/voice/v2-09-wait.wav", "duration_s": 6.582857, "words": "assets/voice/v2-09-wait.words.json" },
+    { "id": "v2-10-result", "path": "assets/voice/v2-10-result.wav", "duration_s": 5.694694, "words": "assets/voice/v2-10-result.words.json" },
+    { "id": "v2-11-bisaya", "path": "assets/voice/v2-11-bisaya.wav", "duration_s": 3.996735, "words": "assets/voice/v2-11-bisaya.words.json" },
+    { "id": "v2-12-history", "path": "assets/voice/v2-12-history.wav", "duration_s": 5.041633, "words": "assets/voice/v2-12-history.words.json" },
+    { "id": "v2-13-open-scan", "path": "assets/voice/v2-13-open-scan.wav", "duration_s": 5.146122, "words": "assets/voice/v2-13-open-scan.words.json" },
+    { "id": "v2-14-language", "path": "assets/voice/v2-14-language.wav", "duration_s": 3.317551, "words": "assets/voice/v2-14-language.words.json" },
+    { "id": "v2-15-bisaya-close", "path": "assets/voice/v2-15-bisaya-close.wav", "duration_s": 4.362449, "words": "assets/voice/v2-15-bisaya-close.words.json" }
+  ]
+}

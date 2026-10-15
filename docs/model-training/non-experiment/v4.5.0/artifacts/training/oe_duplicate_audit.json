@@ -1,0 +1,5303 @@
+{
+  "rawCount": 2481,
+  "retainedCount": 2311,
+  "exactCopyGroups": [
+    {
+      "keptId": "f4cd6cb2b493219c2956",
+      "copies": [
+        {
+          "id": "f4cd6cb2b493219c2956",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0035 (1).jpg",
+          "sha256": "f4cd6cb2b493219c295683a32e863938d4532389d2aa74ca19770a4edaab2bc8",
+          "decodedRgbSha256": "016dc9607ae511c124a3faac67a7a82812dd6b2d4303dea2488d34ab994255ba",
+          "bytes": 5045371,
+          "phash": "8b63b720c61cf9d2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "f4cd6cb2b493219c2956",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0035.jpg",
+          "sha256": "f4cd6cb2b493219c295683a32e863938d4532389d2aa74ca19770a4edaab2bc8",
+          "decodedRgbSha256": "016dc9607ae511c124a3faac67a7a82812dd6b2d4303dea2488d34ab994255ba",
+          "bytes": 5045371,
+          "phash": "8b63b720c61cf9d2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "0250dfb680eaff3e80da",
+      "copies": [
+        {
+          "id": "0250dfb680eaff3e80da",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0046 (1).jpg",
+          "sha256": "0250dfb680eaff3e80da5b6a7e1cd70d7605879c769781e8bd034f5c46f5aa34",
+          "decodedRgbSha256": "035f1fc3989dc5ca6d2f46de7797a25120d48c2b82e2dc51383ab998670d1fe8",
+          "bytes": 4843680,
+          "phash": "a0a73590176a9bf6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "0250dfb680eaff3e80da",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0046.jpg",
+          "sha256": "0250dfb680eaff3e80da5b6a7e1cd70d7605879c769781e8bd034f5c46f5aa34",
+          "decodedRgbSha256": "035f1fc3989dc5ca6d2f46de7797a25120d48c2b82e2dc51383ab998670d1fe8",
+          "bytes": 4843680,
+          "phash": "a0a73590176a9bf6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "44fae6b728a5d5c48448",
+      "copies": [
+        {
+          "id": "44fae6b728a5d5c48448",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0135 (1).jpg",
+          "sha256": "44fae6b728a5d5c48448f06cc58079050084638dfdeb4b3eeaf0eb7c9f897afb",
+          "decodedRgbSha256": "04ec6af9eeff47440eb497d13ffa7f6ad870904cdaf1df9802a170c69001b52f",
+          "bytes": 5117921,
+          "phash": "a0dd060273797e6d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "44fae6b728a5d5c48448",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0135.jpg",
+          "sha256": "44fae6b728a5d5c48448f06cc58079050084638dfdeb4b3eeaf0eb7c9f897afb",
+          "decodedRgbSha256": "04ec6af9eeff47440eb497d13ffa7f6ad870904cdaf1df9802a170c69001b52f",
+          "bytes": 5117921,
+          "phash": "a0dd060273797e6d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "121c5750f88e73f51fc6",
+      "copies": [
+        {
+          "id": "121c5750f88e73f51fc6",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0014 (1).jpg",
+          "sha256": "121c5750f88e73f51fc626c7ca71830ba3d8eeba43e78e57f48db64c366734ef",
+          "decodedRgbSha256": "07e811560e94d921c4f08c51dabeb39b35712c8db16baf4836ded037611e800d",
+          "bytes": 4917927,
+          "phash": "b758ef725248a45c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "121c5750f88e73f51fc6",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0014.jpg",
+          "sha256": "121c5750f88e73f51fc626c7ca71830ba3d8eeba43e78e57f48db64c366734ef",
+          "decodedRgbSha256": "07e811560e94d921c4f08c51dabeb39b35712c8db16baf4836ded037611e800d",
+          "bytes": 4917927,
+          "phash": "b758ef725248a45c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "2dd38dfeb29a6d3b9adf",
+      "copies": [
+        {
+          "id": "2dd38dfeb29a6d3b9adf",
+          "pool": "oe",
+          "sourceRelativePath": "Arum lobe_0001.jpg",
+          "sha256": "2dd38dfeb29a6d3b9adfa24e74d5f236e44868d7aa4d84f449b9e26b8a46928f",
+          "decodedRgbSha256": "0a5fa9feb5f6d2785ab565a9dca0d3c0f1a6897d879007fa220c1cc59b5ec209",
+          "bytes": 4162112,
+          "phash": "80dc488f3ea586fe",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "2dd38dfeb29a6d3b9adf",
+          "pool": "oe",
+          "sourceRelativePath": "Arum lobe_0002.jpg",
+          "sha256": "2dd38dfeb29a6d3b9adfa24e74d5f236e44868d7aa4d84f449b9e26b8a46928f",
+          "decodedRgbSha256": "0a5fa9feb5f6d2785ab565a9dca0d3c0f1a6897d879007fa220c1cc59b5ec209",
+          "bytes": 4162112,
+          "phash": "80dc488f3ea586fe",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "73ee6c426c5e101c8d93",
+      "copies": [
+        {
+          "id": "73ee6c426c5e101c8d93",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0062 (1).jpg",
+          "sha256": "73ee6c426c5e101c8d939f8148f4c758fe14743067d2129fedd4fefde2d97517",
+          "decodedRgbSha256": "0af5ddd396a649e5f1477f9ee069a757bfd071e3174887c7f75303173363525e",
+          "bytes": 4165367,
+          "phash": "f07b239f4186876c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "73ee6c426c5e101c8d93",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0062.jpg",
+          "sha256": "73ee6c426c5e101c8d939f8148f4c758fe14743067d2129fedd4fefde2d97517",
+          "decodedRgbSha256": "0af5ddd396a649e5f1477f9ee069a757bfd071e3174887c7f75303173363525e",
+          "bytes": 4165367,
+          "phash": "f07b239f4186876c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "59e5820ef92370d7b766",
+      "copies": [
+        {
+          "id": "59e5820ef92370d7b766",
+          "pool": "oe",
+          "sourceRelativePath": "IMG-20241203-WA0051(1).jpg",
+          "sha256": "59e5820ef92370d7b766b6434dcebbe0197bc3063a61d5a49f5201618bb1bd02",
+          "decodedRgbSha256": "0b21e167380aebd91109ac61240bb065beebfe765baa16fb16fcdf9f7da04e85",
+          "bytes": 141946,
+          "phash": "8e8ee0601f3eaf61",
+          "dimensions": [
+            847,
+            1599
+          ]
+        },
+        {
+          "id": "59e5820ef92370d7b766",
+          "pool": "oe",
+          "sourceRelativePath": "IMG-20241203-WA0051.jpg",
+          "sha256": "59e5820ef92370d7b766b6434dcebbe0197bc3063a61d5a49f5201618bb1bd02",
+          "decodedRgbSha256": "0b21e167380aebd91109ac61240bb065beebfe765baa16fb16fcdf9f7da04e85",
+          "bytes": 141946,
+          "phash": "8e8ee0601f3eaf61",
+          "dimensions": [
+            847,
+            1599
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "1c0c9e9dabc286c1e6ca",
+      "copies": [
+        {
+          "id": "1c0c9e9dabc286c1e6ca",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0141 (1).jpg",
+          "sha256": "1c0c9e9dabc286c1e6cad65d693f33ebd54f9a0d99e5a41136bc6c7f1b05707a",
+          "decodedRgbSha256": "0c3f25143a13504fea85566953eabe246241d3369c219e9979c3a7e90e6416f2",
+          "bytes": 5589169,
+          "phash": "99daa7ba78ca5812",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "1c0c9e9dabc286c1e6ca",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0141.jpg",
+          "sha256": "1c0c9e9dabc286c1e6cad65d693f33ebd54f9a0d99e5a41136bc6c7f1b05707a",
+          "decodedRgbSha256": "0c3f25143a13504fea85566953eabe246241d3369c219e9979c3a7e90e6416f2",
+          "bytes": 5589169,
+          "phash": "99daa7ba78ca5812",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "47642e3df7e92084291d",
+      "copies": [
+        {
+          "id": "47642e3df7e92084291d",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0043 (1).jpg",
+          "sha256": "47642e3df7e92084291decd3d5877dda7127e5725ab1f342f9cb3f314c30a8b3",
+          "decodedRgbSha256": "0cee5997834668c9d4c95710426fa25b6a5c3bee46ca5ad67707d4aa3876d077",
+          "bytes": 5010569,
+          "phash": "8c797ee02578e307",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "47642e3df7e92084291d",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0043.jpg",
+          "sha256": "47642e3df7e92084291decd3d5877dda7127e5725ab1f342f9cb3f314c30a8b3",
+          "decodedRgbSha256": "0cee5997834668c9d4c95710426fa25b6a5c3bee46ca5ad67707d4aa3876d077",
+          "bytes": 5010569,
+          "phash": "8c797ee02578e307",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "1d6703820f5426db0e30",
+      "copies": [
+        {
+          "id": "1d6703820f5426db0e30",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0026 (1).jpg",
+          "sha256": "1d6703820f5426db0e307eb6b20ab7a165e82c4b964a55417897b51d5bfd0804",
+          "decodedRgbSha256": "0d66c3b280865ba63597c7b36d51e96d54f14692e8b4508efbb4d5b1624924e9",
+          "bytes": 3739338,
+          "phash": "83d7f8a15e2c5253",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "1d6703820f5426db0e30",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0026.jpg",
+          "sha256": "1d6703820f5426db0e307eb6b20ab7a165e82c4b964a55417897b51d5bfd0804",
+          "decodedRgbSha256": "0d66c3b280865ba63597c7b36d51e96d54f14692e8b4508efbb4d5b1624924e9",
+          "bytes": 3739338,
+          "phash": "83d7f8a15e2c5253",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "44490d30cd1b35f32fa8",
+      "copies": [
+        {
+          "id": "44490d30cd1b35f32fa8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0038 (1).jpg",
+          "sha256": "44490d30cd1b35f32fa85a7b21263ba0f22382068a5e0b4f329d0340af449b2a",
+          "decodedRgbSha256": "0d68bbd7f5be497440eb5a59d570cf781aa05e571a9cfc711999a0cb1b4801e2",
+          "bytes": 4491286,
+          "phash": "de702c1473adf688",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "44490d30cd1b35f32fa8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0038.jpg",
+          "sha256": "44490d30cd1b35f32fa85a7b21263ba0f22382068a5e0b4f329d0340af449b2a",
+          "decodedRgbSha256": "0d68bbd7f5be497440eb5a59d570cf781aa05e571a9cfc711999a0cb1b4801e2",
+          "bytes": 4491286,
+          "phash": "de702c1473adf688",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "a04ffec05994320a9198",
+      "copies": [
+        {
+          "id": "a04ffec05994320a9198",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0027 (1).jpg",
+          "sha256": "a04ffec05994320a91986d163a8e0baa4d2b242763aca794bf33cbb769eb14fb",
+          "decodedRgbSha256": "0f19469506c821ac6ed638118f07b297e562e925bf04753b2e86055bacac962f",
+          "bytes": 4039203,
+          "phash": "83c469726f4ee329",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "a04ffec05994320a9198",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0027.jpg",
+          "sha256": "a04ffec05994320a91986d163a8e0baa4d2b242763aca794bf33cbb769eb14fb",
+          "decodedRgbSha256": "0f19469506c821ac6ed638118f07b297e562e925bf04753b2e86055bacac962f",
+          "bytes": 4039203,
+          "phash": "83c469726f4ee329",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "aad00d14d3412601e674",
+      "copies": [
+        {
+          "id": "aad00d14d3412601e674",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0105 (1).jpg",
+          "sha256": "aad00d14d3412601e674fa3c38ed56510d1c8de4729791632516dda26e9fd81a",
+          "decodedRgbSha256": "0f605e1d7148558059f10263e469e43923e9df262a4fde4c1664f2dfa5dab5f6",
+          "bytes": 4568061,
+          "phash": "beda2555f2788928",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "aad00d14d3412601e674",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0105.jpg",
+          "sha256": "aad00d14d3412601e674fa3c38ed56510d1c8de4729791632516dda26e9fd81a",
+          "decodedRgbSha256": "0f605e1d7148558059f10263e469e43923e9df262a4fde4c1664f2dfa5dab5f6",
+          "bytes": 4568061,
+          "phash": "beda2555f2788928",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "1a8c75652cc966dce414",
+      "copies": [
+        {
+          "id": "1a8c75652cc966dce414",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0058 (1).jpg",
+          "sha256": "1a8c75652cc966dce414c8cadcf0335149cdec3cb32d4c4c1ab30a28b14e829d",
+          "decodedRgbSha256": "14177c7698649a51cc74e4814ec42bf2041eb7f72a1394765b2e0d1f5f45bfe6",
+          "bytes": 5271076,
+          "phash": "de271a47749a499a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "1a8c75652cc966dce414",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0058.jpg",
+          "sha256": "1a8c75652cc966dce414c8cadcf0335149cdec3cb32d4c4c1ab30a28b14e829d",
+          "decodedRgbSha256": "14177c7698649a51cc74e4814ec42bf2041eb7f72a1394765b2e0d1f5f45bfe6",
+          "bytes": 5271076,
+          "phash": "de271a47749a499a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "e5e21e63e321fb31fd80",
+      "copies": [
+        {
+          "id": "e5e21e63e321fb31fd80",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0060 (1).jpg",
+          "sha256": "e5e21e63e321fb31fd808f2e4c8fbbed3b119e4512382c12016a48465a48829a",
+          "decodedRgbSha256": "15db62efa78ec58f3ae499943a05d739e303080e4059e90e9c946bb0c63389f1",
+          "bytes": 5136377,
+          "phash": "cc5b2b53b7dc2068",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "e5e21e63e321fb31fd80",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0060.jpg",
+          "sha256": "e5e21e63e321fb31fd808f2e4c8fbbed3b119e4512382c12016a48465a48829a",
+          "decodedRgbSha256": "15db62efa78ec58f3ae499943a05d739e303080e4059e90e9c946bb0c63389f1",
+          "bytes": 5136377,
+          "phash": "cc5b2b53b7dc2068",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "22e9f065d4c7fea52095",
+      "copies": [
+        {
+          "id": "22e9f065d4c7fea52095",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0069 (1).jpg",
+          "sha256": "22e9f065d4c7fea520957b6699716fd24edfb5f46642f45376cac10ea949479d",
+          "decodedRgbSha256": "16042a0beb51edcfe5814d1717c11d751574558c286af5f2b1dc84c13d0badcd",
+          "bytes": 4516496,
+          "phash": "cf247a42788735d6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "22e9f065d4c7fea52095",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0069.jpg",
+          "sha256": "22e9f065d4c7fea520957b6699716fd24edfb5f46642f45376cac10ea949479d",
+          "decodedRgbSha256": "16042a0beb51edcfe5814d1717c11d751574558c286af5f2b1dc84c13d0badcd",
+          "bytes": 4516496,
+          "phash": "cf247a42788735d6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "c06a1e78bc0e1be2baee",
+      "copies": [
+        {
+          "id": "c06a1e78bc0e1be2baee",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0063 (1).jpg",
+          "sha256": "c06a1e78bc0e1be2baee8b717c97e5943c1d259eb82cc2a00f91ccbeaa32488a",
+          "decodedRgbSha256": "1b400fe0c62ea504aa50de9988267a91f8ac19dc34964f2337cb895029d72e9f",
+          "bytes": 4914413,
+          "phash": "956b1b283b363137",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "c06a1e78bc0e1be2baee",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0063.jpg",
+          "sha256": "c06a1e78bc0e1be2baee8b717c97e5943c1d259eb82cc2a00f91ccbeaa32488a",
+          "decodedRgbSha256": "1b400fe0c62ea504aa50de9988267a91f8ac19dc34964f2337cb895029d72e9f",
+          "bytes": 4914413,
+          "phash": "956b1b283b363137",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "2cfa9572761b0c9a4bce",
+      "copies": [
+        {
+          "id": "2cfa9572761b0c9a4bce",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0028 (1).jpg",
+          "sha256": "2cfa9572761b0c9a4bce392d0ee9bce8452c78d52ed2a74b9215cacbe48b9b79",
+          "decodedRgbSha256": "1b7732db3868ae114e6d2dfa5a81403d925412cf0b75bb45ac3ab786ca611aac",
+          "bytes": 4196698,
+          "phash": "c6cffa329c01d8a9",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "2cfa9572761b0c9a4bce",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0028.jpg",
+          "sha256": "2cfa9572761b0c9a4bce392d0ee9bce8452c78d52ed2a74b9215cacbe48b9b79",
+          "decodedRgbSha256": "1b7732db3868ae114e6d2dfa5a81403d925412cf0b75bb45ac3ab786ca611aac",
+          "bytes": 4196698,
+          "phash": "c6cffa329c01d8a9",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "179c66cd7df0faa0f14f",
+      "copies": [
+        {
+          "id": "179c66cd7df0faa0f14f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0039 (1).jpg",
+          "sha256": "179c66cd7df0faa0f14f024a174e3f29e9b5a833e25baae0c906ff9bda4eb5ef",
+          "decodedRgbSha256": "1ce78f57ff72715224969d46d0eb036c34bbf4214d723dff64de5b77a7c6e5fb",
+          "bytes": 4801049,
+          "phash": "e2332e5c92f2f44c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "179c66cd7df0faa0f14f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0039.jpg",
+          "sha256": "179c66cd7df0faa0f14f024a174e3f29e9b5a833e25baae0c906ff9bda4eb5ef",
+          "decodedRgbSha256": "1ce78f57ff72715224969d46d0eb036c34bbf4214d723dff64de5b77a7c6e5fb",
+          "bytes": 4801049,
+          "phash": "e2332e5c92f2f44c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "f16a8faf96e65ac27514",
+      "copies": [
+        {
+          "id": "f16a8faf96e65ac27514",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0127 (1).jpg",
+          "sha256": "f16a8faf96e65ac27514ed991a4877b1cf74bf48b28b219fbd788a0d1860507b",
+          "decodedRgbSha256": "1d48b7dba8c3feb6f0d075122de76c010e93a4f8ef16aa9a1ec32bdf26d18cfb",
+          "bytes": 4145540,
+          "phash": "eeffe1ea6a604202",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "f16a8faf96e65ac27514",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0127.jpg",
+          "sha256": "f16a8faf96e65ac27514ed991a4877b1cf74bf48b28b219fbd788a0d1860507b",
+          "decodedRgbSha256": "1d48b7dba8c3feb6f0d075122de76c010e93a4f8ef16aa9a1ec32bdf26d18cfb",
+          "bytes": 4145540,
+          "phash": "eeffe1ea6a604202",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "3f273409ad855264e461",
+      "copies": [
+        {
+          "id": "3f273409ad855264e461",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0128 (1).jpg",
+          "sha256": "3f273409ad855264e46134522a26ec095a12a5088e92a2d7c1f57b436f8e7473",
+          "decodedRgbSha256": "1d60405b909f0e06a7f8d6ca05e139cd99857e1eb49b53c0076222a188a8f309",
+          "bytes": 3698661,
+          "phash": "89b9565df268f8a0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "3f273409ad855264e461",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0128.jpg",
+          "sha256": "3f273409ad855264e46134522a26ec095a12a5088e92a2d7c1f57b436f8e7473",
+          "decodedRgbSha256": "1d60405b909f0e06a7f8d6ca05e139cd99857e1eb49b53c0076222a188a8f309",
+          "bytes": 3698661,
+          "phash": "89b9565df268f8a0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "ac8e1b7d622148660dc8",
+      "copies": [
+        {
+          "id": "ac8e1b7d622148660dc8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0008 (1).jpg",
+          "sha256": "ac8e1b7d622148660dc82e13cc2d530286b7d765c7b5fe570397221ce2873522",
+          "decodedRgbSha256": "1debafa4e6ecf2f36670ce3b983e4c63de23774716f819aef2009bdcef757609",
+          "bytes": 4912949,
+          "phash": "a7d825f4f8a99053",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "ac8e1b7d622148660dc8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0008.jpg",
+          "sha256": "ac8e1b7d622148660dc82e13cc2d530286b7d765c7b5fe570397221ce2873522",
+          "decodedRgbSha256": "1debafa4e6ecf2f36670ce3b983e4c63de23774716f819aef2009bdcef757609",
+          "bytes": 4912949,
+          "phash": "a7d825f4f8a99053",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "4b17d49b2b65d504c23d",
+      "copies": [
+        {
+          "id": "4b17d49b2b65d504c23d",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0044 (1).jpg",
+          "sha256": "4b17d49b2b65d504c23d65a3b0270025b3824debd0cf7296e6dd3dc7f7f31506",
+          "decodedRgbSha256": "1fe5c2544eda4b870fa326ef20df6663dba0cbcbcbf2857a005451a6708d845a",
+          "bytes": 4683391,
+          "phash": "dbe4c9e8cd2815ac",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "4b17d49b2b65d504c23d",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0044.jpg",
+          "sha256": "4b17d49b2b65d504c23d65a3b0270025b3824debd0cf7296e6dd3dc7f7f31506",
+          "decodedRgbSha256": "1fe5c2544eda4b870fa326ef20df6663dba0cbcbcbf2857a005451a6708d845a",
+          "bytes": 4683391,
+          "phash": "dbe4c9e8cd2815ac",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "a22b345021e8d6d3fc76",
+      "copies": [
+        {
+          "id": "a22b345021e8d6d3fc76",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0053 (1).jpg",
+          "sha256": "a22b345021e8d6d3fc76cb725a90d94eeaab38f14b3e04704935513e576ec3e9",
+          "decodedRgbSha256": "250bd8e464afc9dfc85540870df1b0d0f9d1732123d672513e8d5406e97af2b7",
+          "bytes": 4339672,
+          "phash": "c42b4592647b527f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "a22b345021e8d6d3fc76",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0053.jpg",
+          "sha256": "a22b345021e8d6d3fc76cb725a90d94eeaab38f14b3e04704935513e576ec3e9",
+          "decodedRgbSha256": "250bd8e464afc9dfc85540870df1b0d0f9d1732123d672513e8d5406e97af2b7",
+          "bytes": 4339672,
+          "phash": "c42b4592647b527f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "f0853538a4b536bd86c9",
+      "copies": [
+        {
+          "id": "f0853538a4b536bd86c9",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0112 (1).jpg",
+          "sha256": "f0853538a4b536bd86c9a8d2ca07af82627f1266302727700089bd3eae6d1abf",
+          "decodedRgbSha256": "253536f2dee152445235024790f5f0d650382511045022ae659a31c41c758e32",
+          "bytes": 5734100,
+          "phash": "dd5f24582453b0f9",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "f0853538a4b536bd86c9",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0112.jpg",
+          "sha256": "f0853538a4b536bd86c9a8d2ca07af82627f1266302727700089bd3eae6d1abf",
+          "decodedRgbSha256": "253536f2dee152445235024790f5f0d650382511045022ae659a31c41c758e32",
+          "bytes": 5734100,
+          "phash": "dd5f24582453b0f9",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "f83c8277e22b4dfdcbc4",
+      "copies": [
+        {
+          "id": "f83c8277e22b4dfdcbc4",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0003 (1).jpg",
+          "sha256": "f83c8277e22b4dfdcbc4b0c0c3fcd248929827b12eae9bf60e61682c5047e7f9",
+          "decodedRgbSha256": "25623ef025bff9346deec4b68a2e873aab993f6fa4e47e6ef799fceb6227662f",
+          "bytes": 4623489,
+          "phash": "b66b069679d67580",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "f83c8277e22b4dfdcbc4",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0003.jpg",
+          "sha256": "f83c8277e22b4dfdcbc4b0c0c3fcd248929827b12eae9bf60e61682c5047e7f9",
+          "decodedRgbSha256": "25623ef025bff9346deec4b68a2e873aab993f6fa4e47e6ef799fceb6227662f",
+          "bytes": 4623489,
+          "phash": "b66b069679d67580",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "3bfccd6b52cad33562cc",
+      "copies": [
+        {
+          "id": "3bfccd6b52cad33562cc",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0071 (1).jpg",
+          "sha256": "3bfccd6b52cad33562cc9559b23f2ae20841ea19c496507bbec8401caefcb018",
+          "decodedRgbSha256": "2641a56100fb846309f5dd18d58a10f01105223e2ea20211fba9e2addac214b9",
+          "bytes": 4783058,
+          "phash": "e22dbc8017dc1fd4",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "3bfccd6b52cad33562cc",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0071.jpg",
+          "sha256": "3bfccd6b52cad33562cc9559b23f2ae20841ea19c496507bbec8401caefcb018",
+          "decodedRgbSha256": "2641a56100fb846309f5dd18d58a10f01105223e2ea20211fba9e2addac214b9",
+          "bytes": 4783058,
+          "phash": "e22dbc8017dc1fd4",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "4d3025cd735c2d2498e7",
+      "copies": [
+        {
+          "id": "4d3025cd735c2d2498e7",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0139 (1).jpg",
+          "sha256": "4d3025cd735c2d2498e7f9cdaac61bb9f65d3e74a4b39ea06dd198d14d85a692",
+          "decodedRgbSha256": "26535b5e623c9805b0a751f4fc27397b48046fafb5bbd5321b25b79042aec07a",
+          "bytes": 5667368,
+          "phash": "f36bbb1d6481e206",
+          "dimensions": [
+            4000,
+            3000
+          ]
+        },
+        {
+          "id": "4d3025cd735c2d2498e7",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0139.jpg",
+          "sha256": "4d3025cd735c2d2498e7f9cdaac61bb9f65d3e74a4b39ea06dd198d14d85a692",
+          "decodedRgbSha256": "26535b5e623c9805b0a751f4fc27397b48046fafb5bbd5321b25b79042aec07a",
+          "bytes": 5667368,
+          "phash": "f36bbb1d6481e206",
+          "dimensions": [
+            4000,
+            3000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "4549df846ef999225ad1",
+      "copies": [
+        {
+          "id": "4549df846ef999225ad1",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0092 (1).jpg",
+          "sha256": "4549df846ef999225ad1b0d5578c8e6e251085cf2a3b20553494125b38f3f7da",
+          "decodedRgbSha256": "2b11e155201e146e2f14c1c6563356cace6980a7be43ef3a95fe4b402a6b219d",
+          "bytes": 4917528,
+          "phash": "dca0b45be06d2e17",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "4549df846ef999225ad1",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0092.jpg",
+          "sha256": "4549df846ef999225ad1b0d5578c8e6e251085cf2a3b20553494125b38f3f7da",
+          "decodedRgbSha256": "2b11e155201e146e2f14c1c6563356cace6980a7be43ef3a95fe4b402a6b219d",
+          "bytes": 4917528,
+          "phash": "dca0b45be06d2e17",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "4d0213275d42d3c60a8e",
+      "copies": [
+        {
+          "id": "4d0213275d42d3c60a8e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0096 (1).jpg",
+          "sha256": "4d0213275d42d3c60a8ef9565e3a399def7f4385e20a4cd43b4154c0a4019420",
+          "decodedRgbSha256": "2cc33ee19f994820f90c0d9b996da6a05d2315bd4e861bb3b894fddb7f960c98",
+          "bytes": 4675521,
+          "phash": "fa881d98c455ee66",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "4d0213275d42d3c60a8e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0096.jpg",
+          "sha256": "4d0213275d42d3c60a8ef9565e3a399def7f4385e20a4cd43b4154c0a4019420",
+          "decodedRgbSha256": "2cc33ee19f994820f90c0d9b996da6a05d2315bd4e861bb3b894fddb7f960c98",
+          "bytes": 4675521,
+          "phash": "fa881d98c455ee66",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "65d67c1f02712ebe6e1f",
+      "copies": [
+        {
+          "id": "65d67c1f02712ebe6e1f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0089 (1).jpg",
+          "sha256": "65d67c1f02712ebe6e1fe51f87cc7e0f697d85a9f57cee74f5aae5d0cb151f2c",
+          "decodedRgbSha256": "2d942957f3c5ae29cbb148656890b6f7015c65474895dfe06b9b391db44f5c0b",
+          "bytes": 5284957,
+          "phash": "dd901e0fcc854bc7",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "65d67c1f02712ebe6e1f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0089.jpg",
+          "sha256": "65d67c1f02712ebe6e1fe51f87cc7e0f697d85a9f57cee74f5aae5d0cb151f2c",
+          "decodedRgbSha256": "2d942957f3c5ae29cbb148656890b6f7015c65474895dfe06b9b391db44f5c0b",
+          "bytes": 5284957,
+          "phash": "dd901e0fcc854bc7",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "6d41466abaf3474255e8",
+      "copies": [
+        {
+          "id": "6d41466abaf3474255e8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0059 (1).jpg",
+          "sha256": "6d41466abaf3474255e8133ad333f0bf91e35ef7f0c6b1f78085874e4ab58291",
+          "decodedRgbSha256": "2e0abfac2ea5ab72e1d387a79ed09fdac11798bf5574b5da5774ba0db21df528",
+          "bytes": 5247880,
+          "phash": "d87e6781384e9ae2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "6d41466abaf3474255e8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0059.jpg",
+          "sha256": "6d41466abaf3474255e8133ad333f0bf91e35ef7f0c6b1f78085874e4ab58291",
+          "decodedRgbSha256": "2e0abfac2ea5ab72e1d387a79ed09fdac11798bf5574b5da5774ba0db21df528",
+          "bytes": 5247880,
+          "phash": "d87e6781384e9ae2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "fe4fe90f7caf28fe0ec6",
+      "copies": [
+        {
+          "id": "fe4fe90f7caf28fe0ec6",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0037 (1).jpg",
+          "sha256": "fe4fe90f7caf28fe0ec6b7d3372b75d3ffc4389c58911cb7b2bb3df4f058793a",
+          "decodedRgbSha256": "2e408d7347f8afae0828c7dadd8f9c60716b143b81a4b70595f56012716ead13",
+          "bytes": 5111460,
+          "phash": "c579349a20c3d7ea",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "fe4fe90f7caf28fe0ec6",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0037.jpg",
+          "sha256": "fe4fe90f7caf28fe0ec6b7d3372b75d3ffc4389c58911cb7b2bb3df4f058793a",
+          "decodedRgbSha256": "2e408d7347f8afae0828c7dadd8f9c60716b143b81a4b70595f56012716ead13",
+          "bytes": 5111460,
+          "phash": "c579349a20c3d7ea",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "30404eda6ee665af571f",
+      "copies": [
+        {
+          "id": "30404eda6ee665af571f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0126 (1).jpg",
+          "sha256": "30404eda6ee665af571fa02f1eae398dd50ba64ed3043a7a6bad339c69c255b5",
+          "decodedRgbSha256": "2ed3658983391bcf89e4722874c60c7204c4b60e2bebe9b7b52239f6e223b97b",
+          "bytes": 3884019,
+          "phash": "f883f07ea0e0f153",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "30404eda6ee665af571f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0126.jpg",
+          "sha256": "30404eda6ee665af571fa02f1eae398dd50ba64ed3043a7a6bad339c69c255b5",
+          "decodedRgbSha256": "2ed3658983391bcf89e4722874c60c7204c4b60e2bebe9b7b52239f6e223b97b",
+          "bytes": 3884019,
+          "phash": "f883f07ea0e0f153",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "b9ac66cd1b3f1419754c",
+      "copies": [
+        {
+          "id": "b9ac66cd1b3f1419754c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0152 (1).jpg",
+          "sha256": "b9ac66cd1b3f1419754ca56a435626295b97348402ba80db0e579bf4d59cb9ce",
+          "decodedRgbSha256": "303842e3642edda7b761d55b9445f5c5d64889700f9fe3c45ea2b0020fc6fd17",
+          "bytes": 4855287,
+          "phash": "dbe7b0c08553c716",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "b9ac66cd1b3f1419754c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0152.jpg",
+          "sha256": "b9ac66cd1b3f1419754ca56a435626295b97348402ba80db0e579bf4d59cb9ce",
+          "decodedRgbSha256": "303842e3642edda7b761d55b9445f5c5d64889700f9fe3c45ea2b0020fc6fd17",
+          "bytes": 4855287,
+          "phash": "dbe7b0c08553c716",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "a517c896e94f7ba99dce",
+      "copies": [
+        {
+          "id": "a517c896e94f7ba99dce",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0111 (1).jpg",
+          "sha256": "a517c896e94f7ba99dce6999c878748c4163fa760426593382da7e59b6df10ae",
+          "decodedRgbSha256": "3186c36a52e08cd425092a250fe99ba2bee92aece232502aa7e5a6ca38a0f8d6",
+          "bytes": 5512143,
+          "phash": "c70c393f09f834d3",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "a517c896e94f7ba99dce",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0111.jpg",
+          "sha256": "a517c896e94f7ba99dce6999c878748c4163fa760426593382da7e59b6df10ae",
+          "decodedRgbSha256": "3186c36a52e08cd425092a250fe99ba2bee92aece232502aa7e5a6ca38a0f8d6",
+          "bytes": 5512143,
+          "phash": "c70c393f09f834d3",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "da32c3be19e1289d2757",
+      "copies": [
+        {
+          "id": "da32c3be19e1289d2757",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0065 (1).jpg",
+          "sha256": "da32c3be19e1289d2757980bf40c0ad93f63893954fbd740136876dd48a5f9ce",
+          "decodedRgbSha256": "3208b2fb9574b8d7c925be9c9d28b0b69cb0304a78344d442010b321043802c4",
+          "bytes": 4368155,
+          "phash": "dc333fed7304a10c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "da32c3be19e1289d2757",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0065.jpg",
+          "sha256": "da32c3be19e1289d2757980bf40c0ad93f63893954fbd740136876dd48a5f9ce",
+          "decodedRgbSha256": "3208b2fb9574b8d7c925be9c9d28b0b69cb0304a78344d442010b321043802c4",
+          "bytes": 4368155,
+          "phash": "dc333fed7304a10c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "125d2c872c10a39b2f71",
+      "copies": [
+        {
+          "id": "125d2c872c10a39b2f71",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0077 (1).jpg",
+          "sha256": "125d2c872c10a39b2f715ae8623cf6ab111f8aff3f190da27e57364b6fe591c8",
+          "decodedRgbSha256": "3227b3a262c33703227817fd5bfde3c081bd3015b3f9d4d1dafeda3c95146112",
+          "bytes": 4556697,
+          "phash": "c7a47d6b32743234",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "125d2c872c10a39b2f71",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0077.jpg",
+          "sha256": "125d2c872c10a39b2f715ae8623cf6ab111f8aff3f190da27e57364b6fe591c8",
+          "decodedRgbSha256": "3227b3a262c33703227817fd5bfde3c081bd3015b3f9d4d1dafeda3c95146112",
+          "bytes": 4556697,
+          "phash": "c7a47d6b32743234",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "cfc51ec11bdca5a4938f",
+      "copies": [
+        {
+          "id": "cfc51ec11bdca5a4938f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0029 (1).jpg",
+          "sha256": "cfc51ec11bdca5a4938f472751b90fc48c3911982f8562b86bfb22e887f11a96",
+          "decodedRgbSha256": "324c15c7879c8c9a729982240a931de5ce1d69cfc8913fe995a4f87413eca44c",
+          "bytes": 3950828,
+          "phash": "8c9bc73f645ad260",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "cfc51ec11bdca5a4938f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0029.jpg",
+          "sha256": "cfc51ec11bdca5a4938f472751b90fc48c3911982f8562b86bfb22e887f11a96",
+          "decodedRgbSha256": "324c15c7879c8c9a729982240a931de5ce1d69cfc8913fe995a4f87413eca44c",
+          "bytes": 3950828,
+          "phash": "8c9bc73f645ad260",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "dca827c1e65039c4d556",
+      "copies": [
+        {
+          "id": "dca827c1e65039c4d556",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0081 (1).jpg",
+          "sha256": "dca827c1e65039c4d556926f006954fd96e5befa33e251ad22a2dfd1040eaf4b",
+          "decodedRgbSha256": "36976c19aeddc9c4ef68d3b379a8a4f03e6909a135a084136583221c9c0b0504",
+          "bytes": 4940126,
+          "phash": "dc83c238fb0bb239",
+          "dimensions": [
+            4000,
+            3000
+          ]
+        },
+        {
+          "id": "dca827c1e65039c4d556",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0081.jpg",
+          "sha256": "dca827c1e65039c4d556926f006954fd96e5befa33e251ad22a2dfd1040eaf4b",
+          "decodedRgbSha256": "36976c19aeddc9c4ef68d3b379a8a4f03e6909a135a084136583221c9c0b0504",
+          "bytes": 4940126,
+          "phash": "dc83c238fb0bb239",
+          "dimensions": [
+            4000,
+            3000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "2a0c4bbcbd042f40bda1",
+      "copies": [
+        {
+          "id": "2a0c4bbcbd042f40bda1",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0106 (1).jpg",
+          "sha256": "2a0c4bbcbd042f40bda16ebb73a920a805517a81e9c2386db94e507366e1910d",
+          "decodedRgbSha256": "36caf71fbf18fb9420902c52c1de3b14b8ec6e05199f01b338153f27c813a293",
+          "bytes": 4051303,
+          "phash": "9bd92439c594f8d8",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "2a0c4bbcbd042f40bda1",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0106.jpg",
+          "sha256": "2a0c4bbcbd042f40bda16ebb73a920a805517a81e9c2386db94e507366e1910d",
+          "decodedRgbSha256": "36caf71fbf18fb9420902c52c1de3b14b8ec6e05199f01b338153f27c813a293",
+          "bytes": 4051303,
+          "phash": "9bd92439c594f8d8",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "e4372f23e824ea091402",
+      "copies": [
+        {
+          "id": "e4372f23e824ea091402",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0102 (1).jpg",
+          "sha256": "e4372f23e824ea091402845c8c4816b6588dcf9d50f2c8ee6c9bf0bd3f83d2a1",
+          "decodedRgbSha256": "3793036255b584ee99ff8bbe24e6d9bb909a0eff871ab3e282f0edfad22181f1",
+          "bytes": 4601470,
+          "phash": "98c0c73e0ba2f13f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "e4372f23e824ea091402",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0102.jpg",
+          "sha256": "e4372f23e824ea091402845c8c4816b6588dcf9d50f2c8ee6c9bf0bd3f83d2a1",
+          "decodedRgbSha256": "3793036255b584ee99ff8bbe24e6d9bb909a0eff871ab3e282f0edfad22181f1",
+          "bytes": 4601470,
+          "phash": "98c0c73e0ba2f13f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "19190527167fc34df671",
+      "copies": [
+        {
+          "id": "19190527167fc34df671",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0124 (1).jpg",
+          "sha256": "19190527167fc34df671cd9d0b51d4a645d930b1ba2e63de7c5a66902a5158be",
+          "decodedRgbSha256": "3803ea6cc25453b9b4bf6ce5c31bb890a97892984de8b3e9044ceff46005edc5",
+          "bytes": 5661464,
+          "phash": "d10c2774dd03dd72",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "19190527167fc34df671",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0124.jpg",
+          "sha256": "19190527167fc34df671cd9d0b51d4a645d930b1ba2e63de7c5a66902a5158be",
+          "decodedRgbSha256": "3803ea6cc25453b9b4bf6ce5c31bb890a97892984de8b3e9044ceff46005edc5",
+          "bytes": 5661464,
+          "phash": "d10c2774dd03dd72",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "997fc3a415e98d15a2b7",
+      "copies": [
+        {
+          "id": "997fc3a415e98d15a2b7",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0143 (1).jpg",
+          "sha256": "997fc3a415e98d15a2b752802aba16219f2526e05c430400b12e3bcc40f75805",
+          "decodedRgbSha256": "38ef5e1a43fb2a3a544491135a1e077435f06f60c1af5ee68c513bc86dd2543f",
+          "bytes": 3932294,
+          "phash": "b4536934a29fce83",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "997fc3a415e98d15a2b7",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0143.jpg",
+          "sha256": "997fc3a415e98d15a2b752802aba16219f2526e05c430400b12e3bcc40f75805",
+          "decodedRgbSha256": "38ef5e1a43fb2a3a544491135a1e077435f06f60c1af5ee68c513bc86dd2543f",
+          "bytes": 3932294,
+          "phash": "b4536934a29fce83",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "5ae5d286a1ca991e4b3b",
+      "copies": [
+        {
+          "id": "5ae5d286a1ca991e4b3b",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0006 (1).jpg",
+          "sha256": "5ae5d286a1ca991e4b3b9b78b1c9d240c3c2c784833a6e913ccb4e96b007305a",
+          "decodedRgbSha256": "392a018d7b78b4b5edf14fe4c38cd59c7dabdd4db45a72ec2a5eaf86b5a68213",
+          "bytes": 4620073,
+          "phash": "93ac7f442514cd4f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "5ae5d286a1ca991e4b3b",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0006.jpg",
+          "sha256": "5ae5d286a1ca991e4b3b9b78b1c9d240c3c2c784833a6e913ccb4e96b007305a",
+          "decodedRgbSha256": "392a018d7b78b4b5edf14fe4c38cd59c7dabdd4db45a72ec2a5eaf86b5a68213",
+          "bytes": 4620073,
+          "phash": "93ac7f442514cd4f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "f5fbc220290567edd0dc",
+      "copies": [
+        {
+          "id": "f5fbc220290567edd0dc",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0150 (1).jpg",
+          "sha256": "f5fbc220290567edd0dce66a6192c4cf991ea9200a875e3ff3080a7b8563dc3b",
+          "decodedRgbSha256": "3a6974f501ebcc9ca4e005d8a56f907d405df3f12a65576a02953456675b2d3a",
+          "bytes": 5231793,
+          "phash": "bcf22d02d125ef25",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "f5fbc220290567edd0dc",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0150.jpg",
+          "sha256": "f5fbc220290567edd0dce66a6192c4cf991ea9200a875e3ff3080a7b8563dc3b",
+          "decodedRgbSha256": "3a6974f501ebcc9ca4e005d8a56f907d405df3f12a65576a02953456675b2d3a",
+          "bytes": 5231793,
+          "phash": "bcf22d02d125ef25",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "cf78e7a30dafb8dc9e15",
+      "copies": [
+        {
+          "id": "cf78e7a30dafb8dc9e15",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0155 (1).jpg",
+          "sha256": "cf78e7a30dafb8dc9e155440a0a62ad0d50e91376ffcf6d62e93a22e99d54370",
+          "decodedRgbSha256": "3d8268eb6bd9275539f4a1612715783e06a5255328642ad712ac1f41d9147e2c",
+          "bytes": 5340514,
+          "phash": "9ecf460de36b9508",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "cf78e7a30dafb8dc9e15",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0155.jpg",
+          "sha256": "cf78e7a30dafb8dc9e155440a0a62ad0d50e91376ffcf6d62e93a22e99d54370",
+          "decodedRgbSha256": "3d8268eb6bd9275539f4a1612715783e06a5255328642ad712ac1f41d9147e2c",
+          "bytes": 5340514,
+          "phash": "9ecf460de36b9508",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "34fe8d6f5fec8f8e7405",
+      "copies": [
+        {
+          "id": "34fe8d6f5fec8f8e7405",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0005 (1).jpg",
+          "sha256": "34fe8d6f5fec8f8e7405897bd9b492dbeb63db4a84e1371ee66385d3d1ce5eff",
+          "decodedRgbSha256": "3d881df1e4cce456652329fc16b9f27bc83d88c00e623edfabfb134cea90ef8b",
+          "bytes": 4168698,
+          "phash": "e47b8785a4a982fc",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "34fe8d6f5fec8f8e7405",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0005.jpg",
+          "sha256": "34fe8d6f5fec8f8e7405897bd9b492dbeb63db4a84e1371ee66385d3d1ce5eff",
+          "decodedRgbSha256": "3d881df1e4cce456652329fc16b9f27bc83d88c00e623edfabfb134cea90ef8b",
+          "bytes": 4168698,
+          "phash": "e47b8785a4a982fc",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "1758b225eca8e17d7160",
+      "copies": [
+        {
+          "id": "1758b225eca8e17d7160",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0153 (1).jpg",
+          "sha256": "1758b225eca8e17d7160c22277d233a22dd274e5a70511bf89f964a349d4b15c",
+          "decodedRgbSha256": "3efaa8626507e02684a6d09057d2d2ee25a459032648859ce1a8afc2a3d10e26",
+          "bytes": 5567801,
+          "phash": "ca953d4965128fe5",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "1758b225eca8e17d7160",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0153.jpg",
+          "sha256": "1758b225eca8e17d7160c22277d233a22dd274e5a70511bf89f964a349d4b15c",
+          "decodedRgbSha256": "3efaa8626507e02684a6d09057d2d2ee25a459032648859ce1a8afc2a3d10e26",
+          "bytes": 5567801,
+          "phash": "ca953d4965128fe5",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "0d90fcb8cd5aa835beda",
+      "copies": [
+        {
+          "id": "0d90fcb8cd5aa835beda",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0147 (1).jpg",
+          "sha256": "0d90fcb8cd5aa835beda29b02ef3044cdc107a7a80a5258ce209aec304222ba9",
+          "decodedRgbSha256": "3fae61d7aadb38a3d12a3637ca4358a2bccea0d5ae7d3ddaef83da9fa41c39ad",
+          "bytes": 5562692,
+          "phash": "b179a49518f7ea28",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "0d90fcb8cd5aa835beda",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0147.jpg",
+          "sha256": "0d90fcb8cd5aa835beda29b02ef3044cdc107a7a80a5258ce209aec304222ba9",
+          "decodedRgbSha256": "3fae61d7aadb38a3d12a3637ca4358a2bccea0d5ae7d3ddaef83da9fa41c39ad",
+          "bytes": 5562692,
+          "phash": "b179a49518f7ea28",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "dffc49211d2b79d2f9e4",
+      "copies": [
+        {
+          "id": "dffc49211d2b79d2f9e4",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0087 (1).jpg",
+          "sha256": "dffc49211d2b79d2f9e457d818f9761f78717a9e0e80d963038a6f74f5f28e64",
+          "decodedRgbSha256": "40ccbadce6ab814c481636560f2a2bce9fec58db0329b6ee8a77ef1dfaac7e80",
+          "bytes": 5468905,
+          "phash": "e9331252a6cf47d2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "dffc49211d2b79d2f9e4",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0087.jpg",
+          "sha256": "dffc49211d2b79d2f9e457d818f9761f78717a9e0e80d963038a6f74f5f28e64",
+          "decodedRgbSha256": "40ccbadce6ab814c481636560f2a2bce9fec58db0329b6ee8a77ef1dfaac7e80",
+          "bytes": 5468905,
+          "phash": "e9331252a6cf47d2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "a0aaacd07fbf528d93ab",
+      "copies": [
+        {
+          "id": "a0aaacd07fbf528d93ab",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0036 (1).jpg",
+          "sha256": "a0aaacd07fbf528d93abd2f85ce2cf6f71f7e2687d649211a5fa4b69cd1b3075",
+          "decodedRgbSha256": "4161dd26b1c9b688940f531ff68fc5b3cc321c9a92743692a13dd2b03abd55c6",
+          "bytes": 4954302,
+          "phash": "8263d62dd83566d9",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "a0aaacd07fbf528d93ab",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0036.jpg",
+          "sha256": "a0aaacd07fbf528d93abd2f85ce2cf6f71f7e2687d649211a5fa4b69cd1b3075",
+          "decodedRgbSha256": "4161dd26b1c9b688940f531ff68fc5b3cc321c9a92743692a13dd2b03abd55c6",
+          "bytes": 4954302,
+          "phash": "8263d62dd83566d9",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "3ee35eb17a0c10689955",
+      "copies": [
+        {
+          "id": "3ee35eb17a0c10689955",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0091 (1).jpg",
+          "sha256": "3ee35eb17a0c10689955430a493a5158a9255121f85a00c0502e0c68da340523",
+          "decodedRgbSha256": "43f03d19405ea9c17d5b738b0ed5e8661e7a4192f8e014139ec42052197907fa",
+          "bytes": 5690198,
+          "phash": "97fd682bd4e2c0c1",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "3ee35eb17a0c10689955",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0091.jpg",
+          "sha256": "3ee35eb17a0c10689955430a493a5158a9255121f85a00c0502e0c68da340523",
+          "decodedRgbSha256": "43f03d19405ea9c17d5b738b0ed5e8661e7a4192f8e014139ec42052197907fa",
+          "bytes": 5690198,
+          "phash": "97fd682bd4e2c0c1",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "40f18477d631e637449f",
+      "copies": [
+        {
+          "id": "40f18477d631e637449f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0078 (1).jpg",
+          "sha256": "40f18477d631e637449ff486f3e1d60e33c55fa6a9aab87903b1f7a3e8f47476",
+          "decodedRgbSha256": "4434b4ea4ff25673d63cc80f530fe8d8ee285a17ec3421389b8f8f6f84d2453c",
+          "bytes": 5229503,
+          "phash": "c03f4f787e0de848",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "40f18477d631e637449f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0078.jpg",
+          "sha256": "40f18477d631e637449ff486f3e1d60e33c55fa6a9aab87903b1f7a3e8f47476",
+          "decodedRgbSha256": "4434b4ea4ff25673d63cc80f530fe8d8ee285a17ec3421389b8f8f6f84d2453c",
+          "bytes": 5229503,
+          "phash": "c03f4f787e0de848",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "0f3d34572ffbb0d69dfc",
+      "copies": [
+        {
+          "id": "0f3d34572ffbb0d69dfc",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0083 (1).jpg",
+          "sha256": "0f3d34572ffbb0d69dfc4627ef11a0a21541c3aafc63e3b5d748d69d222b6e1a",
+          "decodedRgbSha256": "4845ebc3cb418669b1af4d0c58a3c4bb00fc071bb6273fe5033500b8938db001",
+          "bytes": 5420691,
+          "phash": "80372e597ae64dd4",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "0f3d34572ffbb0d69dfc",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0083.jpg",
+          "sha256": "0f3d34572ffbb0d69dfc4627ef11a0a21541c3aafc63e3b5d748d69d222b6e1a",
+          "decodedRgbSha256": "4845ebc3cb418669b1af4d0c58a3c4bb00fc071bb6273fe5033500b8938db001",
+          "bytes": 5420691,
+          "phash": "80372e597ae64dd4",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "c99d0d00eaea78062052",
+      "copies": [
+        {
+          "id": "c99d0d00eaea78062052",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0131 (1).jpg",
+          "sha256": "c99d0d00eaea780620524ea5dfc08b49ea2abd36b958c5d5b393b8cf28146dc3",
+          "decodedRgbSha256": "4a14a5c5930379db27b4237d47a45dd610328028e1a7f1eb08678f73df9ab9dc",
+          "bytes": 4493006,
+          "phash": "9d1b7158f600f635",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "c99d0d00eaea78062052",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0131.jpg",
+          "sha256": "c99d0d00eaea780620524ea5dfc08b49ea2abd36b958c5d5b393b8cf28146dc3",
+          "decodedRgbSha256": "4a14a5c5930379db27b4237d47a45dd610328028e1a7f1eb08678f73df9ab9dc",
+          "bytes": 4493006,
+          "phash": "9d1b7158f600f635",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "3d1ba4769d5cd541e72e",
+      "copies": [
+        {
+          "id": "3d1ba4769d5cd541e72e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0120 (1).jpg",
+          "sha256": "3d1ba4769d5cd541e72e0e27895a5dfc4680ba08f381ad9b5f61c3ecb96cd21e",
+          "decodedRgbSha256": "4a91c399fe6b4a5282a0193f51f3066aafb9e3686a7b889bf82e5124f7f1cada",
+          "bytes": 3752830,
+          "phash": "fd84e1d1a803d7e2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "3d1ba4769d5cd541e72e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0120.jpg",
+          "sha256": "3d1ba4769d5cd541e72e0e27895a5dfc4680ba08f381ad9b5f61c3ecb96cd21e",
+          "decodedRgbSha256": "4a91c399fe6b4a5282a0193f51f3066aafb9e3686a7b889bf82e5124f7f1cada",
+          "bytes": 3752830,
+          "phash": "fd84e1d1a803d7e2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "fd967850bc2efa03edd0",
+      "copies": [
+        {
+          "id": "fd967850bc2efa03edd0",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0098 (1).jpg",
+          "sha256": "fd967850bc2efa03edd0ebad11c0b82b69962f73d6e19ce98328dc537726ccb0",
+          "decodedRgbSha256": "4c4a012cc8e577ffa086d7655872ccf38ce46816fa807738bef2796ad0c28008",
+          "bytes": 4979252,
+          "phash": "b953615f1e780c96",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "fd967850bc2efa03edd0",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0098.jpg",
+          "sha256": "fd967850bc2efa03edd0ebad11c0b82b69962f73d6e19ce98328dc537726ccb0",
+          "decodedRgbSha256": "4c4a012cc8e577ffa086d7655872ccf38ce46816fa807738bef2796ad0c28008",
+          "bytes": 4979252,
+          "phash": "b953615f1e780c96",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "1ec4196361517089a4b1",
+      "copies": [
+        {
+          "id": "1ec4196361517089a4b1",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0107 (1).jpg",
+          "sha256": "1ec4196361517089a4b1e359f25e950f8edc28c33112d498405f23e44ad0d253",
+          "decodedRgbSha256": "4c545c84651388ac6d3fd68fda8ddfa3dadd84433dccdeb9d34d0132544edaf3",
+          "bytes": 4576592,
+          "phash": "ce11615768cef871",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "1ec4196361517089a4b1",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0107.jpg",
+          "sha256": "1ec4196361517089a4b1e359f25e950f8edc28c33112d498405f23e44ad0d253",
+          "decodedRgbSha256": "4c545c84651388ac6d3fd68fda8ddfa3dadd84433dccdeb9d34d0132544edaf3",
+          "bytes": 4576592,
+          "phash": "ce11615768cef871",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "7f05d6e413baa7ea0296",
+      "copies": [
+        {
+          "id": "7f05d6e413baa7ea0296",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0009 (1).jpg",
+          "sha256": "7f05d6e413baa7ea0296346dda52c13fece222d2de0b0758ff98ea74a41278ac",
+          "decodedRgbSha256": "4cef14ae26c1fd57cc5dcbf546eaa2ed2928b6ef6474b7cd6457a9996a1902ce",
+          "bytes": 5369402,
+          "phash": "dcb22c526997cd62",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "7f05d6e413baa7ea0296",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0009.jpg",
+          "sha256": "7f05d6e413baa7ea0296346dda52c13fece222d2de0b0758ff98ea74a41278ac",
+          "decodedRgbSha256": "4cef14ae26c1fd57cc5dcbf546eaa2ed2928b6ef6474b7cd6457a9996a1902ce",
+          "bytes": 5369402,
+          "phash": "dcb22c526997cd62",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "23299a5b5c632627efc3",
+      "copies": [
+        {
+          "id": "23299a5b5c632627efc3",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0015 (1).jpg",
+          "sha256": "23299a5b5c632627efc36b8d06e17a8b69cfd2e66a84911765aaba6c9d462fde",
+          "decodedRgbSha256": "4e19f7755b82a67056c23fe0b1e36546e36ca9b7948a254eb4eb5d7d2743e079",
+          "bytes": 4739486,
+          "phash": "f3491c98674ab66a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "23299a5b5c632627efc3",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0015.jpg",
+          "sha256": "23299a5b5c632627efc36b8d06e17a8b69cfd2e66a84911765aaba6c9d462fde",
+          "decodedRgbSha256": "4e19f7755b82a67056c23fe0b1e36546e36ca9b7948a254eb4eb5d7d2743e079",
+          "bytes": 4739486,
+          "phash": "f3491c98674ab66a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "01a01d623911b7891585",
+      "copies": [
+        {
+          "id": "01a01d623911b7891585",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0157 (1).jpg",
+          "sha256": "01a01d623911b789158505766ed69a93f9f7478690ebafd30d874891de4228d0",
+          "decodedRgbSha256": "4edd0616f74e90ba3cdec4505f69aa57e3b521eeecad54550c08b9ca44873ce6",
+          "bytes": 4926179,
+          "phash": "84f31dc2d92ceeb0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "01a01d623911b7891585",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0157.jpg",
+          "sha256": "01a01d623911b789158505766ed69a93f9f7478690ebafd30d874891de4228d0",
+          "decodedRgbSha256": "4edd0616f74e90ba3cdec4505f69aa57e3b521eeecad54550c08b9ca44873ce6",
+          "bytes": 4926179,
+          "phash": "84f31dc2d92ceeb0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "c1ba462a6366493c0234",
+      "copies": [
+        {
+          "id": "c1ba462a6366493c0234",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0095 (1).jpg",
+          "sha256": "c1ba462a6366493c0234ef3442ec3a14b431380da37dcdc45d8ca3670a57cdd3",
+          "decodedRgbSha256": "50ac5f38cc2064fee6bd19b58228af57765cf3a23502ca6a9f4d7ce14f619720",
+          "bytes": 4865010,
+          "phash": "c6c0b48fa994af8d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "c1ba462a6366493c0234",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0095.jpg",
+          "sha256": "c1ba462a6366493c0234ef3442ec3a14b431380da37dcdc45d8ca3670a57cdd3",
+          "decodedRgbSha256": "50ac5f38cc2064fee6bd19b58228af57765cf3a23502ca6a9f4d7ce14f619720",
+          "bytes": 4865010,
+          "phash": "c6c0b48fa994af8d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "c78717166b7d3def2430",
+      "copies": [
+        {
+          "id": "c78717166b7d3def2430",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0011 (1).jpg",
+          "sha256": "c78717166b7d3def24300ebe418fcb0573619cd17e07df32eb81cd7c9c45b35f",
+          "decodedRgbSha256": "516aa24350eaab99b39df56902fa8edcefeeeb806d2ff95278263b140e42da56",
+          "bytes": 4680329,
+          "phash": "bd649c49bbd86093",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "c78717166b7d3def2430",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0011.jpg",
+          "sha256": "c78717166b7d3def24300ebe418fcb0573619cd17e07df32eb81cd7c9c45b35f",
+          "decodedRgbSha256": "516aa24350eaab99b39df56902fa8edcefeeeb806d2ff95278263b140e42da56",
+          "bytes": 4680329,
+          "phash": "bd649c49bbd86093",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "09dc565ea4c9f213db44",
+      "copies": [
+        {
+          "id": "09dc565ea4c9f213db44",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0144 (1).jpg",
+          "sha256": "09dc565ea4c9f213db444197cc48e8d5e0697238af08e3983b51264289d9d9ca",
+          "decodedRgbSha256": "51ba95c794f53f436bbd25703be785a05408f159b1bc93fcae19527fad9129a7",
+          "bytes": 4276082,
+          "phash": "dd8e732d2a90a1ec",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "09dc565ea4c9f213db44",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0144.jpg",
+          "sha256": "09dc565ea4c9f213db444197cc48e8d5e0697238af08e3983b51264289d9d9ca",
+          "decodedRgbSha256": "51ba95c794f53f436bbd25703be785a05408f159b1bc93fcae19527fad9129a7",
+          "bytes": 4276082,
+          "phash": "dd8e732d2a90a1ec",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "53962adc8775413b328b",
+      "copies": [
+        {
+          "id": "53962adc8775413b328b",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0110 (1).jpg",
+          "sha256": "53962adc8775413b328bdf69e941db3df7b15da638d4f7aee5f9313ce8e8157c",
+          "decodedRgbSha256": "544c67727cda557c1144ff4881a2ef5ce0ce15ceebad257c0b3c9a09e7c9a266",
+          "bytes": 5241316,
+          "phash": "d1062c7b57f47425",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "53962adc8775413b328b",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0110.jpg",
+          "sha256": "53962adc8775413b328bdf69e941db3df7b15da638d4f7aee5f9313ce8e8157c",
+          "decodedRgbSha256": "544c67727cda557c1144ff4881a2ef5ce0ce15ceebad257c0b3c9a09e7c9a266",
+          "bytes": 5241316,
+          "phash": "d1062c7b57f47425",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "f2a03177c83bba4833bf",
+      "copies": [
+        {
+          "id": "f2a03177c83bba4833bf",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0041 (1).jpg",
+          "sha256": "f2a03177c83bba4833bf1d9929aa397da813eb8c5fd7c0dfb8569c818c952dd7",
+          "decodedRgbSha256": "54b4f0f8752785dc25f503267c4ffb2b2953914fcd43cf3465bfdce7fb2f8c1e",
+          "bytes": 5160293,
+          "phash": "9b1d656546740ee6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "f2a03177c83bba4833bf",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0041.jpg",
+          "sha256": "f2a03177c83bba4833bf1d9929aa397da813eb8c5fd7c0dfb8569c818c952dd7",
+          "decodedRgbSha256": "54b4f0f8752785dc25f503267c4ffb2b2953914fcd43cf3465bfdce7fb2f8c1e",
+          "bytes": 5160293,
+          "phash": "9b1d656546740ee6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "08a7579f9d45c5cb42df",
+      "copies": [
+        {
+          "id": "08a7579f9d45c5cb42df",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0057 (1).jpg",
+          "sha256": "08a7579f9d45c5cb42dfe460abf79d6e577ce8f88cfcb003184670ca7a9f754d",
+          "decodedRgbSha256": "557c533f1a022889d028343256df5dde762c43131aceba792da3ff114d62734d",
+          "bytes": 4713223,
+          "phash": "b15b17e80fe10d2d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "08a7579f9d45c5cb42df",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0057.jpg",
+          "sha256": "08a7579f9d45c5cb42dfe460abf79d6e577ce8f88cfcb003184670ca7a9f754d",
+          "decodedRgbSha256": "557c533f1a022889d028343256df5dde762c43131aceba792da3ff114d62734d",
+          "bytes": 4713223,
+          "phash": "b15b17e80fe10d2d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "6cb1aa03e82fdfdcffc1",
+      "copies": [
+        {
+          "id": "6cb1aa03e82fdfdcffc1",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0116 (1).jpg",
+          "sha256": "6cb1aa03e82fdfdcffc1f2cbfdf96af184a5735b9931551a39fa92d08efdc63d",
+          "decodedRgbSha256": "57645030b5ed63fd8b54d6c6079a7bfd9f23819c3f004c63f9fd659131a97917",
+          "bytes": 3303044,
+          "phash": "ecd8b153075b4995",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "6cb1aa03e82fdfdcffc1",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0116.jpg",
+          "sha256": "6cb1aa03e82fdfdcffc1f2cbfdf96af184a5735b9931551a39fa92d08efdc63d",
+          "decodedRgbSha256": "57645030b5ed63fd8b54d6c6079a7bfd9f23819c3f004c63f9fd659131a97917",
+          "bytes": 3303044,
+          "phash": "ecd8b153075b4995",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "b1200e67985d6310566c",
+      "copies": [
+        {
+          "id": "b1200e67985d6310566c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0138 (1).jpg",
+          "sha256": "b1200e67985d6310566ce945d938b4a346932dd18a814ca7de3e8b55084a31ac",
+          "decodedRgbSha256": "5a78ffdf61f502c72129b4156c51b31571f9c066e945b5b5750566d064e6737e",
+          "bytes": 5541504,
+          "phash": "8ea24918eb1fd173",
+          "dimensions": [
+            4000,
+            3000
+          ]
+        },
+        {
+          "id": "b1200e67985d6310566c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0138.jpg",
+          "sha256": "b1200e67985d6310566ce945d938b4a346932dd18a814ca7de3e8b55084a31ac",
+          "decodedRgbSha256": "5a78ffdf61f502c72129b4156c51b31571f9c066e945b5b5750566d064e6737e",
+          "bytes": 5541504,
+          "phash": "8ea24918eb1fd173",
+          "dimensions": [
+            4000,
+            3000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "dbed38fac3a371e4cc9c",
+      "copies": [
+        {
+          "id": "dbed38fac3a371e4cc9c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0033 (1).jpg",
+          "sha256": "dbed38fac3a371e4cc9c36522c5ce8128fb7e19ab3da6282e67eda20f16901d4",
+          "decodedRgbSha256": "5bfdec1a1b9d13d10c09cc9cb7ae0c4ee11e62b8e852a5e195dd6a1b417f044b",
+          "bytes": 4919334,
+          "phash": "ce4439bb3191916f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "dbed38fac3a371e4cc9c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0033.jpg",
+          "sha256": "dbed38fac3a371e4cc9c36522c5ce8128fb7e19ab3da6282e67eda20f16901d4",
+          "decodedRgbSha256": "5bfdec1a1b9d13d10c09cc9cb7ae0c4ee11e62b8e852a5e195dd6a1b417f044b",
+          "bytes": 4919334,
+          "phash": "ce4439bb3191916f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "1e71f304fbfe20552ab5",
+      "copies": [
+        {
+          "id": "1e71f304fbfe20552ab5",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0051 (1).jpg",
+          "sha256": "1e71f304fbfe20552ab5bb7a2e392d254f13a9f7558638feda53b9837a7da193",
+          "decodedRgbSha256": "5c50214e4cb44b3bd58ee1efb89847962237cbc9e0c89b563ea5f1f929cda918",
+          "bytes": 5126416,
+          "phash": "eb2fbdb10584668a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "1e71f304fbfe20552ab5",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0051.jpg",
+          "sha256": "1e71f304fbfe20552ab5bb7a2e392d254f13a9f7558638feda53b9837a7da193",
+          "decodedRgbSha256": "5c50214e4cb44b3bd58ee1efb89847962237cbc9e0c89b563ea5f1f929cda918",
+          "bytes": 5126416,
+          "phash": "eb2fbdb10584668a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "2ec5d3d9ce7185f390e9",
+      "copies": [
+        {
+          "id": "2ec5d3d9ce7185f390e9",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0049 (1).jpg",
+          "sha256": "2ec5d3d9ce7185f390e97772f7ec2c882d8143a4e49add94f499fad3b2e8a18c",
+          "decodedRgbSha256": "606282202bb69da235623270a02cbc4a920ad1cf77d7ea4f197d6f77ca83431d",
+          "bytes": 5381219,
+          "phash": "d6220359ee7fe062",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "2ec5d3d9ce7185f390e9",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0049.jpg",
+          "sha256": "2ec5d3d9ce7185f390e97772f7ec2c882d8143a4e49add94f499fad3b2e8a18c",
+          "decodedRgbSha256": "606282202bb69da235623270a02cbc4a920ad1cf77d7ea4f197d6f77ca83431d",
+          "bytes": 5381219,
+          "phash": "d6220359ee7fe062",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "42c3ac9d317cea266284",
+      "copies": [
+        {
+          "id": "42c3ac9d317cea266284",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0075 (1).jpg",
+          "sha256": "42c3ac9d317cea266284af0221c135327aabc4a595593d2d4aa7cb5b0865532e",
+          "decodedRgbSha256": "61c2fadfb4310bf5b64aeaa27da38dd5bc0b4b5cb9d6a9dc718eca291b98c61b",
+          "bytes": 4681498,
+          "phash": "d743749ef19d80b0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "42c3ac9d317cea266284",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0075.jpg",
+          "sha256": "42c3ac9d317cea266284af0221c135327aabc4a595593d2d4aa7cb5b0865532e",
+          "decodedRgbSha256": "61c2fadfb4310bf5b64aeaa27da38dd5bc0b4b5cb9d6a9dc718eca291b98c61b",
+          "bytes": 4681498,
+          "phash": "d743749ef19d80b0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "533c0d242ec2687cf867",
+      "copies": [
+        {
+          "id": "533c0d242ec2687cf867",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0020 (1).jpg",
+          "sha256": "533c0d242ec2687cf867e61e97b8dbb1dfb01c7b9d93478f642a157761bec029",
+          "decodedRgbSha256": "627ee66720be8d8bb5e68bef9bd418f3bc712c5080b915afc1d823a38961f8f5",
+          "bytes": 4488751,
+          "phash": "c02fce2d9e50a7b1",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "533c0d242ec2687cf867",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0020.jpg",
+          "sha256": "533c0d242ec2687cf867e61e97b8dbb1dfb01c7b9d93478f642a157761bec029",
+          "decodedRgbSha256": "627ee66720be8d8bb5e68bef9bd418f3bc712c5080b915afc1d823a38961f8f5",
+          "bytes": 4488751,
+          "phash": "c02fce2d9e50a7b1",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "418e5d8a1bb186a89f8d",
+      "copies": [
+        {
+          "id": "418e5d8a1bb186a89f8d",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0121 (1).jpg",
+          "sha256": "418e5d8a1bb186a89f8d56592557b50649a4c4826edef0119e8ca0db540cae24",
+          "decodedRgbSha256": "65c10d7ec16ca5832eba8e1632449ed5d2fc085bb43f264ed818f83e6bee5fed",
+          "bytes": 3473785,
+          "phash": "fcf0a5e6645046dc",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "418e5d8a1bb186a89f8d",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0121.jpg",
+          "sha256": "418e5d8a1bb186a89f8d56592557b50649a4c4826edef0119e8ca0db540cae24",
+          "decodedRgbSha256": "65c10d7ec16ca5832eba8e1632449ed5d2fc085bb43f264ed818f83e6bee5fed",
+          "bytes": 3473785,
+          "phash": "fcf0a5e6645046dc",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "fa836df1fa5063f766bf",
+      "copies": [
+        {
+          "id": "fa836df1fa5063f766bf",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0079 (1).jpg",
+          "sha256": "fa836df1fa5063f766bfb7598b84dcdd5a17eb9049065a7cada41b5dd2b99c36",
+          "decodedRgbSha256": "66a6a1e0f4f839299668a3c47bb22a80ab926a1c95f2084c37245aa9bcdeedef",
+          "bytes": 5320208,
+          "phash": "db3d65c41ef4a01a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "fa836df1fa5063f766bf",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0079.jpg",
+          "sha256": "fa836df1fa5063f766bfb7598b84dcdd5a17eb9049065a7cada41b5dd2b99c36",
+          "decodedRgbSha256": "66a6a1e0f4f839299668a3c47bb22a80ab926a1c95f2084c37245aa9bcdeedef",
+          "bytes": 5320208,
+          "phash": "db3d65c41ef4a01a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "3773a56acddb3e3f9491",
+      "copies": [
+        {
+          "id": "3773a56acddb3e3f9491",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0032 (1).jpg",
+          "sha256": "3773a56acddb3e3f949190dbbec65379e5eca292d695faaca6f29fd4ec8c1447",
+          "decodedRgbSha256": "66df230431b570b57999488bc9bf56b9d80a6e68d8fb042c277405f147c60075",
+          "bytes": 4613185,
+          "phash": "fb67486db288d152",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "3773a56acddb3e3f9491",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0032.jpg",
+          "sha256": "3773a56acddb3e3f949190dbbec65379e5eca292d695faaca6f29fd4ec8c1447",
+          "decodedRgbSha256": "66df230431b570b57999488bc9bf56b9d80a6e68d8fb042c277405f147c60075",
+          "bytes": 4613185,
+          "phash": "fb67486db288d152",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "393f1a706ba4a78c8901",
+      "copies": [
+        {
+          "id": "393f1a706ba4a78c8901",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0016 (1).jpg",
+          "sha256": "393f1a706ba4a78c890147551e2468f21cb057170807e8351f4eab2c3c44db92",
+          "decodedRgbSha256": "681362abb06794f098770c1786753b14005384d94d45f9747461c707ea8dfc51",
+          "bytes": 4069980,
+          "phash": "b2fd3160ec492ecc",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "393f1a706ba4a78c8901",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0016.jpg",
+          "sha256": "393f1a706ba4a78c890147551e2468f21cb057170807e8351f4eab2c3c44db92",
+          "decodedRgbSha256": "681362abb06794f098770c1786753b14005384d94d45f9747461c707ea8dfc51",
+          "bytes": 4069980,
+          "phash": "b2fd3160ec492ecc",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "f8f20b7cfa9e068390ff",
+      "copies": [
+        {
+          "id": "f8f20b7cfa9e068390ff",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0086 (1).jpg",
+          "sha256": "f8f20b7cfa9e068390ff93cbb34a7d4cd33a7314127a24ed0a552b3b7a0b62dd",
+          "decodedRgbSha256": "695f438d21286ce0b7e5ce6a02c103a259100f264ea9b7303a358d316c9e7359",
+          "bytes": 5723935,
+          "phash": "d652bb2d2e65e0c1",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "f8f20b7cfa9e068390ff",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0086.jpg",
+          "sha256": "f8f20b7cfa9e068390ff93cbb34a7d4cd33a7314127a24ed0a552b3b7a0b62dd",
+          "decodedRgbSha256": "695f438d21286ce0b7e5ce6a02c103a259100f264ea9b7303a358d316c9e7359",
+          "bytes": 5723935,
+          "phash": "d652bb2d2e65e0c1",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "4da5f787f948f31418b1",
+      "copies": [
+        {
+          "id": "4da5f787f948f31418b1",
+          "pool": "oe",
+          "sourceRelativePath": "IMG_1199(1).jpg",
+          "sha256": "4da5f787f948f31418b199b1280514ac71dca0cc39bf4f8bbe5a3fb85d63ac4e",
+          "decodedRgbSha256": "6a72076d2276ddf0c9ff20922d324f00afe98df49b257b4dce5ce33a9e531b11",
+          "bytes": 1622116,
+          "phash": "8996768996768b96",
+          "dimensions": [
+            5712,
+            4284
+          ]
+        },
+        {
+          "id": "4da5f787f948f31418b1",
+          "pool": "oe",
+          "sourceRelativePath": "IMG_1199.jpg",
+          "sha256": "4da5f787f948f31418b199b1280514ac71dca0cc39bf4f8bbe5a3fb85d63ac4e",
+          "decodedRgbSha256": "6a72076d2276ddf0c9ff20922d324f00afe98df49b257b4dce5ce33a9e531b11",
+          "bytes": 1622116,
+          "phash": "8996768996768b96",
+          "dimensions": [
+            5712,
+            4284
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "ddb86f75e00147a52084",
+      "copies": [
+        {
+          "id": "ddb86f75e00147a52084",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0030 (1).jpg",
+          "sha256": "ddb86f75e00147a52084d07323c39085ff9a85b8356e01da2e8484e81d53f793",
+          "decodedRgbSha256": "6e8f6378e9e552b4380cfb8dab55fe918250595ec4bba8650a88e3b23346c9db",
+          "bytes": 4336630,
+          "phash": "8d8e7950951f05db",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "ddb86f75e00147a52084",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0030.jpg",
+          "sha256": "ddb86f75e00147a52084d07323c39085ff9a85b8356e01da2e8484e81d53f793",
+          "decodedRgbSha256": "6e8f6378e9e552b4380cfb8dab55fe918250595ec4bba8650a88e3b23346c9db",
+          "bytes": 4336630,
+          "phash": "8d8e7950951f05db",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "79aa3a8a74121a54f4ea",
+      "copies": [
+        {
+          "id": "79aa3a8a74121a54f4ea",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0007 (1).jpg",
+          "sha256": "79aa3a8a74121a54f4ea85cf468b4df763c5d601aeb1e23cbf98c6ed47002776",
+          "decodedRgbSha256": "6ebd9b5118cc30a33fe7b4dc16581609736a456abfd02632cb46594223ca3c3c",
+          "bytes": 4528825,
+          "phash": "ea9a0c29baaec63c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "79aa3a8a74121a54f4ea",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0007.jpg",
+          "sha256": "79aa3a8a74121a54f4ea85cf468b4df763c5d601aeb1e23cbf98c6ed47002776",
+          "decodedRgbSha256": "6ebd9b5118cc30a33fe7b4dc16581609736a456abfd02632cb46594223ca3c3c",
+          "bytes": 4528825,
+          "phash": "ea9a0c29baaec63c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "14ff0af6e8421f91e751",
+      "copies": [
+        {
+          "id": "14ff0af6e8421f91e751",
+          "pool": "oe",
+          "sourceRelativePath": "IMG_1220(1).jpg",
+          "sha256": "14ff0af6e8421f91e751df1cdaac74db0bca6ade0589c476ab4e914d63801fa5",
+          "decodedRgbSha256": "70d371b09c1cd1b1a8df2673f62f1c7a093126f0edfbb446e58288b618e4ee2f",
+          "bytes": 768633,
+          "phash": "dada5a4ba9250dc5",
+          "dimensions": [
+            3024,
+            4032
+          ]
+        },
+        {
+          "id": "14ff0af6e8421f91e751",
+          "pool": "oe",
+          "sourceRelativePath": "IMG_1220.jpg",
+          "sha256": "14ff0af6e8421f91e751df1cdaac74db0bca6ade0589c476ab4e914d63801fa5",
+          "decodedRgbSha256": "70d371b09c1cd1b1a8df2673f62f1c7a093126f0edfbb446e58288b618e4ee2f",
+          "bytes": 768633,
+          "phash": "dada5a4ba9250dc5",
+          "dimensions": [
+            3024,
+            4032
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "850d34b678374914068c",
+      "copies": [
+        {
+          "id": "850d34b678374914068c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0085 (1).jpg",
+          "sha256": "850d34b678374914068c63b2686ba02902c4dcd004b00f6d5c9ddaa38191826d",
+          "decodedRgbSha256": "71563cdc75c8712a2103968df35d36a14a487b70e94b8c2f9cd375c914e85236",
+          "bytes": 4691726,
+          "phash": "c79a1984ebd207e3",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "850d34b678374914068c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0085.jpg",
+          "sha256": "850d34b678374914068c63b2686ba02902c4dcd004b00f6d5c9ddaa38191826d",
+          "decodedRgbSha256": "71563cdc75c8712a2103968df35d36a14a487b70e94b8c2f9cd375c914e85236",
+          "bytes": 4691726,
+          "phash": "c79a1984ebd207e3",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "be9b5957a954338ac77f",
+      "copies": [
+        {
+          "id": "be9b5957a954338ac77f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0034 (1).jpg",
+          "sha256": "be9b5957a954338ac77f4692cce489253de43ebf0833bdf439e19aa4e5a15fa6",
+          "decodedRgbSha256": "732d0970fb4adcee830195d2ec8588afe8c6bc0825a59ef448e4fd9d86778aec",
+          "bytes": 4886682,
+          "phash": "c3f54a7007a3dc66",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "be9b5957a954338ac77f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0034.jpg",
+          "sha256": "be9b5957a954338ac77f4692cce489253de43ebf0833bdf439e19aa4e5a15fa6",
+          "decodedRgbSha256": "732d0970fb4adcee830195d2ec8588afe8c6bc0825a59ef448e4fd9d86778aec",
+          "bytes": 4886682,
+          "phash": "c3f54a7007a3dc66",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "40d4307d696ee01a46f1",
+      "copies": [
+        {
+          "id": "40d4307d696ee01a46f1",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0055 (1).jpg",
+          "sha256": "40d4307d696ee01a46f1775355d7c6a0dbcd1b5e3417de17472ce0e99299c774",
+          "decodedRgbSha256": "74bb8c8078fdcd3037acc8dfb7e9a83a43f4d7a5c2944b1ec95ba70e5b95ec8d",
+          "bytes": 4719378,
+          "phash": "d974377b421a3f20",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "40d4307d696ee01a46f1",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0055.jpg",
+          "sha256": "40d4307d696ee01a46f1775355d7c6a0dbcd1b5e3417de17472ce0e99299c774",
+          "decodedRgbSha256": "74bb8c8078fdcd3037acc8dfb7e9a83a43f4d7a5c2944b1ec95ba70e5b95ec8d",
+          "bytes": 4719378,
+          "phash": "d974377b421a3f20",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "be9630aba7881be68a97",
+      "copies": [
+        {
+          "id": "be9630aba7881be68a97",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0045 (1).jpg",
+          "sha256": "be9630aba7881be68a97c8ab0e68e11c5066ac9d71aff8991e6724c109c86555",
+          "decodedRgbSha256": "75d56d04573bd8f6f9687a62eae5e28a9f386d470da30d4106ad1671d4ca075a",
+          "bytes": 4648069,
+          "phash": "d279251d027b70e7",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "be9630aba7881be68a97",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0045.jpg",
+          "sha256": "be9630aba7881be68a97c8ab0e68e11c5066ac9d71aff8991e6724c109c86555",
+          "decodedRgbSha256": "75d56d04573bd8f6f9687a62eae5e28a9f386d470da30d4106ad1671d4ca075a",
+          "bytes": 4648069,
+          "phash": "d279251d027b70e7",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "cdf39e089678fa40899f",
+      "copies": [
+        {
+          "id": "cdf39e089678fa40899f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0159 (1).jpg",
+          "sha256": "cdf39e089678fa40899f6a61383a7efee4d4fa16f8d21c4c9bad63a2ca9d7a28",
+          "decodedRgbSha256": "7b96b52632495536638629803822553fc2d8885e0db2a26fc81db5b311fa756b",
+          "bytes": 4275380,
+          "phash": "f8870e638d768de0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "cdf39e089678fa40899f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0159.jpg",
+          "sha256": "cdf39e089678fa40899f6a61383a7efee4d4fa16f8d21c4c9bad63a2ca9d7a28",
+          "decodedRgbSha256": "7b96b52632495536638629803822553fc2d8885e0db2a26fc81db5b311fa756b",
+          "bytes": 4275380,
+          "phash": "f8870e638d768de0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "b7755900df1e619e0571",
+      "copies": [
+        {
+          "id": "b7755900df1e619e0571",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0119 (1).jpg",
+          "sha256": "b7755900df1e619e05710aff831d395373bad44fe625d7ffe788c8f99dc94d4c",
+          "decodedRgbSha256": "7ed69112febb95feda34c5be4fdcfc29ccc3fceffb0e0a5a74282ef3b94ad8c2",
+          "bytes": 3237661,
+          "phash": "c5c1ab2a0f494eaf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "b7755900df1e619e0571",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0119.jpg",
+          "sha256": "b7755900df1e619e05710aff831d395373bad44fe625d7ffe788c8f99dc94d4c",
+          "decodedRgbSha256": "7ed69112febb95feda34c5be4fdcfc29ccc3fceffb0e0a5a74282ef3b94ad8c2",
+          "bytes": 3237661,
+          "phash": "c5c1ab2a0f494eaf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "0a5cd3a2baabbf0f5f6e",
+      "copies": [
+        {
+          "id": "0a5cd3a2baabbf0f5f6e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0066 (1).jpg",
+          "sha256": "0a5cd3a2baabbf0f5f6e8cecc337ed64bfb4249acba5b041095adf60d018a844",
+          "decodedRgbSha256": "7edc57e65cdd89a055b390ca7a2fc733a31e5be46d670e23a162540b8d63a556",
+          "bytes": 4998590,
+          "phash": "d32f7049a5d61b64",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "0a5cd3a2baabbf0f5f6e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0066.jpg",
+          "sha256": "0a5cd3a2baabbf0f5f6e8cecc337ed64bfb4249acba5b041095adf60d018a844",
+          "decodedRgbSha256": "7edc57e65cdd89a055b390ca7a2fc733a31e5be46d670e23a162540b8d63a556",
+          "bytes": 4998590,
+          "phash": "d32f7049a5d61b64",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "cf09c15029b6fc51d714",
+      "copies": [
+        {
+          "id": "cf09c15029b6fc51d714",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0056 (1).jpg",
+          "sha256": "cf09c15029b6fc51d71496483882b5b89b4941ccdc49062fe39a11e9197997d2",
+          "decodedRgbSha256": "80ff4bf9357a9177257fc43dc1067d541841e06d0494bd0140f00941210926f0",
+          "bytes": 5222414,
+          "phash": "dc3beb5cb2c02474",
+          "dimensions": [
+            4000,
+            3000
+          ]
+        },
+        {
+          "id": "cf09c15029b6fc51d714",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0056.jpg",
+          "sha256": "cf09c15029b6fc51d71496483882b5b89b4941ccdc49062fe39a11e9197997d2",
+          "decodedRgbSha256": "80ff4bf9357a9177257fc43dc1067d541841e06d0494bd0140f00941210926f0",
+          "bytes": 5222414,
+          "phash": "dc3beb5cb2c02474",
+          "dimensions": [
+            4000,
+            3000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "2bd75de6f6e90d2b82f2",
+      "copies": [
+        {
+          "id": "2bd75de6f6e90d2b82f2",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0047 (1).jpg",
+          "sha256": "2bd75de6f6e90d2b82f2143f8b23763c1ba32fc4588b4b73a29dda0eeffbdc51",
+          "decodedRgbSha256": "810e682864e6dbd6f757793907de51c066a62ce1878df70bbc627899e178604f",
+          "bytes": 4934094,
+          "phash": "a25079ed5bd609e2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "2bd75de6f6e90d2b82f2",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0047.jpg",
+          "sha256": "2bd75de6f6e90d2b82f2143f8b23763c1ba32fc4588b4b73a29dda0eeffbdc51",
+          "decodedRgbSha256": "810e682864e6dbd6f757793907de51c066a62ce1878df70bbc627899e178604f",
+          "bytes": 4934094,
+          "phash": "a25079ed5bd609e2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "0aca8e05d98a9653936b",
+      "copies": [
+        {
+          "id": "0aca8e05d98a9653936b",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0082 (1).jpg",
+          "sha256": "0aca8e05d98a9653936bce708e961d39b279399dbf2bebd3a039467e1cb9d729",
+          "decodedRgbSha256": "81c986f5e53d0210fa7451af3f88f47d85a75c64ef91a82d07f8f9baf7e65ea8",
+          "bytes": 4100862,
+          "phash": "d30d7832696fc899",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "0aca8e05d98a9653936b",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0082.jpg",
+          "sha256": "0aca8e05d98a9653936bce708e961d39b279399dbf2bebd3a039467e1cb9d729",
+          "decodedRgbSha256": "81c986f5e53d0210fa7451af3f88f47d85a75c64ef91a82d07f8f9baf7e65ea8",
+          "bytes": 4100862,
+          "phash": "d30d7832696fc899",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "c559ef8e48ab9c79a13e",
+      "copies": [
+        {
+          "id": "c559ef8e48ab9c79a13e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0004 (1).jpg",
+          "sha256": "c559ef8e48ab9c79a13ee9fe3bc31c6abd6fde78f23a0fdaadb4ef06575ad701",
+          "decodedRgbSha256": "822e59e4a67d2485483b611c0043b3440ed91bab177e4991184578529a8c45fd",
+          "bytes": 4092931,
+          "phash": "fe38d44efcb0e005",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "c559ef8e48ab9c79a13e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0004.jpg",
+          "sha256": "c559ef8e48ab9c79a13ee9fe3bc31c6abd6fde78f23a0fdaadb4ef06575ad701",
+          "decodedRgbSha256": "822e59e4a67d2485483b611c0043b3440ed91bab177e4991184578529a8c45fd",
+          "bytes": 4092931,
+          "phash": "fe38d44efcb0e005",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "646e8237b98452916f6a",
+      "copies": [
+        {
+          "id": "646e8237b98452916f6a",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0136 (1).jpg",
+          "sha256": "646e8237b98452916f6abbf53829f35ab0f7e24086ebde865c5eef07fd5bbe9a",
+          "decodedRgbSha256": "868a3a3b9adad9221d85eaa1b9351c7bb48957584bf3ec7eaed32084ed157491",
+          "bytes": 5309486,
+          "phash": "80dd06027b797e6d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "646e8237b98452916f6a",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0136.jpg",
+          "sha256": "646e8237b98452916f6abbf53829f35ab0f7e24086ebde865c5eef07fd5bbe9a",
+          "decodedRgbSha256": "868a3a3b9adad9221d85eaa1b9351c7bb48957584bf3ec7eaed32084ed157491",
+          "bytes": 5309486,
+          "phash": "80dd06027b797e6d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "5813230705dba9ed0268",
+      "copies": [
+        {
+          "id": "5813230705dba9ed0268",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0093 (1).jpg",
+          "sha256": "5813230705dba9ed02682d74eb29beb78169932d609e78f46e06c2aa5fa114cd",
+          "decodedRgbSha256": "883dd88c17afe41a0fec449eefcc1c85ed0083f24a17cb9a665c68997dd2e570",
+          "bytes": 4394885,
+          "phash": "9ed45c4f29520be3",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "5813230705dba9ed0268",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0093.jpg",
+          "sha256": "5813230705dba9ed02682d74eb29beb78169932d609e78f46e06c2aa5fa114cd",
+          "decodedRgbSha256": "883dd88c17afe41a0fec449eefcc1c85ed0083f24a17cb9a665c68997dd2e570",
+          "bytes": 4394885,
+          "phash": "9ed45c4f29520be3",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "d10c9e4484a446642380",
+      "copies": [
+        {
+          "id": "d10c9e4484a446642380",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0109 (1).jpg",
+          "sha256": "d10c9e4484a446642380fd5a8022313c620561a117bda1c1c0cb5cfe4644bf51",
+          "decodedRgbSha256": "88c8bebc2b36522c6bb7b584f321001c87da89420363e0a524c6fd7e49735e98",
+          "bytes": 5671128,
+          "phash": "c152275e8b3d7178",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "d10c9e4484a446642380",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0109.jpg",
+          "sha256": "d10c9e4484a446642380fd5a8022313c620561a117bda1c1c0cb5cfe4644bf51",
+          "decodedRgbSha256": "88c8bebc2b36522c6bb7b584f321001c87da89420363e0a524c6fd7e49735e98",
+          "bytes": 5671128,
+          "phash": "c152275e8b3d7178",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "9e0965fe8b83b5d6e497",
+      "copies": [
+        {
+          "id": "9e0965fe8b83b5d6e497",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0022 (1).jpg",
+          "sha256": "9e0965fe8b83b5d6e497b1b30a3606ba4c858e8ffb073f4a5d64102e15506103",
+          "decodedRgbSha256": "8de3aa7939521a0defb995f19fbae9c123b3a84f48d9f12b193fd4311d0e99bb",
+          "bytes": 4331216,
+          "phash": "b6c16e540d3865cf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "9e0965fe8b83b5d6e497",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0022.jpg",
+          "sha256": "9e0965fe8b83b5d6e497b1b30a3606ba4c858e8ffb073f4a5d64102e15506103",
+          "decodedRgbSha256": "8de3aa7939521a0defb995f19fbae9c123b3a84f48d9f12b193fd4311d0e99bb",
+          "bytes": 4331216,
+          "phash": "b6c16e540d3865cf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "410ea400f72a5ecb197a",
+      "copies": [
+        {
+          "id": "410ea400f72a5ecb197a",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0118 (1).jpg",
+          "sha256": "410ea400f72a5ecb197af29311918aa09743b3df2e83b23e407929a093f87d61",
+          "decodedRgbSha256": "8eac19b2d6b3510050dd796b07b3d2ce1f1e7a58076d29cfd56ae0449261cfc2",
+          "bytes": 3301717,
+          "phash": "b9eee6b183d8c0c4",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "410ea400f72a5ecb197a",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0118.jpg",
+          "sha256": "410ea400f72a5ecb197af29311918aa09743b3df2e83b23e407929a093f87d61",
+          "decodedRgbSha256": "8eac19b2d6b3510050dd796b07b3d2ce1f1e7a58076d29cfd56ae0449261cfc2",
+          "bytes": 3301717,
+          "phash": "b9eee6b183d8c0c4",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "5099b5540a3de913da43",
+      "copies": [
+        {
+          "id": "5099b5540a3de913da43",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0050 (1).jpg",
+          "sha256": "5099b5540a3de913da431d954449a40a6f6976088a6bb3fcdcbd2c0df98dfe6c",
+          "decodedRgbSha256": "8f8238aca8128980dba4ee471fb503457ed9b9b26aff91a69845f67f03f7cae0",
+          "bytes": 5435791,
+          "phash": "d3191a4b5954d9d6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "5099b5540a3de913da43",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0050.jpg",
+          "sha256": "5099b5540a3de913da431d954449a40a6f6976088a6bb3fcdcbd2c0df98dfe6c",
+          "decodedRgbSha256": "8f8238aca8128980dba4ee471fb503457ed9b9b26aff91a69845f67f03f7cae0",
+          "bytes": 5435791,
+          "phash": "d3191a4b5954d9d6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "823aea64b920978afccd",
+      "copies": [
+        {
+          "id": "823aea64b920978afccd",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0052 (1).jpg",
+          "sha256": "823aea64b920978afccd5a34cf6afa7178741b0ee9e43aa2a5b7bc6b4805e5ff",
+          "decodedRgbSha256": "90d330d6638f9ca4d25f9ec381dad397916af644da31092e6202510be416db7a",
+          "bytes": 3963224,
+          "phash": "c5727973c3f4a023",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "823aea64b920978afccd",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0052.jpg",
+          "sha256": "823aea64b920978afccd5a34cf6afa7178741b0ee9e43aa2a5b7bc6b4805e5ff",
+          "decodedRgbSha256": "90d330d6638f9ca4d25f9ec381dad397916af644da31092e6202510be416db7a",
+          "bytes": 3963224,
+          "phash": "c5727973c3f4a023",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "f09b4da86a79c8ba8aaa",
+      "copies": [
+        {
+          "id": "f09b4da86a79c8ba8aaa",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0160 (1).jpg",
+          "sha256": "f09b4da86a79c8ba8aaa0711b86a5af8f40d40d01765ec6cc6b29b2925121463",
+          "decodedRgbSha256": "9323e4da248ef221e867ae32499ed50ebef590226143ee22c53ca411ea2b3d3e",
+          "bytes": 4834146,
+          "phash": "efc0913cb88778a3",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "f09b4da86a79c8ba8aaa",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0160.jpg",
+          "sha256": "f09b4da86a79c8ba8aaa0711b86a5af8f40d40d01765ec6cc6b29b2925121463",
+          "decodedRgbSha256": "9323e4da248ef221e867ae32499ed50ebef590226143ee22c53ca411ea2b3d3e",
+          "bytes": 4834146,
+          "phash": "efc0913cb88778a3",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "755eb1acb44d206150d7",
+      "copies": [
+        {
+          "id": "755eb1acb44d206150d7",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0149 (1).jpg",
+          "sha256": "755eb1acb44d206150d7cf7f94f1da36e11499cebd49dfa9fe927b987511cab9",
+          "decodedRgbSha256": "95ad755442d3158ccd4d75c8bf0dc4a1ea42910bb90a65636a0b522bc14353c8",
+          "bytes": 4881521,
+          "phash": "b39d954a2e209dce",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "755eb1acb44d206150d7",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0149.jpg",
+          "sha256": "755eb1acb44d206150d7cf7f94f1da36e11499cebd49dfa9fe927b987511cab9",
+          "decodedRgbSha256": "95ad755442d3158ccd4d75c8bf0dc4a1ea42910bb90a65636a0b522bc14353c8",
+          "bytes": 4881521,
+          "phash": "b39d954a2e209dce",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "5270a5c76ac2e52897f1",
+      "copies": [
+        {
+          "id": "5270a5c76ac2e52897f1",
+          "pool": "oe",
+          "sourceRelativePath": "IMG_20190823_173008_969(1).jpg",
+          "sha256": "5270a5c76ac2e52897f1777be5b05992d99d53153f37648901f9e0346381f91f",
+          "decodedRgbSha256": "96bad129238d435ea070d1dff247c96c9290d728ee872bd8d2535bad3d9f777d",
+          "bytes": 89034,
+          "phash": "c178cec19f8c191f",
+          "dimensions": [
+            744,
+            499
+          ]
+        },
+        {
+          "id": "5270a5c76ac2e52897f1",
+          "pool": "oe",
+          "sourceRelativePath": "IMG_20190823_173008_969.jpg",
+          "sha256": "5270a5c76ac2e52897f1777be5b05992d99d53153f37648901f9e0346381f91f",
+          "decodedRgbSha256": "96bad129238d435ea070d1dff247c96c9290d728ee872bd8d2535bad3d9f777d",
+          "bytes": 89034,
+          "phash": "c178cec19f8c191f",
+          "dimensions": [
+            744,
+            499
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "6a817531c6086a0341cd",
+      "copies": [
+        {
+          "id": "6a817531c6086a0341cd",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0090 (1).jpg",
+          "sha256": "6a817531c6086a0341cd2d7f43f0b08a253536896f5edd9dd759d1baa257658d",
+          "decodedRgbSha256": "9b53b7286d6d50015b8d401e3a49c25d234203cf8f917427a842e8182203bd5e",
+          "bytes": 6002682,
+          "phash": "c6083b7ba26a19bd",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "6a817531c6086a0341cd",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0090.jpg",
+          "sha256": "6a817531c6086a0341cd2d7f43f0b08a253536896f5edd9dd759d1baa257658d",
+          "decodedRgbSha256": "9b53b7286d6d50015b8d401e3a49c25d234203cf8f917427a842e8182203bd5e",
+          "bytes": 6002682,
+          "phash": "c6083b7ba26a19bd",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "977fd20aa57519a908a4",
+      "copies": [
+        {
+          "id": "977fd20aa57519a908a4",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0117 (1).jpg",
+          "sha256": "977fd20aa57519a908a430a7c0e151a24bf4292a55099b2e07bcbde8678a7d7c",
+          "decodedRgbSha256": "9b54f43290777f4c1386b248213f7873578be50f71bb5f9150bb6d7a4fba91ad",
+          "bytes": 3696948,
+          "phash": "e184d24d99b9d36a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "977fd20aa57519a908a4",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0117.jpg",
+          "sha256": "977fd20aa57519a908a430a7c0e151a24bf4292a55099b2e07bcbde8678a7d7c",
+          "decodedRgbSha256": "9b54f43290777f4c1386b248213f7873578be50f71bb5f9150bb6d7a4fba91ad",
+          "bytes": 3696948,
+          "phash": "e184d24d99b9d36a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "7daed3995dc0cb877ef2",
+      "copies": [
+        {
+          "id": "7daed3995dc0cb877ef2",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0042 (1).jpg",
+          "sha256": "7daed3995dc0cb877ef2588d4b9ab5bb51a8300395fda789d0c809e5a3df5a8a",
+          "decodedRgbSha256": "a3654c6a90645bc9fadfd5d7b51d0b64589ca60dc2fa7e3293f7cb5f1af9cd1a",
+          "bytes": 5215933,
+          "phash": "8c433f6c18d5595d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "7daed3995dc0cb877ef2",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0042.jpg",
+          "sha256": "7daed3995dc0cb877ef2588d4b9ab5bb51a8300395fda789d0c809e5a3df5a8a",
+          "decodedRgbSha256": "a3654c6a90645bc9fadfd5d7b51d0b64589ca60dc2fa7e3293f7cb5f1af9cd1a",
+          "bytes": 5215933,
+          "phash": "8c433f6c18d5595d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "0b43a484613474074f5d",
+      "copies": [
+        {
+          "id": "0b43a484613474074f5d",
+          "pool": "oe",
+          "sourceRelativePath": "Arum lobe_0007.jpg",
+          "sha256": "0b43a484613474074f5de40b1317eaf9dce50aa766ea2eb6874fce1106b46eb5",
+          "decodedRgbSha256": "a69e18db174af02150c0807e4583248b41bc6421c14438b8d2a4948b479b0120",
+          "bytes": 4773493,
+          "phash": "bc9998db4b6e44a4",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "0b43a484613474074f5d",
+          "pool": "oe",
+          "sourceRelativePath": "Arum lobe_0008.jpg",
+          "sha256": "0b43a484613474074f5de40b1317eaf9dce50aa766ea2eb6874fce1106b46eb5",
+          "decodedRgbSha256": "a69e18db174af02150c0807e4583248b41bc6421c14438b8d2a4948b479b0120",
+          "bytes": 4773493,
+          "phash": "bc9998db4b6e44a4",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "25fd80bd8d101cd122a0",
+      "copies": [
+        {
+          "id": "25fd80bd8d101cd122a0",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0024 (1).jpg",
+          "sha256": "25fd80bd8d101cd122a0340ca44df205096f1686717b019b546fd6e78ee115fe",
+          "decodedRgbSha256": "a69fff05d2be4f4bb2cc6349670ac4e6669fea2a6c7988f2c00853338e84ea0f",
+          "bytes": 4193717,
+          "phash": "c1f05d12a04bbdaf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "25fd80bd8d101cd122a0",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0024.jpg",
+          "sha256": "25fd80bd8d101cd122a0340ca44df205096f1686717b019b546fd6e78ee115fe",
+          "decodedRgbSha256": "a69fff05d2be4f4bb2cc6349670ac4e6669fea2a6c7988f2c00853338e84ea0f",
+          "bytes": 4193717,
+          "phash": "c1f05d12a04bbdaf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "f3e3aabd9a508ca6926e",
+      "copies": [
+        {
+          "id": "f3e3aabd9a508ca6926e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0100 (1).jpg",
+          "sha256": "f3e3aabd9a508ca6926e29eada201eaed0a167703c6a7b1412cd54d248af2d2b",
+          "decodedRgbSha256": "a766a2cbf234a08f38a36743eee7cdb654ed8cae12a8bc81bb15e8aada1f16cc",
+          "bytes": 4807556,
+          "phash": "d9ad2c29b4e00baf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "f3e3aabd9a508ca6926e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0100.jpg",
+          "sha256": "f3e3aabd9a508ca6926e29eada201eaed0a167703c6a7b1412cd54d248af2d2b",
+          "decodedRgbSha256": "a766a2cbf234a08f38a36743eee7cdb654ed8cae12a8bc81bb15e8aada1f16cc",
+          "bytes": 4807556,
+          "phash": "d9ad2c29b4e00baf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "abc54cc5c293fa9717e3",
+      "copies": [
+        {
+          "id": "abc54cc5c293fa9717e3",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0156 (1).jpg",
+          "sha256": "abc54cc5c293fa9717e3700741d8515066b042e08be49254bc1166f3719f09b0",
+          "decodedRgbSha256": "a96b56900e370c88229bd4f366f2aba3acc7b6564552377dc85b6fa52016028d",
+          "bytes": 4656765,
+          "phash": "e11ce7089e1d96f2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "abc54cc5c293fa9717e3",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0156.jpg",
+          "sha256": "abc54cc5c293fa9717e3700741d8515066b042e08be49254bc1166f3719f09b0",
+          "decodedRgbSha256": "a96b56900e370c88229bd4f366f2aba3acc7b6564552377dc85b6fa52016028d",
+          "bytes": 4656765,
+          "phash": "e11ce7089e1d96f2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "8b82ee93ebdf3fbaca21",
+      "copies": [
+        {
+          "id": "8b82ee93ebdf3fbaca21",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0074 (1).jpg",
+          "sha256": "8b82ee93ebdf3fbaca21e1d335153f347565c28dd1b990edc6c817d6025c24cd",
+          "decodedRgbSha256": "aa2f2c2d76540fdd9cb07f57960f123fa6cfceb91daad9fab228a0da3196c1fc",
+          "bytes": 4775314,
+          "phash": "aa283e7a35ddca18",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "8b82ee93ebdf3fbaca21",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0074.jpg",
+          "sha256": "8b82ee93ebdf3fbaca21e1d335153f347565c28dd1b990edc6c817d6025c24cd",
+          "decodedRgbSha256": "aa2f2c2d76540fdd9cb07f57960f123fa6cfceb91daad9fab228a0da3196c1fc",
+          "bytes": 4775314,
+          "phash": "aa283e7a35ddca18",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "23746df7e8b256f889a4",
+      "copies": [
+        {
+          "id": "23746df7e8b256f889a4",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0094 (1).jpg",
+          "sha256": "23746df7e8b256f889a4a04ea8d2b99763a93c7b3b30a66667e3c1090b182c07",
+          "decodedRgbSha256": "ac487bd1b48e7d1996c6b9c0d90596a3b27e62d59e5dfab59d0a2101b60638c9",
+          "bytes": 4599590,
+          "phash": "de82a802b469cff5",
+          "dimensions": [
+            4000,
+            3000
+          ]
+        },
+        {
+          "id": "23746df7e8b256f889a4",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0094.jpg",
+          "sha256": "23746df7e8b256f889a4a04ea8d2b99763a93c7b3b30a66667e3c1090b182c07",
+          "decodedRgbSha256": "ac487bd1b48e7d1996c6b9c0d90596a3b27e62d59e5dfab59d0a2101b60638c9",
+          "bytes": 4599590,
+          "phash": "de82a802b469cff5",
+          "dimensions": [
+            4000,
+            3000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "a82ef6b2fb93b15c40a0",
+      "copies": [
+        {
+          "id": "a82ef6b2fb93b15c40a0",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0002 (1).jpg",
+          "sha256": "a82ef6b2fb93b15c40a003bb478388bdc79e17f15ca94a17b14a277c60f08dcd",
+          "decodedRgbSha256": "ac901593581ba3dc985f36723c819aea69bc7ab1be1ffe88d50311000d403384",
+          "bytes": 4171619,
+          "phash": "c09e59e2b1d90be6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "a82ef6b2fb93b15c40a0",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0002.jpg",
+          "sha256": "a82ef6b2fb93b15c40a003bb478388bdc79e17f15ca94a17b14a277c60f08dcd",
+          "decodedRgbSha256": "ac901593581ba3dc985f36723c819aea69bc7ab1be1ffe88d50311000d403384",
+          "bytes": 4171619,
+          "phash": "c09e59e2b1d90be6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "750a43d6be438a5ac98a",
+      "copies": [
+        {
+          "id": "750a43d6be438a5ac98a",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0021 (1).jpg",
+          "sha256": "750a43d6be438a5ac98a48ced1cf0ccbf7a907d30ebd3d41430e737715391b6f",
+          "decodedRgbSha256": "aeb8ea19ccd81ace4f069e6efb0910807ee3a06d225aca200ee445041f65a463",
+          "bytes": 4410197,
+          "phash": "d7ba1a7f4310cc91",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "750a43d6be438a5ac98a",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0021.jpg",
+          "sha256": "750a43d6be438a5ac98a48ced1cf0ccbf7a907d30ebd3d41430e737715391b6f",
+          "decodedRgbSha256": "aeb8ea19ccd81ace4f069e6efb0910807ee3a06d225aca200ee445041f65a463",
+          "bytes": 4410197,
+          "phash": "d7ba1a7f4310cc91",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "3d9d0448c056a2b8837e",
+      "copies": [
+        {
+          "id": "3d9d0448c056a2b8837e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0018 (1).jpg",
+          "sha256": "3d9d0448c056a2b8837e61674d53ecc7b6a15c5d7a11b590488cf68b9ee30a44",
+          "decodedRgbSha256": "af658fda9f59294fe666bf7fbded38498821e7d216e8bfb33c06464d6bbcea61",
+          "bytes": 5054796,
+          "phash": "f39a722e61a7a485",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "3d9d0448c056a2b8837e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0018.jpg",
+          "sha256": "3d9d0448c056a2b8837e61674d53ecc7b6a15c5d7a11b590488cf68b9ee30a44",
+          "decodedRgbSha256": "af658fda9f59294fe666bf7fbded38498821e7d216e8bfb33c06464d6bbcea61",
+          "bytes": 5054796,
+          "phash": "f39a722e61a7a485",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "fad74794472f155bb3e3",
+      "copies": [
+        {
+          "id": "fad74794472f155bb3e3",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0148 (1).jpg",
+          "sha256": "fad74794472f155bb3e3203114e62a81046463bcd1b98f6adfe411ad02a73121",
+          "decodedRgbSha256": "b00fc562a88ead567d518fb49c5e66b8917c3b2f77c24f2b982e3298fe9c2dab",
+          "bytes": 4951932,
+          "phash": "c0bed3453695194f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "fad74794472f155bb3e3",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0148.jpg",
+          "sha256": "fad74794472f155bb3e3203114e62a81046463bcd1b98f6adfe411ad02a73121",
+          "decodedRgbSha256": "b00fc562a88ead567d518fb49c5e66b8917c3b2f77c24f2b982e3298fe9c2dab",
+          "bytes": 4951932,
+          "phash": "c0bed3453695194f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "d6f0a1de90d16cce531b",
+      "copies": [
+        {
+          "id": "d6f0a1de90d16cce531b",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0067 (1).jpg",
+          "sha256": "d6f0a1de90d16cce531b634bc2ab7630f09bc4b29080b7e20f7a4a4d154fcabf",
+          "decodedRgbSha256": "b1296eb359eb389f0a2ed425ae9799ff18d84e58f12b6e1b1ab81f4080062930",
+          "bytes": 4543650,
+          "phash": "dd7921a48f87950b",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "d6f0a1de90d16cce531b",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0067.jpg",
+          "sha256": "d6f0a1de90d16cce531b634bc2ab7630f09bc4b29080b7e20f7a4a4d154fcabf",
+          "decodedRgbSha256": "b1296eb359eb389f0a2ed425ae9799ff18d84e58f12b6e1b1ab81f4080062930",
+          "bytes": 4543650,
+          "phash": "dd7921a48f87950b",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "95c3dad7629822ec73b2",
+      "copies": [
+        {
+          "id": "95c3dad7629822ec73b2",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0132 (1).jpg",
+          "sha256": "95c3dad7629822ec73b2cbf6dd7a8324df2276b9b53746b60b0b526626d8ec53",
+          "decodedRgbSha256": "b232454ff65b6cec5c8cdba473364bf2d5c9aa42e1bab4b11fc865a06b042d15",
+          "bytes": 4600580,
+          "phash": "fec70584f813d865",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "95c3dad7629822ec73b2",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0132.jpg",
+          "sha256": "95c3dad7629822ec73b2cbf6dd7a8324df2276b9b53746b60b0b526626d8ec53",
+          "decodedRgbSha256": "b232454ff65b6cec5c8cdba473364bf2d5c9aa42e1bab4b11fc865a06b042d15",
+          "bytes": 4600580,
+          "phash": "fec70584f813d865",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "e0dff9809dac9c3e9525",
+      "copies": [
+        {
+          "id": "e0dff9809dac9c3e9525",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0080 (1).jpg",
+          "sha256": "e0dff9809dac9c3e9525a19dd0b383e5b68d91e8cd133893018af66b8286e4fb",
+          "decodedRgbSha256": "b2df6f76f3d05b8525fa7c1d7bdeddc058d3efdba21d6651bddac66bf7b51cb1",
+          "bytes": 3811671,
+          "phash": "ce0625f2d81fa4f2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "e0dff9809dac9c3e9525",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0080.jpg",
+          "sha256": "e0dff9809dac9c3e9525a19dd0b383e5b68d91e8cd133893018af66b8286e4fb",
+          "decodedRgbSha256": "b2df6f76f3d05b8525fa7c1d7bdeddc058d3efdba21d6651bddac66bf7b51cb1",
+          "bytes": 3811671,
+          "phash": "ce0625f2d81fa4f2",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "225dab032895b6675110",
+      "copies": [
+        {
+          "id": "225dab032895b6675110",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0019 (1).jpg",
+          "sha256": "225dab032895b66751109db9e692902ca5e16487982346f4cd3e1fefe2a9d7b6",
+          "decodedRgbSha256": "b371bf94c0bd087915eb791826c2cbae519663258d84e656840bce983dbee23a",
+          "bytes": 5239598,
+          "phash": "ff84a3277d849262",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "225dab032895b6675110",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0019.jpg",
+          "sha256": "225dab032895b66751109db9e692902ca5e16487982346f4cd3e1fefe2a9d7b6",
+          "decodedRgbSha256": "b371bf94c0bd087915eb791826c2cbae519663258d84e656840bce983dbee23a",
+          "bytes": 5239598,
+          "phash": "ff84a3277d849262",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "f9a87a882e69468ffea6",
+      "copies": [
+        {
+          "id": "f9a87a882e69468ffea6",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0122 (1).jpg",
+          "sha256": "f9a87a882e69468ffea68326bedf741675a295ad51e5a15ef1ed76850ebf479d",
+          "decodedRgbSha256": "b540a02832e8609d7fd7423ee658b53544e655ee50243c4539f416dca3ddd98c",
+          "bytes": 2969516,
+          "phash": "98a5926fdb61a1a6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "f9a87a882e69468ffea6",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0122.jpg",
+          "sha256": "f9a87a882e69468ffea68326bedf741675a295ad51e5a15ef1ed76850ebf479d",
+          "decodedRgbSha256": "b540a02832e8609d7fd7423ee658b53544e655ee50243c4539f416dca3ddd98c",
+          "bytes": 2969516,
+          "phash": "98a5926fdb61a1a6",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "92cfcde18ef68ce1d1c8",
+      "copies": [
+        {
+          "id": "92cfcde18ef68ce1d1c8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0154 (1).jpg",
+          "sha256": "92cfcde18ef68ce1d1c86e06fddf47a48495826257ce40f899923b49fa9900bc",
+          "decodedRgbSha256": "b6091b69347ef72d43f6fac588922c19ac3e45621982b51b2b4526b640d70a7b",
+          "bytes": 5790912,
+          "phash": "8f9d78262fa2164d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "92cfcde18ef68ce1d1c8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0154.jpg",
+          "sha256": "92cfcde18ef68ce1d1c86e06fddf47a48495826257ce40f899923b49fa9900bc",
+          "decodedRgbSha256": "b6091b69347ef72d43f6fac588922c19ac3e45621982b51b2b4526b640d70a7b",
+          "bytes": 5790912,
+          "phash": "8f9d78262fa2164d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "2c83d2a905ced1ae7cb8",
+      "copies": [
+        {
+          "id": "2c83d2a905ced1ae7cb8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0151 (1).jpg",
+          "sha256": "2c83d2a905ced1ae7cb8082a07973475e492fd6108c0029e6949d1b7e9ab0a38",
+          "decodedRgbSha256": "b628aeef5e84cd0279648ef8697fdf1f681cfeee54ecc9bfa5f28f03865166a0",
+          "bytes": 5392439,
+          "phash": "b48fa0a699740f73",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "2c83d2a905ced1ae7cb8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0151.jpg",
+          "sha256": "2c83d2a905ced1ae7cb8082a07973475e492fd6108c0029e6949d1b7e9ab0a38",
+          "decodedRgbSha256": "b628aeef5e84cd0279648ef8697fdf1f681cfeee54ecc9bfa5f28f03865166a0",
+          "bytes": 5392439,
+          "phash": "b48fa0a699740f73",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "c54ae10f05e13aec1dcd",
+      "copies": [
+        {
+          "id": "c54ae10f05e13aec1dcd",
+          "pool": "oe",
+          "sourceRelativePath": "IMG_20241202_150904_106(1).jpg",
+          "sha256": "c54ae10f05e13aec1dcd4409424e90a686e1b5c063cffce4747ee90afebda203",
+          "decodedRgbSha256": "b9b0469c4b7f0437a5b8a89ba6e6a3424422e4cb57cd0a2b01c005577a5e3ee2",
+          "bytes": 40885,
+          "phash": "c7b821873d61e63c",
+          "dimensions": [
+            621,
+            933
+          ]
+        },
+        {
+          "id": "c54ae10f05e13aec1dcd",
+          "pool": "oe",
+          "sourceRelativePath": "IMG_20241202_150904_106.jpg",
+          "sha256": "c54ae10f05e13aec1dcd4409424e90a686e1b5c063cffce4747ee90afebda203",
+          "decodedRgbSha256": "b9b0469c4b7f0437a5b8a89ba6e6a3424422e4cb57cd0a2b01c005577a5e3ee2",
+          "bytes": 40885,
+          "phash": "c7b821873d61e63c",
+          "dimensions": [
+            621,
+            933
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "57108c68be96fb6d8fa9",
+      "copies": [
+        {
+          "id": "57108c68be96fb6d8fa9",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0145 (1).jpg",
+          "sha256": "57108c68be96fb6d8fa9efe1f8c5965767f258beee0252c2cc6dd794e273be85",
+          "decodedRgbSha256": "bb0f9a70e59ed6e07193a72eb751f65aa2f9e0e3a4fb2b7a3188756ae6a13a1d",
+          "bytes": 5029884,
+          "phash": "f9925239ac6106bf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "57108c68be96fb6d8fa9",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0145.jpg",
+          "sha256": "57108c68be96fb6d8fa9efe1f8c5965767f258beee0252c2cc6dd794e273be85",
+          "decodedRgbSha256": "bb0f9a70e59ed6e07193a72eb751f65aa2f9e0e3a4fb2b7a3188756ae6a13a1d",
+          "bytes": 5029884,
+          "phash": "f9925239ac6106bf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "78f7d16e67307e209394",
+      "copies": [
+        {
+          "id": "78f7d16e67307e209394",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0017 (1).jpg",
+          "sha256": "78f7d16e67307e20939477806a1f129b61f16f83bdc30759009996d1087daa1a",
+          "decodedRgbSha256": "bcc0c3b67ff5075088c2e7f23a4777cc3963274432951c0768e89f471b56e6b1",
+          "bytes": 5209059,
+          "phash": "e1979f927c987890",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "78f7d16e67307e209394",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0017.jpg",
+          "sha256": "78f7d16e67307e20939477806a1f129b61f16f83bdc30759009996d1087daa1a",
+          "decodedRgbSha256": "bcc0c3b67ff5075088c2e7f23a4777cc3963274432951c0768e89f471b56e6b1",
+          "bytes": 5209059,
+          "phash": "e1979f927c987890",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "99e30a0cc0ac493d6e8e",
+      "copies": [
+        {
+          "id": "99e30a0cc0ac493d6e8e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0070 (1).jpg",
+          "sha256": "99e30a0cc0ac493d6e8e6709dfc5bcbaf06b631ad01c5e069900aaaf3ad4ddc4",
+          "decodedRgbSha256": "bcde26b599843dc96c3e9d985e7df6c9d3f398353811adf2bf54ae8e87f836d9",
+          "bytes": 4568768,
+          "phash": "cc347ecd224fa549",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "99e30a0cc0ac493d6e8e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0070.jpg",
+          "sha256": "99e30a0cc0ac493d6e8e6709dfc5bcbaf06b631ad01c5e069900aaaf3ad4ddc4",
+          "decodedRgbSha256": "bcde26b599843dc96c3e9d985e7df6c9d3f398353811adf2bf54ae8e87f836d9",
+          "bytes": 4568768,
+          "phash": "cc347ecd224fa549",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "784279a27b9e4630d934",
+      "copies": [
+        {
+          "id": "784279a27b9e4630d934",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0115 (1).jpg",
+          "sha256": "784279a27b9e4630d9345bcd92b6abab2f993b9cc0f5eacfc37de0fb0ce2e96d",
+          "decodedRgbSha256": "bd1a393c6ae0da6ea5d5196ee5a1ea7c00ae35f986f9f4693c91bdbbff61379a",
+          "bytes": 3180850,
+          "phash": "dbd5adc0e4d03a19",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "784279a27b9e4630d934",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0115.jpg",
+          "sha256": "784279a27b9e4630d9345bcd92b6abab2f993b9cc0f5eacfc37de0fb0ce2e96d",
+          "decodedRgbSha256": "bd1a393c6ae0da6ea5d5196ee5a1ea7c00ae35f986f9f4693c91bdbbff61379a",
+          "bytes": 3180850,
+          "phash": "dbd5adc0e4d03a19",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "2d334f41d94fbc5f76ae",
+      "copies": [
+        {
+          "id": "2d334f41d94fbc5f76ae",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0104 (1).jpg",
+          "sha256": "2d334f41d94fbc5f76aee2abd0598b7d26e789c21e72f106850910a761077eb0",
+          "decodedRgbSha256": "bf1c7a8245829ca074386a09bd96731f514c19c689ff30103ca484ed20adb57b",
+          "bytes": 4548597,
+          "phash": "b5d22c2bc671991b",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "2d334f41d94fbc5f76ae",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0104.jpg",
+          "sha256": "2d334f41d94fbc5f76aee2abd0598b7d26e789c21e72f106850910a761077eb0",
+          "decodedRgbSha256": "bf1c7a8245829ca074386a09bd96731f514c19c689ff30103ca484ed20adb57b",
+          "bytes": 4548597,
+          "phash": "b5d22c2bc671991b",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "ec120937e1fe8b47bebd",
+      "copies": [
+        {
+          "id": "ec120937e1fe8b47bebd",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0031 (1).jpg",
+          "sha256": "ec120937e1fe8b47bebd72b9f0ebfb631fdd55ebdf91ab1e4d7da66ea446af81",
+          "decodedRgbSha256": "bfbe724ffa1fb4b0f89552fb80d81e63329807fc56294e888d77f7eaa6205e88",
+          "bytes": 4643646,
+          "phash": "ad7b276b8b58c105",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "ec120937e1fe8b47bebd",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0031.jpg",
+          "sha256": "ec120937e1fe8b47bebd72b9f0ebfb631fdd55ebdf91ab1e4d7da66ea446af81",
+          "decodedRgbSha256": "bfbe724ffa1fb4b0f89552fb80d81e63329807fc56294e888d77f7eaa6205e88",
+          "bytes": 4643646,
+          "phash": "ad7b276b8b58c105",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "15e5bd861f77647b18fc",
+      "copies": [
+        {
+          "id": "15e5bd861f77647b18fc",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0023 (1).jpg",
+          "sha256": "15e5bd861f77647b18fcc717178deb6edc93143421cb35465af673b7776fe3e4",
+          "decodedRgbSha256": "bfd60e969e0e9be8b5ff162a48d1d3ded692e6dfce49c501609c1cff5e3d9abe",
+          "bytes": 4138668,
+          "phash": "9ab3e4818788c7cf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "15e5bd861f77647b18fc",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0023.jpg",
+          "sha256": "15e5bd861f77647b18fcc717178deb6edc93143421cb35465af673b7776fe3e4",
+          "decodedRgbSha256": "bfd60e969e0e9be8b5ff162a48d1d3ded692e6dfce49c501609c1cff5e3d9abe",
+          "bytes": 4138668,
+          "phash": "9ab3e4818788c7cf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "091fa13af09cd007d714",
+      "copies": [
+        {
+          "id": "091fa13af09cd007d714",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0137 (1).jpg",
+          "sha256": "091fa13af09cd007d7144edeab7e5f89dc9b261baf00d8391010a335c5224dda",
+          "decodedRgbSha256": "c176e1c420fdf382bb18469350cd3a5bd2b536cb9d09b4d08fbba45a4f66c1c4",
+          "bytes": 5395406,
+          "phash": "93f3601afdce0b84",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "091fa13af09cd007d714",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0137.jpg",
+          "sha256": "091fa13af09cd007d7144edeab7e5f89dc9b261baf00d8391010a335c5224dda",
+          "decodedRgbSha256": "c176e1c420fdf382bb18469350cd3a5bd2b536cb9d09b4d08fbba45a4f66c1c4",
+          "bytes": 5395406,
+          "phash": "93f3601afdce0b84",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "78e6593df96524b29929",
+      "copies": [
+        {
+          "id": "78e6593df96524b29929",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0064 (1).jpg",
+          "sha256": "78e6593df96524b29929dd33439f041d58f0997717e25564505e4e8ed0ac1f10",
+          "decodedRgbSha256": "c36af9997ea2997b9f0493f5d537acc178d23c6bce184d0de138a947eb63fa08",
+          "bytes": 5110778,
+          "phash": "e207759652da1ccb",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "78e6593df96524b29929",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0064.jpg",
+          "sha256": "78e6593df96524b29929dd33439f041d58f0997717e25564505e4e8ed0ac1f10",
+          "decodedRgbSha256": "c36af9997ea2997b9f0493f5d537acc178d23c6bce184d0de138a947eb63fa08",
+          "bytes": 5110778,
+          "phash": "e207759652da1ccb",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "fbd208ce4f757d4cf9da",
+      "copies": [
+        {
+          "id": "fbd208ce4f757d4cf9da",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0130 (1).jpg",
+          "sha256": "fbd208ce4f757d4cf9da782b01b708a1808ff8102019acb891bc07f47b14af63",
+          "decodedRgbSha256": "c3f6d86cd897a392ac0ac0a7b7570d8e571806b64d1e57add1aadc6449c6fbb8",
+          "bytes": 3723236,
+          "phash": "b19527232b4f6a1e",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "fbd208ce4f757d4cf9da",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0130.jpg",
+          "sha256": "fbd208ce4f757d4cf9da782b01b708a1808ff8102019acb891bc07f47b14af63",
+          "decodedRgbSha256": "c3f6d86cd897a392ac0ac0a7b7570d8e571806b64d1e57add1aadc6449c6fbb8",
+          "bytes": 3723236,
+          "phash": "b19527232b4f6a1e",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "9b1aec72899d45808681",
+      "copies": [
+        {
+          "id": "9b1aec72899d45808681",
+          "pool": "oe",
+          "sourceRelativePath": "Arum lobe_0003.jpg",
+          "sha256": "9b1aec72899d458086818455def27c29b3e25bb0175b380ae187900cebaf9e6d",
+          "decodedRgbSha256": "c43999d47c2ed301b15b0e8102cdf7d3db61d8cfab0fdd3502e6f42460a5c498",
+          "bytes": 4037629,
+          "phash": "aedbc82dc1c084fe",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "9b1aec72899d45808681",
+          "pool": "oe",
+          "sourceRelativePath": "Arum lobe_0004.jpg",
+          "sha256": "9b1aec72899d458086818455def27c29b3e25bb0175b380ae187900cebaf9e6d",
+          "decodedRgbSha256": "c43999d47c2ed301b15b0e8102cdf7d3db61d8cfab0fdd3502e6f42460a5c498",
+          "bytes": 4037629,
+          "phash": "aedbc82dc1c084fe",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "a6128e7e6a46ccdf1dd5",
+      "copies": [
+        {
+          "id": "a6128e7e6a46ccdf1dd5",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0054 (1).jpg",
+          "sha256": "a6128e7e6a46ccdf1dd5e1a2c8e3f69d182846dd3ce3b74caa5fe77de8d1ca48",
+          "decodedRgbSha256": "c6ae9303fe3b279b0a9f9cf3a6a1f1bfec6270c366a5f313af6ffed35b6defad",
+          "bytes": 3969982,
+          "phash": "f4552366da3ea113",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "a6128e7e6a46ccdf1dd5",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0054.jpg",
+          "sha256": "a6128e7e6a46ccdf1dd5e1a2c8e3f69d182846dd3ce3b74caa5fe77de8d1ca48",
+          "decodedRgbSha256": "c6ae9303fe3b279b0a9f9cf3a6a1f1bfec6270c366a5f313af6ffed35b6defad",
+          "bytes": 3969982,
+          "phash": "f4552366da3ea113",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "e6900333f5f05ec85aed",
+      "copies": [
+        {
+          "id": "e6900333f5f05ec85aed",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0040 (1).jpg",
+          "sha256": "e6900333f5f05ec85aed62beecf1dd8da0b85e7e8a3d00ddaa37d3e1a540e9e1",
+          "decodedRgbSha256": "c6d6ee9472af0fb9183c14cc48f61435eb892dacaf19e73ba410dcd911908ac1",
+          "bytes": 4771042,
+          "phash": "847f3064889b5abf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "e6900333f5f05ec85aed",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0040.jpg",
+          "sha256": "e6900333f5f05ec85aed62beecf1dd8da0b85e7e8a3d00ddaa37d3e1a540e9e1",
+          "decodedRgbSha256": "c6d6ee9472af0fb9183c14cc48f61435eb892dacaf19e73ba410dcd911908ac1",
+          "bytes": 4771042,
+          "phash": "847f3064889b5abf",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "2d9535211e4123ddae63",
+      "copies": [
+        {
+          "id": "2d9535211e4123ddae63",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0101 (1).jpg",
+          "sha256": "2d9535211e4123ddae631bec3002d89d63703a2626a9abf6bbfa39d6e14e43de",
+          "decodedRgbSha256": "c6e924e14b35a932f57118d53eed12418cbcb6d956ec0e15799b7a097fbdc508",
+          "bytes": 4973682,
+          "phash": "99fb45527a1c8a35",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "2d9535211e4123ddae63",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0101.jpg",
+          "sha256": "2d9535211e4123ddae631bec3002d89d63703a2626a9abf6bbfa39d6e14e43de",
+          "decodedRgbSha256": "c6e924e14b35a932f57118d53eed12418cbcb6d956ec0e15799b7a097fbdc508",
+          "bytes": 4973682,
+          "phash": "99fb45527a1c8a35",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "fe1ecdf65f942c9af98d",
+      "copies": [
+        {
+          "id": "fe1ecdf65f942c9af98d",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0114 (1).jpg",
+          "sha256": "fe1ecdf65f942c9af98dd37cc0a7395e3d325df34d2f6f51c507874fcf746b98",
+          "decodedRgbSha256": "c78407c50522b3314ef52da8518723251ed1c450a1e2909c5c3b6ce2af86e735",
+          "bytes": 5266737,
+          "phash": "c609783af077648f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "fe1ecdf65f942c9af98d",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0114.jpg",
+          "sha256": "fe1ecdf65f942c9af98dd37cc0a7395e3d325df34d2f6f51c507874fcf746b98",
+          "decodedRgbSha256": "c78407c50522b3314ef52da8518723251ed1c450a1e2909c5c3b6ce2af86e735",
+          "bytes": 5266737,
+          "phash": "c609783af077648f",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "9e805e2818321f34f80a",
+      "copies": [
+        {
+          "id": "9e805e2818321f34f80a",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0025 (1).jpg",
+          "sha256": "9e805e2818321f34f80a64f4b32214cf079d0681b0fb3bb00cc0884969af75d8",
+          "decodedRgbSha256": "c9c7165dcf3cd68214af90dab6f16124d51114c11eba92c13c0d618c708e570c",
+          "bytes": 4356467,
+          "phash": "92818e5e8d585cfe",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "9e805e2818321f34f80a",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0025.jpg",
+          "sha256": "9e805e2818321f34f80a64f4b32214cf079d0681b0fb3bb00cc0884969af75d8",
+          "decodedRgbSha256": "c9c7165dcf3cd68214af90dab6f16124d51114c11eba92c13c0d618c708e570c",
+          "bytes": 4356467,
+          "phash": "92818e5e8d585cfe",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "1ef94fa1e059ab7394e8",
+      "copies": [
+        {
+          "id": "1ef94fa1e059ab7394e8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0125 (1).jpg",
+          "sha256": "1ef94fa1e059ab7394e8e730399fee6397f8524f093ce26eb0e2e1cdc6aea24c",
+          "decodedRgbSha256": "cb31d00be8aee90ac49afc1dbfd999cf6433b15c783efa30291c5bcf0cc75a17",
+          "bytes": 3643806,
+          "phash": "fac0f9a5a2e8868b",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "1ef94fa1e059ab7394e8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0125.jpg",
+          "sha256": "1ef94fa1e059ab7394e8e730399fee6397f8524f093ce26eb0e2e1cdc6aea24c",
+          "decodedRgbSha256": "cb31d00be8aee90ac49afc1dbfd999cf6433b15c783efa30291c5bcf0cc75a17",
+          "bytes": 3643806,
+          "phash": "fac0f9a5a2e8868b",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "1d724062220c50ad685c",
+      "copies": [
+        {
+          "id": "1d724062220c50ad685c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0113 (1).jpg",
+          "sha256": "1d724062220c50ad685cd1beb22225c7b241e34400f1f5eea66b542f770fe4be",
+          "decodedRgbSha256": "cb8c11d3cb9020e87c23204e9044d7b8127043a3e9c6b66ff6c66b7ca8e30a37",
+          "bytes": 5195167,
+          "phash": "c71c672760721f8b",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "1d724062220c50ad685c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0113.jpg",
+          "sha256": "1d724062220c50ad685cd1beb22225c7b241e34400f1f5eea66b542f770fe4be",
+          "decodedRgbSha256": "cb8c11d3cb9020e87c23204e9044d7b8127043a3e9c6b66ff6c66b7ca8e30a37",
+          "bytes": 5195167,
+          "phash": "c71c672760721f8b",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "523b52f70b1ec7552e8c",
+      "copies": [
+        {
+          "id": "523b52f70b1ec7552e8c",
+          "pool": "oe",
+          "sourceRelativePath": "IMG-20241202-WA0156 (1).jpg",
+          "sha256": "523b52f70b1ec7552e8c9f96b6d062e1f1f1bc03ed392006ed62393bca34073c",
+          "decodedRgbSha256": "cdd983c63b5cb8142a3a90ae9fb1896cbd7489d183c0ffd4e35972e3ff35a8a4",
+          "bytes": 262716,
+          "phash": "98c3f61c49d8b6a6",
+          "dimensions": [
+            3472,
+            4624
+          ]
+        },
+        {
+          "id": "523b52f70b1ec7552e8c",
+          "pool": "oe",
+          "sourceRelativePath": "IMG-20241202-WA0156.jpg",
+          "sha256": "523b52f70b1ec7552e8c9f96b6d062e1f1f1bc03ed392006ed62393bca34073c",
+          "decodedRgbSha256": "cdd983c63b5cb8142a3a90ae9fb1896cbd7489d183c0ffd4e35972e3ff35a8a4",
+          "bytes": 262716,
+          "phash": "98c3f61c49d8b6a6",
+          "dimensions": [
+            3472,
+            4624
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "91b0aa036d5549284201",
+      "copies": [
+        {
+          "id": "91b0aa036d5549284201",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0013 (1).jpg",
+          "sha256": "91b0aa036d5549284201ea7b5afbf08dcdf1dcb9142beb8cc7461e7ab25b0681",
+          "decodedRgbSha256": "ce739a883fc22ee0f803c02b266fb164bffe36ab26c3eee37cbf2bd04042e12a",
+          "bytes": 4598903,
+          "phash": "aab57461183dcd2d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "91b0aa036d5549284201",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0013.jpg",
+          "sha256": "91b0aa036d5549284201ea7b5afbf08dcdf1dcb9142beb8cc7461e7ab25b0681",
+          "decodedRgbSha256": "ce739a883fc22ee0f803c02b266fb164bffe36ab26c3eee37cbf2bd04042e12a",
+          "bytes": 4598903,
+          "phash": "aab57461183dcd2d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "4084b7c44d008f0a5869",
+      "copies": [
+        {
+          "id": "4084b7c44d008f0a5869",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0140 (1).jpg",
+          "sha256": "4084b7c44d008f0a586949ed6ec2c6fb039b3fc807abbbba4cfb0fbaf4d0c2d8",
+          "decodedRgbSha256": "cecd8135711859e3e982c1a3d3c23af2a843b60c455f397393dd62a470ac1838",
+          "bytes": 5554802,
+          "phash": "d5614bf235e0fc24",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "4084b7c44d008f0a5869",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0140.jpg",
+          "sha256": "4084b7c44d008f0a586949ed6ec2c6fb039b3fc807abbbba4cfb0fbaf4d0c2d8",
+          "decodedRgbSha256": "cecd8135711859e3e982c1a3d3c23af2a843b60c455f397393dd62a470ac1838",
+          "bytes": 5554802,
+          "phash": "d5614bf235e0fc24",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "efb104b20f96a8a24ddd",
+      "copies": [
+        {
+          "id": "efb104b20f96a8a24ddd",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0061 (1).jpg",
+          "sha256": "efb104b20f96a8a24ddd57fadbc4364a4737dce8de19040b9251457aa5ad5d84",
+          "decodedRgbSha256": "d1b6cb07a29900a254aaffebde08fc0550f807d4def6f079824fdf381c6ebf16",
+          "bytes": 4838198,
+          "phash": "f8d36313c29f852c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "efb104b20f96a8a24ddd",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0061.jpg",
+          "sha256": "efb104b20f96a8a24ddd57fadbc4364a4737dce8de19040b9251457aa5ad5d84",
+          "decodedRgbSha256": "d1b6cb07a29900a254aaffebde08fc0550f807d4def6f079824fdf381c6ebf16",
+          "bytes": 4838198,
+          "phash": "f8d36313c29f852c",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "58fed557e5906b5437ce",
+      "copies": [
+        {
+          "id": "58fed557e5906b5437ce",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0158 (1).jpg",
+          "sha256": "58fed557e5906b5437ce5753099450643dfd8ad07dafa385f8de228613927100",
+          "decodedRgbSha256": "d2b354bfbf7b1dbb4b3c5e48255e907a3bc48f423772efab1b295f8c658bac77",
+          "bytes": 4963532,
+          "phash": "9dd07f0e6a3d2701",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "58fed557e5906b5437ce",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0158.jpg",
+          "sha256": "58fed557e5906b5437ce5753099450643dfd8ad07dafa385f8de228613927100",
+          "decodedRgbSha256": "d2b354bfbf7b1dbb4b3c5e48255e907a3bc48f423772efab1b295f8c658bac77",
+          "bytes": 4963532,
+          "phash": "9dd07f0e6a3d2701",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "7df5581904d2b4923d5e",
+      "copies": [
+        {
+          "id": "7df5581904d2b4923d5e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0123 (1).jpg",
+          "sha256": "7df5581904d2b4923d5e39fbede8c533bf3125e32c39da0e2519060eac949382",
+          "decodedRgbSha256": "d4ce5f31bacece54b70210a9a5889c2aaa64af1ea112754349592e8c9fb0e09c",
+          "bytes": 3481344,
+          "phash": "9a50a62f62a56b3e",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "7df5581904d2b4923d5e",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0123.jpg",
+          "sha256": "7df5581904d2b4923d5e39fbede8c533bf3125e32c39da0e2519060eac949382",
+          "decodedRgbSha256": "d4ce5f31bacece54b70210a9a5889c2aaa64af1ea112754349592e8c9fb0e09c",
+          "bytes": 3481344,
+          "phash": "9a50a62f62a56b3e",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "1bc839caa98e85dbff2a",
+      "copies": [
+        {
+          "id": "1bc839caa98e85dbff2a",
+          "pool": "oe",
+          "sourceRelativePath": "Arum lobe_0005.jpg",
+          "sha256": "1bc839caa98e85dbff2ae3174b28068cc090b07eee8709827e8caffa8778cde2",
+          "decodedRgbSha256": "d9432bb6118998351a206c212c1fa399d12d065f50e37a3906bd367799b2db48",
+          "bytes": 4022957,
+          "phash": "8b8374fe03fc1709",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "1bc839caa98e85dbff2a",
+          "pool": "oe",
+          "sourceRelativePath": "Arum lobe_0006.jpg",
+          "sha256": "1bc839caa98e85dbff2ae3174b28068cc090b07eee8709827e8caffa8778cde2",
+          "decodedRgbSha256": "d9432bb6118998351a206c212c1fa399d12d065f50e37a3906bd367799b2db48",
+          "bytes": 4022957,
+          "phash": "8b8374fe03fc1709",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "595b5ba03ef3fc9b56a7",
+      "copies": [
+        {
+          "id": "595b5ba03ef3fc9b56a7",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0073 (1).jpg",
+          "sha256": "595b5ba03ef3fc9b56a70f39234f3e8866e556612b63810ced941fdceb95ceed",
+          "decodedRgbSha256": "da853a0484936084035c83cde6d33e6083259a7c3849251b90ad35f6082dd91b",
+          "bytes": 4579182,
+          "phash": "c51c7052565b3e5d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "595b5ba03ef3fc9b56a7",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0073.jpg",
+          "sha256": "595b5ba03ef3fc9b56a70f39234f3e8866e556612b63810ced941fdceb95ceed",
+          "decodedRgbSha256": "da853a0484936084035c83cde6d33e6083259a7c3849251b90ad35f6082dd91b",
+          "bytes": 4579182,
+          "phash": "c51c7052565b3e5d",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "28023506d560fe25a7e8",
+      "copies": [
+        {
+          "id": "28023506d560fe25a7e8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0103 (1).jpg",
+          "sha256": "28023506d560fe25a7e8d8ebbf51c6536c639737268337c0cc5ea92e9da58c2c",
+          "decodedRgbSha256": "dc9b5ab869bd322dc14c14e8a4ddf89459b25f843fbcf35b1629a2260c15c359",
+          "bytes": 5031469,
+          "phash": "bd5710dbc063c457",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "28023506d560fe25a7e8",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0103.jpg",
+          "sha256": "28023506d560fe25a7e8d8ebbf51c6536c639737268337c0cc5ea92e9da58c2c",
+          "decodedRgbSha256": "dc9b5ab869bd322dc14c14e8a4ddf89459b25f843fbcf35b1629a2260c15c359",
+          "bytes": 5031469,
+          "phash": "bd5710dbc063c457",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "933c48693e6dc81631c7",
+      "copies": [
+        {
+          "id": "933c48693e6dc81631c7",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0084 (1).jpg",
+          "sha256": "933c48693e6dc81631c7d847060f2d0e98d3da051f2fb55817acdfd5fa576eb3",
+          "decodedRgbSha256": "dd10365ff437089f664cc08a8667adf94371d64cce93aa232df6b6869b0f5e26",
+          "bytes": 5641740,
+          "phash": "de01609e43bc7ab3",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "933c48693e6dc81631c7",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0084.jpg",
+          "sha256": "933c48693e6dc81631c7d847060f2d0e98d3da051f2fb55817acdfd5fa576eb3",
+          "decodedRgbSha256": "dd10365ff437089f664cc08a8667adf94371d64cce93aa232df6b6869b0f5e26",
+          "bytes": 5641740,
+          "phash": "de01609e43bc7ab3",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "45320f885d19d0d1b507",
+      "copies": [
+        {
+          "id": "45320f885d19d0d1b507",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0072 (1).jpg",
+          "sha256": "45320f885d19d0d1b507f0a16ae2df9a41213158b5da43f4073108a28096a610",
+          "decodedRgbSha256": "de565f5bee9dc64ed2e94b5ad88d5dbf1ed56a6634984b79073218da63ffa47c",
+          "bytes": 4623075,
+          "phash": "c54b1ee05ce15bb1",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "45320f885d19d0d1b507",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0072.jpg",
+          "sha256": "45320f885d19d0d1b507f0a16ae2df9a41213158b5da43f4073108a28096a610",
+          "decodedRgbSha256": "de565f5bee9dc64ed2e94b5ad88d5dbf1ed56a6634984b79073218da63ffa47c",
+          "bytes": 4623075,
+          "phash": "c54b1ee05ce15bb1",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "6aad56cc557075c778d4",
+      "copies": [
+        {
+          "id": "6aad56cc557075c778d4",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0088 (1).jpg",
+          "sha256": "6aad56cc557075c778d4321de584679f4b85e3ab329172b70302b6c083dcbb1a",
+          "decodedRgbSha256": "deadf723be631da3717b497e92c16c565744f88daa9f1c5a2ecd26b0eee30329",
+          "bytes": 5816714,
+          "phash": "8475606af86ae4ed",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "6aad56cc557075c778d4",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0088.jpg",
+          "sha256": "6aad56cc557075c778d4321de584679f4b85e3ab329172b70302b6c083dcbb1a",
+          "decodedRgbSha256": "deadf723be631da3717b497e92c16c565744f88daa9f1c5a2ecd26b0eee30329",
+          "bytes": 5816714,
+          "phash": "8475606af86ae4ed",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "80af421d6d0632ca2f39",
+      "copies": [
+        {
+          "id": "80af421d6d0632ca2f39",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0001 (1).jpg",
+          "sha256": "80af421d6d0632ca2f3947f5f7e22faa745c851a938bc2d110b8956c8fd8188b",
+          "decodedRgbSha256": "e179ca03419dfc20682559877130ad0ce80d4f4af13b2d7946c57b80eb1277ae",
+          "bytes": 3927352,
+          "phash": "ce8ecc859cdb83b0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "80af421d6d0632ca2f39",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0001.jpg",
+          "sha256": "80af421d6d0632ca2f3947f5f7e22faa745c851a938bc2d110b8956c8fd8188b",
+          "decodedRgbSha256": "e179ca03419dfc20682559877130ad0ce80d4f4af13b2d7946c57b80eb1277ae",
+          "bytes": 3927352,
+          "phash": "ce8ecc859cdb83b0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "82e79eb42b90e0ff9ef6",
+      "copies": [
+        {
+          "id": "82e79eb42b90e0ff9ef6",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0010 (1).jpg",
+          "sha256": "82e79eb42b90e0ff9ef63438e0ce2a7c1c695f0dbcd2e62006a7ca84bb93cc53",
+          "decodedRgbSha256": "e72d3899bbca25873f037a40f86959add2a7a30b5b342c082c7fb79a37f5f0db",
+          "bytes": 5217979,
+          "phash": "d5a7cc8cd05a9a55",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "82e79eb42b90e0ff9ef6",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0010.jpg",
+          "sha256": "82e79eb42b90e0ff9ef63438e0ce2a7c1c695f0dbcd2e62006a7ca84bb93cc53",
+          "decodedRgbSha256": "e72d3899bbca25873f037a40f86959add2a7a30b5b342c082c7fb79a37f5f0db",
+          "bytes": 5217979,
+          "phash": "d5a7cc8cd05a9a55",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "5b30c9f241ad1b1fa706",
+      "copies": [
+        {
+          "id": "5b30c9f241ad1b1fa706",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0076 (1).jpg",
+          "sha256": "5b30c9f241ad1b1fa706f407a35e91d41b3e87226d11106024d1a6b55c18eed3",
+          "decodedRgbSha256": "e86de941b061a90d27e16f5a042e400187ddf4254e933f439f6550057794ce26",
+          "bytes": 4125339,
+          "phash": "f6f02cf2c772a130",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "5b30c9f241ad1b1fa706",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0076.jpg",
+          "sha256": "5b30c9f241ad1b1fa706f407a35e91d41b3e87226d11106024d1a6b55c18eed3",
+          "decodedRgbSha256": "e86de941b061a90d27e16f5a042e400187ddf4254e933f439f6550057794ce26",
+          "bytes": 4125339,
+          "phash": "f6f02cf2c772a130",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "5734e84478d918fdebfd",
+      "copies": [
+        {
+          "id": "5734e84478d918fdebfd",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0129 (1).jpg",
+          "sha256": "5734e84478d918fdebfd4a97650aaa5f8d2b51e7cd796dce23bc52575af1e442",
+          "decodedRgbSha256": "eac9db614d4b554c053c5da47fc7299eacd1161ffa81d593443c404f2a556354",
+          "bytes": 3756144,
+          "phash": "ac85f0a6a6bc9cf0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "5734e84478d918fdebfd",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0129.jpg",
+          "sha256": "5734e84478d918fdebfd4a97650aaa5f8d2b51e7cd796dce23bc52575af1e442",
+          "decodedRgbSha256": "eac9db614d4b554c053c5da47fc7299eacd1161ffa81d593443c404f2a556354",
+          "bytes": 3756144,
+          "phash": "ac85f0a6a6bc9cf0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "99bd23241171ae9ec297",
+      "copies": [
+        {
+          "id": "99bd23241171ae9ec297",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0097 (1).jpg",
+          "sha256": "99bd23241171ae9ec29788f72f855ddb5308f44eae802f47fa919ee688d2df7f",
+          "decodedRgbSha256": "eee6860c26dff7265e552d54f74e228c2e59d7a48b28418ebd14328458d5d5e6",
+          "bytes": 4984499,
+          "phash": "9333f04dd478a347",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "99bd23241171ae9ec297",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0097.jpg",
+          "sha256": "99bd23241171ae9ec29788f72f855ddb5308f44eae802f47fa919ee688d2df7f",
+          "decodedRgbSha256": "eee6860c26dff7265e552d54f74e228c2e59d7a48b28418ebd14328458d5d5e6",
+          "bytes": 4984499,
+          "phash": "9333f04dd478a347",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "25300e3b36bc2016bb5b",
+      "copies": [
+        {
+          "id": "25300e3b36bc2016bb5b",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0146 (1).jpg",
+          "sha256": "25300e3b36bc2016bb5b10e8d0a604aa3ad4c061551800f86aa8d5e66255f165",
+          "decodedRgbSha256": "f0109f6e16931fbbf7f00e808b6565aa21dbedbd0d6619c5a9f09890a91ba49b",
+          "bytes": 4777506,
+          "phash": "bed05056ad43f98a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "25300e3b36bc2016bb5b",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0146.jpg",
+          "sha256": "25300e3b36bc2016bb5b10e8d0a604aa3ad4c061551800f86aa8d5e66255f165",
+          "decodedRgbSha256": "f0109f6e16931fbbf7f00e808b6565aa21dbedbd0d6619c5a9f09890a91ba49b",
+          "bytes": 4777506,
+          "phash": "bed05056ad43f98a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "0bb5918d0e55563fbb4f",
+      "copies": [
+        {
+          "id": "0bb5918d0e55563fbb4f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0099 (1).jpg",
+          "sha256": "0bb5918d0e55563fbb4fd367ace17b370724c800af6a46f6f480d398bd7bb34d",
+          "decodedRgbSha256": "f129acebfda39eea2ee2fec5fb9f15bc15a59fc4a1a7c061ccca7c9fe775b182",
+          "bytes": 4445882,
+          "phash": "883d4399651b7cf1",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "0bb5918d0e55563fbb4f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0099.jpg",
+          "sha256": "0bb5918d0e55563fbb4fd367ace17b370724c800af6a46f6f480d398bd7bb34d",
+          "decodedRgbSha256": "f129acebfda39eea2ee2fec5fb9f15bc15a59fc4a1a7c061ccca7c9fe775b182",
+          "bytes": 4445882,
+          "phash": "883d4399651b7cf1",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "cbde850297000fd0231c",
+      "copies": [
+        {
+          "id": "cbde850297000fd0231c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0048 (1).jpg",
+          "sha256": "cbde850297000fd0231c0c8c183cf317bdce765c0d2bd3616e85dd034c73091b",
+          "decodedRgbSha256": "f1fe2a3203081325f9e4ab389e82be99436872b8b398df4791d90277a964d40b",
+          "bytes": 5356242,
+          "phash": "e7603b73b6160d19",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "cbde850297000fd0231c",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0048.jpg",
+          "sha256": "cbde850297000fd0231c0c8c183cf317bdce765c0d2bd3616e85dd034c73091b",
+          "decodedRgbSha256": "f1fe2a3203081325f9e4ab389e82be99436872b8b398df4791d90277a964d40b",
+          "bytes": 5356242,
+          "phash": "e7603b73b6160d19",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "337d1de976c3ee0cf60d",
+      "copies": [
+        {
+          "id": "337d1de976c3ee0cf60d",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0142 (1).jpg",
+          "sha256": "337d1de976c3ee0cf60d2f268b33b243ce1cecce91af98ce38a7d60967729cdd",
+          "decodedRgbSha256": "f4dc269674638ff49272cc89038a50c41238f8c89016d978a0a79bbba6656845",
+          "bytes": 4201389,
+          "phash": "e99b3645a1c39cf0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "337d1de976c3ee0cf60d",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0142.jpg",
+          "sha256": "337d1de976c3ee0cf60d2f268b33b243ce1cecce91af98ce38a7d60967729cdd",
+          "decodedRgbSha256": "f4dc269674638ff49272cc89038a50c41238f8c89016d978a0a79bbba6656845",
+          "bytes": 4201389,
+          "phash": "e99b3645a1c39cf0",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "b0046e001e7585e8d348",
+      "copies": [
+        {
+          "id": "b0046e001e7585e8d348",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0134 (1).jpg",
+          "sha256": "b0046e001e7585e8d348f5d957b183dd02262428dd42157c98695e7efefd0af3",
+          "decodedRgbSha256": "f65729be91d342559a2ba2a8029d974d3bdcea217fffcc3a97fdf600295a887c",
+          "bytes": 6082866,
+          "phash": "af162b81c65acd56",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "b0046e001e7585e8d348",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0134.jpg",
+          "sha256": "b0046e001e7585e8d348f5d957b183dd02262428dd42157c98695e7efefd0af3",
+          "decodedRgbSha256": "f65729be91d342559a2ba2a8029d974d3bdcea217fffcc3a97fdf600295a887c",
+          "bytes": 6082866,
+          "phash": "af162b81c65acd56",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "751f4d01f10c7315c924",
+      "copies": [
+        {
+          "id": "751f4d01f10c7315c924",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0108 (1).jpg",
+          "sha256": "751f4d01f10c7315c9247046ea8817f5a97c2d68554e5a7406513ff20ca4bcc1",
+          "decodedRgbSha256": "f833b8967d99bdd87d0df614663bf0ec3393fc21e2241ffe3273ad5e490dc1d8",
+          "bytes": 5468598,
+          "phash": "d1c664ccceed1e09",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "751f4d01f10c7315c924",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0108.jpg",
+          "sha256": "751f4d01f10c7315c9247046ea8817f5a97c2d68554e5a7406513ff20ca4bcc1",
+          "decodedRgbSha256": "f833b8967d99bdd87d0df614663bf0ec3393fc21e2241ffe3273ad5e490dc1d8",
+          "bytes": 5468598,
+          "phash": "d1c664ccceed1e09",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "c919a6ace5486edc97f3",
+      "copies": [
+        {
+          "id": "c919a6ace5486edc97f3",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0068 (1).jpg",
+          "sha256": "c919a6ace5486edc97f39f8de584ea4a5f853cc9b996a6a71da6406b3837a01f",
+          "decodedRgbSha256": "f872b57fdc1f1b44d55fb36199f9c35bee823116fec851e7a976dd17e3c141ba",
+          "bytes": 4257650,
+          "phash": "cc39373641deb14a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "c919a6ace5486edc97f3",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0068.jpg",
+          "sha256": "c919a6ace5486edc97f39f8de584ea4a5f853cc9b996a6a71da6406b3837a01f",
+          "decodedRgbSha256": "f872b57fdc1f1b44d55fb36199f9c35bee823116fec851e7a976dd17e3c141ba",
+          "bytes": 4257650,
+          "phash": "cc39373641deb14a",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "252250dd814d15acf1ec",
+      "copies": [
+        {
+          "id": "252250dd814d15acf1ec",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0012 (1).jpg",
+          "sha256": "252250dd814d15acf1ec1cd1151b201fa5c683c1c50c2a7262788d84cdf2785c",
+          "decodedRgbSha256": "f88d571802b5ee9e318e9522919970b37aea31e660f677c8ddfd97f19be7f9fc",
+          "bytes": 5170538,
+          "phash": "9966291f1e3f6425",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "252250dd814d15acf1ec",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0012.jpg",
+          "sha256": "252250dd814d15acf1ec1cd1151b201fa5c683c1c50c2a7262788d84cdf2785c",
+          "decodedRgbSha256": "f88d571802b5ee9e318e9522919970b37aea31e660f677c8ddfd97f19be7f9fc",
+          "bytes": 5170538,
+          "phash": "9966291f1e3f6425",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    },
+    {
+      "keptId": "c14245006455b880a94f",
+      "copies": [
+        {
+          "id": "c14245006455b880a94f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0133 (1).jpg",
+          "sha256": "c14245006455b880a94f1d67b248d498188b20ebec7dc601817c8476c8bf8bc7",
+          "decodedRgbSha256": "fde67bca7471adac4cb2b5b59405100928c4ec11f6fd6e23bfd3aec50134849a",
+          "bytes": 5638902,
+          "phash": "de4341a4e90bd0fe",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        },
+        {
+          "id": "c14245006455b880a94f",
+          "pool": "oe",
+          "sourceRelativePath": "Flat bean _0133.jpg",
+          "sha256": "c14245006455b880a94f1d67b248d498188b20ebec7dc601817c8476c8bf8bc7",
+          "decodedRgbSha256": "fde67bca7471adac4cb2b5b59405100928c4ec11f6fd6e23bfd3aec50134849a",
+          "bytes": 5638902,
+          "phash": "de4341a4e90bd0fe",
+          "dimensions": [
+            3000,
+            4000
+          ]
+        }
+      ]
+    }
+  ],
+  "similarityPairs": [
+    {
+      "firstId": "44fae6b728a5d5c48448",
+      "secondId": "646e8237b98452916f6a",
+      "distance": 2
+    },
+    {
+      "firstId": "e11eccf548ee97f6b227",
+      "secondId": "81a42dadb3d7cb5b44d6",
+      "distance": 2
+    },
+    {
+      "firstId": "571df8058de73f86ae33",
+      "secondId": "ea0768e5d9f1b786c055",
+      "distance": 0
+    },
+    {
+      "firstId": "308d4e36bf8d3e74eaed",
+      "secondId": "f594372d3b9a7a146469",
+      "distance": 4
+    },
+    {
+      "firstId": "861535448761051b1963",
+      "secondId": "58ca573453fefc16371d",
+      "distance": 4
+    }
+  ]
+}

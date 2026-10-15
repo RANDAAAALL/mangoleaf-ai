@@ -14,7 +14,7 @@ interface ScanDetailsModalProps {
   onLanguageChange: (lang: Language) => void;
   onClose: () => void;
   // History records may have no display rows.
-  // diagnosedResultTabular?: DiagnosisResult["diagnosedResultTabular"];
+  diagnosedResultTabular?: DiagnosisResult["diagnosedResultTabular"];
 }
 
 export const ScanDetailsModal = memo(function ScanDetailsModal({
@@ -27,7 +27,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
   // An empty array hides rows for saved reports.
   // Enable or disable all three PANEL TABLE sections together.
   // PANEL TABLE 1/3: Comment only the parameter line below to hide the table.
-  // diagnosedResultTabular = [],
+  diagnosedResultTabular = [],
 }: ScanDetailsModalProps) {
   const t = translations[language];
   const badgeClass = getBadgeStyles(scan.disease_name);
@@ -35,35 +35,35 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
   // These percentages are model scores,
   // not measured accuracy. Rejected scans keep their existing diagnosis label.
   // PANEL TABLE 2/3 START: Comment the code below through its closing ); line.
-  // const classProbabilityTable = diagnosedResultTabular.length > 0 && (
-  //   <div className="overflow-x-auto border-t border-[#e2ebd9] pt-4">
-  //     <table className="w-full text-sm text-[#143519]">
-  //       <caption className="mb-2 text-center font-semibold">
-  //         {t.classProbabilityHeading}
-  //       </caption>
-  //       <thead>
-  //         <tr className="border-b border-[#e2ebd9]">
-  //           <th scope="col" className="py-2 text-left">
-  //             {t.classColumn}
-  //           </th>
-  //           <th scope="col" className="py-2 text-right">
-  //             {t.probabilityColumn}
-  //           </th>
-  //         </tr>
-  //       </thead>
-  //       <tbody>
-  //         {diagnosedResultTabular.map((row) => (
-  //           <tr key={row.Class} className="border-b border-[#e2ebd9]">
-  //             <td className="py-2">{row.Class}</td>
-  //             <td className="py-2 text-right tabular-nums">
-  //               {row.Probability}
-  //             </td>
-  //           </tr>
-  //         ))}
-  //       </tbody>
-  //     </table>
-  //   </div>
-  // );
+  const classProbabilityTable = diagnosedResultTabular.length > 0 && (
+    <div className="overflow-x-auto border-t border-[#e2ebd9] pt-4">
+      <table className="w-full text-sm text-[#143519]">
+        <caption className="mb-2 text-center font-semibold">
+          {t.classProbabilityHeading}
+        </caption>
+        <thead>
+          <tr className="border-b border-[#e2ebd9]">
+            <th scope="col" className="py-2 text-left">
+              {t.classColumn}
+            </th>
+            <th scope="col" className="py-2 text-right">
+              {t.probabilityColumn}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {diagnosedResultTabular.map((row) => (
+            <tr key={row.Class} className="border-b border-[#e2ebd9]">
+              <td className="py-2">{row.Class}</td>
+              <td className="py-2 text-right tabular-nums">
+                {row.Probability}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
   // PANEL TABLE 2/3 END
 
   return (
@@ -158,7 +158,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
 
             {
               // PANEL TABLE 3/3: Comment only the line below; keep the surrounding braces.
-              // classProbabilityTable
+              classProbabilityTable
             }
 
             {/* Treatment Guidelines Section */}
@@ -250,7 +250,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
           </div>
 
           {/* Modal Footer Action Button */}
-          <div className="pt-4 border-t border-[#e2ebd9] flex justify-end shrink-0">
+          <div className="border-[#e2ebd9] flex justify-end shrink-0">
             <button
               onClick={onClose}
               className="w-full sm:w-auto text-xs px-6 py-2.5 bg-[#277839] text-white hover:bg-[#1f622d] rounded-xl font-bold cursor-pointer transition-colors shadow-xs text-center"

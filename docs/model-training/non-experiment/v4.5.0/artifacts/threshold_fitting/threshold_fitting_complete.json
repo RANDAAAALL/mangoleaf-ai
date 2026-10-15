@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "experimentVersion": "v4.5.0",
+  "status": "completed threshold experiment; not adopted or deployed",
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.5.0/training/v4-5-0-training-20261011T063913Z-40b7b0fe",
+  "trainingCompleteSha256": "7bf59fb00836d554f25aa310bdb1f93db36a79b87ec72f5627f830e2302e3dd5",
+  "selectionSha256": "f356631f548304f32c11514c92e53615798c324384d5b3a24f4704efae53fe45",
+  "evaluationSha256": "10e058bed7812831cd618d0a6a27d406aa42ecf97de10a222c156ff2c1395737",
+  "evaluationInputsSha256": "b2b19112cda8ae16fd756417d115c9264de3880c84df55604c1b50748953eca2",
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": 0.0,
+    "entropyThreshold": 0.4
+  },
+  "oodCounts": {
+    "ood_report": 250,
+    "ood_tune": 250
+  },
+  "modelWeightsChangedByThisNotebook": false,
+  "reuseStatus": "Existing study pool plus newly collected photos; histories recorded. Not pristine external evidence.",
+  "browserPredictionParityMeasured": false,
+  "artifacts": {
+    "candidate_hashes.json": {
+      "sha256": "d144833fa6b18e25ac33df42d1cc50a872c59516cff5845af41d31dcbdc947c1",
+      "bytes": 666
+    },
+    "candidate_model.zip": {
+      "sha256": "6e52e1d4d8171d0fa643bb9a3d2061d40786426fa009e7e9550a7adebeaf61ee",
+      "bytes": 11095765
+    },
+    "candidate_model/group1-shard1of3.bin": {
+      "sha256": "3afb04fb4e127cdbe19f71e396966ddab8eb136522ebd1bc4c9eabfd68032692",
+      "bytes": 4194304
+    },
+    "candidate_model/group1-shard2of3.bin": {
+      "sha256": "72671218e2f2370306f99e28df46873e3063cab258463a1c9a4aec7e2b6dd619",
+      "bytes": 4194304
+    },
+    "candidate_model/group1-shard3of3.bin": {
+      "sha256": "075e1eabdb172384f5c5df496b211d5463eee12bc54cec6ca1d40ab0a73225d2",
+      "bytes": 3497804
+    },
+    "candidate_model/model.json": {
+      "sha256": "0fd24e1f0f6bd5595566b8f4aec130808fbd510208ed82abbdc4d319fd2aa2a1",
+      "bytes": 228393
+    },
+    "candidate_model/model_config.json": {
+      "sha256": "01caf6c73bd8223c82ce501dcff8d4df9dc906fb39e88860a021ee0602b14306",
+      "bytes": 1388
+    },
+    "confidence_only_mango_test_predictions.csv": {
+      "sha256": "3eb7689e32cdacfd99011f88621eea772560e937446450fcae8214ad58343c7c",
+      "bytes": 167356
+    },
+    "confidence_only_ood_report_predictions.csv": {
+      "sha256": "21d1669c38836bb3eb29227e988d5010873742445634398fab3e5ee29b16a30f",
+      "bytes": 93501
+    },
+    "evaluation.json": {
+      "sha256": "10e058bed7812831cd618d0a6a27d406aa42ecf97de10a222c156ff2c1395737",
+      "bytes": 21065
+    },
+    "evaluation_inputs.json": {
+      "sha256": "b2b19112cda8ae16fd756417d115c9264de3880c84df55604c1b50748953eca2",
+      "bytes": 595366
+    },
+    "evaluation_lock.json": {
+      "sha256": "0b9f6be2cb11804f04f0517ff7ecf573a0d20b72b35e7c92408f4d72e4640610",
+      "bytes": 330
+    },
+    "evaluation_started.json": {
+      "sha256": "1ee510802b581d1167a7f8b195d0c046474d8977b4012843a55f33d710e61eb0",
+      "bytes": 335
+    },
+    "figures/confusion_matrix.png": {
+      "sha256": "cfa3878867821c2d8656c0dbef389fe5d1021ff584f6ac14cea512e4c820e5c9",
+      "bytes": 337323
+    },
+    "figures/confusion_matrix_with_rejection.png": {
+      "sha256": "46daab3d00e5ea1dea3ded7046c31579af2179582f7ef450bc07c95575d06662",
+      "bytes": 357822
+    },
+    "figures/figure_captions.json": {
+      "sha256": "e65558000aefb77d5346fae124b562fa5d90104262cd965ae52c15d6f565b3ad",
+      "bytes": 1212
+    },
+    "figures/per_class_metrics.png": {
+      "sha256": "5584609ee8e15aa193ab90aa446b717f82e5c4a7355c90b3d199b70d3f284ca8",
+      "bytes": 163298
+    },
+    "figures/per_class_metrics_with_rejection.png": {
+      "sha256": "9f32f0f1fe4b02c1548e811191a799254570d0ccdd1a3c58ede2f4336ac6014d",
+      "bytes": 169521
+    },
+    "figures/threshold_search.png": {
+      "sha256": "bfaaf74ffe8a706c46e29689e94eae3b6fe1dd75d21cdecb8aec54ddc21fa131",
+      "bytes": 125825
+    },
+    "input_lock.json": {
+      "sha256": "56ea8d4713d0b9608213484df4c592d64cadd048e74cff2a5cd643f2146eafb1",
+      "bytes": 150
+    },
+    "mango_test_predictions.csv": {
+      "sha256": "6968f853dfdf9952e079c7cde21568c90d729156adc45dcde360c0be94bc284b",
+      "bytes": 167383
+    },
+    "ood_assignments.csv": {
+      "sha256": "6ca99b0c5e92bbf4b62ebb7f9286995406439fc7f0ff5393a05126a9ded49535",
+      "bytes": 71292
+    },
+    "ood_inventory.json": {
+      "sha256": "b9847b050c9302ab2fe285cb59fb06dfe703aab0141d364dc3f9225f648376a9",
+      "bytes": 249651
+    },
+    "ood_report_predictions.csv": {
+      "sha256": "876ebc352c5557e6f5ae3ab9fe0a457799f9ab0fa0694cc94091798e033952e2",
+      "bytes": 95442
+    },
+    "ood_review.csv": {
+      "sha256": "d25fec427170e38314c0bdf292701d8abdfe41b87fb0332a244daddac93a9053",
+      "bytes": 306439
+    },
+    "ood_tuning_predictions.csv": {
+      "sha256": "3858a4d4eb72445b67c37ab53ee11b142d13e3bc89afe1d3d5e9a2c75991e0ab",
+      "bytes": 95174
+    },
+    "raw_per_class_metrics.csv": {
+      "sha256": "ebb540d5b426b227b6b03867620bcd5aca25c4685cc5bb95a6c57f0f0ce11b9e",
+      "bytes": 497
+    },
+    "rejection_aware_per_class_metrics.csv": {
+      "sha256": "d55a93d875f292d8781daf718ae3b08351460baad16135bd5e6915a32dcda67e",
+      "bytes": 541
+    },
+    "review_contact_sheets/ood_01.jpg": {
+      "sha256": "adb9aaafcf8fa8b466742a0aed02b85dc453b76e9840f8c6a147f2a526f749ca",
+      "bytes": 344351
+    },
+    "review_contact_sheets/ood_02.jpg": {
+      "sha256": "6c8a5ef17edeffa1ae0669828cc1896e7467958d79919a4e4128d5a2ef561ecf",
+      "bytes": 340967
+    },
+    "review_contact_sheets/ood_03.jpg": {
+      "sha256": "5e3741103b6628c2c74cc4d19326544266ebf2fdc8513e857366d8cb34741b14",
+      "bytes": 364067
+    },
+    "review_contact_sheets/ood_04.jpg": {
+      "sha256": "c53a150b80ff88da39974c85c6eb7c5dc0cb023683fed0aabedb2aa9e43d2bc7",
+      "bytes": 290376
+    },
+    "review_contact_sheets/ood_05.jpg": {
+      "sha256": "6f9bbbd282e2202cd56f1a0219c7954285b7edd332df8495e78e2250d6e0c621",
+      "bytes": 325477
+    },
+    "review_contact_sheets/ood_06.jpg": {
+      "sha256": "922c2e6a4b44d3451c5c73560e35694a25615ed93a191d04e846c0aee3d06650",
+      "bytes": 355263
+    },
+    "review_contact_sheets/ood_07.jpg": {
+      "sha256": "61ad128dd5dcef1bda8f40270b41ee4ae154c159dc2a153769b3b77fd897d00b",
+      "bytes": 427805
+    },
+    "review_contact_sheets/ood_08.jpg": {
+      "sha256": "61f121a01a6cbe0dc23c4171fbcc49a4b1ab95f8712c8bc5e16f69d5a31359dc",
+      "bytes": 489730
+    },
+    "review_contact_sheets/ood_09.jpg": {
+      "sha256": "0a18c2598acc07db06c7ac76768516fb3365a0271a283ac60355c6c3ab7506a0",
+      "bytes": 448694
+    },
+    "review_contact_sheets/ood_10.jpg": {
+      "sha256": "b956e3f27d5b6f651d701a22bdbe0ffa1d021f1aceca6aa4b47fd8c0c4c1c9a0",
+      "bytes": 320630
+    },
+    "review_contact_sheets/ood_11.jpg": {
+      "sha256": "a6c0d5c5222ab5e99410c16c20d6957eefb6123944978a442ef5fd4c4e1b2087",
+      "bytes": 316480
+    },
+    "review_contact_sheets/ood_12.jpg": {
+      "sha256": "3a7cb67c1f7988d05d6ea8093b0a99f2b42d015d47b9e2779c69961c5b27be1e",
+      "bytes": 290386
+    },
+    "review_contact_sheets/ood_13.jpg": {
+      "sha256": "37647cc8e97388e8f4c289b0e7b57064e9c6453f5ef015a4fd3e2c138b479387",
+      "bytes": 352431
+    },
+    "review_contact_sheets/ood_14.jpg": {
+      "sha256": "834e76800bf7daac0379c5e31e6058109d3206164396fce71e2d1898b900d03f",
+      "bytes": 372435
+    },
+    "review_contact_sheets/ood_15.jpg": {
+      "sha256": "48c339bd92f55a086982a47f3a31c25ae32acedf88df493683b9609ce47b6324",
+      "bytes": 450329
+    },
+    "review_contact_sheets/ood_16.jpg": {
+      "sha256": "a32afe0aac62fc302a1e7b8a45aee682175feeab9a372215d5ffdced84b4f8da",
+      "bytes": 378375
+    },
+    "review_contact_sheets/ood_17.jpg": {
+      "sha256": "4d178fba48c8dcf78be61658480325537c3802526bf4dbfb6dca7d98eb3dd7dd",
+      "bytes": 380380
+    },
+    "review_contact_sheets/ood_18.jpg": {
+      "sha256": "dcf0ba8520242cb9441a2da225bf80e8c055577622f89c85a8febc7e4e044b2b",
+      "bytes": 354499
+    },
+    "review_contact_sheets/ood_19.jpg": {
+      "sha256": "ac9773067c2e827cace3da4affc1b7aa62b837f4112196393b767382f9d01405",
+      "bytes": 339120
+    },
+    "review_contact_sheets/ood_20.jpg": {
+      "sha256": "b4efa914d9ea0090ca952d84a8441793d56f0b7a2d0982c4f7823251daf2ec24",
+      "bytes": 344781
+    },
+    "runtime.json": {
+      "sha256": "2fc76001483e2d62675950543e2514bb14820778b24fd2d7e09ff465260e90ca",
+      "bytes": 888
+    },
+    "runtime_preflight/installation.json": {
+      "sha256": "3ce358a27d076a9f8151c79cf611ce85ba6963e5b7e4558129df9ef85db65e01",
+      "bytes": 550
+    },
+    "runtime_preflight/installation.log": {
+      "sha256": "ccc9b70c1c5a08b7001af2dcee82e03d355bdf22402b7828a41ed4b71cb707ea",
+      "bytes": 15213
+    },
+    "runtime_preflight/pip-bootstrap.log": {
+      "sha256": "f6dae8f18d51b28cc02fd8c63ebb50fbde461d3821ee7f98c3911576e28ba5ab",
+      "bytes": 502
+    },
+    "runtime_preflight/provider-pip-check.log": {
+      "sha256": "37d1424e7e7baf5773da177026d9e79e132c00d72d45d7745332ef49fa5244d7",
+      "bytes": 382
+    },
+    "runtime_preflight/training-audit.json": {
+      "sha256": "c25d028beb68e2f50db135e82b02a282f9ed4141c63da7c3d089619774bd964f",
+      "bytes": 4016
+    },
+    "runtime_preflight/training-audit.log": {
+      "sha256": "6d5085911020ff44e3db97df2f5318e71b3072eae399a0f01982584df90b8b89",
+      "bytes": 266
+    },
+    "runtime_preflight/training-runtime-lock.txt": {
+      "sha256": "b7a918905890ee89515776a4ec07c20c66d0ae291e8f0408c253534d63cfc38a",
+      "bytes": 1254
+    },
+    "selected_thresholds.json": {
+      "sha256": "f356631f548304f32c11514c92e53615798c324384d5b3a24f4704efae53fe45",
+      "bytes": 1314
+    },
+    "selection_lock.json": {
+      "sha256": "832fc91cd9522a0accac3c09099d7c740ad537fea9db885c67927777a4937978",
+      "bytes": 334
+    },
+    "similarity_review.csv": {
+      "sha256": "e84ebe489d6388e148be00676b124aa760c43159ffaa63660a7706fc92f2471b",
+      "bytes": 107
+    },
+    "threshold_search.csv": {
+      "sha256": "9e87c34db76f101b8389a6887a9bb319bd31c6afe9195ae333283d5b7cb4c7a9",
+      "bytes": 575225
+    },
+    "training_reference.json": {
+      "sha256": "6416cb82d871d409a7176bf134f0eb190828a08c31cf6f193dd9235998a16ab8",
+      "bytes": 724
+    },
+    "validation_predictions.csv": {
+      "sha256": "2a5751ae95472f2da756907a489e0ddf1c8cc392d029886c90c726883f17ee1f",
+      "bytes": 167025
+    }
+  },
+  "finishedAt": "2026-10-11T18:07:50.394500+00:00"
+}

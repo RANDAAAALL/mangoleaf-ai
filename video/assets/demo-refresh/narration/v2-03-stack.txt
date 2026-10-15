@@ -1,0 +1,1 @@
+It is built with Next.js, React, Bun, TypeScript, Tailwind CSS, TensorFlow.js, Dexie, IndexedDB, Supabase, and Serwist. The model is MobileNetV3-Large.

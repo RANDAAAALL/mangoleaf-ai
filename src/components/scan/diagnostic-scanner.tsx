@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, memo } from "react";
 import { translations, type Language } from "@/lib/translations";
 import { Icon } from "@/components/brand/icon";
+import type { DiagnosisStage, DiagnosisError } from "@/lib/diagnosis-step";
 
 interface DiagnosticScannerProps {
   previewUrl: string | null;
@@ -10,8 +11,12 @@ interface DiagnosticScannerProps {
   isDuplicate: boolean;
   canRunDiagnosis: boolean;
   scanningProgress: number;
+  scanningStage: DiagnosisStage;
+  scanError: DiagnosisError | null;
   language: Language;
   onRunDiagnosis: () => void;
+  onCancelDiagnosis: () => void;
+  onReloadApp: () => void;
   onRetake: () => void;
   onClose: () => void;
   onViewSavedResult: () => void;
@@ -26,14 +31,32 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
   isDuplicate,
   canRunDiagnosis,
   scanningProgress,
+  scanningStage,
+  scanError,
   language,
   onRunDiagnosis,
+  onCancelDiagnosis,
+  onReloadApp,
   onRetake,
   onClose,
   onViewSavedResult,
   onRetryPhotoCheck,
 }: DiagnosticScannerProps) {
   const t = translations[language];
+  const scanningText = {
+    prepare: t.stagePreparingPhoto,
+    analyze: t.stageAnalyzingPhoto,
+    process: t.stagePreparingResult,
+    save: t.stageSavingResult,
+  }[scanningStage];
+  const requiresReload = scanError === "inference-pending";
+  const scanErrorText = requiresReload
+    ? t.scanInferencePendingText
+    : scanError === "timeout"
+      ? t.scanTimeoutText
+      : scanError === "cancelled"
+        ? t.scanCancelledText
+        : t.scanFailedText;
   const dialogRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
   const descriptionId = useId();
@@ -59,10 +82,11 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
   useEffect(() => {
     if (!previewUrl) return;
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !isScanning) {
+      if (event.key === "Escape") {
         event.preventDefault();
         event.stopPropagation();
-        onClose();
+        if (isScanning) onCancelDiagnosis();
+        else onClose();
         return;
       }
       if (event.key !== "Tab") return;
@@ -91,7 +115,7 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [previewUrl, isScanning, onClose]);
+  }, [previewUrl, isScanning, onClose, onCancelDiagnosis]);
 
   useEffect(() => {
     // A lookup or inference can remove the focused action. Keep focus local.
@@ -144,17 +168,20 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
             )}
 
             {/* Photo Thumbnail */}
-            <div className="relative w-48 h-48 shrink-0 rounded-2xl overflow-hidden border-2 border-[#277839] shadow-md">
-              <img
-                src={previewUrl}
-                alt={t.photoPreviewAlt}
-                className="w-full h-full object-contain"
-              />
-              {isScanning && (
-                <div className="absolute inset-0 bg-[#277839]/30 backdrop-blur-xs flex items-center justify-center">
-                  <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin" />
-                </div>
-              )}
+            <div className="relative w-48 h-48 shrink-0 rounded-2xl border-2 border-[#277839] shadow-md">
+              {/* Explicitly clip the filtered layer inside the border; rounded overflow alone can leak its square corners. */}
+              <div className="relative w-full h-full overflow-hidden rounded-[calc(1rem-2px)] [clip-path:inset(0_round_calc(1rem-2px))]">
+                <img
+                  src={previewUrl}
+                  alt={t.photoPreviewAlt}
+                  className="w-full h-full object-contain"
+                />
+                {isScanning && (
+                  <div className="absolute inset-0 rounded-[inherit] bg-[#277839]/30 backdrop-blur-xs flex items-center justify-center">
+                    <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Keep the live region mounted so completed checks are announced. */}
@@ -180,6 +207,11 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
                 {t.photoCheckFailedText}
               </p>
             )}
+            {!isScanning && scanError && (
+              <p role="alert" className="text-xs font-medium text-[#8a3d10]">
+                {scanErrorText}
+              </p>
+            )}
 
             {/* Scanning Progress Bar */}
             {isScanning ? (
@@ -194,8 +226,15 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
                   role="status"
                   className="text-xs font-semibold text-[#526856]"
                 >
-                  {t.runningAI} ({scanningProgress}%)
+                  {scanningText} ({scanningProgress}%)
                 </span>
+                <button
+                  type="button"
+                  onClick={onCancelDiagnosis}
+                  className="w-full py-2.5 bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold rounded-xl text-xs cursor-pointer"
+                >
+                  {t.cancelBtn}
+                </button>
               </div>
             ) : (
               /* Action Buttons Container (Responsive stacking on mobile, no text squishing!) */
@@ -205,21 +244,30 @@ export const DiagnosticScanner = memo(function DiagnosticScanner({
                   onClick={
                     isDuplicate
                       ? onClose
-                      : photoCheckFailed
-                        ? onRetryPhotoCheck
-                        : onRunDiagnosis
+                      : requiresReload
+                        ? onReloadApp
+                        : photoCheckFailed
+                          ? onRetryPhotoCheck
+                          : onRunDiagnosis
                   }
                   disabled={
                     isCheckingPhoto ||
-                    (!isDuplicate && !photoCheckFailed && !canRunDiagnosis)
+                    (!isDuplicate &&
+                      !photoCheckFailed &&
+                      !requiresReload &&
+                      !canRunDiagnosis)
                   }
                   className="w-full py-3 bg-[#277839] text-white hover:bg-[#1f622d] font-extrabold rounded-xl text-xs transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed order-1 sm:order-2"
                 >
                   {isDuplicate
                     ? t.cancelBtn
-                    : photoCheckFailed
-                      ? t.retryPhotoCheckBtn
-                      : t.runDiagnosisBtn}
+                    : requiresReload
+                      ? t.reloadAppBtn
+                      : photoCheckFailed
+                        ? t.retryPhotoCheckBtn
+                        : scanError
+                          ? t.retryDiagnosisBtn
+                          : t.runDiagnosisBtn}
                 </button>
                 <button
                   type="button"

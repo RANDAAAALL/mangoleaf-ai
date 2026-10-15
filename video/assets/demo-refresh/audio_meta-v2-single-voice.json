@@ -1,0 +1,125 @@
+{
+  "version": "v2-single-voice",
+  "provider": "edge-tts",
+  "voice": "en-US-JennyNeural",
+  "rate": "+14%",
+  "voices": [
+    {
+      "id": "v2single-info-01-title",
+      "path": "assets/voice/v2single-info-01-title.wav",
+      "duration_s": 2.016
+    },
+    {
+      "id": "v2single-info-02-overview",
+      "path": "assets/voice/v2single-info-02-overview.wav",
+      "duration_s": 20.784
+    },
+    {
+      "id": "v2single-info-03-classes",
+      "path": "assets/voice/v2single-info-03-classes.wav",
+      "duration_s": 13.368
+    },
+    {
+      "id": "v2single-info-04-stack",
+      "path": "assets/voice/v2single-info-04-stack.wav",
+      "duration_s": 15.768
+    },
+    {
+      "id": "v2single-info-05-walkthrough",
+      "path": "assets/voice/v2single-info-05-walkthrough.wav",
+      "duration_s": 9.816
+    },
+    {
+      "id": "v2single-demo-01-intro",
+      "path": "assets/voice/v2single-demo-01-intro.wav",
+      "duration_s": 5.472
+    },
+    {
+      "id": "v2single-demo-02-take-photo",
+      "path": "assets/voice/v2single-demo-02-take-photo.wav",
+      "duration_s": 7.536
+    },
+    {
+      "id": "v2single-demo-03-capture",
+      "path": "assets/voice/v2single-demo-03-capture.wav",
+      "duration_s": 7.728
+    },
+    {
+      "id": "v2single-demo-04-review",
+      "path": "assets/voice/v2single-demo-04-review.wav",
+      "duration_s": 9.648
+    },
+    {
+      "id": "v2single-demo-05-wait",
+      "path": "assets/voice/v2single-demo-05-wait.wav",
+      "duration_s": 5.904
+    },
+    {
+      "id": "v2single-demo-06-result",
+      "path": "assets/voice/v2single-demo-06-result.wav",
+      "duration_s": 4.704
+    },
+    {
+      "id": "v2single-demo-07-bisaya",
+      "path": "assets/voice/v2single-demo-07-bisaya.wav",
+      "duration_s": 5.088
+    },
+    {
+      "id": "v2single-demo-08-history",
+      "path": "assets/voice/v2single-demo-08-history.wav",
+      "duration_s": 4.056
+    },
+    {
+      "id": "v2single-demo-09-open-scan",
+      "path": "assets/voice/v2single-demo-09-open-scan.wav",
+      "duration_s": 5.232
+    },
+    {
+      "id": "v2single-demo-10-language",
+      "path": "assets/voice/v2single-demo-10-language.wav",
+      "duration_s": 4.176
+    },
+    {
+      "id": "v2single-demo-11-bisaya-close",
+      "path": "assets/voice/v2single-demo-11-bisaya-close.wav",
+      "duration_s": 5.424
+    }
+  ],
+  "composition": {
+    "duration_s": 145.95,
+    "fps": 60,
+    "info_starts_s": [
+      4,
+      6.366,
+      27.5,
+      41.218,
+      57.336
+    ],
+    "demo_start_s": 67.652,
+    "voice_starts_s": [
+      67.752,
+      74.084,
+      82.48,
+      91.068,
+      101.576,
+      107.86,
+      113.424,
+      120.212,
+      125.128,
+      131.22,
+      135.776
+    ],
+    "click_starts_s": [
+      73.804,
+      82.2,
+      90.788,
+      101.296,
+      113.144,
+      119.092,
+      119.932,
+      124.848,
+      130.94
+    ],
+    "outro_start_s": 141.45
+  }
+}

@@ -1,0 +1,1 @@
+MangoLeaf AI supports seven classes: Anthracnose, Sooty Mold, Bacterial Canker, Mango Scab, Bacterial Black Spot, Healthy Leaf, and Healthy Fruit.

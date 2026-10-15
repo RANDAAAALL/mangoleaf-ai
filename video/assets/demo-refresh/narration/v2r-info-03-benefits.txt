@@ -1,0 +1,1 @@
+MangoLeaf AI requires no login or registration. It works offline, runs on-device AI diagnosis, provides English and Bisaya treatment guidance, and keeps Scan History.

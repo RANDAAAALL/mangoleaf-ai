@@ -8,9 +8,9 @@ This repository uses Next.js 16.3.8. APIs, conventions, and file structure may d
 
 - The main application is an offline-first static-export PWA under `src/`.
 - Browser-side diagnosis uses TensorFlow.js model assets from `public/model/`.
-- Dexie/IndexedDB is the local source of truth; Supabase provides synchronization, Storage, and guideline updates.
-- Cloud scan access must use the verified Supabase guest `owner_id`, not the caller-controlled browser `device_id`. Keep guest sign-in and cloud retries separate from local diagnosis and public guideline downloads.
-- Keep scan photos in the private `scans` bucket under the verified owner's folder. Store the bucket path and offline Blob, never a permanent public link or an expiring signed URL for new scans. Never automatically assign legacy cloud records to a guest using a device UUID.
+- Dexie/IndexedDB stores scan reports and compressed photos locally. Supabase provides public treatment-guideline HTTP downloads and Realtime updates only.
+- Do not create guest sessions or send scan/photo requests to Supabase. Preserve existing local reports and legacy metadata; do not resurrect hidden `pending-delete` rows. Guideline refreshes remain independent of local diagnosis and saving.
+- Keep scan photos as local Blobs. Never request legacy cloud URLs as a fallback. Existing cloud rows, private photos, users, and policies are preserved historical resources; changing or deleting them needs separate authorization. Any future cloud recovery must verify ownership rather than trust a device UUID.
 - Serwist generates `public/sw.js` from `src/sw.ts` during builds.
 - Keep `experimental.mcpServer: false` in `next.config.ts` so the development server does not expose `/_next/mcp` through public tunnels. This setting is independent of agent GitHub MCP connectors; allowed development origins are not authentication.
 

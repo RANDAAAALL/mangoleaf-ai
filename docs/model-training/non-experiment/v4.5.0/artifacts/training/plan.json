@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "experimentVersion": "v4.5.0",
+  "modelVersion": "model-v4.5.0-candidate",
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "seed": 42,
+  "imageSize": [
+    224,
+    224
+  ],
+  "batchSize": 32,
+  "initialWeights": "ImageNet MobileNetV3Large; no prior MangoLeaf model",
+  "splitPolicy": "Fresh grouped allocation; all seven preview groups reserved in validation before predictions",
+  "splitFractionsTarget": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "stage1": {
+    "epochs": 5,
+    "learningRate": 0.001,
+    "backboneFrozen": true
+  },
+  "stage2": {
+    "epochs": 10,
+    "learningRate": 1e-05,
+    "batchNormalizationFrozen": true
+  },
+  "modelSelection": "Lowest clean unweighted mango validation loss in each stage; final checkpoint from stage 2",
+  "augmentation": {
+    "flip": "horizontal_and_vertical",
+    "rotationDegrees": 30,
+    "zoom": 0.2,
+    "shear": 0.2,
+    "brightness": 0.2,
+    "contrast": 0.1
+  },
+  "oe": {
+    "lossWeight": 0.5,
+    "target": "uniform over seven mango classes",
+    "loss": "negative mean log-softmax over classes; expectation on approved OE training photos",
+    "objective": "mean(class_weight * mango cross-entropy) + lossWeight * mean(OE uniform cross-entropy)",
+    "weightRationale": "0.5 is a starting research hyperparameter, not inferred from photo count or a proven MangoLeaf optimum",
+    "sampling": "One independently shuffled OE batch per mango batch, cycling as needed; reshuffle every epoch",
+    "approvedCount": 2011,
+    "accuracyIncludesOE": false,
+    "classWeightsIncludeOE": false,
+    "temperatureIncludesOE": false
+  },
+  "classWeightRule": "Balanced weights from mango training labels only",
+  "phashDistance": 5,
+  "preprocessing": "RGB decode; bilinear 224x224 without antialias; float32 0-255; MobileNetV3 internal rescaling",
+  "temperatureRule": "Validation mango negative log likelihood only; divide classifier logits once",
+  "heldOutOodCount": 500,
+  "expectedOodCount": 500,
+  "validationExamples": [
+    "ee9676472204c9cdd083",
+    "33409e67c75bacf91843",
+    "09778a641c62fbc9511e",
+    "bccae50356a84611268b",
+    "90a7907f7a259e404f6b",
+    "6e99067feab48b78d0e0",
+    "6c1c6c90f2dbfdb3ab1d"
+  ],
+  "testPredictionsRun": false,
+  "thresholdsFitted": false
+}

@@ -16,7 +16,7 @@ export const translations = {
     installGuideDesktopTitle: "Install MangoLeaf AI on your phone",
     installGuideMobileTitle: "Install MangoLeaf AI",
     installGuideDescription:
-      "Add MangoLeaf AI to your Home Screen for quick access. You can also keep using it in your browser.",
+      "Add MangoLeaf AI to your Home Screen for quick access. You can also keep using it in your phone browser.",
     installGuideQRDescription:
       "Scan this QR code using your phone camera, then tap the website link.",
     installGuideQRAlt: "QR code to open MangoLeaf AI on your phone",
@@ -112,8 +112,41 @@ export const translations = {
     photoCheckFailedText:
       "We could not check whether this photo was already scanned. Try again, or choose another photo.",
     retryPhotoCheckBtn: "Try again",
+    stagePreparingPhoto: "Preparing photo...",
+    stageAnalyzingPhoto: "Analyzing photo...",
+    stagePreparingResult: "Preparing result...",
+    stageSavingResult: "Saving result...",
+    scanFailedText:
+      "The scan could not finish. Try again, or choose another photo.",
+    scanTimeoutText: "This step took too long. Try again, or retake the photo.",
+    scanCancelledText:
+      "Scan cancelled. You can try again or choose another photo.",
+    scanInferencePendingText:
+      "The previous analysis has not finished. Reload the app to start a new scan.",
+    retryDiagnosisBtn: "Retry diagnosis",
+    reloadAppBtn: "Reload app",
+    modelLoadFailedText: "The AI could not start. Reload the app to try again.",
     photoCheckHint:
       "Check that one whole leaf or fruit is clearly visible, without blur, bright reflections, or deep shadows. Retake if needed.",
+
+    // Local scan storage recovery
+    storageFullTitle: "Device storage is full",
+    storageHelpLabel: "Storage recovery instructions",
+    storageFullText:
+      "This scan could not be saved. Delete scans you no longer need from History, then retry saving. No scans have been deleted automatically.",
+    storagePendingText:
+      "Your photo and result are kept only while this page stays open. Reloading or closing the app will lose this unsaved result.",
+    storageUnsavedTitle: "One scan is not saved yet",
+    storageManageHistoryBtn: "Open History",
+    storageRetrySaveBtn: "Retry save",
+    storageDiscardBtn: "Discard unsaved result",
+    storageSavingText: "Saving result…",
+    storageStillFullText:
+      "Storage is still full. Delete more scans or free space on your device, then retry.",
+    storageSaveFailedText:
+      "Saving failed. Your result is still unsaved. Try again.",
+    storageSaveTimeoutText:
+      "Saving took too long. Your result is still unsaved. Try again.",
 
     // How It Works Card
     HowItWorksTitle: "How it works?",
@@ -160,9 +193,9 @@ export const translations = {
     historyDeleteConfirmTitle: "Delete selected scans ({n})?",
     historyDeleteConfirmOneTitle: "Delete selected scan ({n})?",
     historyDeleteConfirmDescription:
-      "The selected reports and saved photos will be deleted. This cannot be undone. Linked cloud copies are removed after a successful sync.",
+      "The selected reports and saved photos will be deleted from this browser. This cannot be undone.",
     historyDeleteConfirmOneDescription:
-      "The selected report and saved photo will be deleted. This cannot be undone. Linked cloud copies are removed after a successful sync.",
+      "The selected report and saved photo will be deleted from this browser. This cannot be undone.",
     historyDeleteConfirmBtn: "Delete",
     historyDeletingBtn: "Deleting...",
     historyDeleteFailed:
@@ -233,9 +266,9 @@ export const translations = {
     aboutOnDeviceTitle: "On-device AI",
     aboutOnDeviceDesc:
       "AI inference happens directly on the device, allowing images to be analyzed locally.",
-    aboutSyncTitle: "Sync when connected",
+    aboutSyncTitle: "Updated treatment guidance",
     aboutSyncDesc:
-      "Scan records can be stored locally and synchronized when connectivity becomes available.",
+      "Treatment guidelines refresh when connected. Your scan history and photos stay in this browser.",
     aboutAiEngineHeading: "The AI Engine",
     aboutModelVersionLabel: "Current model for mango leaves and fruit",
     aboutModelArchitectureValue: "MobileNetV3",
@@ -274,11 +307,12 @@ export const translations = {
     healthyLabel: "Healthy Leaf and Healthy Fruit",
     healthyDesc: "Separate healthy results for mango leaves and fruit.",
     diagnosticScope:
-      "The model checks Anthracnose, Sooty Mold, Bacterial Canker, Bacterial Black Spot, Mango Scab, Healthy Leaf, and Healthy Fruit. A result below 70% confidence or outside the fitted margin and entropy limits is Uncertain.",
+      "The model checks Anthracnose, Sooty Mold, Bacterial Canker, Bacterial Black Spot, Mango Scab, Healthy Leaf, and Healthy Fruit. A result below 70% confidence is Uncertain.",
 
     // Bottom Navigation & Scan Sheet
     navScan: "Scan",
     scanSheetTitle: "Select Scan Option",
+    // scanSheetTitle: "Start a Scan",
     scanSheetTipsTitle: "Photo tips",
     scanSheetFramingLabel: "Framing:",
     scanSheetFramingTip:
@@ -306,6 +340,42 @@ export const translations = {
       "© 2026 MangoLeaf AI. Designed for the Future of Filipino Dabawenyo Agriculture.",
     privacyPolicy: "Privacy Policy",
     termsOfService: "Terms of Service",
+    legalCloseBtn: "Understood & Close",
+    privacyUpdated: "Last updated: October 15, 2026",
+    privacySections: [
+      {
+        title: "1. No account required",
+        text: "You can use MangoLeaf AI without registration or sign-in. The app does not request your name, email address, or phone number.",
+      },
+      {
+        title: "2. Photos and scan history stay on this device",
+        text: "The AI analyzes photos in your browser. Saved results and compressed photos are stored in this browser’s IndexedDB database, online or offline. New scans are not uploaded to Supabase.",
+      },
+      {
+        title: "3. Treatment guideline updates",
+        text: "When connected, the app downloads public treatment guidelines from Supabase and saves them on this device for offline reading. These requests do not include your scan photos or results.",
+      },
+      {
+        title: "4. Local storage and data loss",
+        text: "Scan history belongs to this browser profile. Clearing site data, removing the browser profile, or browser storage removal can erase it. There is no account or automatic cloud recovery. A storage-full warning lets you manage History and retry an unsaved result.",
+      },
+      {
+        title: "5. Deletion and earlier cloud copies",
+        text: "You can delete saved reports and photos from History. Deletion is permanent in this browser. Earlier app versions may have uploaded cloud copies; this version does not download or delete those earlier copies.",
+      },
+    ],
+    termsIntro:
+      "Terms of Service & Usage Guidelines | Philippine Carabao Mango Diagnostic System",
+    termsScopeTitle: "1. Scope of Application:",
+    termsScopeText:
+      "MangoLeaf AI is specifically designed to assist Filipino smallholder farmers in detecting pre-harvest diseases affecting Philippine Carabao Mango (Mangifera indica L.) leaves and green fruit.",
+    termsConfidenceTitle: "2. Diagnostic AI Confidence Threshold:",
+    termsGuidanceTitle: "3. Treatment Guidance Disclaimer:",
+    termsGuidanceText:
+      "All disease treatment protocols and reminders provided in this app are sourced from standardized agricultural guidelines published by DOST-PCAARRD and BAFS. Recommendations serve as advisory decision support and do not replace professional agricultural extension services.",
+    termsEthicsTitle: "4. Intellectual Property & Ethical Standards:",
+    termsEthicsText:
+      "Developed in compliance with Republic Act No. 8293 (Intellectual Property Code of the Philippines) and DOST-PHREB research ethics standards.",
   },
   bis: {
     // Navigation
@@ -420,8 +490,43 @@ export const translations = {
     photoCheckFailedText:
       "Wala masusi kung na-scan na kini nga litrato. Sulayi pag-usab, o pagpili og laing litrato.",
     retryPhotoCheckBtn: "Sulayi pag-usab",
+    stagePreparingPhoto: "Giandam ang litrato...",
+    stageAnalyzingPhoto: "Gisusi ang litrato...",
+    stagePreparingResult: "Giandam ang resulta...",
+    stageSavingResult: "Gitipigan ang resulta...",
+    scanFailedText:
+      "Wala mahuman ang scan. Sulayi pag-usab, o pagpili og laing litrato.",
+    scanTimeoutText:
+      "Dugay ra kaayo kini nga lakang. Sulayi pag-usab, o pagkuha og laing litrato.",
+    scanCancelledText:
+      "Gikansela ang scan. Mahimo kang mosulay pag-usab o mopili og laing litrato.",
+    scanInferencePendingText:
+      "Wala pa mahuman ang miaging pagsusi. I-reload ang app aron makasugod og bag-ong scan.",
+    retryDiagnosisBtn: "Sulayi pag-usab ang pagsusi",
+    reloadAppBtn: "I-reload ang app",
+    modelLoadFailedText:
+      "Wala makasugod ang AI. I-reload ang app aron mosulay pag-usab.",
     photoCheckHint:
       "Susiha nga klarong makita ang tibuok usa ka dahon o bunga sa mangga, nga dili hanap, silaw, o natabonan og baga nga landong. Pagkuha og laing litrato kung kinahanglan.",
+
+    // Local scan storage recovery
+    storageFullTitle: "Puno na ang storage sa device",
+    storageHelpLabel: "Mga giya sa pagbakante sa storage",
+    storageFullText:
+      "Wala matipig kini nga scan. I-delete sa Dating Scan ang mga scan nga dili na kinahanglan, dayon sulayi pagtipig pag-usab. Walay scan nga awtomatikong gi-delete.",
+    storagePendingText:
+      "Ang imong litrato ug resulta gitipigan lamang samtang abli pa kini nga pahina. Kung i-reload o isira ang app, mawala kini nga wala pa matipig nga resulta.",
+    storageUnsavedTitle: "Adunay usa ka scan nga wala pa matipig",
+    storageManageHistoryBtn: "Ablihi ang Dating Scan",
+    storageRetrySaveBtn: "Sulayi pagtipig pag-usab",
+    storageDiscardBtn: "Biyai ang wala matipig nga resulta",
+    storageSavingText: "Gitipigan ang resulta…",
+    storageStillFullText:
+      "Puno gihapon ang storage. I-delete ang dugang scan o pagbakante og lugar sa imong device, dayon sulayi pag-usab.",
+    storageSaveFailedText:
+      "Wala matipig ang resulta. Anaa pa kini apan wala pa matipig. Sulayi pag-usab.",
+    storageSaveTimeoutText:
+      "Nadugay ang pagtipig. Anaa pa ang resulta apan wala pa matipig. Sulayi pag-usab.",
 
     // How It Works Card
     HowItWorksTitle: "Unsaon ni pag-gamit?",
@@ -467,9 +572,9 @@ export const translations = {
     historyDeleteConfirmTitle: "I-delete ang mga gipiling scan ({n})?",
     historyDeleteConfirmOneTitle: "I-delete ang gipiling scan ({n})?",
     historyDeleteConfirmDescription:
-      "I-delete ang mga gipiling report ug natipig nga litrato. Dili na kini mabalik. Ang mga konektadong kopya sa cloud i-delete human sa malampusong pag-sync.",
+      "I-delete ang mga gipiling report ug natipig nga litrato gikan niini nga browser. Dili na kini mabalik.",
     historyDeleteConfirmOneDescription:
-      "I-delete ang gipiling report ug natipig nga litrato. Dili na kini mabalik. Ang mga konektadong kopya sa cloud i-delete human sa malampusong pag-sync.",
+      "I-delete ang gipiling report ug natipig nga litrato gikan niini nga browser. Dili na kini mabalik.",
     historyDeleteConfirmBtn: "I-delete",
     historyDeletingBtn: "Ginadelete...",
     historyDeleteFailed:
@@ -542,9 +647,9 @@ export const translations = {
     aboutOnDeviceTitle: "On-device AI",
     aboutOnDeviceDesc:
       "Ang AI inference mahitabo mismo sa device aron lokal masusi ang mga hulagway.",
-    aboutSyncTitle: "Mag-sync kung konektado",
+    aboutSyncTitle: "Bag-ong giya sa pagtambal",
     aboutSyncDesc:
-      "Matipigan lokal ang mga rekord sa scan ug ma-sync kung adunay koneksyon.",
+      "Ma-update ang giya sa pagtambal kung konektado. Ang imong mga scan ug litrato magpabilin niini nga browser.",
     aboutAiEngineHeading: "Ang AI Engine",
     aboutModelVersionLabel:
       "Kasamtangang modelo para sa dahon ug bunga sa mangga",
@@ -585,11 +690,12 @@ export const translations = {
     healthyDesc:
       "Lahi ang himsog nga resulta para sa dahon ug bunga sa mangga.",
     diagnosticScope:
-      "Ang model mosusi sa Anthracnose, Sooty Mold, Bacterial Canker, Bacterial Black Spot, Mango Scab, Healthy Leaf, ug Healthy Fruit. Ang resulta nga ubos sa 70% confidence o dili makapasar sa margin ug entropy mahimong Uncertain.",
+      "Ang model mosusi sa Anthracnose, Sooty Mold, Bacterial Canker, Bacterial Black Spot, Mango Scab, Healthy Leaf, ug Healthy Fruit. Ang resulta nga ubos sa 70% confidence mahimong Uncertain.",
 
     // Bottom Navigation & Scan Sheet
     navScan: "I-scan",
     scanSheetTitle: "Pili sa duha ka Scan",
+    // scanSheetTitle: "Sugdi nag Scan",
     scanSheetTipsTitle: "Mga tip sa litrato",
     scanSheetFramingLabel: "Pagpahimutang:",
     scanSheetFramingTip:
@@ -617,5 +723,40 @@ export const translations = {
     footerVersions: "PWA {appVersion} / Modelo {modelVersion}",
     privacyPolicy: "Polisiya sa Pribasya",
     termsOfService: "Kondisyon sa Serbisyo",
+    legalCloseBtn: "Nasabtan ug Isara",
+    privacyUpdated: "Kataposang gi-update: Oktubre 15, 2026",
+    privacySections: [
+      {
+        title: "1. Walay account nga gikinahanglan",
+        text: "Magamit ang MangoLeaf AI bisan walay pagrehistro o pag-sign in. Dili mangayo ang app sa imong ngalan, email address, o numero sa telepono.",
+      },
+      {
+        title: "2. Ang litrato ug mga scan magpabilin sa device",
+        text: "Susihon sa AI ang litrato sa imong browser. Ang natipig nga resulta ug gipagamay nga litrato anaa sa IndexedDB niini nga browser, online man o offline. Dili i-upload sa Supabase ang bag-ong mga scan.",
+      },
+      {
+        title: "3. Mga update sa giya sa pagtambal",
+        text: "Kung konektado, i-download sa app ang publikong giya sa pagtambal gikan sa Supabase ug tipigan sa device aron mabasa offline. Dili iapil sa maong mga request ang imong litrato o resulta sa scan.",
+      },
+      {
+        title: "4. Lokal nga storage ug pagkawala sa datos",
+        text: "Ang mga scan iya niini nga browser profile. Mahimong mawala kini kung papason ang site data, tangtangon ang browser profile, o tangtangon sa browser ang storage. Walay account o awtomatikong pagbawi gikan sa cloud. Kung puno ang storage, adunay pahimangno aron madumala ang Dating Scan ug masulayan pagtipig ang resulta.",
+      },
+      {
+        title: "5. Pag-delete ug karaang kopya sa cloud",
+        text: "Mahimo nimong i-delete ang natipig nga report ug litrato sa Dating Scan. Permanente kini niini nga browser. Posibleng naka-upload og kopya sa cloud ang karaang bersyon sa app; dili na i-download o i-delete niini nga bersyon ang maong karaang mga kopya.",
+      },
+    ],
+    termsIntro: "Mga Termino sa Paggamit | Sistema sa Diagnosis sa Mangga",
+    termsScopeTitle: "1. Sakop sa Paggamit:",
+    termsScopeText:
+      "Ang MangoLeaf AI gidisenyo alang sa mga mag-uuma sa mangga sa Pilipinas aron makatabang sa pag-diagnose sa pre-harvest nga sakit sa dahon ug prutas sa Carabao Mango (Mangifera indica L.).",
+    termsConfidenceTitle: "2. AI Confidence Threshold sa Diagnosis:",
+    termsGuidanceTitle: "3. Pahinumdom sa Pagtambal:",
+    termsGuidanceText:
+      "Ang tanang gabay sa pagtambal gikan sa mga opisyal nga giya sa DOST-PCAARRD ug BAFS. Nagserbisyo kini isip tambag sa pag-atiman ug dili puli sa opisyal nga konsultasyon sa kapunongan sa agrikultura.",
+    termsEthicsTitle: "4. Propetikal nga Katungod (IP Code):",
+    termsEthicsText:
+      "Gi-develop subay sa Republic Act No. 8293 (Intellectual Property Code sa Pilipinas) ug etikong sumbanan sa DOST-PHREB.",
   },
 };

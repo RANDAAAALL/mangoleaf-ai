@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "adoptedAt": "2026-10-16",
+  "repositoryModelVersion": "v4.5.0",
+  "appVersion": "0.5.5",
+  "productionDeployment": "pending release validation and promotion",
+  "selection": {
+    "modelVersion": "model-v4.5.0",
+    "confidenceThreshold": 0.7,
+    "marginThreshold": null,
+    "entropyThreshold": null,
+    "temperature": 0.8002093839891747,
+    "temperatureFoldedIntoWeights": true,
+    "sourceSelectionSha256": "f356631f548304f32c11514c92e53615798c324384d5b3a24f4704efae53fe45",
+    "sourceEvaluationSha256": "10e058bed7812831cd618d0a6a27d406aa42ecf97de10a222c156ff2c1395737"
+  },
+  "activePublicModelFiles": {
+    "public/model/group1-shard1of3.bin": {
+      "sha256": "3afb04fb4e127cdbe19f71e396966ddab8eb136522ebd1bc4c9eabfd68032692",
+      "bytes": 4194304
+    },
+    "public/model/group1-shard2of3.bin": {
+      "sha256": "72671218e2f2370306f99e28df46873e3063cab258463a1c9a4aec7e2b6dd619",
+      "bytes": 4194304
+    },
+    "public/model/group1-shard3of3.bin": {
+      "sha256": "075e1eabdb172384f5c5df496b211d5463eee12bc54cec6ca1d40ab0a73225d2",
+      "bytes": 3497804
+    },
+    "public/model/model.json": {
+      "sha256": "0fd24e1f0f6bd5595566b8f4aec130808fbd510208ed82abbdc4d319fd2aa2a1",
+      "bytes": 228393
+    },
+    "public/model/model_config.json": {
+      "sha256": "cf6f3089071b75f99cd4e828440ea54bbfba87d292f9faa8432a08b370084a1f",
+      "bytes": 1392
+    }
+  },
+  "configurationHistory": {
+    "originalFittedCandidateModelConfigSha256": "01caf6c73bd8223c82ce501dcff8d4df9dc906fb39e88860a021ee0602b14306",
+    "preAdoptionConfidenceOnlyConfigSha256": "f7a95d687b6fd38ad98e8c6423dc6ef968bd951207ca55b546e00d1b4d222530",
+    "adoptedModelConfigSha256": "cf6f3089071b75f99cd4e828440ea54bbfba87d292f9faa8432a08b370084a1f",
+    "change": "Adopted identity/status metadata and confidence-only gates; margin and entropy disabled. Weight files and graph bytes retain the verified V4.5.0 candidate hashes."
+  },
+  "preservation": {
+    "archivedFilesVerified": 117,
+    "archiveManifest": "artifacts/archive_provenance.json",
+    "result": "All manifest entries retain their SHA-256 hashes and byte counts after the move.",
+    "repositoryPathMappings": {
+      "docs/model-training/experiment/v4.5.0/": "docs/model-training/non-experiment/v4.5.0/",
+      "notebooks/experiment/v4.5.0/": "notebooks/non-experiment/v4.5.0/"
+    },
+    "pathMappingNote": "Historical receipts, including figures/confidence_only/generation_provenance.json, retain original repository paths; resolve those paths through this mapping. Original Drive run paths are unchanged.",
+    "plotGeneratorPathUpdate": {
+      "path": "tools/generate-v4-5-confidence-only-figures.py",
+      "originalSha256": "288e33c76635074a96691744fd0002592321b480b2b6b345c5c36e9b86dfc1bf",
+      "currentSha256": "125a347820be0357079dc8c40e1aee10267a4b17372df3beb8f9401d4d24f1cd",
+      "change": "Updated only the evidence root to non-experiment; plotting math and preserved figures are unchanged."
+    },
+    "notebooks": {
+      "notebooks/non-experiment/v4.5.0/MangoLeaf_AI_Threshold_Fitting_v4_5_0.ipynb": {
+        "sha256": "4415043840113f204c5d786186d38f8a8efe6319b600e269688f2272b283ebee",
+        "bytes": 121107
+      },
+      "notebooks/non-experiment/v4.5.0/MangoLeaf_AI_Threshold_Fitting_v4_5_0_Results.ipynb": {
+        "sha256": "a330c0a83e3ba3c81dbece086299db80caa800057f99cff7e5b35c4e2d3b3c9e",
+        "bytes": 40931488
+      },
+      "notebooks/non-experiment/v4.5.0/MangoLeaf_AI_Training_v4_5_0.ipynb": {
+        "sha256": "ae489e51da86d022a94e12f4feb3bcf6a5bedfb3458a5c223fca6e4165ed4fe3",
+        "bytes": 168357
+      },
+      "notebooks/non-experiment/v4.5.0/MangoLeaf_AI_Training_v4_5_0_Post_Training.ipynb": {
+        "sha256": "df2680f01f76002bca8a098b8f5ce30f8332406b074123eaba74a626989efe9b",
+        "bytes": 12834653
+      }
+    }
+  },
+  "confidenceOnlyReference": {
+    "source": "artifacts/threshold_fitting/evaluation.json#confidenceOnlyReference",
+    "mangoTest": {
+      "total": 397,
+      "correctAccepted": 377,
+      "wrongAccepted": 12,
+      "rejected": 8,
+      "correctAcceptedFractionOfAll": 0.9496221662468514,
+      "rawAccuracy": 0.9672544080604534
+    },
+    "oodReport": {
+      "total": 250,
+      "falseAccepted": 9,
+      "rejected": 241
+    },
+    "limits": [
+      "Saved experiment reference; no scientific prediction export or figure was regenerated for adoption. Browser integration observations are separate.",
+      "Not an independent field accuracy result.",
+      "The OOD report collection was reused in experiment review and is not a fresh independent field sample.",
+      "Browser/Keras numerical parity and physical-device behavior remain pending."
+    ]
+  },
+  "rollback": {
+    "modelVersion": "v4.3.0",
+    "backupDirectory": ".tools/model-backups/v4.3.0-before-v4.5.0-local-test-20261012/",
+    "manifest": ".tools/model-backups/v4.3.0-before-v4.5.0-local-test-20261012/backup-manifest.json",
+    "verification": "All five backed-up public model files and matching source snapshots were hash-verified on 2026-10-16 against the manifest.",
+    "adoptedRestoreHelper": ".tools/model-backups/v4.3.0-before-v4.5.0-local-test-20261012/restore-adopted-model.ps1",
+    "adoptedRestoreHelperSha256": "536a875aad26c2b33812a51209f6f8cbee4a5b375a2a1b0b80678a15412c0137",
+    "adoptedRestoreHelperValidation": "Dry-run passed without -Apply; active model and source were not restored. Original candidate helper and backup files remain unchanged."
+  },
+  "validation": {
+    "sourceAdoption": "adopted in repository",
+    "baseCommit": "63aff1d42e474a61f7938db692a5595266784b5b",
+    "workingTreeNote": "Changes remain uncommitted; fingerprints and asset hashes identify the tested inputs.",
+    "formatTypecheckLintBuild": "passed on final source; production worker regenerated by build",
+    "tooling": { "passed": 46, "failed": 0, "assertions": 125 },
+    "exportVerification": { "assetsVerified": 10 },
+    "notebookVerifier": "passed local synthetic fixtures after the path update; no training or scientific evaluation ran",
+    "markdownLinks": { "documents": 42, "localLinks": 824, "failures": 0 },
+    "coreBrowserSuite": {
+      "passed": 224,
+      "skipped": 9,
+      "failed": 0,
+      "flaky": 0,
+      "durationMs": 1223698.98,
+      "applicationFingerprint": "33989e8a702cc8ea62d5154c4eecc3fa5a606ec816cf4db528ad3cdbe32f7918",
+      "resultsSha256": "17351a0d32f5e9db18669a03ee1f09a19aae58b557902dd601044a58da4f2cf7",
+      "scope": "Full core suite before the final two bilingual Terms sentences were corrected. The nine platform skips retain their documented scope."
+    },
+    "finalApplicationFingerprint": "3e5d43568a05a2bd9442a19be59dd98f4271387946b7c93700bb4601675312b7",
+    "postCoreSourceChange": {
+      "file": "src/lib/translations.ts",
+      "scope": "Only diagnosticScope in English and Bisaya changed to say below-70% results are Uncertain, without margin/entropy wording.",
+      "proof": "Compared against the isolated core build: only this application input hash changed, and replacing exactly these two sentences reproduces final translation bytes. Final typecheck, lint, build and R01 passed; the full core suite was not rerun for this text-only correction."
+    },
+    "r01": {
+      "passed": 1,
+      "failed": 0,
+      "photos": 8,
+      "predictionsPerPhoto": 30,
+      "actualPredictions": 240,
+      "maximumConfidenceRange": 0,
+      "maximumNetTensorGrowth": 0,
+      "applicationFingerprint": "3e5d43568a05a2bd9442a19be59dd98f4271387946b7c93700bb4601675312b7",
+      "resultsSha256": "0603f8adb3f969c412cbff71ea59c3639af11f12d0aa0265905f50f95b99043f",
+      "browser": "Chromium 153.0.8010.12",
+      "tfjs": "4.22.0",
+      "backend": "webgl",
+      "forcedFloat16": false,
+      "renderer": "ANGLE SwiftShader Vulkan",
+      "scope": "Same-session consistency and tensor-lifetime evidence, not diagnostic accuracy or physical-phone performance."
+    },
+    "r03ThirtyMinuteSession": "not run, including no shortened session; protocol updated for a future run",
+    "r03Discovery": "One chromium-mobile R03 case collected using --list --reporter=line; no test execution",
+    "localEvidenceDirectory": ".tools/model-adoption-20261016/",
+    "remoteCi": "not run in this task",
+    "physicalDeviceEvaluation": "pending; record against the eventual tested build",
+    "productionPromotion": "pending"
+  },
+  "affectedPaths": {
+    "modelAndSource": [
+      "public/model/",
+      "src/lib/constants.ts",
+      "src/lib/classifier.ts",
+      "src/lib/translations.ts (diagnosticScope in English and Bisaya only)",
+      "src/sw.ts",
+      "public/sw.js (regenerated by build)"
+    ],
+    "tooling": [
+      "tools/e2e/endurance.pw.ts",
+      "tools/generate-v4-5-confidence-only-figures.py",
+      "tools/verify-v4-5-notebooks.py"
+    ],
+    "documentation": [
+      "README.md",
+      "SETUP.md",
+      "docs/ARCHITECTURE.md",
+      "docs/PERFORMANCE.md",
+      "docs/PROGRESS.md",
+      "docs/versions/AI_MODEL_VERSIONING.md",
+      "docs/versions/PWA_VERSIONING.md",
+      "docs/testing/TESTING.md",
+      "docs/testing/PHYSICAL_RELIABILITY_CHECKLIST.md",
+      "docs/security/DEPENDENCY_SECURITY.md (moved notebook links)",
+      "notebooks/README.md",
+      "notebooks/experiment/README.md",
+      "notebooks/non-experiment/README.md",
+      "docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md",
+      "docs/model-training/non-experiment/v4.5.0/RESULTS_REVIEW_v4_5_0.md",
+      "docs/model-training/experiment/v5.0.0/TRIAL_v5_0_0.md (untrained standby status)"
+    ],
+    "movedPreservedFolders": [
+      "docs/model-training/experiment/v4.5.0/ to docs/model-training/non-experiment/v4.5.0/",
+      "notebooks/experiment/v4.5.0/ to notebooks/non-experiment/v4.5.0/"
+    ],
+    "newReceipt": "docs/model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json",
+    "localRollbackSupport": [
+      ".tools/model-backups/v4.3.0-before-v4.5.0-local-test-20261012/restore-adopted-model.ps1 (new, ignored)",
+      ".tools/model-backups/v4.3.0-before-v4.5.0-local-test-20261012/ROLLBACK.md (adoption instructions appended)"
+    ],
+    "documentationImpactReviewed": true
+  },
+  "releaseWordingDraft": {
+    "commitSubject": "feat(model): adopt v4.5.0 confidence-only",
+    "modelTag": "model-v4.5.0",
+    "description": "Adopt V4.5.0 as the repository model with confidence >=0.70 only. Disable margin and entropy gates, record TensorFlow.js capability-based WebGL precision, preserve V4.3.0 rollback and original scientific evidence, and align the future R03 protocol. App version remains 0.5.5. Production promotion and physical-device evaluation remain pending; V5.0.0 is untrained and on standby.",
+    "commitOrTagCreated": false,
+    "note": "The model tag is a provenance label. Create it on the final tested commit after the required release gates; app release publication remains separate."
+  },
+  "v5Status": "V5.0.0 is untrained and on standby; this adoption does not start or imply a V5 run."
+}

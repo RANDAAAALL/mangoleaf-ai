@@ -1,0 +1,1 @@
+Support 7 classes. Leaf Diseases include Anthracnose, Sooty Mold, and Bacterial Canker. Fruit Diseases include Mango Scab and Bacterial Black Spot. Healthy results are Healthy Leaf and Healthy Fruit.

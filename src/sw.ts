@@ -7,7 +7,7 @@ declare const self: ServiceWorkerGlobalScope & {
 
 // Bump with model swaps so old runtime caches can be evicted. Precache revisions
 // fetch changed model files. See docs/versions/AI_MODEL_VERSIONING.md.
-const MODEL_CACHE = "mangoleaf-model-cache-v4-3-0";
+const MODEL_CACHE = "mangoleaf-model-cache-v4-5-0";
 
 // Every model cache name this app has used, so old weights can be evicted
 // instead of sitting on the device. Trial 2 was 11.51 MB, Trial 2.1 was 5.67 MB
@@ -22,7 +22,9 @@ const OUTDATED_MODEL_CACHES = [
   "mangoleaf-model-cache-v4-1-1-candidate",
   "mangoleaf-model-cache-v4-2-0-dual-experiment",
   "mangoleaf-model-cache-v4-3-0-candidate",
+  "mangoleaf-model-cache-v4-3-0",
   "mangoleaf-model-cache-v4-4-0-candidate",
+  "mangoleaf-model-cache-v4-5-0-candidate",
 ];
 
 // Private cloud responses must be authorized on every request. IndexedDB,

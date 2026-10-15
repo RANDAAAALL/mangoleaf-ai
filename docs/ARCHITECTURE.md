@@ -1,18 +1,56 @@
 # MangoLeaf AI Architecture
 
+## Current model and local-only storage architecture (October 16, 2026)
+
+The repository's adopted model is V4.5.0, with confidence >=0.70 as the only rejection gate; margin and entropy gates are disabled. The prepared PWA version is `0.6.0`, sourced from `package.json` through the existing Next.js build configuration. The model label is `v4.5.0` and its service-worker cache identity is `mangoleaf-model-cache-v4-5-0`. See the [adoption record](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026). Production deployment remains pending release validation and promotion.
+
+V5.0.0 is an untrained workflow on standby. Its prepared notebook and helper do not affect app inference or `public/model/`.
+
+## V5.0.0 experimental training workflow prepared (October 15, 2026)
+
+The separate [V5.0.0 notebook and helper](../notebooks/experiment/v5.0.0/) prepare OE fine-tuning from a hash-verified, uncalibrated V4.5.0 checkpoint. They retain the parent's mango split and Grad-CAM photo identities, inherit matching review evidence, expand approved OE with the old 500-photo OOD collection, and require fresh unseen OOD for reporting. New calibration, evaluation, figures, and candidate exports stay in a separate Drive run. This workflow is not imported by `src/`, does not write `public/model/`, and has no completed training result. The [experiment guide](model-training/experiment/v5.0.0/TRIAL_v5_0_0.md) records inputs, output preservation, runtime audits, and evaluation limits. Application inference code, active model assets/labels, and historical evidence remain unchanged by this preparation.
+
+**Historical temporary model test, October 12, 2026:** The working tree then used V4.5.0 as a candidate with confidence 0.70, margin 0, and entropy 0.40. That state was superseded by the October 16 repository adoption using confidence only. The [trial report](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) preserves both identities and the rollback details.
+
+## Local-only History candidate (October 15, 2026)
+
+This working tree stores scan reports and compressed photo Blobs only in this browser's IndexedDB. Supabase supplies public treatment guidelines through HTTP GET and Realtime; the app does not create guest sessions, upload scans/photos, pull private History, or queue cloud deletions. This is a source candidate, not a deployment or release announcement. Existing cloud tables, photos, users, policies, and Auth settings were left unchanged.
+
+Existing local report IDs, photos, hashes, model labels, and legacy metadata are preserved. Version 9 removes unused scan indexes without rewriting those records. Previously hidden `pending-delete` rows stay hidden. New reports have `local-only` status; older status values are retained as historical fields and do not trigger cloud work. Clearing site data, browser eviction, or losing the device can remove local History; there is no account or automatic cloud recovery.
+
+If a scan cannot save because browser storage is full, the translated dialog says so explicitly. Open History retains that unsaved result in memory while the user chooses reports to delete. Retry save uses the same prepared record ID and photo without running inference again. Discard releases the unsaved result; no report is automatically deleted. Reloading or closing the page loses an unsaved result. Other database errors retain the existing failure handling.
+
+## Diagnosis recovery (October 13, 2026)
+
+Photo review uses `src/lib/diagnosis-step.ts` to bound preparation, inference, storage encoding, and local saving separately, with translated stage labels and recovery actions. Cancel/Escape aborts the current caller and discards late results. An unfinished GPU read retains its resources and blocks overlapping inference; the preview offers reload instead of starting another GPU job. Model initialization awaits warmup readback with a 60-second recovery deadline. `ModelStatusBanner` shows a translated failure and Reload action after initialization rejects; overdue warmup graphs are discarded after readback settles, and initialization cannot overlap that pending work. Model/config downloads remain outside these deadlines.
+
+`useSync.createScan()` returns the committed `ScanRecord` from an abortable local transaction, so diagnosis can display that exact result without a second database query. At that dated snapshot, cloud synchronization still started independently after local commit; the October 15 candidate removes that work. A commit that happened before cancellation remains in History and is recovered through the exact-photo/current-model duplicate check on retry. No new database field or cloud migration is involved. The [performance record](PERFORMANCE.md#211-diagnosis-stage-deadlines-and-recovery-october-13-2026) documents deadlines, evidence, and main-thread/startup limits; [testing](testing/TESTING.md#diagnosis-recovery-october-13-2026) distinguishes automated faults from pending phone validation.
+
 ## System overview
 
-MangoLeaf AI is a client-heavy, offline-first Next.js 16 application. The browser is the primary runtime: it loads the TensorFlow.js model, performs image classification, stores scan records in IndexedDB, and queues synchronization work. Supabase adds backup, image hosting, and shared treatment-guideline updates when the device is online.
+MangoLeaf AI is a client-heavy, offline-first Next.js 16 application. The browser is the primary runtime: it loads the TensorFlow.js model, performs image classification, stores scan records and photo Blobs in IndexedDB. Supabase publishes shared treatment-guideline updates when the device is online.
 
-![MangoLeaf AI Architecture](../public/images/mangoleaf-architecture.svg)
+```mermaid
+flowchart LR
+  Photo[Camera or uploaded photo] --> AI[On-device TensorFlow.js]
+  AI --> DB[(IndexedDB reports and photos)]
+  DB --> UI[History and scan details]
+  Guidance[Supabase public guidelines] -->|HTTP GET and Realtime| Advice[(IndexedDB guidelines)]
+  Advice --> UI
+  Cache[Cached app and model files] --> AI
+```
 
-**Current prepared release, October 10, 2026:** PWA `0.5.5` retains the adopted V4.3.0 Combined model and packages guided camera capture, responsive installation instructions, four-report phone History pages, and stable photo-card sizing. The confirmed deletion, guest-owned private-cloud client, public-guideline separation, HTTP/Realtime safeguards, and unchanged-guidance write check remain in use. See the [release record](versions/PWA_VERSIONING.md#v055-guided-camera-and-installation-prepared-release-october-10-2026) and [versioned validation](testing/TESTING.md#v055-release-validation-october-10-2026) for preparation, evidence, publication, and production-promotion status. Earlier dated records, including the [October 7 confirmation](versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026), retain their original evidence.
+The [earlier cloud-sync diagram](../public/images/mangoleaf-architecture.svg) is retained as historical documentation; the diagram above describes the current candidate.
+
+**Historical prepared-release snapshot, October 10, 2026:** PWA `0.5.5` was prepared with the V4.3.0 model. Repository source later adopted V4.5.0 and selected PWA `0.6.0`; earlier dated release records retain their original evidence.
 
 **October 6, 2026 source update:** Responsive Home/History presentation, search/category counts, selection, and shared deletion confirmation are described below. This source update retains the adopted model and existing cloud ownership rules; the October 5 validation identifies an earlier build and does not verify these changes. Final candidate validation and deployment status remain separate from earlier evidence. No physical-device result is claimed.
 
 **October 7, 2026 ordering implementation:** Guidance downloads and direct Realtime writes share ordering protection, and guideline REST reads bypass the service-worker HTTP cache. The [initial implementation record](testing/TESTING.md#guideline-update-ordering-october-7-2026) preserves its `0.5.2` identity. The [v0.5.3 preparation record](versions/PWA_VERSIONING.md#v053-guideline-update-ordering-candidate-october-7-2026) has separate [versioned validation](testing/TESTING.md#v053-candidate-validation-october-7-2026). Existing local `v0.5.2` at `ee91cf693fd52acb6f882f2c049a3b2ddd599a1f` excludes the fix. The later reported release status is recorded above.
 
 ## Test and release boundaries
+
+Root ESLint excludes the separate video project's generated `video/.venv/` Python dependencies. Tracked application and tooling sources remain checked; this exclusion does not change the video project's code or environment.
 
 The [dependency security review](security/DEPENDENCY_SECURITY.md) separates the current Bun application from the archived Colab environment. Next.js and its ESLint configuration use `16.3.8` after the October 10 framework security patch. The root Browserslist override remains recorded with the October 3 dependency review. The historical Python freeze is stored as `colab-runtime-snapshot.txt`, with a separate repository-path mapping and unchanged original ledgers. Neither the app build nor CI installs those Python packages. This classification does not make the old training environment safe to recreate.
 
@@ -24,7 +62,7 @@ The dependency and development-configuration patch retains app `0.5.5` and model
 
 `tools/build-test-app.mjs` copies application inputs into an ignored, hash-addressed `.test-app/` directory and builds a private static export with a loopback mock backend. It excludes the existing generated worker and regenerates one there. This leaves the normal `out/` and tracked `public/sw.js` alone. Fresh browser contexts isolate local data; the server's connection policy prevents external service access. The mock verifies client flow, not Supabase's server behavior or RLS.
 
-The local server uses pinned, development-only Busboy to extract photo bytes from multipart uploads. This preserves the unnamed file field sent by the installed Supabase client, which Bun 1.4's built-in form parser drops. R02 compares the stored bytes with the local scan image after reconnect.
+The local mock retains its former cloud endpoints for regression support. Current local-only tests assert that the application never calls Auth, private scans, or Storage endpoints. R02 verifies that local reports/photos survive offline use and reconnection.
 
 Core desktop/mobile and Chromium service-worker cases run in the existing `master` push CI. R01 repeated inference and R03 extended use run explicitly; [TESTING.md](testing/TESTING.md) defines scope and [PHYSICAL_RELIABILITY_CHECKLIST.md](testing/PHYSICAL_RELIABILITY_CHECKLIST.md) records real-device coverage. Reports, traces, and the private build stay untracked. A scan-card object-URL lifecycle fix accompanied the tests so a replaced photo blob cannot leave a revoked URL in the rendered image; the tests use the existing inference path and model assets.
 
@@ -32,7 +70,7 @@ The manual release workflow uses Vercel staged production builds: disable automa
 
 Experiment guides live under [experiment/v3.1](model-training/experiment/v3.1/TRIAL_v3_1.md), [experiment/v3.2](model-training/experiment/v3.2/TRIAL_v3_2.md), [experiment/v4](model-training/experiment/v4/TRIAL_v4.md), [experiment/v4.1](model-training/experiment/v4.1/TRIAL_v4_1.md), [experiment/v4.1.1](model-training/experiment/v4.1.1/TRIAL_v4_1_1.md), and [experiment/v4.2.0](model-training/experiment/v4.2.0/TRIAL_v4_2_0.md). Their candidate notebooks and completed experimental evidence live in [notebooks/experiment](../notebooks/experiment/README.md): **experimental candidates, not shipped or deployed**. V4 introduced separate healthy-leaf and healthy-fruit outputs while preserving historical split membership by file contents. V4.1 compared control, background replacement, local lighting, and both effects; V4.1.1 completed a guided reproduction. V4.2.0 completed separate leaf and fruit runs; only leaf met the threshold-selection rule. On October 2, 2026, the single seven-class V4.3.0 Combined model was adopted for app `0.4.9`, replacing V3 as the current application baseline. The [adoption receipt](model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) records original export and adopted identities/hashes. Exact earlier model/app backups remain in ignored `.tools/model-backups/`; `.tools/release-backups/v0.4.9-model-v4.3.0-20261002/before/` preserves the pre-adoption state. Production promotion remains pending the final CI and release checks.
 
-Historical and adopted trial reports live under `docs/model-training/non-experiment/v{n}/`. Each version keeps its report beside any saved `artifacts/` and `figures/`; those evidence folders exist only when files are available. Their preserved templates and completed notebooks live under `notebooks/non-experiment/v{n}/`, including the current adopted V4.3.0 model and older versions. Experimental notebooks stay under `notebooks/experiment/v{n}/` and remain candidates regardless of the `TRIAL_*.md` filename. Moving these records does not change notebook cell contents, saved outputs, or original Google Drive run paths. V3.1 also retains its separate [original-weight threshold guide](model-training/experiment/v3.1/THRESHOLD_FITTING_v3_1.md).
+Historical and adopted trial reports live under `docs/model-training/non-experiment/v{n}/`. Each version keeps its report beside any saved `artifacts/` and `figures/`; those evidence folders exist only when files are available. Their preserved templates and completed notebooks live under `notebooks/non-experiment/v{n}/`, including the current adopted V4.5.0 model and older versions. Experimental notebooks stay under `notebooks/experiment/v{n}/` and remain candidates regardless of the `TRIAL_*.md` filename. Moving these records does not change notebook cell contents, saved outputs, or original Google Drive run paths. V3.1 also retains its separate [original-weight threshold guide](model-training/experiment/v3.1/THRESHOLD_FITTING_v3_1.md).
 
 V4 notebook outputs default to `MyDrive/mangoleaf_experiments/v4/training/` and `MyDrive/mangoleaf_experiments/v4/threshold_fitting/`. Each run and downloadable evidence/model ZIP carries its v4 workflow label and unique run ID. See the [Drive output layout](model-training/experiment/v4/TRIAL_v4.md#where-google-drive-outputs-go) for folder contents and existing-run compatibility.
 
@@ -44,9 +82,11 @@ V4.1.1 saved separate `MyDrive/mangoleaf_experiments/v4.1.1/` training, threshol
 
 The [V4.2.0 guide](model-training/experiment/v4.2.0/TRIAL_v4_2_0.md) defines two separate experimental classifiers: four leaf classes (including Bacterial Canker) and three fruit classes. Each has one training notebook with integrated figure steps, a separate threshold notebook, and completed Drive runs under `MyDrive/mangoleaf_experiments/v4.2.0/`. Curated evidence is under each organ's `artifacts/` and `figures/`, with source paths and SHA-256 hashes in `source_manifest.json`. The local two-choice app trial is over; the exact two-model asset and app-source state is retained in ignored `.tools/model-backups/v4.2.0-dual-experiment-20260929/`. The fruit gate was infeasible. Neither model was adopted or deployed.
 
-The [V4.3.0 adopted trial report](model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) records one completed seven-class Combined model, two workflow notebooks, and separately preserved completed result copies now under `notebooks/non-experiment/v4.3.0/`. Training reads the saved V4.1.1 split and provenance, reviews the original 62 scene photos plus the supplied 138 new scene photos, and fits a single combined recipe. Background replacement and local lighting each keep their 30% probability during training only; validation and test retain original pixels. The reviewed 200-scene pool is augmentation input, not an expanded mango dataset. Original training and fitting runs retain their `MyDrive/mangoleaf_experiments/v4.3.0/` paths and candidate metadata. Figure steps are integrated into the training notebook: training charts first, then evaluation charts after fitting. Verified evidence copies retain their artifacts/training/, artifacts/threshold_fitting/, artifacts/review/, and final figures/ grouping. The [comparison](model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) records unchanged selected mango decisions and mixed OOD results. Root `public/model/` now contains the adopted Combined graph, configuration, and three shards, with `v4.3.0` display label and `mangoleaf-model-cache-v4-3-0` cache identity. Only configuration release metadata changes from the original fitted export; numerical settings and weights are preserved. Current photo guidance, bilingual text, and history remain in use. Adoption is recorded separately from pending production promotion.
+The [V4.3.0 adopted trial report](model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) records one completed seven-class Combined model, two workflow notebooks, and separately preserved completed result copies now under `notebooks/non-experiment/v4.3.0/`. Training reads the saved V4.1.1 split and provenance, reviews the original 62 scene photos plus the supplied 138 new scene photos, and fits a single combined recipe. Background replacement and local lighting each keep their 30% probability during training only; validation and test retain original pixels. The reviewed 200-scene pool is augmentation input, not an expanded mango dataset. Original training and fitting runs retain their `MyDrive/mangoleaf_experiments/v4.3.0/` paths and candidate metadata. Figure steps are integrated into the training notebook: training charts first, then evaluation charts after fitting. Verified evidence copies retain their artifacts/training/, artifacts/threshold_fitting/, artifacts/review/, and final figures/ grouping. The [comparison](model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) records unchanged selected mango decisions and mixed OOD results. At the October 2 adoption, root `public/model/` received the adopted Combined graph, configuration, and three shards, with `v4.3.0` display label and `mangoleaf-model-cache-v4-3-0` cache identity. Only configuration release metadata changes from the original fitted export; numerical settings and weights are preserved. Current photo guidance, bilingual text, and history remain in use. Adoption is recorded separately from pending production promotion.
 
 ## Project structure
+
+**V4.5.0 OE workflow, October 11, 2026:** The clean and completed notebooks are now preserved under `notebooks/non-experiment/v4.5.0/` because this model was adopted in the repository on October 16. The original 500-photo OOD review and the fitted-rule report remain historical evidence; the active model uses confidence-only rejection. See the [trial report](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) for its dated run and adoption records.
 
 **V4.4.0 experimental workflow, October 8, 2026:** Two self-contained notebooks under `notebooks/experiment/v4.4.0/` read raw mango photos, reviewed scene inputs, and reused OOD photos directly from Drive. They create fresh audits, grouped 70/15/15 membership, masks, ImageNet-initialized weights, temperature, and fitted gates without restoring previous MangoLeaf run folders. New unique outputs remain under `MyDrive/mangoleaf_experiments/v4.4.0/training/` and `threshold_fitting/`. Runtime audits and an isolated converter preflight precede training; selection locks precede reporting. Shared illustration photos, connected Grad-CAM, and separate training charts retain source hashes. The [V4.4.0 guide](model-training/experiment/v4.4.0/TRIAL_v4_4_0.md) and `tools/verify-v4-4-notebooks.py` define this candidate boundary. No application asset or version change follows automatically.
 
@@ -81,13 +121,14 @@ mangoleaf-ai/
 |   |-- verify-v4-notebooks.py      # Seven-class notebook contracts and optional read-only data audit
 |   |-- verify-v4-1-notebooks.py    # Four-arm experiment contracts and synthetic data-boundary checks
 |   |-- run-browser-tests.mjs       # Build verification and Node.js Playwright runner
-|   `-- verify-v4-4-notebooks.py     # Fresh experimental notebook contract checks
+|   |-- verify-v4-4-notebooks.py     # V4.4.0 isolated-kernel notebook contract checks
+|   `-- verify-v4-5-notebooks.py     # V4.5.0 ordinary-cell OE and evaluation checks
 |-- public/                         # Files served directly from the site root
 |   |-- images/
 |   |   |-- icons/
 |   |   |   |-- png/                # PWA, favicon, and Apple touch icons
 |   |   |   `-- svg/                # Vector application and favicon icons
-|   |   `-- mangoleaf-architecture.svg  # Diagram embedded by this document
+|   |   `-- mangoleaf-architecture.svg  # Historical cloud-sync diagram
 |   |-- model/                      # Adopted V4.3.0 Combined seven-class model
 |   |   |-- model.json              # Seven-output TensorFlow.js graph
 |   |   |-- model_config.json       # Class order, preprocessing, fitted thresholds
@@ -104,7 +145,7 @@ mangoleaf-ai/
 |   |-- components/                 # Reusable interface components, grouped by role
 |   |   |-- brand/                  # Application logo and icon set
 |   |   |-- layout/                 # Top header, navigation bar, footer, and splash screen
-|   |   |-- modal/                  # Legal, scan-details, and scan bottom sheet
+|   |   |-- modal/                  # Legal, scan-details, storage-full, and scan bottom sheet
 |   |   |-- scan/                   # Scan controls, result card, history list, guide
 |   |   `-- tab/                    # Home, history, and about screen content
 |   |-- hooks/
@@ -113,12 +154,10 @@ mangoleaf-ai/
 |   |   |-- usePWAInstall.ts        # PWA installation prompt state and actions
 |   |   |-- useScanPhotoUrl.ts      # Stable card photo URLs and cleanup
 |   |   |-- useScrollLock.ts        # Shared scroll lock for overlapping modals
-|   |   `-- useSync.ts              # IndexedDB and Supabase synchronization
+|   |   `-- useSync.ts              # Local scan actions and public guideline updates
 |   |-- lib/
 |   |   |-- classifier.ts           # Model loading, inference; compatible helper exports
-|   |   |-- cloud-session.ts        # Serialized background guest-session reuse
-|   |   |-- cloud-scan.ts           # Owner-scoped cloud IDs and photo paths
-|   |   |-- cloud-sync.ts           # Owned row mutations and private photo downloads
+|   |   |-- diagnosis-step.ts       # Diagnosis stage deadlines, cancellation and image decode
 |   |   |-- constants.ts            # Model classes and model version label
 |   |   |-- db.ts                   # Dexie schema and scan record types
 |   |   |-- format-time-ago.ts      # Relative timestamp formatting for scan cards
@@ -126,6 +165,7 @@ mangoleaf-ai/
 |   |   |-- guidelines-sync.ts      # Ordered HTTP snapshots and Realtime guidance writes
 |   |   |-- image-hash.ts           # Lightweight upload/saved-photo SHA-256 fingerprints
 |   |   |-- image-storage.ts        # Canvas compression after diagnosis, without TensorFlow.js
+|   |   |-- local-scans.ts          # Prepared IDs, local save/delete, and quota detection
 |   |   |-- supabase-client.ts      # Browser-side Supabase client
 |   |   `-- translations.ts         # English and Cebuano/Bisaya interface text
 |   |-- env.d.ts                    # Types for build-time injected public env values
@@ -150,15 +190,17 @@ mangoleaf-ai/
 |   |   |   |-- v4.1/               # TRIAL_v4_1.md, artifacts/, figures/
 |   |   |   |-- v4.1.1/             # TRIAL_v4_1_1.md, artifacts/, figures/; completed candidate
 |   |   |   |-- v4.2.0/             # TRIAL_v4_2_0.md; mangoleaf/ and mangofruit/ evidence
-|   |   |   `-- v4.4.0/             # TRIAL_v4_4_0.md; completed, declined experiment
-|   |   |       |-- artifacts/     # Curated training/fitting receipts, metrics, copy manifest, review
-|   |   |       `-- figures/       # Original training/ and threshold_fitting/ figures
+|   |   |   |-- v4.4.0/             # TRIAL_v4_4_0.md; completed, declined experiment
+|   |   |   |   |-- artifacts/     # Curated training/fitting receipts, metrics, copy manifest, review
+|   |   |   |   `-- figures/       # Original training/ and threshold_fitting/ figures
+|   |   |   `-- v5.0.0/             # TRIAL_v5_0_0.md; prepared OE fine-tuning, no results yet
 |   |   `-- non-experiment/         # Historical and adopted model trials
 |   |       |-- v1/                 # TRIAL_v1.md
 |   |       |-- v2/                 # TRIAL_v2.md, figures/
 |   |       |-- v2.1/               # TRIAL_v2_1.md, artifacts/, figures/
 |   |       |-- v3/                 # TRIAL_v3.md, artifacts/, figures/; previous released baseline
-|   |       `-- v4.3.0/             # Adopted trial/comparison, artifacts/, figures/
+|   |       |-- v4.3.0/             # Previous adopted trial/comparison, artifacts/, figures/
+|   |       `-- v4.5.0/             # Current adopted OE model, confidence-only evidence and figures
 |   |-- ARCHITECTURE.md             # This architecture reference
 |   |-- versions/                   # Separate app and model version records
 |   |   |-- PWA_VERSIONING.md        # App versions, release history, and deployment
@@ -183,7 +225,8 @@ mangoleaf-ai/
 |   |   |   |-- MangoLeaf_AI_Training_v3_Post_Training.ipynb    # Completed Trial 3 run, manuscript evidence, do not rerun
 |   |   |   |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb         # Trial 3 threshold template, 8 cells, outputs cleared
 |   |   |   `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb # Trial 3 fitting run; cell 9 settles the margin at 0.40
-|   |   `-- v4.3.0/                 # Current adopted model; templates and completed runs
+|   |   |-- v4.3.0/                 # Previous adopted model; templates and completed runs
+|   |   `-- v4.5.0/                 # Current adopted model; unchanged templates and completed outputs
 |   `-- experiment/                  # Experimental notebooks/evidence; candidates, not shipped or deployed
 |       |-- README.md                # Status, scope, and notebook-version boundary
 |       |-- v3.1/                    # v3.1 workflow templates and completed results
@@ -192,11 +235,15 @@ mangoleaf-ai/
 |       |-- v4.1/                    # Four-arm training, thresholds, and post-training figures
 |       |-- v4.1.1/                  # Guided templates and completed reproduction notebooks
 |       |-- v4.2.0/                  # Separate leaf/fruit templates and completed result notebooks
-|       `-- v4.4.0/                  # Seven-class templates and completed trial evidence
-|           |-- MangoLeaf_AI_Training_v4_4_0.ipynb
-|           |-- MangoLeaf_AI_Threshold_Fitting_v4_4_0.ipynb
-|           |-- MangoLeaf_AI_Training_v4_4_0_Post_Training.ipynb
-|           `-- MangoLeaf_AI_Threshold_Fitting_v4_4_0_Results.ipynb
+|       |-- v4.4.0/                  # Seven-class templates and completed trial evidence
+|       |   |-- MangoLeaf_AI_Training_v4_4_0.ipynb
+|       |   |-- MangoLeaf_AI_Threshold_Fitting_v4_4_0.ipynb
+|       |   |-- MangoLeaf_AI_Training_v4_4_0_Post_Training.ipynb
+|       |   `-- MangoLeaf_AI_Threshold_Fitting_v4_4_0_Results.ipynb
+|       `-- v5.0.0/                  # Prepared checkpoint-based OE fine-tuning
+|           |-- MangoLeaf_AI_OE_Fine_Tuning_v5_0_0.ipynb
+|           |-- MangoLeaf_AI_Evaluate_v5_0_0.ipynb     # Later unseen-OOD report without retraining
+|           `-- v5_workflow.py        # Required Colab helper; not application code
 |-- video/                           # Promotional video, a separate HyperFrames project
 |   |-- assets/                      # Render inputs plus the thumbnail still
 |   |-- index.html                   # Root composition and timeline
@@ -205,7 +252,7 @@ mangoleaf-ai/
 |   |-- meta.json                    # Composition id and name
 |   |-- package.json                 # Pinned hyperframes CLI scripts
 |   |-- AGENTS.md                    # HyperFrames instructions for coding agents
-|   `-- MangoLeafAI-walkthrough.mp4  # Rendered output
+|   `-- MangoLeafAI-walkthrough-v2.mp4 # Selected rendered output
 |-- .env.example                     # Public environment-variable template
 |-- AGENTS.md                        # Repository instructions for coding agents
 |-- README.md                        # Project overview and quick start
@@ -215,7 +262,7 @@ mangoleaf-ai/
 `-- tsconfig.json                    # TypeScript and @/* path-alias configuration
 ```
 
-This is a single Next.js application rather than separate frontend and backend folders. Browser code owns diagnosis and local storage, while Supabase is an external synchronization service.
+This is a single Next.js application rather than separate frontend and backend folders. Browser code owns diagnosis and local storage, while Supabase publishes shared public treatment guidance.
 
 `video/` is the one directory that is not part of the application. It is a self-contained HyperFrames composition project for the promotional video, with its own `package.json`, its own dependency tree, and its own `AGENTS.md`. Nothing in it is imported by `src/`, and nothing in it reaches a device: `public/` is the only directory a static export copies verbatim, so the composition, the voice-over, and the rendered MP4 are absent from `out/` and from the service worker's precache manifest. The `static-video-assets` runtime cache in `public/sw.js` is unrelated to it and matches only `.mp4` and `.webm` files the app itself requests. Treat the two projects as neighbours that share a repository and nothing else; running `bun install` at the root does not install the video project's dependencies, and `bun run build` does not render the video.
 
@@ -236,7 +283,7 @@ Components are grouped into subfolders by the role they play rather than kept in
 | Folder    | Contents                                                                                                                                       | Role                                    |
 | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | `brand/`  | `logo.tsx`, `icon.tsx`                                                                                                                         | Identity marks and the shared icon set  |
-| `layout/` | `top-header.tsx`, `bottom-nav.tsx`, `footer.tsx`, `splash-screen.tsx`                                                                          | Application frame around screen content |
+| `layout/` | `top-header.tsx`, `bottom-nav.tsx`, `footer.tsx`, `splash-screen.tsx`, `model-status-banner.tsx`                                               | Application frame around screen content |
 | `modal/`  | `legal-modal.tsx`, `scan-details-modal.tsx`, `scan-sheet.tsx`, `delete-scans-modal.tsx`, `install-guide-overlay.tsx`                           | Overlay dialogs and sheets              |
 | `scan/`   | `guided-camera.tsx`, `diagnostic-scanner.tsx`, `scan-card.tsx`, `scan-history-list.tsx`, `how-it-works-steps.tsx`, `disease-coverage-card.tsx` | Diagnosis feature surface               |
 | `tab/`    | `home-tab.tsx`, `history-tab.tsx`, `about-tab.tsx`                                                                                             | One component per navigation tab        |
@@ -245,7 +292,7 @@ The three tab components are the boundary between `page.tsx` and screen content.
 
 Grouping is by role, not by which tab uses a file. `scan/scan-history-list.tsx` is rendered by both `HistoryTab` in full and by `HomeTab` as a phone preview, so it belongs to the scan feature rather than to either tab. Below 768px, Home shows the newest one card with Recent Scans and View All History. At or above that breakpoint, a responsive wrapper hides the entire recent list and shows the Install prompt card instead. The hidden list remains mounted and can contain up to four passed records; visual hiding is not proof of reduced database reads or zero hidden-card resources. Folders group files for navigation and do not define access boundaries.
 
-History shows four records per page below 768px and six on wider screens. A viewport change recalculates the page from the first record on the old page; deletion or synchronization clamps the page when its last records disappear. `ScanCard` renders thumbnail rows on phones and full photo cards on desktop using one responsive image element per record. Phone thumbnails use a fixed 56px square; full cards reserve a 4:3 image area with width-based padding and an absolutely positioned image, including after a viewport change. Mobile rows open Details from the photo/text area; selection mode exposes checkboxes and disables Details. The phone selection-delete action appears above pagination. Home keeps full photo cards, and desktop History keeps its individual trash action.
+History shows four records per page below 768px and six on wider screens. A viewport change recalculates the page from the first record on the old page; deletion or another local record change clamps the page when its last records disappear. `ScanCard` renders thumbnail rows on phones and full photo cards on desktop using one responsive image element per record. Phone thumbnails use a fixed 56px square; full cards reserve a 4:3 image area with width-based padding and an absolutely positioned image, including after a viewport change. Mobile rows open Details from the photo/text area; selection mode exposes checkboxes and disables Details. The phone selection-delete action appears above pagination. Home keeps full photo cards, and desktop History keeps its individual trash action.
 
 History searches disease-name text, then applies the chosen category, then selects a page. Category counts cover all search matches before category filtering and pagination, including older model and legacy reports. Typing or clearing search resets the category to All, closes the phone filter bar, returns to page one, and clears selection. Changing category also returns to page one and clears selection. Selection persists across pages within the same results; Select all captures every current matching ID across those pages. Later arrivals require another deliberate selection action, and IDs removed from the results lose their selection.
 
@@ -267,7 +314,7 @@ Since the October 8, 2026 guided-camera change, the phone Take Photo action call
 
 The camera requests video only, preferring the rear camera, 1280×720, and at most 30 frames per second. Those are browser constraints, not a promise of a particular lens or frame size. The muted, inline video shows the entire frame with `object-contain`, including any letterboxing. A centered square guide measures 75% of the displayed frame's shorter dimension and resizes when the video or viewport changes. It provides positioning advice only: it does not crop, segment, check image quality, or run continuous inference.
 
-Capture becomes available only after playback has started and a nonzero video frame is ready. Capture draws the entire frame at its actual `videoWidth` and `videoHeight`, encodes JPEG at quality 0.92, stops the stream, and passes the resulting `File` into the existing duplicate check and photo-review dialog. The guide is not included in the saved pixels. Run AI Diagnosis remains an explicit action; capture alone creates no scan or cloud upload. Camera Retake discards the review photo and opens a new live stream, while upload Retake reopens the same gallery input. Local inference, 224×224 preprocessing, rejection gates, post-inference storage compression, and owner-scoped private cloud synchronization retain their existing paths.
+Capture becomes available only after playback has started and a nonzero video frame is ready. Capture draws the entire frame at its actual `videoWidth` and `videoHeight`, encodes JPEG at quality 0.92, stops the stream, and passes the resulting `File` into the existing duplicate check and photo-review dialog. The guide is not included in the saved pixels. Run AI Diagnosis remains an explicit action; capture alone creates no scan or cloud upload. Camera Retake discards the review photo and opens a new live stream, while upload Retake reopens the same gallery input. Local inference, 224×224 preprocessing, rejection gates, post-inference storage compression, and local-only persistence retain their existing paths.
 
 Close, unmount, a hidden document, and `pagehide` release all stream tracks. Pending permission requests and JPEG encoding results carry a request identity: a late completion after cancellation cannot reopen review, and any late-acquired stream is stopped. Returning from the background shows a paused state and requires an explicit Open camera again action; it does not restart hardware automatically. An ended camera track stops the stream and offers retry. Once a stream is acquired, a 15-second preview-start deadline prevents an indefinite unusable preview; the permission prompt itself has no application deadline.
 
@@ -316,60 +363,52 @@ When adding a relative-time string, add it to both the `en` and `bis` objects in
 
 Photo review uses `scan/diagnostic-scanner.tsx`. X and Escape discard the selected photo before diagnosis, without opening a picker or saving a record. These dismiss controls are unavailable during active diagnosis. A duplicate check must finish successfully before diagnosis can start; a failed check offers a retry. Closing or replacing a photo invalidates its pending check and releases its preview URL, so a delayed result cannot reopen an old selection. `useScrollLock.ts` counts active locks shared by the page and scan sheet so closing the sheet cannot unlock scrolling behind a newly opened preview. Duplicate detection compares file contents, not visual similarity: renaming an unchanged file still matches, while cropping or recompressing can produce a different hash.
 
-The adopted V4.3.0 Combined model uses these settings:
+The adopted V4.5.0 model uses confidence-only rejection at 0.70. Margin and entropy gates are disabled. Its temperature is already folded into the exported weights.
 
-| Gate       | Test                                                 | Source                           | Setting |
-| ---------- | ---------------------------------------------------- | -------------------------------- | ------- |
-| Confidence | Top-1 probability at least the threshold             | Hardcoded `CONFIDENCE_THRESHOLD` | `0.70`  |
-| Margin     | Top-1 minus top-2 probability at least the threshold | `model_config.json`              | `0.00`  |
-| Entropy    | Normalized Shannon entropy at most the threshold     | `model_config.json`              | `0.42`  |
+| Gate       | Test                                        | Source                           | Setting           |
+| ---------- | ------------------------------------------- | -------------------------------- | ----------------- |
+| Confidence | Top-1 probability at least the threshold    | Hardcoded `CONFIDENCE_THRESHOLD` | `0.70`            |
+| Margin     | Optional top-1 minus top-2 probability gate | `model_config.json`              | Disabled (`null`) |
+| Entropy    | Optional normalized Shannon entropy gate    | `model_config.json`              | Disabled (`null`) |
 
 The confidence floor is hardcoded and deliberately not configurable. It is a manuscript specification cited to [31], so a `model_config.json` that asks for a different value is refused: the classifier logs a warning and keeps `0.70`. Margin and entropy are optional; `null` disables that gate. The config travels with the exact fitted weights.
 
 Entropy is normalized by `Math.log(results.length)` so it stays on a 0-to-1 scale comparable to the fitted threshold. Confidence is compared before rounding; the rounded value is returned for display only, because comparing the rounded number would let `0.695` clear a `0.70` gate and silently lower the real floor to 69.5%.
 
-Root `public/model/` contains the adopted seven-output V4.3.0 Combined model, with fitted confidence 0.70, margin 0, and entropy 0.42 gates. Its class order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold, as defined in `src/lib/constants.ts`. Both healthy outputs reuse the existing `healthy` treatment-guidance key. Original candidate files and earlier model baselines remain preserved; the adoption receipt distinguishes unchanged graph/shard hashes from the relabeled configuration. See [AI model versioning](versions/AI_MODEL_VERSIONING.md).
+Root `public/model/` contains the adopted seven-output V4.5.0 OE model, with confidence 0.70 as the only active rejection gate. Its class order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold, as defined in `src/lib/constants.ts`. Both healthy outputs reuse the existing `healthy` treatment-guidance key. V4.3.0 remains preserved as a previous model and verified rollback. See [AI model versioning](versions/AI_MODEL_VERSIONING.md).
 
 Each inference prints a collapsed browser-console table of all seven class probabilities in development and production, ranked from highest to lowest. This supports technical review through DevTools without adding scores to the result modal. The table sorts copies of the scores and rounds only the display percentages; prediction and rejection still use the original scores. These probabilities describe one photo, not per-class accuracy. An eligible saved duplicate does not run inference or print a new table. See [TESTING.md](testing/TESTING.md#fixture-and-report-interpretation) for reading it and handling duplicate photos.
 
 ### Local persistence
 
-`src/lib/db.ts` defines version 8 of the Dexie database `MangoLeafDB` with two stores:
+`src/lib/db.ts` defines version 9 of `MangoLeafDB`:
 
-- `scans`: image blobs, predictions, sync metadata, timestamps, a browser label, and optional verified cloud-owner/private-object references. Existing V4.2.0 trial rows may also retain local model/organ fields.
-- `guidelines`: cached English and Cebuano/Bisaya treatment guidance. Disease and healthy presentation colors are fixed in the client, not stored in Supabase.
+- `scans` stores report IDs, predictions, confidence, original-file hashes, exact model labels, compressed photo Blobs, and timestamps. Its indexes are `id`, `image_hash`, and `updated_at`. Other fields remain stored without needing an index.
+- `guidelines` stores downloaded English/Bisaya guidance, with `id` and `disease_name` indexes.
 
-New scans are written locally first. This allows diagnosis and history features to keep working without a network connection. Cloud-owned rows additionally retain `owner_id`, `cloud_id`, and `storage_path`; the cloud ID can differ from a retained pre-upgrade local ID. The upgrade preserves legacy reports and photo Blobs, marks formerly uploaded unowned rows local-only, and gives purely local pending rows a new cloud identity rather than colliding with inaccessible historical server rows.
+The v9 upgrade changes indexes only. It preserves earlier Blob bytes, IDs, hashes, model labels, status values, and any historical owner/cloud/path/device fields without writing every large row again. New reports use `local-only` status and no device or guest identity. History reads newest dates first and filters legacy `pending-delete` tombstones, which remain hidden and do not cause cloud cleanup.
+
+`local-scans.ts` prepares a stable report ID once, then saves it in an abortable transaction. Retrying a committed prepared ID returns its saved report; a conflicting report cannot overwrite it. A quota failure leaves the new result unsaved and preserves existing reports. The storage-full modal retains one draft in memory for History management, retry, or explicit discard. No successful save is announced before local commit. Reloading loses an unsaved draft.
 
 Treatment guidance is authored in Supabase's `public.guidelines` table and read from its downloaded IndexedDB copy. `getGuidelineForScan()` in `src/app/page.tsx` maps both healthy classes to `healthy`, preserves valid cached text during offline use, and handles English and Bisaya independently. While the local query is pending it shows a translated loading message. A missing row or blank language field shows a translated unavailable message from `src/lib/translations.ts`. The application no longer bundles treatment advice in `src/lib/constants.ts` or uses generic treatment instructions when guidance is missing. Users need a successful guideline download before advice is available offline.
 
 An `Uncertain / Unrecognized` result is handled before the cached-guideline lookup. It displays the approved English/Bisaya photo reminder immediately, including offline use and while IndexedDB is loading. Scan details use the heading “Try another photo” / “Sulayi og laing litrato” for this result. The reminder is interface text in `src/lib/translations.ts`; it does not require a Supabase guideline row or change model rejection rules. Loading and unavailable guideline messages still apply to accepted class results.
 
-Historical trial and legacy rows remain visible in local history. Duplicate reuse requires the exact active `model_version`, so V4.2.0, the former V4.3.0 candidate identity, V3, and unlabeled legacy rows do not substitute for adopted V4.3.0 inference. This prevents an unidentified older diagnosis from blocking the promoted model. The V4.2.0 route metadata stays local; new owned cloud rows preserve `model_version` without converting older unlabeled diagnoses into current-model reports.
+Historical trial and legacy rows remain visible in local history. Duplicate reuse requires exact active `model_version` `v4.5.0`, so older candidate identities and unlabeled legacy rows do not substitute for adopted V4.5.0 inference. New local reports retain the active label without relabeling earlier diagnoses.
 
-`useSync.ts` exposes `deleteScans(ids)` and routes single deletion through the same path. It deduplicates IDs, reads them with `bulkGet()`, and changes the existing records in one read/write Dexie transaction. Local-only or unowned reports are removed with `bulkDelete()`. Owned records become hidden `pending-delete` tombstones through `bulkUpdate()` until the existing queue removes their private photo and cloud row. An upload cannot claim an unowned row between the transaction's ownership check and deletion. After a changed batch commits, one synchronization request is queued when online; offline tombstones remain durable for later retry. The dialog waits for local commit, while cloud cleanup continues through the existing owner/session checks and retry rules.
+`useSync.ts` exposes local save/delete actions. `deleteScans(ids)` deduplicates IDs and removes those local records with `bulkDelete()`; the shared confirmation dialog waits for the local deletion. No cloud upload, tombstone creation, or remote deletion follows a new deletion. The previous v8 tombstones are preserved hidden historical state.
 
 ### Scan-card photo display
 
 `scan-card.tsx` uses `useScanPhotoUrl.ts` to own its local photo URL. IndexedDB returns fresh Blob objects after scan metadata changes, even when their bytes are unchanged. For a new wrapper with the same size and MIME type, the hook asynchronously compares SHA-256 fingerprints of the saved photo bytes and caches the displayed photo's fingerprint. An unchanged photo keeps its existing URL and image element. Different bytes replace the URL; size or type changes can replace it immediately. These in-memory fingerprints do not change the original-upload `image_hash` used for duplicate diagnosis checks.
 
-A card keeps its displayed photo while comparison is pending. Newer inputs cancel outdated comparisons, empty photos use the existing fallback, and replaced or unmounted cards release their URLs. No photo hash or display state is added to IndexedDB or the cloud schema. This avoids thumbnail reloads from metadata-only sync without changing inference, model settings, or photo compression.
+A card keeps its displayed photo while comparison is pending. Newer inputs cancel outdated comparisons, empty photos show the missing-local-photo message without requesting a URL, and replaced or unmounted cards release their URLs. No photo hash or display state is added to IndexedDB or the cloud schema. This avoids thumbnail reloads from metadata-only record changes without changing inference, model settings, or photo compression.
 
 ### Synchronization
 
-`src/hooks/useSync.ts` coordinates Supabase synchronization:
+`src/hooks/useSync.ts` now synchronizes public treatment guidance only. Its public client has session persistence, token refresh, and URL-session detection disabled. It performs a full four-field GET at startup, online recovery, foreground recovery, and subscription readiness; it subscribes to direct Realtime INSERT/UPDATE/DELETE changes. Failed downloads retain saved advice and retry while online after 10, 30, 60, then 300 seconds. Each HTTP request has a 10-second bound.
 
-- Creates a stable per-browser `device_id` in `localStorage`.
-- Obtains and reuses a saved anonymous guest session for private cloud operations, without a login screen or a diagnosis dependency.
-- Uploads pending image blobs into the guest's directory in the private `scans` Storage bucket.
-- Inserts metadata with a verified owner and private object path. RLS compares that owner with the signed session; the browser's `device_id` is a label, not proof of ownership.
-- Marks deletions locally and removes only the guest's owned remote rows/files when online.
-- Pulls the signed guest's remote scans and downloads private photos into IndexedDB for later offline display.
-- Pulls publicly readable treatment guidelines independently of guest sign-in. After its ordering checks pass, a full response is compared with current local guidance. Identical content succeeds without database writes; a different valid full set atomically replaces the snapshot. Failed or superseded responses preserve saved advice.
-- Subscribes to Realtime changes for the `guidelines` table. INSERT/UPDATE messages carry the changed row and write it directly to IndexedDB; DELETE messages remove its row.
-- Uses a sync lock with one queued follow-up pass, a real 10-second cloud-request timeout, a 15-second session-wait bound, exponential retry while online, and an immediate retry when the app returns to foreground. The guest get-or-create sequence is also serialized across supported tabs with Web Locks.
-
-Supabase is therefore a synchronization and recovery layer; IndexedDB remains the immediate source used by the UI. Guest creation needs a network connection. A failed sign-in, refresh, or upload leaves local scanning available and cloud changes pending. Losing the saved anonymous session also loses access to that guest's cloud records; there is no cross-device account recovery in this design. The live server's private bucket and ownership policies were applied and verified on October 2. Client validation and release status are recorded separately in the [release guide](versions/PWA_VERSIONING.md#v055-guided-camera-and-installation-prepared-release-october-10-2026); local checks do not establish the current production client version.
+Local saving, deleting, photo display, and exact-file duplicate checks do not use a network connection or guest identity. HTTP and Realtime remain complementary: the GET catches changes missed while offline or before subscription readiness; received live events update the cached row directly. The existing overlap, cross-tab, and unchanged-content safeguards remain in `guidelines-sync.ts`.
 
 **Guideline update ordering, October 7, 2026:** `src/lib/guidelines-sync.ts` coordinates the HTTP snapshot and direct Realtime writes. Each HTTP attempt records the event counter and current local guidance before fetching. A received guideline event increments the counter immediately and queues its local write. If that event arrives before the HTTP download/save finishes, the potentially outdated HTTP result cannot replace the saved advice, and repeated events share a protected follow-up GET after the active attempt finishes or fails while online. Ordinary Realtime events do not request another GET when no guidance attempt is active. No millisecond threshold or special reconnect state decides this.
 
@@ -387,7 +426,7 @@ Private cloud endpoints for Auth, scans metadata, and Storage, together with pub
 
 The precache manifest that Serwist generates covers the build output _and every file under `public/`_. Anything added to `public/` is therefore downloaded to each installed device during service-worker installation, whether or not the application ever requests it. Keep assets that only documentation uses out of `public/` unless they also have to be reachable at a site URL.
 
-**That manifest, not the `CacheFirst` rule, is what actually updates the model.** `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `/model/*` rule never fires in practice. Every file under `public/model/` carries a content-revision hash in the manifest, so a changed weight shard is refetched on the next service-worker activation regardless of the cache name, and Serwist's own `activate` handler evicts precache entries missing from the current manifest. The current `MODEL_CACHE` label `mangoleaf-model-cache-v4-3-0` and the `OUTDATED_MODEL_CACHES` eviction are defence in depth whose real payoff is reclaiming superseded weights, including the V4.1.1, V4.2.0, and V4.3.0 candidate runtime caches, not the update mechanism. The activation filter protects the active V4.3.0 runtime cache. The runtime cache can legitimately be empty on a correctly updated device.
+**That manifest, not the `CacheFirst` rule, is what actually updates the model.** `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `/model/*` rule never fires in practice. Every model file carries a content-revision hash in the manifest and is refetched after service-worker activation when its bytes change. The current cache identity is `mangoleaf-model-cache-v4-5-0`; activation removes superseded model caches and protects the active cache.
 
 ### Static assets
 
@@ -398,12 +437,12 @@ These files must stay tracked in git. `.gitignore` patterns that could match the
 ## Data flow for a scan
 
 1. The user captures or selects an image from the scan sheet.
-2. The app hashes the original file and checks IndexedDB for a matching eligible scan. Reuse requires the exact active `model_version`; another label or an unlabeled legacy row cannot substitute for adopted V4.3.0 inference.
+2. The app hashes the original file and checks IndexedDB for a matching eligible scan. Reuse requires the exact active `model_version` `v4.5.0`; another label or an unlabeled legacy row cannot substitute for adopted-model inference.
 3. The single classifier preprocesses the image and runs on-device inference.
-4. The result and compressed image are saved to IndexedDB with `pending-insert` status.
-5. The scan appears immediately in the UI through Dexie live queries.
-6. If online, background synchronization obtains a guest session, uploads the image into its private owner directory, and inserts the owned metadata row. This does not delay steps 3–5.
-7. The local record becomes `synced`; failed operations remain pending for a later retry.
+4. The completed result and compressed image are prepared under one stable report ID.
+5. The report is committed to IndexedDB, then displayed; live queries update History.
+6. If the browser rejects the save because storage is full, the modal offers explicit History management, retry of that same result, or discard. The model does not run again for a save retry.
+7. Public treatment guidance comes from its separately refreshed IndexedDB table. No scan metadata or photo is sent to Supabase.
 
 ## Build and deployment constraints
 

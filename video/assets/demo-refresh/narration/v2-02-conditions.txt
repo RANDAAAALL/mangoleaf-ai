@@ -1,0 +1,1 @@
+It recognizes five disease classes: Anthracnose, Bacterial Canker, Sooty Mold, Bacterial Black Spot, and Mango Scab, plus Healthy Leaf and Healthy Fruit.

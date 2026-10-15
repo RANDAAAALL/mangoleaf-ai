@@ -220,17 +220,6 @@ export async function releaseGuidelineReads(page: Page) {
   });
 }
 
-export async function waitForMockScanPull(page: Page) {
-  // Sync pulls scan history after guidance; a synced row alone does not mean the pull finished.
-  const response = await page.waitForResponse(
-    (response) =>
-      response.request().method() === "GET" &&
-      new URL(response.url()).pathname === "/__mock__/rest/v1/scans",
-  );
-  expect(response.ok()).toBe(true);
-  expect(await response.finished()).toBeNull();
-}
-
 export async function openApp(page: Page) {
   await page.goto("/");
   await expect(homeHeading(page)).toBeVisible({ timeout: 90_000 });
@@ -299,20 +288,6 @@ export async function confirmScanDeletion(page: Page, count = 1) {
     .getByRole("button", { name: t.historyDeleteConfirmBtn, exact: true })
     .click();
   await expect(dialog).not.toBeVisible();
-}
-
-// Only the isolated HTTP mock accepts these test sessions. Never use this
-// helper against a production Supabase project or attach its token to reports.
-export async function mockGuestToken(page: Page): Promise<string> {
-  return page.evaluate(() => {
-    for (let index = 0; index < localStorage.length; index += 1) {
-      const key = localStorage.key(index)!;
-      if (!key.endsWith("-auth-token")) continue;
-      const value = JSON.parse(localStorage.getItem(key)!);
-      if (value.access_token) return value.access_token as string;
-    }
-    throw new Error("No isolated guest session was saved");
-  });
 }
 
 // Playwright serializes a Blob as an empty object. Inspect its byte length

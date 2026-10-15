@@ -1,0 +1,156 @@
+{
+  "version": "v2-kitten-current-script",
+  "provider": "kittenml-local",
+  "model": "KittenML/kitten-tts-2",
+  "weights": "emb4",
+  "voice_reference": "assets/voice/v2-01-overview.wav",
+  "voice_reference_text": "MangoLeaf AI helps mango farmers check mango leaves and Mango Green Fruit with on-device AI, even offline.",
+  "sample_rate": 24000,
+  "lines": [
+    {
+      "id": "v2-current-info-01-title",
+      "text": "What is MangoLeaf AI?",
+      "source": "assets/voice/v2kitten-current-info-01-title.wav",
+      "duration": 2.5
+    },
+    {
+      "id": "v2-current-info-02-overview",
+      "text": "Field-Ready Mango Health Diagnostic. MangoLeaf AI is a Progressive Web Application that helps Mango Farmers automate the classification of Mango Leaf and Mango Green Fruit conditions, even offline. It requires no login or registration, works offline, runs on-device AI diagnosis, provides English and Bisaya treatment guidance, and includes Scan History.",
+      "source": "assets/voice/v2kitten-current-info-02-overview.wav",
+      "duration": 22.42
+    },
+    {
+      "id": "v2-current-info-03-classes",
+      "text": "Support 7 classes. Leaf Diseases include Anthracnose, Sooty Mold, and Bacterial Canker. Fruit Diseases include Mango Scab and Bacterial Black Spot. Healthy results are Healthy Leaf and Healthy Fruit.",
+      "source": "assets/voice/v2kitten-current-info-03-classes.wav",
+      "duration": 13.82
+    },
+    {
+      "id": "v2-current-info-04-stack",
+      "text": "MangoLeaf AI Offline-First Tech Stack. Next.js, React, Bun, TypeScript, and Tailwind CSS. TensorFlow.js, Dexie, IndexedDB, Supabase, and Serwist. Model: MobileNet V3 Large.",
+      "source": "assets/voice/v2kitten-current-info-04-stack.wav",
+      "duration": 19.38
+    },
+    {
+      "id": "v2-current-info-05-walkthrough",
+      "text": "Simple Walkthrough. We will show one straightforward path: scan, take a photo, view the diagnosed result, open Scan History, then view the scan detail modal.",
+      "source": "assets/voice/v2kitten-current-info-05-walkthrough.wav",
+      "duration": 14.38
+    },
+    {
+      "id": "v2-current-demo-01-intro",
+      "text": "MangoLeaf AI checks a Mango Leaf or Mango Green Fruit right on your phone, even when you are offline.",
+      "source": "assets/voice/v2kitten-current-demo-01-intro.wav",
+      "duration": 6.82
+    },
+    {
+      "id": "v2-current-demo-02-take-photo",
+      "text": "Read the Photo Tips, then use Take Photo for this simple demo. Keep one whole Mango Leaf or Mango Green Fruit in even light.",
+      "source": "assets/voice/v2kitten-current-demo-02-take-photo.wav",
+      "duration": 8.7
+    },
+    {
+      "id": "v2-current-demo-03-capture",
+      "text": "Center the subject in the Green Box Guidance. Hold steady and use good light so the camera can capture a clear Mango Green Fruit view.",
+      "source": "assets/voice/v2kitten-current-demo-03-capture.wav",
+      "duration": 9.66
+    },
+    {
+      "id": "v2-current-demo-04-review",
+      "text": "Review your photo. Make sure one whole Mango Leaf or Mango Green Fruit is visible. After that, tap Run AI Diagnosis to start the on-device check.",
+      "source": "assets/voice/v2kitten-current-demo-04-review.wav",
+      "duration": 12.5
+    },
+    {
+      "id": "v2-current-demo-05-wait",
+      "text": "Please wait a moment while the on-device model checks your photo. After that, review the result.",
+      "source": "assets/voice/v2kitten-current-demo-05-wait.wav",
+      "duration": 6.22
+    },
+    {
+      "id": "v2-current-demo-06-result",
+      "text": "See the predicted condition, Confidence Score, and treatment guidance in English.",
+      "source": "assets/voice/v2kitten-current-demo-06-result.wav",
+      "duration": 6.42
+    },
+    {
+      "id": "v2-current-demo-07-bisaya",
+      "text": "Switch language with One tap so Mango Farmers can understand immediate treatment steps.",
+      "source": "assets/voice/v2kitten-current-demo-07-bisaya.wav",
+      "duration": 5.9
+    },
+    {
+      "id": "v2-current-demo-08-history",
+      "text": "Your Scan History keeps earlier results close at hand for a quick review.",
+      "source": "assets/voice/v2kitten-current-demo-08-history.wav",
+      "duration": 5.14
+    },
+    {
+      "id": "v2-current-demo-09-open-scan",
+      "text": "Select a saved scan to view its image, diagnosis, and treatment details together.",
+      "source": "assets/voice/v2kitten-current-demo-09-open-scan.wav",
+      "duration": 5.74
+    },
+    {
+      "id": "v2-current-demo-10-language",
+      "text": "English and Bisaya treatment guidance are available from the scan details.",
+      "source": "assets/voice/v2kitten-current-demo-10-language.wav",
+      "duration": 4.46
+    },
+    {
+      "id": "v2-current-demo-11-bisaya-close",
+      "text": "MangoLeaf AI brings offline diagnosis, Scan History, and Bisaya guidance together.",
+      "source": "assets/voice/v2kitten-current-demo-11-bisaya-close.wav",
+      "duration": 5.9
+    }
+  ],
+  "timing": {
+    "info_starts": [
+      4.0,
+      6.85,
+      29.62,
+      43.79,
+      63.52
+    ],
+    "demo_start": 78.4,
+    "voice_starts": [
+      78.5,
+      86.18,
+      95.74,
+      106.26,
+      119.62,
+      126.22,
+      133.5,
+      141.1,
+      147.1,
+      153.7,
+      158.54
+    ],
+    "scene_starts": [
+      78.4,
+      86.08,
+      95.64,
+      106.16,
+      119.52,
+      126.12,
+      133.4,
+      141.0,
+      147.0,
+      153.6,
+      158.44
+    ],
+    "tap_times": [
+      85.9,
+      95.46,
+      105.98,
+      119.34,
+      133.22,
+      139.98,
+      140.82,
+      146.82,
+      153.42
+    ],
+    "outro_at": 164.69,
+    "composition_duration": 167.29
+  }
+}

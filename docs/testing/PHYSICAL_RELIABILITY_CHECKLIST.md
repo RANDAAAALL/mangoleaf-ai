@@ -1,6 +1,8 @@
 # MangoLeaf AI physical reliability checklist
 
-Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current prepared app release is `0.5.5`, with model `v4.3.0`; fill results only after observing the recorded build.
+Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current repository source is prepared app `0.6.0`, model `v4.5.0`, confidence-only threshold 0.70. Fill results only after observing the exact recorded release build; physical-device evaluation remains pending.
+
+**Storage protocol introduced October 15:** Reports/photos stay in this browser's IndexedDB; Supabase updates public treatment guidance only. Use the actual tested build identity below. Earlier completed examples retain their historical cloud scope.
 
 Do not mark a case as passed before every required observation is recorded. Use `Pass`, `Fail`, or `Blocked`; explain every failure or block.
 
@@ -89,7 +91,7 @@ Use two different photos. Photo B must not have been scanned on this device befo
 - [ ] Wait for app and model to finish initial loading.
 - [ ] Scan Photo A:
 - [ ] Photo A result appears in Recent Scans and History, including its image.
-- [ ] Wait for visible synchronization to settle before disconnecting.
+- [ ] Open treatment guidance online once and confirm the downloaded advice is visible before disconnecting.
 - [ ] Close and reopen app once while still online.
 
 ### Airplane-mode check
@@ -106,12 +108,24 @@ Use two different photos. Photo B must not have been scanned on this device befo
 ### R02-M02: reconnection check
 
 - [ ] Restore network.
-- [ ] Wait for pending records to synchronize.
+- [ ] Confirm saved History/photos remain local after reconnection; no guest sign-in or scan upload is expected.
 - [ ] No duplicate records appear.
 - [ ] No deleted test record returns unexpectedly.
-- [ ] Verify the expected test rows, uploaded photos, and deletions on the designated backend; local History alone does not prove remote synchronization.
+- [ ] Change guidance on the designated test backend while offline; reconnect and confirm its current English/Bisaya advice downloads, then confirm a later live update appears. Do not write production treatment text for a test.
 - [ ] R02-M02 result: Pass / Fail / Blocked — reason and evidence location:
 - [ ] R02 result: Pass / Fail / Blocked — reason and evidence location:
+
+## Local storage-full recovery
+
+- [ ] Record device free space, browser/version, and whether quota failure was natural or injected.
+- [ ] A failed new scan save shows Device storage is full; existing History/photos remain intact.
+- [ ] Open History retains the unsaved result and lets the user explicitly delete selected reports.
+- [ ] Retry save stores that same result once without another AI prediction.
+- [ ] Repeated failure keeps the recovery actions available; no permanent analyzing overlay remains.
+- [ ] Discard releases the unsaved result and allows a new scan; it does not remove other reports.
+- [ ] Reloading loses an unsaved result as explained, while previously committed reports remain.
+- [ ] Repeat History view/delete and saving offline, then reconnect without duplicate/resurrected rows.
+- [ ] Storage-full result: Pass / Fail / Blocked — reason and evidence location:
 
 ## R03-M01: 30-minute mixed-use session
 
@@ -122,6 +136,8 @@ End time:
 Use real scans. To avoid duplicate shortcuts, choose different photos or delete each completed test record before its next use. Include Details, History, navigation, rotation, background/resume, and network changes.
 
 **October 9, 2026 protocol update:** Mix actual guided-camera capture and gallery uploads. Synthetic-camera automation does not satisfy these observations. The protocol was aligned with the new camera; no full or shortened R03 session was run for that update. Record results only after this physical session occurs.
+
+**October 16, 2026 alignment:** Record the tested app/model versions, model hashes, and actual WebGL precision when available in DevTools. Current repository source uses V4.5.0 and confidence-only rejection at 0.70. Reports and photo Blobs stay local; reconnection refreshes public guidelines and must not upload private scan/photo data. This checklist remains blank until physical observations are recorded.
 
 | Time   | Action completed                                              | Result / observation | Crash, freeze, lost record, or stuck scan? | Heat / battery / slowdown notes | Pass / Fail / Blocked |
 | ------ | ------------------------------------------------------------- | -------------------- | ------------------------------------------ | ------------------------------- | --------------------- |
@@ -139,7 +155,7 @@ Use real scans. To avoid duplicate shortcuts, choose different photos or delete 
 - [ ] Camera Retake discarded review and reopened live preview without saving or predicting; gallery Retake reopened its picker.
 - [ ] Camera streams stopped after Capture, Close, and backgrounding; record OS camera-indicator behavior and observed delays.
 - [ ] Permission denial left the app usable; permission recovery and retry were observed, with no invented pass if browser settings prevented the check.
-- [ ] After app/model caching, capture and diagnosis worked offline; reconnection preserved expected History and queued synchronization.
+- [ ] After app/model caching, capture and diagnosis worked offline; reconnection preserved local History/photos and allowed public guideline refresh without private scan/photo requests.
 - [ ] Camera-start/capture delays, device rotation, heat, battery, and interruptions were recorded as observations rather than inferred from desktop tests.
 - [ ] R03 result: Pass / Fail / Blocked — reason and evidence location:
 
@@ -170,6 +186,10 @@ Take Photo now opens a live browser camera below 768px; it does not launch the o
 
 ### Result and layout
 
+- [ ] Run at least two distinct camera captures and gallery uploads online and after offline caching; record device/OS/browser, each progress stage, and total elapsed time.
+- [ ] If analysis stalls, record the 15/45/75/90% marker and `[Diagnosis]` console timings. Check Cancel/Escape and the offered retry/reload action without random tapping.
+- [ ] If GPU warmup times out after model assets load, confirm the startup failure banner and Reload action. Record device/browser logs; model/config download stalls remain a separate check.
+- [ ] After recovery, check History for missing or duplicate rows; a result committed before cancellation remains valid and should be reused by the exact-photo/current-model check.
 - [ ] Test accepted result: photo, class, confidence, and Details appear.
 - [ ] Test uncertain result if available: photo and uncertain label appear; no raw diagnostics appear in modal.
 - [ ] Recent Scans displays latest record and image.

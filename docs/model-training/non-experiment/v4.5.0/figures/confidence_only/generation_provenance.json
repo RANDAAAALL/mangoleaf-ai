@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-14",
+  "purpose": "Locally regenerated figures from the preserved V4.5.0 confidence-only reference",
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": null,
+    "entropyThreshold": null
+  },
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "mangoTest": {
+    "total": 397,
+    "accepted": 389,
+    "rejected": 8,
+    "correctAccepted": 377,
+    "wrongAccepted": 12,
+    "correctAcceptedFractionOfAllPhotos": 0.9496221662468514,
+    "acceptedOnlyAccuracy": 0.9691516709511568,
+    "rawAccuracy": 0.9672544080604534
+  },
+  "rejectionAwareConfusionMatrix": [
+    [74, 0, 0, 0, 0, 0, 0, 0],
+    [0, 31, 0, 0, 0, 9, 0, 5],
+    [0, 0, 75, 0, 0, 0, 0, 0],
+    [0, 0, 0, 17, 0, 0, 0, 1],
+    [0, 0, 0, 0, 75, 0, 0, 0],
+    [0, 2, 0, 0, 0, 30, 0, 2],
+    [1, 0, 0, 0, 0, 0, 75, 0]
+  ],
+  "rejectionAwarePerClassMetrics": [
+    {
+      "className": "anthracnose",
+      "precision": 0.9866666666666667,
+      "recall": 1.0,
+      "f1Score": 0.9932885906040269,
+      "support": 74
+    },
+    {
+      "className": "bacterial_black_spot",
+      "precision": 0.9393939393939394,
+      "recall": 0.6888888888888889,
+      "f1Score": 0.7948717948717948,
+      "support": 45
+    },
+    {
+      "className": "bacterial_canker",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1Score": 1.0,
+      "support": 75
+    },
+    {
+      "className": "healthy_fruit",
+      "precision": 1.0,
+      "recall": 0.9444444444444444,
+      "f1Score": 0.9714285714285714,
+      "support": 18
+    },
+    {
+      "className": "healthy_leaf",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1Score": 1.0,
+      "support": 75
+    },
+    {
+      "className": "mango_scab",
+      "precision": 0.7692307692307693,
+      "recall": 0.8823529411764706,
+      "f1Score": 0.8219178082191781,
+      "support": 34
+    },
+    {
+      "className": "sooty_mold",
+      "precision": 1.0,
+      "recall": 0.9868421052631579,
+      "f1Score": 0.9933774834437086,
+      "support": 76
+    }
+  ],
+  "sources": {
+    "evaluation": {
+      "path": "docs/model-training/experiment/v4.5.0/artifacts/threshold_fitting/evaluation.json",
+      "sha256": "10e058bed7812831cd618d0a6a27d406aa42ecf97de10a222c156ff2c1395737"
+    },
+    "confidenceOnlyPredictions": {
+      "path": "docs/model-training/experiment/v4.5.0/artifacts/threshold_fitting/confidence_only_mango_test_predictions.csv",
+      "sha256": "3eb7689e32cdacfd99011f88621eea772560e937446450fcae8214ad58343c7c"
+    },
+    "originalPredictions": {
+      "path": "docs/model-training/experiment/v4.5.0/artifacts/threshold_fitting/mango_test_predictions.csv",
+      "sha256": "6968f853dfdf9952e079c7cde21568c90d729156adc45dcde360c0be94bc284b"
+    }
+  },
+  "generator": {
+    "path": "tools/generate-v4-5-confidence-only-figures.py",
+    "sha256": "288e33c76635074a96691744fd0002592321b480b2b6b345c5c36e9b86dfc1bf"
+  },
+  "runtime": {
+    "python": "3.12.1",
+    "matplotlib": "3.11.2",
+    "numpy": "2.5.3"
+  },
+  "outputs": {
+    "confusion_matrix_with_rejection.png": {
+      "sha256": "8f2ddb12e914746069c1b97bb4726a347623544a439e34757102788ad458f032",
+      "bytes": 311030
+    },
+    "per_class_metrics_with_rejection.png": {
+      "sha256": "e160c06776cd36e22992967fb9b562ed08623a972e9dc2fbfb39bddc2c999c4b",
+      "bytes": 152880
+    },
+    "figure_captions.json": {
+      "sha256": "d6de4b9c297f327de0b61ce659c9986cd6b94099891fff1349d23e8ef5185f30",
+      "bytes": 488
+    }
+  },
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.5.0/training/v4-5-0-training-20261011T063913Z-40b7b0fe",
+  "trainingCompleteSha256": "7bf59fb00836d554f25aa310bdb1f93db36a79b87ec72f5627f830e2302e3dd5",
+  "modelWeightsChanged": false,
+  "inferenceRerun": false,
+  "browserPredictionParityMeasured": false,
+  "evidenceLimit": "Derived saved-study charts; no new independent evaluation, browser parity measurement, app threshold change, or deployment."
+}

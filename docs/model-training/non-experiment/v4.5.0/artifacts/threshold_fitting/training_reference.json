@@ -1,0 +1,17 @@
+{
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.5.0/training/v4-5-0-training-20261011T063913Z-40b7b0fe",
+  "trainingCompleteSha256": "7bf59fb00836d554f25aa310bdb1f93db36a79b87ec72f5627f830e2302e3dd5",
+  "configurationHash": "ac50fa09594a84834963536c3cc7c515daa1e2a4f5bfbe350dcf4c38affaec1e",
+  "oeInventorySha256": "04d59652425e8d42e62e166355d86202844cfe73d133060f0de560ee5b5ee2b6",
+  "heldOutOodInventorySha256": "746f4fc9d9926bf573fc5913744b1d0f63810174b2ab9067f9c645457893a2ce",
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "createdAt": "2026-10-11T17:15:28.988461+00:00"
+}

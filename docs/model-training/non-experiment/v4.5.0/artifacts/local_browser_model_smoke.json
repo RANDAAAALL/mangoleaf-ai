@@ -1,0 +1,2070 @@
+{
+  "status": "pass",
+  "completedAt": "2026-10-11T18:47:45.507Z",
+  "scope": "Actual production classifier through existing inference harness; direct model validation only",
+  "browserVersion": "153.0.8010.12",
+  "applicationFingerprint": "f9513153d710f85b1eede17302d389486167174b8dc02ab03e94157c5b228efc",
+  "sourceInputs": {
+    "bun.lock": "f186cef400df31b3be057f8224da9ec94fb61503126e89ffa181ede4bdb2df7b",
+    "next.config.ts": "24167726c5765d456a629962210e2594e41395ac89ca21a0c9a106646f2c9eb1",
+    "package.json": "9fef8ab345cbe4ffdb4807078e9ba4ab5eaf42bfb466d77868f75f7180a19ab2",
+    "postcss.config.mjs": "dfac7ac2d86d326a0e5adb024e7943c181393ed17a5fcb8f0315b24c7da6ddde",
+    "public/images/icons/png/apple-touch-icon.png": "888d57517aafe4b5d85ea7cb6a605a8872f929f62b501a4173794ea77ab83bde",
+    "public/images/icons/png/favicon-16x16.png": "6aedebcbcdd45e54ea0c51c806734ba96a8bfb4bf7fa79f52eb0eae11ff4e555",
+    "public/images/icons/png/favicon-32x32.png": "8f8ce51f3512ca12ef0847a0d1ea7c9a3c3276e294aaaadfdfd5dc57d04ff4aa",
+    "public/images/icons/png/icon-192x192.png": "a37ec507fd3102f1504f97b20e6269fe27818e2ae11b7c89f524d90bd4608546",
+    "public/images/icons/png/icon-512x512.png": "25d16e3c2f856484ed40f163d8b8f8bacba8fbd140229617a92ca46bc945b87f",
+    "public/images/icons/svg/favicon.svg": "d6ddd5a949bfaa5b62a18549bb36397beffdbe44c490522fced918f809edb892",
+    "public/images/icons/svg/icon.svg": "a577cfe7b0b2fbec95bbf1f07c30b57e2fd8d38fb12c838c8f53f6f4a8a693a4",
+    "public/images/mangoleaf-architecture.svg": "5578a0046b09bcc359797e5c159cd77c1cff5a8bde51d65ffa376a00d0f56599",
+    "public/install-qr.svg": "9777ec05ea80308f5c7289ebe7ecd4161ff91c366b880da134a8c50cac9e39a3",
+    "public/model/group1-shard1of3.bin": "3afb04fb4e127cdbe19f71e396966ddab8eb136522ebd1bc4c9eabfd68032692",
+    "public/model/group1-shard2of3.bin": "72671218e2f2370306f99e28df46873e3063cab258463a1c9a4aec7e2b6dd619",
+    "public/model/group1-shard3of3.bin": "075e1eabdb172384f5c5df496b211d5463eee12bc54cec6ca1d40ab0a73225d2",
+    "public/model/model.json": "0fd24e1f0f6bd5595566b8f4aec130808fbd510208ed82abbdc4d319fd2aa2a1",
+    "public/model/model_config.json": "01caf6c73bd8223c82ce501dcff8d4df9dc906fb39e88860a021ee0602b14306",
+    "src/app/globals.css": "a79c659f730aabec11854de838ff0ffd7346b23eeab507086dfdb33bdc85df5b",
+    "src/app/layout.tsx": "496f170a0dc7bc1a3aefeb280386cc54ce16695d81ca28240fac81c29c54baf1",
+    "src/app/manifest.ts": "ff281a75ed81168a13bba546601e5ac22702eb3dafaab7a3de62f1d1ab51f05d",
+    "src/app/page.tsx": "46b4f630563582e21f1b944f35767e3cdd915270302af9bd2e271fde422442ee",
+    "src/components/brand/icon.tsx": "74374088c9951cecd8c515431f3680f1ba31307e626b79d1683280a446dff1e4",
+    "src/components/brand/logo.tsx": "f4e2aa467278575ca92f647a5b0d8c1e7f72e50db00c8ec7ac5824c22bbd8546",
+    "src/components/layout/bottom-nav.tsx": "e5f64c7dea8cfe86baaaabb2526f305316f3756626cf2a9ebb59333e7b6ce192",
+    "src/components/layout/footer.tsx": "5a78a6f595dd04d22b4a7d35b483c54e634e60a73a8e7458c6fcfb0657c66ade",
+    "src/components/layout/splash-screen.tsx": "b2f3db56e1ffdf006fa2c1dcf8c45cdbb7a79e193872de050bec64ddf915ba97",
+    "src/components/layout/top-header.tsx": "eca4da3487e7f0e16b64906fe386a133cbe8c96350aab86e3437b191684c5d22",
+    "src/components/modal/delete-scans-modal.tsx": "3661d7a2ced0915f311d13ae6d71e1429f309602dd99a4d35daef1dee82e2666",
+    "src/components/modal/install-guide-overlay.tsx": "38cea12231c3a81d476893dc72baa647ad60ccc9592864d1188293b3aa26083b",
+    "src/components/modal/legal-modal.tsx": "0eb4bd5f456ea9c8b59108c8ca8d016744318eb926efae4b5654d8a97dea1b6d",
+    "src/components/modal/scan-details-modal.tsx": "e6f4338624d2d46de8ef869b8d2de883ddd75aa958c4c06aa98b5a5cd7cda283",
+    "src/components/modal/scan-sheet.tsx": "6964f4cead03e364c7816acd6e08c6a227b178679c17fd08b9fc15fcd3a32344",
+    "src/components/scan/diagnostic-scanner.tsx": "537307af6a9a8e7d5b1debe7d68c424bc40f47cf4fea90dd224baf9324aba51f",
+    "src/components/scan/disease-coverage-card.tsx": "470475b867b9fe467b51a89d4f504f7425a7c334f404aea168015a2407ebf0e1",
+    "src/components/scan/download-prompt-card.tsx": "d8a0e5ac153112c4f40706b1b6e007dd45d39a2023c1fb607c1db1fb50c6badf",
+    "src/components/scan/guided-camera.tsx": "caf28dd48aed950b527937c1671f5775402fa9834e410a2464be508dc5cc8ac1",
+    "src/components/scan/how-it-works-steps.tsx": "5b792396f36f61e745f177291ec1940bb03155ec38bb73bab496e4696af4b89b",
+    "src/components/scan/scan-card.tsx": "01550dbb1c6757dd4e65fce5091982243a765b04bb78cadf31b65dd45e94b108",
+    "src/components/scan/scan-history-list.tsx": "3e8c9912cf78fd064ec1882a85fe6c2831d95f0d173e7d02b07b2555612c2665",
+    "src/components/tab/about-tab.tsx": "01275b612bae022f033171fce6d0be1884c9d4d13f30b291adb84a76aeb7dc98",
+    "src/components/tab/history-tab.tsx": "f77c1f6a8a574eb590d41853583d740d78740de5972c0999dcd0ce3fe5be9bb2",
+    "src/components/tab/home-tab.tsx": "5125ac15a710247449dbfff69a1dba0625f0888ca40f3b91eb33dfb1f0bbce97",
+    "src/env.d.ts": "6d0622c35af7677a0f5910d1c1bad50b7cd461625be30a412106631b6b09876c",
+    "src/hooks/useGuidedCamera.ts": "884d51d82195e9648046674b27b70de0888e0fd30c95f0db06340977d048bd44",
+    "src/hooks/useInstallGuide.ts": "b8bbc4e6e2b10789479f68d29af438839eb306acd9bd6f26f5b2e1e4e0d25b2b",
+    "src/hooks/usePWAInstall.ts": "633caa747c44c421195739a7218117f3fdc5594bb5287467478a18dc36f7276d",
+    "src/hooks/useScanPhotoUrl.ts": "9b5777473a526efa9aeba9ecc02c352f5f6dd6fde68c4097421655e4449fa299",
+    "src/hooks/useScrollLock.ts": "1394aa6b5e53cf1611ee41a3ef0f26bad9752b741bb458654687b8e4a2dbc315",
+    "src/hooks/useSync.ts": "9e7756e7c2358cb0071e298060d5f37102644210e6a0ecd0efa3d958c79f0e40",
+    "src/lib/classifier.ts": "8c26a7e02b4f30fbae4c28c5ad0c3a6e6f3199bbd6ec8aaa46a398e6942624eb",
+    "src/lib/cloud-scan.ts": "69d11f1a79458c26f2aac6d783bc9505eccacd0115a411e5b6dba1246cc85412",
+    "src/lib/cloud-session.ts": "a828fac2b265d973f29ef20c76c468c4622c421a423c686f68305714ba90ba09",
+    "src/lib/cloud-sync.ts": "d1cdcdcc8b765390a11e9a104ef315c34b0df6b572889d5f37eefea0c1687ecd",
+    "src/lib/constants.ts": "85c699ec4a78800f30edf6b1a411e29fc2151c3f35024c8f5031a25210a33fad",
+    "src/lib/db.ts": "13e7be187db944a72572b0548e206e83a93adda4a4d3533d5df5afaa90353b36",
+    "src/lib/format-time-ago.ts": "618f5d58dbd6ed9d318da9d370793751c9127208dce56589c2be990a667e686e",
+    "src/lib/get-badge-styles.ts": "e947cd64c032a3e55e62a48a92f925e15ac85f53a80c3fc0ad9ed71c9145f210",
+    "src/lib/guidelines-sync.ts": "aa9d6caa18585a1bfd2c8ef92797cde754833a612fb0a900f6835b29a0cf9084",
+    "src/lib/image-hash.ts": "15062f80b8994adf5edcc5fdc77f81c31cfd68f7e8aaee1a91051413df38b5b1",
+    "src/lib/image-storage.ts": "18aa62fe0cf1de7053c9b8df46c6845e90c6a710464cc70784823777b94adf54",
+    "src/lib/supabase-client.ts": "2c9b69b09f1b9ca4a8b72213abf0b1681fc563d9fb5e0471f6b8d33ebb713e17",
+    "src/lib/translations.ts": "dfcc2d670b42918ee3b30396b2e672bb1663b0f486fcefafba12dab25adc618c",
+    "src/sw.ts": "9a038902bf479faa9db1df5ac703cd5d93bded8977e040325683fec906c0ac1e",
+    "tsconfig.json": "4b0114fb01dce664433cdcb307c2670342d5d1e8e8f67c5beabecb0dd5cc1000"
+  },
+  "modelAssetsVersion": "model-v4.5.0-candidate",
+  "backend": "local mock server; production services blocked",
+  "offlineScope": "Already-loaded model with original fixture bytes supplied as data URLs; no service-worker reload/History flow verified",
+  "browserKerasProbabilityParityMeasured": false,
+  "fullM01UiSuitePassed": false,
+  "fullR02OfflineUiSuitePassed": false,
+  "r03ThirtyMinuteTestRun": false,
+  "shortenedR03SubstituteRun": false,
+  "profiles": [
+    {
+      "profile": "chromium-desktop",
+      "metadata": {
+        "modelVersion": "v4.5.0-candidate",
+        "modelAssetVersion": "model-v4.5.0-candidate",
+        "tfjs": "4.22.0",
+        "backend": "webgl",
+        "forcedFloat16": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "thresholds": {
+          "confidenceThreshold": 0.7,
+          "marginThreshold": 0,
+          "entropyThreshold": 0.4
+        },
+        "classes": [
+          "Anthracnose",
+          "Bacterial Black Spot",
+          "Bacterial Canker",
+          "Healthy Fruit",
+          "Healthy Leaf",
+          "Mango Scab",
+          "Sooty Mold"
+        ]
+      },
+      "observations": [
+        {
+          "file": "healthy_mango_fruit.JPG",
+          "sha256": "5e832bc5a93f67dda12f79405fa39e89f7208052bb5ee6e627711967c6ee668c",
+          "expectedLabel": "Healthy Fruit",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "99.90%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.05%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.01%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Healthy Fruit",
+            "confidence": 1,
+            "rawClass": "Healthy Fruit",
+            "rawConfidence": 0.9990234375,
+            "margin": 0.9984922409057617,
+            "entropy": 0.0048810317533444746,
+            "probabilities": [
+              0.00022673606872558594,
+              0.00009304285049438477,
+              0.000012040138244628906,
+              0.9990234375,
+              0.0001608133316040039,
+              0.0005311965942382812,
+              0.000019252300262451172
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 1625.2000000029802,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "healthy_mangoleaf.jpg",
+          "sha256": "46aba3daebb33fb637f38a985d09d63cfae3810d93a5debd8dbe17a8b9d2c464",
+          "expectedLabel": "Healthy Leaf",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "100.00%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Healthy Leaf",
+            "confidence": 1,
+            "rawClass": "Healthy Leaf",
+            "rawConfidence": 1,
+            "margin": 0.9998286962509155,
+            "entropy": 0.0009519913474755762,
+            "probabilities": [
+              0.00003534555435180664,
+              0,
+              2.384185791015625e-7,
+              0,
+              1,
+              5.960464477539063e-8,
+              0.00017130374908447266
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 161.70000000298023,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangofruit_bacterial_black_spot.jpg",
+          "sha256": "d099549a7f4fc77ed38682754361c99664b29f3ab6af10ceab8bf87747612457",
+          "expectedLabel": "Bacterial Black Spot",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "96.97%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "1.59%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.77%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.49%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.08%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.06%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Bacterial Black Spot",
+            "confidence": 0.97,
+            "rawClass": "Bacterial Black Spot",
+            "rawConfidence": 0.9697265625,
+            "margin": 0.9538116455078125,
+            "entropy": 0.08713338995595575,
+            "probabilities": [
+              0.007732391357421875,
+              0.9697265625,
+              0.000579833984375,
+              0.000037670135498046875,
+              0.0007681846618652344,
+              0.004894256591796875,
+              0.0159149169921875
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 145.40000000596046,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangofruit_mango_scab.png",
+          "sha256": "46489d778fa5c3d04468e8a5301916527c43ff43d4dd25e735ee1ce160728424",
+          "expectedLabel": "Mango Scab",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Mango Scab",
+                "Probability": "88.18%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "11.10%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.47%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.12%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.07%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Mango Scab",
+            "confidence": 0.88,
+            "rawClass": "Mango Scab",
+            "rawConfidence": 0.8818359375,
+            "margin": 0.77081298828125,
+            "entropy": 0.20246779141806426,
+            "probabilities": [
+              0.00003451108932495117,
+              0.11102294921875,
+              0.000021636486053466797,
+              0.0007181167602539062,
+              0.0011882781982421875,
+              0.8818359375,
+              0.004718780517578125
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 137.6000000089407,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_anthracnose.jpg",
+          "sha256": "392c0842f1215bd3fb639ec6965e53194004c8c2d33f93a3ce6a36d506460dc9",
+          "expectedLabel": "Anthracnose",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Anthracnose",
+                "Probability": "76.46%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "15.95%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "6.59%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.49%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.43%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.02%"
+              }
+            ],
+            "diseaseName": "Anthracnose",
+            "confidence": 0.76,
+            "rawClass": "Anthracnose",
+            "rawConfidence": 0.7646484375,
+            "margin": 0.6051025390625,
+            "entropy": 0.37510348088888934,
+            "probabilities": [
+              0.7646484375,
+              0.00019979476928710938,
+              0.0042877197265625,
+              0.00019669532775878906,
+              0.1595458984375,
+              0.00485992431640625,
+              0.06591796875
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 141.5,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_bacterial_canker.jpg",
+          "sha256": "822150af07b381a8e22da8f2f7611dbaf89c6a354c8511667dcdd85319329677",
+          "expectedLabel": "Bacterial Canker",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "100.00%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.01%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Bacterial Canker",
+            "confidence": 1,
+            "rawClass": "Bacterial Canker",
+            "rawConfidence": 1,
+            "margin": 0.9999158382415771,
+            "entropy": 0.0006900206716798676,
+            "probabilities": [
+              0.00008416175842285156,
+              0.000012636184692382812,
+              1,
+              0.0000013709068298339844,
+              0.000013947486877441406,
+              0.000017523765563964844,
+              0.000003516674041748047
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 138.09999999403954,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_sooty_mold.jpg",
+          "sha256": "265c4244670d7e8ac61a7c58eaba00814ec3e9dd1e042f0fe7e0fb696b8d9b0b",
+          "expectedLabel": "Sooty Mold",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Sooty Mold",
+                "Probability": "87.99%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "6.48%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "3.24%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "1.34%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.65%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.27%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.06%"
+              }
+            ],
+            "diseaseName": "Sooty Mold",
+            "confidence": 0.88,
+            "rawClass": "Sooty Mold",
+            "rawConfidence": 0.8798828125,
+            "margin": 0.81512451171875,
+            "entropy": 0.262954018938437,
+            "probabilities": [
+              0.06475830078125,
+              0.0006103515625,
+              0.0026836395263671875,
+              0.01335906982421875,
+              0.006458282470703125,
+              0.032440185546875,
+              0.8798828125
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 144.09999999403954,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "ood.jpg",
+          "sha256": "9b995697456d49e1bf9ed6b10650bc55948d422dd5be25e9c30ae59a7c7a4b65",
+          "expectedLabel": null,
+          "expectedKind": "ood",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Mango Scab",
+                "Probability": "20.78%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "20.10%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "20.02%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "12.95%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "12.24%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "9.25%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "4.61%"
+              }
+            ],
+            "diseaseName": "Uncertain / Unrecognized",
+            "confidence": 0.21,
+            "rawClass": "Mango Scab",
+            "rawConfidence": 0.207763671875,
+            "margin": 0.0067138671875,
+            "entropy": 0.9532365633084514,
+            "probabilities": [
+              0.2010498046875,
+              0.1295166015625,
+              0.2001953125,
+              0.1224365234375,
+              0.04608154296875,
+              0.207763671875,
+              0.092529296875
+            ],
+            "failedGates": [
+              "confidence",
+              "entropy"
+            ],
+            "accepted": false,
+            "durationMs": 141.79999999701977,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "healthy_mango_fruit.JPG",
+          "sha256": "5e832bc5a93f67dda12f79405fa39e89f7208052bb5ee6e627711967c6ee668c",
+          "expectedLabel": "Healthy Fruit",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "99.90%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.05%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.01%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Healthy Fruit",
+            "confidence": 1,
+            "rawClass": "Healthy Fruit",
+            "rawConfidence": 0.9990234375,
+            "margin": 0.9984922409057617,
+            "entropy": 0.0048810317533444746,
+            "probabilities": [
+              0.00022673606872558594,
+              0.00009304285049438477,
+              0.000012040138244628906,
+              0.9990234375,
+              0.0001608133316040039,
+              0.0005311965942382812,
+              0.000019252300262451172
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 143.5,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "healthy_mangoleaf.jpg",
+          "sha256": "46aba3daebb33fb637f38a985d09d63cfae3810d93a5debd8dbe17a8b9d2c464",
+          "expectedLabel": "Healthy Leaf",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "100.00%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Healthy Leaf",
+            "confidence": 1,
+            "rawClass": "Healthy Leaf",
+            "rawConfidence": 1,
+            "margin": 0.9998286962509155,
+            "entropy": 0.0009519913474755762,
+            "probabilities": [
+              0.00003534555435180664,
+              0,
+              2.384185791015625e-7,
+              0,
+              1,
+              5.960464477539063e-8,
+              0.00017130374908447266
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 136.79999999701977,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangofruit_bacterial_black_spot.jpg",
+          "sha256": "d099549a7f4fc77ed38682754361c99664b29f3ab6af10ceab8bf87747612457",
+          "expectedLabel": "Bacterial Black Spot",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "96.97%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "1.59%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.77%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.49%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.08%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.06%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Bacterial Black Spot",
+            "confidence": 0.97,
+            "rawClass": "Bacterial Black Spot",
+            "rawConfidence": 0.9697265625,
+            "margin": 0.9538116455078125,
+            "entropy": 0.08713338995595575,
+            "probabilities": [
+              0.007732391357421875,
+              0.9697265625,
+              0.000579833984375,
+              0.000037670135498046875,
+              0.0007681846618652344,
+              0.004894256591796875,
+              0.0159149169921875
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 136.20000000298023,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangofruit_mango_scab.png",
+          "sha256": "46489d778fa5c3d04468e8a5301916527c43ff43d4dd25e735ee1ce160728424",
+          "expectedLabel": "Mango Scab",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Mango Scab",
+                "Probability": "88.18%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "11.10%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.47%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.12%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.07%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Mango Scab",
+            "confidence": 0.88,
+            "rawClass": "Mango Scab",
+            "rawConfidence": 0.8818359375,
+            "margin": 0.77081298828125,
+            "entropy": 0.20246779141806426,
+            "probabilities": [
+              0.00003451108932495117,
+              0.11102294921875,
+              0.000021636486053466797,
+              0.0007181167602539062,
+              0.0011882781982421875,
+              0.8818359375,
+              0.004718780517578125
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 136.40000000596046,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_anthracnose.jpg",
+          "sha256": "392c0842f1215bd3fb639ec6965e53194004c8c2d33f93a3ce6a36d506460dc9",
+          "expectedLabel": "Anthracnose",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Anthracnose",
+                "Probability": "76.46%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "15.95%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "6.59%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.49%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.43%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.02%"
+              }
+            ],
+            "diseaseName": "Anthracnose",
+            "confidence": 0.76,
+            "rawClass": "Anthracnose",
+            "rawConfidence": 0.7646484375,
+            "margin": 0.6051025390625,
+            "entropy": 0.37510348088888934,
+            "probabilities": [
+              0.7646484375,
+              0.00019979476928710938,
+              0.0042877197265625,
+              0.00019669532775878906,
+              0.1595458984375,
+              0.00485992431640625,
+              0.06591796875
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 138.5,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_bacterial_canker.jpg",
+          "sha256": "822150af07b381a8e22da8f2f7611dbaf89c6a354c8511667dcdd85319329677",
+          "expectedLabel": "Bacterial Canker",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "100.00%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.01%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Bacterial Canker",
+            "confidence": 1,
+            "rawClass": "Bacterial Canker",
+            "rawConfidence": 1,
+            "margin": 0.9999158382415771,
+            "entropy": 0.0006900206716798676,
+            "probabilities": [
+              0.00008416175842285156,
+              0.000012636184692382812,
+              1,
+              0.0000013709068298339844,
+              0.000013947486877441406,
+              0.000017523765563964844,
+              0.000003516674041748047
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 140.40000000596046,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_sooty_mold.jpg",
+          "sha256": "265c4244670d7e8ac61a7c58eaba00814ec3e9dd1e042f0fe7e0fb696b8d9b0b",
+          "expectedLabel": "Sooty Mold",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Sooty Mold",
+                "Probability": "87.99%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "6.48%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "3.24%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "1.34%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.65%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.27%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.06%"
+              }
+            ],
+            "diseaseName": "Sooty Mold",
+            "confidence": 0.88,
+            "rawClass": "Sooty Mold",
+            "rawConfidence": 0.8798828125,
+            "margin": 0.81512451171875,
+            "entropy": 0.262954018938437,
+            "probabilities": [
+              0.06475830078125,
+              0.0006103515625,
+              0.0026836395263671875,
+              0.01335906982421875,
+              0.006458282470703125,
+              0.032440185546875,
+              0.8798828125
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 141.3999999910593,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "ood.jpg",
+          "sha256": "9b995697456d49e1bf9ed6b10650bc55948d422dd5be25e9c30ae59a7c7a4b65",
+          "expectedLabel": null,
+          "expectedKind": "ood",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Mango Scab",
+                "Probability": "20.78%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "20.10%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "20.02%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "12.95%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "12.24%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "9.25%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "4.61%"
+              }
+            ],
+            "diseaseName": "Uncertain / Unrecognized",
+            "confidence": 0.21,
+            "rawClass": "Mango Scab",
+            "rawConfidence": 0.207763671875,
+            "margin": 0.0067138671875,
+            "entropy": 0.9532365633084514,
+            "probabilities": [
+              0.2010498046875,
+              0.1295166015625,
+              0.2001953125,
+              0.1224365234375,
+              0.04608154296875,
+              0.207763671875,
+              0.092529296875
+            ],
+            "failedGates": [
+              "confidence",
+              "entropy"
+            ],
+            "accepted": false,
+            "durationMs": 142.19999998807907,
+            "tensors": 212
+          }
+        }
+      ]
+    },
+    {
+      "profile": "chromium-mobile",
+      "metadata": {
+        "modelVersion": "v4.5.0-candidate",
+        "modelAssetVersion": "model-v4.5.0-candidate",
+        "tfjs": "4.22.0",
+        "backend": "webgl",
+        "forcedFloat16": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "thresholds": {
+          "confidenceThreshold": 0.7,
+          "marginThreshold": 0,
+          "entropyThreshold": 0.4
+        },
+        "classes": [
+          "Anthracnose",
+          "Bacterial Black Spot",
+          "Bacterial Canker",
+          "Healthy Fruit",
+          "Healthy Leaf",
+          "Mango Scab",
+          "Sooty Mold"
+        ]
+      },
+      "observations": [
+        {
+          "file": "healthy_mango_fruit.JPG",
+          "sha256": "5e832bc5a93f67dda12f79405fa39e89f7208052bb5ee6e627711967c6ee668c",
+          "expectedLabel": "Healthy Fruit",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "99.90%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.05%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.01%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Healthy Fruit",
+            "confidence": 1,
+            "rawClass": "Healthy Fruit",
+            "rawConfidence": 0.9990234375,
+            "margin": 0.9984922409057617,
+            "entropy": 0.0048810317533444746,
+            "probabilities": [
+              0.00022673606872558594,
+              0.00009304285049438477,
+              0.000012040138244628906,
+              0.9990234375,
+              0.0001608133316040039,
+              0.0005311965942382812,
+              0.000019252300262451172
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 567.2999999970198,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "healthy_mangoleaf.jpg",
+          "sha256": "46aba3daebb33fb637f38a985d09d63cfae3810d93a5debd8dbe17a8b9d2c464",
+          "expectedLabel": "Healthy Leaf",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "100.00%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Healthy Leaf",
+            "confidence": 1,
+            "rawClass": "Healthy Leaf",
+            "rawConfidence": 1,
+            "margin": 0.9998286962509155,
+            "entropy": 0.0009519913474755762,
+            "probabilities": [
+              0.00003534555435180664,
+              0,
+              2.384185791015625e-7,
+              0,
+              1,
+              5.960464477539063e-8,
+              0.00017130374908447266
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 158,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangofruit_bacterial_black_spot.jpg",
+          "sha256": "d099549a7f4fc77ed38682754361c99664b29f3ab6af10ceab8bf87747612457",
+          "expectedLabel": "Bacterial Black Spot",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "96.97%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "1.59%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.77%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.49%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.08%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.06%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Bacterial Black Spot",
+            "confidence": 0.97,
+            "rawClass": "Bacterial Black Spot",
+            "rawConfidence": 0.9697265625,
+            "margin": 0.9538116455078125,
+            "entropy": 0.08713338995595575,
+            "probabilities": [
+              0.007732391357421875,
+              0.9697265625,
+              0.000579833984375,
+              0.000037670135498046875,
+              0.0007681846618652344,
+              0.004894256591796875,
+              0.0159149169921875
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 156.70000000298023,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangofruit_mango_scab.png",
+          "sha256": "46489d778fa5c3d04468e8a5301916527c43ff43d4dd25e735ee1ce160728424",
+          "expectedLabel": "Mango Scab",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Mango Scab",
+                "Probability": "88.18%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "11.10%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.47%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.12%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.07%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Mango Scab",
+            "confidence": 0.88,
+            "rawClass": "Mango Scab",
+            "rawConfidence": 0.8818359375,
+            "margin": 0.77081298828125,
+            "entropy": 0.20246779141806426,
+            "probabilities": [
+              0.00003451108932495117,
+              0.11102294921875,
+              0.000021636486053466797,
+              0.0007181167602539062,
+              0.0011882781982421875,
+              0.8818359375,
+              0.004718780517578125
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 160.29999999701977,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_anthracnose.jpg",
+          "sha256": "392c0842f1215bd3fb639ec6965e53194004c8c2d33f93a3ce6a36d506460dc9",
+          "expectedLabel": "Anthracnose",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Anthracnose",
+                "Probability": "76.46%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "15.95%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "6.59%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.49%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.43%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.02%"
+              }
+            ],
+            "diseaseName": "Anthracnose",
+            "confidence": 0.76,
+            "rawClass": "Anthracnose",
+            "rawConfidence": 0.7646484375,
+            "margin": 0.6051025390625,
+            "entropy": 0.37510348088888934,
+            "probabilities": [
+              0.7646484375,
+              0.00019979476928710938,
+              0.0042877197265625,
+              0.00019669532775878906,
+              0.1595458984375,
+              0.00485992431640625,
+              0.06591796875
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 153.80000001192093,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_bacterial_canker.jpg",
+          "sha256": "822150af07b381a8e22da8f2f7611dbaf89c6a354c8511667dcdd85319329677",
+          "expectedLabel": "Bacterial Canker",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "100.00%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.01%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Bacterial Canker",
+            "confidence": 1,
+            "rawClass": "Bacterial Canker",
+            "rawConfidence": 1,
+            "margin": 0.9999158382415771,
+            "entropy": 0.0006900206716798676,
+            "probabilities": [
+              0.00008416175842285156,
+              0.000012636184692382812,
+              1,
+              0.0000013709068298339844,
+              0.000013947486877441406,
+              0.000017523765563964844,
+              0.000003516674041748047
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 172.8999999910593,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_sooty_mold.jpg",
+          "sha256": "265c4244670d7e8ac61a7c58eaba00814ec3e9dd1e042f0fe7e0fb696b8d9b0b",
+          "expectedLabel": "Sooty Mold",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Sooty Mold",
+                "Probability": "87.99%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "6.48%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "3.24%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "1.34%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.65%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.27%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.06%"
+              }
+            ],
+            "diseaseName": "Sooty Mold",
+            "confidence": 0.88,
+            "rawClass": "Sooty Mold",
+            "rawConfidence": 0.8798828125,
+            "margin": 0.81512451171875,
+            "entropy": 0.262954018938437,
+            "probabilities": [
+              0.06475830078125,
+              0.0006103515625,
+              0.0026836395263671875,
+              0.01335906982421875,
+              0.006458282470703125,
+              0.032440185546875,
+              0.8798828125
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 142.1000000089407,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "ood.jpg",
+          "sha256": "9b995697456d49e1bf9ed6b10650bc55948d422dd5be25e9c30ae59a7c7a4b65",
+          "expectedLabel": null,
+          "expectedKind": "ood",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": false,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Mango Scab",
+                "Probability": "20.78%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "20.10%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "20.02%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "12.95%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "12.24%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "9.25%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "4.61%"
+              }
+            ],
+            "diseaseName": "Uncertain / Unrecognized",
+            "confidence": 0.21,
+            "rawClass": "Mango Scab",
+            "rawConfidence": 0.207763671875,
+            "margin": 0.0067138671875,
+            "entropy": 0.9532365633084514,
+            "probabilities": [
+              0.2010498046875,
+              0.1295166015625,
+              0.2001953125,
+              0.1224365234375,
+              0.04608154296875,
+              0.207763671875,
+              0.092529296875
+            ],
+            "failedGates": [
+              "confidence",
+              "entropy"
+            ],
+            "accepted": false,
+            "durationMs": 146.5,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "healthy_mango_fruit.JPG",
+          "sha256": "5e832bc5a93f67dda12f79405fa39e89f7208052bb5ee6e627711967c6ee668c",
+          "expectedLabel": "Healthy Fruit",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "99.90%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.05%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.01%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Healthy Fruit",
+            "confidence": 1,
+            "rawClass": "Healthy Fruit",
+            "rawConfidence": 0.9990234375,
+            "margin": 0.9984922409057617,
+            "entropy": 0.0048810317533444746,
+            "probabilities": [
+              0.00022673606872558594,
+              0.00009304285049438477,
+              0.000012040138244628906,
+              0.9990234375,
+              0.0001608133316040039,
+              0.0005311965942382812,
+              0.000019252300262451172
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 146.90000000596046,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "healthy_mangoleaf.jpg",
+          "sha256": "46aba3daebb33fb637f38a985d09d63cfae3810d93a5debd8dbe17a8b9d2c464",
+          "expectedLabel": "Healthy Leaf",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "100.00%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Healthy Leaf",
+            "confidence": 1,
+            "rawClass": "Healthy Leaf",
+            "rawConfidence": 1,
+            "margin": 0.9998286962509155,
+            "entropy": 0.0009519913474755762,
+            "probabilities": [
+              0.00003534555435180664,
+              0,
+              2.384185791015625e-7,
+              0,
+              1,
+              5.960464477539063e-8,
+              0.00017130374908447266
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 148.29999999701977,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangofruit_bacterial_black_spot.jpg",
+          "sha256": "d099549a7f4fc77ed38682754361c99664b29f3ab6af10ceab8bf87747612457",
+          "expectedLabel": "Bacterial Black Spot",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "96.97%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "1.59%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.77%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.49%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.08%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.06%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Bacterial Black Spot",
+            "confidence": 0.97,
+            "rawClass": "Bacterial Black Spot",
+            "rawConfidence": 0.9697265625,
+            "margin": 0.9538116455078125,
+            "entropy": 0.08713338995595575,
+            "probabilities": [
+              0.007732391357421875,
+              0.9697265625,
+              0.000579833984375,
+              0.000037670135498046875,
+              0.0007681846618652344,
+              0.004894256591796875,
+              0.0159149169921875
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 142.90000000596046,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangofruit_mango_scab.png",
+          "sha256": "46489d778fa5c3d04468e8a5301916527c43ff43d4dd25e735ee1ce160728424",
+          "expectedLabel": "Mango Scab",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Mango Scab",
+                "Probability": "88.18%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "11.10%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.47%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.12%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.07%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Mango Scab",
+            "confidence": 0.88,
+            "rawClass": "Mango Scab",
+            "rawConfidence": 0.8818359375,
+            "margin": 0.77081298828125,
+            "entropy": 0.20246779141806426,
+            "probabilities": [
+              0.00003451108932495117,
+              0.11102294921875,
+              0.000021636486053466797,
+              0.0007181167602539062,
+              0.0011882781982421875,
+              0.8818359375,
+              0.004718780517578125
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 141.70000000298023,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_anthracnose.jpg",
+          "sha256": "392c0842f1215bd3fb639ec6965e53194004c8c2d33f93a3ce6a36d506460dc9",
+          "expectedLabel": "Anthracnose",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Anthracnose",
+                "Probability": "76.46%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "15.95%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "6.59%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.49%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.43%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.02%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.02%"
+              }
+            ],
+            "diseaseName": "Anthracnose",
+            "confidence": 0.76,
+            "rawClass": "Anthracnose",
+            "rawConfidence": 0.7646484375,
+            "margin": 0.6051025390625,
+            "entropy": 0.37510348088888934,
+            "probabilities": [
+              0.7646484375,
+              0.00019979476928710938,
+              0.0042877197265625,
+              0.00019669532775878906,
+              0.1595458984375,
+              0.00485992431640625,
+              0.06591796875
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 153.5,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_bacterial_canker.jpg",
+          "sha256": "822150af07b381a8e22da8f2f7611dbaf89c6a354c8511667dcdd85319329677",
+          "expectedLabel": "Bacterial Canker",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "100.00%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "0.01%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "0.00%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "0.00%"
+              }
+            ],
+            "diseaseName": "Bacterial Canker",
+            "confidence": 1,
+            "rawClass": "Bacterial Canker",
+            "rawConfidence": 1,
+            "margin": 0.9999158382415771,
+            "entropy": 0.0006900206716798676,
+            "probabilities": [
+              0.00008416175842285156,
+              0.000012636184692382812,
+              1,
+              0.0000013709068298339844,
+              0.000013947486877441406,
+              0.000017523765563964844,
+              0.000003516674041748047
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 138,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "mangoleaf_sooty_mold.jpg",
+          "sha256": "265c4244670d7e8ac61a7c58eaba00814ec3e9dd1e042f0fe7e0fb696b8d9b0b",
+          "expectedLabel": "Sooty Mold",
+          "expectedKind": "mango",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Sooty Mold",
+                "Probability": "87.99%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "6.48%"
+              },
+              {
+                "Class": "Mango Scab",
+                "Probability": "3.24%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "1.34%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "0.65%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "0.27%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "0.06%"
+              }
+            ],
+            "diseaseName": "Sooty Mold",
+            "confidence": 0.88,
+            "rawClass": "Sooty Mold",
+            "rawConfidence": 0.8798828125,
+            "margin": 0.81512451171875,
+            "entropy": 0.262954018938437,
+            "probabilities": [
+              0.06475830078125,
+              0.0006103515625,
+              0.0026836395263671875,
+              0.01335906982421875,
+              0.006458282470703125,
+              0.032440185546875,
+              0.8798828125
+            ],
+            "failedGates": [],
+            "accepted": true,
+            "durationMs": 143.1000000089407,
+            "tensors": 212
+          }
+        },
+        {
+          "file": "ood.jpg",
+          "sha256": "9b995697456d49e1bf9ed6b10650bc55948d422dd5be25e9c30ae59a7c7a4b65",
+          "expectedLabel": null,
+          "expectedKind": "ood",
+          "labelStatus": "provisional; expert verification pending",
+          "offline": true,
+          "labelMatches": true,
+          "prediction": {
+            "diagnosedResultTabular": [
+              {
+                "Class": "Mango Scab",
+                "Probability": "20.78%"
+              },
+              {
+                "Class": "Anthracnose",
+                "Probability": "20.10%"
+              },
+              {
+                "Class": "Bacterial Canker",
+                "Probability": "20.02%"
+              },
+              {
+                "Class": "Bacterial Black Spot",
+                "Probability": "12.95%"
+              },
+              {
+                "Class": "Healthy Fruit",
+                "Probability": "12.24%"
+              },
+              {
+                "Class": "Sooty Mold",
+                "Probability": "9.25%"
+              },
+              {
+                "Class": "Healthy Leaf",
+                "Probability": "4.61%"
+              }
+            ],
+            "diseaseName": "Uncertain / Unrecognized",
+            "confidence": 0.21,
+            "rawClass": "Mango Scab",
+            "rawConfidence": 0.207763671875,
+            "margin": 0.0067138671875,
+            "entropy": 0.9532365633084514,
+            "probabilities": [
+              0.2010498046875,
+              0.1295166015625,
+              0.2001953125,
+              0.1224365234375,
+              0.04608154296875,
+              0.207763671875,
+              0.092529296875
+            ],
+            "failedGates": [
+              "confidence",
+              "entropy"
+            ],
+            "accepted": false,
+            "durationMs": 142.59999999403954,
+            "tensors": 212
+          }
+        }
+      ]
+    }
+  ]
+}

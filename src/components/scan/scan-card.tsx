@@ -10,7 +10,6 @@ import { Icon } from "@/components/brand/icon";
 interface ScanCardProps {
   scan: ScanRecord;
   imageBlob: Blob | null;
-  imageUrlFallback: string | null;
   language: Language;
   onSelect: (scan: ScanRecord) => void;
   onDelete: (id: string) => void;
@@ -25,7 +24,6 @@ interface ScanCardProps {
 export const ScanCard = memo(function ScanCard({
   scan,
   imageBlob,
-  imageUrlFallback,
   language,
   onSelect,
   onDelete,
@@ -45,9 +43,9 @@ export const ScanCard = memo(function ScanCard({
       ? scan.disease_name.split(" / ")
       : null;
 
-  // Metadata-only sync updates keep the existing photo URL and avoid blinking.
+  // Reuse the Blob URL across metadata updates to avoid blinking.
   const localImageUrl = useScanPhotoUrl(scan.id, imageBlob);
-  const displayUrl = localImageUrl || imageUrlFallback;
+  const displayUrl = localImageUrl;
 
   // History changes grid columns in selection mode, so only colors transition.
   return (

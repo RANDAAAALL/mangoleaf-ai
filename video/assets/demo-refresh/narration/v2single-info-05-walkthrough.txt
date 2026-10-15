@@ -1,0 +1,1 @@
+Simple Walkthrough. We will show one straightforward path: scan, take a photo, view the diagnosed result, open Scan History, then view the scan detail modal.

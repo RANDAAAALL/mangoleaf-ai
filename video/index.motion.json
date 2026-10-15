@@ -1,10 +1,33 @@
 {
-  "duration": 56.5,
+  "duration": 167.29,
   "assertions": [
-    { "kind": "appearsBy", "selector": "#loader-title", "bySec": 1.5 },
-    { "kind": "appearsBy", "selector": "#s1-copy", "bySec": 4.8 },
-    { "kind": "appearsBy", "selector": "#phone-fixed", "bySec": 5.0 },
-    { "kind": "staysInFrame", "selector": "#phone-fixed" },
-    { "kind": "keepsMoving", "maxStaticSec": 4 }
+    {
+      "kind": "appearsBy",
+      "selector": "#loader-title",
+      "bySec": 1.5
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#info-1",
+      "bySec": 4.8
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#copy-1",
+      "bySec": 79.5
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#phone",
+      "bySec": 79.5
+    },
+    {
+      "kind": "staysInFrame",
+      "selector": "#phone"
+    },
+    {
+      "kind": "keepsMoving",
+      "maxStaticSec": 4
+    }
   ]
 }

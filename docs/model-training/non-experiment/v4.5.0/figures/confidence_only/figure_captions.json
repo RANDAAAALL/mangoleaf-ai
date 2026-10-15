@@ -1,0 +1,4 @@
+{
+  "confusion_matrix_with_rejection.png": "All mango test photos remain in the denominator; rejected photos count as missed diagnoses. Saved evaluation reference; same trained weights and predictions. No retraining or new inference.",
+  "per_class_metrics_with_rejection.png": "All mango test photos remain in class support; rejected photos reduce recall. Dashed line is correct accepted / all mango test photos, not accepted-only accuracy. Saved reference, not a new field test."
+}

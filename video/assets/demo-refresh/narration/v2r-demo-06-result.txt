@@ -1,0 +1,1 @@
+Review the predicted condition, Confidence Score, and treatment guidance in English.

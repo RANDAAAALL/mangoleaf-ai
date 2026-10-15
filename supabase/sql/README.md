@@ -1,5 +1,7 @@
 # Cloud security SQL explained in plain English
 
+**Current source candidate, October 15, 2026:** the app now stores reports/photos only in IndexedDB and uses Supabase for public guidelines. These SQL files remain historical security and preservation tools for retained cloud resources; they are not setup requirements for the local-only candidate. No SQL, server resource, or Auth setting was changed by that candidate. See the [transition and rollback boundary](../../docs/supabase/SECURITY-AND-SYNC.md#local-only-history-candidate-october-15-2026).
+
 This folder keeps the database instructions used to protect MangoLeaf AI's cloud scan records and photos, plus scripts for checking those protections and pausing cloud writes during a problem.
 
 Think of these files as saved instructions for a maintainer. The live Supabase project stores and enforces the security rules; these files explain how those rules were applied and can be checked later.
@@ -8,7 +10,7 @@ Think of these files as saved instructions for a maintainer. The live Supabase p
 
 No. Opening the app, taking a photo, running `bun run dev`, or building the app does not execute these SQL files. Farmers do not need to open them or follow extra steps.
 
-The application sends normal requests to Supabase. Supabase checks those requests against its already-installed access rules. Local diagnosis and History use IndexedDB and do not depend on running maintenance SQL.
+The earlier cloud client sent scan/photo requests to Supabase; the current candidate requests public guidelines only. Supabase checks those requests against its already-installed access rules. Local diagnosis and History use IndexedDB and do not depend on running maintenance SQL.
 
 This folder does not contain the actual database, uploaded photos, or a data backup. Private backups belong under ignored `.tools/supabase-backups/`, outside the public app and tracked documentation.
 
@@ -50,7 +52,7 @@ Do not run all four files as one setup sequence. The rollback would pause the cl
 
 ## Which settings are separate from these scripts?
 
-**Allow anonymous sign-ins** is an Auth setting. These SQL files do not enable it. The application needs that setting enabled and saved to create its background guest session.
+**Allow anonymous sign-ins** is an Auth setting. These SQL files do not enable it. The earlier cloud client needed that setting enabled to create its background guest session; the current local-only candidate does not use guest sign-in.
 
 **Private bucket** is a Storage setting. Set it through the Supabase dashboard or supported Storage API. The forward SQL checks that it is already private; it does not switch the bucket to private or directly modify Storage metadata.
 

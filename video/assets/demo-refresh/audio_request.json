@@ -1,0 +1,55 @@
+{
+  "provider": "heygen",
+  "voice": "05f19352e8f74b0392a8f411eba40de1",
+  "lang": "en",
+  "speed": 1.0,
+  "lines": [
+    {
+      "id": "refresh-01-intro",
+      "text": "MangoLeaf A-I checks mango health right on your phone, even offline."
+    },
+    {
+      "id": "refresh-02-take-photo",
+      "text": "Tap Take Photo to capture one clear mango leaf or fruit."
+    },
+    {
+      "id": "refresh-03-capture",
+      "text": "Center one whole mango in the guide, then capture your photo."
+    },
+    {
+      "id": "refresh-04-review",
+      "text": "Review your photo, then run the A-I diagnosis."
+    },
+    {
+      "id": "refresh-05-wait",
+      "text": "Your photo is checked on-device. Please wait a moment."
+    },
+    {
+      "id": "refresh-06-result",
+      "text": "See the predicted condition, confidence, and care guidance."
+    },
+    {
+      "id": "refresh-07-bisaya",
+      "text": "Switch to Bisaya to share these treatment steps."
+    },
+    {
+      "id": "refresh-08-history-intro",
+      "text": "Saved scans stay in History for a quick return."
+    },
+    {
+      "id": "refresh-09-open-scan",
+      "text": "Open a saved scan to review the photo and result."
+    },
+    {
+      "id": "refresh-10-change-language",
+      "text": "Switch guidance to Bisaya when it helps."
+    },
+    {
+      "id": "refresh-11-bisaya-close",
+      "text": "Clear Bisaya guidance helps growers choose next steps."
+    }
+  ],
+  "bgm": {
+    "mode": "none"
+  }
+}

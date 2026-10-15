@@ -1,8 +1,22 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## V4.5.0 repository adoption (October 16, 2026)
+
+The repository now uses V4.5.0 with confidence-only rejection at 0.70. TensorFlow.js WebGL selects texture precision based on device capability; the app does not retry after GPU memory exhaustion. The model/cache identity change provides no measured startup, scan-latency, memory, battery, heat, or low-end-device improvement. Physical-device observations remain pending. See the [model adoption record](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026).
+
+## Local-only History candidate (October 15, 2026)
+
+The current source removes guest sign-in/refresh, scan uploads/pulls, private photo requests, and cloud deletion retries. Local scan saves and deletions do not trigger guideline downloads. This removes that background network and database work online and after reconnect. It does not change TensorFlow.js inference, image decoding/compression, model warmup, startup asset downloads, or their existing deadlines; no physical low-end-device speedup is claimed.
+
+Dexie v9 retains only the scan primary key, exact-file hash index, and date index. Upgrading removes unused indexes without rewriting large photo rows. Existing fields and photo bytes remain stored. History still loads its visible records for client filtering/pagination; this is not an incremental-query optimization.
+
+A storage-full save retains one completed report and compressed photo in memory for retry without another prediction. History deletion is explicit; the app does not evict saved scans automatically. The draft is released on successful save or discard and is lost if the page closes/reloads. Browser quota is shared with cached app/model files; removing cloud storage does not increase the browser quota or prevent eviction. [Focused validation](testing/TESTING.md#local-only-history-and-storage-quota-october-15-2026) records actual checks separately from expected effects. R03 and a shortened substitute remain excluded.
+
+**V4.5.0 local model test, October 12, 2026:** The candidate browser bundle totals 12,116,193 bytes across its graph, configuration, and three float32 shards. It uses a new runtime cache identity and evicts the previous V4.3.0 cache; the rollback backup is outside the served bundle. This is artifact/cache evidence, not a startup, latency, memory, physical-device, or field-accuracy measurement. No 30-minute R03 testcase or shortened replacement was run. See the [local candidate record](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#v450-completed-results-and-local-test-october-12-2026) and [focused verification](testing/TESTING.md#v450-local-candidate-validation-october-12-2026). Existing dated measurements retain their original model/build scope.
+
 This document describes the performance mechanisms implemented in **MangoLeaf AI** (`mangoleaf-ai`). Their effects depend on the image, browser, hardware, and network. Use [TESTING.md](testing/TESTING.md) and the [physical reliability checklist](testing/PHYSICAL_RELIABILITY_CHECKLIST.md) to record measurements for the exact release build and device.
 
-**Current prepared release, October 10, 2026:** App `0.5.5` includes the guided-camera lifecycle, responsive installation guide, four-report phone History pages, photo-card sizing changes, and per-inference console diagnostics described below. Model `v4.3.0` and its fitted gates remain unchanged. The [release record](versions/PWA_VERSIONING.md#v055-guided-camera-and-installation-prepared-release-october-10-2026) and [versioned validation](testing/TESTING.md#v055-release-validation-october-10-2026) identify the current build; earlier measurements remain evidence for their original source snapshots. Physical-device measurements remain open, and no target-phone speed, memory, battery, or heat improvement is established by preparation alone.
+**Historical app snapshot, October 10, 2026:** App `0.5.5` included the guided-camera lifecycle, responsive installation guide, four-report phone History pages, photo-card sizing, and per-inference console diagnostics. It then used model `v4.3.0`. The current repository model is V4.5.0; no target-phone speed, memory, battery, or heat improvement is established by the model change.
 
 **Historical prepared-release snapshot, October 7, 2026:** App `0.5.4` adds a comparison that skips unchanged HTTP guidance writes after existing ordering safeguards pass. Model `v4.3.0` remains unchanged. See the [prepared release record](versions/PWA_VERSIONING.md#v054-unchanged-guidance-check-prepared-release-october-7-2026) and [versioned validation](testing/TESTING.md#v054-release-validation-october-7-2026). The [reported release status](versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) preserves the earlier live-version and publication report; original candidate evidence remains historical.
 
@@ -59,11 +73,13 @@ The matrix distinguishes implementation choices from measured outcomes. Earlier 
 - **Solution:** In `src/lib/classifier.ts`, photos are resized to **224x224 pixels** with browser Canvas before `tf.browser.fromPixels()` is invoked. The entire image is drawn into the square; this step resizes rather than crops, and can stretch a non-square image. Browser interpolation is not guaranteed to match the training loader.
 - **Expected effect:** Reduces the input tensor to 150,528 channel values, about 239 times fewer than a 12-megapixel RGB image. This is an input-size comparison, not a measurement of total GPU memory or proof that a browser cannot crash.
 
-### 1.3 WebGL 16-Bit Float Textures
+<a id="13-webgl-16-bit-float-textures"></a>
 
-- **Implementation:** `tf.env().set("WEBGL_FORCE_F16_TEXTURES", true)` is executed prior to model initialization.
-- **Rationale:** Requests half-float texture storage on the WebGL path. Compatible textures use fewer bytes than float32 textures; this does not halve all application memory or establish that every GPU operation uses 16-bit arithmetic. Saved model files, class mapping, and thresholds stay unchanged, but rounding can alter scores or a decision near a threshold. The flag alone does not establish the cause of a wrong diagnosis or guarantee unchanged accuracy.
-- **Download trade-off:** The historical Trial 3 bundle was 11.53 MB. The current V4.3.0 Combined bundle's five files total 12,101,642 bytes (about 12.10 MB). A separately verified float16 export could reduce transfer size, but it is not shipped; this review changes no model artifact.
+### 1.3 Capability-Based WebGL Texture Precision
+
+- **Implementation:** TensorFlow.js uses its WebGL capability flags to select 32-bit textures when supported and 16-bit on devices limited to that precision. `src/lib/classifier.ts` logs the selected precision. The app does not retry after a 32-bit allocation failure or crash.
+- **Rationale:** Texture precision describes GPU calculations and is separate from the saved float32 weights. A 16-bit path can use less texture memory but may round scores differently near a rejection boundary. Capability-based selection does not establish prediction parity, eliminate out-of-memory failures, or guarantee that every GPU operation uses one precision.
+- **Download trade-off:** The historical Trial 3 bundle was 11.53 MB. The adopted V4.5.0 five-file bundle totals 12,116,197 bytes (three float32 shards, graph, and config), as recorded in the adoption receipt. Texture precision does not change model download size.
 
 The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag definitions](https://github.com/tensorflow/tfjs/blob/tfjs-v4.22.0/tfjs-backend-webgl/src/flags_webgl.ts). Use browser/device evidence before changing this flag or claiming a benefit from another precision setting.
 
@@ -71,17 +87,17 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 
 - **Implementation:** Output tensors are extracted via `await outputTensor.data()` instead of synchronous `dataSync()`.
 - **Scope:** Asynchronous readback does not move `model.predict()`, shader compilation, canvas work, or JavaScript CPU-backend computation off the main thread. It does not establish smooth frames during every scan.
-- **Tensor cleanup:** `tf.tidy()` releases intermediate tensors, and the returned output tensor is disposed after successful readback. A rejected `data()` skips that disposal in the current code. Automated R01 checks successful predictions for net tensor-count growth; error paths, native bitmap memory, and pooled GPU allocation need separate checks.
+- **Tensor cleanup, October 13 update:** `tf.tidy()` releases intermediate tensors, and a `finally` block disposes the returned output after readback settles, including rejection. Cancelling the caller's wait retains the output and blocks another inference until the original GPU read settles. See [diagnosis recovery](#211-diagnosis-stage-deadlines-and-recovery-october-13-2026) for error-path evidence and limits; tensor counts do not measure native bitmap memory or pooled GPU allocation.
 
 ### 1.5 Startup GPU Shader Warmup & Light Green Splash Screen
 
-- **Implementation:** On app launch, the adopted single V4.3.0 Combined model loads and runs a dummy inference with `tf.zeros([1, 224, 224, 3])` behind the existing light organic green (`#f6faf1`) splash screen (`<SplashScreen />`).
-- **Rationale:** Compiles model shaders before the first real scan. Its five files total about **12.10 MB**. The whole UI currently waits behind the splash screen; model/config requests have no application deadline. A rejected request is logged and clears the loading state, but there is no dedicated translated initialization-retry prompt. A request that remains pending can leave the splash visible. The [dated review](#startup-and-inference) records the short local measurements and proposed recovery work.
+- **Implementation:** On app launch, the active single model loads and runs a dummy inference with `tf.zeros([1, 224, 224, 3])` behind the existing light organic green (`#f6faf1`) splash screen (`<SplashScreen />`). The October 13 update awaits the warmup output's asynchronous readback before declaring readiness, disposes that output on success/failure, and disposes the graph after failed warmup.
+- **Rationale:** Compiles model shaders before the first real scan. Its five files total about **12.10 MB**. Warmup has a 60-second recovery deadline; failure clears the splash and shows a translated Reload action. Pending readback retains its tensor, graph, and initialization gate until settlement; an overdue graph is discarded rather than cached. Model/config requests still have no application deadline and can leave the splash visible while pending. The [dated review](#startup-and-inference) retains its earlier measurements and scope.
 
 ### 1.6 Module-Level Model Singleton Cache (`classifier.ts`)
 
 - **Implementation:** The cached model and its loading promise persist at module level outside React's component lifecycle.
-- **Behavior:** After successful initialization, subsequent calls reuse the same model in the current page session. Network reconnection does not reload it; a full page reload or terminated browser process creates a new in-memory session. A rejected loading promise currently remains cached too, so an in-page retry does not start a fresh attempt. A future retry fix must preserve the single-flight safeguard and dispose any graph left by failed warmup.
+- **Behavior, October 13 update:** After successful initialization, subsequent calls reuse the same model in the current page session. Network reconnection does not reload it; a full page reload or terminated browser process creates a new in-memory session. Failed initialization releases the shared loading promise so another call can retry. Concurrent callers share one attempt, and a remounted page restores its model state from the cached loader.
 
 ### 1.7 Singleton Canvas Reuse (`classifier.ts`)
 
@@ -167,13 +183,31 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 
 ---
 
+### 2.10 Rounded diagnosis preview (October 12, 2026)
+
+The diagnosis preview keeps its green border and shadow on the outer frame. A separate inner wrapper clips the photo and scanning blur to a 14px radius inside the 2px border. The blur overlay inherits that inner radius. Explicit clipping addresses the square filtered corners reproduced in Chromium when rounded overflow alone failed to contain the overlay. The photo remains 192px square with `object-contain` sizing.
+
+All 12 focused rendering checks passed in Chromium and WebKit: normal review and scanning at phone portrait, landscape, and desktop sizes, using the actual component and installed Tailwind styles. They simulate the scanning state and do not measure inference, physical-phone behavior, or a performance improvement. Local before/after screenshots and geometry observations are preserved under ignored `.tools/scan-preview-corners-20261012/`. No 30-minute reliability session is part of this visual fix.
+
+### 2.11 Diagnosis stage deadlines and recovery (October 13, 2026)
+
+QA reported intermittent analysis stalls, mostly at 45%, sometimes at 15%, 75%, or 90%, online and offline. The phone/browser and native failure have not been identified. Progress numbers are stage markers: preparation includes the duplicate recheck/import/decode at 15%; inference/readback is 45%; saved-photo encoding is 75%; local commit is 90%. Cloud synchronization is started separately and is not awaited by diagnosis. Tapping elsewhere does not explicitly retry inference.
+
+The original flow had unbounded image, GPU-readback, encoder, and database waits and only console error handling. Three isolated baseline probes deliberately withheld detached image completion, native WebGL fence completion with the current real model, and WebP completion. Each remained locked after five minutes of simulated clock time. The three probes ran in 9.2 seconds; they are fault-injection evidence, not a physical-phone measurement or an R03 session. Separate controlled tests exposed failed output disposal and permanently cached failed initialization.
+
+`diagnosis-step.ts` applies recovery deadlines of 20 seconds for preparation, 60 seconds for analysis, 20 seconds for result encoding, and 15 seconds for saving. These are caps while the browser can schedule work, not expected durations or a faster-model claim. Stage labels, Cancel/Escape, translated errors, retry, and a reload action replace an indefinite locked preview. A synchronous overrun is checked again when work returns; a JavaScript timer cannot preempt a blocked browser/driver thread. Startup GPU warmup also has a 60-second recovery deadline and translated failure banner with Reload. Its pending read retains the output, graph, and initialization gate; late completion disposes the overdue graph without caching it. Model-download/configuration waits still have no application deadline.
+
+Cancellation removes detached decoder handlers, ignores late encoder completions, and releases image/canvas resources. Pending GPU reads keep their tensor and inference gate until settlement; the UI asks for reload while that work remains pending. Cancelling or timing out an active local save requests transaction abort and checks the signal before/after insertion. A record already committed before cancellation stays valid; retry performs the same active-model duplicate lookup instead of saving another copy. Successful saves return their committed record directly, avoiding the former final database re-query. No error is converted into an uncertain diagnosis. Model files, preprocessing, class order, backend/precision flags, and rejection math are unchanged.
+
+Focused candidate checks and remaining physical-device requirements are recorded in [TESTING.md](testing/TESTING.md#diagnosis-recovery-october-13-2026). Baseline probes, source copies, model hashes, and local reports are kept under ignored `.tools/analysis-stall-20261013/`. Original dated performance measurements below retain their original scope.
+
 ## 3. PWA Offline Infrastructure & Network Caching
 
 ### 3.1 Service Worker Model Pre-Caching (`sw.ts`)
 
-- **Strategy:** Serwist precaches the five adopted V4.3.0 Combined model files under `/model/`: `model.json`, `model_config.json`, and three weight shards. The `CacheFirst` runtime rule remains as defence in depth.
+- **Strategy:** Serwist precaches the five adopted V4.5.0 model files under `/model/`: `model.json`, `model_config.json`, and three weight shards. The `CacheFirst` runtime rule remains as defence in depth.
 - **Expected effect:** Enables offline model loading after successful service-worker installation and caching, while browser storage remains available. Loading still requires local model initialization; cache eviction, cleared site data, or an incomplete first load can prevent it. R02 and the physical checklist verify this behavior for a recorded environment.
-- **Versioned cache name:** `mangoleaf-model-cache-v4-3-0` for the adopted V4.3.0 Combined model, retained by app `0.5.5`. Activation deletes superseded model caches, including V4.1.1, V4.2.0, V4.3.0 candidate, and temporary V4.4.0 candidate runtime caches. The active V4.3.0 cache is protected by the activation filter.
+- **Versioned cache name:** `mangoleaf-model-cache-v4-5-0` for the adopted V4.5.0 model, retained by prepared app `0.6.0`. Activation deletes superseded model caches, including former V4.3.0 and V4.5.0 candidate runtime caches. The active V4.5.0 cache is protected by the activation filter.
 - **The precache is the real update mechanism.** Public files receive content-revision hashes in Serwist's precache manifest, which is matched before runtime caching. Replaced weights therefore refetch on next activation. An empty runtime model cache is normal; verify updates in generated `public/sw.js`.
 
 ### 3.2 High-Capacity Offline Database (Dexie.js / IndexedDB)
@@ -267,6 +301,12 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 - **Expected effect:** Allows the browser to prepare the Supabase connection earlier. Any latency saving depends on whether the browser uses the hint and whether a connection is already available.
 
 ---
+
+## Experimental inventory retry: October 11, 2026
+
+The maintainer reported about an hour in V4.5.0 training Step 4 before the notebook rejected an OOD collection containing 200 photos instead of the selected 500. The original code decoded and hashed all mango/OE/OOD images before checking that OOD count. This observation is session evidence, not a benchmark of T4 training speed; Step 4 also performs Drive reads, CPU hashing/decoding, and image resizing.
+
+The training template now checks the OOD file count before any mango/OE content reads, then retains its normal decoding and identity validation. Progress prints every 100 images and every ten preview pages, using each preview folder's name. An incomplete inventory blocks the next review step. The [specific live-session recovery](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#if-step-4-counted-200-ood-photos-after-a-long-scan) rescans OOD while reusing completed mango/OE inventories; later input-hash checks remain mandatory. It does not provide an automatic resume cache or a measured speedup for complete inputs. Colab documents that mounted [Drive reads can be slow](https://research.google.com/colaboratory/faq.html); actual progress and session timings should inform later estimates.
 
 ## Accuracy and runtime evidence
 
@@ -396,7 +436,9 @@ A smaller review thumbnail should remain separate from the inference input until
 
 [useSync.ts](../src/hooks/useSync.ts#L83) starts a guideline fetch on each synchronization trigger. Successful responses clear and rewrite the cache even when the text is unchanged. Authentication events, foreground return, local mutations, and Realtime subscription can cause more passes. Private-operation locks serialize work; they do not remove repeated refreshes.
 
-[cloud-sync.ts](../src/lib/cloud-sync.ts#L177) reads all owner metadata and matching local records, including Blob fields. Multiple status/path writes during one upload can cause the complete live History query to rerun. Prefer mutation-only passes for queued uploads/deletes and bounded history restoration, with correct deletion reconciliation. Existing photos already present locally should continue to skip downloads.
+The former `src/lib/cloud-sync.ts` (line 177 in this dated review) reads all owner metadata and matching local records, including Blob fields. Multiple status/path writes during one upload can cause the complete live History query to rerun. Prefer mutation-only passes for queued uploads/deletes and bounded history restoration, with correct deletion reconciliation. Existing photos already present locally should continue to skip downloads.
+
+**October 15, 2026:** that cloud module is retired by the local-only History candidate. This finding and recommendation remain historical evidence; current scans do not run that upload/pull path.
 
 [sw.ts](../src/sw.ts#L29) explicitly bypasses caches for private requests, but not guideline reads. In the production cross-origin configuration, guidelines can match Serwist's default network-first cache. A previously cached HTTP 200 could then be mistaken for a fresh successful snapshot after network failure and overwrite newer Realtime guidance. This is a source-established possible sequence, not an observed production data regression. A separate isolated service-worker test should reproduce it before a fix. Public advice already has an offline home in Dexie.
 

@@ -2,7 +2,7 @@
 
 This guide explains the PWA version: the application interface, local/offline behavior, release history, build labels, and deployment procedure. The PWA is the app people use. The separate [AI model versioning guide](AI_MODEL_VERSIONING.md) explains the model weights, training workflows, fitted rejection settings, and model evidence.
 
-**Current prepared release:** App `0.5.5` adds guided camera capture, photo review and retake, device-specific installation guidance, and responsive History refinements. It retains the adopted V4.3.0 Combined model (`v4.3.0`) and the existing local-first diagnosis, synchronization, and guidance safeguards. See the [v0.5.5 record](#v055-guided-camera-and-installation-prepared-release-october-10-2026) and [model adoption history](AI_MODEL_VERSIONING.md#v049-adoption-of-v430-combined-october-2-2026). This is a prepared release, with publication and production promotion recorded separately from preparation. The last reported live version is `v0.5.3`; local tag `v0.5.4` identifies commit `341a065c0288e196578b970a6e5ac402915ed417`. Earlier dated validation remains evidence for its original build.
+**Current repository preparation:** PWA `0.6.0` is the prepared application release, with adopted model V4.5.0 (`v4.5.0`) and confidence >=0.70 only. Margin and entropy gates are disabled. The [version-correction record](#v060-local-history-and-v450-prepared-release-october-16-2026) supersedes the earlier `0.5.5` preparation label without moving an existing tag. Release validation and production promotion remain pending. The [model adoption record](AI_MODEL_VERSIONING.md#current-adopted-model-v450-october-16-2026) preserves exact assets and evidence; earlier app release records retain their original build identities.
 
 ## Reading the release history
 
@@ -55,6 +55,7 @@ v0.5.2  released: responsive scan History, selection, and confirmed deletion
 v0.5.3  released / reported live: protected guideline HTTP/Realtime updates and offline advice
 v0.5.4  prepared / awaiting CI and production promotion: skip unchanged HTTP guidance writes while preserving update ordering
 v0.5.5  prepared release: guided camera capture, installation guidance, and responsive History refinements
+v0.6.0  prepared release: V4.5.0 confidence-only model and local-only History with storage-full recovery
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
@@ -399,6 +400,46 @@ Use the exact approved, tested commit when creating the tag through the procedur
 The maintainer committed the prepared release at `5cad2ff15efa66d045642432c34b8846dcaabcfc`. A later authenticated GitHub MCP review identified six root Next.js alerts, all fixed in `16.3.8`. The subsequent local changes pin both Next.js and its ESLint configuration to that version, repair compatible Sharp and source-map-js dependencies, and disable the unused development MCP endpoint for the public-tunnel workflow.
 
 App/model labels remain `0.5.5` / `v4.3.0`; no existing tag is moved. The [security review](../security/DEPENDENCY_SECURITY.md) keeps the two unpatchable braces/sprintf-js findings visible. The earlier release validation above belongs to its original dependency/configuration fingerprint. The [security revalidation record](../testing/TESTING.md#nextjs-security-revalidation-october-10-2026) identifies this revision's new checks and reports. Camera follow-up also fixes the controlled media capability, restores escaped modal focus to an enabled action, and gives the complete CI job 45 minutes for setup/build/core checks. R03 remains a separate 30-minute protocol and is excluded from CI and this task. Local verification passed 187 core cases with four declared skips, filtered R01's 240 actual predictions, and the formatting/security/type/lint/build/export/tooling/archive checks. The new reports identify application fingerprint `2ccdfaede198d91f39c4aa5ca65eabae85869382edcad9fffef3a0feb2127f7d`; the corrected Linux CI result remains pending. GitHub alert re-evaluation and production deployment require the corresponding reviewed changes to be published through the release procedure.
+
+## v0.6.0: local History and V4.5.0 prepared release (October 16, 2026)
+
+**Status: prepared / not released or deployed.** The maintainer selected PWA `0.6.0` for the combined update. The original unpublished draft `d532fc8` contained the model adoption and local-only History under the earlier `0.5.5` app label. The version correction changes `package.json` to `0.6.0`; the existing Next.js `env` configuration embeds `v0.6.0` in the rebuilt footer. No environment override or second app-version constant is needed. The maintainer selected amending that unpublished draft to include the corrected version and documentation; amending changes its commit ID. Original validation reports retain their recorded base commit and input hashes.
+
+During this correction, the local `v0.6.0` tag was observed pointing to `d532fc8`, whose package still says `0.5.5`. The maintainer confirmed that the commit/tag had not been pushed and authorized repointing this unpublished local tag to the amended commit. This local consolidation does not push, publish, or deploy anything. Complete final-commit CI and approved release checks before publishing the tag/release. Published tags must never be moved.
+
+The release combines the already implemented V4.5.0 confidence-only model, browser-local scan reports/photos, bilingual storage-full recovery, diagnosis recovery, supported WebGL precision selection, guided camera/installation workflows, and selected V2 walkthrough. Supabase supplies public guideline HTTP downloads and Realtime updates only. The version correction itself changes no application source, database schema, prediction rules, model assets, or model-cache identity. The AI model remains `v4.5.0`; V5.0.0 is untrained and on standby.
+
+The [v0.6.0 validation record](../testing/TESTING.md#v060-version-correction-october-16-2026) distinguishes checks on the rebuilt version from preserved `0.5.5` core and R01 evidence. The 30-minute R03 protocol is prepared for future use; no full or shortened R03 session is part of this correction. Final-commit CI, approved release validation, physical-device evaluation, production promotion, and publication remain separate steps.
+
+### Version correction files
+
+- `package.json`
+- `public/sw.js` (generated by the build)
+- `README.md`
+- `SETUP.md`
+- `docs/ARCHITECTURE.md`
+- `docs/PERFORMANCE.md`
+- `docs/PROGRESS.md`
+- `docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md`
+- `docs/testing/TESTING.md`
+- `docs/testing/PHYSICAL_RELIABILITY_CHECKLIST.md`
+- `docs/versions/PWA_VERSIONING.md`
+- `docs/versions/AI_MODEL_VERSIONING.md`
+- `notebooks/non-experiment/README.md`
+
+### Prepared tag and release description
+
+**App tag:** `v0.6.0`
+
+**Release title:** `MangoLeaf AI v0.6.0 — V4.5.0 and local scan history`
+
+**Release description draft:**
+
+> Adopts V4.5.0 with a 70% confidence threshold; margin and entropy rejection are disabled. Scan reports and compressed photos stay in this browser's IndexedDB, with bilingual storage-full recovery and save retry that reuses the completed prediction. Public treatment guidelines continue to refresh online and remain available offline.
+>
+> Uses 32-bit WebGL textures where supported, with 16-bit textures on limited devices. Retains guided camera capture, photo review/retake, diagnosis recovery, and installation guidance. Selects the V2 walkthrough, preserves model rollback/evaluation records, and updates the future 30-minute reliability protocol. V5.0.0 remains untrained and on standby.
+
+The separate `model-v4.5.0` tag is a model-provenance marker on the approved tested commit, not a second GitHub Release. Do not reuse `v0.5.5` for this build or publish the draft before completing the release procedure below.
 
 ## Candidate testing and promotion
 

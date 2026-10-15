@@ -1,0 +1,1 @@
+Review your photo. After that, tap Run AI Diagnosis to start the on-device check.

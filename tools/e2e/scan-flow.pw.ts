@@ -17,7 +17,6 @@ import {
   attachJson,
   holdGuidelineReads,
   releaseGuidelineReads,
-  waitForMockScanPull,
   recentHeading,
   homeHeading,
   historyDetails,
@@ -243,10 +242,7 @@ test("F15: accepted results load saved guidance, download advice and reopen it o
 }) => {
   await holdGuidelineReads(page);
   await controlledModel(page, scoresFor("Healthy Fruit"));
-  const initialPull = waitForMockScanPull(page);
   await openApp(page);
-  await initialPull;
-  const savedScanPull = waitForMockScanPull(page);
   await runScan(page, photos[0].file);
   const modal = page.locator("div.fixed.inset-0").filter({
     has: page.getByRole("button", { name: "English", exact: true }),
@@ -262,8 +258,6 @@ test("F15: accepted results load saved guidance, download advice and reopen it o
     modal.getByText(translations.bis.guidelinesLoading, { exact: true }),
   ).toBeVisible();
   await releaseGuidelineReads(page);
-  // The held guidance baseline delays queued sync until these reads resume.
-  await savedScanPull;
   await expect(
     modal.getByText(translations.bis.guidelinesUnavailable, { exact: true }),
   ).toBeVisible();
@@ -285,15 +279,13 @@ test("F15: accepted results load saved guidance, download advice and reopen it o
   );
   await expect
     .poll(async () => (await records(page))[0]._status)
-    .toBe("synced");
-  const advicePull = waitForMockScanPull(page);
+    .toBe("local-only");
   await page.evaluate(() =>
     document.dispatchEvent(new Event("visibilitychange")),
   );
   await expect(
     modal.getByText(advice.guidelines_en, { exact: true }),
   ).toBeVisible();
-  await advicePull;
   await context.setOffline(true);
   await closeDetails(page);
   await nav(page, "History");
@@ -391,10 +383,7 @@ test("F16: uncertain results keep photo guidance across pending, empty and downl
 }) => {
   await holdGuidelineReads(page);
   await controlledModel(page, [0.35, 0.25, 0.15, 0.1, 0.07, 0.05, 0.03]);
-  const initialPull = waitForMockScanPull(page);
   await openApp(page);
-  await initialPull;
-  const savedScanPull = waitForMockScanPull(page);
   await runScan(
     page,
     photos.find((photo) => photo.expectedKind === "ood")!.file,
@@ -431,8 +420,6 @@ test("F16: uncertain results keep photo guidance across pending, empty and downl
   };
   await checkReminder();
   await releaseGuidelineReads(page);
-  // The held guidance baseline delays queued sync until these reads resume.
-  await savedScanPull;
   await checkReminder();
   const advice = {
     id: "uncertain_/_unrecognized",
@@ -447,8 +434,7 @@ test("F16: uncertain results keep photo guidance across pending, empty and downl
   );
   await expect
     .poll(async () => (await records(page))[0]._status)
-    .toBe("synced");
-  const advicePull = waitForMockScanPull(page);
+    .toBe("local-only");
   const downloaded = page.waitForResponse((response) =>
     response.url().includes("/__mock__/rest/v1/guidelines"),
   );
@@ -479,7 +465,6 @@ test("F16: uncertain results keep photo guidance across pending, empty and downl
       ),
     )
     .toBe(1);
-  await advicePull;
   await context.setOffline(true);
   await closeDetails(page);
   await nav(page, "History");

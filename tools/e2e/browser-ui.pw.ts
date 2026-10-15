@@ -106,7 +106,12 @@ test("R04: About and footer show the current app and model versions in both lang
 
 test("R04: scan cards keep photo proportions and compact details after viewport changes", async ({
   page,
+  browserName,
 }) => {
+  test.skip(
+    browserName === "webkit" && process.platform === "win32",
+    "Windows WebKit cannot persist IndexedDB Blobs; local-photo layout is covered by Chromium/Firefox and requires physical iOS validation.",
+  );
   await page.setViewportSize({ width: 390, height: 844 });
   await openApp(page);
   await page.evaluate(async () => {
@@ -116,8 +121,10 @@ test("R04: scan cards keep photo proportions and compact details after viewport 
     const drawing = canvas.getContext("2d")!;
     drawing.fillStyle = "#7bbf67";
     drawing.fillRect(0, 0, canvas.width, canvas.height);
-    // Seed presentation only. Windows WebKit cannot store Blobs in IndexedDB;
-    // the existing image URL fallback exercises the same CSS without inference.
+    const photo = await new Promise<Blob>((resolve) =>
+      canvas.toBlob((blob) => resolve(blob!), "image/png"),
+    );
+    // Seed the same local Blob representation used by saved scan photos.
     await new Promise<void>((resolve, reject) => {
       const opening = indexedDB.open("MangoLeafDB");
       opening.onerror = () => reject(opening.error);
@@ -129,11 +136,11 @@ test("R04: scan cards keep photo proportions and compact details after viewport 
           id: crypto.randomUUID(),
           disease_name: "Healthy Leaf",
           confidence: 0.95,
-          image_blob: null,
-          image_url: canvas.toDataURL("image/png"),
+          image_blob: photo,
+          image_url: null,
           updated_at: new Date().toISOString(),
           device_id: "local-layout-test",
-          _status: "synced",
+          _status: "local-only",
         });
         scans.put({
           id: crypto.randomUUID(),

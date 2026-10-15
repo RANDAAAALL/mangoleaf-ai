@@ -1,0 +1,1 @@
+MangoLeaf AI Offline-First Tech Stack includes Next.js, React, Bun, TypeScript, Tailwind CSS, TensorFlow.js, Dexie, IndexedDB, Supabase, Serwist, and MobileNetV3-Large.

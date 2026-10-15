@@ -1,0 +1,26 @@
+{
+  "version": "v2r",
+  "tts_provider": "edge-tts",
+  "voice_id": "en-US-JennyNeural",
+  "rate": "+8%",
+  "bgm": "assets/audio/bgm-demo-v2r.wav",
+  "voices": [
+    { "id": "v2r-info-01-title", "path": "assets/voice/v2r-info-01-title.wav", "duration_s": 5.976009 },
+    { "id": "v2r-info-02-diagnostic", "path": "assets/voice/v2r-info-02-diagnostic.wav", "duration_s": 9.720000 },
+    { "id": "v2r-info-03-benefits", "path": "assets/voice/v2r-info-03-benefits.wav", "duration_s": 11.088005 },
+    { "id": "v2r-info-04-classes", "path": "assets/voice/v2r-info-04-classes.wav", "duration_s": 10.104014 },
+    { "id": "v2r-info-05-stack", "path": "assets/voice/v2r-info-05-stack.wav", "duration_s": 14.136009 },
+    { "id": "v2r-info-06-walkthrough", "path": "assets/voice/v2r-info-06-walkthrough.wav", "duration_s": 10.344014 },
+    { "id": "v2r-demo-01-intro", "path": "assets/voice/v2r-demo-01-intro.wav", "duration_s": 5.784014 },
+    { "id": "v2r-demo-02-take-photo", "path": "assets/voice/v2r-demo-02-take-photo.wav", "duration_s": 7.968005 },
+    { "id": "v2r-demo-03-capture", "path": "assets/voice/v2r-demo-03-capture.wav", "duration_s": 5.208005 },
+    { "id": "v2r-demo-04-review", "path": "assets/voice/v2r-demo-04-review.wav", "duration_s": 6.288005 },
+    { "id": "v2r-demo-05-wait", "path": "assets/voice/v2r-demo-05-wait.wav", "duration_s": 6.240000 },
+    { "id": "v2r-demo-06-result", "path": "assets/voice/v2r-demo-06-result.wav", "duration_s": 5.136009 },
+    { "id": "v2r-demo-07-bisaya", "path": "assets/voice/v2r-demo-07-bisaya.wav", "duration_s": 5.376009 },
+    { "id": "v2r-demo-08-history", "path": "assets/voice/v2r-demo-08-history.wav", "duration_s": 3.648005 },
+    { "id": "v2r-demo-09-open-scan", "path": "assets/voice/v2r-demo-09-open-scan.wav", "duration_s": 4.608005 },
+    { "id": "v2r-demo-10-language", "path": "assets/voice/v2r-demo-10-language.wav", "duration_s": 3.024014 },
+    { "id": "v2r-demo-11-bisaya-close", "path": "assets/voice/v2r-demo-11-bisaya-close.wav", "duration_s": 4.056009 }
+  ]
+}

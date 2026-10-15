@@ -1,10 +1,38 @@
 # MangoLeaf AI Model Versioning Guide
 
+## Current adopted model: V4.5.0 (October 16, 2026)
+
+Repository source now uses V4.5.0 in `public/model/`, replacing V4.3.0. The active label is `v4.5.0`, config identity is `model-v4.5.0`, and cache identity is `mangoleaf-model-cache-v4-5-0`. The selected rejection rule is **confidence >= 0.70 only**; margin and entropy gates are disabled (`null`). The prepared app version is `0.6.0`; the [PWA version correction](PWA_VERSIONING.md#v060-local-history-and-v450-prepared-release-october-16-2026) leaves the model files and original adoption receipt unchanged.
+
+This adopts saved V4.5.0 weights and the previously generated confidence-only evaluation reference. No training or scientific prediction export was regenerated; browser integration checks are recorded separately. That reference reports 377/397 correct accepted mango diagnoses (94.96% of all mango inputs), 12 wrong accepted, eight rejected, and nine false accepts among 250 OOD reporting photos. The original fitted-rule report remains unchanged as historical evidence and reports four OOD false accepts. Neither result is independent field accuracy. Test-set overlap, class confusion, review limitations, and browser/Keras parity are documented in the [trial report](../model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md).
+
+The [adoption receipt](../model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json) records active asset hashes, the chosen configuration, and the verified V4.3.0 rollback backup. App release validation, physical-device evaluation, and production deployment remain pending; record them against the exact build when performed. No app version bump is part of this model adoption.
+
+V5.0.0 remains an untrained, prepared workflow on standby. Its notebooks and helper remain under `notebooks/experiment/v5.0.0/`; no V5.0.0 weights or evaluation results exist.
+
+## V5.0.0 OE fine-tuning workflow prepared (October 15, 2026)
+
+The [V5.0.0 candidate guide](../model-training/experiment/v5.0.0/TRIAL_v5_0_0.md) and [clean notebook/helper](../../notebooks/experiment/v5.0.0/) prepare a warm start from the verified, uncalibrated V4.5.0 stage-two checkpoint. Original mango train/validation/test membership stays fixed at 1,854/398/397. The old reviewed 500-photo OOD pool becomes OE training input, giving an expected 2,511 unique approved OE photos with the existing 2,011. Matching old review evidence is inherited; new cross-pool relationships still require verification. The 300 reserved photos were already excluded from the 2,011 and must not be counted twice.
+
+Expanding the approved training dataset uses the major candidate identity **`model-v5.0.0-candidate`** under the policy below. The new attempt uses a fresh optimizer, validation-only checkpoint selection and temperature calibration, and fixed confidence 0.70 with margin/entropy disabled. A fresh unseen OOD reporting collection is required because the old 500 now supply training gradients. New weights require new predictions and figures, including recomputed Grad-CAM on the same seven validation originals. This is workflow preparation with no training/evaluation result, adoption, deployment, app-version bump, public model replacement, or application inference change.
+
+For this experiment, the expanded dataset is the **approved OE training pool**; the mango test membership stays fixed. The major label therefore does not require reshuffling mango data or imply a new independent test set. The earlier six-class explanation below describes those historical dataset changes, not a reason to alter this confirmed V5.0.0 split.
+
+## V4.5.0 confidence-only reference figures (October 14, 2026)
+
+Two locally generated rejection-aware charts now visualize the saved V4.5.0 **70%-confidence-only reference**, with margin/entropy rejection disabled for those plotted decisions. The [experiment's derived-figure record](../model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#confidence-only-reference-figures-october-14-2026) links figures, exact source/output hashes, and the reproducible plotting tool. This operation did not retrain or run inference, edit archived evidence, or change the active app/model/cache identity. The plotter does not edit or verify application configuration; a separate threshold change still requires its own identity, cache, and validation review. Figure generation does not establish adoption or deployment of confidence-only behavior.
+
+## V4.5.0 local candidate test (October 12, 2026)
+
+At the maintainer's request, the working tree temporarily tested **`v4.5.0-candidate`** from the completed OE experiment. Its original fitted configuration used confidence 0.70, margin 0, and entropy 0.40, with temperature already folded into the weights. This passage describes that earlier temporary state only. On October 16, V4.5.0 was initially adopted in the repository with confidence 0.70 only under app `0.5.5`; see the current adoption section above. The subsequent PWA preparation uses `0.6.0`, and production release/deployment are separate.
+
+The [completed results/local-test guide](../model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#v450-completed-results-and-local-test-october-12-2026) records selected evidence, exact hashes, an ignored independent V4.3.0 backup, and targeted rollback. Existing History labels remain; duplicate-report reuse requires the active candidate label. Reload/reopen the page after switching because the model and fitted thresholds are cached in memory. Browser/Keras parity and field evaluation remain unverified. The 30-minute R03 testcase and shortened alternatives are excluded by the maintainer. Earlier dated release/model records below remain historical evidence.
+
 This guide explains the AI model version: the saved model weights, class list, fitted rejection settings, training notebooks, and evidence behind a model change. The model is the part that identifies the photo. The separate [PWA versioning guide](PWA_VERSIONING.md) covers the application interface, app release history, and deployment procedure.
 
 An app update can keep the same model, and a model change does not by itself require an app version bump. Both changes still need the appropriate validation and a new build before deployment.
 
-**Current prepared application release, October 10, 2026:** App `0.5.5` retains V4.3.0 Combined (`v4.3.0`) in root `public/model/` after the temporary V4.4.0 local test and restoration. Guided camera capture, photo review/retake, installation guidance, and History refinements change the PWA workflow without retraining or changing the five model files, classes, full-photo 224 × 224 preprocessing, folded temperature, or fitted gates. See [v0.5.5 release status](PWA_VERSIONING.md#v055-guided-camera-and-installation-prepared-release-october-10-2026) and [versioned validation](../testing/TESTING.md#v055-release-validation-october-10-2026). The existing `model-v4.3.0` provenance tag remains; no new model tag is required. V4.4.0 evidence stays experimental, and preparation does not establish production promotion or a new accuracy result.
+**Historical prepared application release, October 10, 2026:** App `0.5.5` retains V4.3.0 Combined (`v4.3.0`) in root `public/model/` after the temporary V4.4.0 local test and restoration. Guided camera capture, photo review/retake, installation guidance, and History refinements change the PWA workflow without retraining or changing the five model files, classes, full-photo 224 × 224 preprocessing, folded temperature, or fitted gates. See [v0.5.5 release status](PWA_VERSIONING.md#v055-guided-camera-and-installation-prepared-release-october-10-2026) and [versioned validation](../testing/TESTING.md#v055-release-validation-october-10-2026). The existing `model-v4.3.0` provenance tag remains; no new model tag is required. V4.4.0 evidence stays experimental, and preparation does not establish production promotion or a new accuracy result.
 
 **October 7, 2026 application snapshot:** App `0.5.4` retains V4.3.0 Combined (`v4.3.0`) in root `public/model/` and skips unchanged HTTP guidance writes after the existing ordering safeguards pass. The five model assets, classes, preprocessing, folded temperature, and fitted gates are unchanged. See [v0.5.4 release status](PWA_VERSIONING.md#v054-unchanged-guidance-check-prepared-release-october-7-2026) and [versioned validation](../testing/TESTING.md#v054-release-validation-october-7-2026). The existing `model-v4.3.0` provenance tag remains; no new model tag is required. The [reported release status](PWA_VERSIONING.md#release-status-confirmation-october-7-2026) identifies `v0.5.3` as the live baseline and records that the earlier `v0.5.0`–`v0.5.2` versions were also published and used.
 
@@ -20,9 +48,19 @@ The [completed V4.4.0 report](../model-training/experiment/v4.4.0/TRIAL_v4_4_0.m
 
 **Historical runtime security, October 3, 2026:** The V4.3.0 Colab package freeze is archived as `colab-runtime-snapshot.txt`, with [separate provenance](../model-training/non-experiment/v4.3.0/artifacts/runtime-snapshot-provenance.json). Its 14,117 bytes, original filename in the run ledgers, notebook outputs, and model hashes are preserved. The [security review](../security/DEPENDENCY_SECURITY.md) records 112 advisories against that old environment. The PWA does not install it; a future training run must use a reviewed, patched runtime rather than reinstalling the snapshot. This repository archive clarification does not change model version or establish retraining compatibility.
 
+**Mask reuse note archive correction, October 10, 2026:** The prose-only V4.3.0 `mask_requirements.txt` is archived as `mask-reuse-note.txt` to prevent pip dependency scanning from treating its sentence as a package requirement. Its 104 bytes, original run ledgers, completed notebooks, and model files remain unchanged. The [separate filename mapping](../model-training/non-experiment/v4.3.0/artifacts/mask-reuse-note-provenance.json) and [dated trial note](../model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md#mask-reuse-note-archive-correction-october-10-2026) preserve the source identity. `bun run verify:training-archive` checks both archive mappings. This changes repository evidence storage, not the app/model version or original training workflow.
+
 The dated records below preserve what was prepared, copied locally, restored, or adopted at that time. Phrases such as "current model" and "now holds" inside an older record describe that date, not the latest application state. Original scores, export identities, rollback paths, and pending checks remain unchanged. The latest adoption record identifies V4.3.0 Combined. Earlier pending production/publication statements retain their historical context; the October 7 release-status confirmation and current prepared app release are recorded separately above.
 
 ## Training Notebooks
+
+### V4.5.0 fresh Outlier Exposure workflow, October 11, 2026
+
+The [V4.5.0 experiment guide](../model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) defines two clean templates under `notebooks/non-experiment/v4.5.0/`: training and threshold fitting. Ordinary Colab cells replace the earlier custom execution layer. Raw owned mango, OE, and OOD collections are inputs; previous MangoLeaf runs, checkpoints, masks, and split archives are not. New results stay under `MyDrive/mangoleaf_experiments/v4.5.0/training/` and `threshold_fitting/`.
+
+Training retains MobileNetV3-Large, seven classes, RGB 224 × 224 float32 0–255 input, the five-epoch 0.001 / ten-epoch 0.00001 schedule, fresh balanced class weights, and validation-only temperature fitting. It retains the 62 reviewed source identities, creates a new grouped approximately 70/15/15 split, adds OE and random contrast 0.1, and removes background replacement/localized lighting. The intended first run declares 500 reviewed OOD photos before training and assigns 250 tuning / 250 reporting without splitting related groups. Reused OOD history remains visible.
+
+These are unexecuted experimental templates, not completed results, adoption, or a PWA release. The adopted V4.3.0 assets and app label remain unchanged. Runtime, GPU, training, conversion, browser parity, frozen evaluation, and any later adoption must have their own recorded evidence. Changed membership and multiple simultaneous recipe changes prevent attributing a historical score difference to OE alone.
 
 ### V4.4.0 fresh experimental workflow, October 8, 2026
 
@@ -190,6 +228,7 @@ model-v4.2.0-mangoleaf-candidate  four-class leaf fitted candidate; local experi
 model-v4.2.0-mangofruit-candidate  three-class training export only; threshold fit infeasible, not released
 model-v4.3.0-candidate  completed single seven-class combined recipe; restored for local retesting, not released
 model-v4.3.0  adopted Combined export for app v0.4.9; original candidate identity preserved in provenance
+model-v4.5.0  adopted V4.5.0 OE export in repository source; confidence-only 0.70; production deployment pending
 ```
 
 Choose the level by the model/data change. A version identifies an artifact; it does not rank its accuracy:

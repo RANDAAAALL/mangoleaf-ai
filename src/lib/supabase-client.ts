@@ -9,8 +9,8 @@ const supabaseAnonKey =
 const cloudRequestTimeoutMs = 10_000;
 
 /**
- * Bound cloud requests so a stalled connection releases background work.
- * Authentication and uploads never gate local diagnosis or saved History.
+ * Bound public guideline requests, including body downloads, so a stalled
+ * connection releases background work independently of local diagnosis.
  */
 async function fetchWithCloudTimeout(
   input: RequestInfo | URL,
@@ -35,8 +35,7 @@ async function fetchWithCloudTimeout(
       cache: "no-store",
       signal: controller.signal,
     });
-    // Keep the timer active until bytes arrive too. Headers alone do not mean
-    // a private photo finished downloading on a stalled mobile connection.
+    // Keep the timer active until guideline bytes arrive, not just headers.
     // Some browser fetch wrappers expose an empty stream for 204. These HTTP
     // statuses still forbid any reconstructed body, including zero bytes.
     const body =
@@ -54,21 +53,8 @@ async function fetchWithCloudTimeout(
   }
 }
 
-// Shared browser client. The anon key is public by design; what a caller may
-// actually read or write is decided by the RLS policies on Supabase.
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: false,
-  },
-  global: {
-    fetch: fetchWithCloudTimeout,
-  },
-});
-
-// Published guidance must stay readable even when a guest token is expired or
-// private synchronization cannot sign in. This client never stores a session.
+// The public key is authorized by guideline RLS. No guest is created, and this
+// client never reads or stores the former cloud session or its scan photos.
 export const guidelinesClient = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: false,

@@ -17,6 +17,7 @@ import {
   uncertain,
 } from "./support/fixtures";
 import { writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import type { Page } from "@playwright/test";
 import { modelVersion } from "../../src/lib/constants";
 import { translations } from "../../src/lib/translations";
@@ -150,15 +151,58 @@ async function captureAndRetake(page: Page, file: string) {
 
 test("R03: thirty-minute mixed-use session with fresh real predictions", async ({
   page,
+  browser,
 }, info) => {
   const durationMs = 30 * 60_000;
   test.setTimeout(durationMs + 180_000);
   await installSyntheticCamera(page);
   let predictionCalls = 0;
+  const texturePrecisionMessages: string[] = [];
+  const privateCloudRequestPaths: string[] = [];
+  page.on("request", (request) => {
+    const path = new URL(request.url()).pathname;
+    if (/\/(auth\/v1|storage\/v1|rest\/v1\/scans)(?:\/|$)/.test(path))
+      privateCloudRequestPaths.push(path);
+  });
   page.on("console", (message) => {
     if (message.text().startsWith("Class probabilities ("))
       predictionCalls += 1;
+    if (message.text().startsWith("---WebGL texture precision: "))
+      texturePrecisionMessages.push(message.text());
   });
+  // Record the served configuration and exact build identity before the timed
+  // session. This observes the current model without replacing its scores.
+  const response = await page.request.get("/model/model_config.json");
+  expect(response.ok()).toBe(true);
+  const configurationBytes = await response.body();
+  const configuration = JSON.parse(configurationBytes.toString("utf8"));
+  const inputHashes = info.config.metadata.inputHashes as Record<
+    string,
+    string
+  >;
+  expect(createHash("sha256").update(configurationBytes).digest("hex")).toBe(
+    inputHashes["public/model/model_config.json"],
+  );
+  expect(configuration.modelVersion).toBe(`model-${modelVersion}`);
+  expect(configuration.thresholds).toEqual({
+    confidenceThreshold: 0.7,
+    marginThreshold: null,
+    entropyThreshold: null,
+  });
+  const identity = {
+    appVersion: info.config.metadata.appVersion,
+    modelVersion,
+    modelAssetVersion: configuration.modelVersion,
+    thresholds: configuration.thresholds,
+    browser: browser.version(),
+    applicationFingerprint: info.config.metadata.applicationFingerprint,
+    modelFiles: Object.fromEntries(
+      Object.entries(inputHashes).filter(([path]) =>
+        path.startsWith("public/model/"),
+      ),
+    ),
+    storage: "IndexedDB local-only reports and photo Blobs",
+  };
   await openApp(page);
   const originalViewport = page.viewportSize()!;
   const started = Date.now();
@@ -193,6 +237,9 @@ test("R03: thirty-minute mixed-use session with fresh real predictions", async (
           source: "Actual classifier; gallery photos and synthetic live camera",
           cameraLimit:
             "Synthetic streams do not establish physical-phone behavior or accuracy.",
+          identity,
+          texturePrecisionMessages,
+          privateCloudRequestPaths,
           predictionCalls,
           activeCycle,
           cycles,
@@ -240,6 +287,11 @@ test("R03: thirty-minute mixed-use session with fresh real predictions", async (
       expect(predictionCalls - callsBefore).toBe(1);
       expect(saved[0].image_hash).toBe(selectedPhotoSha256);
       expect(saved[0].model_version).toBe(modelVersion);
+      expect(saved[0]).toMatchObject({
+        _status: "local-only",
+        image_url: null,
+      });
+      expect(privateCloudRequestPaths).toEqual([]);
       await expectResult(page, saved[0].disease_name, saved[0].confidence);
       const savedPhotoBytes = await savedPhotoSize(page, saved[0].id);
       expect(savedPhotoBytes).toBeGreaterThan(0);
@@ -255,7 +307,7 @@ test("R03: thirty-minute mixed-use session with fresh real predictions", async (
       // Delete this test record so the next upload must perform inference again.
       await expect
         .poll(async () =>
-          (await records(page)).every((row) => row._status === "synced"),
+          (await records(page)).every((row) => row._status === "local-only"),
         )
         .toBe(true);
       await requestScanDeletion(page);
@@ -296,6 +348,7 @@ test("R03: thirty-minute mixed-use session with fresh real predictions", async (
     expect(cycles.length).toBeGreaterThan(1);
     expect(cycles.some((cycle) => cycle.source === "guided-camera")).toBe(true);
     expect(cycles.some((cycle) => cycle.source === "gallery")).toBe(true);
+    expect(privateCloudRequestPaths).toEqual([]);
     completed = true;
   } finally {
     // Failed cycles also retain their source and completed-cycle evidence.
@@ -305,6 +358,9 @@ test("R03: thirty-minute mixed-use session with fresh real predictions", async (
     plannedDurationMs: durationMs,
     elapsedMs: Date.now() - started,
     source: "Actual classifier; gallery photos and synthetic live camera",
+    identity,
+    texturePrecisionMessages,
+    privateCloudRequestPaths,
     predictionCalls,
     cycles,
   });

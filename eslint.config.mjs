@@ -28,6 +28,8 @@ const eslintConfig = defineConfig([
     "playwright-report/**",
     ".playwright-mcp/**",
     "src/remotion/**",
+    // Generated dependencies of the separate video project.
+    "video/.venv/**",
   ]),
   // Let Prettier own formatting; keep ESLint's code-quality checks.
   prettier,

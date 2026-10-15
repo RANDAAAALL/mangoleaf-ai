@@ -1,12 +1,13 @@
 # Current and older model notebooks
 
-**Current app model: V4.3.0 Combined.** App candidate `0.5.0` retains one model with seven classes covering mango leaves and fruit. See the [current model report](../../docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) for training results, model identity, and adoption status. Repository adoption is separate from production deployment.
+**Current repository model: V4.5.0.** Prepared app `0.6.0` uses seven classes and confidence-only rejection at 0.70; margin and entropy are disabled. See the [current model report](../../docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) for preserved results and adoption identity. Production release validation and deployment remain pending.
 
 This folder contains the current adopted model and older models kept as evidence. A version being here does not mean the app still uses it.
 
 | Folder | Purpose |
 | --- | --- |
-| [v4.3.0](v4.3.0/) | Current adopted model: training and threshold-fitting templates, plus completed result notebooks. |
+| [v4.5.0](v4.5.0/) | Current adopted model: clean templates and completed training/threshold result notebooks. |
+| [v4.3.0](v4.3.0/) | Previous adopted model and rollback baseline: templates and completed results. |
 | [v3](v3/) | Previous adopted model: templates, partial and completed training results, and threshold-fitting results. |
 | [v2.1](v2.1/) | Older model: training template, completed training, and threshold-fitting results. |
 | [v2](v2/) | Older Trial 2 training workflow. |
