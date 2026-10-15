@@ -1,4 +1,4 @@
-import { test, expect, openApp, nav } from "./support/fixtures";
+import { test, expect, openApp, nav, attachJson } from "./support/fixtures";
 import { modelVersion } from "../../src/lib/constants";
 import { translations } from "../../src/lib/translations";
 import packageInfo from "../../package.json";
@@ -107,11 +107,91 @@ test("R04: About and footer show the current app and model versions in both lang
 test("R04: scan cards keep photo proportions and compact details after viewport changes", async ({
   page,
   browserName,
-}) => {
-  test.skip(
-    browserName === "webkit" && process.platform === "win32",
-    "Windows WebKit cannot persist IndexedDB Blobs; local-photo layout is covered by Chromium/Firefox and requires physical iOS validation.",
-  );
+}, info) => {
+  if (browserName === "webkit") {
+    await page.goto("/__test__/ready");
+    // Probe native storage separately so an application/database failure cannot skip this case.
+    const capability = await page.evaluate(async () => {
+      const name = `mangoleaf-layout-blob-probe-${crypto.randomUUID()}`;
+      let database: IDBDatabase | undefined;
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = 600;
+        canvas.height = 1400;
+        const drawing = canvas.getContext("2d")!;
+        drawing.fillStyle = "#7bbf67";
+        drawing.fillRect(0, 0, canvas.width, canvas.height);
+        const photo = await new Promise<Blob>((resolve, reject) =>
+          canvas.toBlob(
+            (blob) =>
+              blob
+                ? resolve(blob)
+                : reject(
+                    new Error("Native PNG probe could not encode its photo."),
+                  ),
+            "image/png",
+          ),
+        );
+        database = await new Promise<IDBDatabase>((resolve, reject) => {
+          const opening = indexedDB.open(name, 1);
+          opening.onupgradeneeded = () =>
+            opening.result.createObjectStore("photos");
+          opening.onerror = () => reject(opening.error);
+          opening.onsuccess = () => resolve(opening.result);
+        });
+        await new Promise<void>((resolve, reject) => {
+          const transaction = database!.transaction("photos", "readwrite");
+          transaction.oncomplete = () => resolve();
+          transaction.onabort = () => reject(transaction.error);
+          transaction.objectStore("photos").put(photo, 1);
+        });
+        const saved = await new Promise<Blob>((resolve, reject) => {
+          const request = database!
+            .transaction("photos")
+            .objectStore("photos")
+            .get(1);
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error);
+        });
+        if (!(saved instanceof Blob) || saved.type !== photo.type)
+          throw new Error("Native IndexedDB Blob round-trip changed the data.");
+        const original = new Uint8Array(await photo.arrayBuffer());
+        const restored = new Uint8Array(await saved.arrayBuffer());
+        if (
+          original.length !== restored.length ||
+          !original.every((byte, index) => byte === restored[index])
+        )
+          throw new Error("Native IndexedDB Blob round-trip changed the data.");
+        return { supported: true } as const;
+      } catch (error) {
+        if (!(error instanceof DOMException)) throw error;
+        return {
+          supported: false,
+          name: error.name,
+          message: error.message,
+        } as const;
+      } finally {
+        database?.close();
+        await new Promise<void>((resolve) => {
+          const deletion = indexedDB.deleteDatabase(name);
+          deletion.onsuccess = deletion.onerror = () => resolve();
+        });
+      }
+    });
+    await attachJson(info, "native-indexeddb-blob-capability", {
+      browserName,
+      platform: process.platform,
+      ...capability,
+    });
+    test.skip(
+      !capability.supported &&
+        capability.name === "UnknownError" &&
+        capability.message ===
+          "Error preparing Blob/File data to be stored in object store",
+      "This WebKit runtime cannot persist the layout fixture's native PNG Blob. Chromium/Firefox retain photo-layout coverage; physical iOS validation remains separate.",
+    );
+    expect(capability.supported, JSON.stringify(capability)).toBe(true);
+  }
   await page.setViewportSize({ width: 390, height: 844 });
   await openApp(page);
   await page.evaluate(async () => {

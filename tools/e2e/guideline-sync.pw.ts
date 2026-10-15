@@ -674,16 +674,21 @@ test.describe("Guideline worker cache", () => {
         }),
       )
       .toEqual({ guidance: false, unrelated: true });
-    await page.evaluate(async (row) => {
-      // Recreate the old fallback response after activation to check routing too.
-      const cache = await caches.open("others");
-      await cache.put(
-        "/__mock__/rest/v1/guidelines?select=id%2Cdisease_name%2Cguidelines_en%2Cguidelines_bis",
-        new Response(JSON.stringify([row]), {
-          headers: { "Content-Type": "application/json" },
-        }),
-      );
-    }, advice("stale HTTP cache"));
+    const offlineProbePath =
+      "/__mock__/rest/v1/guidelines?select=id%2Cdisease_name%2Cguidelines_en%2Cguidelines_bis&g07_offline_probe=1";
+    await page.evaluate(
+      async ({ row, path }) => {
+        // Recreate the old fallback response after activation to check routing too.
+        const cache = await caches.open("others");
+        await cache.put(
+          path,
+          new Response(JSON.stringify([row]), {
+            headers: { "Content-Type": "application/json" },
+          }),
+        );
+      },
+      { row: advice("stale HTTP cache"), path: offlineProbePath },
+    );
     const connection = (await control(request)).connections[0];
     await control(request, {
       action: "change",
@@ -697,32 +702,38 @@ test.describe("Guideline worker cache", () => {
     await expectAdvice(page, advice("B"));
     await settleReads(request);
     await context.setOffline(true);
-    // A network-only request must fail despite a successful cached HTTP 200.
-    const response = await page.evaluate(async () => {
-      try {
-        await fetch(
-          "/__mock__/rest/v1/guidelines?select=id%2Cdisease_name%2Cguidelines_en%2Cguidelines_bis",
-        );
-        return "unexpected cached response";
-      } catch {
-        return "network failed";
-      }
+    const offlineProbeUrl = new URL(offlineProbePath, page.url()).href;
+    // Console delivery can follow fetch rejection; observe this unique probe first.
+    const failureMessage = page.waitForEvent("console", {
+      predicate: (message) =>
+        message.type() === "error" &&
+        message.location().url === offlineProbeUrl &&
+        /^Failed to load resource: net::ERR_(INTERNET_DISCONNECTED|FAILED)$/.test(
+          message.text(),
+        ),
+      timeout: 15_000,
     });
+    // A network-only request must fail despite a successful cached HTTP 200.
+    const [response, message] = await Promise.all([
+      page.evaluate(async (path) => {
+        try {
+          await fetch(path);
+          return "unexpected cached response";
+        } catch {
+          return "network failed";
+        }
+      }, offlineProbePath),
+      failureMessage,
+    ]);
     expect(response).toBe("network failed");
     await expectAdvice(page, advice("B"));
-    const expectedErrors = runtimeErrors.filter(
-      (error) =>
-        error.includes("/__mock__/rest/v1/guidelines") &&
-        /ERR_INTERNET_DISCONNECTED|ERR_FAILED|Failed to load resource/.test(
-          error,
-        ),
-    );
-    for (let index = runtimeErrors.length - 1; index >= 0; index -= 1)
-      if (expectedErrors.includes(runtimeErrors[index]))
-        runtimeErrors.splice(index, 1);
+    const expectedError = `${message.text()} (${message.location().url})`;
+    expect(runtimeErrors).toContain(expectedError);
+    runtimeErrors.splice(runtimeErrors.indexOf(expectedError), 1);
     await attachJson(info, "intentional-offline-guideline-request", {
       response,
-      expectedErrors,
+      offlineProbeUrl,
+      expectedErrors: [expectedError],
     });
     await context.setOffline(false);
   });

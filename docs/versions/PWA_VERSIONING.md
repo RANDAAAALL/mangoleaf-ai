@@ -441,6 +441,10 @@ The [v0.6.0 validation record](../testing/TESTING.md#v060-version-correction-oct
 
 The separate `model-v4.5.0` tag is a model-provenance marker on the approved tested commit, not a second GitHub Release. Do not reuse `v0.5.5` for this build or publish the draft before completing the release procedure below.
 
+### CI browser follow-up (October 16, 2026)
+
+The first `b7331a9` CI run failed G07's intentional offline-request console cleanup and R04's native Blob seeding in Linux WebKit; 223 core cases passed and eight were skipped. The [follow-up testing record](../testing/TESTING.md#v060-ci-browser-follow-up-october-16-2026) records the timing fix, narrowly scoped native-PNG capability guard, successful repeated local checks, and pending Linux rerun. Typecheck, lint, build, and export checks passed. This changes test support, documentation, and the build-generated worker only; app/model versions remain `0.6.0` / `v4.5.0`. The pushed commit and any published tag must retain their identities; the repair requires a new follow-up commit and fresh CI before release approval.
+
 ## Candidate testing and promotion
 
 Added September 20, 2026. Preparing an intended version is separate from publishing it. Commit candidate code, matching version labels, and affected documentation together after local checks. Mark new entries **candidate / not released** until their release decision is made. Do not write that CI, physical-device testing, or deployment passed before it happened. App and model labels remain independent; tooling-only changes do not require a new model label.
