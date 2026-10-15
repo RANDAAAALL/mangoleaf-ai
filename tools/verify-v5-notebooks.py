@@ -339,6 +339,38 @@ class ImageSafetyTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 self.workflow.unique_records(rows)
 
+    def test_decoder_limits_cover_the_frozen_parent_photo_sizes(self):
+        parent = ROOT / "docs/model-training/non-experiment/v4.5.0/artifacts/training"
+        # A new workflow must accept the unchanged, already reviewed parent inputs.
+        for filename in ["input_manifest.json", "oe_dataset_manifest.json", "held_out_ood_inventory.json"]:
+            rows = json.loads((parent / filename).read_text(encoding="utf-8"))["images"]
+            with self.subTest(manifest=filename):
+                self.assertLessEqual(max(row["dimensions"][0] * row["dimensions"][1] for row in rows),
+                                     self.workflow.MAX_IMAGE_PIXELS)
+                self.assertLessEqual(max(row["bytes"] for row in rows), self.workflow.MAX_IMAGE_BYTES)
+
+    def test_mpo_keeps_the_primary_photo_and_original_file_bytes(self):
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "camera-photo.jpg"
+            # Camera JPEGs can contain additional MPO pictures, not animation.
+            Image.new("RGB", (4, 3), "red").save(
+                path, format="MPO", save_all=True,
+                append_images=[Image.new("RGB", (2, 2), "blue")])
+            original_bytes = path.read_bytes()
+            with Image.open(path) as opened:
+                self.assertEqual(opened.format, "MPO")
+                self.assertEqual(opened.n_frames, 2)
+            primary = self.workflow.raw_rgb(path)
+            self.assertEqual(primary.size, (4, 3))
+            self.assertEqual(primary.mode, "RGB")
+            red, _, blue = primary.getpixel((0, 0))
+            self.assertGreater(red, 240)
+            self.assertLess(blue, 10)
+            self.assertEqual(path.read_bytes(), original_bytes)
+            with patch.object(self.workflow, "MAX_IMAGE_PIXELS", 1), self.assertRaises(ValueError):
+                self.workflow.raw_rgb(path)
+
     def test_decoder_checks_real_encoding_animation_and_resource_limits(self):
         from PIL import Image
         with tempfile.TemporaryDirectory() as directory:
@@ -350,7 +382,7 @@ class ImageSafetyTests(unittest.TestCase):
                        append_images=[Image.new("RGB", (4, 3), "blue")])
             self.assertEqual(self.workflow.raw_rgb(root / "valid.png").size, (4, 3))
             for filename in ["disguised.jpg", "animated.gif"]:
-                with self.subTest(filename=filename), self.assertRaises(ValueError):
+                with self.subTest(filename=filename), self.assertRaisesRegex(ValueError, re.escape(filename)):
                     self.workflow.raw_rgb(root / filename)
             with patch.object(self.workflow, "MAX_IMAGE_BYTES", 1), self.assertRaises(ValueError):
                 self.workflow.raw_rgb(root / "valid.png")

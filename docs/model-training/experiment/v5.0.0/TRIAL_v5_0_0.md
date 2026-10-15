@@ -150,6 +150,31 @@ Grad-CAM depends on the current model's activations and gradients, so reuse the 
 
 An unchanged augmentation illustration may be referenced with its original provenance; a V5.0.0 label must not imply it was newly generated. Keep V4.5.0 figures and results intact. Store any later curated V5.0.0 results under this version's own `artifacts/` and `figures/` with a source-hash mapping.
 
+## Step 4 MPO compatibility and recovery, October 16, 2026
+
+A Colab attempt stopped in `experiment.inventory()` with `Unsupported image encoding.` The downloaded parent contains 11 mango and eight approved OE files with JPEG filenames that Pillow identifies as Multi Picture Object (MPO). Their original file hashes match the frozen manifests. [Pillow opens an MPO's primary image by default](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html#mpo); the earlier V5 helper instead rejected its format before validating that image.
+
+The helper now explicitly reads only the primary MPO picture, preserving the parent's EXIF-to-RGB inventory behavior. Auxiliary pictures do not become extra training examples. File-size and primary-image pixel limits still apply, ordinary animated inputs remain rejected, and unsupported-format/resource errors identify the affected path. The TensorFlow model-input decoder, resize, class order, split membership, source files, weights, and 0.70 confidence rule are unchanged. Do not convert, rename, delete, or re-save the frozen inputs to bypass this error.
+
+For a stopped Step 4 attempt:
+
+1. Upload the updated fine-tuning notebook and its matching `v5_workflow.py` to Colab; the helper belongs at `/content/v5_workflow.py`. Both repository notebook templates now check the updated helper hash.
+2. Rerun Steps 1 and 2 to import that helper and verify the runtime. An existing matching installation receipt is reused; a fresh runtime needs setup. Restart when the installation flow requires it.
+3. Restore the actual input paths in Step 3, including the five-file `PARENT_THRESHOLD_RUN` review folder. Run Step 3 once to create a new attempt with the corrected helper copied into its provenance. Preserve the failed attempt separately.
+4. Run Step 4 again, then continue in order. Training starts in Step 8, so this inventory failure does not require repeating completed V5 training.
+
+Local verification reproduced the old failure with a synthetic two-picture MPO under a `.jpg` filename. The corrected decoder passed all 31 focused safeguard tests, including that regression and existing animation/resource checks. Read-only checks against the downloaded parent reproduced the original byte, RGB, dimensions, and pHash identities for all 19 MPO files. These are local compatibility checks, not a successful Colab training/export run or a new accuracy result. The interrupted Colab attempt still needs to rerun inventory with the corrected files.
+
+## Step 4 pixel-bound follow-up, October 16, 2026
+
+A later inventory attempt reached the approved OE pool and stopped at `996f179e25631d225861__IMG_20240916_123814_081.jpg`. That original is a single-picture JPEG measuring 9,216 by 6,912 pixels (**63,700,992 pixels**), with a 21,724,785-byte file. The helper's previous 40-megapixel limit was lower than the dimensions of 14 already approved OE photos. This was a source-image size limit, not evidence of animation or a model-training error.
+
+The explicit decoding limit is now **64,000,000 pixels**, while the **32 MiB file-size limit** remains. All 5,160 frozen mango, approved OE, and held-out OOD manifest entries fit these bounds. Pixel-limit errors now state the dimensions, pixel count, configured limit, and path separately from animation errors. Frozen photo bytes and decoding identities are preserved; the 224 by 224 TensorFlow input, model weights, classes, splits, and confidence rule are unchanged. New photos exceeding the bound still stop rather than silently changing or dropping data.
+
+Local verification reproduced the old cap failure and passed all **32 focused safeguard tests** after correction. A complete read-only decode/inventory check of the downloaded **2,649 mango and 2,011 approved OE photos** matched their original file SHA-256, decoded RGB SHA-256, byte count, dimensions, and pHash, including all 14 large OE originals and 19 MPO files. This took approximately 344 seconds locally. The separate 500 OOD records were checked for their saved dimensions/file sizes; their current Drive image bytes still require Colab verification. Logs are under ignored `.tools/v5-pixel-bound-20261016/`. No training, inference evaluation, or R03 session ran.
+
+Upload the latest matching notebook/helper pair again and follow the [Step 4 recovery procedure](#step-4-mpo-compatibility-and-recovery-october-16-2026), restoring the actual Step 3 paths. A new attempt records the corrected helper. The reported 36 minutes were spent in inventory verification; Step 8 training had not started in that attempt. Local compatibility checks do not establish that a subsequent Colab run completed.
+
 ## Runtime and dependency review
 
 Do not install a historical package snapshot. The notebook declares explicit packages, installs binary wheels, requires a session restart, audits the installed research dependency closure, and saves runtime/GPU evidence. A successful metadata lookup or local syntax check is not an installed-runtime, GPU, training, or conversion pass.

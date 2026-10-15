@@ -29,7 +29,8 @@ EXPECTED_SPLITS = {'train': 1854, 'val': 398, 'test': 397}
 PREPROCESSING = 'RGB decode; bilinear 224x224 without antialias; float32 0-255; MobileNetV3 internal rescaling'
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.webp'}
 MAX_IMAGE_BYTES = 32 * 1024 * 1024
-MAX_IMAGE_PIXELS = 40_000_000
+# The frozen approved OE pool includes 63,700,992-pixel camera photos.
+MAX_IMAGE_PIXELS = 64_000_000
 REVIEW_FIELDS = ['id', 'relativePath', 'keep', 'unsupported', 'captureGroup',
                  'sourceGroup', 'sourceNotes', 'priorUse', 'notes']
 
@@ -308,10 +309,18 @@ def raw_rgb(path):
     with warnings.catch_warnings():
         warnings.simplefilter('error', Image.DecompressionBombWarning)
         with Image.open(path) as opened:
-            if opened.format not in {'JPEG', 'PNG', 'BMP', 'GIF', 'WEBP'}:
-                raise ValueError('Unsupported image encoding.')
-            if opened.width * opened.height > MAX_IMAGE_PIXELS or getattr(opened, 'n_frames', 1) != 1:
-                raise ValueError('Image exceeds pixel bounds or contains animation.')
+            if opened.format not in {'JPEG', 'MPO', 'PNG', 'BMP', 'GIF', 'WEBP'}:
+                raise ValueError(f'Unsupported image encoding {opened.format!r}: {path}')
+            pixels = opened.width * opened.height
+            if pixels > MAX_IMAGE_PIXELS:
+                raise ValueError(f'Image exceeds pixel bound ({opened.width}x{opened.height} = '
+                                 f'{pixels} pixels; limit={MAX_IMAGE_PIXELS}): {path}')
+            if opened.format != 'MPO' and getattr(opened, 'n_frames', 1) != 1:
+                raise ValueError('Animated image is unsupported: ' + str(path))
+            # Preserved camera JPEGs can contain auxiliary MPO pictures. Read
+            # only their primary photo, matching the parent's frozen RGB hashes.
+            if opened.format == 'MPO':
+                opened.seek(0)
             return ImageOps.exif_transpose(opened).convert('RGB')
 
 
