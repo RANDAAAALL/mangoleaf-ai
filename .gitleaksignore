@@ -1,0 +1,5 @@
+# Audited non-secret: the diagnostics localStorage key, not an API credential.
+# Scope each exception to the exact historical commit, file, rule, and line.
+88a479d153eaeebc6487774caa9324dd4f18ec62:src/lib/diagnostics.ts:generic-api-key:15
+88a479d153eaeebc6487774caa9324dd4f18ec62:tools/e2e/diagnostics.pw.ts:generic-api-key:109
+88a479d153eaeebc6487774caa9324dd4f18ec62:tools/diagnostics.test.mjs:generic-api-key:38

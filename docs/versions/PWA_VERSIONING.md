@@ -457,11 +457,13 @@ New scan reports retain the raw highest-class probability. Confidence badges rou
 
 The bilingual Privacy Policy discloses optional local logs and export handling; Terms explain raw/new versus previously rounded History scores. Current architecture, setup, performance, incident collection, and test instructions are aligned. Earlier runs remain historical evidence for their original source fingerprints. The [v0.7.0 testing record](../testing/TESTING.md#v070-diagnostics-and-raw-confidence-october-17-2026) records actual local results and pending commit-specific CI; R03 remains a separate explicit protocol.
 
-Final local checks passed: formatting, typecheck, lint, production build, export/security checks, 58 tooling tests, 250 core browser cases with 10 declared platform skips, and filtered R01 with 240 actual predictions. R01 found stable labels/classes, zero confidence variation, and zero net tensor growth in the identified software-rendered browser session. Application fingerprint: `9d57a97c29ccfb15df4d67fc5bf86aa15bed29edfbb889a7d27292461e4b9ce8`. All five model assets match the baseline and production export. Remote CI, device observations, and promotion retain their own evidence requirements.
+Final local checks passed: formatting, typecheck, lint, production build, export/security checks, 59 tooling tests after the scanner follow-up, 250 core browser cases with 10 declared platform skips, and filtered R01 with 240 actual predictions. R01 found stable labels/classes, zero confidence variation, and zero net tensor growth in the identified software-rendered browser session. Application fingerprint: `9d57a97c29ccfb15df4d67fc5bf86aa15bed29edfbb889a7d27292461e4b9ce8`. All five model assets match the baseline and production export. Remote CI, device observations, and promotion retain their own evidence requirements.
 
 ### v0.7.0 commit and tag text
 
 **Regular commit subject:** `feat: prepare v0.7.0 diagnostics and raw scores`
+
+**Pre-push follow-up subject:** `fix: scope diagnostics scanner exceptions`. The first push was blocked by three reviewed non-secret storage-name findings in `88a479d`. Exact historical fingerprints and a regression preserve secret detection in those files. This follow-up does not change the application fingerprint or model; the unpublished local candidate tag must identify the final checked commit containing both changes.
 
 **App tag:** `v0.7.0`
 

@@ -129,6 +129,40 @@ test("a deleted credential is found in history without printing its value", () =
   expect(result.stderr + result.stdout).not.toContain(dummyToken);
 });
 
+test("a finding exception does not hide changed credentials in the same file", () => {
+  const cwd = repository();
+  const file = "diagnostics.ts";
+  // Reproduce the public storage-name false positive in an isolated Git history.
+  const storageName = ["mangoleaf", "diagnostics", "v1"].join("-");
+  writeFileSync(
+    join(cwd, file),
+    `const STORAGE_KEY = ${JSON.stringify(storageName)};\n`,
+  );
+  commit(cwd);
+  const auditedCommit = git(cwd, "rev-parse", "HEAD");
+  expect(scan(cwd).status).toBe(1);
+  writeFileSync(
+    join(cwd, ".gitleaksignore"),
+    `${auditedCommit}:${file}:generic-api-key:1\n`,
+  );
+  commit(cwd);
+  expect(scan(cwd).status).toBe(0);
+
+  // A later credential at the same path/line must still fail and stay redacted.
+  const dummyToken =
+    "ghp_" +
+    createHash("sha256")
+      .update("synthetic credential after audited storage name")
+      .digest("hex")
+      .slice(0, 36);
+  writeFileSync(join(cwd, file), `const API_KEY = "${dummyToken}";\n`);
+  commit(cwd);
+  const result = scan(cwd);
+  expect(result.status).toBe(1);
+  expect(result.stderr).toContain(file);
+  expect(result.stderr + result.stdout).not.toContain(dummyToken);
+});
+
 test("incomplete history fails instead of reporting a clean scan", () => {
   const cwd = repository();
   const shallow = mkdtempSync(join(tmpdir(), "mangoleaf-security-test-"));
