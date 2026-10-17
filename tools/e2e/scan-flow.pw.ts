@@ -94,7 +94,7 @@ test("F01–F05: empty states, scan sheet, picker cancellation and retake", asyn
   expect(await records(page)).toHaveLength(0);
   await page.setViewportSize(originalViewport);
   await page.getByRole("button", { name: "Run AI Diagnosis" }).click();
-  await expectResult(page, "Healthy Fruit", 0.95);
+  await expectResult(page, "Healthy Fruit", Math.fround(0.95));
 });
 
 for (const label of CLASSES) {
@@ -111,12 +111,12 @@ for (const label of CLASSES) {
       scores: scoresFor(label),
     });
     await runScan(page, photo.file);
-    await expectResult(page, label, 0.95);
+    await expectResult(page, label, Math.fround(0.95));
     const saved = await records(page);
     expect(saved).toHaveLength(1);
     expect(saved[0]).toMatchObject({
       disease_name: label,
-      confidence: 0.95,
+      confidence: Math.fround(0.95),
       image_hash: photo.sha256,
       model_version: modelVersion,
     });
@@ -145,32 +145,54 @@ for (const label of CLASSES) {
     ).toBeVisible();
     await page.setViewportSize(originalViewport);
     await historyDetails(page).click();
-    await expectResult(page, label, 0.95);
+    await expectResult(page, label, Math.fround(0.95));
     await page.reload();
     await expect(homeHeading(page)).toBeVisible();
     if (originalViewport.width >= 768)
       await page.setViewportSize({ ...originalViewport, width: 767 });
     await expect(recentHeading(page)).toBeVisible();
     await page.getByRole("button", { name: "Details", exact: true }).click();
-    await expectResult(page, label, 0.95);
+    await expectResult(page, label, Math.fround(0.95));
     await page.setViewportSize(originalViewport);
     expect((await records(page))[0].id).toBe(saved[0].id);
   });
 }
 
-test("F07: a rounded 70% badge preserves a below-threshold uncertain result", async ({
-  page,
-}) => {
-  // Display rounding must not turn a rejected raw score into an accepted class.
-  await controlledModel(page, [0.6999, 0.1001, 0.08, 0.04, 0.03, 0.025, 0.025]);
-  await openApp(page);
-  const photo = photos.find((item) => item.expectedKind === "ood")!;
-  await runScan(page, photo.file);
-  await expectResult(page, uncertain, 0.7);
-  const [saved] = await records(page);
-  expect(saved.disease_name).toBe(uncertain);
-  expect(saved.confidence).toBe(0.7);
-});
+for (const sample of [
+  { score: 0.62, badge: "62%", label: uncertain },
+  { score: 0.6212, badge: "62.1%", label: uncertain },
+  { score: 0.698, badge: "69.8%", label: uncertain },
+  { score: 0.69999, badge: "69.9%", label: uncertain },
+  { score: 0.700001, badge: "70%", label: "Anthracnose" },
+]) {
+  test(`F07: raw confidence ${sample.score} saves unchanged and displays ${sample.badge}`, async ({
+    page,
+  }) => {
+    // Controlled Float32 outputs test display/storage without measuring model accuracy.
+    await controlledModel(page, [
+      sample.score,
+      ...Array(6).fill((1 - sample.score) / 6),
+    ]);
+    await openApp(page);
+    const photo = photos.find((item) => item.expectedKind === "ood")!;
+    await runScan(page, photo.file);
+    const rawConfidence = Math.fround(sample.score);
+    await expectResult(page, sample.label, rawConfidence);
+    await expect(
+      details(page).getByText(sample.badge, { exact: true }),
+    ).toBeVisible();
+    const [saved] = await records(page);
+    expect(saved.disease_name).toBe(sample.label);
+    expect(saved.confidence).toBe(rawConfidence);
+    await closeDetails(page);
+    await page.reload();
+    await expect(homeHeading(page)).toBeVisible();
+    await nav(page, "History");
+    await historyDetails(page).click();
+    await expectResult(page, sample.label, rawConfidence);
+    expect((await records(page))[0].confidence).toBe(rawConfidence);
+  });
+}
 
 test("F07/F13/F14: rejection diagnostics and duplicate review preserve the saved result", async ({
   page,
@@ -187,7 +209,7 @@ test("F07/F13/F14: rejection diagnostics and duplicate review preserve the saved
   await openApp(page);
   const photo = photos.find((item) => item.expectedKind === "ood")!;
   await runScan(page, photo.file);
-  await expectResult(page, uncertain, 0.35);
+  await expectResult(page, uncertain, Math.fround(0.35));
   await expect(
     details(page).getByText(/Raw PredictedDisease|margin=|entropy=/),
   ).toHaveCount(0);
@@ -231,14 +253,14 @@ test("F07/F13/F14: rejection diagnostics and duplicate review preserve the saved
   expect((await records(page))[0].id).toBe(original.id);
   expect(rejectionLogs).toHaveLength(1);
   expect(duplicateLogs).toHaveLength(4);
-  await expectResult(page, uncertain, 0.35);
+  await expectResult(page, uncertain, Math.fround(0.35));
   for (const viewport of [
     { width: 320, height: 710 },
     { width: 740, height: 360 },
     { width: 1280, height: 800 },
   ]) {
     await page.setViewportSize(viewport);
-    await expectResult(page, uncertain, 0.35);
+    await expectResult(page, uncertain, Math.fround(0.35));
     await expect(
       page.getByRole("button", { name: "Close details" }).first(),
     ).toBeInViewport();
@@ -365,7 +387,7 @@ test("F13: older and unversioned diagnoses remain in History while the current m
     );
     historicalIds.push(id);
     await runScan(page, photo.file);
-    await expectResult(page, uncertain, 0.35);
+    await expectResult(page, uncertain, Math.fround(0.35));
     const samePhoto = (await records(page)).filter(
       (row) => row.image_hash === photo.sha256,
     );

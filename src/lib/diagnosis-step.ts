@@ -1,3 +1,9 @@
+import {
+  createDiagnosticOperation,
+  diagnosticErrorName,
+  recordDiagnostic,
+} from "@/lib/diagnostics";
+
 export type DiagnosisStage = "prepare" | "analyze" | "process" | "save";
 export type DiagnosisError =
   "failed" | "timeout" | "cancelled" | "inference-pending";
@@ -26,6 +32,11 @@ export async function runDiagnosisStep<T>(
   const { signal } = controller;
   signal.throwIfAborted();
   const started = performance.now();
+  const diagnosticOperation = createDiagnosticOperation("stage");
+  recordDiagnostic("diagnosis.stage.started", {
+    operation: diagnosticOperation,
+    stage,
+  });
   const limit = DIAGNOSIS_STEP_TIMEOUT_MS[stage];
   let outcome = "failed";
   try {
@@ -69,7 +80,24 @@ export async function runDiagnosisStep<T>(
     signal.throwIfAborted();
     outcome = "complete";
     return result;
+  } catch (error) {
+    recordDiagnostic("diagnosis.stage.error", {
+      operation: diagnosticOperation,
+      stage,
+      errorName: diagnosticErrorName(error),
+    });
+    throw error;
   } finally {
+    recordDiagnostic("diagnosis.stage.finished", {
+      operation: diagnosticOperation,
+      stage,
+      outcome: signal.aborted
+        ? signal.reason instanceof DiagnosisTimeoutError
+          ? "timeout"
+          : "cancelled"
+        : outcome,
+      durationMs: Math.round(performance.now() - started),
+    });
     console.log(
       `[Diagnosis] stage=${stage} outcome=${signal.aborted ? "aborted" : outcome} durationMs=${Math.round(performance.now() - started)}`,
     );

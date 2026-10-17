@@ -4,6 +4,7 @@ import { memo, useCallback, useEffect, useId, useRef, useState } from "react";
 import { Icon } from "@/components/brand/icon";
 import { useGuidedCamera } from "@/hooks/useGuidedCamera";
 import { translations, type Language } from "@/lib/translations";
+import { recordDiagnostic } from "@/lib/diagnostics";
 
 interface GuidedCameraProps {
   language: Language;
@@ -24,6 +25,13 @@ export const GuidedCamera = memo(function GuidedCamera({
   const titleId = useId();
   const hintId = useId();
   const [guideSize, setGuideSize] = useState(0);
+
+  useEffect(() => {
+    recordDiagnostic("camera.state", {
+      status: camera.phase,
+      reason: camera.error ?? "none",
+    });
+  }, [camera.phase, camera.error]);
 
   const close = useCallback(() => {
     stop();

@@ -77,9 +77,9 @@ jobs:
         run: |
           node -e "console.log(JSON.stringify({platform:process.platform,node:process.version,playwright:require('@playwright/test/package.json').version},null,2))"
           bun --version
-      # Core cases include guided camera and installation, using the local mock backend.
+      # Core includes diagnostics, confidence, camera, and offline flows with local mocks.
       # R01/R03 stay explicit local runs; CI never starts the 30-minute session.
-      - name: Test camera, installation, desktop, mobile, and offline workflows
+      - name: Test diagnostics, scans, camera, installation, and offline workflows
         run: bun run test:e2e
       - name: Save browser reports and failure traces
         if: ${{ !cancelled() }}

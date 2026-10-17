@@ -1,5 +1,11 @@
 import * as tf from "@tensorflow/tfjs";
 import { CLASSES, UNCERTAIN_LABEL } from "./constants";
+import {
+  createDiagnosticOperation,
+  diagnosticErrorName,
+  getDiagnosticsSnapshot,
+  recordDiagnostic,
+} from "@/lib/diagnostics";
 
 export interface DiagnosisResult {
   diagnosedResultTabular: {
@@ -72,6 +78,32 @@ export function isMangoInferencePending(): boolean {
   return inferencePending;
 }
 
+function recordRuntimePrecision(operation: string) {
+  if (!getDiagnosticsSnapshot().enabled) return;
+  try {
+    const backend =
+      typeof tf.getBackend === "function" ? tf.getBackend() : "unknown";
+    if (backend === "webgl") {
+      const float32Capable = tf.env().getBool("WEBGL_RENDER_FLOAT32_CAPABLE");
+      const float32Enabled = tf.env().getBool("WEBGL_RENDER_FLOAT32_ENABLED");
+      recordDiagnostic("inference.runtime", {
+        operation,
+        backend,
+        textureBits: float32Enabled ? 32 : 16,
+        float32Capable,
+        float32Enabled,
+      });
+    } else {
+      recordDiagnostic("inference.runtime", { operation, backend });
+    }
+  } catch {
+    recordDiagnostic("inference.runtime", {
+      operation,
+      reason: "capability-unavailable",
+    });
+  }
+}
+
 // Null until model_config.json is read, so only the confidence check runs. That
 // is the intended default: the notebook exports null for both whenever it had no
 // out-of-scope image set to fit them against.
@@ -86,9 +118,17 @@ let thresholds: ModelConfigThresholds = {
  * turns those two checks off and keeps the 70% rule.
  */
 async function loadModelConfig(): Promise<void> {
+  const operation = createDiagnosticOperation("model-config");
+  const started = performance.now();
+  recordDiagnostic("model.config.started", { operation });
   try {
     const response = await fetch("/model/model_config.json");
     if (!response.ok) {
+      recordDiagnostic("model.config.fallback", {
+        operation,
+        reason: "response-unavailable",
+        durationMs: Math.round(performance.now() - started),
+      });
       console.log("---No model_config.json — using the 70% check only.---");
       return;
     }
@@ -113,7 +153,17 @@ async function loadModelConfig(): Promise<void> {
       `---Model config loaded: margin=${thresholds.marginThreshold}, ` +
         `entropy=${thresholds.entropyThreshold} (null means the check is off).---`,
     );
-  } catch {
+    recordDiagnostic("model.config.completed", {
+      operation,
+      durationMs: Math.round(performance.now() - started),
+    });
+  } catch (error) {
+    recordDiagnostic("model.config.fallback", {
+      operation,
+      reason: "unreadable",
+      errorName: diagnosticErrorName(error),
+      durationMs: Math.round(performance.now() - started),
+    });
     console.log(
       "---model_config.json unreadable — using the 70% check only.---",
     );
@@ -124,11 +174,17 @@ async function loadModelConfig(): Promise<void> {
 function warmMangoModel(model: tf.GraphModel): Promise<tf.GraphModel> {
   initializationPending = true;
   const started = performance.now();
+  const diagnosticOperation = createDiagnosticOperation("warmup");
+  recordDiagnostic("model.warmup.started", { operation: diagnosticOperation });
   let timeoutError: WarmupTimeoutError | null = null;
 
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       timeoutError = new WarmupTimeoutError();
+      recordDiagnostic("model.warmup.timeout", {
+        operation: diagnosticOperation,
+        durationMs: Math.round(performance.now() - started),
+      });
       reject(timeoutError);
     }, MODEL_WARMUP_TIMEOUT_MS);
 
@@ -152,8 +208,17 @@ function warmMangoModel(model: tf.GraphModel): Promise<tf.GraphModel> {
           throw timeoutError ?? new WarmupTimeoutError();
         }
         cachedModel = model;
+        recordDiagnostic("model.warmup.completed", {
+          operation: diagnosticOperation,
+          durationMs: Math.round(performance.now() - started),
+        });
         return model;
       } catch (error) {
+        recordDiagnostic("model.warmup.failed", {
+          operation: diagnosticOperation,
+          errorName: diagnosticErrorName(error),
+          durationMs: Math.round(performance.now() - started),
+        });
         model.dispose();
         throw error;
       } finally {
@@ -174,33 +239,55 @@ function warmMangoModel(model: tf.GraphModel): Promise<tf.GraphModel> {
  */
 export async function loadMangoModel(): Promise<tf.GraphModel> {
   if (cachedModel) {
+    recordDiagnostic("model.cache.reused");
     console.log("---Model already cached — returning instantly.---");
     return cachedModel;
   }
 
   // Stops a second load starting mid-flight, e.g. a React StrictMode double-mount.
   if (loadingPromise) {
+    recordDiagnostic("model.load.joined");
     console.log("---Model load already in progress — awaiting...---");
     return loadingPromise;
   }
-  if (initializationPending) throw new InitializationBusyError();
+  if (initializationPending) {
+    recordDiagnostic("model.load.blocked", {
+      reason: "previous-warmup-pending",
+    });
+    throw new InitializationBusyError();
+  }
+
+  const operation = createDiagnosticOperation("model-load");
+  const started = performance.now();
+  recordDiagnostic("model.load.started", { operation });
 
   loadingPromise = (async () => {
+    recordDiagnostic("model.engine.started", { operation });
     console.log("---Initializing TensorFlow.js engine...---");
 
-    // TensorFlow.js selects 32-bit WebGL textures when supported and uses
-    // 16-bit textures on devices limited to that precision. This capability
-    // choice does not retry after a 32-bit memory-allocation failure.
-    // Keep the explicit default override commented for reference.
+    // Force 16-bit WebGL textures for the current release. Comment out the
+    // active override below to restore TensorFlow.js capability selection.
+    // Neither choice automatically retries a failed GPU allocation/readback.
     // tf.env().set("WEBGL_FORCE_F16_TEXTURES", false);
-    // Rollback: uncomment the next line to force 16-bit textures again.
-    // tf.env().set("WEBGL_FORCE_F16_TEXTURES", true);
+    tf.env().set("WEBGL_FORCE_F16_TEXTURES", true);
 
     await tf.ready();
+    recordDiagnostic("model.engine.completed", {
+      operation,
+      backend:
+        typeof tf.getBackend === "function" ? tf.getBackend() : "unknown",
+      durationMs: Math.round(performance.now() - started),
+    });
 
     if (typeof tf.getBackend === "function" && tf.getBackend() === "webgl") {
       const float32Capable = tf.env().getBool("WEBGL_RENDER_FLOAT32_CAPABLE");
       const float32Enabled = tf.env().getBool("WEBGL_RENDER_FLOAT32_ENABLED");
+      recordDiagnostic("model.webgl.precision", {
+        operation,
+        textureBits: float32Enabled ? 32 : 16,
+        float32Capable,
+        float32Enabled,
+      });
       console.info(
         `---WebGL texture precision: ${float32Enabled ? "32-bit" : "16-bit"}; ` +
           `32-bit capable=${float32Capable}.---`,
@@ -212,8 +299,16 @@ export async function loadMangoModel(): Promise<tf.GraphModel> {
     // warmup can start. Nothing reads the thresholds until the first prediction,
     // so the order does not matter.
     const modelPath = "/model/model.json";
+    const assetsStarted = performance.now();
+    recordDiagnostic("model.assets.started", { operation });
     const [model] = await Promise.all([
-      tf.loadGraphModel(modelPath),
+      tf.loadGraphModel(modelPath).then((loaded) => {
+        recordDiagnostic("model.assets.completed", {
+          operation,
+          durationMs: Math.round(performance.now() - assetsStarted),
+        });
+        return loaded;
+      }),
       // Non-fatal on purpose: if this file is missing the classifier keeps the
       // confidence check and skips margin and entropy, so a config problem can
       // never block a scan.
@@ -230,7 +325,19 @@ export async function loadMangoModel(): Promise<tf.GraphModel> {
   })();
 
   try {
-    return await loadingPromise;
+    const model = await loadingPromise;
+    recordDiagnostic("model.load.completed", {
+      operation,
+      durationMs: Math.round(performance.now() - started),
+    });
+    return model;
+  } catch (error) {
+    recordDiagnostic("model.load.failed", {
+      operation,
+      errorName: diagnosticErrorName(error),
+      durationMs: Math.round(performance.now() - started),
+    });
+    throw error;
   } finally {
     // A failed load must be retryable; concurrent callers still share this load.
     loadingPromise = null;
@@ -275,11 +382,25 @@ export async function predictMangoDisease(
   signal?: AbortSignal,
 ): Promise<DiagnosisResult> {
   signal?.throwIfAborted();
-  if (inferencePending) throw new InferenceBusyError();
+  if (inferencePending) {
+    recordDiagnostic("inference.blocked", { reason: "previous-read-pending" });
+    throw new InferenceBusyError();
+  }
 
+  const diagnosticOperation = createDiagnosticOperation("inference");
+  recordDiagnostic("inference.started", { operation: diagnosticOperation });
+  recordRuntimePrecision(diagnosticOperation);
   inferencePending = true;
-  const operation = runPrediction(model, imgElement, signal).finally(() => {
+  const operation = runPrediction(
+    model,
+    imgElement,
+    signal,
+    diagnosticOperation,
+  ).finally(() => {
     inferencePending = false;
+    recordDiagnostic("inference.resources-released", {
+      operation: diagnosticOperation,
+    });
   });
   if (!signal) return operation;
 
@@ -287,6 +408,10 @@ export async function predictMangoDisease(
   // original read settles, and handle that late settlement after cancellation.
   return new Promise<DiagnosisResult>((resolve, reject) => {
     const onAbort = () => {
+      recordDiagnostic("inference.caller-cancelled", {
+        operation: diagnosticOperation,
+        reason: "underlying-read-not-cancelled",
+      });
       signal.removeEventListener("abort", onAbort);
       reject(signal.reason);
     };
@@ -309,10 +434,15 @@ async function runPrediction(
   model: tf.GraphModel,
   imgElement: HTMLImageElement,
   signal?: AbortSignal,
+  diagnosticOperation?: string,
 ): Promise<DiagnosisResult> {
+  const started = performance.now();
   // 1. Downscale on the CPU canvas first. A 12MP photo (4000x3000) is 36 million
   //    floats; 224x224 is 150K, roughly 240x smaller.
   const smallCanvas = downscaleToCanvas(imgElement, 224);
+  recordDiagnostic("inference.canvas.completed", {
+    operation: diagnosticOperation ?? "unknown",
+  });
 
   // 2. tf.tidy frees every temporary GPU tensor made inside it
   const outputTensor = tf.tidy(() => {
@@ -325,12 +455,26 @@ async function runPrediction(
 
     return model.predict(batched) as tf.Tensor;
   });
+  recordDiagnostic("inference.submitted", {
+    operation: diagnosticOperation ?? "unknown",
+  });
 
   // 3. Release the retained output after readback succeeds or fails. Aborting
   //    the caller must not dispose a tensor while the GPU still owns its read.
   let results: Awaited<ReturnType<tf.Tensor["data"]>>;
   try {
     results = await outputTensor.data();
+    recordDiagnostic("inference.readback.completed", {
+      operation: diagnosticOperation ?? "unknown",
+      durationMs: Math.round(performance.now() - started),
+    });
+  } catch (error) {
+    recordDiagnostic("inference.readback.failed", {
+      operation: diagnosticOperation ?? "unknown",
+      errorName: diagnosticErrorName(error),
+      durationMs: Math.round(performance.now() - started),
+    });
+    throw error;
   } finally {
     outputTensor.dispose();
   }
@@ -372,8 +516,8 @@ async function runPrediction(
     thresholds.entropyThreshold === null ||
     normalizedEntropy <= thresholds.entropyThreshold;
 
-  // Round for display only, once every check has run on the raw value.
-  const confidence = Math.round(maxProb * 100) / 100;
+  // Preserve the raw score in saved reports; percentage formatting belongs in the UI.
+  const confidence = maxProb;
 
   const accepted = meetsConfidence && meetsMargin && meetsEntropy;
   // Keep this table in development and production for technical review in DevTools.
@@ -409,6 +553,10 @@ async function runPrediction(
   // }
 
   const diseaseName = accepted ? CLASSES[maxIndex] : UNCERTAIN_LABEL;
+  recordDiagnostic("inference.completed", {
+    operation: diagnosticOperation ?? "unknown",
+    durationMs: Math.round(performance.now() - started),
+  });
 
   return {
     diagnosedResultTabular,

@@ -3,6 +3,11 @@ import { guidelinesClient } from "@/lib/supabase-client";
 import { db, type DiseaseGuideline } from "@/lib/db";
 import { deleteLocalScans, saveLocalScan } from "@/lib/local-scans";
 import {
+  createDiagnosticOperation,
+  diagnosticErrorName,
+  recordDiagnostic,
+} from "@/lib/diagnostics";
+import {
   createGuidelineSyncManager,
   sameGuidelineSnapshot,
 } from "@/lib/guidelines-sync";
@@ -21,12 +26,26 @@ export function useSync() {
       isOnline: () => typeof navigator !== "undefined" && navigator.onLine,
       readSnapshot: () => db.guidelines.toArray(),
       fetchSnapshot: async () => {
-        const { data, error } = await guidelinesClient
-          .from("guidelines")
-          .select("id,disease_name,guidelines_en,guidelines_bis");
-        if (error) throw error;
-        if (!data) throw new Error("Guideline response has no snapshot.");
-        return data as DiseaseGuideline[];
+        const operation = createDiagnosticOperation("guidelines");
+        recordDiagnostic("guidelines.download.started", { operation });
+        try {
+          const { data, error } = await guidelinesClient
+            .from("guidelines")
+            .select("id,disease_name,guidelines_en,guidelines_bis");
+          if (error) throw error;
+          if (!data) throw new Error("Guideline response has no snapshot.");
+          recordDiagnostic("guidelines.download.completed", {
+            operation,
+            count: data.length,
+          });
+          return data as DiseaseGuideline[];
+        } catch (error) {
+          recordDiagnostic("guidelines.download.failed", {
+            operation,
+            errorName: diagnosticErrorName(error),
+          });
+          throw error;
+        }
       },
       replaceSnapshot: (rows, baseline, canWrite) =>
         db
@@ -180,6 +199,7 @@ export function useSync() {
         },
       )
       .subscribe((status) => {
+        recordDiagnostic("guidelines.realtime.state", { status });
         // Reconcile edits missed while the Realtime connection was unavailable.
         if (status === "SUBSCRIBED" && active) {
           void guidelinesSync.refresh(true).then((saved) => {

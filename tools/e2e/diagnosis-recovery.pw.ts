@@ -413,7 +413,7 @@ for (const { fault, held, progress, budget } of [
         exact: true,
       })
       .click();
-    await expectResult(page, "Healthy Fruit", 0.95);
+    await expectResult(page, "Healthy Fruit", Math.fround(0.95));
     expect(await records(page)).toHaveLength(1);
     expectedDiagnosisError(runtimeErrors);
     await attachJson(info, "fault-recovery", {
@@ -436,7 +436,7 @@ test("D03: null WebP export falls back to JPEG with a saved photo", async ({
   await choosePhoto(page, photos[0].file);
   await armFault(page, "null-webp");
   await runDiagnosis(page);
-  await expectResult(page, "Healthy Fruit", 0.95);
+  await expectResult(page, "Healthy Fruit", Math.fround(0.95));
   const formats = await page.evaluate(
     () => window.mangoDiagnosisControl.encodings,
   );
@@ -486,7 +486,7 @@ test("D04: failed JPEG export shows recovery and retries the retained photo", as
       exact: true,
     })
     .click();
-  await expectResult(page, "Healthy Fruit", 0.95);
+  await expectResult(page, "Healthy Fruit", Math.fround(0.95));
   expect(await records(page)).toHaveLength(1);
   expectedDiagnosisError(runtimeErrors);
 });
@@ -543,7 +543,7 @@ test("D05: local-save timeout ignores late result and prevents a second saved ro
       })
       .click();
   }
-  await expectResult(page, "Healthy Fruit", 0.95);
+  await expectResult(page, "Healthy Fruit", Math.fround(0.95));
   expect(await records(page)).toHaveLength(1);
   expectedDiagnosisError(runtimeErrors);
   await attachJson(info, "local-save-recovery", {
@@ -596,7 +596,7 @@ for (const { fault, held, dismiss } of [
         exact: true,
       })
       .click();
-    await expectResult(page, "Healthy Fruit", 0.95);
+    await expectResult(page, "Healthy Fruit", Math.fround(0.95));
     expect(await records(page)).toHaveLength(1);
   });
 }
@@ -682,7 +682,7 @@ for (const offline of [false, true]) {
         .poll(() => page.evaluate(() => window.mangoRecoveryCamera.liveTracks))
         .toBe(0);
       await runDiagnosis(page);
-      await expectResult(page, "Healthy Fruit", 0.95);
+      await expectResult(page, "Healthy Fruit", Math.fround(0.95));
       expect(await records(page)).toHaveLength(capture);
       expect(predictions).toBe(capture);
       if (offline && capture === 1)

@@ -21,6 +21,12 @@ import type { DiagnosisResult } from "@/lib/classifier";
 import type * as tf from "@tensorflow/tfjs";
 import { modelVersion, UNCERTAIN_LABEL } from "@/lib/constants";
 import { translations, type Language } from "@/lib/translations";
+import {
+  createDiagnosticOperation,
+  diagnosticErrorName,
+  initializeDiagnostics,
+  recordDiagnostic,
+} from "@/lib/diagnostics";
 
 // Modular UI Components matching Figma Design System
 import { SplashScreen } from "@/components/layout/splash-screen";
@@ -104,6 +110,41 @@ export default function Home() {
   const [isModelLoading, setIsModelLoading] =
     useState<boolean>(!hasInitialized);
 
+  useEffect(() => {
+    initializeDiagnostics();
+    recordDiagnostic("app.opened", {
+      online: navigator.onLine,
+      visibility: document.visibilityState,
+      standalone: window.matchMedia("(display-mode: standalone)").matches,
+    });
+    const onVisibility = () =>
+      recordDiagnostic("app.visibility", {
+        visibility: document.visibilityState,
+      });
+    const onConnectivity = () =>
+      recordDiagnostic("app.connectivity", { online: navigator.onLine });
+    const onError = (event: ErrorEvent) =>
+      recordDiagnostic("app.error", {
+        errorName: diagnosticErrorName(event.error),
+      });
+    const onRejection = (event: PromiseRejectionEvent) =>
+      recordDiagnostic("app.unhandled-rejection", {
+        errorName: diagnosticErrorName(event.reason),
+      });
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("online", onConnectivity);
+    window.addEventListener("offline", onConnectivity);
+    window.addEventListener("error", onError);
+    window.addEventListener("unhandledrejection", onRejection);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("online", onConnectivity);
+      window.removeEventListener("offline", onConnectivity);
+      window.removeEventListener("error", onError);
+      window.removeEventListener("unhandledrejection", onRejection);
+    };
+  }, []);
+
   // Start loading the model as soon as the app opens, so it is ready before the
   // first scan. A failure leaves History available and offers reload recovery.
   useEffect(() => {
@@ -117,6 +158,9 @@ export default function Home() {
         setModel(loadedModel);
         hasInitialized = true;
       } catch (err) {
+        recordDiagnostic("app.model.failed", {
+          errorName: diagnosticErrorName(err),
+        });
         console.error("Error loading TensorFlow.js model:", err);
         if (!cancelled) setModelLoadFailed(true);
       } finally {
@@ -172,9 +216,13 @@ export default function Home() {
   >(null);
   const [isScanSheetOpen, setIsScanSheetOpen] = useState(false);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
-  const closeScanSheet = useCallback(() => setIsScanSheetOpen(false), []);
+  const closeScanSheet = useCallback(() => {
+    recordDiagnostic("scan-sheet.closed");
+    setIsScanSheetOpen(false);
+  }, []);
   const openScanSheet = useCallback(
     (event?: React.MouseEvent<HTMLButtonElement>) => {
+      recordDiagnostic("scan.requested");
       if (unsavedScan) {
         setIsStorageFullOpen(true);
         return;
@@ -250,6 +298,7 @@ export default function Home() {
 
   // Write the choice back to localStorage so it survives a restart
   const setLanguage = useCallback((newLang: Language) => {
+    recordDiagnostic("language.changed", { language: newLang });
     setLanguageState(newLang);
     if (typeof window !== "undefined") {
       localStorage.setItem("preferred_language", newLang);
@@ -268,6 +317,60 @@ export default function Home() {
     [],
   );
   const activeScans = useMemo(() => scansQuery ?? [], [scansQuery]);
+
+  useEffect(() => {
+    if (scansQuery !== undefined)
+      recordDiagnostic("history.loaded", { count: scansQuery.length });
+  }, [scansQuery]);
+
+  useEffect(() => {
+    if (!previewUrl) return;
+    // Readiness explains disabled Run without logging the selected photo or hash.
+    recordDiagnostic("photo.review.state", {
+      status: photoCheck.status,
+      reason: !model
+        ? modelLoadFailed
+          ? "model-failed"
+          : "model-not-ready"
+        : photoCheck.status !== "ready"
+          ? "photo-not-ready"
+          : photoCheck.duplicate
+            ? "duplicate"
+            : "ready",
+    });
+  }, [previewUrl, photoCheck, model, modelLoadFailed]);
+
+  useEffect(() => {
+    recordDiagnostic("ui.state", {
+      source: "overlays",
+      status: isCameraOpen
+        ? "camera"
+        : isStorageFullOpen
+          ? "storage-full"
+          : isInstallGuideOpen
+            ? "install-guide"
+            : legalModalType
+              ? "legal"
+              : selectedScan
+                ? "scan-details"
+                : previewUrl
+                  ? isScanning
+                    ? "analyzing"
+                    : "photo-review"
+                  : isScanSheetOpen
+                    ? "scan-sheet"
+                    : "none",
+    });
+  }, [
+    isCameraOpen,
+    isStorageFullOpen,
+    isInstallGuideOpen,
+    legalModalType,
+    selectedScan,
+    previewUrl,
+    isScanning,
+    isScanSheetOpen,
+  ]);
 
   const selectedScanImageUrl = useMemo(() => {
     if (selectedScan?.image_blob && selectedScan.image_blob.size > 0) {
@@ -328,19 +431,38 @@ export default function Home() {
     const file = selectedFileRef.current;
     if (!file || scanInFlightRef.current) return;
     const request = ++photoRequestRef.current;
+    const operation = createDiagnosticOperation("photo-check");
+    const started = performance.now();
+    recordDiagnostic("photo.check.started", { operation });
     updatePhotoCheck({ status: "checking" });
     try {
       // Hash once per selection. Retrying a database lookup reuses these bytes.
+      recordDiagnostic("photo.hash.started", { operation });
       const hash = photoHashRef.current ?? (await computeImageHash(file));
+      recordDiagnostic("photo.hash.completed", { operation });
       if (request !== photoRequestRef.current) return;
       photoHashRef.current = hash;
+      recordDiagnostic("photo.duplicate-lookup.started", { operation });
       const duplicate = await findDuplicateScan(hash);
+      recordDiagnostic("photo.duplicate-lookup.completed", {
+        operation,
+        status: duplicate ? "duplicate" : "new",
+      });
       if (request !== photoRequestRef.current) return;
       updatePhotoCheck({ status: "ready", hash, duplicate: duplicate ?? null });
+      recordDiagnostic("photo.check.completed", {
+        operation,
+        durationMs: Math.round(performance.now() - started),
+      });
       if (duplicate) {
         console.log("---Duplicate photo detected — awaiting photo review.---");
       }
     } catch (err) {
+      recordDiagnostic("photo.check.failed", {
+        operation,
+        errorName: diagnosticErrorName(err),
+        durationMs: Math.round(performance.now() - started),
+      });
       if (request !== photoRequestRef.current) return;
       console.error("Photo duplicate check failed:", err);
       updatePhotoCheck({ status: "error" });
@@ -358,6 +480,9 @@ export default function Home() {
       restoreReviewFocusRef.current = false;
       clearPhoto();
       lastPickerIdRef.current = source;
+      recordDiagnostic("photo.selected", {
+        source: source === "guided-camera" ? "camera" : "upload",
+      });
       setIsCameraOpen(false);
       selectedFileRef.current = file;
       previewUrlRef.current = URL.createObjectURL(file);
@@ -379,6 +504,7 @@ export default function Home() {
   );
 
   const openGuidedCamera = useCallback(() => {
+    recordDiagnostic("camera.requested");
     if (scanInFlightRef.current) return;
     if (unsavedScan) {
       setIsStorageFullOpen(true);
@@ -391,6 +517,7 @@ export default function Home() {
   }, [clearPhoto, unsavedScan]);
 
   const closeGuidedCamera = useCallback(() => {
+    recordDiagnostic("camera.closed");
     restoreReviewFocusRef.current = true;
     setIsCameraOpen(false);
   }, []);
@@ -402,6 +529,7 @@ export default function Home() {
 
   const closePhotoReview = useCallback(() => {
     if (scanInFlightRef.current) return;
+    recordDiagnostic("photo.review.closed");
     restoreReviewFocusRef.current = true;
     clearPhoto();
   }, [clearPhoto]);
@@ -409,6 +537,7 @@ export default function Home() {
   // Drop the current preview and reopen the same picker
   const handleRetake = useCallback(() => {
     if (scanInFlightRef.current) return;
+    recordDiagnostic("photo.retake");
     const pickerId = lastPickerIdRef.current;
     restoreReviewFocusRef.current = true;
     clearPhoto();
@@ -433,10 +562,16 @@ export default function Home() {
     if (check.status !== "ready" || !check.duplicate || scanInFlightRef.current)
       return;
     const request = ++photoRequestRef.current;
+    const operation = createDiagnosticOperation("saved-result");
+    recordDiagnostic("saved-result.lookup.started", { operation });
     updatePhotoCheck({ status: "checking" });
     try {
       // Another tab may have deleted the saved report since selection.
       const existingScan = await findDuplicateScan(check.hash);
+      recordDiagnostic("saved-result.lookup.completed", {
+        operation,
+        status: existingScan ? "found" : "missing",
+      });
       if (request !== photoRequestRef.current) return;
       if (existingScan) {
         clearPhoto();
@@ -449,6 +584,10 @@ export default function Home() {
         });
       }
     } catch (err) {
+      recordDiagnostic("saved-result.lookup.failed", {
+        operation,
+        errorName: diagnosticErrorName(err),
+      });
       if (request !== photoRequestRef.current) return;
       console.error("Saved photo lookup failed:", err);
       updatePhotoCheck({ status: "error" });
@@ -456,6 +595,7 @@ export default function Home() {
   }, [clearPhoto, updatePhotoCheck]);
 
   const cancelDiagnosis = useCallback(() => {
+    recordDiagnostic("diagnosis.cancel.requested");
     scanAbortRef.current?.abort(
       new DOMException("Diagnosis cancelled.", "AbortError"),
     );
@@ -471,10 +611,25 @@ export default function Home() {
       scanInFlightRef.current ||
       check.status !== "ready" ||
       check.duplicate
-    )
+    ) {
+      recordDiagnostic("diagnosis.blocked", {
+        reason: !file
+          ? "no-photo"
+          : !model
+            ? "model-not-ready"
+            : scanInFlightRef.current
+              ? "busy"
+              : check.status !== "ready"
+                ? "photo-not-ready"
+                : "duplicate",
+      });
       return;
+    }
 
     // Ref guards rapid clicks before React renders the scanning state.
+    const operation = createDiagnosticOperation("diagnosis");
+    const started = performance.now();
+    recordDiagnostic("diagnosis.started", { operation });
     scanInFlightRef.current = true;
     const request = photoRequestRef.current;
     const controller = new AbortController();
@@ -567,7 +722,12 @@ export default function Home() {
           diagnosedResultTabular,
         });
       }
+      recordDiagnostic("diagnosis.result.opened", { operation });
     } catch (err) {
+      recordDiagnostic("diagnosis.caller.failed", {
+        operation,
+        errorName: diagnosticErrorName(err),
+      });
       if (request !== photoRequestRef.current) return;
       if (preparedScan && isStorageQuotaError(err)) {
         // Keep only the compressed photo/result for a same-ID save retry.
@@ -601,6 +761,11 @@ export default function Home() {
       );
       if (!cancelled) console.error("[Diagnosis] failed:", err);
     } finally {
+      // Caller release is separate from any GPU operation still settling.
+      recordDiagnostic("diagnosis.caller.released", {
+        operation,
+        durationMs: Math.round(performance.now() - started),
+      });
       scanInFlightRef.current = false;
       if (scanAbortRef.current === controller) scanAbortRef.current = null;
       if (request === photoRequestRef.current) {
@@ -657,6 +822,7 @@ export default function Home() {
 
   const handleTabChange = useCallback((tab: AppTab) => {
     if (tab === prevTabRef.current) return;
+    recordDiagnostic("navigation.changed", { tab });
     prevTabRef.current = tab;
     setActiveTab(tab);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -669,6 +835,7 @@ export default function Home() {
 
   const manageStorage = useCallback(() => {
     if (scanInFlightRef.current) return;
+    recordDiagnostic("storage.manage.requested");
     setIsStorageFullOpen(false);
     handleTabChange("history");
     requestAnimationFrame(() =>
@@ -678,6 +845,7 @@ export default function Home() {
 
   const discardUnsavedScan = useCallback(() => {
     if (scanInFlightRef.current) return;
+    recordDiagnostic("storage.draft.discarded");
     restoreReviewFocusRef.current = true;
     setUnsavedScan(null);
     setIsStorageFullOpen(false);
@@ -686,6 +854,7 @@ export default function Home() {
 
   const retryUnsavedScan = useCallback(async () => {
     if (!unsavedScan || scanInFlightRef.current) return;
+    recordDiagnostic("storage.retry.started");
     scanInFlightRef.current = true;
     const controller = new AbortController();
     scanAbortRef.current = controller;
@@ -699,7 +868,11 @@ export default function Home() {
       setUnsavedScan(null);
       setIsStorageFullOpen(false);
       setSelectedScan(savedScan);
+      recordDiagnostic("storage.retry.completed");
     } catch (error) {
+      recordDiagnostic("storage.retry.failed", {
+        errorName: diagnosticErrorName(error),
+      });
       if (
         controller.signal.aborted &&
         !(error instanceof DiagnosisTimeoutError)

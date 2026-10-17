@@ -2,7 +2,7 @@
 
 This guide explains the PWA version: the application interface, local/offline behavior, release history, build labels, and deployment procedure. The PWA is the app people use. The separate [AI model versioning guide](AI_MODEL_VERSIONING.md) explains the model weights, training workflows, fitted rejection settings, and model evidence.
 
-**Current repository preparation:** PWA `0.6.1` is the prepared score-display patch, retaining adopted model V4.5.0 (`v4.5.0`) and confidence >=0.70 only. Margin and entropy gates are disabled. The [v0.6.1 release record](#v061-uncertain-result-scores-prepared-release-october-16-2026) identifies the candidate separately from the preserved [v0.6.0 preparation](#v060-local-history-and-v450-prepared-release-october-16-2026). Final-commit CI and production promotion remain separate; earlier validation and publication records retain their original identities.
+**Current repository preparation:** PWA `0.7.0` adds optional local diagnostics and preserves raw confidence for new reports, retaining adopted model V4.5.0 (`v4.5.0`) and confidence >=0.70 only. Margin and entropy gates are disabled. The [v0.7.0 release record](#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026) identifies this candidate separately from the preserved v0.6.1/v0.6.0 preparation records. Final-commit CI, approved release validation, tag publication, and manual production promotion remain separate; earlier results retain their original identities.
 
 ## Reading the release history
 
@@ -57,6 +57,7 @@ v0.5.4  prepared / awaiting CI and production promotion: skip unchanged HTTP gui
 v0.5.5  prepared release: guided camera capture, installation guidance, and responsive History refinements
 v0.6.0  prepared release: V4.5.0 confidence-only model and local-only History with storage-full recovery
 v0.6.1  prepared patch: uncertain result scores and bilingual Terms clarification; same V4.5.0 model
+v0.7.0  prepared feature release: optional local diagnostics and raw-confidence display; same V4.5.0 model
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
@@ -445,6 +446,36 @@ The separate `model-v4.5.0` tag is a model-provenance marker on the approved tes
 ### CI browser follow-up (October 16, 2026)
 
 The first `b7331a9` CI run failed G07's intentional offline-request console cleanup and R04's native Blob seeding in Linux WebKit; 223 core cases passed and eight were skipped. The [follow-up testing record](../testing/TESTING.md#v060-ci-browser-follow-up-october-16-2026) records the timing fix, narrowly scoped native-PNG capability guard, successful repeated local checks, and pending Linux rerun. Typecheck, lint, build, and export checks passed. This changes test support, documentation, and the build-generated worker only; app/model versions remain `0.6.0` / `v4.5.0`. The pushed commit and any published tag must retain their identities; the repair requires a new follow-up commit and fresh CI before release approval.
+
+## v0.7.0: diagnostics and raw confidence prepared release (October 17, 2026)
+
+**Status: prepared candidate; final-commit CI, approved release validation, tag publication, and manual Vercel promotion are tracked separately.** App `0.7.0` adds the shared, opt-in Diagnostics viewer in About. Recording starts off; enabling it records controlled technical events across startup, photo review, camera, inference, saving/deletion, navigation, and public guideline updates. The viewer supports copy, text download, clear, and English/Bisaya controls without adding log buttons to modals.
+
+Logs are local and bounded to 200 events and 64 KiB under `mangoleaf-diagnostics-v1`. Persistence is debounced and best effort; memory-only operation remains available when browser storage fails. Logs exclude photos, diagnosis results, report identifiers, credentials, raw messages, and URLs. Previously saved events can be inspected after a reload, but a freeze/crash can prevent recent entries from saving. The recorder helps investigate failures and does not establish that the reported phone stalls are repaired.
+
+New scan reports retain the raw highest-class probability. Confidence badges round the percentage down to at most one decimal and omit a trailing `.0`, for example `62%`, `62.1%`, `69.8%`, and `70%`. Both accepted and Uncertain results show confidence. The raw 0.70 acceptance comparison remains unchanged, and older rounded reports retain their saved values. The existing forced 16-bit WebGL preference is included and documented accurately; V4.5.0 weights, class order, preprocessing, calibration, and model-cache identity are unchanged. There is no new model label or scientific evaluation result.
+
+The bilingual Privacy Policy discloses optional local logs and export handling; Terms explain raw/new versus previously rounded History scores. Current architecture, setup, performance, incident collection, and test instructions are aligned. Earlier runs remain historical evidence for their original source fingerprints. The [v0.7.0 testing record](../testing/TESTING.md#v070-diagnostics-and-raw-confidence-october-17-2026) records actual local results and pending commit-specific CI; R03 remains a separate explicit protocol.
+
+Final local checks passed: formatting, typecheck, lint, production build, export/security checks, 58 tooling tests, 250 core browser cases with 10 declared platform skips, and filtered R01 with 240 actual predictions. R01 found stable labels/classes, zero confidence variation, and zero net tensor growth in the identified software-rendered browser session. Application fingerprint: `9d57a97c29ccfb15df4d67fc5bf86aa15bed29edfbb889a7d27292461e4b9ce8`. All five model assets match the baseline and production export. Remote CI, device observations, and promotion retain their own evidence requirements.
+
+### v0.7.0 commit and tag text
+
+**Regular commit subject:** `feat: prepare v0.7.0 diagnostics and raw scores`
+
+**App tag:** `v0.7.0`
+
+**Release title / annotated-tag subject:** `MangoLeaf AI v0.7.0 - Local diagnostics and raw confidence`
+
+**Release description draft:**
+
+> Adds optional technical logs in About with local retention, copy/download/clear controls, and English/Bisaya guidance. Recording defaults off and keeps recent diagnostic events separate from scan reports and photos.
+>
+> Preserves raw confidence for new scan reports. Accepted and Uncertain results display up to one decimal rounded down, hiding unnecessary `.0`, while the 70% confidence-only rejection rule remains unchanged. Existing History keeps its previously saved precision.
+>
+> Retains the V4.5.0 model and current forced 16-bit WebGL preference. Updates privacy, score explanations, architecture, performance, incident collection, and automated regression coverage. Validation results belong to the exact tested commit and do not establish field accuracy or a repair for every phone/browser stall.
+
+The maintainer requested a normal `master` push, with agent work ending after that push. The maintainer handles the CI outcome, `git push origin v0.7.0`, and manual Vercel promotion. Push the branch without `--follow-tags`. A local annotated candidate tag can identify the final locally tested commit; it remains unpublished and does not establish CI or release approval. Complete the required checks before publishing it or promoting the staged deployment. On October 17 the maintainer confirmed **Auto-assign Custom Production Domains is disabled**, so the branch push is intended to prepare a staged deployment. Record final commit/run/deployment identities after they exist; do not treat this planned procedure as completed CI, tag publication, or production promotion.
 
 ## Candidate testing and promotion
 

@@ -103,7 +103,7 @@ test("L03: full storage warns explicitly and retries the same result without ano
     })
     .click();
   await expect(dialog).not.toBeVisible();
-  await expectResult(page, "Healthy Leaf", 0.95);
+  await expectResult(page, "Healthy Leaf", Math.fround(0.95));
   expect(predictions).toBe(1);
   const saved = await records(page);
   expect(saved).toHaveLength(1);
@@ -158,7 +158,7 @@ test("L04: open History, delete a chosen report, and save the retained result of
       exact: true,
     })
     .click();
-  await expectResult(page, "Healthy Fruit", 0.95);
+  await expectResult(page, "Healthy Fruit", Math.fround(0.95));
   expect(predictions).toBe(2);
   const saved = await records(page);
   expect(saved).toHaveLength(1);

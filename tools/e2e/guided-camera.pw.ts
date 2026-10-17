@@ -458,7 +458,7 @@ test("C02: captured photo reaches one controlled diagnosis through existing revi
   await page
     .getByRole("button", { name: translations.en.runDiagnosisBtn, exact: true })
     .click();
-  await expectResult(page, "Healthy Fruit", 0.95);
+  await expectResult(page, "Healthy Fruit", Math.fround(0.95));
   expect(await records(page)).toHaveLength(1);
   expect(await cameraStops(page)).toBe(2);
   expect(predictions).toBe(1);

@@ -469,7 +469,9 @@ export async function expectResult(
     )
     .toBe(true);
   await expect(
-    modal.getByText(`${Math.round(confidence * 100)}%`, { exact: true }),
+    modal.getByText(`${Math.floor(confidence * 1000) / 10}%`, {
+      exact: true,
+    }),
   ).toBeVisible();
   // Bounding boxes catch badges that exist in the DOM but are clipped by the photo.
   const photoBox = await image.boundingBox();

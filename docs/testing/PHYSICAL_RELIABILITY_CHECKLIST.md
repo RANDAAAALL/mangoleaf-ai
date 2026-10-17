@@ -1,6 +1,6 @@
 # MangoLeaf AI physical reliability checklist
 
-Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current repository source is prepared app `0.6.0`, model `v4.5.0`, confidence-only threshold 0.70. Fill results only after observing the exact recorded release build; physical-device evaluation remains pending.
+Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current candidate is app `0.7.0`, model `v4.5.0`, confidence-only threshold 0.70. Fill results only after observing the exact recorded release build; do not transfer a previous build's observations to this candidate.
 
 **Storage protocol introduced October 15:** Reports/photos stay in this browser's IndexedDB; Supabase updates public treatment guidance only. Use the actual tested build identity below. Earlier completed examples retain their historical cloud scope.
 
@@ -27,6 +27,8 @@ Need an answer-format example? See [PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md](PH
 - [ ] Operating system and version:
 - [ ] Browser and version:
 - [ ] Mode: installed PWA / browser tab:
+- [ ] Diagnostics enabled before this session: Yes / No; memory-only warning: Yes / No:
+- [ ] Actual inference backend / texture precision, if available in diagnostics:
 - [ ] Network used before offline checks:
 - [ ] Test account or device identity:
 - [ ] Photo IDs and SHA-256 hashes:
@@ -42,6 +44,38 @@ Need an answer-format example? See [PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md](PH
 - [ ] Run core automated checks for same release build: `bun run test:e2e`.
 - [ ] Run R01 and R03 automated checks for same release build: `bun run test:reliability`.
 - [ ] Record automated report location:
+
+The `0.7.0` preparation does not itself complete any physical observation below. The existing instruction to run R01/R03 describes release evidence to collect when authorized; **no full or shortened R03 session was run for this preparation**. Record a later session's own dates, commit, deployment, and observations.
+
+## Diagnostics and stall evidence (v0.7.0)
+
+Enable **About > Diagnostics > Record diagnostic events** before reproducing a failure. Recording is off by default; enabling it afterward cannot recover earlier actions. About is the only viewer, and no log button is added to a blocking modal. The shared recorder retains recent events after modal/tab changes. Disabling stops new recording without clearing existing history.
+
+- [ ] In a clean test profile, recording starts unchecked; normal camera/scan/save/delete actions still work while it is off.
+- [ ] Enable recording; navigate between Home, History, and About, then open View logs. Earlier step events remain visible.
+- [ ] Reload/reopen the same app/browser context; verify the preference and already persisted events restore when storage is available. Record any browser-specific loss rather than assuming it survives every close.
+- [ ] Copy and Download work on this device. If clipboard permission fails, the log remains selectable; record the fallback outcome.
+- [ ] Clear diagnostics while a designated scan/photo is saved; verify that report/photo remains in History. Downloaded files are separate and are not removed by Clear.
+- [ ] With a controlled storage failure, if applicable, the memory-only warning appears and scanning/saving/deleting do not fail because diagnostic persistence failed. Record whether the failure was injected or naturally observed.
+- [ ] Export contains only technical events/status/counts/timings, app/model version, coarse browser/OS information, and actual backend/precision where available. It contains no photos, diagnosis scores/labels, image hashes, private URLs, credentials, or report/device/guest identities. Operation IDs are temporary diagnostic correlation labels.
+- [ ] Diagnostics result: Pass / Fail / Blocked - reason and evidence location:
+
+Logs rotate at 200 events and 64 KiB of serialized UTF-8 JSON. They stay in memory and, best effort, localStorage under `mangoleaf-diagnostics-v1`; no automatic server upload occurs. Normal event writes are debounced by 250 ms and flushed on page hide/backgrounding. Browser storage denial/quota, crashes, and a frozen browser/driver thread can lose the latest events. If browser storage denies every change, Clear cannot guarantee removal of an older saved copy. A start without a completion event helps locate unfinished work but does not prove a specific root cause or that IndexedDB is defective.
+
+### Record each reproduced stall
+
+- [ ] Incident time/time zone and elapsed time:
+- [ ] Action: disabled Run / enabled Run did not advance / analyzing / confirmed deletion / other:
+- [ ] Button appearance, photo-check text, visible stage, and 15/45/75/90% milestone, if present:
+- [ ] Phone model, exact OS/browser version, PWA or tab, network, and background/lock-screen activity:
+- [ ] Cancel/Close/retry/reload action attempted and observed response:
+- [ ] Log export location, persistence warning, screenshot/video, and issue link:
+- [ ] History rows/photos checked after recovery; save/delete already completed, not completed, or unknown:
+- [ ] Incident result: Pass / Fail / Blocked - reason and remaining evidence gaps:
+
+For **Run that does not advance**, distinguish faded/disabled from enabled/tappable. Disabled native-button taps do not emit click-handler events; startup/readiness/photo-check events explain the recorded state. If review closes normally, open About and export. For **analyzing**, allow the existing 60-second analyze deadline to offer recovery; browser/driver blocking can delay timers. For **confirmed deletion**, there is no automatic deadline and Cancel/Close remain disabled while deletion is pending.
+
+If recovery controls remain unusable, reload or fully close and reopen the same app/browser, then export preserved logs promptly before another attempt rotates the incident out. Check History before retrying because a save/delete may have committed without its screen updating. An unsaved diagnosis can be lost. Do not clear browser data or uninstall during troubleshooting: both can erase local reports/photos and logs. Reopening is a recovery attempt, not a guaranteed fix; document repeated failures for investigation.
 
 ## R01-M01: repeated prediction consistency
 
@@ -79,7 +113,7 @@ For each run, scan the photo, record result, then delete that test record and wa
 - [ ] No duplicate reopening was counted as a prediction.
 - [ ] R01 result: Pass / Fail / Blocked — reason and evidence location:
 
-This manual path checks displayed label/acceptance stability and records visible confidence variation. It does not verify the automated R01 tolerance of 0.001 on raw confidence. If raw class, numerical confidence, margin, or entropy evidence is required on a phone, a separately configured device-capable runner is needed. The repository's current harness runs only on the local loopback test server; it is not reachable from a phone or included in the deployment. Do not add these diagnostics to the farmer-facing modal.
+This manual path checks displayed label/acceptance stability and records visible confidence variation. Display uses the stored score rounded down to at most one decimal and omits a trailing `.0`; it is not the full raw numeric value. It does not verify the automated R01 tolerance of 0.001 on raw confidence. The preserved optional fresh-result table displays formatted probability copies, not full raw numeric values; those rows are not saved in History. About's optional event recorder does not capture scores or probability tables. If full raw class, numerical confidence, margin, or entropy evidence is required on a phone, a separately configured device-capable runner is needed. The repository's current harness runs only on the local loopback test server; it is not reachable from a phone or included in the deployment.
 
 ## R02-M01: offline availability after initial load
 
@@ -187,11 +221,13 @@ Take Photo now opens a live browser camera below 768px; it does not launch the o
 ### Result and layout
 
 - [ ] Run at least two distinct camera captures and gallery uploads online and after offline caching; record device/OS/browser, each progress stage, and total elapsed time.
-- [ ] If analysis stalls, record the 15/45/75/90% marker and `[Diagnosis]` console timings. Check Cancel/Escape and the offered retry/reload action without random tapping.
+- [ ] If analysis stalls, record the 15/45/75/90% workflow marker, elapsed time, and `[Diagnosis]` console timings when accessible. Use the [diagnostics/stall record](#diagnostics-and-stall-evidence-v070) for phone export and recovery; check Cancel/Escape and offered retry/reload actions without repeated tapping.
 - [ ] If GPU warmup times out after model assets load, confirm the startup failure banner and Reload action. Record device/browser logs; model/config download stalls remain a separate check.
 - [ ] After recovery, check History for missing or duplicate rows; a result committed before cancellation remains valid and should be reused by the exact-photo/current-model check.
-- [ ] Test accepted result: photo, class, confidence, and Details appear.
-- [ ] Test uncertain result if available: photo and uncertain label appear; no raw diagnostics appear in modal.
+- [ ] Test accepted result: photo, class, confidence, and Details appear. Confidence uses at most one decimal, such as `95.1%`, and no redundant `.0`, such as `95%`.
+- [ ] Test uncertain result if available: photo, uncertain label, and confidence appear. The badge rounds down (`69.8%` remains below `70%`). If the optional fresh-result probability table is present, its formatted rows do not change the Uncertain label or raw rejection decision; margin and entropy are not shown. Reopening saved History does not restore those unsaved table rows.
+- [ ] New scan retains its raw score through History/reload and displays the same formatted confidence. Check exact stored values separately if needed; display alone cannot prove storage precision.
+- [ ] Previously saved reports retain their stored precision and diagnosis. Reopening an exact-photo/current-model duplicate reuses that record; missing historical decimal places are not reconstructed. An old Uncertain report whose original below-threshold score was saved as `0.70` may still show `70%`; this does not establish a new inference with a passing raw score.
 - [ ] Recent Scans displays latest record and image.
 - [ ] History search, filter, pagination, Details, and delete work.
 - [ ] Portrait layout works.

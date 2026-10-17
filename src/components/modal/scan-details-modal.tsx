@@ -3,6 +3,7 @@ import { type ScanRecord } from "@/lib/db";
 import { translations, type Language } from "@/lib/translations";
 import { UNCERTAIN_LABEL } from "@/lib/constants";
 import { getBadgeStyles } from "@/lib/get-badge-styles";
+import { formatConfidence } from "@/lib/format-confidence";
 // This type-only import is erased from the browser bundle.
 import type { DiagnosisResult } from "@/lib/classifier";
 
@@ -118,7 +119,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
               <span
                 className={`shrink-0 text-[11px] leading-snug font-black uppercase px-2 py-1 ${badgeClass} backdrop-blur-md rounded-full shadow-sm tracking-wide`}
               >
-                {Math.round(scan.confidence * 100)}%
+                {formatConfidence(scan.confidence)}
               </span>
             )}
           </div>
@@ -150,7 +151,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
               {/* AI Confidence Score Badge */}
               {/* {scan.disease_name !== UNCERTAIN_LABEL && (
                   <span className="text-xs font-extrabold px-3 py-1 bg-[#e5f5e0] border border-[#c3e6ba] text-[#1b5e28] rounded-full shadow-xs">
-                    {t.scorePrefix} {Math.round(scan.confidence * 100)}%
+                    {t.scorePrefix} {formatConfidence(scan.confidence)}
                   </span>
                 )} */}
               {/* </div> */}

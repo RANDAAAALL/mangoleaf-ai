@@ -3,6 +3,7 @@ import { Icon } from "@/components/brand/icon";
 import { Logo } from "@/components/brand/logo";
 import { translations, type Language } from "@/lib/translations";
 import { modelVersion } from "@/lib/constants";
+import { DiagnosticsPanel } from "@/components/tab/diagnostics-panel";
 
 interface AboutTabProps {
   language: Language;
@@ -272,6 +273,8 @@ export const AboutTab = memo(function AboutTab({
           ))}
         </ol>
       </section>
+
+      <DiagnosticsPanel language={language} />
 
       <section className="rounded-3xl border border-[#cfe2c8] bg-[#edf6e9] px-6 py-9 text-center shadow-xs sm:px-10 sm:py-12">
         <div className="mx-auto flex max-w-2xl flex-col items-center">

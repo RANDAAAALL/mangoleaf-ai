@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: October 16, 2026
+Last updated: October 17, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -1064,6 +1064,15 @@ This file tracks the project work from the first committed implementation throug
   - Set the candidate app label to 0.6.1 and aligned current version references and release guidance. Model V4.5.0, its assets and 0.70 confidence-only rule remain the same. Validation is recorded in [TESTING.md](testing/TESTING.md#v061-uncertain-result-scores-october-16-2026); commit, tag, CI, and deployment remain separate. No full or shortened R03 session is part of this task.
   - Formatting/typecheck/lint/build and all 10 export checks passed. All 34 focused browser cases passed with no skips or failures, including the raw-score rounding boundary and both legal dialogs in both languages. Active/exported model hashes remain unchanged; 437 local documentation links passed. The validation record preserves the exact source fingerprint, and the physical checklist remains available for the maintainer's later device results.
 
+### October 17, 2026
+
+- **PWA v0.7.0 diagnostics and raw-confidence candidate**
+  - Added an opt-in shared technical recorder with one viewer in About. Recent events survive modal/tab changes and are saved locally on a best-effort basis, bounded to 200 events and 64 KiB. Copy, download, and clear controls keep diagnostic history separate from scan reports/photos.
+  - Instrumented startup, photo readiness, camera, inference/stages, local saving/deletion, navigation, and public guideline synchronization using controlled event fields and safe error names. Recording starts off and excludes photos, diagnosis results, report identifiers, and credentials. Logs provide incident evidence; browser freezes and storage failures can prevent the latest events from saving.
+  - Preserved raw confidence for new reports and formatted both accepted and Uncertain badges with at most one decimal rounded down, omitting `.0`. Existing rounded History values remain untouched; the confidence-only 0.70 rejection rule, V4.5.0 assets, and existing forced 16-bit WebGL preference remain unchanged by this display/storage correction.
+  - Prepared app `0.7.0`, bilingual privacy/score explanations, current architecture/setup/performance/testing guidance, and draft commit/tag notes. Earlier local `0.6.1` checks retain their original identities. Final candidate validation and commit-specific CI are recorded separately in [TESTING.md](testing/TESTING.md#v070-diagnostics-and-raw-confidence-october-17-2026); tag publication and Vercel promotion remain maintainer-controlled.
+  - Verified the final `0.7.0` application fingerprint with formatting, typecheck, lint, build, export/security checks, 58 tooling tests, and the full core suite: 250 passed with 10 declared platform skips and no unexpected/flaky cases. Filtered R01 completed 240 actual predictions with stable labels/classes, zero confidence variation, and zero net tensor growth in the recorded software-rendered browser session. V4.5.0 assets match the baseline/export. These local results do not establish remote CI, phone accuracy/performance, or production promotion; the maintainer handles CI after the branch push. R03 and shortened substitutes were not run.
+
 ## Current Notebook Decision
 
 Keep every training notebook, and keep each trial's clean template separate from its completed run. Historical and adopted trial notebooks live in `notebooks/non-experiment/v{n}/`; this includes the current V4.5.0 model and older models. Candidate workflows and completed experimental evidence live in `notebooks/experiment/v{n}/`. The latter are experimental candidates, not shipped or deployed. V4.5.0's notebooks moved into the adopted/historical group on October 16, 2026, with original cells and outputs intact. The original trial folders were moved from the repository root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle; they were added on September 8, 2026. The filenames below are unchanged. Earlier dated entries retain the repository paths that described those events; the current locations are listed here and in the notebook index.
@@ -1095,7 +1104,7 @@ Keep every training notebook, and keep each trial's clean template separate from
 
 ## Current Adopted Model (v4.5.0)
 
-Prepared app `0.6.1` uses the adopted V4.5.0 TensorFlow.js Graph Model in repository source. Output order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold. Both healthy outputs use the `healthy` guideline row. The selected rejection rule is confidence >= `0.70`; margin and entropy are disabled. Temperature `0.8002093839891747` is folded into the saved weights. V4.3.0 remains available as a verified rollback model.
+Prepared app `0.7.0` uses the adopted V4.5.0 TensorFlow.js Graph Model in repository source. Output order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold. Both healthy outputs use the `healthy` guideline row. The selected rejection rule is confidence >= `0.70`; margin and entropy are disabled. Temperature `0.8002093839891747` is folded into the saved weights. V4.3.0 remains available as a verified rollback model.
 
 The [V4.5.0 report](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) records the confidence-only reference: 377/397 correct accepted mango diagnoses (94.96% of all inputs), 12 wrong accepted, eight rejected, and nine false accepts among 250 OOD reporting photos. These saved-study measurements do not establish independent field accuracy. The [testing guide](testing/TESTING.md) records browser checks separately from scientific evaluation and production promotion.
 

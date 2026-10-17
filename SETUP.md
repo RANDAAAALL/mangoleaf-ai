@@ -2,7 +2,7 @@
 
 This guide covers local development and the external services required by the current application.
 
-The repository uses prepared app version `0.6.1` and adopted model `v4.5.0`, with confidence >=0.70 as the only rejection gate. Margin and entropy gates are disabled. V5.0.0 is untrained and on standby. Production release/deployment status remains separate; version labels come from repository files.
+The repository uses prepared app version `0.7.0` and adopted model `v4.5.0`, with confidence >=0.70 as the only rejection gate. Margin and entropy gates are disabled. Optional diagnostics and raw-confidence preservation require no additional environment variables or Supabase resources. V5.0.0 is untrained and on standby. Production release/deployment status remains separate; version labels come from repository files.
 
 ## Prerequisites
 
@@ -179,7 +179,7 @@ Findings show filenames, lines, rules, and commit IDs without credential values.
 
 CI sets `HUSKY=0` because it invokes checks directly. The build uses the existing public-client fallback settings and requires no production credentials; it is not a deployment artifact for public guideline access. Production builds still need the public Supabase values described above. App/model version labels remain sourced from code. The workflow does not deploy, change Dependabot settings, or gate an independent hosting deployment. It starts after GitHub receives a push and does not inspect pushes isolated on other branches. Local hooks can be skipped, so keep both layers. The hook deliberately excludes production build and export verification because the build is slower and downloads Google Fonts. CI runs these checks automatically; developers still run the required local build before committing and can run `bun run verify:export` afterward.
 
-Tooling regression tests cover secret/file history checks and export assets. They do not test camera capture, browser inference, offline reloads, or Supabase synchronization.
+Tooling regression tests cover secret/file history checks, export assets, diagnosis lifecycle, local scans, diagnostics retention/privacy, and confidence formatting through controlled inputs. They do not establish real-camera behavior, GPU/device performance, or live Supabase behavior; the isolated browser suite and physical-device evidence have separate scopes.
 
 ## Browser tests and reliability
 
@@ -195,7 +195,7 @@ On Linux, include `--with-deps` when installing browsers. `test:e2e` prepares a 
 
 Run `bun run test:reliability` explicitly for 30 real predictions per supplied photo and a 30-minute mixed-use session. It defaults to one emulated Chromium phone; select another supported project explicitly to repeat measurements. These long checks are not in Husky or per-push CI. Reports are under ignored `playwright-report/` and `test-results/`; preserve formal evidence before rerunning. See [TESTING.md](docs/testing/TESTING.md) for case IDs, report-only rejection diagnostics, fixture labels, limitations, and the manual physical-device checklist.
 
-The core CI suite includes guided-camera and installation-guide cases. R03 now alternates gallery uploads and synthetic guided-camera captures, including photo review, Retake, stream cleanup, and actual inference. Updating this protocol does not execute it; the October 9 alignment task did not run R03. Physical camera/lens behavior, permission recovery, OS background behavior, and cached offline capture still require recorded phone checks. For manual camera use, open HTTPS or localhost; an ordinary HTTP LAN address cannot provide the live camera API.
+The core CI suite includes guided-camera, installation-guide, and diagnostics cases. R03 now alternates gallery uploads and synthetic guided-camera captures, including photo review, Retake, stream cleanup, and actual inference. Updating this protocol does not execute it; the October 9 alignment task did not run R03. Physical camera/lens behavior, permission recovery, OS background behavior, and cached offline capture still require recorded phone checks. For manual camera use, open HTTPS or localhost; an ordinary HTTP LAN address cannot provide the live camera API.
 
 For why `.test-app/`, `.tools/`, `playwright-report/`, and `test-results/` appear locally, what creates them, and what happens if you remove them, see [local generated folders](docs/testing/TESTING.md#local-generated-folders).
 
@@ -203,7 +203,7 @@ For why `.test-app/`, `.tools/`, `playwright-report/`, and `test-results/` appea
 
 To review each `master` deployment before it serves users, open Vercel **Settings > Environments > Production > Branch Tracking**, keep `master`, and disable **Auto-assign Custom Production Domains**. Confirm the dashboard setting; these repository changes do not configure Vercel. Builds remain Production/Staged until manually promoted. The previous Current deployment keeps serving the production domain.
 
-Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Prepared version labels and documentation may be pushed before approval, but must not claim an unpublished version has shipped. Follow the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion) and [v0.6.1 validation](docs/testing/TESTING.md#v061-uncertain-result-scores-october-16-2026). Earlier dated results remain evidence for their original builds. The [October 7 release-status confirmation](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) preserves its earlier publication and live-version report.
+Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Prepared version labels and documentation may be pushed before approval, but must not claim an unpublished version has shipped. Follow the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion) and [v0.7.0 validation](docs/testing/TESTING.md#v070-diagnostics-and-raw-confidence-october-17-2026). Earlier dated results remain evidence for their original builds. The [October 7 release-status confirmation](docs/versions/PWA_VERSIONING.md#release-status-confirmation-october-7-2026) preserves its earlier publication and live-version report.
 
 ## Threshold-fitting notebook inputs
 
@@ -227,11 +227,33 @@ The intended first run needs the original labeled mango collection, the separate
 
 The new notebooks update pip first and explicitly patch seven helper packages that the initial Colab audit found vulnerable. Use a fresh runtime when the template's package plan changes; an old setup receipt intentionally stops. The [dependency-repair instructions](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#if-step-2-reports-unresolved-training-dependencies) also cover continuing the older copy that stopped before training. Colab's Recommended image alone does not replace those fixes or establish compatibility; check its actual Python version and run every setup gate.
 
-The V5.0.0 notebooks are prepared but untrained and on standby; they do not change `public/model/`. Colab runtime/audit, GPU, conversion, training, and evaluation remain pending. V4.5.0 is the repository's adopted model in prepared app `0.6.1`.
+The V5.0.0 notebooks are prepared but untrained and on standby; they do not change `public/model/`. Colab runtime/audit, GPU, conversion, training, and evaluation remain pending. V4.5.0 is the repository's adopted model in prepared app `0.7.0`.
+
+## Phone diagnostics and stalled operations
+
+Prepared v0.7.0 adds Diagnostics in About. It needs no account, backend table, or new environment setting, and works offline after the app is available. Recording is off by default. Enable **Record diagnostic events** before reproducing a problem; the choice is remembered when localStorage works. Unchecking stops new events without clearing earlier history. Earlier actions performed while recording was off cannot be recovered.
+
+Use **View logs** in About to inspect, copy, download a `.txt` file, or clear diagnostic history. If clipboard permission fails, select and copy the visible text manually. This is one shared recorder, not separate logs for each modal. Events remain when a modal closes or the user changes tabs; no log controls are added to scan, result, or deletion dialogs. Clearing diagnostic logs does not delete IndexedDB scans, photos, or guidelines.
+
+The recorder keeps at most 200 recent events and a serialized UTF-8 payload of 64 KiB, removing the oldest entries as needed. Logs and the preference use localStorage key `mangoleaf-diagnostics-v1`, separate from `MangoLeafDB`. Writes are grouped behind a 250 ms timer, with a best-effort flush when the page hides or exits; the opt-in choice is written immediately. localStorage is synchronous when the write runs. A denied or failed write produces the memory-only warning rather than failing a scan or deletion. Reload survival is best effort: a frozen/terminated browser can lose recent unwritten entries, storage clearing or eviction removes the saved log, and memory-only history disappears when the page session ends. Copy or download evidence before further attempts rotate it out.
+
+Logs contain controlled technical event names, timestamps, operation/stage durations and counts, connectivity/visibility, app/model labels, browser family/version and OS family, backend/texture precision, and known error names. They do not collect photos, original filenames, hashes, report/device/guest IDs, diagnosis classes/confidence tables, raw error messages/stacks, credentials, full user-agent strings, or page/request URLs. There is no automatic log upload or console interception. Copy/download is an explicit local export; share it deliberately with the maintainer.
+
+### Recover and preserve evidence
+
+1. Enable recording in About before testing. Note the phone/browser version and whether it is a browser tab or installed app; the export does not reliably identify an exact phone model or OS version.
+2. If Run AI Diagnosis is faded, repeated tapping cannot activate it. Close photo review with X if possible, then download the logs. Readiness events can distinguish an unfinished photo check from an unavailable model; disabled-button taps themselves are not recorded.
+3. If analysis starts, the existing analysis stage has a 60-second recovery deadline. This is not a completion guarantee: blocking browser/GPU work or a backgrounded page can delay timers. Use Cancel or the error's Reload action if available.
+4. If analysis or deletion remains stuck and controls do not respond, reload or fully close and reopen the same app/browser. The deletion dialog currently waits for the database operation without an automatic timeout. About is not accessible through a blocking stuck modal, and a whole-browser freeze also prevents reading logs in place.
+5. Open About and download the retained logs before retrying. Check History first: a save or deletion may have committed even when its screen did not advance. An unsaved scan draft is lost on reload. Do not clear site data or uninstall as a troubleshooting shortcut, because local reports/photos and logs can be erased.
+
+A started event without a completion narrows the last observed step; it does not prove a specific GPU driver, precision setting, IndexedDB bug, or exact cause. Reopening is temporary recovery, not a fix supplied by diagnostics. Browser automation and controlled failure checks do not substitute for the [physical-device evidence record](docs/testing/PHYSICAL_RELIABILITY_CHECKLIST.md).
+
+New accepted and uncertain reports keep the raw classifier confidence. Scan details display up to one decimal rounded down, without `.0` (`62%`, `62.1%`, `69.8%`); a 69.99% score displays `69.9%` rather than `70%`. The 0.70 acceptance check continues using the raw score. Existing reports and duplicate reuse keep their saved precision; original discarded decimals cannot be reconstructed. This is a presentation/storage change, not retraining or evidence of higher accuracy. The current classifier explicitly forces 16-bit WebGL textures; no automatic 32-bit-first behavior or memory-failure retry is being introduced by this release.
 
 ## Common setup issues
 
-The adopted model in prepared app `0.6.1` is [V4.5.0](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md), with label `v4.5.0` and confidence-only threshold 0.70. Margin and entropy are disabled. Keep all five model files together in root `public/model/`. The [adoption receipt](docs/model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json) records hashes and the verified V4.3.0 rollback. No retraining is required to use the saved weights. After a model swap, restart the development server and reload the page to replace the in-memory model; for production-preview testing, rebuild, wait for the worker to activate, then reload. Production release validation and promotion remain pending.
+The adopted model in prepared app `0.7.0` is [V4.5.0](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md), with label `v4.5.0` and confidence-only threshold 0.70. Margin and entropy are disabled. Keep all five model files together in root `public/model/`. The [adoption receipt](docs/model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json) records hashes and the verified V4.3.0 rollback. No retraining is required to use the saved weights. After a model swap, restart the development server and reload the page to replace the in-memory model; for production-preview testing, rebuild, wait for the worker to activate, then reload. Production release validation and promotion remain pending.
 
 - If a push reports a missing scanner, run `bun run security:install`. If the hook cannot find Bun, make Bun available to the terminal or Git GUI's PATH and restart that application.
 - For a shallow clone, run `git fetch --unshallow` before scanning. If hooks were not registered during dependency installation, run `bun run prepare` and confirm `git config --get core.hooksPath` prints `.husky/_`.

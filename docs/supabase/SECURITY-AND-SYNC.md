@@ -14,6 +14,12 @@ An older v8-only application cannot simply reopen a database upgraded to v9. A r
 
 No automatic recovery exists after local site data is cleared, evicted, or lost with the device. Retained historical server data is not automatically assigned to a newly generated UUID. Any administrator-assisted recovery or cleanup requires a separate authorized preservation plan. Disabling anonymous sign-ins alone would neither remove old Auth users nor delete their scan/photo data; no such dashboard action was performed here.
 
+## Optional diagnostics boundary (prepared v0.7.0, October 17, 2026)
+
+The new About diagnostics recorder stays in browser memory and localStorage (`mangoleaf-diagnostics-v1`); it does not use a Supabase table, bucket, Auth identity, or automatic upload. Public guideline instrumentation records controlled download counts/outcomes, Realtime status, and known error names without logging advice payloads, request URLs, project keys, or session tokens. Scan/photo/report identities and classification results are excluded from this log. A user may explicitly copy or download a plain-text export; that action does not send it to the server.
+
+Recording defaults to off, with bounded best-effort retention and a memory-only fallback. Clearing diagnostics does not clear local scans/photos or alter preserved cloud resources. This adds evidence for troubleshooting rather than changing cloud ownership, guideline ordering, request timeouts, or stalled-operation recovery. See [diagnostic architecture](../ARCHITECTURE.md#optional-local-diagnostics-october-17-2026) and [phone instructions](../../SETUP.md#phone-diagnostics-and-stalled-operations).
+
 ## Historical cloud client and security implementation (October 2–14, 2026)
 
 The earlier client synchronized scan reports and photos through verified guests. The following rules, SQL, evidence, and deployment notes describe that implementation and remain intact for preserved cloud resources.

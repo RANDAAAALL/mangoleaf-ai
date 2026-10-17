@@ -20,7 +20,7 @@ globalThis.document = {
 };
 globalThis.fetch = async () => ({ ok: false });
 const classifier = await import("./src/lib/classifier.ts");
-const { CLASSES } = await import("./src/lib/constants.ts");
+const { CLASSES, UNCERTAIN_LABEL } = await import("./src/lib/constants.ts");
 function deferred() {
   let resolve, reject;
   const promise = new Promise((yes, no) => { resolve = yes; reject = no; });
@@ -80,9 +80,26 @@ assert.equal(disposals, 1);
 assert.equal(classifier.isMangoInferencePending(), false);
 const result = await classifier.predictMangoDisease(model, {});
 assert.equal(result.diseaseName, CLASSES[0]);
-assert.equal(result.confidence, 0.8);
+assert.equal(result.confidence, scores[0]);
 assert.equal(disposals, 2);
 assert.equal(classifier.isMangoInferencePending(), false);
+`);
+});
+
+test("classifier retains raw confidence on both sides of the unchanged 70% gate", () => {
+  runScenario(String.raw`
+const model = { predict: () => ({ data: async () => scores, dispose() {} }) };
+for (const [probability, label] of [
+  [0.698, UNCERTAIN_LABEL],
+  [0.69999, UNCERTAIN_LABEL],
+  [0.700001, CLASSES[0]],
+  [0.75, CLASSES[0]],
+]) {
+  scores[0] = probability;
+  const result = await classifier.predictMangoDisease(model, {});
+  assert.equal(result.diseaseName, label);
+  assert.equal(result.confidence, scores[0], "Saving must not round the model output");
+}
 `);
 });
 

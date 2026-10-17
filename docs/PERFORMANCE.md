@@ -1,8 +1,26 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## Local diagnostics and raw confidence (prepared v0.7.0, October 17, 2026)
+
+Prepared v0.7.0 adds opt-in diagnostics in About and retains raw classifier confidence in new reports. Model V4.5.0, its assets/cache identity, preprocessing, and the 0.70 confidence-only rejection rule are unchanged. Current source retains the maintainer's explicit `WEBGL_FORCE_F16_TEXTURES=true` setting; it does not use the earlier automatic 32-bit-first choice or retry on GPU memory failure. The [release record](versions/PWA_VERSIONING.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026) distinguishes repository preparation, CI, and manual production promotion.
+
+### Recorder work and evidence limits
+
+- Recording defaults to off. Calls then return without appending events, serializing a history, or scheduling event-persistence writes; controlled call-site work and startup/preference reading still exist. This is not a claim of zero runtime cost.
+- When enabled, one shared recorder keeps at most 200 events and a 64 KiB serialized UTF-8 payload. Each append sanitizes allowed fields and checks bounded retention; it copies/serializes a bounded history rather than scanning photos or History reports. Old events rotate out.
+- localStorage writes are grouped behind a 250 ms timer, plus best-effort page-hide/exit flushes and immediate preference writes. The actual storage write is synchronous on the browser thread. A bounded payload and grouped writes limit work; they do not establish a measured phone-latency, memory, heat, or battery result.
+- About subscribes to recorder snapshots; the other tab/modal screens do not mount duplicate log viewers. Plain-text export is built when viewing/copying/downloading. No model pass, photograph capture, background upload, database schema, or full-history query is added by logging.
+- Known storage/error failures remain diagnostic evidence rather than altering save/delete outcomes. A memory-only fallback prevents diagnostic persistence failures from throwing into app work. Most recent events can be missing after a crash/freeze; a start without completion does not establish the exact cause.
+
+Instrumentation records selected startup, photo readiness, inference stages, camera state, database save/delete, public guideline, and app visibility/connectivity events. It excludes private photo/report identities, input bytes, class predictions/probability tables, raw error text/stacks, and request URLs. It is not an every-interaction recorder or a cure for disabled Run, GPU/browser freezes, or pending database deletion. About is still blocked by an active stuck modal. The [recovery instructions](../SETUP.md#phone-diagnostics-and-stalled-operations) explain saving evidence after reopening and checking whether a local save/delete already committed.
+
+### Confidence storage and formatting work
+
+`classifier.ts` returns `maxProb` unchanged, and local saving keeps that number for new reports. The UI helper performs `Math.floor(confidence * 1000) / 10` and string conversion only, displaying at most one decimal with no `.0`. It adds no inference pass, asynchronous work, or database query. Examples include `62%`, `62.1%`, `69.8%`, and `69.9%` from 69.99%; acceptance still uses the raw score. Historical reports/duplicate reuse retain their earlier precision because discarded decimals cannot be recovered. This fixes the misleading rounded display near 70%; it does not improve measured classification accuracy or establish a frame-rate guarantee. See [v0.7.0 validation](testing/TESTING.md#v070-diagnostics-and-raw-confidence-october-17-2026) for the scope of controlled formatting/retention and browser checks.
+
 ## V4.5.0 repository adoption (October 16, 2026)
 
-The repository now uses V4.5.0 with confidence-only rejection at 0.70. TensorFlow.js WebGL selects texture precision based on device capability; the app does not retry after GPU memory exhaustion. The model/cache identity change provides no measured startup, scan-latency, memory, battery, heat, or low-end-device improvement. Physical-device observations remain pending. See the [model adoption record](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026).
+The October 16 adoption selected V4.5.0 with confidence-only rejection at 0.70 and then documented capability-based texture selection. The October 17 prepared source above retains an explicit forced-16-bit override instead; neither path supplies an automatic GPU memory-failure retry. The model/cache identity change provides no measured startup, scan-latency, memory, battery, heat, or low-end-device improvement. See the [model adoption record](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026) for that dated evidence; physical-device checks remain tied to their exact build and settings.
 
 ## Local-only History candidate (October 15, 2026)
 
@@ -34,28 +52,30 @@ The matrix distinguishes implementation choices from measured outcomes. Earlier 
 
 ## Performance mechanisms and expected effects
 
-| Mechanism                 | Current implementation                                       | Expected effect or evidence limit                                                                                                   |
-| ------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| TensorFlow.js loading     | Dynamic classifier imports                                   | Defers classifier code loading; total downloads and startup timing still need measurement.                                          |
-| Input tensor size         | Canvas resizes to 224x224 before tensor creation             | 150,528 channel values instead of 36 million for a 12MP RGB image; this is not total application memory.                            |
-| GPU textures              | `WEBGL_FORCE_F16_TEXTURES`                                   | Uses half-float render textures on the WebGL path; score parity must be measured.                                                   |
-| Model download            | Single V4.3.0 Combined export is precached locally           | Reuses cached files while storage and revisions remain valid.                                                                       |
-| Output readback           | `outputTensor.data()`                                        | Avoids synchronous readback; does not guarantee a frame rate.                                                                       |
-| Stored photos             | WebP with JPEG fallback after inference                      | Reduces upload/storage bytes; final sizes vary by image.                                                                            |
-| Blob URLs                 | Per-card content comparison and URL cleanup                  | Reuses the thumbnail URL for unchanged photo bytes; replaces it for changed photos.                                                 |
-| React rendering           | Memoized components and selected stable callbacks            | Can skip renders when props stay equal; no measured percentage is claimed.                                                          |
-| Responsive scan lists     | One/four Home cards and four/six History entries             | Mounts only the viewport's preview/page; phone History reuses one image per row. The parent still reads all active scans.           |
-| Overlay effects           | Reduced mobile backdrop blur                                 | Reduces filter work; target-phone frame rates remain a manual measurement.                                                          |
-| Model and canvas reuse    | One cached model instance and one shared canvas              | Avoids repeated initialization/allocation within the page session.                                                                  |
-| Database access           | Indexed scan lookups and guideline `bulkPut()`               | Guideline writes are batched; full scan collections are still materialized during History queries and cloud refreshes.              |
-| Local batch deletion      | One Dexie transaction and one sync request per batch         | Avoids invoking one local deletion transaction and sync trigger for each selected ID; cloud cleanup still processes queued records. |
-| Fonts and modal bundles   | Font swapping and dynamic Details import                     | Shows fallback text and defers some UI code.                                                                                        |
-| Duplicate photos          | SHA-256 lookup before inference                              | Reuses an active saved report; not a new prediction.                                                                                |
-| Cloud request timeout     | 10-second abort timer with retries                           | Limits a stalled request attempt; total synchronization time is not capped at 10 seconds.                                           |
-| Concurrent sync           | Lock and one queued follow-up pass                           | Serializes sync work while preserving new pending mutations.                                                                        |
-| Guideline update ordering | Shared HTTP attempt, event counter, and ordered local writes | Prevents an observed overlapping update from being replaced by an older full response; a follow-up download adds network work.      |
-| Cloud identity            | Reused anonymous guest session for private scans             | Adds background Auth requests; diagnosis and local History do not wait for them. Device/network impact needs measurement.           |
-| Connection hints          | Supabase preconnect and DNS-prefetch                         | May reduce connection setup delay; network measurements are needed.                                                                 |
+| Mechanism                 | Current implementation                                       | Expected effect or evidence limit                                                                                              |
+| ------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| TensorFlow.js loading     | Dynamic classifier imports                                   | Defers classifier code loading; total downloads and startup timing still need measurement.                                     |
+| Input tensor size         | Canvas resizes to 224x224 before tensor creation             | 150,528 channel values instead of 36 million for a 12MP RGB image; this is not total application memory.                       |
+| GPU textures              | `WEBGL_FORCE_F16_TEXTURES`                                   | Uses half-float render textures on the WebGL path; score parity must be measured.                                              |
+| Model download            | Single V4.5.0 OE export is cached locally                    | Reuses cached files while storage and revisions remain valid.                                                                  |
+| Output readback           | `outputTensor.data()`                                        | Avoids synchronous readback; does not guarantee a frame rate.                                                                  |
+| Stored photos             | WebP with JPEG fallback after inference                      | Reduces local storage bytes; final sizes vary by image.                                                                        |
+| Blob URLs                 | Per-card content comparison and URL cleanup                  | Reuses the thumbnail URL for unchanged photo bytes; replaces it for changed photos.                                            |
+| React rendering           | Memoized components and selected stable callbacks            | Can skip renders when props stay equal; no measured percentage is claimed.                                                     |
+| Responsive scan lists     | One/four Home cards and four/six History entries             | Mounts only the viewport's preview/page; phone History reuses one image per row. The parent still reads all active scans.      |
+| Overlay effects           | Reduced mobile backdrop blur                                 | Reduces filter work; target-phone frame rates remain a manual measurement.                                                     |
+| Model and canvas reuse    | One cached model instance and one shared canvas              | Avoids repeated initialization/allocation within the page session.                                                             |
+| Database access           | Indexed scan lookups and guideline `bulkPut()`               | Guideline writes are batched; full scan collections are still materialized for History. No scan-cloud refresh is used.         |
+| Local batch deletion      | One local Dexie `bulkDelete()` for deduplicated IDs          | Removes selected local records without a cloud queue or guideline refresh. No automatic deletion timeout is added.             |
+| Fonts and modal bundles   | Font swapping and dynamic Details import                     | Shows fallback text and defers some UI code.                                                                                   |
+| Duplicate photos          | SHA-256 lookup before inference                              | Reuses an active saved report; not a new prediction.                                                                           |
+| Cloud request timeout     | 10-second abort timer with retries                           | Limits a stalled request attempt; total synchronization time is not capped at 10 seconds.                                      |
+| Concurrent sync           | Shared guideline attempt and protected follow-up             | Coordinates guideline writes/downloads independently of local diagnosis and saves.                                             |
+| Guideline update ordering | Shared HTTP attempt, event counter, and ordered local writes | Prevents an observed overlapping update from being replaced by an older full response; a follow-up download adds network work. |
+| Cloud identity            | No application guest session or private scan synchronization | Avoids the former Auth/scan/photo work; it does not establish a measured device speedup.                                       |
+| Local diagnostics         | Opt-in 200-event/64-KiB recorder with grouped storage writes | Collects bounded evidence; synchronous persistence and viewer updates still have runtime cost.                                 |
+| Confidence presentation   | Raw new-report storage; downward display to one decimal      | Keeps the 0.70 check independent of formatting, with no extra prediction or database request.                                  |
+| Connection hints          | Supabase preconnect and DNS-prefetch                         | May reduce connection setup delay; network measurements are needed.                                                            |
 
 ---
 
@@ -75,10 +95,12 @@ The matrix distinguishes implementation choices from measured outcomes. Earlier 
 
 <a id="13-webgl-16-bit-float-textures"></a>
 
-### 1.3 Capability-Based WebGL Texture Precision
+<a id="13-capability-based-webgl-texture-precision"></a>
 
-- **Implementation:** TensorFlow.js uses its WebGL capability flags to select 32-bit textures when supported and 16-bit on devices limited to that precision. `src/lib/classifier.ts` logs the selected precision. The app does not retry after a 32-bit allocation failure or crash.
-- **Rationale:** Texture precision describes GPU calculations and is separate from the saved float32 weights. A 16-bit path can use less texture memory but may round scores differently near a rejection boundary. Capability-based selection does not establish prediction parity, eliminate out-of-memory failures, or guarantee that every GPU operation uses one precision.
+### 1.3 Current Forced-16-Bit WebGL Texture Precision
+
+- **Implementation, prepared v0.7.0:** `src/lib/classifier.ts` retains the active `tf.env().set("WEBGL_FORCE_F16_TEXTURES", true)` override before `tf.ready()`. It logs the actual enabled/capable flags, and the optional diagnostic recorder captures them. This is an existing maintainer choice included in the prepared source; no automatic 32-bit-first or memory-failure fallback is added. The October 16 capability-based description above remains dated history.
+- **Scope:** Texture precision describes GPU calculations and is separate from saved float32 weights. Half-float textures can use less memory per stored value but may produce different scores near a rejection boundary. The override does not guarantee score parity, prevent out-of-memory/context failures, establish the cause of an observed stall, or prove that every GPU operation uses one precision.
 - **Download trade-off:** The historical Trial 3 bundle was 11.53 MB. The adopted V4.5.0 five-file bundle totals 12,116,197 bytes (three float32 shards, graph, and config), as recorded in the adoption receipt. Texture precision does not change model download size.
 
 The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag definitions](https://github.com/tensorflow/tfjs/blob/tfjs-v4.22.0/tfjs-backend-webgl/src/flags_webgl.ts). Use browser/device evidence before changing this flag or claiming a benefit from another precision setting.
@@ -103,7 +125,7 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 
 - **Implementation:** A module-level `sharedCanvas` HTMLCanvasElement is created once and reused for all subsequent `downscaleToCanvas()` calls.
 - **Context Hint:** Canvas 2D context uses `{ alpha: false }` for an opaque output. Uploaded files can still contain transparency, so this setting is part of the image-processing behavior rather than proof that every input is a JPEG.
-- **Confidence Rounding:** Replaced `parseFloat(maxProb.toFixed(2))` (float→string→float) with `Math.round(maxProb * 100) / 100` (pure numeric operation) in the inference hot path.
+- **Confidence, October 17 update:** The classifier returns the raw `maxProb`; it no longer rounds before saving. A small UI-only helper truncates the displayed percentage to at most one decimal and omits `.0`, without changing canvas work, inference, or rejection math. Earlier releases saved a rounded score; their lost precision cannot be reconstructed.
 
 ### 1.8 One-Time Splash Screen Guard (`page.tsx`)
 
@@ -113,7 +135,7 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 ### 1.9 Console probability tables (`classifier.ts`)
 
 - **Implementation:** Each actual inference prints one collapsed table of the seven class scores in development and production DevTools. A saved duplicate reused without inference does not print another table.
-- **Purpose:** Supports developers, teammates, and technical reviewers who need to inspect accepted or rejected predictions. The result modal retains its existing presentation.
+- **Purpose:** Supports developers, teammates, and technical reviewers who need to inspect accepted or rejected predictions. The existing fresh-result table is separate from these console groups and is not persisted in saved reports; it predates this release. Optional persistent diagnostics excludes class scores/tables.
 - **Behavior:** Sorting uses copied values, and rounding applies only to the printed percentages. The original probabilities, class mapping, model files, and rejection thresholds remain unchanged. Scores for one photo are not accuracy measurements.
 - **Cost:** Creates seven diagnostic rows and formats their percentages once per inference; it adds no model pass or network request. Console rendering costs can vary by browser and whether DevTools is open. No device-performance improvement or slowdown has been measured for this change.
 
@@ -207,10 +229,12 @@ Focused candidate checks and remaining physical-device requirements are recorded
 
 - **Strategy:** Serwist precaches the five adopted V4.5.0 model files under `/model/`: `model.json`, `model_config.json`, and three weight shards. The `CacheFirst` runtime rule remains as defence in depth.
 - **Expected effect:** Enables offline model loading after successful service-worker installation and caching, while browser storage remains available. Loading still requires local model initialization; cache eviction, cleared site data, or an incomplete first load can prevent it. R02 and the physical checklist verify this behavior for a recorded environment.
-- **Versioned cache name:** `mangoleaf-model-cache-v4-5-0` for the adopted V4.5.0 model, retained by prepared app `0.6.1`. Activation deletes superseded model caches, including former V4.3.0 and V4.5.0 candidate runtime caches. The active V4.5.0 cache is protected by the activation filter.
+- **Versioned cache name:** `mangoleaf-model-cache-v4-5-0` for the adopted V4.5.0 model, retained by prepared app `0.7.0`. Activation deletes superseded model caches, including former V4.3.0 and V4.5.0 candidate runtime caches. The active V4.5.0 cache is protected by the activation filter.
 - **The precache is the real update mechanism.** Public files receive content-revision hashes in Serwist's precache manifest, which is matched before runtime caching. Replaced weights therefore refetch on next activation. An empty runtime model cache is normal; verify updates in generated `public/sw.js`.
 
 ### 3.2 High-Capacity Offline Database (Dexie.js / IndexedDB)
+
+**Current v0.7.0 source:** Dexie v9 keeps `id`, `image_hash`, and `updated_at` scan indexes. The parent query reads full records in reverse date order and filters legacy tombstones before client-side pagination; it is not bounded to the visible page. Optional diagnostics uses separate bounded localStorage, not a new IndexedDB store. The following earlier index/query descriptions are historical and were superseded by the local-only transition; they are not current implementation instructions.
 
 - **Storage Layer:** Binary photo Blobs and scan metadata are persisted locally using Dexie.js (IndexedDB).
 - **Indexed Queries:** Active scans are queried via `db.scans.where("_status").notEqual("pending-delete")` using Dexie's native index instead of in-memory JS `.filter()`. Pending sync scans use `db.scans.where("_status").anyOf(["pending-insert", "pending-delete"])`.
@@ -220,15 +244,15 @@ Focused candidate checks and remaining physical-device requirements are recorded
 
 - **Guidelines Sync:** A successful full download first checks its event counter and starting local snapshot in one IndexedDB transaction, then compares downloaded content with current local guidance. An identical set succeeds without `clear()` or `bulkPut()`; a different valid set uses those operations to replace the snapshot atomically. A response superseded by an observed local/Realtime change is discarded and schedules one protected follow-up. Accepted changed full sets also remove rows deleted remotely when their event was missed. Failed downloads do not clear saved advice.
 - **Guidelines Display:** Scan details read the existing live-query cache and perform no additional network request. Downloaded advice remains available offline; missing or blank text uses a translated status message. The bundled treatment dictionary has been removed, so guideline revisions are maintained in Supabase and arrive through successful synchronization. No download-time or bundle-size benchmark was measured for this change.
-- **Scans Sync:** Remote cloud IDs are matched through the local `cloud_id` index. Photos already present as Blobs are reused; missing private photos are downloaded and saved with metadata in guarded transactions. Each result is rechecked after the network request so a concurrent local deletion is not replaced by the restored row.
-- **Local Scan Deletion:** `deleteScans()` deduplicates the requested IDs, uses `bulkGet()` in one read/write transaction, removes local-only/unowned rows with `bulkDelete()`, and marks owned rows as hidden `pending-delete` tombstones with `bulkUpdate()`. Single deletion delegates to this path. A changed batch triggers one online sync request after commit; offline tombstones remain queued. This reduces repeated local transaction/trigger work compared with invoking single deletion for every selection. The existing private owner checks and cloud retry/cleanup path still apply to each queued record, and no batch timing or network saving is measured here.
+- **Current local Scan Deletion:** `deleteScans()` deduplicates IDs and awaits one local `bulkDelete()`; it does not create tombstones, upload/delete cloud resources, or refresh guidelines. The confirmation locks while waiting and has no automatic timeout. Diagnostic start/completion/error events observe this existing behavior rather than changing it.
+- **Historical scan-cloud behavior, before October 15:** Remote cloud IDs were matched through the local `cloud_id` index. Photos already present as Blobs were reused; missing private photos were downloaded and saved with metadata in guarded transactions. Each result was rechecked after the network request so a concurrent local deletion was not replaced by the restored row. Earlier deletion used `bulkGet()`, removed local-only/unowned rows, marked owned rows as hidden `pending-delete` tombstones, and requested one sync after a changed batch. That queue is retired by local-only History; preserved old tombstones remain hidden.
 
 ### 3.4 Duplicate Photo Checker (SHA-256 Image Hash)
 
 - **Implementation:** Photo selection starts one asynchronous `computeImageHash()` call in the lightweight `image-hash.ts` module using browser-native Web Crypto. This calculates a 64-character SHA-256 fingerprint of the original file. Time and buffer size depend on original photo size; the helper imports no TensorFlow.js code and does not run model inference or upload the photo. `classifier.ts` re-exports the helper for existing callers.
 - **Lookup:** The hash is checked against the indexed `image_hash` column in Dexie's `scans` table, rather than reading the whole history. Reuse requires the exact active `model_version`; pending-deletion rows, another model version, and legacy unversioned rows are excluded. Older records remain visible in History, while reuploading their photo runs the adopted model.
 - **Duplicate Found:** The existing preview shows "Photo already scanned" with Retake, Cancel, X, and View saved result. Opening that result is an explicit action and creates no record or prediction. The saved record is checked again before opening in case it changed during review. Reopening a report does not count as an R01 prediction.
-- **New Photo:** Diagnosis stays disabled while checking. The completed hash is retained for this selected file and reused at diagnosis and save time. A final indexed lookup catches a duplicate saved since the preview check, without rereading and hashing the image bytes. No match means normal inference, compression, and storage of `image_hash` in IndexedDB and Supabase.
+- **New Photo:** Diagnosis stays disabled while checking. The completed hash is retained for this selected file and reused at diagnosis and save time. A final indexed lookup catches a duplicate saved since the preview check, without rereading and hashing the image bytes. No match means normal inference, compression, and storage of `image_hash` in IndexedDB only.
 - **Cleanup:** Closing or retaking clears selection state, resets the picker, and releases the preview object URL. A stale asynchronous check cannot update a newer selection or reopen a dismissed preview. Rapid repeated diagnosis clicks are guarded so one review cannot start overlapping inference calls. Lookup failure keeps diagnosis disabled and offers a retry.
 - **Scope:** This is exact-file matching, not perceptual matching. Edited, cropped, or recompressed copies can be treated as new photos; the app does not automatically block similar-looking leaves.
 
@@ -236,11 +260,15 @@ Focused candidate checks and remaining physical-device requirements are recorded
 
 ### 3.5 3G Network Resilience: Cloud Request Timeout (`supabase-client.ts`, `useSync.ts`)
 
+**Current scope, prepared v0.7.0:** The 10-second wrapper serves public guideline HTTP downloads. Scan/photo/Auth requests are no longer part of the application flow. It does not time out model downloads, GPU reads, or local deletion. The following upload/session description records the earlier cloud client rather than an active queue.
+
 - **Problem:** On weak 3G connections with packet loss, the default browser `fetch()` can hang for **30–60 seconds** waiting for a Supabase Storage upload response.
 - **Solution:** A Supabase client fetch wrapper applies a real 10-second `AbortController` timeout to cloud requests, including Auth, guideline reads, private photo reads, and writes. The timer covers response-body reading as well as headers, and requests use `cache: "no-store"`. Storage's `upload()` options do not accept a signal, so this cancellation happens at its underlying fetch layer. The retry delays are 10 seconds, 30 seconds, 60 seconds, then every 5 minutes while online. Each request and the whole synchronization pass are different scopes; the latter can take longer than one request timeout.
 - **Safety:** The scan record remains `pending-insert` in IndexedDB. A successful blob upload stores its owner-scoped private object path locally before row insertion, so a later metadata failure can retry that small row without re-uploading photo bytes. A public URL is not used as an authorization bypass.
 
 ### 3.6 3G Network Resilience: Concurrent Sync Lock (`useSync.ts`)
+
+**Current scope, prepared v0.7.0:** Guideline downloads use the shared coordinator and its ordered writes, online retry, and foreground recovery. Local saves/deletes do not request guideline refreshes. The following private-scan sync description is preserved historical behavior, superseded by the local-only transition.
 
 - **Problem:** On slow 3G, multiple sync triggers (e.g., going online + taking a new scan simultaneously) could fire overlapping network requests.
 - **Solution:** A `useRef`-based `isSyncingRef` lock allows one sync at a time. A trigger arriving during active work queues exactly one follow-up pass, which prevents overlap without losing a new local mutation.
@@ -248,6 +276,8 @@ Focused candidate checks and remaining physical-device requirements are recorded
 - **Limit:** Every sync trigger also starts a public-guideline refresh, and each private history refresh reads the complete owner result. Serialization prevents concurrent private passes but does not remove repeated downloads or full History-query invalidations. App `0.5.4` skips identical HTTP guidance writes; direct Realtime handling and private scan/history writes are outside that optimization. Application retries and the guideline subscription are not explicitly paused when the document is hidden. Supabase Auth already handles its own refresh visibility; that is a separate mechanism.
 
 ### 3.7 Background guest identity and private photo downloads
+
+**Historical scope:** The October 15 local-only transition retired the application guest session, private photo downloads, and scan upload/pull queue described below. Prepared v0.7.0 does not re-enable them, and its optional diagnostics does not introduce a network log sink. Existing server archives/policies remain preserved separately.
 
 - **Local first:** Guest creation and session refresh belong to cloud synchronization. Neither is part of the classifier path or a prerequisite for saving a scan locally. The first online guest request and later refreshes add network work; no zero-overhead claim is made.
 - **Session reuse:** The saved guest session is reused instead of creating an identity for each scan or reconnect. A shared pending task serializes guest creation, with an additional Web Lock across tabs where supported. The caller stops waiting after 15 seconds; individual HTTP requests abort after 10 seconds. If cloud authorization is unavailable, pending scan changes remain in IndexedDB for a later retry. A refresh error does not trigger creation of a replacement guest.

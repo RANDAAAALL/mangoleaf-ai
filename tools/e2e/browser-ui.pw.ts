@@ -112,8 +112,11 @@ test("R04: About and footer show the current app and model versions in both lang
       await expect(legal).toBeVisible();
       if (type === "privacy") {
         // Legal copy must still describe local History rather than guest sync.
+        await expect(legal).toContainText(t.privacyUpdated);
         await expect(legal).toContainText(t.privacySections[1].text);
         await expect(legal).toContainText(t.privacySections[3].text);
+        // The optional local-log disclosure must be included in both languages.
+        await expect(legal).toContainText(t.privacySections[5].text);
       } else {
         await expect(legal).toContainText(t.termsUpdated);
         await expect(legal).toContainText(t.termsConfidenceText);

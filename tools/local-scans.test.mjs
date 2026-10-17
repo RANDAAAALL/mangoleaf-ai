@@ -92,6 +92,19 @@ assert.equal(rows.size, 1);
 `);
 });
 
+test("saving preserves fractional confidence and leaves older rounded reports intact", () => {
+  runScenario(String.raw`
+const legacy = { ...prepared, id: "legacy-rounded", confidence: 0.7 };
+rows.set(legacy.id, legacy);
+const rawConfidence = Math.fround(0.698);
+const current = prepareLocalScan({ ...input, confidence: rawConfidence });
+await saveLocalScan(current);
+assert.equal(rows.get(current.id).confidence, rawConfidence);
+assert.equal(rows.get(legacy.id).confidence, 0.7);
+assert.equal(rows.size, 2);
+`);
+});
+
 test("a prepared ID cannot overwrite another report or resurrect a deletion", () => {
   runScenario(String.raw`
 rows.set(prepared.id, { ...prepared, disease_name: "Mango Scab" });

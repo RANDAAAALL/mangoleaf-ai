@@ -12,6 +12,11 @@ import { ScanCard } from "./scan-card";
 import { translations, type Language } from "@/lib/translations";
 import { Icon } from "@/components/brand/icon";
 import { DeleteScansModal } from "@/components/modal/delete-scans-modal";
+import {
+  createDiagnosticOperation,
+  diagnosticErrorName,
+  recordDiagnostic,
+} from "@/lib/diagnostics";
 
 interface ScanHistoryListProps {
   scans: ScanRecord[];
@@ -59,6 +64,19 @@ export const ScanHistoryList = memo(function ScanHistoryList({
   const filterPanelId = useId();
   const filterSelectId = useId();
   const selectionHintId = useId();
+  const deleteDialogWasOpen = useRef(false);
+
+  useEffect(() => {
+    if (confirmationIds?.length) {
+      recordDiagnostic("history.delete.dialog.opened", {
+        count: confirmationIds.length,
+      });
+      deleteDialogWasOpen.current = true;
+    } else if (deleteDialogWasOpen.current) {
+      recordDiagnostic("history.delete.dialog.closed");
+      deleteDialogWasOpen.current = false;
+    }
+  }, [confirmationIds]);
 
   useEffect(() => {
     // Read the viewport after hydration, using the layout's md breakpoint.
@@ -158,6 +176,7 @@ export const ScanHistoryList = memo(function ScanHistoryList({
   }
 
   const toggleSelection = useCallback((id: string) => {
+    recordDiagnostic("history.selection.toggled");
     setSelectedIds((current) =>
       current.includes(id)
         ? current.filter((selectedId) => selectedId !== id)
@@ -166,6 +185,7 @@ export const ScanHistoryList = memo(function ScanHistoryList({
   }, []);
 
   const cancelSelection = () => {
+    recordDiagnostic("history.selection.cancelled");
     setSelectionMode(false);
     setSelectedIds([]);
     setDeleteFailed(false);
@@ -173,6 +193,7 @@ export const ScanHistoryList = memo(function ScanHistoryList({
   };
 
   const selectAllMatching = () => {
+    recordDiagnostic("history.selection.all", { count: filteredScans.length });
     // Capture the current matching IDs across pages. Later arrivals need
     // another deliberate selection action.
     setSelectedIds(filteredScans.map((scan) => scan.id));
@@ -202,6 +223,11 @@ export const ScanHistoryList = memo(function ScanHistoryList({
     // Freeze the confirmed IDs. New arrivals and other pages cannot expand the
     // deletion while the local transaction is waiting to finish.
     const idsToDelete = [...confirmationIds];
+    const operation = createDiagnosticOperation("delete-ui");
+    recordDiagnostic("history.delete.confirmed", {
+      operation,
+      count: idsToDelete.length,
+    });
     deletingRef.current = true;
     setIsDeleting(true);
     setDeleteFailed(false);
@@ -210,10 +236,15 @@ export const ScanHistoryList = memo(function ScanHistoryList({
       // Closing early would hide a failed deletion instead of offering retry.
       if (onDeleteScans) await onDeleteScans(idsToDelete);
       else await onDeleteScan(idsToDelete[0]);
+      recordDiagnostic("history.delete.caller.completed", { operation });
       setSelectedIds([]);
       setSelectionMode(false);
       setConfirmationIds(null);
-    } catch {
+    } catch (error) {
+      recordDiagnostic("history.delete.caller.failed", {
+        operation,
+        errorName: diagnosticErrorName(error),
+      });
       // Keep the confirmation and selection available for a deliberate retry.
       setDeleteFailed(true);
     } finally {
@@ -586,7 +617,10 @@ export const ScanHistoryList = memo(function ScanHistoryList({
           isDeleting={isDeleting}
           hasError={deleteFailed}
           onConfirm={() => void handleConfirmDelete()}
-          onCancel={() => setConfirmationIds(null)}
+          onCancel={() => {
+            recordDiagnostic("history.delete.cancelled");
+            setConfirmationIds(null);
+          }}
           fallbackFocusRef={historyHeadingRef}
         />
       )}

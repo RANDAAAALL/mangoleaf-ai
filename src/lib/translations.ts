@@ -334,6 +334,28 @@ export const translations = {
     howStep3Desc:
       "Read the predicted condition and available guidance in English or Bisaya. If uncertain, try another clear photo.",
 
+    diagnosticsTitle: "Diagnostics",
+    diagnosticsDescription:
+      "For troubleshooting on this phone: enable recording, repeat the problem, then return here to copy or download the log. Events from across the app remain when a modal closes. Logs show recorded steps, not a guaranteed cause.",
+    diagnosticsEnable: "Record diagnostic events",
+    diagnosticsRetention:
+      "Keeps up to {n} recent events locally, with a size limit. Recording stays enabled after reopening. Saving is best-effort; a crash or clearing browser data can lose events. Logs contain technical states and error names, without photos or diagnosis results. Nothing is uploaded automatically.",
+    diagnosticsMemoryOnly:
+      "This browser could not save diagnostic logs. Recording can continue in memory; copy or download before refreshing or closing the app.",
+    diagnosticsView: "View logs",
+    diagnosticsHide: "Hide logs",
+    diagnosticsEventCount: "Recorded events: {n}",
+    diagnosticsLogLabel: "Diagnostic log",
+    diagnosticsCopy: "Copy logs",
+    diagnosticsDownload: "Download logs",
+    diagnosticsClear: "Clear logs",
+    diagnosticsCopied: "Logs copied.",
+    diagnosticsCopyFailed:
+      "Copy was unavailable. Select the log text to copy it manually, or download the log.",
+    diagnosticsDownloadFailed:
+      "The log download could not start. Select and copy the text instead.",
+    diagnosticsCleared: "Diagnostic logs cleared. Scan history is unchanged.",
+
     // Footer
     footerVersions: "PWA {appVersion} / Model {modelVersion}",
     footerCopyright:
@@ -341,7 +363,7 @@ export const translations = {
     privacyPolicy: "Privacy Policy",
     termsOfService: "Terms of Service",
     legalCloseBtn: "Understood & Close",
-    privacyUpdated: "Last updated: October 15, 2026",
+    privacyUpdated: "Last updated: October 17, 2026",
     privacySections: [
       {
         title: "1. No account required",
@@ -363,8 +385,12 @@ export const translations = {
         title: "5. Deletion and earlier cloud copies",
         text: "You can delete saved reports and photos from History. Deletion is permanent in this browser. Earlier app versions may have uploaded cloud copies; this version does not download or delete those earlier copies.",
       },
+      {
+        title: "6. Optional diagnostic logs",
+        text: "Recording is off by default. If you enable it in About, the app keeps recent technical events in memory and attempts to save them in this browser's localStorage. Logs include action timing, error types, app/model versions, and browser/runtime information, but exclude scan photos, diagnosis results, report identifiers, and account credentials. You can view, copy, download, or clear logs. Clearing logs preserves scan history; turning recording off retains earlier logs. Logs are not automatically uploaded. Saving can fail or lose recent events during a crash, and downloaded or copied logs remain wherever you save or share them.",
+      },
     ],
-    termsUpdated: "Last updated: October 16, 2026",
+    termsUpdated: "Last updated: October 17, 2026",
     termsIntro:
       "Terms of Service & Usage Guidelines | Philippine Carabao Mango Diagnostic System",
     termsScopeTitle: "1. Scope of Application:",
@@ -372,7 +398,7 @@ export const translations = {
       "MangoLeaf AI is specifically designed to assist Filipino smallholder farmers in detecting pre-harvest diseases affecting Philippine Carabao Mango (Mangifera indica L.) leaves and green fruit.",
     termsConfidenceTitle: "2. Diagnostic AI Confidence Threshold:",
     termsConfidenceText:
-      "The highest mango-class score must be at least 70% before rounding for a diagnosis to be accepted. Below that, the result is Uncertain / Unrecognized. Its percentage is still the highest mango-class score, not a score for an extra Uncertain class or a guarantee of correctness. Rounding can display 70% even when the original score was below the cutoff and the result remains Uncertain.",
+      "The highest raw mango-class score must be at least 70% for a diagnosis to be accepted. Below that, the result is Uncertain / Unrecognized. Both accepted and uncertain results show that highest score, not a score for an extra Uncertain class or a guarantee of correctness. New reports preserve the raw score; the confidence badge rounds down to at most one decimal and omits a trailing .0, such as 69.8% or 70%. Older reports retain their previously saved precision, so an older Uncertain report may still show 70%.",
     termsGuidanceTitle: "3. Treatment Guidance Disclaimer:",
     termsGuidanceText:
       "Treatment guidance draws on reviewed agricultural references, including DOST-PCAARRD and BAFS materials. It provides general decision support and does not replace advice from qualified local agricultural professionals. Updated advice requires a working connection; offline users see the guidance already saved on their device.",
@@ -720,6 +746,29 @@ export const translations = {
     howStep3Desc:
       "Basaha ang posibleng kondisyon ug ang magamit nga giya sa English o Bisaya. Kung dili sigurado ang resulta, sulayi gamit ang laing klarong litrato.",
 
+    diagnosticsTitle: "Diagnostics",
+    diagnosticsDescription:
+      "Para sa pagsusi sa problema niini nga telepono: i-enable ang pagrekord, usba ang aksyon nga adunay problema, dayon balik dinhi aron kopyahon o i-download ang log. Magpabilin ang mga event sa app bisan masirado ang modal. Ang log nagpakita sa natala nga mga lakang, dili garantiya sa hinungdan.",
+    diagnosticsEnable: "Irekord ang diagnostic events",
+    diagnosticsRetention:
+      "Hangtod {n} ka bag-ong event ang tipigan dinhi, nga adunay limitasyon sa gidak-on. Magpabiling naka-enable ang pagrekord sa pag-abli pag-usab. Posibleng mawala ang event kung mo-crash o papason ang browser data. Teknikal nga kahimtang ug ngalan sa error ang sulod, walay litrato o resulta sa diagnosis. Walay awtomatikong pag-upload.",
+    diagnosticsMemoryOnly:
+      "Wala matipig sa browser ang diagnostic logs. Mahimong magpadayon ang pagrekord sa memory; kopyaha o i-download una sa pag-refresh o pagsira sa app.",
+    diagnosticsView: "Tan-awa ang logs",
+    diagnosticsHide: "Tagoa ang logs",
+    diagnosticsEventCount: "Natala nga mga event: {n}",
+    diagnosticsLogLabel: "Diagnostic log",
+    diagnosticsCopy: "Kopyaha ang logs",
+    diagnosticsDownload: "I-download ang logs",
+    diagnosticsClear: "Papasa ang logs",
+    diagnosticsCopied: "Nakopya ang logs.",
+    diagnosticsCopyFailed:
+      "Dili magamit ang pagkopya. Pilia ang teksto sa log aron kopyahon, o i-download ang log.",
+    diagnosticsDownloadFailed:
+      "Wala masugdi ang pag-download. Pilia ug kopyaha ang teksto sa log.",
+    diagnosticsCleared:
+      "Napapas ang diagnostic logs. Wala mausab ang Dating Scan.",
+
     // Footer
     footerCopyright:
       "© 2026 MangoLeaf AI. Gidisenyo alang sa Kaugmaon sa Agrikultura sa Pilipinas.",
@@ -727,7 +776,7 @@ export const translations = {
     privacyPolicy: "Polisiya sa Pribasya",
     termsOfService: "Kondisyon sa Serbisyo",
     legalCloseBtn: "Nasabtan ug Isara",
-    privacyUpdated: "Kataposang gi-update: Oktubre 15, 2026",
+    privacyUpdated: "Kataposang gi-update: Oktubre 17, 2026",
     privacySections: [
       {
         title: "1. Walay account nga gikinahanglan",
@@ -749,15 +798,19 @@ export const translations = {
         title: "5. Pag-delete ug karaang kopya sa cloud",
         text: "Mahimo nimong i-delete ang natipig nga report ug litrato sa Dating Scan. Permanente kini niini nga browser. Posibleng naka-upload og kopya sa cloud ang karaang bersyon sa app; dili na i-download o i-delete niini nga bersyon ang maong karaang mga kopya.",
       },
+      {
+        title: "6. Opsyonal nga diagnostic logs",
+        text: "Naka-off daan ang recording. Kon imong i-on sa Bahin, tipigan sa app ang bag-ong teknikal nga panghitabo sa memory ug sulayan kining i-save sa localStorage niini nga browser. Lakip sa logs ang oras ug gidugayon sa aksiyon, matang sa error, bersyon sa app/model, ug impormasyon sa browser/runtime, apan walay litrato sa scan, resulta sa diagnosis, identifier sa report, o credential sa account. Mahimo nimong tan-awon, kopyahon, i-download, o papason ang logs. Dili mapapas ang Dating Scan kon papason ang logs; magpabilin ang daang logs kon i-off ang recording. Dili awtomatikong i-upload ang logs. Mahimong mapakyas ang pag-save o mawala ang pinakabag-ong panghitabo kon mo-crash ang app; ang na-download o nakopyang logs magpabilin diin nimo kini gitipigan o gipakigbahin.",
+      },
     ],
-    termsUpdated: "Kataposang gi-update: Oktubre 16, 2026",
+    termsUpdated: "Kataposang gi-update: Oktubre 17, 2026",
     termsIntro: "Mga Termino sa Paggamit | Sistema sa Diagnosis sa Mangga",
     termsScopeTitle: "1. Sakop sa Paggamit:",
     termsScopeText:
       "Ang MangoLeaf AI gidisenyo alang sa mga mag-uuma sa mangga sa Pilipinas aron makatabang sa pag-diagnose sa pre-harvest nga sakit sa dahon ug prutas sa Carabao Mango (Mangifera indica L.).",
     termsConfidenceTitle: "2. AI Confidence Threshold sa Diagnosis:",
     termsConfidenceText:
-      "Dawaton lamang ang diagnosis kon ang pinakataas nga score sa klase sa mangga labing menos 70% sa wala pa i-round. Kon ubos niini, Uncertain / Unrecognized ang resulta. Ang porsiyento mao gihapon ang pinakataas nga score sa klase sa mangga, dili score sa dugang nga Uncertain nga klase o garantiya nga husto ang resulta. Tungod sa pag-round, mahimong 70% ang makita bisan ubos sa limitasyon ang orihinal nga score ug Uncertain gihapon ang resulta.",
+      "Dawaton lamang ang diagnosis kon ang pinakataas nga raw score sa klase sa mangga labing menos 70%. Kon ubos niini, Uncertain / Unrecognized ang resulta. Ang dawaton ug uncertain nga resulta parehong magpakita sa pinakataas nga score, dili score sa dugang nga Uncertain nga klase o garantiya nga husto ang resulta. Tipigan sa bag-ong report ang raw score; ang confidence badge ipaubos ngadto sa labing daghan usa ka decimal ug dili ipakita ang kataposang .0, sama sa 69.8% o 70%. Ang karaang report magpabilin sa score nga natipigan kaniadto, busa mahimong 70% gihapon ang makita sa karaang Uncertain nga report.",
     termsGuidanceTitle: "3. Pahinumdom sa Pagtambal:",
     termsGuidanceText:
       "Ang giya sa pagtambal naggikan sa gisusi nga mga reperensiya sa agrikultura, lakip ang mga materyal sa DOST-PCAARRD ug BAFS. Kinatibuk-ang tabang kini sa pagdesisyon ug dili puli sa tambag sa kwalipikadong lokal nga eksperto sa agrikultura. Kinahanglan og koneksiyon aron makuha ang bag-ong tambag; kon offline, ang daang giya nga natipig sa device ang makita.",

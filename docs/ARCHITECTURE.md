@@ -1,8 +1,12 @@
 # MangoLeaf AI Architecture
 
-## Current model and local-only storage architecture (October 16, 2026)
+<a id="current-model-and-local-only-storage-architecture-october-16-2026"></a>
 
-The repository's adopted model is V4.5.0, with confidence >=0.70 as the only rejection gate; margin and entropy gates are disabled. The prepared PWA version is `0.6.1`, sourced from `package.json` through the existing Next.js build configuration. The model label is `v4.5.0` and its service-worker cache identity is `mangoleaf-model-cache-v4-5-0`. See the [adoption record](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026). Production deployment remains pending release validation and promotion.
+## Current model and local-only storage architecture (October 17, 2026)
+
+The repository's adopted model is V4.5.0, with confidence >=0.70 as the only rejection gate; margin and entropy gates are disabled. The prepared PWA version is `0.7.0`, sourced from `package.json` through the existing Next.js build configuration. The model label is `v4.5.0` and its service-worker cache identity is `mangoleaf-model-cache-v4-5-0`. See the [October 16 adoption record](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026) and [v0.7.0 prepared release](versions/PWA_VERSIONING.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026). Current source explicitly forces 16-bit WebGL textures; this retains the maintainer's existing precision choice rather than introducing automatic 32-bit-first selection. Model assets and rejection rules are unchanged by the diagnostics/confidence update. Production deployment remains separate from branch pushes, CI, and manual promotion.
+
+Prepared v0.7.0 adds an opt-in shared diagnostic recorder with its only viewer in About, and preserves raw confidence in new scan reports while formatting scan-detail percentages to at most one decimal rounded down. The [diagnostic architecture](#optional-local-diagnostics-october-17-2026) describes retention, privacy, persistence failure, and stalled-operation limits.
 
 V5.0.0 is an untrained workflow on standby. Its prepared notebook and helper do not affect app inference or `public/model/`.
 
@@ -129,7 +133,7 @@ mangoleaf-ai/
 |   |   |   |-- png/                # PWA, favicon, and Apple touch icons
 |   |   |   `-- svg/                # Vector application and favicon icons
 |   |   `-- mangoleaf-architecture.svg  # Historical cloud-sync diagram
-|   |-- model/                      # Adopted V4.3.0 Combined seven-class model
+|   |-- model/                      # Adopted V4.5.0 OE seven-class model
 |   |   |-- model.json              # Seven-output TensorFlow.js graph
 |   |   |-- model_config.json       # Class order, preprocessing, fitted thresholds
 |   |   |-- group1-shard1of3.bin
@@ -147,8 +151,9 @@ mangoleaf-ai/
 |   |   |-- layout/                 # Top header, navigation bar, footer, and splash screen
 |   |   |-- modal/                  # Legal, scan-details, storage-full, and scan bottom sheet
 |   |   |-- scan/                   # Scan controls, result card, history list, guide
-|   |   `-- tab/                    # Home, history, and about screen content
+|   |   `-- tab/                    # Home, history, about, and optional diagnostics panel
 |   |-- hooks/
+|   |   |-- useDiagnostics.ts       # Shared recorder subscription, independent of modal lifetime
 |   |   |-- useGuidedCamera.ts      # Live camera readiness, capture, and stream cleanup
 |   |   |-- useInstallGuide.ts      # Platform instructions, QR arrival, and focus restoration
 |   |   |-- usePWAInstall.ts        # PWA installation prompt state and actions
@@ -158,8 +163,10 @@ mangoleaf-ai/
 |   |-- lib/
 |   |   |-- classifier.ts           # Model loading, inference; compatible helper exports
 |   |   |-- diagnosis-step.ts       # Diagnosis stage deadlines, cancellation and image decode
+|   |   |-- diagnostics.ts          # Opt-in bounded local event recorder and text export
 |   |   |-- constants.ts            # Model classes and model version label
 |   |   |-- db.ts                   # Dexie schema and scan record types
+|   |   |-- format-confidence.ts    # Display-only downward percentage formatting
 |   |   |-- format-time-ago.ts      # Relative timestamp formatting for scan cards
 |   |   |-- get-badge-styles.ts     # Disease-name to badge color class mapping
 |   |   |-- guidelines-sync.ts      # Ordered HTTP snapshots and Realtime guidance writes
@@ -286,7 +293,7 @@ Components are grouped into subfolders by the role they play rather than kept in
 | `layout/` | `top-header.tsx`, `bottom-nav.tsx`, `footer.tsx`, `splash-screen.tsx`, `model-status-banner.tsx`                                               | Application frame around screen content |
 | `modal/`  | `legal-modal.tsx`, `scan-details-modal.tsx`, `scan-sheet.tsx`, `delete-scans-modal.tsx`, `install-guide-overlay.tsx`                           | Overlay dialogs and sheets              |
 | `scan/`   | `guided-camera.tsx`, `diagnostic-scanner.tsx`, `scan-card.tsx`, `scan-history-list.tsx`, `how-it-works-steps.tsx`, `disease-coverage-card.tsx` | Diagnosis feature surface               |
-| `tab/`    | `home-tab.tsx`, `history-tab.tsx`, `about-tab.tsx`                                                                                             | One component per navigation tab        |
+| `tab/`    | `home-tab.tsx`, `history-tab.tsx`, `about-tab.tsx`, `diagnostics-panel.tsx`                                                                    | Navigation tabs and About diagnostics   |
 
 The three tab components are the boundary between `page.tsx` and screen content. `page.tsx` owns all state and handlers, and renders exactly one of `HomeTab`, `HistoryTab`, or `AboutTab` per active tab. Adding a screen means adding a tab component and one branch in `page.tsx`, not editing shared markup.
 
@@ -340,12 +347,13 @@ Use the `@/components/...` path alias for imports across folders, and relative `
 
 ### Presentation helpers
 
-Two pure formatting functions in `src/lib/` are kept out of the components that render them so the component files stay markup-only:
+Pure presentation helpers in `src/lib/` stay separate from the components that render their output:
 
 - `format-time-ago.ts` turns a scan's ISO `updated_at` into a relative label. It reads every string from `translations.ts`, including the `{n}` count templates for minutes, hours, and days and the `monthsShort` abbreviations used for dates older than a week, so the label is fully localized in both languages. Month names come from `translations.ts` rather than `toLocaleDateString` because browsers have no reliable Cebuano/Bisaya month data. An unparseable timestamp returns the `justNow` label instead of falling through to a `NaN` date.
 - `get-badge-styles.ts` maps a disease name to the shared red disease-badge classes or the green healthy-badge classes. It matches on substrings, so an unrecognized class name falls back to neutral slate styling rather than throwing.
+- `format-confidence.ts` formats the saved probability as a percentage with at most one decimal, rounded down, using `Math.floor(confidence * 1000) / 10`. String conversion omits a trailing `.0`. The helper neither changes the stored value nor performs a model pass, database read, or threshold check. Scan details use the same formatter for accepted and uncertain reports.
 
-Both are imported by `scan/scan-card.tsx`. Neither imports React, so both can be called from any component or tested directly.
+The time and badge helpers are imported by `scan/scan-card.tsx`; the confidence formatter is used by `modal/scan-details-modal.tsx`. These helpers do not import React and can be tested directly.
 
 When adding a relative-time string, add it to both the `en` and `bis` objects in `translations.ts` and use the `{n}` placeholder for any number. Cebuano/Bisaya does not inflect nouns for plurals, so only English needs separate singular and plural forms.
 
@@ -354,9 +362,9 @@ When adding a relative-time string, add it to both the `en` and `bis` objects in
 `src/app/page.tsx` coordinates photo review and saving. `src/lib/image-hash.ts` fingerprints upload files and saved-photo Blobs without importing TensorFlow.js, and `src/lib/image-storage.ts` creates the compressed photo saved after diagnosis. `src/lib/classifier.ts` provides browser inference and re-exports both helpers for existing callers. The page imports storage compression directly and dynamically loads the prediction function when diagnosis starts:
 
 1. During initial loading, fetch `/model/model.json` with `tf.loadGraphModel` and `/model/model_config.json` for its rejection settings.
-2. Cache and warm the single seven-class V4.3.0 Combined model once per browser session.
+2. Cache and warm the single seven-class V4.5.0 OE model once per browser session, using the existing explicit forced-16-bit WebGL texture setting.
 3. On photo selection, show the preview and asynchronously hash the original file with SHA-256. Query the indexed local `image_hash` column before enabling diagnosis. Keep the hash for this selection so diagnosis does not hash the same file again.
-4. If an eligible saved scan matches, keep the preview open with the bilingual "Photo already scanned" message. Retake opens the original picker; Cancel or X closes review; View saved result opens the existing report. Reuse requires an exact `model_version` match with `v4.3.0`. Pending-deletion rows, another model label, and legacy rows without a label do not block a new inference.
+4. If an eligible saved scan matches, keep the preview open with the bilingual "Photo already scanned" message. Retake opens the original picker; Cancel or X closes review; View saved result opens the existing report. Reuse requires an exact `model_version` match with `v4.5.0`. Pending-deletion rows, another model label, and legacy rows without a label do not block a new inference.
 5. For a new photo, Run AI Diagnosis rechecks the local duplicate lookup before inference. Downscale the image to `224 x 224` with a shared canvas, run TensorFlow.js inference, and dispose temporary tensors.
 6. Apply the model's rejection gates and return the highest-probability class only if they pass; otherwise return `Uncertain / Unrecognized`.
 7. Compress the image for storage and save the existing original-file hash with the new scan record.
@@ -373,11 +381,11 @@ The adopted V4.5.0 model uses confidence-only rejection at 0.70. Margin and entr
 
 The confidence floor is hardcoded and deliberately not configurable. It is a manuscript specification cited to [31], so a `model_config.json` that asks for a different value is refused: the classifier logs a warning and keeps `0.70`. Margin and entropy are optional; `null` disables that gate. The config travels with the exact fitted weights.
 
-Entropy is normalized by `Math.log(results.length)` so it stays on a 0-to-1 scale comparable to the fitted threshold. Confidence is compared before rounding; the rounded value is returned for display only, because comparing the rounded number would let `0.695` clear a `0.70` gate and silently lower the real floor to 69.5%.
+Entropy is normalized by `Math.log(results.length)` so it stays on a 0-to-1 scale comparable to the fitted threshold. Confidence is compared at its raw precision, returned without rounding, and preserved by `prepareLocalScan()` in new reports. Only scan-detail rendering formats the percentage. A raw `0.698` therefore displays `69.8%` and remains uncertain; `0.6999` displays `69.9%`, not a misleading `70%`. Integer percentages omit `.0`. No existing row is rewritten to invent precision it never stored; older reports and eligible duplicate reuse retain their saved value. Formatting does not change classification, preprocessing, thresholds, or model accuracy.
 
 Root `public/model/` contains the adopted seven-output V4.5.0 OE model, with confidence 0.70 as the only active rejection gate. Its class order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold, as defined in `src/lib/constants.ts`. Both healthy outputs reuse the existing `healthy` treatment-guidance key. V4.3.0 remains preserved as a previous model and verified rollback. See [AI model versioning](versions/AI_MODEL_VERSIONING.md).
 
-Each inference prints a collapsed browser-console table of all seven class probabilities in development and production, ranked from highest to lowest. This supports technical review through DevTools without adding scores to the result modal. The table sorts copies of the scores and rounds only the display percentages; prediction and rejection still use the original scores. These probabilities describe one photo, not per-class accuracy. An eligible saved duplicate does not run inference or print a new table. See [TESTING.md](testing/TESTING.md#fixture-and-report-interpretation) for reading it and handling duplicate photos.
+Each inference prints a collapsed browser-console table of all seven class probabilities in development and production, ranked from highest to lowest. The existing fresh-result modal can also receive the returned probability table; this table predates v0.7.0 and is not saved in History rows. Reopening a saved report therefore does not reconstruct that table. Both tables sort copied values and format only displayed percentages; prediction and rejection still use the original scores. These probabilities describe one photo, not per-class accuracy. An eligible saved duplicate does not run inference or print a new table. The optional persistent diagnostics log deliberately excludes class results and probability tables. See [TESTING.md](testing/TESTING.md#fixture-and-report-interpretation) for reading inference evidence and handling duplicate photos.
 
 ### Local persistence
 
@@ -397,6 +405,18 @@ An `Uncertain / Unrecognized` result is handled before the cached-guideline look
 Historical trial and legacy rows remain visible in local history. Duplicate reuse requires exact active `model_version` `v4.5.0`, so older candidate identities and unlabeled legacy rows do not substitute for adopted V4.5.0 inference. New local reports retain the active label without relabeling earlier diagnoses.
 
 `useSync.ts` exposes local save/delete actions. `deleteScans(ids)` deduplicates IDs and removes those local records with `bulkDelete()`; the shared confirmation dialog waits for the local deletion. No cloud upload, tombstone creation, or remote deletion follows a new deletion. The previous v8 tombstones are preserved hidden historical state.
+
+### Optional local diagnostics (October 17, 2026)
+
+`src/lib/diagnostics.ts` owns one app-wide recorder; `useDiagnostics.ts` subscribes with `useSyncExternalStore`, using stable frozen snapshots and a safe server snapshot. `tab/diagnostics-panel.tsx` is its only viewer and is mounted by About. It is not attached to any modal: unmounting About, closing photo review/results, or changing tabs does not clear recorded events. The viewer supplies recording opt-in, View/Hide, Copy, plain-text Download, and Clear with bilingual controls. Recording defaults to off. Disabling stops new events but retains prior history; Clear affects only diagnostic history, not scan/photo/guideline records.
+
+The module reads and writes localStorage key `mangoleaf-diagnostics-v1`, independently of Dexie. The saved versioned payload contains the preference and recent events, capped at 200 events and 64 KiB of UTF-8 serialized JSON; oldest events rotate out. The preference is flushed immediately. Event writes are grouped behind a 250 ms timer, and page hiding/exiting requests another best-effort flush. Saving is not guaranteed during a browser freeze or process termination. Denied/quota-failed access falls back to memory with a visible warning and never turns an application operation into a diagnostic failure. Clear normally keeps the preference; if replacement fails but removing the key succeeds, the next visit defaults to off. If storage denies every operation, memory clears but changing previously saved data cannot be guaranteed.
+
+Explicit instrumentation records selected model initialization/warmup and actual backend/texture precision; photo readiness/hash/duplicate-check stages; camera state; diagnosis stages and caller cancellation; committed save/delete outcomes; guideline download/Realtime status; visibility/connectivity/navigation; and known browser error names. Disabled-button taps do not dispatch handlers, so photo-review readiness events provide evidence for a disabled Run action. A caller timeout and an underlying GPU operation's later settlement are separate events. Database completion is recorded only after its awaited operation settles, not merely when a request is queued. The recorder has no heartbeat, automatic upload, screenshot capture, console interception, or full coverage of every DOM interaction.
+
+Allowlisted metadata contains short technical labels, timestamps, counts/durations, ephemeral operation IDs, app/model labels, parsed browser family/version, and OS family. It excludes report/device/guest identities, photo data/names/hashes, classification scores/results/tables, tokens, full user-agent strings, URLs, raw error messages, and stacks. Browser identification is approximate and does not establish an exact physical phone model or OS version. The `.txt` export is an explicit user action, not a network request.
+
+Diagnostics narrows the last observed step; it does not fix a hang or prove that IndexedDB, WebGL, precision, or the network caused it. About remains inaccessible while a blocking stuck modal is open, and a full browser freeze can prevent both the viewer and pending writes. Try Cancel/Close when responsive; otherwise reload or reopen the same app/browser, download retained logs, and inspect History before retrying because a save/delete may already have committed. Reopening loses unsaved drafts and possibly unwritten log events. Deletion currently has no automatic timeout; the existing 60-second analysis deadline depends on browser scheduling. See [phone recovery instructions](../SETUP.md#phone-diagnostics-and-stalled-operations) and [v0.7.0 validation](testing/TESTING.md#v070-diagnostics-and-raw-confidence-october-17-2026).
 
 ### Scan-card photo display
 
