@@ -224,10 +224,12 @@ These documents help the agent navigate the repository. It must still check impl
 - [Architecture and data flow](ARCHITECTURE.md)
 - [Performance mechanisms and dated review](PERFORMANCE.md)
 - [Functional and browser-test guide](testing/TESTING.md)
-- [Supabase ownership, security, and synchronization](supabase/SECURITY-AND-SYNC.md)
+- [Supabase ownership, security, and synchronization](security/SECURITY-AND-SYNC.md)
 - [Dependency-security review](security/DEPENDENCY_SECURITY.md)
-- [Application versioning and releases](versions/PWA_VERSIONING.md)
-- [Model versioning and training records](versions/AI_MODEL_VERSIONING.md)
+- [App version rules and release steps](versions/PWA_VERSIONING.md)
+- [Full app release history](versions/history/PWA_RELEASE_HISTORY.md#release-timeline)
+- [Active model, version rules, and adoption steps](versions/AI_MODEL_VERSIONING.md)
+- [Full model history and training records](versions/history/AI_MODEL_HISTORY.md#model-timeline)
 - [Notebook organization](../notebooks/README.md)
 
 Files in `docs/local-ignored-files/`, including generated technical Q&A and review reports, may help if separately shared. They are optional local references, not files guaranteed to exist after cloning.

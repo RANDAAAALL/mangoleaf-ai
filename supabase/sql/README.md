@@ -1,6 +1,6 @@
 # Cloud security SQL explained in plain English
 
-**Current source candidate, October 15, 2026:** the app now stores reports/photos only in IndexedDB and uses Supabase for public guidelines. These SQL files remain historical security and preservation tools for retained cloud resources; they are not setup requirements for the local-only candidate. No SQL, server resource, or Auth setting was changed by that candidate. See the [transition and rollback boundary](../../docs/supabase/SECURITY-AND-SYNC.md#local-only-history-candidate-october-15-2026).
+**Current source candidate, October 15, 2026:** the app now stores reports/photos only in IndexedDB and uses Supabase for public guidelines. These SQL files remain historical security and preservation tools for retained cloud resources; they are not setup requirements for the local-only candidate. No SQL, server resource, or Auth setting was changed by that candidate. See the [transition and rollback boundary](../../docs/security/SECURITY-AND-SYNC.md#local-only-history-candidate-october-15-2026).
 
 This folder keeps the database instructions used to protect MangoLeaf AI's cloud scan records and photos, plus scripts for checking those protections and pausing cloud writes during a problem.
 
@@ -29,7 +29,7 @@ The old setup trusted a browser's `device_id`, which a caller could change. The 
 
 For example, Visitor A can access Visitor A's new cloud scans and photos. Visitor A cannot access Visitor B's scans by changing the device ID in a request. A caller without a signed session cannot read private scans, but can still download the public treatment guidelines.
 
-The script also adds fields for the owner, photo location, and model version. It does not guess who owns older records or automatically assign them to a new guest. See [legacy data and the rollout status](../../docs/supabase/SECURITY-AND-SYNC.md#implementation-status) for the preserved records and verification limits.
+The script also adds fields for the owner, photo location, and model version. It does not guess who owns older records or automatically assign them to a new guest. See [legacy data and the rollout status](../../docs/security/SECURITY-AND-SYNC.md#implementation-status) for the preserved records and verification limits.
 
 ## Are these migrations?
 
@@ -43,7 +43,7 @@ These are reviewed maintenance scripts under `supabase/sql/`, not a Supabase CLI
 
 ## When would a maintainer use them?
 
-- **To understand the existing setup:** read this guide and the [full security and recovery guide](../../docs/supabase/SECURITY-AND-SYNC.md). There is no need to rerun a migration just because these files exist.
+- **To understand the existing setup:** read this guide and the [full security and recovery guide](../../docs/security/SECURITY-AND-SYNC.md). There is no need to rerun a migration just because these files exist.
 - **To apply a reviewed security change:** first verify the backup and prerequisites, then use the forward script through an authorized database connection or migration tool. The `scans` bucket must already be private.
 - **To check the installed protections:** use the catalog verification and temporary policy tests after the forward change has committed. The temporary tests check database permissions; they do not prove real guest sign-in or photo upload/download works from a browser.
 - **To pause cloud writes during recovery:** use the rollback script only when that pause is intended. After resolving the problem, review the backup and prerequisites before reapplying the forward script and checking it again.
@@ -60,5 +60,5 @@ A failure in guest sign-in can leave cloud uploads waiting even when the databas
 
 ## Where to read more
 
-- [Security rules, backups, evidence, and recovery](../../docs/supabase/SECURITY-AND-SYNC.md)
+- [Security rules, backups, evidence, and recovery](../../docs/security/SECURITY-AND-SYNC.md)
 - [Project setup](../../SETUP.md#configure-supabase)

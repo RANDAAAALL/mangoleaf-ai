@@ -1,6 +1,6 @@
 # Current and older model notebooks
 
-**Current repository model: V4.5.0.** Prepared app `0.7.0` uses seven classes and confidence-only rejection at 0.70; margin and entropy are disabled. Its diagnostics and confidence presentation changes do not alter training notebooks or model artifacts. See the [current model report](../../docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) for preserved results and adoption identity, and the [PWA release record](../../docs/versions/PWA_VERSIONING.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026) for app validation and manual promotion.
+**Current repository model: V4.5.0.** Prepared app `0.7.0` uses seven classes and confidence-only rejection at 0.70; margin and entropy are disabled. Its diagnostics and confidence presentation changes do not alter training notebooks or model artifacts. See the [current model report](../../docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) for preserved results and adoption identity, and the [PWA release record](../../docs/versions/history/PWA_RELEASE_HISTORY.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026) for app validation and manual promotion.
 
 This folder contains the current adopted model and older models kept as evidence. A version being here does not mean the app still uses it.
 

@@ -4,7 +4,7 @@
 
 ## Current model and local-only storage architecture (October 17, 2026)
 
-The repository's adopted model is V4.5.0, with confidence >=0.70 as the only rejection gate; margin and entropy gates are disabled. The prepared PWA version is `0.7.0`, sourced from `package.json` through the existing Next.js build configuration. The model label is `v4.5.0` and its service-worker cache identity is `mangoleaf-model-cache-v4-5-0`. See the [October 16 adoption record](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026) and [v0.7.0 prepared release](versions/PWA_VERSIONING.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026). Current source explicitly forces 16-bit WebGL textures; this retains the maintainer's existing precision choice rather than introducing automatic 32-bit-first selection. Model assets and rejection rules are unchanged by the diagnostics/confidence update. Production deployment remains separate from branch pushes, CI, and manual promotion.
+The repository's adopted model is V4.5.0, with confidence >=0.70 as the only rejection gate; margin and entropy gates are disabled. The prepared PWA version is `0.7.0`, sourced from `package.json` through the existing Next.js build configuration. The model label is `v4.5.0` and its service-worker cache identity is `mangoleaf-model-cache-v4-5-0`. See the [October 16 adoption record](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026) and [v0.7.0 prepared release](versions/history/PWA_RELEASE_HISTORY.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026). Current source explicitly forces 16-bit WebGL textures; this retains the maintainer's existing precision choice rather than introducing automatic 32-bit-first selection. Model assets and rejection rules are unchanged by the diagnostics/confidence update. Production deployment remains separate from branch pushes, CI, and manual promotion.
 
 Prepared v0.7.0 adds an opt-in shared diagnostic recorder with its only viewer in About, and preserves raw confidence in new scan reports while formatting scan-detail percentages to at most one decimal rounded down. The [diagnostic architecture](#optional-local-diagnostics-october-17-2026) describes retention, privacy, persistence failure, and stalled-operation limits.
 
@@ -50,7 +50,7 @@ The [earlier cloud-sync diagram](../public/images/mangoleaf-architecture.svg) is
 
 **October 6, 2026 source update:** Responsive Home/History presentation, search/category counts, selection, and shared deletion confirmation are described below. This source update retains the adopted model and existing cloud ownership rules; the October 5 validation identifies an earlier build and does not verify these changes. Final candidate validation and deployment status remain separate from earlier evidence. No physical-device result is claimed.
 
-**October 7, 2026 ordering implementation:** Guidance downloads and direct Realtime writes share ordering protection, and guideline REST reads bypass the service-worker HTTP cache. The [initial implementation record](testing/TESTING.md#guideline-update-ordering-october-7-2026) preserves its `0.5.2` identity. The [v0.5.3 preparation record](versions/PWA_VERSIONING.md#v053-guideline-update-ordering-candidate-october-7-2026) has separate [versioned validation](testing/TESTING.md#v053-candidate-validation-october-7-2026). Existing local `v0.5.2` at `ee91cf693fd52acb6f882f2c049a3b2ddd599a1f` excludes the fix. The later reported release status is recorded above.
+**October 7, 2026 ordering implementation:** Guidance downloads and direct Realtime writes share ordering protection, and guideline REST reads bypass the service-worker HTTP cache. The [initial implementation record](testing/TESTING.md#guideline-update-ordering-october-7-2026) preserves its `0.5.2` identity. The [v0.5.3 preparation record](versions/history/PWA_RELEASE_HISTORY.md#v053-guideline-update-ordering-candidate-october-7-2026) has separate [versioned validation](testing/TESTING.md#v053-candidate-validation-october-7-2026). Existing local `v0.5.2` at `ee91cf693fd52acb6f882f2c049a3b2ddd599a1f` excludes the fix. The later reported release status is recorded above.
 
 ## Test and release boundaries
 
@@ -104,7 +104,7 @@ The setup environment is created without pip seeding (`venv --without-pip`). The
 
 The tree below highlights the files and directories that define the application. Generated directories such as `.next/` and `out/` are intentionally omitted. See [local generated folders](testing/TESTING.md#local-generated-folders) for the test builds, downloaded scanner, and reports that appear after running developer commands.
 
-Testing instructions and physical-device checklists are grouped under `docs/testing/`. Treatment-advice source reviews and proposed English/Bisaya wording are grouped under `docs/treatment-guidelines/`. Supabase ownership, configuration, and recovery instructions live in [SECURITY-AND-SYNC.md](supabase/SECURITY-AND-SYNC.md), with SQL explanations beside the maintenance files. App and model version records live under `docs/versions/`; dated performance reviews stay within `docs/PERFORMANCE.md`. These folder names describe the documents they contain; the Supabase table remains named `guidelines`.
+Testing instructions and physical-device checklists are grouped under `docs/testing/`. Treatment-advice source reviews and proposed English/Bisaya wording are grouped under `docs/treatment-guidelines/`. Supabase ownership, configuration, and recovery instructions live in [SECURITY-AND-SYNC.md](security/SECURITY-AND-SYNC.md), with SQL explanations beside the maintenance files. The short [PWA](versions/PWA_VERSIONING.md) and [model](versions/AI_MODEL_VERSIONING.md) version guides describe current rules and release steps. Their complete dated records live under `docs/versions/history/`; existing section bookmarks remain available. Dated performance reviews stay within `docs/PERFORMANCE.md`. These folder names describe the documents they contain; the Supabase table remains named `guidelines`.
 
 ```text
 mangoleaf-ai/
@@ -180,9 +180,8 @@ mangoleaf-ai/
 |-- docs/                           # Detailed engineering and project history
 |   |-- CODEBASE_REVIEW.md           # Shared AI-agent review instructions; attach with your own prompt
 |   |-- local-ignored-files/         # Optional local review/Q&A outputs; not included in Git clones
-|   |-- security/                   # Application dependencies and historical environment risks
-|   |   `-- DEPENDENCY_SECURITY.md   # Advisory review, remediation, and residual findings
-|   |-- supabase/                   # Cloud ownership, configuration, and recovery
+|   |-- security/                   # Dependency risks, cloud ownership, and recovery
+|   |   |-- DEPENDENCY_SECURITY.md   # Advisory review, remediation, and residual findings
 |   |   `-- SECURITY-AND-SYNC.md     # Overview, setup links, evidence, and recovery
 |   |-- treatment-guidelines/       # Treatment-advice source reviews and bilingual drafts
 |   |-- testing/                    # Test instructions and physical-device checklists
@@ -209,9 +208,12 @@ mangoleaf-ai/
 |   |       |-- v4.3.0/             # Previous adopted trial/comparison, artifacts/, figures/
 |   |       `-- v4.5.0/             # Current adopted OE model, confidence-only evidence and figures
 |   |-- ARCHITECTURE.md             # This architecture reference
-|   |-- versions/                   # Separate app and model version records
-|   |   |-- PWA_VERSIONING.md        # App versions, release history, and deployment
-|   |   `-- AI_MODEL_VERSIONING.md   # Model versions, notebooks, and saved evidence
+|   |-- versions/                   # Short current guides and full historical records
+|   |   |-- PWA_VERSIONING.md        # App version rules and release procedure
+|   |   |-- AI_MODEL_VERSIONING.md   # Active model, version rules, and adoption steps
+|   |   `-- history/
+|   |       |-- PWA_RELEASE_HISTORY.md # Dated app records, checks, and release templates
+|   |       `-- AI_MODEL_HISTORY.md # Dated model decisions, notebooks, and evidence
 |   |-- PERFORMANCE.md              # Performance mechanisms, dated reviews, and measurements
 |   `-- PROGRESS.md                 # Development timeline and current baseline
 |-- notebooks/                      # Colab notebooks: trial records and experimental workflows
@@ -436,7 +438,7 @@ The HTTP commit also compares IndexedDB with its recorded starting snapshot insi
 
 **Unchanged HTTP guidance, v0.5.4:** Inside that same transaction, after the event-counter and starting-snapshot checks pass, `sameGuidelineSnapshot` compares the downloaded set with the current IndexedDB set. It matches rows by ID and compares `disease_name`, `guidelines_en`, and `guidelines_bis`, independently of row order. Identical sets return success without `clear()` or `bulkPut()`. Changed text, additions, and deletions still use the guarded complete-set replacement. This content check does not add a schema field, change direct Realtime handling, or remove HTTP downloads. It also does not turn a previously invalidated response into an acceptable one. See the [v0.5.4 checks](testing/TESTING.md#v054-release-validation-october-7-2026).
 
-Older cloud rows/files remain preserved without automatically assigning them to a submitted `device_id`. Their former public image links are not a fallback for private downloads. Existing local image Blobs remain usable. A local-only report without photo bytes keeps its diagnosis and shows “Photo not saved on this device” / “Walay litrato nga natipigan niini nga device”; it does not request the old unowned URL. Recovering that remote photo needs an administrator's explicit decision. Clients using the former public-access design cannot sync private scans after the server transition until updated. See [cloud ownership and recovery](supabase/SECURITY-AND-SYNC.md) for status, verification, and rollout boundaries.
+Older cloud rows/files remain preserved without automatically assigning them to a submitted `device_id`. Their former public image links are not a fallback for private downloads. Existing local image Blobs remain usable. A local-only report without photo bytes keeps its diagnosis and shows “Photo not saved on this device” / “Walay litrato nga natipigan niini nga device”; it does not request the old unowned URL. Recovering that remote photo needs an administrator's explicit decision. Clients using the former public-access design cannot sync private scans after the server transition until updated. See [cloud ownership and recovery](security/SECURITY-AND-SYNC.md) for status, verification, and rollout boundaries.
 
 ### PWA and offline caching
 
@@ -487,7 +489,7 @@ CI records the runner platform and Node, Bun, and Playwright versions, while gui
 - Custom hooks: camelCase `useSomething.ts` filenames with matching `useSomething` exports.
 - Detailed engineering and history documentation: `docs/`.
 - Test instructions and device checklists: `docs/testing/`; treatment-advice source reviews: `docs/treatment-guidelines/`.
-- Supabase configuration, cloud ownership, and recovery: `docs/supabase/`.
+- Supabase configuration, cloud ownership, and recovery: `docs/security/SECURITY-AND-SYNC.md`.
 - Training notebooks: `notebooks/non-experiment/` for the current adopted and older models, and `notebooks/experiment/` for experimental candidates.
 - Root documentation: `README.md` for the overview, `SETUP.md` for installation, and `AGENTS.md` for coding-agent instructions.
 - Generated files such as `public/sw.js`, `.next/`, `out/`, and `next-env.d.ts` should not be edited by hand.

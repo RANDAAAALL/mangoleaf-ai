@@ -2,7 +2,7 @@
 
 Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current candidate is app `0.7.0`, model `v4.5.0`, confidence-only threshold 0.70. Fill results only after observing the exact recorded release build; do not transfer a previous build's observations to this candidate.
 
-**Storage protocol introduced October 15:** Reports/photos stay in this browser's IndexedDB; Supabase updates public treatment guidance only. Use the actual tested build identity below. Earlier completed examples retain their historical cloud scope.
+Reports/photos stay in this browser's IndexedDB; Supabase supplies public treatment guidance only. No guest sign-in or private scan/photo upload is expected. Use the exact tested build identity below; dated changes are in [Protocol history](#protocol-history).
 
 Do not mark a case as passed before every required observation is recorded. Use `Pass`, `Fail`, or `Blocked`; explain every failure or block.
 
@@ -30,7 +30,7 @@ Need an answer-format example? See [PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md](PH
 - [ ] Diagnostics enabled before this session: Yes / No; memory-only warning: Yes / No:
 - [ ] Actual inference backend / texture precision, if available in diagnostics:
 - [ ] Network used before offline checks:
-- [ ] Test account or device identity:
+- [ ] Local test profile / device alias (no guest sign-in required):
 - [ ] Photo IDs and SHA-256 hashes:
 - [ ] Screenshot, video, notes, and issue-link location:
 
@@ -41,11 +41,14 @@ Need an answer-format example? See [PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md](PH
 - [ ] Footer shows recorded application and model versions.
 - [ ] Device has enough storage and battery for 30-minute session.
 - [ ] Use a designated test browser profile or device. Do not mix research evidence with personal scan history.
-- [ ] Run core automated checks for same release build: `bun run test:e2e`.
-- [ ] Run R01 and R03 automated checks for same release build: `bun run test:reliability`.
+- [ ] Core automated result for this build: Pass / Fail / Blocked; report or reason:
+- [ ] Automated R01 result for this build: Pass / Fail / Blocked; report or reason:
+- [ ] Automated R03 result for this build: Pass / Fail / Blocked; report or reason:
 - [ ] Record automated report location:
 
-The `0.7.0` preparation does not itself complete any physical observation below. The existing instruction to run R01/R03 describes release evidence to collect when authorized; **no full or shortened R03 session was run for this preparation**. Record a later session's own dates, commit, deployment, and observations.
+Record physical observations even when an automated check is still pending; mark the missing evidence as blocked and explain why. Release approval still requires the approved automated and physical scope for the exact build. `bun run test:e2e` collects core results; `bun run test:reliability` runs both R01 and the full 30-minute R03 session when authorized. Preserve each report before a later run replaces it. Do not run a shortened substitute or mark a missing session as passed.
+
+The `0.7.0` preparation does not itself complete any physical observation below; **no full or shortened R03 session was run for that preparation**. Record a later session's own dates, commit, deployment, and observations.
 
 ## Diagnostics and stall evidence (v0.7.0)
 
@@ -169,9 +172,7 @@ End time:
 
 Use real scans. To avoid duplicate shortcuts, choose different photos or delete each completed test record before its next use. Include Details, History, navigation, rotation, background/resume, and network changes.
 
-**October 9, 2026 protocol update:** Mix actual guided-camera capture and gallery uploads. Synthetic-camera automation does not satisfy these observations. The protocol was aligned with the new camera; no full or shortened R03 session was run for that update. Record results only after this physical session occurs.
-
-**October 16, 2026 alignment:** Record the tested app/model versions, model hashes, and actual WebGL precision when available in DevTools. Current repository source uses V4.5.0 and confidence-only rejection at 0.70. Reports and photo Blobs stay local; reconnection refreshes public guidelines and must not upload private scan/photo data. This checklist remains blank until physical observations are recorded.
+Mix actual guided-camera capture and gallery uploads. Record the tested app/model versions, asset hashes, and observed backend/precision where available. Synthetic-camera automation does not satisfy these physical observations. After reconnecting, local History/photos remain local while public guidelines refresh. Use the [protocol history](#protocol-history) to identify earlier instruction changes; it is not a completed session record.
 
 | Time   | Action completed                                              | Result / observation | Crash, freeze, lost record, or stuck scan? | Heat / battery / slowdown notes | Pass / Fail / Blocked |
 | ------ | ------------------------------------------------------------- | -------------------- | ------------------------------------------ | ------------------------------- | --------------------- |
@@ -216,7 +217,7 @@ Take Photo now opens a live browser camera below 768px; it does not launch the o
 - [ ] Close camera or cancel the upload picker; no scan is created and the initiating control regains usable focus.
 - [ ] Upload from gallery; selected photo preview matches source.
 - [ ] Camera Retake discards review and opens a fresh live preview; upload Retake reopens the gallery picker. No stale preview or saved record appears after cancellation.
-- [ ] After initial caching, repeat camera capture and diagnosis in airplane mode; local result and photo remain available. Cloud synchronization is checked separately in R02-M02.
+- [ ] After initial caching, repeat camera capture and diagnosis in airplane mode; local result and photo remain available. Check local History preservation and public guideline refresh after reconnection in R02-M02; no scan/photo upload is expected.
 
 ### Result and layout
 
@@ -272,3 +273,22 @@ Record actual installation outcomes for the same release build and browser. An e
 - [ ] Final decision: Release may proceed to publication / Release blocked from publication — reason and evidence location:
 
 See [TESTING.md](TESTING.md) for automated scope and limitations. See [PWA versioning](../versions/PWA_VERSIONING.md#candidate-testing-and-promotion) for promotion and tagging order.
+
+## Protocol history
+
+These notes record checklist changes, oldest first. They do not supply completed physical-test results.
+
+### October 9, 2026
+
+- **Guided-camera session protocol**
+  - Mix actual guided-camera capture and gallery uploads. Synthetic-camera automation does not satisfy these observations. The protocol was aligned with the new camera; no full or shortened R03 session was run for that update. Record results only after this physical session occurs.
+
+### October 15, 2026
+
+- **Local-only storage protocol**
+  - Reports/photos stay in this browser's IndexedDB; Supabase updates public treatment guidance only. Use the actual tested build identity below. Completed evidence from older builds retains its original cloud scope; the fictional sample describes the current local-only workflow.
+
+### October 16, 2026
+
+- **V4.5.0 and local-only session alignment**
+  - Record the tested app/model versions, model hashes, and actual WebGL precision when available in DevTools. Current repository source uses V4.5.0 and confidence-only rejection at 0.70. Reports and photo Blobs stay local; reconnection refreshes public guidelines and must not upload private scan/photo data. This checklist remains blank until physical observations are recorded.
