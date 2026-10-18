@@ -40,6 +40,7 @@ This repository uses Next.js 16.3.8. APIs, conventions, and file structure may d
 - Keep every user-facing string in `src/lib/translations.ts` with an entry in both the `en` and `bis` objects. Do not hardcode English in a component or helper, and do not rely on `toLocaleDateString` or other `Intl` formatting for Cebuano/Bisaya output, because browsers have no reliable locale data for it. Use `{n}` placeholder templates for counted labels so plural rules stay in the translation file.
 - Preserve unrelated user changes and untracked work.
 - Treat preserved Colab package snapshots as historical evidence, never as installation instructions. Keep their original bytes and run ledgers; record repository archive names in a separate provenance mapping. Review dependency advisories before executing a historical training workflow in a new environment. Keep unresolved dependency findings visible rather than suppressing the audit.
+- Keep the hash-checked V5 Colab helper LF-terminated through its scoped `.gitattributes` rule. When its bytes change, update `EXPECTED_HELPER_SHA256` in both clean V5 notebooks together; preserve the original helper inside every existing frozen run.
 - Reuse a saved duplicate diagnosis only when its `model_version` exactly matches the active model. Keep older and unlabeled legacy reports in History, but run current-model inference when their photo is uploaded again.
 
 ## Application tests and release candidates

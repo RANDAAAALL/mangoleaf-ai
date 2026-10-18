@@ -1,0 +1,108 @@
+{
+  "experimentVersion": "v5.0.0",
+  "originalExamplesSha256": "563d7b6c66a2ccdb9b1337c53f0b5d54a033f2179055bffeb87a9f9c8c4d63e5",
+  "gradCamTarget": "same true class for both versions",
+  "examples": [
+    {
+      "id": "ee9676472204c9cdd083",
+      "sha256": "ee9676472204c9cdd0830dce3be63a9d47e646ecb9d2c70126ddcdac063e4ecd",
+      "subset": "val",
+      "targetClass": "anthracnose",
+      "predictedClass": "anthracnose",
+      "hasPositiveHeatmap": true,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits"
+    },
+    {
+      "id": "33409e67c75bacf91843",
+      "sha256": "33409e67c75bacf918435cb60888283900c137071edf76dab3b0aa6a0faac233",
+      "subset": "val",
+      "targetClass": "bacterial_black_spot",
+      "predictedClass": "bacterial_black_spot",
+      "hasPositiveHeatmap": true,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits"
+    },
+    {
+      "id": "09778a641c62fbc9511e",
+      "sha256": "09778a641c62fbc9511eaf17ff5e2bb2bae843dd2eeb4807e41a66a49b5a84ae",
+      "subset": "val",
+      "targetClass": "bacterial_canker",
+      "predictedClass": "bacterial_canker",
+      "hasPositiveHeatmap": true,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits"
+    },
+    {
+      "id": "bccae50356a84611268b",
+      "sha256": "bccae50356a84611268b9fd0b5f5bf5517b222ac223d298084b121e169550b64",
+      "subset": "val",
+      "targetClass": "healthy_fruit",
+      "predictedClass": "healthy_fruit",
+      "hasPositiveHeatmap": true,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits"
+    },
+    {
+      "id": "90a7907f7a259e404f6b",
+      "sha256": "90a7907f7a259e404f6bb8c6558bb1081f2d2942249ebb5cac4b747a2f989e0c",
+      "subset": "val",
+      "targetClass": "healthy_leaf",
+      "predictedClass": "anthracnose",
+      "hasPositiveHeatmap": true,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits"
+    },
+    {
+      "id": "6e99067feab48b78d0e0",
+      "sha256": "6e99067feab48b78d0e0c4260e342c1b64673dab00a5c18099310bb9053f1dd7",
+      "subset": "val",
+      "targetClass": "mango_scab",
+      "predictedClass": "mango_scab",
+      "hasPositiveHeatmap": true,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits"
+    },
+    {
+      "id": "6c1c6c90f2dbfdb3ab1d",
+      "sha256": "6c1c6c90f2dbfdb3ab1d451b90a9ce2769222aaa237bb820bf55f782e63498d5",
+      "subset": "val",
+      "targetClass": "sooty_mold",
+      "predictedClass": "sooty_mold",
+      "hasPositiveHeatmap": true,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits"
+    }
+  ],
+  "interpretation": "Validation illustrations do not establish accuracy or independent field evidence.",
+  "artifacts": {
+    "figures/augmentation_preview.png": {
+      "sha256": "bad177500f5e0a83454a84f19b3d6501f65f65f11143cfd38ff945d534c5fddf",
+      "bytes": 13046350
+    },
+    "figures/training_curves.png": {
+      "sha256": "feed8816e30f73a21e6ce7ddcefcb4fc8cdb19eeeb6b7d24c945d7181891e08f",
+      "bytes": 152029
+    },
+    "figures/grad_cam.png": {
+      "sha256": "f240c92b9b8e83bdd2ee5091ecdc0941af315f904849313dc65461111db6dc56",
+      "bytes": 4512084
+    },
+    "figures/confusion_matrix.png": {
+      "sha256": "8203ff6b837092e24ad94e5ea28613c40f58dc4ee78c48d15fb3394c0fc1e572",
+      "bytes": 224464
+    },
+    "figures/per_class_metrics.png": {
+      "sha256": "b92859c230343ecb29d1ac19db63ed1175277d6c64b1da79d50b1e2c15175156",
+      "bytes": 106050
+    },
+    "figures/confusion_matrix_with_rejection.png": {
+      "sha256": "f2078bbbc50d88b02a7564193929d0b77a4b0a9523929f9173193c9fbe7b873a",
+      "bytes": 230346
+    },
+    "figures/per_class_metrics_with_rejection.png": {
+      "sha256": "7932a192b558cda01a2437cecaba5537893c066790bd38e3b52496473a7af0fa",
+      "bytes": 107141
+    }
+  }
+}

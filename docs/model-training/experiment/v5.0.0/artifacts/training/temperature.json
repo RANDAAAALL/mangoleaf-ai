@@ -1,0 +1,11 @@
+{
+  "temperature": 0.909599105656865,
+  "foldCount": 1,
+  "temperatureFoldedIntoWeights": true,
+  "fitSubset": "val",
+  "validationCount": 398,
+  "fitIncludesOE": false,
+  "fitIncludesOOD": false,
+  "beforeNll": 0.07593608955397503,
+  "afterNll": 0.07553699545524599
+}

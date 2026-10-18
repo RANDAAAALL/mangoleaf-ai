@@ -1,0 +1,26 @@
+{
+  "completedEpochs": 5,
+  "configurationHash": "5ee13fe1b483cdbfeb3fb5f4f9bb196ce6c027ca5cf06551f8aa2cb15e11372c",
+  "artifacts": {
+    "fine_tuned_best.weights.h5": {
+      "sha256": "9dc74554258aa5bb8f95b7d0053d3b1ce549fda73ef4a0253749db58e50cf56f",
+      "bytes": 12516800
+    },
+    "model_selected.keras": {
+      "sha256": "33c2eedaf9006b4348419b8bfb809b9b0e0fc7113035160051a55631fc7205e1",
+      "bytes": 12704358
+    },
+    "training_history.json": {
+      "sha256": "2fe6f973f88bcfd90ad3f6d1ad222929ae8d1e4b8d746870db62b132e65b079c",
+      "bytes": 1551
+    },
+    "checkpoint_selection.json": {
+      "sha256": "799af82b6045ae5e64d6e7cc4755dcaa0dfbc8d666b488a73bf903cdf4ead799",
+      "bytes": 229
+    },
+    "oe_exposure.json": {
+      "sha256": "e2c76a214b1c4df8d976379e851a4d88dc73e618bbf2af00c0409244a60d8dd0",
+      "bytes": 466
+    }
+  }
+}

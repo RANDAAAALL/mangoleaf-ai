@@ -14,13 +14,15 @@ import inspect
 import io
 import json
 import pathlib
+import random
 import re
+import subprocess
 import sys
 import tempfile
 import unittest
-from contextlib import redirect_stdout
+from contextlib import contextmanager, redirect_stdout
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from urllib.parse import unquote
 
 
@@ -77,12 +79,46 @@ class NotebookContractTests(unittest.TestCase):
                         assigned.append(ast.literal_eval(node.value))
             self.assertEqual(assigned, [expected], path.name)
 
+    def test_git_checkout_preserves_the_hash_locked_helper_bytes(self):
+        relative = HELPER.relative_to(ROOT).as_posix()
+        original = subprocess.run(["git", "show", "HEAD:" + relative], cwd=ROOT,
+                                  capture_output=True, check=True).stdout
+        checkout = subprocess.run(["git", "-c", "core.autocrlf=true", "cat-file", "--filters",
+                                   "--path=" + relative, "HEAD:" + relative], cwd=ROOT,
+                                  capture_output=True, check=True).stdout
+        self.assertEqual(checkout, original)
+        self.assertNotIn(b"\r\n", HELPER.read_bytes())
+
     def test_helper_import_does_not_start_scientific_runtime(self):
         before = set(sys.modules)
         load_workflow()
         newly_loaded = set(sys.modules) - before
         self.assertFalse(any(name == "tensorflow" or name.startswith("tensorflow.")
                              for name in newly_loaded))
+
+    def test_missing_review_bundle_stops_before_creating_a_new_run(self):
+        notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
+        source = next("".join(cell["source"]) for cell in notebook["cells"]
+                      if cell["cell_type"] == "code" and "experiment = wf.Experiment({" in "".join(cell["source"]))
+        tree = ast.parse(source)
+        for node in tree.body:
+            if isinstance(node, ast.Assign) and any(
+                    isinstance(target, ast.Name) and target.id == "PARENT_THRESHOLD_RUN" for target in node.targets):
+                node.value = ast.Name(id="fixture_review", ctx=ast.Load())
+        code = compile(ast.fix_missing_locations(tree), str(NOTEBOOK), "exec")
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            factory = Mock(return_value=SimpleNamespace(run=root / "new-attempt"))
+            scope = {"Path": pathlib.Path, "fixture_review": root,
+                     "wf": SimpleNamespace(Experiment=factory)}
+            with self.assertRaisesRegex(FileNotFoundError, "Review bundle is incomplete"):
+                exec(code, scope)
+            factory.assert_not_called()
+            for filename in scope["REQUIRED_REVIEW_FILES"]:
+                (root / filename).write_bytes(b"controlled fixture")
+            with redirect_stdout(io.StringIO()):
+                exec(code, scope)
+            factory.assert_called_once()
 
     def test_trial_links_resolve_to_existing_local_inputs(self):
         guide = ROOT / "docs/model-training/experiment/v5.0.0/TRIAL_v5_0_0.md"
@@ -273,6 +309,266 @@ class SafeguardTests(unittest.TestCase):
         reviews[0]["relativePath"] = "other.jpg"
         with self.assertRaises(RuntimeError):
             self.workflow.validate_review_rows(records, reviews, fresh=True)
+
+
+class TrainingExecutionTests(unittest.TestCase):
+    """Controlled loop fixtures; these do not execute TensorFlow or measure accuracy."""
+
+    @classmethod
+    def setUpClass(cls):
+        import numpy as np
+        cls.np = np
+        cls.workflow = load_workflow()
+
+    def run_fixture(self, root, validation_losses=None, fail_step=None):
+        np, module = self.np, self.workflow
+        events, seen = [], []
+        losses = validation_losses or [1.0, 0.9, 0.8, 0.7, 0.6, 0.5]
+
+        class Scalar:
+            def __init__(self, value, fail=False):
+                self.value, self.fail = value, fail
+
+            def numpy(self):
+                if self.fail:
+                    raise RuntimeError("fixture readback failure")
+                return np.float32(self.value)
+
+        class Model:
+            def __init__(self):
+                self.weights = np.array([1.0], dtype=np.float32)
+
+            def get_weights(self):
+                return [self.weights.copy()]
+
+            def save_weights(self, path):
+                pathlib.Path(path).write_bytes(self.weights.tobytes())
+
+            def load_weights(self, path):
+                self.weights = np.frombuffer(pathlib.Path(path).read_bytes(), dtype=np.float32).copy()
+
+            def save(self, path):
+                pathlib.Path(path).write_bytes(self.weights.tobytes())
+
+        class Trainer:
+            def __init__(self, model, weights, oe_weight):
+                self.model, self.phase, self.mode, self.updates = model, -1, None, 0
+                self.metrics = [SimpleNamespace(name=name)
+                                for name in ("loss", "mango_loss", "oe_loss", "accuracy")]
+                self.reset_metrics()
+
+            def compile(self, **kwargs):
+                self.compile_options = kwargs
+
+            def reset_metrics(self):
+                self.mango_seen, self.oe_seen = [], []
+
+            def train_step(self, data):
+                features, labels = data
+                mango, oe = list(features["mango"]), list(features["oe"])
+                if len(mango) != len(labels):
+                    raise AssertionError("Mango labels lost their batch alignment")
+                self.mode = "training"
+                self.updates += 1
+                self.model.weights += 1
+                seen.append((mango, oe))
+                events.append(("update", len(mango), len(oe)))
+                self.mango_seen.extend(mango)
+                self.oe_seen.extend(oe)
+                return {
+                    "loss": Scalar(len(self.mango_seen) / 1000, self.updates == fail_step),
+                    "mango_loss": Scalar(np.mean(self.mango_seen)),
+                    "oe_loss": Scalar(np.mean(self.oe_seen)),
+                    "accuracy": Scalar(np.mean(np.asarray(self.mango_seen) % 2 == 0)),
+                }
+
+            def test_step(self, data):
+                pixels, labels = data
+                if self.mode != "validation":
+                    self.phase += 1
+                self.mode = "validation"
+                self.mango_seen.extend(pixels)
+                return {"loss": Scalar(losses[self.phase]), "mango_loss": Scalar(losses[self.phase]),
+                        "oe_loss": Scalar(0), "accuracy": Scalar(1)}
+
+        class Progress:
+            def __init__(self, *args, **kwargs):
+                pass
+
+            def update(self, *args, **kwargs):
+                pass
+
+        experiment = object.__new__(module.Experiment)
+        experiment.run = root
+        experiment.config = {"epochs": 5, "batch_size": 16, "seed": 42,
+                             "learning_rate": 1e-5, "oe_loss_weight": 0.5}
+        experiment.frozen = {"configurationHash": "fixture-plan"}
+        experiment.verify_frozen = lambda: None
+        experiment.model = experiment.logits_model = Model()
+        experiment.initial_weight_hash = module.canonical_hash([
+            hashlib.sha256(value.tobytes()).hexdigest() for value in experiment.model.get_weights()
+        ])
+        experiment.class_weights = np.ones(7, dtype=np.float32)
+        experiment.train_rows = [{"id": index, "label": module.CLASS_NAMES[index % 7]}
+                                 for index in range(1854)]
+        experiment.val_rows = [{"id": 100000 + index, "label": module.CLASS_NAMES[index % 7]}
+                               for index in range(398)]
+        experiment.oe = [{"id": 10000 + index, "sha256": str(index)} for index in range(2511)]
+
+        def host_batch(rows, *, labelled=False, layers=None):
+            events.append(("host", len(rows)))
+            values = np.asarray([row["id"] for row in rows], dtype=np.float32)
+            return (values, np.asarray([module.CLASS_NAMES.index(row["label"]) for row in rows],
+                                       dtype=np.int32)) if labelled else values
+
+        fake_tf = SimpleNamespace(
+            float32="float32", int32="int32", TensorSpec=lambda *args: args,
+            function=lambda function, **kwargs: function,
+            keras=SimpleNamespace(optimizers=SimpleNamespace(Adam=lambda rate: rate),
+                                  utils=SimpleNamespace(Progbar=Progress)),
+        )
+        patches = dict(tf=fake_tf, np=np, OETrainer=Trainer, load_host_batch=host_batch,
+                       augmentation_layers=lambda seed: (seed,))
+        try:
+            with patch.multiple(module, create=True, **patches), redirect_stdout(io.StringIO()), patch.object(
+                    module, "dataset", side_effect=AssertionError("Training reentered a Dataset generator")):
+                experiment.train()
+        except RuntimeError:
+            if fail_step is None:
+                raise
+        return experiment, seen, events
+
+    def test_all_five_epochs_preserve_membership_oe_cycle_and_short_tails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            experiment, seen, events = self.run_fixture(pathlib.Path(directory))
+            self.assertEqual(len(seen), 580)
+            for epoch in range(5):
+                actual = [item for mango, _ in seen[epoch * 116:(epoch + 1) * 116] for item in mango]
+                order = list(range(1854))
+                random.Random(42 + epoch).shuffle(order)
+                self.assertEqual(actual, order)
+                self.assertEqual(len(seen[(epoch + 1) * 116 - 1][0]), 14)
+                self.assertAlmostEqual(experiment.history[epoch]["loss"], 1.854, places=6)
+                self.assertAlmostEqual(experiment.history[epoch]["mango_loss"], 926.5)
+            oe = list(range(10000, 12511))
+            random.Random(1042).shuffle(oe)
+            batches = [oe[start:start + 16] for start in range(0, len(oe), 16)]
+            self.assertEqual([actual for _, actual in seen], [batches[index % 157] for index in range(580)])
+            self.assertEqual(experiment.oe_samples_consumed, 9277)
+            self.assertEqual(sum(len(batch) == 15 for _, batch in seen), 3)
+            receipt = self.workflow.read_json(experiment.run / "training_state.json")
+            self.assertEqual(receipt["completedEpochs"], 5)
+            selection = self.workflow.read_json(experiment.run / "checkpoint_selection.json")
+            self.assertEqual(selection["selectedEpoch"], 5)
+            self.assertAlmostEqual(float(experiment.model.get_weights()[0][0]), 581)
+            self.assertTrue(events)
+
+    def test_parent_baseline_can_remain_selected_with_zero_new_checkpoint_exposure(self):
+        with tempfile.TemporaryDirectory() as directory:
+            experiment, _, _ = self.run_fixture(pathlib.Path(directory), [0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
+            selection = self.workflow.read_json(experiment.run / "checkpoint_selection.json")
+            exposure = self.workflow.read_json(experiment.run / "oe_exposure.json")
+            self.assertEqual(selection["selectedEpoch"], 0)
+            self.assertEqual(exposure["samplesProcessed"], 9277)
+            self.assertEqual(exposure["selectedCheckpointSamplesProcessed"], 0)
+            self.assertEqual(float(experiment.model.get_weights()[0][0]), 1)
+
+    def test_failed_readback_is_not_counted_or_sealed_and_cannot_restart(self):
+        with tempfile.TemporaryDirectory() as directory:
+            experiment, _, _ = self.run_fixture(pathlib.Path(directory), fail_step=3)
+            self.assertEqual(experiment.oe_samples_consumed, 32)
+            self.assertFalse((experiment.run / "epoch_01.json").exists())
+            self.assertFalse((experiment.run / "training_state.json").exists())
+            self.assertFalse((experiment.run / "model_selected.keras").exists())
+            marker = (experiment.run / "training_started.json").read_bytes()
+            with self.assertRaisesRegex(RuntimeError, "already started"):
+                experiment.train()
+            self.assertEqual((experiment.run / "training_started.json").read_bytes(), marker)
+
+    def test_host_batch_completes_cpu_reads_before_returning_numpy_arrays(self):
+        np, module = self.np, self.workflow
+        active, reads = [], []
+
+        @contextmanager
+        def device(name):
+            active.append(name)
+            try:
+                yield
+            finally:
+                active.pop()
+
+        class Pixels:
+            device = "/device:CPU:0"
+
+            def numpy(self):
+                self_test.assertEqual(active, ["/CPU:0"])
+                reads.append("complete")
+                return np.full((224, 224, 3), 127, dtype=np.float32)
+
+        class Augmented(Pixels):
+            def numpy(self):
+                return np.stack([super(Augmented, self).numpy()] * 2)
+
+        self_test = self
+        rows = [{"path": "fixture", "label": module.CLASS_NAMES[0]}] * 2
+        with patch.multiple(module, create=True, np=np, tf=SimpleNamespace(device=device)), patch.object(
+                module, "load_pixels", return_value=Pixels()), patch.object(
+                module, "augment_batch", return_value=Augmented(), create=True):
+            images, labels = module.load_host_batch(rows, labelled=True, layers=["fixture-layer"])
+        self.assertEqual(active, [])
+        self.assertEqual(images.shape, (2, 224, 224, 3))
+        self.assertEqual(images.dtype, np.float32)
+        self.assertEqual(labels.tolist(), [0, 0])
+        self.assertEqual(len(reads), 3)
+
+    def test_prediction_source_closes_cpu_scope_before_each_generator_yield(self):
+        np, module = self.np, self.workflow
+        active = []
+
+        @contextmanager
+        def device(name):
+            active.append(name)
+            try:
+                yield
+            finally:
+                active.pop()
+
+        class Pixels:
+            def numpy(self):
+                self_test.assertEqual(active, ["/CPU:0"])
+                return np.zeros((224, 224, 3), dtype=np.float32)
+
+        class Source:
+            def __init__(self, generator, **kwargs):
+                self.generator = generator
+
+            def apply(self, operation):
+                return self
+
+            def batch(self, size):
+                return self
+
+            def prefetch(self, size):
+                return self
+
+        self_test = self
+        fake_tf = SimpleNamespace(
+            device=device, float32="float32", TensorSpec=lambda *args: args,
+            data=SimpleNamespace(Dataset=SimpleNamespace(from_generator=Source),
+                                 experimental=SimpleNamespace(assert_cardinality=lambda count: None)),
+        )
+        with patch.multiple(module, create=True, np=np, tf=fake_tf), patch.object(
+                module, "load_pixels", return_value=Pixels()):
+            stream = module.dataset([{"path": "one"}, {"path": "two"}])
+            iterator = stream.generator()
+            next(iterator)
+            self.assertEqual(active, [])
+            next(iterator)
+            self.assertEqual(active, [])
+
+    def test_nonfinite_step_readback_is_rejected(self):
+        with self.assertRaisesRegex(RuntimeError, "Non-finite"):
+            self.workflow.synchronized_metrics({"loss": SimpleNamespace(numpy=lambda: float("nan"))})
 
 
 class MetricTests(unittest.TestCase):

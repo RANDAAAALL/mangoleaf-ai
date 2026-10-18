@@ -2,7 +2,7 @@
 
 This guide covers local development and the external services required by the current application.
 
-The repository uses prepared app version `0.7.0` and adopted model `v4.5.0`, with confidence >=0.70 as the only rejection gate. Margin and entropy gates are disabled. Optional diagnostics and raw-confidence preservation require no additional environment variables or Supabase resources. V5.0.0 is untrained and on standby. Production release/deployment status remains separate; version labels come from repository files.
+The committed app uses prepared version `0.7.0` and adopted model `v4.5.0`, with confidence >=0.70 only; margin and entropy are disabled. The maintainer's uncommitted local V5 override is separate from the research-only push. A fresh checkout uses V4.5 unless the candidate is deliberately installed. See the [V5 local test and rollback record](docs/model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md#local-installation-and-rollback). No new environment variables, Supabase resources, retraining, or PWA version bump are needed for the research records. Production release/deployment status remains separate.
 
 ## Prerequisites
 
@@ -229,7 +229,7 @@ The intended first run needs the original labeled mango collection, the separate
 
 The new notebooks update pip first and explicitly patch seven helper packages that the initial Colab audit found vulnerable. Use a fresh runtime when the template's package plan changes; an old setup receipt intentionally stops. The [dependency-repair instructions](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#if-step-2-reports-unresolved-training-dependencies) also cover continuing the older copy that stopped before training. Colab's Recommended image alone does not replace those fixes or establish compatibility; check its actual Python version and run every setup gate.
 
-The V5.0.0 notebooks are prepared but untrained and on standby; they do not change `public/model/`. Colab runtime/audit, GPU, conversion, training, and evaluation remain pending. V4.5.0 is the repository's adopted model in prepared app `0.7.0`.
+V5.0.0 completed five fine-tuning epochs and a later 995-photo OOD report. Its [completed review](docs/model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md) preserves source identities, copied evidence, comparison and limitations. The research-only push does not replace the V4.5 model in committed application files. The earlier failed attempts remain historical evidence.
 
 ## Phone diagnostics and stalled operations
 
@@ -255,7 +255,7 @@ New accepted and uncertain reports keep the raw classifier confidence. Scan deta
 
 ## Common setup issues
 
-The adopted model in prepared app `0.7.0` is [V4.5.0](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md), with label `v4.5.0` and confidence-only threshold 0.70. Margin and entropy are disabled. Keep all five model files together in root `public/model/`. The [adoption receipt](docs/model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json) records hashes and the verified V4.3.0 rollback. No retraining is required to use the saved weights. After a model swap, restart the development server and reload the page to replace the in-memory model; for production-preview testing, rebuild, wait for the worker to activate, then reload. Production release validation and promotion remain pending.
+The committed model in prepared app `0.7.0` is [V4.5.0](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md). The October 19 maintainer workspace temporarily uses uncommitted `v5.0.0-candidate` files for local testing; these runtime overrides are excluded from the research-only commit. Keep all five matching model files together in `public/model/`. The [local installation receipt](docs/model-training/experiment/v5.0.0/artifacts/local_test_installation.json) records that tested override, its original hashes and exact V4.5 backup; it does not change what a fresh checkout loads. After an intentional model swap, restart the development server and reload the page; a production preview also needs a rebuild and activated worker. Production promotion remains separate.
 
 - If a push reports a missing scanner, run `bun run security:install`. If the hook cannot find Bun, make Bun available to the terminal or Git GUI's PATH and restart that application.
 - For a shallow clone, run `git fetch --unshallow` before scanning. If hooks were not registered during dependency installation, run `bun run prepare` and confirm `git config --get core.hooksPath` prints `.husky/_`.

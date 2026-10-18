@@ -1,0 +1,11 @@
+{
+  "availableUniquePhotos": 2511,
+  "samplesProcessed": 9277,
+  "uniquePhotosExposed": 2511,
+  "allPhotosExposed": true,
+  "selectedCheckpointSamplesProcessed": 9277,
+  "selectedCheckpointUniqueOePhotosExposed": 2511,
+  "shuffledOrderSha256": "2f9ac8590af77508a59470357d4acb2224c6d0eccb3d7f8f5e68d487e35c34d7",
+  "sampling": "continuous shuffled cursor; short tails retained across epochs",
+  "counting": "count only after successful synchronized training steps"
+}

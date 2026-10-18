@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-18T22:01:19.960871+00:00",
+  "status": "verified local candidate; not adopted or deployed",
+  "appVersion": "0.7.0",
+  "modelVersion": "v5.0.0-candidate",
+  "testedApplicationFingerprint": "9018bd786093fa7f45a430e5921cf6a4e6f9314cd34747dbf0460d4cb91023ad",
+  "sourceInputs": {
+    "bun.lock": "f186cef400df31b3be057f8224da9ec94fb61503126e89ffa181ede4bdb2df7b",
+    "next.config.ts": "24167726c5765d456a629962210e2594e41395ac89ca21a0c9a106646f2c9eb1",
+    "package.json": "d5365ad8407d0ea78c7b92b5f57b1a912de4a03f22050665cd9755567e5d552a",
+    "postcss.config.mjs": "dfac7ac2d86d326a0e5adb024e7943c181393ed17a5fcb8f0315b24c7da6ddde",
+    "public/images/icons/png/apple-touch-icon.png": "888d57517aafe4b5d85ea7cb6a605a8872f929f62b501a4173794ea77ab83bde",
+    "public/images/icons/png/favicon-16x16.png": "6aedebcbcdd45e54ea0c51c806734ba96a8bfb4bf7fa79f52eb0eae11ff4e555",
+    "public/images/icons/png/favicon-32x32.png": "8f8ce51f3512ca12ef0847a0d1ea7c9a3c3276e294aaaadfdfd5dc57d04ff4aa",
+    "public/images/icons/png/icon-192x192.png": "a37ec507fd3102f1504f97b20e6269fe27818e2ae11b7c89f524d90bd4608546",
+    "public/images/icons/png/icon-512x512.png": "25d16e3c2f856484ed40f163d8b8f8bacba8fbd140229617a92ca46bc945b87f",
+    "public/images/icons/svg/favicon.svg": "d6ddd5a949bfaa5b62a18549bb36397beffdbe44c490522fced918f809edb892",
+    "public/images/icons/svg/icon.svg": "a577cfe7b0b2fbec95bbf1f07c30b57e2fd8d38fb12c838c8f53f6f4a8a693a4",
+    "public/images/mangoleaf-architecture.svg": "5578a0046b09bcc359797e5c159cd77c1cff5a8bde51d65ffa376a00d0f56599",
+    "public/install-qr.svg": "9777ec05ea80308f5c7289ebe7ecd4161ff91c366b880da134a8c50cac9e39a3",
+    "public/model/group1-shard1of3.bin": "54b868d3e6eea6f1b7e5577ad55b325e07c924f38e914da98e451d2b49ec7afa",
+    "public/model/group1-shard2of3.bin": "94dddb47d3b74d0230d794235c87cbdcc45eb25dcb7bdc744c0babc4d6dc1876",
+    "public/model/group1-shard3of3.bin": "4fdc3e6eb83ceafe8e19458a236f9eecdd600ebfed6212d3dc64f7ff66a732c0",
+    "public/model/model.json": "b3e3ae0550f6f2dcb7990aad3e042e385b465315c92c8031dbc29c7750f7bbc8",
+    "public/model/model_config.json": "7ab107f8632000c163514717193259f3d5fee27a0bd03950557fe4914fa4af8a",
+    "src/app/globals.css": "a79c659f730aabec11854de838ff0ffd7346b23eeab507086dfdb33bdc85df5b",
+    "src/app/layout.tsx": "496f170a0dc7bc1a3aefeb280386cc54ce16695d81ca28240fac81c29c54baf1",
+    "src/app/manifest.ts": "ff281a75ed81168a13bba546601e5ac22702eb3dafaab7a3de62f1d1ab51f05d",
+    "src/app/page.tsx": "e58465491d4875ae0c17cef62ad21de2f1c4ee11d44219f06ca3addee785f9d1",
+    "src/components/brand/icon.tsx": "74374088c9951cecd8c515431f3680f1ba31307e626b79d1683280a446dff1e4",
+    "src/components/brand/logo.tsx": "f4e2aa467278575ca92f647a5b0d8c1e7f72e50db00c8ec7ac5824c22bbd8546",
+    "src/components/layout/bottom-nav.tsx": "e5f64c7dea8cfe86baaaabb2526f305316f3756626cf2a9ebb59333e7b6ce192",
+    "src/components/layout/footer.tsx": "5a78a6f595dd04d22b4a7d35b483c54e634e60a73a8e7458c6fcfb0657c66ade",
+    "src/components/layout/model-status-banner.tsx": "a61f4cfd80cf64a8a51f1641c89885022c4f2600249dc19ba9b5be2439072a6d",
+    "src/components/layout/splash-screen.tsx": "b2f3db56e1ffdf006fa2c1dcf8c45cdbb7a79e193872de050bec64ddf915ba97",
+    "src/components/layout/top-header.tsx": "eca4da3487e7f0e16b64906fe386a133cbe8c96350aab86e3437b191684c5d22",
+    "src/components/modal/delete-scans-modal.tsx": "3661d7a2ced0915f311d13ae6d71e1429f309602dd99a4d35daef1dee82e2666",
+    "src/components/modal/install-guide-overlay.tsx": "38cea12231c3a81d476893dc72baa647ad60ccc9592864d1188293b3aa26083b",
+    "src/components/modal/legal-modal.tsx": "c7de15c69a357dbf64f9f2fbd6d264c563e34b3a7c3f8e7f23ea752c31ffbb80",
+    "src/components/modal/scan-details-modal.tsx": "d4edbceb49bbb6c0344b5fa6a92b03f4934b10d3730c0793dcaa985d954aa4dc",
+    "src/components/modal/scan-sheet.tsx": "df86eda95b1af5c797dc7d904ecd9bf36ecb97add3ed781adb3cab4bd7490758",
+    "src/components/modal/storage-full-modal.tsx": "7509026a4650738ee8a917c061315e7897aa2dec9a184e4a33dde35273d04be7",
+    "src/components/scan/diagnostic-scanner.tsx": "0edfd383ba8a90ca78e6d4d660d588ce57dfdc423d261b378760ce11e4d27f3a",
+    "src/components/scan/disease-coverage-card.tsx": "470475b867b9fe467b51a89d4f504f7425a7c334f404aea168015a2407ebf0e1",
+    "src/components/scan/download-prompt-card.tsx": "d8a0e5ac153112c4f40706b1b6e007dd45d39a2023c1fb607c1db1fb50c6badf",
+    "src/components/scan/guided-camera.tsx": "5c5bb179eaa8f0a8a82c98340f03899da18e30c5423dd3e464d03bdf51dd2130",
+    "src/components/scan/how-it-works-steps.tsx": "5b792396f36f61e745f177291ec1940bb03155ec38bb73bab496e4696af4b89b",
+    "src/components/scan/scan-card.tsx": "7320fdce4989b9dc1f89d62a9cc563e8143152531723484203da5d1b70ba6326",
+    "src/components/scan/scan-history-list.tsx": "7b4e8e83ee11d52aed836a1052dcffe05780874faa1d1958bb9bc0839e2ff5ac",
+    "src/components/scan/unsaved-scan-notice.tsx": "dfa86e26644481ae572d6b7bb162e21d918ec80e83676f5ea68e205b131644af",
+    "src/components/tab/about-tab.tsx": "b417378e473684235b7cefa689f0cd71e98e179f703409ab8b82d4c09d05937c",
+    "src/components/tab/diagnostics-panel.tsx": "823221128c6c8ac96098f81ce2fc7395ed0dfacdccadd048e25160f0399ef112",
+    "src/components/tab/history-tab.tsx": "f77c1f6a8a574eb590d41853583d740d78740de5972c0999dcd0ce3fe5be9bb2",
+    "src/components/tab/home-tab.tsx": "5125ac15a710247449dbfff69a1dba0625f0888ca40f3b91eb33dfb1f0bbce97",
+    "src/env.d.ts": "6d0622c35af7677a0f5910d1c1bad50b7cd461625be30a412106631b6b09876c",
+    "src/hooks/useDiagnostics.ts": "b42caa6b1a0317d725247a3c555a3359dc075937da0bac9b06fdefb780b6c16e",
+    "src/hooks/useGuidedCamera.ts": "884d51d82195e9648046674b27b70de0888e0fd30c95f0db06340977d048bd44",
+    "src/hooks/useInstallGuide.ts": "b8bbc4e6e2b10789479f68d29af438839eb306acd9bd6f26f5b2e1e4e0d25b2b",
+    "src/hooks/usePWAInstall.ts": "633caa747c44c421195739a7218117f3fdc5594bb5287467478a18dc36f7276d",
+    "src/hooks/useScanPhotoUrl.ts": "9b5777473a526efa9aeba9ecc02c352f5f6dd6fde68c4097421655e4449fa299",
+    "src/hooks/useScrollLock.ts": "1394aa6b5e53cf1611ee41a3ef0f26bad9752b741bb458654687b8e4a2dbc315",
+    "src/hooks/useSync.ts": "274add4843ea1da1bded3fa4241467577d91e634a623e0c68bbb48709d5c9cc8",
+    "src/lib/classifier.ts": "9c5fff7b507e94b80c5e05958d0fe6d642f31c85746d0f96a0dfbe6d39421556",
+    "src/lib/constants.ts": "53319d91a396f44f195f7ae1cb7eb6901b62df456c3a62335910978f06a94d77",
+    "src/lib/db.ts": "07e2fbf3ea817fbdb9a84879dd6b6a8fcd031361c385fcfacc3128f6b7c6e034",
+    "src/lib/diagnosis-step.ts": "43a5cf419e0a9ad3aa05db932d7038e171f6067971d8e72a2d60aabfcd4d4ea7",
+    "src/lib/diagnostics.ts": "a366ab23d3160561f80c15d97ecc1813d4c4e505ea58549ff6886a93b189dba0",
+    "src/lib/format-confidence.ts": "a154deb53a3fd487711b45ff678cc738892efea71c3036aa8c7bc283edf52318",
+    "src/lib/format-time-ago.ts": "618f5d58dbd6ed9d318da9d370793751c9127208dce56589c2be990a667e686e",
+    "src/lib/get-badge-styles.ts": "e947cd64c032a3e55e62a48a92f925e15ac85f53a80c3fc0ad9ed71c9145f210",
+    "src/lib/guidelines-sync.ts": "aa9d6caa18585a1bfd2c8ef92797cde754833a612fb0a900f6835b29a0cf9084",
+    "src/lib/image-hash.ts": "15062f80b8994adf5edcc5fdc77f81c31cfd68f7e8aaee1a91051413df38b5b1",
+    "src/lib/image-storage.ts": "6402e8599a293d56f4dee42099d0fdcd3116dfb485ffae9bc1de972a1be8786b",
+    "src/lib/local-scans.ts": "2bbe6a007abb6d1f35a58c6a89ff6d53e5dc22cc2a026ee90a71e4db1f65fa10",
+    "src/lib/supabase-client.ts": "2a20847bc2009726959e02dc79a1919d684fb31fd5f3f0cb0760c3a051dabb6a",
+    "src/lib/translations.ts": "bdc4e574af5d707a17f441cd034557478dc41a6e772996afb60d0c08ad8bb67f",
+    "src/sw.ts": "42e7dade4b9559c6fb9340dac529f7de02be824e8734f6275f721b4fd810e264",
+    "tsconfig.json": "4b0114fb01dce664433cdcb307c2670342d5d1e8e8f67c5beabecb0dd5cc1000"
+  },
+  "activeModelFiles": {
+    "group1-shard1of3.bin": {
+      "sha256": "54b868d3e6eea6f1b7e5577ad55b325e07c924f38e914da98e451d2b49ec7afa",
+      "bytes": 4194304
+    },
+    "group1-shard2of3.bin": {
+      "sha256": "94dddb47d3b74d0230d794235c87cbdcc45eb25dcb7bdc744c0babc4d6dc1876",
+      "bytes": 4194304
+    },
+    "group1-shard3of3.bin": {
+      "sha256": "4fdc3e6eb83ceafe8e19458a236f9eecdd600ebfed6212d3dc64f7ff66a732c0",
+      "bytes": 3497804
+    },
+    "model.json": {
+      "sha256": "b3e3ae0550f6f2dcb7990aad3e042e385b465315c92c8031dbc29c7750f7bbc8",
+      "bytes": 228393
+    },
+    "model_config.json": {
+      "sha256": "7ab107f8632000c163514717193259f3d5fee27a0bd03950557fe4914fa4af8a",
+      "bytes": 1721
+    }
+  },
+  "checks": {
+    "format": "pass; pinned project formatter",
+    "typecheck": "pass; installed dependency reads needed sandbox permission",
+    "lint": "pass",
+    "productionBuild": "pass; Next16.3.8 webpack static export",
+    "staticExport": "pass;10 required PWA/model files; all5 exported model hashes equal active files",
+    "secretScan": "pass; pinned Gitleaks8.30.1 installed before check",
+    "workflowChecks": "pass;40 focused synthetic checks, no training/model inference",
+    "originalSourceFilesUnchanged": "pass;all original run files and both executed notebooks match pre-task snapshot",
+    "evidenceCopies": "pass;130 independent source-byte-identical copies",
+    "baselineRollback": {
+      "status": "pass",
+      "scope": "Isolated fixture; actual candidate not rolled back",
+      "dryRunNoMutation": true,
+      "exactFiveBaselineAssetsRestored": true,
+      "modelLabelAndCacheRestored": true,
+      "candidateCacheEvictionRetained": true,
+      "idempotent": true,
+      "tamperedBackupRefusedBeforeMutation": true
+    },
+    "matchedBrowserOodComparison": "pass",
+    "modelAndOfflineUi": {
+      "status": "pass",
+      "uniqueCasesPassed": 18,
+      "scope": "16 M01 real-model report/save/History cases plus2 R02 real-worker offline reload/history/new inference/reconnect cases, desktop and emulated mobile Chromium",
+      "applicationFingerprint": "9018bd786093fa7f45a430e5921cf6a4e6f9314cd34747dbf0460d4cb91023ad",
+      "firstRun": {
+        "passed": 14,
+        "failed": 4,
+        "cause": "Comparison process closed shared mock server;4 mobile cases received ERR_CONNECTION_REFUSED. Original report/traces retained in ignored local review folder."
+      },
+      "rerun": {
+        "passed": 4,
+        "failed": 0,
+        "changes": "Independent mock server, same source/model fingerprint, fresh contexts; no application change or assertion weakening"
+      },
+      "physicalDevices": false,
+      "fullCoreSuite": false,
+      "r01R03": false,
+      "resultFiles": [
+        ".tools/v5-review-20261019/ui-results/results.json",
+        ".tools/v5-review-20261019/ui-rerun/results.json"
+      ],
+      "resultSha256": {
+        ".tools/v5-review-20261019/ui-results/results.json": "837d242b3c0c5d57349f418ffd47d9378b6eeafe77fab72919a38dc8e505cace",
+        ".tools/v5-review-20261019/ui-rerun/results.json": "b1cc75414fa9d7b517268f3a751076629ad7e9d8c58877078fec9016da1d8bf3"
+      }
+    },
+    "browserKerasNumericalParity": "not measured",
+    "fullCoreBrowserSuite": "not run; focused model/offline integration only",
+    "r01AndR03ReleaseReliability": "pending for this candidate",
+    "physicalDevicesAndIndependentFieldEvaluation": "pending",
+    "remoteCiAndProductionPromotion": "not performed",
+    "baselineAdoptionIdentity": "pass;all5 backup assets match original V4.5 adoption receipt",
+    "newLocalMarkdownLinks": "pass;pre-existing docs/PROGRESS.md video/...mp4 placeholder preserved",
+    "diffWhitespace": "pass",
+    "researchOnlyPushBoundary": {
+      "committedApp": "V4.5 baseline; all5 HEAD model assets match adoption receipt",
+      "localApp": "V5 candidate unchanged",
+      "runtimeChangesExcluded": 8,
+      "stagedFiles": [],
+      "pwaVersionUnchanged": "0.7.0",
+      "templateScope": "Reusable input/review cells restored; collection-specific preset preserved locally; executed results unchanged",
+      "workflowChecks": "pass;40 checks after restoring reusable template",
+      "runtimeFingerprintRechecked": "9018bd786093fa7f45a430e5921cf6a4e6f9314cd34747dbf0460d4cb91023ad",
+      "sourceEvidenceRechecked": "130 copies and both executed notebooks unchanged",
+      "newMarkdownDestinations": "pass"
+    }
+  },
+  "documentationImpactReview": "complete; trial/comparison, setup, model guide/history, architecture, performance, progress, notebook indexes and testing scope updated",
+  "unrelatedUserChangesPreserved": true,
+  "browserComparisonFile": {
+    "sha256": "70761d62dc16066214e64a1aeae25fdb426f2f8aedcea8072e20146dfacd7d9d",
+    "bytes": 3386739
+  },
+  "browserComparisonSummary": [
+    {
+      "version": "v4.5.0",
+      "count": 995,
+      "accepted": 95,
+      "rejected": 900
+    },
+    {
+      "version": "v5.0.0-candidate",
+      "count": 995,
+      "accepted": 45,
+      "rejected": 950
+    }
+  ]
+}

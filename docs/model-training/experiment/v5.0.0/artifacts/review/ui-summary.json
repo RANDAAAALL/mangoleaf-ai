@@ -1,0 +1,27 @@
+{
+  "status": "pass",
+  "uniqueCasesPassed": 18,
+  "scope": "16 M01 real-model report/save/History cases plus2 R02 real-worker offline reload/history/new inference/reconnect cases, desktop and emulated mobile Chromium",
+  "applicationFingerprint": "9018bd786093fa7f45a430e5921cf6a4e6f9314cd34747dbf0460d4cb91023ad",
+  "firstRun": {
+    "passed": 14,
+    "failed": 4,
+    "cause": "Comparison process closed shared mock server;4 mobile cases received ERR_CONNECTION_REFUSED. Original report/traces retained in ignored local review folder."
+  },
+  "rerun": {
+    "passed": 4,
+    "failed": 0,
+    "changes": "Independent mock server, same source/model fingerprint, fresh contexts; no application change or assertion weakening"
+  },
+  "physicalDevices": false,
+  "fullCoreSuite": false,
+  "r01R03": false,
+  "resultFiles": [
+    ".tools/v5-review-20261019/ui-results/results.json",
+    ".tools/v5-review-20261019/ui-rerun/results.json"
+  ],
+  "resultSha256": {
+    ".tools/v5-review-20261019/ui-results/results.json": "837d242b3c0c5d57349f418ffd47d9378b6eeafe77fab72919a38dc8e505cace",
+    ".tools/v5-review-20261019/ui-rerun/results.json": "b1cc75414fa9d7b517268f3a751076629ad7e9d8c58877078fec9016da1d8bf3"
+  }
+}

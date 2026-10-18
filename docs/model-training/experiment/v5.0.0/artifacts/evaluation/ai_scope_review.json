@@ -1,0 +1,9 @@
+{
+  "reviewMethod": "AI-assisted visual scope screening; not expert-validated botanical labels",
+  "candidateCount": 1000,
+  "retainedCount": 995,
+  "excludedCount": 5,
+  "reviewCsvSha256": "b2835ffba4cc65022e5008390f0d6bcd88ab0a9957b21f2411902a3e9ce17da6",
+  "trainingReceiptSha256": "b16c880e9ba571d19a85898634daa54d73cb5270c5df424009c3674471e722b2",
+  "notes": "AI-assisted visual scope screening of all 1000 collected candidates on 20 numbered sheets, with 17 full-size checks; 995 retained and 5 excluded for uncertain species/scope or an unidentifiable dark/texture image. No model predictions were viewed or used in selection. User confirmed no use for training, threshold tuning, temperature fitting or checkpoint selection. All supplied byte/decoded/perceptual identities matched; no exact or phash-distance<=5 matches against 5160 supplied training-manifest photos. Publisher author profiles are recorded where available, but historical source/capture provenance is unknown and full independence is not proven. This is AI-assisted screening, not expert-validated botanical ground truth or field accuracy evidence."
+}

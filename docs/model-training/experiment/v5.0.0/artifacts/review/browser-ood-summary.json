@@ -1,0 +1,56 @@
+{
+  "status": "pass",
+  "count": 995,
+  "threshold": 0.7,
+  "baseline": {
+    "version": "v4.5.0",
+    "accepted": 95,
+    "rejected": 900,
+    "falseAcceptanceRate": 0.09547738693467336
+  },
+  "candidate": {
+    "version": "v5.0.0-candidate",
+    "accepted": 45,
+    "rejected": 950,
+    "falseAcceptanceRate": 0.04522613065326633
+  },
+  "paired": {
+    "bothRejected": 898,
+    "bothAccepted": 43,
+    "v45OnlyAccepted": 52,
+    "v5OnlyAccepted": 2
+  },
+  "absoluteFalseAcceptanceReductionPercentagePoints": 5.025125628140704,
+  "relativeFalseAcceptanceReduction": 0.5263157894736842,
+  "browserVersusColabV5": {
+    "acceptanceDecisionDifferences": 20,
+    "rawClassDifferences": 127,
+    "interpretation": "Different image resize/backend pipelines; this is not a controlled canonical-input numerical parity test."
+  },
+  "browserVersion": "153.0.8010.12",
+  "backend": {
+    "modelVersion": "v5.0.0-candidate",
+    "modelAssetVersion": "model-v5.0.0-candidate",
+    "tfjs": "4.22.0",
+    "backend": "webgl",
+    "forcedFloat16": true,
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "thresholds": {
+      "confidenceThreshold": 0.7,
+      "marginThreshold": null,
+      "entropyThreshold": null
+    },
+    "classes": [
+      "Anthracnose",
+      "Bacterial Black Spot",
+      "Bacterial Canker",
+      "Healthy Fruit",
+      "Healthy Leaf",
+      "Mango Scab",
+      "Sooty Mold"
+    ]
+  },
+  "applicationFingerprint": "9018bd786093fa7f45a430e5921cf6a4e6f9314cd34747dbf0460d4cb91023ad",
+  "rawObservationsSha256": "70761d62dc16066214e64a1aeae25fdb426f2f8aedcea8072e20146dfacd7d9d",
+  "limitations": "AI-assisted scope labels; unknown capture/source independence; reused reporting pool; software GPU on Windows, no physical device or field accuracy established."
+}

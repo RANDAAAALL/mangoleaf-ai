@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-18T21:36:49.404913+00:00",
+  "status": "Local V5 candidate installed and verified; not adopted or deployed",
+  "appVersion": "0.7.0",
+  "modelVersion": "v5.0.0-candidate",
+  "cacheIdentity": "mangoleaf-model-cache-v5-0-0-candidate",
+  "trainingRun": "v5-0-0-oe-finetune-20261018T153838Z-5a6fce69",
+  "reportingRun": "v5-0-0-report-20261018T211040Z-e49c5359",
+  "trainingReceiptSha256": "b16c880e9ba571d19a85898634daa54d73cb5270c5df424009c3674471e722b2",
+  "reportingReceiptSha256": "2e261f0b200c9cd2e8cdf7c25ba74af7af005f693af9ea3134ddeac0ac41ed0c",
+  "activePublicModelFiles": {
+    "group1-shard1of3.bin": {
+      "sha256": "54b868d3e6eea6f1b7e5577ad55b325e07c924f38e914da98e451d2b49ec7afa",
+      "bytes": 4194304
+    },
+    "group1-shard2of3.bin": {
+      "sha256": "94dddb47d3b74d0230d794235c87cbdcc45eb25dcb7bdc744c0babc4d6dc1876",
+      "bytes": 4194304
+    },
+    "group1-shard3of3.bin": {
+      "sha256": "4fdc3e6eb83ceafe8e19458a236f9eecdd600ebfed6212d3dc64f7ff66a732c0",
+      "bytes": 3497804
+    },
+    "model.json": {
+      "sha256": "b3e3ae0550f6f2dcb7990aad3e042e385b465315c92c8031dbc29c7750f7bbc8",
+      "bytes": 228393
+    },
+    "model_config.json": {
+      "sha256": "7ab107f8632000c163514717193259f3d5fee27a0bd03950557fe4914fa4af8a",
+      "bytes": 1721
+    }
+  },
+  "originalExportFiles": {
+    "tfjs_model/group1-shard1of3.bin": {
+      "sha256": "54b868d3e6eea6f1b7e5577ad55b325e07c924f38e914da98e451d2b49ec7afa",
+      "bytes": 4194304
+    },
+    "tfjs_model/group1-shard2of3.bin": {
+      "sha256": "94dddb47d3b74d0230d794235c87cbdcc45eb25dcb7bdc744c0babc4d6dc1876",
+      "bytes": 4194304
+    },
+    "tfjs_model/group1-shard3of3.bin": {
+      "sha256": "4fdc3e6eb83ceafe8e19458a236f9eecdd600ebfed6212d3dc64f7ff66a732c0",
+      "bytes": 3497804
+    },
+    "tfjs_model/model.json": {
+      "sha256": "b3e3ae0550f6f2dcb7990aad3e042e385b465315c92c8031dbc29c7750f7bbc8",
+      "bytes": 228393
+    },
+    "tfjs_model/model_config.json": {
+      "sha256": "b7b536cdfdd74fb6f2d3baac911be36bf7cae9e3453be0917923702160065f20",
+      "bytes": 1340
+    }
+  },
+  "configurationChanges": "Only status and later OOD completion/provenance metadata; numerical model settings unchanged. Original export config preserved in artifacts/training/tfjs_model.",
+  "baselineBackup": ".tools/model-backups/v4.5.0-before-v5.0.0-local-test-20261019",
+  "baselineFiles": {
+    "public/model/group1-shard1of3.bin": {
+      "sha256": "3afb04fb4e127cdbe19f71e396966ddab8eb136522ebd1bc4c9eabfd68032692",
+      "bytes": 4194304
+    },
+    "public/model/group1-shard2of3.bin": {
+      "sha256": "72671218e2f2370306f99e28df46873e3063cab258463a1c9a4aec7e2b6dd619",
+      "bytes": 4194304
+    },
+    "public/model/group1-shard3of3.bin": {
+      "sha256": "075e1eabdb172384f5c5df496b211d5463eee12bc54cec6ca1d40ab0a73225d2",
+      "bytes": 3497804
+    },
+    "public/model/model.json": {
+      "sha256": "0fd24e1f0f6bd5595566b8f4aec130808fbd510208ed82abbdc4d319fd2aa2a1",
+      "bytes": 228393
+    },
+    "public/model/model_config.json": {
+      "sha256": "cf6f3089071b75f99cd4e828440ea54bbfba87d292f9faa8432a08b370084a1f",
+      "bytes": 1392
+    },
+    "src/lib/constants.ts": {
+      "sha256": "7bd72178512dd7bb4233697720f160bdcbdd96e705cd7d22024b2e79111a465a",
+      "bytes": 944
+    },
+    "src/sw.ts": {
+      "sha256": "4725b099b5b131981a4c383f2d28068e6351c4eb95165cdf7dbe74c530a849d1",
+      "bytes": 3573
+    }
+  },
+  "executedNotebooksRewritten": false,
+  "originalSourceFilesMoved": false,
+  "browserKerasProbabilityParityMeasured": false,
+  "physicalDeviceAndIndependentFieldEvaluation": "pending",
+  "publicationScope": {
+    "type": "research-only evidence",
+    "committedAppModel": "v4.5.0",
+    "pwaVersion": "0.7.0",
+    "runtimeOverridesCommitted": false,
+    "excludedRuntimePaths": [
+      "public/model/",
+      "src/lib/constants.ts",
+      "src/sw.ts",
+      "public/sw.js"
+    ],
+    "recordDescribes": "Exact uncommitted maintainer test build, not the active assets of the research-only commit"
+  }
+}

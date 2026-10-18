@@ -1,0 +1,805 @@
+{
+  "reviewDate": "2026-10-19",
+  "method": "Read-only JSON/CSV/NumPy/ZIP inspection and recomputation. No supplied Python or notebook code executed; no Keras model inference or deserialization performed. Source files unmodified.",
+  "trainingSource": "C:\\Users\\My Pc\\Desktop\\workspace\\capstone\\model\\brain\\v5.0.0\\training\\v5-0-0-oe-finetune-20261018T153838Z-5a6fce69",
+  "notebook": {
+    "path": "notebooks\\experiment\\v5.0.0\\MangoLeaf_AI_OE_Fine_Tuning_v5_0_0_Post_Training.ipynb",
+    "sha256": "6dae42fddc21e46aa7c9e894fb70fccbd69c6f353acd48053c762dc207894bbb",
+    "cells": 29,
+    "codeCells": 14,
+    "errorOutputs": [],
+    "outputsAgreeWithSavedReceipts": true
+  },
+  "receipts": {
+    "experiment_complete.json": {
+      "sha256": "b16c880e9ba571d19a85898634daa54d73cb5270c5df424009c3674471e722b2",
+      "verifiedArtifacts": 86,
+      "missing": [],
+      "mismatched": []
+    },
+    "frozen_inputs.json": {
+      "sha256": "954d4e3d31ee81bde19763f53a37f4905d339ac061fd8624bb3f10c5e82c0e99",
+      "verifiedArtifacts": 44,
+      "missing": [],
+      "mismatched": []
+    },
+    "training_state.json": {
+      "sha256": "1a65d908eccd24c5b556636ccb166f9e74ab110df95eaa5573dc2183160f50ed",
+      "verifiedArtifacts": 5,
+      "missing": [],
+      "mismatched": []
+    },
+    "calibration_complete.json": {
+      "sha256": "b761a6efff862844934f0db33395caa5d314becdb86a381688d039f947bf8c8c",
+      "verifiedArtifacts": 4,
+      "missing": [],
+      "mismatched": []
+    },
+    "evaluation_complete.json": {
+      "sha256": "b3d169a3bbd353ea39ad69c38016fe7b4fb7a2dab3b5b072f60174b56506153b",
+      "verifiedArtifacts": 2,
+      "missing": [],
+      "mismatched": []
+    },
+    "export_complete.json": {
+      "sha256": "01b52fee947f73202b7e8cb876eb726397e6cdec35c89f311d66be19cdafafc0",
+      "verifiedArtifacts": 5,
+      "missing": [],
+      "mismatched": []
+    },
+    "figure_manifest.json": {
+      "sha256": "16ece618ce2032308f7518a4dff62d883277a5916f8daf2c890eacff3a9517d8",
+      "verifiedArtifacts": 7,
+      "missing": [],
+      "mismatched": []
+    }
+  },
+  "configuration": {
+    "canonicalPlanMatchesFrozen": true,
+    "canonicalManifestMatchesFrozen": true,
+    "plan": {
+      "schemaVersion": 1,
+      "experimentVersion": "v5.0.0",
+      "modelVersion": "model-v5.0.0-candidate",
+      "classNames": [
+        "anthracnose",
+        "bacterial_black_spot",
+        "bacterial_canker",
+        "healthy_fruit",
+        "healthy_leaf",
+        "mango_scab",
+        "sooty_mold"
+      ],
+      "imageSize": [
+        224,
+        224
+      ],
+      "preprocessing": "RGB decode; bilinear 224x224 without antialias; float32 0-255; MobileNetV3 internal rescaling",
+      "parentCheckpointSha256": "ac7337a69ceed1ac1279072a4605fb47717949cc6a7ede8c725bb214ddb663ad",
+      "parentArtifacts": {
+        "training_complete.json": {
+          "sha256": "7bf59fb00836d554f25aa310bdb1f93db36a79b87ec72f5627f830e2302e3dd5",
+          "bytes": 891009
+        },
+        "stage2_best.weights.h5": {
+          "sha256": "ac7337a69ceed1ac1279072a4605fb47717949cc6a7ede8c725bb214ddb663ad",
+          "bytes": 12516800
+        },
+        "class_names.json": {
+          "sha256": "b96d0d53ca197fa056bf6e161f273009c9d93aa12371cea0339f2e09cf1ffcea",
+          "bytes": 137
+        },
+        "input_manifest.json": {
+          "sha256": "aa04c5105e2aa0a15d1ca4f46da0722c130577eb7bc62e8cef4830e45ec48d5c",
+          "bytes": 1790270
+        },
+        "plan.json": {
+          "sha256": "f412bb109e34b3b720701537e23700f3f83f04e623787b8cfc28d33d456c84c5",
+          "bytes": 2384
+        },
+        "oe_dataset_manifest.json": {
+          "sha256": "8c658260a62d9eac607422a616002618907fbdf7ebfe0df26a8a7ba8935316fe",
+          "bytes": 1173675
+        },
+        "oe_training_manifest.json": {
+          "sha256": "cade9c02c6e1e9e6d092daa3786c31bb383686643849a72399de757afe300abb",
+          "bytes": 1017132
+        },
+        "example_selection.json": {
+          "sha256": "563d7b6c66a2ccdb9b1337c53f0b5d54a033f2179055bffeb87a9f9c8c4d63e5",
+          "bytes": 5075
+        },
+        "held_out_ood_inventory.json": {
+          "sha256": "746f4fc9d9926bf573fc5913744b1d0f63810174b2ab9067f9c645457893a2ce",
+          "bytes": 234891
+        }
+      },
+      "initialWeights": "uncalibrated V4.5.0 stage2 weights; fresh optimizer state",
+      "splitPolicy": "preserve exact V4.5.0 membership; old mango test is an exploratory paired reference",
+      "splitCounts": {
+        "train": 1854,
+        "val": 398,
+        "test": 397
+      },
+      "oeCount": 2511,
+      "freshOodCount": 0,
+      "fineTuning": {
+        "epochs": 5,
+        "learning_rate": 1e-05,
+        "batch_size": 16,
+        "oe_loss_weight": 0.5,
+        "seed": 42
+      },
+      "batchNormalizationFrozen": true,
+      "modelSelection": "minimum clean mango validation loss, including epoch0 baseline",
+      "temperatureRule": "fit validation-only after weight selection; fold into logits once",
+      "thresholds": {
+        "confidenceThreshold": 0.7,
+        "marginThreshold": null,
+        "entropyThreshold": null
+      },
+      "augmentation": {
+        "flip": "horizontal_and_vertical",
+        "rotationDegrees": 30,
+        "zoom": 0.2,
+        "shear": 0.2,
+        "brightness": 0.2,
+        "contrast": 0.1
+      },
+      "trainingExecution": {
+        "policy": "serial-host-batches-v1",
+        "decodeResizeDevice": "CPU:0",
+        "augmentationDevice": "CPU:0",
+        "modelSteps": "compiled train_step/test_step; synchronize metrics before next host batch",
+        "trainingInput": "explicit batches; no tf.data generator or prefetch",
+        "oeExposure": "count only after successful synchronized training steps"
+      },
+      "augmentationReviewNotes": "Reviewed",
+      "trainingSamplesPerEpoch": 1854,
+      "oeSampling": "shuffled iterator cycles across epoch boundaries; actual and selected-checkpoint coverage are recorded",
+      "freshOodRole": "report only; never fitting, calibration or model selection",
+      "browserParityPassed": false
+    },
+    "checkpoint": {
+      "selectedEpoch": 5,
+      "validationLoss": 0.07593610137701035,
+      "epoch0ValidationLoss": 0.08137137442827225,
+      "parentRetainedIfNoImprovement": false,
+      "criterion": "minimum clean unweighted mango validation cross-entropy"
+    },
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.1045588254928589,
+        "mango_loss": 0.10226256400346756,
+        "oe_loss": 2.004564046859741,
+        "accuracy": 0.9730312824249268,
+        "val_loss": 0.10309300571680069,
+        "val_mango_loss": 0.10309300571680069,
+        "val_oe_loss": 0.0,
+        "val_accuracy": 0.9572864174842834
+      },
+      {
+        "epoch": 2,
+        "loss": 1.0870463848114014,
+        "mango_loss": 0.09128507226705551,
+        "oe_loss": 1.9915144443511963,
+        "accuracy": 0.9719525575637817,
+        "val_loss": 0.10260604321956635,
+        "val_mango_loss": 0.10260604321956635,
+        "val_oe_loss": 0.0,
+        "val_accuracy": 0.9572864174842834
+      },
+      {
+        "epoch": 3,
+        "loss": 1.0747746229171753,
+        "mango_loss": 0.08107876777648926,
+        "oe_loss": 1.9873967170715332,
+        "accuracy": 0.9811218976974487,
+        "val_loss": 0.10117842257022858,
+        "val_mango_loss": 0.10117842257022858,
+        "val_oe_loss": 0.0,
+        "val_accuracy": 0.9623115658760071
+      },
+      {
+        "epoch": 4,
+        "loss": 1.071208119392395,
+        "mango_loss": 0.07977240532636642,
+        "oe_loss": 1.9828598499298096,
+        "accuracy": 0.9784250259399414,
+        "val_loss": 0.09049513190984726,
+        "val_mango_loss": 0.09049513190984726,
+        "val_oe_loss": 0.0,
+        "val_accuracy": 0.9597989916801453
+      },
+      {
+        "epoch": 5,
+        "loss": 1.0810799598693848,
+        "mango_loss": 0.09188208729028702,
+        "oe_loss": 1.9783909320831299,
+        "accuracy": 0.9757281541824341,
+        "val_loss": 0.07593610137701035,
+        "val_mango_loss": 0.07593610137701035,
+        "val_oe_loss": 0.0,
+        "val_accuracy": 0.9623115658760071
+      }
+    ],
+    "oeExposure": {
+      "availableUniquePhotos": 2511,
+      "samplesProcessed": 9277,
+      "uniquePhotosExposed": 2511,
+      "allPhotosExposed": true,
+      "selectedCheckpointSamplesProcessed": 9277,
+      "selectedCheckpointUniqueOePhotosExposed": 2511,
+      "shuffledOrderSha256": "2f9ac8590af77508a59470357d4acb2224c6d0eccb3d7f8f5e68d487e35c34d7",
+      "sampling": "continuous shuffled cursor; short tails retained across epochs",
+      "counting": "count only after successful synchronized training steps"
+    }
+  },
+  "membership": {
+    "mango": 2649,
+    "oe": 2511,
+    "freshOodAtTraining": 0,
+    "mangoSplitCounts": {
+      "train": 1854,
+      "val": 398,
+      "test": 397
+    },
+    "classCounts": {
+      "train": {
+        "anthracnose": 346,
+        "bacterial_black_spot": 209,
+        "bacterial_canker": 350,
+        "healthy_fruit": 82,
+        "healthy_leaf": 352,
+        "mango_scab": 161,
+        "sooty_mold": 354
+      },
+      "val": {
+        "anthracnose": 74,
+        "bacterial_black_spot": 45,
+        "bacterial_canker": 75,
+        "healthy_fruit": 18,
+        "healthy_leaf": 75,
+        "mango_scab": 35,
+        "sooty_mold": 76
+      },
+      "test": {
+        "anthracnose": 74,
+        "bacterial_black_spot": 45,
+        "bacterial_canker": 75,
+        "healthy_fruit": 18,
+        "healthy_leaf": 75,
+        "mango_scab": 34,
+        "sooty_mold": 76
+      }
+    },
+    "parentMangoMembershipExactlyPreserved": true,
+    "crossSplitOverlap": {
+      "sha256": {
+        "train_val": 0,
+        "train_test": 0,
+        "val_test": 0
+      },
+      "decodedRgbSha256": {
+        "train_val": 0,
+        "train_test": 0,
+        "val_test": 0
+      },
+      "groupId": {
+        "train_val": 0,
+        "train_test": 0,
+        "val_test": 0
+      }
+    },
+    "mangoVsOeExactOverlap": {
+      "sha256": 0,
+      "decodedRgbSha256": 0
+    },
+    "crossSplitMangoPhashDistance5Flags": 0,
+    "mangoVsOePhashDistance5Flags": 0,
+    "phashRecomputed": true,
+    "mangoGroupCount": 2613,
+    "oePools": {
+      "original_oe": 2011,
+      "transferred_ood": 500
+    },
+    "knownSourceGroupCounts": {
+      "mango": 0,
+      "oe": 0
+    },
+    "knownCaptureGroupCounts": {
+      "mango": 0,
+      "oe": 0
+    },
+    "limitation": "No exact/perceptual flags do not establish source/capture independence. Original image pixels were not supplied in the training folder, so source hash values are receipt-bound metadata rather than fresh pixel rehashes."
+  },
+  "calibration": {
+    "saved": {
+      "temperature": 0.909599105656865,
+      "foldCount": 1,
+      "temperatureFoldedIntoWeights": true,
+      "fitSubset": "val",
+      "validationCount": 398,
+      "fitIncludesOE": false,
+      "fitIncludesOOD": false,
+      "beforeNll": 0.07593608955397503,
+      "afterNll": 0.07553699545524599
+    },
+    "recomputedBeforeNll": 0.07593608955397503,
+    "recomputedAfterNll": 0.07553699545524599,
+    "softmaxMaximumAbsoluteDifference": 4.3758504963964384e-07,
+    "argmaxPreserved": true,
+    "validationCorrect": 383,
+    "arrayShapes": [
+      [
+        398,
+        7
+      ],
+      [
+        398,
+        7
+      ]
+    ]
+  },
+  "mangoEvaluation": {
+    "saved": {
+      "experimentVersion": "v5.0.0",
+      "configurationHash": "5ee13fe1b483cdbfeb3fb5f4f9bb196ce6c027ca5cf06551f8aa2cb15e11372c",
+      "thresholds": {
+        "confidenceThreshold": 0.7,
+        "marginThreshold": null,
+        "entropyThreshold": null
+      },
+      "mangoTestRole": "same historical397 photos; exploratory paired reference",
+      "rawMango": {
+        "count": 397,
+        "correct": 383,
+        "correctOverAll": 0.964735516372796,
+        "accepted": 397,
+        "rejected": 0,
+        "acceptedOnlyAccuracy": 0.964735516372796,
+        "confusionMatrix": [
+          [
+            74,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            35,
+            0,
+            0,
+            0,
+            10,
+            0
+          ],
+          [
+            0,
+            0,
+            75,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            18,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            75,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            0,
+            0,
+            0,
+            31,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            75
+          ]
+        ],
+        "perClass": [
+          {
+            "class": "anthracnose",
+            "support": 74,
+            "precision": 0.9866666666666667,
+            "recall": 1.0,
+            "f1": 0.9932885906040269
+          },
+          {
+            "class": "bacterial_black_spot",
+            "support": 45,
+            "precision": 0.9210526315789473,
+            "recall": 0.7777777777777778,
+            "f1": 0.8433734939759038
+          },
+          {
+            "class": "bacterial_canker",
+            "support": 75,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          {
+            "class": "healthy_fruit",
+            "support": 18,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          {
+            "class": "healthy_leaf",
+            "support": 75,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          {
+            "class": "mango_scab",
+            "support": 34,
+            "precision": 0.7560975609756098,
+            "recall": 0.9117647058823529,
+            "f1": 0.8266666666666665
+          },
+          {
+            "class": "sooty_mold",
+            "support": 76,
+            "precision": 1.0,
+            "recall": 0.9868421052631579,
+            "f1": 0.9933774834437086
+          }
+        ]
+      },
+      "confidenceOnlyMango": {
+        "count": 397,
+        "correct": 377,
+        "correctOverAll": 0.9496221662468514,
+        "accepted": 389,
+        "rejected": 8,
+        "acceptedOnlyAccuracy": 0.9691516709511568,
+        "confusionMatrix": [
+          [
+            74,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            32,
+            0,
+            0,
+            0,
+            9,
+            0,
+            4
+          ],
+          [
+            0,
+            0,
+            75,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            17,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            74,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            2,
+            0,
+            0,
+            0,
+            30,
+            0,
+            2
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            75,
+            0
+          ]
+        ],
+        "perClass": [
+          {
+            "class": "anthracnose",
+            "support": 74,
+            "precision": 0.9866666666666667,
+            "recall": 1.0,
+            "f1": 0.9932885906040269
+          },
+          {
+            "class": "bacterial_black_spot",
+            "support": 45,
+            "precision": 0.9411764705882353,
+            "recall": 0.7111111111111111,
+            "f1": 0.8101265822784811
+          },
+          {
+            "class": "bacterial_canker",
+            "support": 75,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          {
+            "class": "healthy_fruit",
+            "support": 18,
+            "precision": 1.0,
+            "recall": 0.9444444444444444,
+            "f1": 0.9714285714285714
+          },
+          {
+            "class": "healthy_leaf",
+            "support": 75,
+            "precision": 1.0,
+            "recall": 0.9866666666666667,
+            "f1": 0.9932885906040269
+          },
+          {
+            "class": "mango_scab",
+            "support": 34,
+            "precision": 0.7692307692307693,
+            "recall": 0.8823529411764706,
+            "f1": 0.8219178082191781
+          },
+          {
+            "class": "sooty_mold",
+            "support": 76,
+            "precision": 1.0,
+            "recall": 0.9868421052631579,
+            "f1": 0.9933774834437086
+          }
+        ]
+      },
+      "freshOod": null,
+      "freshOodStatus": "pending; no unseen pool supplied",
+      "calibratedModelSha256": "4e124aa15875e180736e818732a0e899483caaf9b71e8640ad44a1308b53dc1f",
+      "browserParityPassed": false,
+      "old500OodExcludedFromEvaluation": true,
+      "sourceIndependenceLimit": "Unknown capture/source provenance remains unknown. Counts do not establish independent sampling."
+    },
+    "csvNumericIssues": [],
+    "rawConfusionMatrixRecomputedMatches": true,
+    "gatedConfusionMatrixRecomputedMatches": true,
+    "rawMacroF1": 0.9509580335271866,
+    "gatedMacroF1": 0.9404896609397133,
+    "wrongAccepted": 12
+  },
+  "serialization": {
+    "kerasVersion": "3.15.1",
+    "nestedBatchNormLayers": 46,
+    "trainableBatchNormLayers": 0,
+    "lambdaLayers": 0,
+    "runtime": "TensorFlow 2.19.0 on Python 3.12.13",
+    "tfjsFormat": "graph-model",
+    "converter": "TensorFlow.js Converter v4.22.0",
+    "signature": {
+      "inputs": {
+        "image": {
+          "name": "image:0",
+          "dtype": "DT_FLOAT",
+          "tensorShape": {
+            "dim": [
+              {
+                "size": "-1"
+              },
+              {
+                "size": "224"
+              },
+              {
+                "size": "224"
+              },
+              {
+                "size": "3"
+              }
+            ]
+          }
+        }
+      },
+      "outputs": {
+        "output_0": {
+          "name": "Identity:0",
+          "dtype": "DT_FLOAT",
+          "tensorShape": {
+            "dim": [
+              {
+                "size": "-1"
+              },
+              {
+                "size": "7"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "nodeOperations": {
+      "Const": 212,
+      "Placeholder": 1,
+      "Mul": 72,
+      "AddV2": 54,
+      "_FusedConv2D": 37,
+      "Relu6": 28,
+      "DepthwiseConv2dNative": 15,
+      "Relu": 6,
+      "Conv2D": 10,
+      "AddN": 10,
+      "Pad": 4,
+      "Mean": 9,
+      "_FusedMatMul": 1,
+      "Softmax": 1,
+      "Identity": 1
+    },
+    "weightSpecCount": 212,
+    "weightDtypes": {
+      "float32": 199,
+      "int32": 13
+    },
+    "quantizationSpecsPresent": false,
+    "expectedWeightBytes": 11886412,
+    "actualShardBytes": 11886412,
+    "candidateZipMatchesExportFiles": true,
+    "exportFiles": {
+      "tfjs_model/group1-shard1of3.bin": {
+        "sha256": "54b868d3e6eea6f1b7e5577ad55b325e07c924f38e914da98e451d2b49ec7afa",
+        "bytes": 4194304
+      },
+      "tfjs_model/group1-shard2of3.bin": {
+        "sha256": "94dddb47d3b74d0230d794235c87cbdcc45eb25dcb7bdc744c0babc4d6dc1876",
+        "bytes": 4194304
+      },
+      "tfjs_model/group1-shard3of3.bin": {
+        "sha256": "4fdc3e6eb83ceafe8e19458a236f9eecdd600ebfed6212d3dc64f7ff66a732c0",
+        "bytes": 3497804
+      },
+      "tfjs_model/model.json": {
+        "sha256": "b3e3ae0550f6f2dcb7990aad3e042e385b465315c92c8031dbc29c7750f7bbc8",
+        "bytes": 228393
+      },
+      "tfjs_model/model_config.json": {
+        "sha256": "b7b536cdfdd74fb6f2d3baac911be36bf7cae9e3453be0917923702160065f20",
+        "bytes": 1340
+      }
+    },
+    "browserProbabilityParityMeasured": false
+  },
+  "preservedDependencySecurity": {
+    "trainingDependencyCount": 70,
+    "trainingVulnerabilityFindings": 0,
+    "providerPipCheckReturnCode": 1,
+    "providerCompatibilityFindings": [
+      "ipython 7.34.0 requires jedi, which is not installed.",
+      "google-colab 1.0.0 has requirement requests==2.32.4, but you have requests 2.33.0.",
+      "gradio 5.50.0 has requirement pillow<12.0,>=8.0, but you have pillow 12.3.0.",
+      "numba 0.60.0 has requirement numpy<2.1,>=1.22, but you have numpy 2.1.3.",
+      "sklearn-compat 0.1.5 has requirement scikit-learn<1.9,>=1.2, but you have scikit-learn 1.9.1.",
+      ""
+    ],
+    "converterAuditStatus": "unresolved",
+    "converterAuditReturnCode": 1,
+    "converterExecutionAllowedHistorically": true,
+    "converterFindings": [
+      {
+        "name": "setuptools",
+        "version": "81.0.0",
+        "advisories": [
+          "PYSEC-2026-3447",
+          "PYSEC-2026-3447"
+        ]
+      },
+      {
+        "name": "wheel",
+        "version": "0.45.1",
+        "advisories": [
+          "CVE-2026-24049"
+        ]
+      }
+    ],
+    "converterOperationReviews": [
+      {
+        "package": "setuptools",
+        "version": "81.0.0",
+        "advisory": "GHSA-h35f-9h28-mq5c",
+        "status": "unresolved advisory; affected source-distribution build/publish operation absent",
+        "reason": "TensorFlow Hub imports pkg_resources. Installation is wheels-only through uv; this environment only converts SavedModels and never builds or publishes source distributions.",
+        "source": "https://github.com/advisories/GHSA-h35f-9h28-mq5c"
+      },
+      {
+        "package": "wheel",
+        "version": "0.45.1",
+        "advisory": "GHSA-8rrh-rw8j-w5fx",
+        "status": "unresolved advisory; affected wheel unpack/RECORD permission operation absent",
+        "reason": "TFDF requires wheel and TensorFlow.js requires packaging 23.x. uv installs published binary wheels independently; this converter never calls wheel.cli.unpack or WheelFile permission extraction.",
+        "source": "https://github.com/advisories/GHSA-8rrh-rw8j-w5fx"
+      }
+    ],
+    "currentAdvisoryRevalidationPerformed": false,
+    "limitation": "Historical audit records retained, not a current security assertion or installation recommendation. Converter vulnerabilities remain unresolved and are not suppressed."
+  },
+  "comparisonSummary": {
+    "v45RawCorrect": 384,
+    "v5RawCorrect": 383,
+    "denominator": 397,
+    "v45ConfidenceOnly": {
+      "correctAccepted": 377,
+      "wrongAccepted": 12,
+      "rejected": 8
+    },
+    "v5ConfidenceOnly": {
+      "correctAccepted": 377,
+      "wrongAccepted": 12,
+      "rejected": 8
+    },
+    "interpretation": "No demonstrated overall improvement. One fewer raw correct; confidence-only aggregate outcomes tie. Separate reporting pools cannot rank OOD quality directly. Detailed paired/new OOD analysis belongs to the evaluation audit."
+  },
+  "copyRecommendations": {
+    "publicModel": "Copy only the five original tfjs_model files together after verifying a complete V4.5 rollback bundle; preserve candidate metadata and folded temperature; keep version labels consistent. Source assets remain untouched.",
+    "figures": "Copy all seven figures to figures/training with original bytes and retain figure_manifest.json.",
+    "artifacts": "Copy measured JSON/CSV/NumPy, receipts, frozen helper, provenance, audit records and exact TFJS export under artifacts/training. If excluding large model/probe bundles, record omissions and hash/path mapping separately without rewriting source receipts.",
+    "rollback": "Preserve the original five V4.5 public/model files plus active source version/gate configuration and hashes; rollback must restore both assets and labels.",
+    "notebooks": "Preserve executed outputs and bytes; do not regenerate or overwrite completed notebooks."
+  },
+  "limits": [
+    "Repeated historical study mango set; exploratory paired comparison, not independent field accuracy.",
+    "Training receipt and exported model_config correctly preserve their historical pre-OOD status; later evaluation has a separate completion record. Do not edit those archived bytes to update status.",
+    "Known black-spot/scab confusion persists.",
+    "No browser/Keras numerical parity or physical-device performance is established by conversion.",
+    "Grad-CAM illustrates selected validation images; it is not correctness evidence. HealthyLeaf_1 remains predicted anthracnose in figure_manifest."
+  ]
+}

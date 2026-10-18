@@ -1,0 +1,28 @@
+{
+  "sourceRun": "/content/drive/MyDrive/v4.5.0-threshold-review",
+  "artifacts": {
+    "threshold_fitting_complete.json": {
+      "sha256": "22d4d6da5dfc126444c3764a2cd481df560086763cdafa2a9222820ef1477b96",
+      "bytes": 10648
+    },
+    "ood_inventory.json": {
+      "sha256": "b9847b050c9302ab2fe285cb59fb06dfe703aab0141d364dc3f9225f648376a9",
+      "bytes": 249651
+    },
+    "ood_review.csv": {
+      "sha256": "d25fec427170e38314c0bdf292701d8abdfe41b87fb0332a244daddac93a9053",
+      "bytes": 306439
+    },
+    "similarity_review.csv": {
+      "sha256": "e84ebe489d6388e148be00676b124aa760c43159ffaa63660a7706fc92f2471b",
+      "bytes": 107
+    },
+    "evaluation_inputs.json": {
+      "sha256": "b2b19112cda8ae16fd756417d115c9264de3880c84df55604c1b50748953eca2",
+      "bytes": 595366
+    }
+  },
+  "interpretation": "Preserved researcher declarations, not independent inspection or new evaluation evidence.",
+  "reusedPhotos": 500,
+  "newTrainingUse": true
+}

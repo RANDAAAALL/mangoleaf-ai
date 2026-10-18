@@ -1,0 +1,14 @@
+{
+  "parent_threshold_run": "/content/drive/MyDrive/v4.5.0-threshold-review",
+  "fresh_ood": null,
+  "allow_shared_inputs": true,
+  "epochs": 5,
+  "learning_rate": 1e-05,
+  "batch_size": 16,
+  "oe_loss_weight": 0.5,
+  "seed": 42,
+  "expected_oe_count": 2511,
+  "parent_run": "/content/drive/MyDrive/mangoleaf_experiments/v4.5.0/training/v4-5-0-training-20261011T063913Z-40b7b0fe",
+  "old_ood": "/content/drive/MyDrive/mango_ood_test_v4_4_0",
+  "output_root": "/content/drive/MyDrive/mangoleaf_experiments/v5.0.0/training"
+}

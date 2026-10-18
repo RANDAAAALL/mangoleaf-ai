@@ -1,0 +1,16 @@
+
+2026-10-18 16:58:18.301707: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1792342698.330469   21374 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1792342698.338871   21374 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1792342698.372047   21374 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1792342698.372090   21374 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1792342698.372094   21374 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1792342698.372096   21374 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+🌲 Try https://ydf.readthedocs.io, the successor of TensorFlow Decision Forests with more features and faster training!
+/content/mangoleaf-v500-converter/v5-0-0-oe-finetune-20261018T153838Z-5a6fce69-6a73c5aa/lib/python3.11/site-packages/tensorflow_hub/__init__.py:61: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import parse_version
+2026-10-18 16:58:32.798219: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+I0000 00:00:1792342713.992003   21374 devices.cc:67] Number of eligible GPUs (core count >= 8, compute capability >= 0.0): 0
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1792342713.992347   21374 single_machine.cc:374] Starting new session

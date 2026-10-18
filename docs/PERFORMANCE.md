@@ -1,5 +1,17 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## V5.0.0 local candidate (October 19, 2026)
+
+The completed V5 model is installed only in the maintainer's uncommitted workspace with unchanged seven-output architecture, full-photo canvas preprocessing, float32 browser weights, forced-float16 WebGL setting, and confidence-only 0.70 gate. Its three shards total 11,886,412 bytes, the same shard size as V4.5. The graph JSON and shard bytes differ; equal size does not establish equal predictions, latency or device memory use. The new cache identity and precache revisions replace older served model bytes; the exact V4.5 backup stays outside `public/`.
+
+The [V5 review](model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md) separates training and inference observations. Five fine-tuning epochs and the observed 53-second Colab CPU OOD report are run-specific, not phone performance benchmarks. The local matched browser follow-up records its actual renderer/backend and preprocessing, without claiming Keras numerical parity or physical-device speed, memory, heat, battery, or reliability. R01/R03 and physical-device evidence remain tied to their exact tested build; no new result is inferred from successful export or repeated scores.
+
+## V5.0.0 serial training batches (prepared October 18, 2026)
+
+The experimental Colab helper now completes CPU image decoding, the existing bilinear resize, and augmentation before each compiled model update. It synchronizes returned metrics before loading the next batch. Training/validation no longer use the nested generator or input prefetch implicated by the supplied augmentation tracebacks. Prediction source generators also finish CPU loading before yielding. The full data collection is not copied into RAM; host input memory is bounded by the active batches. Model operations remain GPU-eligible.
+
+This deliberately removes input/model overlap. It may increase wall-clock time; no speed, memory, or thermal improvement is measured or guaranteed. The augmentation recipe and model objective remain the same, but device placement and random realizations can change. OE exposure now counts successful synchronized updates rather than producer pulls. A small Step 2 execution probe can reject an incompatible runtime before the long Drive inventory; passing it does not establish full-run reliability. The [trial follow-up](model-training/experiment/v5.0.0/TRIAL_v5_0_0.md#october-18-2026-serial-training-batch-correction) distinguishes the reported failures, local fixtures, and pending full Colab evidence. This workflow is separate from browser inference and does not alter PWA runtime performance.
+
 ## Local diagnostics and raw confidence (prepared v0.7.0, October 17, 2026)
 
 Prepared v0.7.0 adds opt-in diagnostics in About and retains raw classifier confidence in new reports. Model V4.5.0, its assets/cache identity, preprocessing, and the 0.70 confidence-only rejection rule are unchanged. Current source retains the maintainer's explicit `WEBGL_FORCE_F16_TEXTURES=true` setting; it does not use the earlier automatic 32-bit-first choice or retry on GPU memory failure. The [release record](versions/history/PWA_RELEASE_HISTORY.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026) distinguishes repository preparation, CI, and manual production promotion.

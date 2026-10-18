@@ -1,2 +1,4 @@
 # Git runs hooks through a shell, which needs LF endings on Windows too.
 .husky/* text eol=lf
+# Both V5 notebooks verify the helper's exact bytes before running.
+notebooks/experiment/v5.0.0/v5_workflow.py text eol=lf

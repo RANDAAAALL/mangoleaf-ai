@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "syntheticOnly": true,
+  "modelAccuracyEvidence": false,
+  "trainingBatches": 3,
+  "mangoSamples": 46,
+  "oeSamples": 47,
+  "validationSamples": 17,
+  "modelProbeDevice": "/job:localhost/replica:0/task:0/device:GPU:0",
+  "executionPolicy": {
+    "policy": "serial-host-batches-v1",
+    "decodeResizeDevice": "CPU:0",
+    "augmentationDevice": "CPU:0",
+    "modelSteps": "compiled train_step/test_step; synchronize metrics before next host batch",
+    "trainingInput": "explicit batches; no tf.data generator or prefetch",
+    "oeExposure": "count only after successful synchronized training steps"
+  }
+}

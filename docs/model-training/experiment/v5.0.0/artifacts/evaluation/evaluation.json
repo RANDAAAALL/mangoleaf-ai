@@ -1,0 +1,21 @@
+{
+  "experimentVersion": "v5.0.0",
+  "freshOod": {
+    "count": 995,
+    "rejected": 942,
+    "falseAccepted": 53,
+    "rejectionRate": 0.9467336683417086,
+    "falseAcceptanceRate": 0.053266331658291456
+  },
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments/v5.0.0/training/v5-0-0-oe-finetune-20261018T153838Z-5a6fce69",
+  "calibratedModelSha256": "4e124aa15875e180736e818732a0e899483caaf9b71e8640ad44a1308b53dc1f",
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": null,
+    "entropyThreshold": null
+  },
+  "modelWeightsChanged": false,
+  "browserParityPassed": false,
+  "adopted": false,
+  "independenceLimit": "Researcher-declared fresh scope; unknown source/capture provenance remains unknown."
+}

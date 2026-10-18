@@ -1,0 +1,57 @@
+{
+  "parentRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.5.0/training/v4-5-0-training-20261011T063913Z-40b7b0fe",
+  "parentArtifacts": {
+    "training_complete.json": {
+      "sha256": "7bf59fb00836d554f25aa310bdb1f93db36a79b87ec72f5627f830e2302e3dd5",
+      "bytes": 891009
+    },
+    "stage2_best.weights.h5": {
+      "sha256": "ac7337a69ceed1ac1279072a4605fb47717949cc6a7ede8c725bb214ddb663ad",
+      "bytes": 12516800
+    },
+    "class_names.json": {
+      "sha256": "b96d0d53ca197fa056bf6e161f273009c9d93aa12371cea0339f2e09cf1ffcea",
+      "bytes": 137
+    },
+    "input_manifest.json": {
+      "sha256": "aa04c5105e2aa0a15d1ca4f46da0722c130577eb7bc62e8cef4830e45ec48d5c",
+      "bytes": 1790270
+    },
+    "plan.json": {
+      "sha256": "f412bb109e34b3b720701537e23700f3f83f04e623787b8cfc28d33d456c84c5",
+      "bytes": 2384
+    },
+    "oe_dataset_manifest.json": {
+      "sha256": "8c658260a62d9eac607422a616002618907fbdf7ebfe0df26a8a7ba8935316fe",
+      "bytes": 1173675
+    },
+    "oe_training_manifest.json": {
+      "sha256": "cade9c02c6e1e9e6d092daa3786c31bb383686643849a72399de757afe300abb",
+      "bytes": 1017132
+    },
+    "example_selection.json": {
+      "sha256": "563d7b6c66a2ccdb9b1337c53f0b5d54a033f2179055bffeb87a9f9c8c4d63e5",
+      "bytes": 5075
+    },
+    "held_out_ood_inventory.json": {
+      "sha256": "746f4fc9d9926bf573fc5913744b1d0f63810174b2ab9067f9c645457893a2ce",
+      "bytes": 234891
+    }
+  },
+  "oldOodRoot": "/content/drive/.shortcut-targets-by-id/1zW9Hv_9W1EVwuWaYrxcfNUblMKHVtSMx/mango_ood_test_v4_4_0",
+  "selectedInputPaths": {
+    "parent_run": "/content/drive/MyDrive/mangoleaf_experiments/v4.5.0/training/v4-5-0-training-20261011T063913Z-40b7b0fe",
+    "old_ood": "/content/drive/MyDrive/mango_ood_test_v4_4_0",
+    "parent_threshold_run": "/content/drive/MyDrive/v4.5.0-threshold-review",
+    "fresh_ood": null
+  },
+  "resolvedInputPaths": {
+    "parentRun": "/content/drive/MyDrive/mangoleaf_experiments/v4.5.0/training/v4-5-0-training-20261011T063913Z-40b7b0fe",
+    "oldOodRoot": "/content/drive/.shortcut-targets-by-id/1zW9Hv_9W1EVwuWaYrxcfNUblMKHVtSMx/mango_ood_test_v4_4_0",
+    "parentThresholdRun": "/content/drive/MyDrive/v4.5.0-threshold-review",
+    "freshOod": null
+  },
+  "checkpointKind": "uncalibrated weights only; fresh optimizer, not exact resume",
+  "parentCheckpointSha256": "ac7337a69ceed1ac1279072a4605fb47717949cc6a7ede8c725bb214ddb663ad",
+  "sourceWritesPermitted": false
+}

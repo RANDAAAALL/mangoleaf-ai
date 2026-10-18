@@ -7,7 +7,7 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 
 MangoLeaf AI is an offline-first progressive web application that helps identify possible diseases affecting mango leaves and fruit. Classification runs in the browser with TensorFlow.js, scan reports and compressed photos stay in this browser's IndexedDB, and Supabase publishes shared treatment guidelines.
 
-**Current repository model: V4.5.0; prepared PWA version: `0.7.0`.** It uses the 0.70 confidence gate only; margin and entropy rejection are disabled. The [v0.7.0 prepared release](docs/versions/history/PWA_RELEASE_HISTORY.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026) adds optional local diagnostics and preserves raw confidence for new reports, with a percentage display of up to one decimal rounded down. The [V4.5.0 trial](./docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) and [model version guide](docs/versions/AI_MODEL_VERSIONING.md) retain model evidence separately. Release validation and manual production promotion remain separate; a pushed version label does not establish deployment. V5.0.0 remains untrained and on standby.
+**Repository model: V4.5.0; prepared PWA version: `0.7.0`.** The committed app uses confidence >=0.70 only; margin and entropy are disabled. V5 training, figures, and evaluation are research evidence in the [V5 review](docs/model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md). The maintainer separately tests an uncommitted V5 override locally. The research-only push excludes `public/model/`, `src/lib/constants.ts`, `src/sw.ts`, and generated `public/sw.js`, so it does not replace the committed app model or require a new PWA version. See the [model guide](docs/versions/AI_MODEL_VERSIONING.md) and [prepared v0.7.0 release](docs/versions/history/PWA_RELEASE_HISTORY.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026) for separate adoption and promotion requirements.
 
 ## Local diagnostics and confidence display (prepared v0.7.0)
 
@@ -120,7 +120,7 @@ The development-origin allowance supports browser requests through the tunnel; i
 
 ### Experimental models
 
-V5.0.0 remains an untrained candidate workflow on standby. Repository adoption of V4.5.0 is complete; production deployment remains separate.
+V5.0.0 has incomplete Colab fitting attempts. The [serial-batch correction and retry guide](./docs/model-training/experiment/v5.0.0/TRIAL_v5_0_0.md#october-18-2026-serial-training-batch-correction) prepares a fresh attempt; no completed V5.0.0 training or evaluation handoff is established. Repository adoption of V4.5.0 is complete; production deployment remains separate.
 
 - [All experimental training notebooks](./notebooks/experiment/README.md)
 - [V4.5.0 Outlier Exposure inputs, notebooks, and run guide](./docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md)

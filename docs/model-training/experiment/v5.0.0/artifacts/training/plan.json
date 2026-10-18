@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "experimentVersion": "v5.0.0",
+  "modelVersion": "model-v5.0.0-candidate",
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "imageSize": [
+    224,
+    224
+  ],
+  "preprocessing": "RGB decode; bilinear 224x224 without antialias; float32 0-255; MobileNetV3 internal rescaling",
+  "parentCheckpointSha256": "ac7337a69ceed1ac1279072a4605fb47717949cc6a7ede8c725bb214ddb663ad",
+  "parentArtifacts": {
+    "training_complete.json": {
+      "sha256": "7bf59fb00836d554f25aa310bdb1f93db36a79b87ec72f5627f830e2302e3dd5",
+      "bytes": 891009
+    },
+    "stage2_best.weights.h5": {
+      "sha256": "ac7337a69ceed1ac1279072a4605fb47717949cc6a7ede8c725bb214ddb663ad",
+      "bytes": 12516800
+    },
+    "class_names.json": {
+      "sha256": "b96d0d53ca197fa056bf6e161f273009c9d93aa12371cea0339f2e09cf1ffcea",
+      "bytes": 137
+    },
+    "input_manifest.json": {
+      "sha256": "aa04c5105e2aa0a15d1ca4f46da0722c130577eb7bc62e8cef4830e45ec48d5c",
+      "bytes": 1790270
+    },
+    "plan.json": {
+      "sha256": "f412bb109e34b3b720701537e23700f3f83f04e623787b8cfc28d33d456c84c5",
+      "bytes": 2384
+    },
+    "oe_dataset_manifest.json": {
+      "sha256": "8c658260a62d9eac607422a616002618907fbdf7ebfe0df26a8a7ba8935316fe",
+      "bytes": 1173675
+    },
+    "oe_training_manifest.json": {
+      "sha256": "cade9c02c6e1e9e6d092daa3786c31bb383686643849a72399de757afe300abb",
+      "bytes": 1017132
+    },
+    "example_selection.json": {
+      "sha256": "563d7b6c66a2ccdb9b1337c53f0b5d54a033f2179055bffeb87a9f9c8c4d63e5",
+      "bytes": 5075
+    },
+    "held_out_ood_inventory.json": {
+      "sha256": "746f4fc9d9926bf573fc5913744b1d0f63810174b2ab9067f9c645457893a2ce",
+      "bytes": 234891
+    }
+  },
+  "initialWeights": "uncalibrated V4.5.0 stage2 weights; fresh optimizer state",
+  "splitPolicy": "preserve exact V4.5.0 membership; old mango test is an exploratory paired reference",
+  "splitCounts": {
+    "train": 1854,
+    "val": 398,
+    "test": 397
+  },
+  "oeCount": 2511,
+  "freshOodCount": 0,
+  "fineTuning": {
+    "epochs": 5,
+    "learning_rate": 1e-05,
+    "batch_size": 16,
+    "oe_loss_weight": 0.5,
+    "seed": 42
+  },
+  "batchNormalizationFrozen": true,
+  "modelSelection": "minimum clean mango validation loss, including epoch0 baseline",
+  "temperatureRule": "fit validation-only after weight selection; fold into logits once",
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": null,
+    "entropyThreshold": null
+  },
+  "augmentation": {
+    "flip": "horizontal_and_vertical",
+    "rotationDegrees": 30,
+    "zoom": 0.2,
+    "shear": 0.2,
+    "brightness": 0.2,
+    "contrast": 0.1
+  },
+  "trainingExecution": {
+    "policy": "serial-host-batches-v1",
+    "decodeResizeDevice": "CPU:0",
+    "augmentationDevice": "CPU:0",
+    "modelSteps": "compiled train_step/test_step; synchronize metrics before next host batch",
+    "trainingInput": "explicit batches; no tf.data generator or prefetch",
+    "oeExposure": "count only after successful synchronized training steps"
+  },
+  "augmentationReviewNotes": "Reviewed",
+  "trainingSamplesPerEpoch": 1854,
+  "oeSampling": "shuffled iterator cycles across epoch boundaries; actual and selected-checkpoint coverage are recorded",
+  "freshOodRole": "report only; never fitting, calibration or model selection",
+  "browserParityPassed": false
+}

@@ -27,6 +27,13 @@ CLASS_NAMES = ['anthracnose', 'bacterial_black_spot', 'bacterial_canker',
                'healthy_fruit', 'healthy_leaf', 'mango_scab', 'sooty_mold']
 EXPECTED_SPLITS = {'train': 1854, 'val': 398, 'test': 397}
 PREPROCESSING = 'RGB decode; bilinear 224x224 without antialias; float32 0-255; MobileNetV3 internal rescaling'
+TRAINING_EXECUTION = {
+    'policy': 'serial-host-batches-v1',
+    'decodeResizeDevice': 'CPU:0', 'augmentationDevice': 'CPU:0',
+    'modelSteps': 'compiled train_step/test_step; synchronize metrics before next host batch',
+    'trainingInput': 'explicit batches; no tf.data generator or prefetch',
+    'oeExposure': 'count only after successful synchronized training steps',
+}
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.webp'}
 MAX_IMAGE_BYTES = 32 * 1024 * 1024
 # The frozen approved OE pool includes 63,700,992-pixel camera photos.
@@ -376,13 +383,95 @@ def make_model():
 def dataset(rows, *, labelled=False, batch_size=16):
     def examples():
         for row in rows:
-            pixels = load_pixels(row['path']).numpy().astype(np.float32)
+            with tf.device('/CPU:0'):
+                pixels = load_pixels(row['path']).numpy().astype(np.float32)
             yield (pixels, np.int32(CLASS_NAMES.index(row['label']))) if labelled else pixels
     signature = tf.TensorSpec((224, 224, 3), tf.float32)
     if labelled:
         signature = (signature, tf.TensorSpec((), tf.int32))
     return tf.data.Dataset.from_generator(examples, output_signature=signature).apply(
         tf.data.experimental.assert_cardinality(len(rows))).batch(batch_size).prefetch(1)
+
+
+def load_host_batch(rows, *, labelled=False, layers=None):
+    # Complete CPU work before any model step; never suspend a device scope at yield.
+    with tf.device('/CPU:0'):
+        pixels = np.stack([load_pixels(row['path']).numpy() for row in rows]).astype(np.float32, copy=False)
+        if layers is not None:
+            output = augment_batch(pixels, layers)
+            if 'CPU:' not in output.device:
+                raise RuntimeError('Training augmentation did not execute on CPU.')
+            pixels = output.numpy()
+    if pixels.shape != (len(rows), 224, 224, 3) or not np.isfinite(pixels).all():
+        raise RuntimeError('Invalid completed host batch.')
+    return (pixels, np.asarray([CLASS_NAMES.index(row['label']) for row in rows], dtype=np.int32)) if labelled else pixels
+
+
+def compiled_training_steps(trainer):
+    pixels = tf.TensorSpec((None, 224, 224, 3), tf.float32)
+    labels = tf.TensorSpec((None,), tf.int32)
+    train = tf.function(trainer.train_step,
+                        input_signature=[({'mango': pixels, 'oe': pixels}, labels)], jit_compile=False)
+    validate = tf.function(trainer.test_step, input_signature=[(pixels, labels)], jit_compile=False)
+    return train, validate
+
+
+def synchronized_metrics(values):
+    # Reading all results also waits for the compiled model step to finish.
+    result = {key: float(value.numpy()) for key, value in values.items()}
+    if not result or not all(math.isfinite(value) for value in result.values()):
+        raise RuntimeError('Non-finite training/validation step metrics.')
+    return result
+
+
+def validate_host_batches(trainer, step, rows, batch_size):
+    trainer.reset_metrics()
+    if not rows:
+        raise RuntimeError('Validation requires the preserved mango validation photos.')
+    for start in range(0, len(rows), batch_size):
+        metrics = synchronized_metrics(step(load_host_batch(rows[start:start + batch_size], labelled=True)))
+    return metrics
+
+
+def verify_serial_training_runtime(device):
+    # Exercise real compiled updates before the expensive Drive inventory.
+    # These synthetic inputs and tiny classifier provide no model accuracy evidence.
+    from PIL import Image
+    fixture = setup_directory / 'serial-batch-fixture.png'
+    Image.new('RGB', (224, 224), (71, 127, 193)).save(fixture)
+    row = {'path': str(fixture), 'label': CLASS_NAMES[0]}
+    with tf.device(device):
+        inputs = tf.keras.Input((224, 224, 3))
+        pooled = tf.keras.layers.GlobalAveragePooling2D()(inputs)
+        outputs = tf.keras.layers.Dense(7)(pooled / 255.0)
+        classifier = tf.keras.Model(inputs, outputs)
+    trainer = OETrainer(classifier, np.ones(7, dtype=np.float32), 0.5)
+    trainer.compile(optimizer=tf.keras.optimizers.Adam(1e-5), jit_compile=False)
+    train, validate = compiled_training_steps(trainer)
+    mango_layers, oe_layers = augmentation_layers(10042), augmentation_layers(20042)
+    trainer.reset_metrics()
+    sizes = [(16, 16), (14, 16), (16, 15)]
+    for mango_count, oe_count in sizes:
+        images, labels = load_host_batch([row] * mango_count, labelled=True, layers=mango_layers)
+        outliers = load_host_batch([row] * oe_count, layers=oe_layers)
+        synchronized_metrics(train(({'mango': images, 'oe': outliers}, labels)))
+    counts = (int(trainer.optimizer.iterations.numpy()),
+              int(trainer.accuracy_tracker.count.numpy()), int(trainer.oe_tracker.count.numpy()))
+    if counts != (3, 46, 47):
+        raise RuntimeError('Compiled training steps lost optimizer updates or accumulated metric counts.')
+    validate_host_batches(trainer, validate, [row] * 17, 16)
+    if int(trainer.accuracy_tracker.count.numpy()) != 17:
+        raise RuntimeError('Compiled validation did not retain its short final batch.')
+    probe = classifier(tf.zeros((1, 224, 224, 3)), training=False)
+    if device == '/GPU:0' and 'GPU:' not in probe.device:
+        raise RuntimeError('Serial training classifier probe did not execute on GPU.')
+    result = {'passed': True, 'syntheticOnly': True, 'modelAccuracyEvidence': False,
+              'trainingBatches': 3, 'mangoSamples': 46, 'oeSamples': 47,
+              'validationSamples': 17, 'modelProbeDevice': probe.device,
+              'executionPolicy': TRAINING_EXECUTION}
+    (setup_directory / 'serial-training-probe.json').write_text(json.dumps(result, indent=2) + '\n')
+    print('Serial training execution probe passed: 3 controlled batches; not an accuracy evaluation.')
+    return result
 
 
 class Experiment:
@@ -653,6 +742,7 @@ class Experiment:
             'thresholds': {'confidenceThreshold': 0.70, 'marginThreshold': None, 'entropyThreshold': None},
             'augmentation': {'flip': 'horizontal_and_vertical', 'rotationDegrees': 30, 'zoom': 0.2,
                              'shear': 0.2, 'brightness': 0.2, 'contrast': 0.1},
+            'trainingExecution': TRAINING_EXECUTION,
             'augmentationReviewNotes': augmentation_review_notes,
             'trainingSamplesPerEpoch': len(self.train_rows),
             'oeSampling': 'shuffled iterator cycles across epoch boundaries; actual and selected-checkpoint coverage are recorded',
@@ -709,10 +799,11 @@ class Experiment:
     def augmentation_preview(self):
         fig, axes = plt.subplots(7, 8, figsize=(24, 23))
         for index, row in enumerate(self.examples):
-            pixels = load_pixels(row['path'])[None]
-            layers = augmentation_layers(self.config['seed'] + 30000 + index * 10)
-            views = [pixels] + [tf.clip_by_value(layer(pixels, training=True), 0, 255) for layer in layers]
-            views.append(augment_batch(pixels, augmentation_layers(self.config['seed'] + 40000 + index * 10)))
+            with tf.device('/CPU:0'):
+                pixels = load_pixels(row['path'])[None]
+                layers = augmentation_layers(self.config['seed'] + 30000 + index * 10)
+                views = [pixels] + [tf.clip_by_value(layer(pixels, training=True), 0, 255) for layer in layers]
+                views.append(augment_batch(pixels, augmentation_layers(self.config['seed'] + 40000 + index * 10)))
             for axis, heading, view in zip(axes[index], ['Original', 'Flip', 'Rotation', 'Zoom', 'Shear', 'Brightness', 'Contrast 0.1', 'Combined'], views):
                 axis.imshow(np.uint8(view.numpy()[0])); axis.set_title(heading); axis.axis('off')
             axes[index, 0].set_ylabel(row['label'])
@@ -729,39 +820,45 @@ class Experiment:
         save_json_once(self.run / 'training_started.json', {'startedAt': utc_now(), 'configurationHash': self.frozen['configurationHash']})
         trainer = OETrainer(self.logits_model, self.class_weights, self.config['oe_loss_weight'])
         trainer.compile(optimizer=tf.keras.optimizers.Adam(self.config['learning_rate']), jit_compile=False)
-        val = dataset(self.val_rows, labelled=True, batch_size=self.config['batch_size'])
-        baseline = trainer.evaluate(val, verbose=0, return_dict=True)
+        train_step, validation_step = compiled_training_steps(trainer)
+        batch_size = self.config['batch_size']
+        baseline = validate_host_batches(trainer, validation_step, self.val_rows, batch_size)
         if not all(math.isfinite(float(value)) for value in baseline.values()):
             raise RuntimeError('Non-finite epoch0 validation metrics.')
         best_loss = float(baseline['loss']); best_epoch = 0; best_oe_samples = 0
         checkpoint = self.run / 'fine_tuned_best.weights.h5'
         self.model.save_weights(checkpoint)
         self.history = []
-        # A continuous iterator avoids reshuffling away unseen OE tails each
-        # epoch when 2511 OE photos exceed 1854 supervised examples.
+        # Carry the OE cursor across epochs, including the short final OE batch.
         oe_order = list(self.oe); random.Random(self.config['seed'] + 1000).shuffle(oe_order)
-        self.oe_iterator = iter(dataset(oe_order, batch_size=self.config['batch_size']).repeat())
+        oe_cursor = 0
         self.oe_samples_consumed = 0
+        print('Training uses completed CPU batches and synchronized compiled model steps.')
         for epoch in range(self.config['epochs']):
             order = list(self.train_rows); random.Random(self.config['seed'] + epoch).shuffle(order)
             mango_layers = augmentation_layers(self.config['seed'] + 10000 + epoch * 10)
             oe_layers = augmentation_layers(self.config['seed'] + 20000 + epoch * 10)
-            def batches():
-                for images, labels in dataset(order, labelled=True, batch_size=self.config['batch_size']):
-                    outliers = next(self.oe_iterator)
-                    self.oe_samples_consumed += int(outliers.shape[0])
-                    yield ({'mango': augment_batch(images, mango_layers),
-                            'oe': augment_batch(outliers, oe_layers)}, labels)
-            signature = ({'mango': tf.TensorSpec((None, 224, 224, 3), tf.float32),
-                          'oe': tf.TensorSpec((None, 224, 224, 3), tf.float32)}, tf.TensorSpec((None,), tf.int32))
-            train = tf.data.Dataset.from_generator(batches, output_signature=signature).apply(
-                tf.data.experimental.assert_cardinality(math.ceil(len(order) / self.config['batch_size']))).prefetch(1)
-            history = trainer.fit(train, validation_data=val, epochs=1, verbose=2)
-            row = {'epoch': epoch + 1, **{key: float(value[-1]) for key, value in history.history.items()}}
+            trainer.reset_metrics()
+            print('Epoch', epoch + 1, '/', self.config['epochs'])
+            progress = tf.keras.utils.Progbar(math.ceil(len(order) / batch_size),
+                                            stateful_metrics=[metric.name for metric in trainer.metrics])
+            for start in range(0, len(order), batch_size):
+                if oe_cursor == len(oe_order):
+                    oe_cursor = 0
+                oe_rows = oe_order[oe_cursor:oe_cursor + batch_size]
+                images, labels = load_host_batch(order[start:start + batch_size], labelled=True, layers=mango_layers)
+                outliers = load_host_batch(oe_rows, layers=oe_layers)
+                metrics = synchronized_metrics(train_step(({'mango': images, 'oe': outliers}, labels)))
+                oe_cursor += len(oe_rows)
+                self.oe_samples_consumed += len(oe_rows)
+                progress.update(start // batch_size + 1, values=list(metrics.items()))
+            validation = validate_host_batches(trainer, validation_step, self.val_rows, batch_size)
+            row = {'epoch': epoch + 1, **metrics, **{'val_' + key: value for key, value in validation.items()}}
             if not all(math.isfinite(value) for value in row.values()):
                 raise RuntimeError('Non-finite training metrics; this run cannot be exported.')
             self.history.append(row)
             save_json_once(self.run / f'epoch_{epoch + 1:02d}.json', row)
+            print('Validation loss:', row['val_loss'], 'accuracy:', row['val_accuracy'])
             if row['val_loss'] < best_loss:
                 best_loss, best_epoch = row['val_loss'], epoch + 1
                 best_oe_samples = self.oe_samples_consumed
@@ -779,7 +876,8 @@ class Experiment:
             'selectedCheckpointSamplesProcessed': best_oe_samples,
             'selectedCheckpointUniqueOePhotosExposed': min(best_oe_samples, len(oe_order)),
             'shuffledOrderSha256': canonical_hash([row['sha256'] for row in oe_order]),
-            'sampling': 'continuous shuffled iterator; incomplete tails carry into next epoch'})
+            'sampling': 'continuous shuffled cursor; short tails retained across epochs',
+            'counting': TRAINING_EXECUTION['oeExposure']})
         self.verify_frozen()
         save_json_once(self.run / 'training_state.json', {'completedEpochs': len(self.history),
             'configurationHash': self.frozen['configurationHash'], 'artifacts': receipt_for(self.run,
@@ -1381,6 +1479,8 @@ def verify_runtime(*, require_gpu=True):
     print('TensorFlow:', tf.__version__, 'Keras:', tf.keras.__version__, 'GPU count:', len(gpus))
 
     define_training_components()
+    if require_gpu:
+        RUNTIME['serialTrainingProbe'] = verify_serial_training_runtime('/GPU:0')
     return RUNTIME
 
 
@@ -1409,21 +1509,23 @@ def define_training_components():
 
 
     def augmentation_layers(seed):
-        return [
-            tf.keras.layers.RandomFlip('horizontal_and_vertical', seed=seed),
-            tf.keras.layers.RandomRotation(30 / 360, fill_mode='nearest', seed=seed + 1),
-            tf.keras.layers.RandomZoom(0.2, fill_mode='nearest', seed=seed + 2),
-            RandomShear(0.2),
-            tf.keras.layers.RandomBrightness(0.2, value_range=(0, 255), seed=seed + 3),
-            tf.keras.layers.RandomContrast(CONTRAST_FACTOR, value_range=(0, 255), seed=seed + 4),
-        ]
+        with tf.device('/CPU:0'):
+            return [
+                tf.keras.layers.RandomFlip('horizontal_and_vertical', seed=seed),
+                tf.keras.layers.RandomRotation(30 / 360, fill_mode='nearest', seed=seed + 1),
+                tf.keras.layers.RandomZoom(0.2, fill_mode='nearest', seed=seed + 2),
+                RandomShear(0.2),
+                tf.keras.layers.RandomBrightness(0.2, value_range=(0, 255), seed=seed + 3),
+                tf.keras.layers.RandomContrast(CONTRAST_FACTOR, value_range=(0, 255), seed=seed + 4),
+            ]
 
 
     def augment_batch(pixels, layers):
-        output = pixels
-        for layer in layers:
-            output = layer(output, training=True)
-        return tf.clip_by_value(output, 0.0, 255.0)
+        with tf.device('/CPU:0'):
+            output = tf.convert_to_tensor(pixels, dtype=tf.float32)
+            for layer in layers:
+                output = layer(output, training=True)
+            return tf.clip_by_value(output, 0.0, 255.0)
 
 
 

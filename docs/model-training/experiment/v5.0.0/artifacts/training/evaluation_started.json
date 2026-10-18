@@ -1,0 +1,5 @@
+{
+  "startedAt": "2026-10-18T17:44:38.484134+00:00",
+  "rule": "confidence >= 0.70 only; fixed before predictions",
+  "oodRole": "report only"
+}

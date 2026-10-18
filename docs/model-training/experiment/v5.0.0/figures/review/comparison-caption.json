@@ -1,0 +1,9 @@
+{
+  "figure": "v45-v5-comparison.png",
+  "description": "Mango correct-accepted counts from matched saved Keras predictions; OOD false accepts from matched production-browser comparison. Panels intentionally identify different pipelines and fixed denominators.",
+  "sources": [
+    "artifacts/review/evaluation-audit.json",
+    "artifacts/review/browser-ood-summary.json"
+  ],
+  "imageSha256": "678e7f1c4e323acf31155bcad619ba108d006312f923f2de41d2a8462a638068"
+}

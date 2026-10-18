@@ -1,0 +1,21 @@
+{
+  "configurationHash": "5ee13fe1b483cdbfeb3fb5f4f9bb196ce6c027ca5cf06551f8aa2cb15e11372c",
+  "artifacts": {
+    "model_calibrated.keras": {
+      "sha256": "4e124aa15875e180736e818732a0e899483caaf9b71e8640ad44a1308b53dc1f",
+      "bytes": 12697365
+    },
+    "temperature.json": {
+      "sha256": "4797d62a6953f34ba37a9e38cae5f7443e24d08d889cc0a147164db501c17e94",
+      "bytes": 269
+    },
+    "validation_logits.npy": {
+      "sha256": "13c429ed35d5c67723b35055e2aba55ced219baca6b2e6792a5940e49ca58957",
+      "bytes": 22416
+    },
+    "validation_probabilities.npy": {
+      "sha256": "b459d93b0c1d41650a078c8f93dc445ed2a4a2bab2cc881ff1354256f426499d",
+      "bytes": 11272
+    }
+  }
+}

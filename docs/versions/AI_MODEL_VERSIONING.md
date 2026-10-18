@@ -2,20 +2,24 @@
 
 Use this guide to identify the active model and understand how a replacement is adopted. Detailed experiments, original measurements, and past decisions are in the [model history](history/AI_MODEL_HISTORY.md#model-timeline).
 
+## Local candidate test: V5.0.0 (October 19, 2026)
+
+The committed app remains V4.5.0. The maintainer's local workspace separately contains an **uncommitted** V5 browser bundle, labeled `v5.0.0-candidate` with cache `mangoleaf-model-cache-v5-0-0-candidate`. It uses confidence >=0.70 only and has not been adopted or deployed. The research-only push excludes `public/model/`, `src/lib/constants.ts`, `src/sw.ts`, and generated `public/sw.js`; it publishes research records without changing the app model or PWA `0.7.0`. See the [comparison, push scope and rollback](../model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md) and [local test hashes](../model-training/experiment/v5.0.0/artifacts/local_test_installation.json). These test hashes describe the uncommitted candidate, not the committed baseline.
+
 ## Current adopted model: V4.5.0 (October 16, 2026)
 
 | Item                 | Recorded value                                                    |
 | -------------------- | ----------------------------------------------------------------- |
-| Active model label   | `v4.5.0`                                                          |
+| Adopted model label  | `v4.5.0`                                                          |
 | Asset identity       | `model-v4.5.0`                                                    |
-| Model files          | `public/model/`                                                   |
+| Baseline files       | `public/model/` in committed source; backup for local rollback    |
 | Classification scope | Seven mango leaf/fruit classes                                    |
 | Acceptance rule      | Raw confidence at least `0.70`; margin and entropy gates disabled |
 | Model cache identity | `mangoleaf-model-cache-v4-5-0`                                    |
 
 - **Adopted** means selected in repository source. It does not establish production deployment or field accuracy.
 - Use the [V4.5.0 trial report](../model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) for dataset details, accuracy measures, and their limitations. Its [adoption receipt](../model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json) identifies the adopted files.
-- V5.0.0's last recorded status is **prepared, untrained, and on standby**. Its notebook preparation does not replace V4.5.0.
+- V5.0.0 completed five fine-tuning epochs and a separate 995-photo OOD report after the earlier failed attempts. Its [review](../model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md) distinguishes the saved measurements, local browser checks, and remaining adoption/device/field checks.
 
 ## Model Versions
 

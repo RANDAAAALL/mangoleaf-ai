@@ -1,5 +1,13 @@
 # MangoLeaf AI Architecture
 
+## Local V5 candidate override (October 19, 2026)
+
+The **committed application remains V4.5.0**. The maintainer's workspace separately serves a copied V5 bundle through uncommitted overrides in `public/model/`, `src/lib/constants.ts`, `src/sw.ts`, and generated `public/sw.js`. Those four paths are excluded from the research-only push; new checkouts retain the V4.5 model, report label and cache. The local V5 label is `v5.0.0-candidate`, with cache `mangoleaf-model-cache-v5-0-0-candidate`. The exact V4.5 bundle and prior label/cache source are backed up outside `public/`. See the [V5 comparison, push scope and rollback](model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md).
+
+The local test preserves seven-class order, full-photo canvas preprocessing, internal model rescaling, folded temperature, and confidence-only 0.70 gate. It introduces no new classifier, storage, guideline or network path. Local V5 scans carry the candidate label and cannot reuse V4.5 predictions; existing History is preserved. The runtime descriptions below refer to the committed V4.5 baseline. Local override behavior and its measured results are recorded separately rather than presented as the app shipped by this research-only commit.
+
+Completed independent copies live under `docs/model-training/experiment/v5.0.0/artifacts/{training,evaluation,review}/` and `figures/{training,evaluation,review}/`. Executed notebooks remain under `notebooks/experiment/v5.0.0/`; original source runs and notebook outputs are unchanged. The [copy manifest](model-training/experiment/v5.0.0/artifacts/evidence_copy_manifest.json) maps source identities separately from archive paths.
+
 <a id="current-model-and-local-only-storage-architecture-october-16-2026"></a>
 
 ## Current model and local-only storage architecture (October 17, 2026)
@@ -8,11 +16,13 @@ The repository's adopted model is V4.5.0, with confidence >=0.70 as the only rej
 
 Prepared v0.7.0 adds an opt-in shared diagnostic recorder with its only viewer in About, and preserves raw confidence in new scan reports while formatting scan-detail percentages to at most one decimal rounded down. The [diagnostic architecture](#optional-local-diagnostics-october-17-2026) describes retention, privacy, persistence failure, and stalled-operation limits.
 
-V5.0.0 is an untrained workflow on standby. Its prepared notebook and helper do not affect app inference or `public/model/`.
+V5.0.0 completed the corrected workflow after the earlier failed attempts. Its notebooks/helper are separate research tools; the research-only commit preserves the app's V4.5 assets and inference configuration.
 
 ## V5.0.0 experimental training workflow prepared (October 15, 2026)
 
 The separate [V5.0.0 notebook and helper](../notebooks/experiment/v5.0.0/) prepare OE fine-tuning from a hash-verified, uncalibrated V4.5.0 checkpoint. They retain the parent's mango split and Grad-CAM photo identities, inherit matching review evidence, expand approved OE with the old 500-photo OOD collection, and require fresh unseen OOD for reporting. New calibration, evaluation, figures, and candidate exports stay in a separate Drive run. This workflow is not imported by `src/`, does not write `public/model/`, and has no completed training result. The [experiment guide](model-training/experiment/v5.0.0/TRIAL_v5_0_0.md) records inputs, output preservation, runtime audits, and evaluation limits. Application inference code, active model assets/labels, and historical evidence remain unchanged by this preparation.
+
+**October 18 training follow-up:** the helper now loads and augments CPU batches synchronously, then executes the existing compiled model training/validation steps. It removes the nested training generator and input prefetch, preserves the continuous OE cursor and short tails, and counts exposure after successful step completion. Prediction-source generators close CPU device scopes before yielding. Step 2 adds a tiny synthetic execution probe; Step 3 checks the sealed review files before inventory. The revised notebook/helper pair needs a fresh frozen run; no full Colab completion or accuracy improvement is established. See the [correction and retry procedure](model-training/experiment/v5.0.0/TRIAL_v5_0_0.md#october-18-2026-serial-training-batch-correction).
 
 **Historical temporary model test, October 12, 2026:** The working tree then used V4.5.0 as a candidate with confidence 0.70, margin 0, and entropy 0.40. That state was superseded by the October 16 repository adoption using confidence only. The [trial report](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) preserves both identities and the rollback details.
 
@@ -133,7 +143,7 @@ mangoleaf-ai/
 |   |   |   |-- png/                # PWA, favicon, and Apple touch icons
 |   |   |   `-- svg/                # Vector application and favicon icons
 |   |   `-- mangoleaf-architecture.svg  # Historical cloud-sync diagram
-|   |-- model/                      # Adopted V4.5.0 OE seven-class model
+|   |-- model/                      # Committed V4.5.0 model; maintainer's V5 override uncommitted
 |   |   |-- model.json              # Seven-output TensorFlow.js graph
 |   |   |-- model_config.json       # Class order, preprocessing, fitted thresholds
 |   |   |-- group1-shard1of3.bin
@@ -199,7 +209,7 @@ mangoleaf-ai/
 |   |   |   |-- v4.4.0/             # TRIAL_v4_4_0.md; completed, declined experiment
 |   |   |   |   |-- artifacts/     # Curated training/fitting receipts, metrics, copy manifest, review
 |   |   |   |   `-- figures/       # Original training/ and threshold_fitting/ figures
-|   |   |   `-- v5.0.0/             # TRIAL_v5_0_0.md; prepared OE fine-tuning, no results yet
+|   |   |   `-- v5.0.0/             # Trial/review, copied artifacts and figures; completed candidate
 |   |   `-- non-experiment/         # Historical and adopted model trials
 |   |       |-- v1/                 # TRIAL_v1.md
 |   |       |-- v2/                 # TRIAL_v2.md, figures/
@@ -249,9 +259,11 @@ mangoleaf-ai/
 |       |   |-- MangoLeaf_AI_Threshold_Fitting_v4_4_0.ipynb
 |       |   |-- MangoLeaf_AI_Training_v4_4_0_Post_Training.ipynb
 |       |   `-- MangoLeaf_AI_Threshold_Fitting_v4_4_0_Results.ipynb
-|       `-- v5.0.0/                  # Prepared checkpoint-based OE fine-tuning
+|       `-- v5.0.0/                  # Templates plus completed fine-tuning/evaluation evidence
 |           |-- MangoLeaf_AI_OE_Fine_Tuning_v5_0_0.ipynb
 |           |-- MangoLeaf_AI_Evaluate_v5_0_0.ipynb     # Later unseen-OOD report without retraining
+|           |-- MangoLeaf_AI_OE_Fine_Tuning_v5_0_0_Post_Training.ipynb
+|           |-- MangoLeaf_AI_Evaluate_v5_0_0_Reults.ipynb # Original supplied filename preserved
 |           `-- v5_workflow.py        # Required Colab helper; not application code
 |-- video/                           # Promotional video, a separate HyperFrames project
 |   |-- assets/                      # Render inputs plus the thumbnail still
@@ -364,7 +376,7 @@ When adding a relative-time string, add it to both the `en` and `bis` objects in
 `src/app/page.tsx` coordinates photo review and saving. `src/lib/image-hash.ts` fingerprints upload files and saved-photo Blobs without importing TensorFlow.js, and `src/lib/image-storage.ts` creates the compressed photo saved after diagnosis. `src/lib/classifier.ts` provides browser inference and re-exports both helpers for existing callers. The page imports storage compression directly and dynamically loads the prediction function when diagnosis starts:
 
 1. During initial loading, fetch `/model/model.json` with `tf.loadGraphModel` and `/model/model_config.json` for its rejection settings.
-2. Cache and warm the single seven-class V4.5.0 OE model once per browser session, using the existing explicit forced-16-bit WebGL texture setting.
+2. Cache and warm the single seven-class adopted V4.5.0 model once per browser session, using the existing explicit forced-16-bit WebGL texture setting.
 3. On photo selection, show the preview and asynchronously hash the original file with SHA-256. Query the indexed local `image_hash` column before enabling diagnosis. Keep the hash for this selection so diagnosis does not hash the same file again.
 4. If an eligible saved scan matches, keep the preview open with the bilingual "Photo already scanned" message. Retake opens the original picker; Cancel or X closes review; View saved result opens the existing report. Reuse requires an exact `model_version` match with `v4.5.0`. Pending-deletion rows, another model label, and legacy rows without a label do not block a new inference.
 5. For a new photo, Run AI Diagnosis rechecks the local duplicate lookup before inference. Downscale the image to `224 x 224` with a shared canvas, run TensorFlow.js inference, and dispose temporary tensors.
@@ -385,7 +397,7 @@ The confidence floor is hardcoded and deliberately not configurable. It is a man
 
 Entropy is normalized by `Math.log(results.length)` so it stays on a 0-to-1 scale comparable to the fitted threshold. Confidence is compared at its raw precision, returned without rounding, and preserved by `prepareLocalScan()` in new reports. Only scan-detail rendering formats the percentage. A raw `0.698` therefore displays `69.8%` and remains uncertain; `0.6999` displays `69.9%`, not a misleading `70%`. Integer percentages omit `.0`. No existing row is rewritten to invent precision it never stored; older reports and eligible duplicate reuse retain their saved value. Formatting does not change classification, preprocessing, thresholds, or model accuracy.
 
-Root `public/model/` contains the adopted seven-output V4.5.0 OE model, with confidence 0.70 as the only active rejection gate. Its class order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold, as defined in `src/lib/constants.ts`. Both healthy outputs reuse the existing `healthy` treatment-guidance key. V4.3.0 remains preserved as a previous model and verified rollback. See [AI model versioning](versions/AI_MODEL_VERSIONING.md).
+In committed source, root `public/model/` contains the adopted seven-output V4.5.0 model, with confidence 0.70 as the only active rejection gate. The maintainer's uncommitted V5 override is described above. Its class order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold, as defined in `src/lib/constants.ts`. Both healthy outputs reuse the existing `healthy` treatment-guidance key. V4.3.0 remains preserved as a previous model and verified rollback. See [AI model versioning](versions/AI_MODEL_VERSIONING.md).
 
 Each inference prints a collapsed browser-console table of all seven class probabilities in development and production, ranked from highest to lowest. The existing fresh-result modal can also receive the returned probability table; this table predates v0.7.0 and is not saved in History rows. Reopening a saved report therefore does not reconstruct that table. Both tables sort copied values and format only displayed percentages; prediction and rejection still use the original scores. These probabilities describe one photo, not per-class accuracy. An eligible saved duplicate does not run inference or print a new table. The optional persistent diagnostics log deliberately excludes class results and probability tables. See [TESTING.md](testing/TESTING.md#fixture-and-report-interpretation) for reading inference evidence and handling duplicate photos.
 
@@ -404,7 +416,7 @@ Treatment guidance is authored in Supabase's `public.guidelines` table and read 
 
 An `Uncertain / Unrecognized` result is handled before the cached-guideline lookup. It displays the approved English/Bisaya photo reminder immediately, including offline use and while IndexedDB is loading. Scan details use the heading “Try another photo” / “Sulayi og laing litrato” for this result. The reminder is interface text in `src/lib/translations.ts`; it does not require a Supabase guideline row or change model rejection rules. Loading and unavailable guideline messages still apply to accepted class results.
 
-Historical trial and legacy rows remain visible in local history. Duplicate reuse requires exact active `model_version` `v4.5.0`, so older candidate identities and unlabeled legacy rows do not substitute for adopted V4.5.0 inference. New local reports retain the active label without relabeling earlier diagnoses.
+Historical trial and legacy rows remain visible in local history. Committed-source duplicate reuse requires exact active `model_version` `v4.5.0`, so other candidate identities and unlabeled legacy rows do not substitute for V4.5 inference. The maintainer's local override instead requires `v5.0.0-candidate`. New local reports retain the active label without relabeling earlier diagnoses.
 
 `useSync.ts` exposes local save/delete actions. `deleteScans(ids)` deduplicates IDs and removes those local records with `bulkDelete()`; the shared confirmation dialog waits for the local deletion. No cloud upload, tombstone creation, or remote deletion follows a new deletion. The previous v8 tombstones are preserved hidden historical state.
 
@@ -448,7 +460,7 @@ Private cloud endpoints for Auth, scans metadata, and Storage, together with pub
 
 The precache manifest that Serwist generates covers the build output _and every file under `public/`_. Anything added to `public/` is therefore downloaded to each installed device during service-worker installation, whether or not the application ever requests it. Keep assets that only documentation uses out of `public/` unless they also have to be reachable at a site URL.
 
-**That manifest, not the `CacheFirst` rule, is what actually updates the model.** `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `/model/*` rule never fires in practice. Every model file carries a content-revision hash in the manifest and is refetched after service-worker activation when its bytes change. The current cache identity is `mangoleaf-model-cache-v4-5-0`; activation removes superseded model caches and protects the active cache.
+**That manifest, not the `CacheFirst` rule, is what actually updates the model.** `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `/model/*` rule never fires in practice. Every model file carries a content-revision hash in the manifest and is refetched after service-worker activation when its bytes change. The committed cache identity is `mangoleaf-model-cache-v4-5-0` (the uncommitted local test uses `mangoleaf-model-cache-v5-0-0-candidate`); activation removes superseded model caches and protects the active cache.
 
 ### Static assets
 
@@ -459,7 +471,7 @@ These files must stay tracked in git. `.gitignore` patterns that could match the
 ## Data flow for a scan
 
 1. The user captures or selects an image from the scan sheet.
-2. The app hashes the original file and checks IndexedDB for a matching eligible scan. Reuse requires the exact active `model_version` `v4.5.0`; another label or an unlabeled legacy row cannot substitute for adopted-model inference.
+2. The app hashes the original file and checks IndexedDB for a matching eligible scan. Reuse requires the exact committed active `model_version` `v4.5.0`; another label or an unlabeled legacy row cannot substitute for that model's inference. The local V5 override uses its own exact candidate label.
 3. The single classifier preprocesses the image and runs on-device inference.
 4. The completed result and compressed image are prepared under one stable report ID.
 5. The report is committed to IndexedDB, then displayed; live queries update History.

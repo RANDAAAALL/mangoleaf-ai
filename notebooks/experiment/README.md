@@ -4,11 +4,11 @@
 
 This folder holds candidate notebook workflows and completed experimental evidence. A completed notebook does not automatically change application assets or deployment. An explicit local candidate test may copy verified model files after preserving a rollback backup; adoption and release still follow the model-version policy.
 
-V4.5.0 is the current repository model; V4.3.0 is preserved as a previous model. Adopted and historical notebooks live under `notebooks/non-experiment/`; see the [notebook index](../README.md) and [V4.5.0 adoption record](../../docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026). Workflows remaining below are experimental candidates.
+V4.5.0 remains the adopted model; the maintainer's uncommitted workspace temporarily tests V5.0.0 after a verified backup. V4.3.0 is preserved as an older model. Adopted and historical notebooks live under `notebooks/non-experiment/`; see the [notebook index](../README.md) and [V4.5.0 adoption record](../../docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026). Workflows remaining below are experimental candidates.
 
 Folder versions identify notebook workflows, not model versions:
 
-- `v5.0.0/` contains the prepared OE fine-tuning and evaluation notebooks plus their helper. V5.0.0 is untrained and on standby; this folder is preparation only. See the [V5.0.0 guide](../../docs/model-training/experiment/v5.0.0/TRIAL_v5_0_0.md). No model weights or evaluation results exist.
+- `v5.0.0/` contains unexecuted workflow copies, the matching helper, and completed training/evaluation notebooks. The completed attempt used the October 18 serial CPU batch correction. See the [V5.0.0 completed review](../../docs/model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md) for copied evidence, same-input comparison and local rollback. No V5 adoption or deployment is established.
 - `v3.1/` contains the threshold-only workflow against the shipped Trial 3 weights and the background-replacement training experiment. See the [background experiment guide](../../docs/model-training/experiment/v3.1/TRIAL_v3_1.md) and [original-weight threshold guide](../../docs/model-training/experiment/v3.1/THRESHOLD_FITTING_v3_1.md).
 - `v3.2/` contains paired threshold fitting for the v3.1 experiment models. See the [paired fitting guide](../../docs/model-training/experiment/v3.2/TRIAL_v3_2.md).
 - `v4/` contains seven-class training and separate threshold fitting, with healthy leaves and healthy fruits separated. See the [v4 upload and run guide](../../docs/model-training/experiment/v4/TRIAL_v4.md).

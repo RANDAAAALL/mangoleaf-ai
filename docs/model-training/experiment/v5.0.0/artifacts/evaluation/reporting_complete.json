@@ -1,0 +1,242 @@
+{
+  "status": "new OOD reporting complete; adoption/browser checks pending",
+  "trainingRun": "/content/drive/MyDrive/mangoleaf_experiments/v5.0.0/training/v5-0-0-oe-finetune-20261018T153838Z-5a6fce69",
+  "trainingReceiptSha256": "b16c880e9ba571d19a85898634daa54d73cb5270c5df424009c3674471e722b2",
+  "calibratedModelSha256": "4e124aa15875e180736e818732a0e899483caaf9b71e8640ad44a1308b53dc1f",
+  "modelWeightsChanged": false,
+  "artifacts": {
+    "v5_workflow.py": {
+      "sha256": "1c38d9d592028ce2497281ce9855c7aa5718aac2065a4b2e96394bbe93e3fe8d",
+      "bytes": 111509
+    },
+    "runtime.json": {
+      "sha256": "96f010f635310b10af595e7601f705843236e53cd0aecfcda6f8f30422da1e1b",
+      "bytes": 2260
+    },
+    "fresh_ood_review.csv": {
+      "sha256": "b2835ffba4cc65022e5008390f0d6bcd88ab0a9957b21f2411902a3e9ce17da6",
+      "bytes": 1079622
+    },
+    "cross_pool_similarity_review.csv": {
+      "sha256": "0ee11cfbe0d00101e9f31ef7277a3a4ee84be1a030c5be451290390785428520",
+      "bytes": 82
+    },
+    "inventory.json": {
+      "sha256": "00249c2e70b5bf2dea99ba77a8f8dc86d8b18bd897d695628b3b2275ac116489",
+      "bytes": 515300
+    },
+    "fresh_ood_review.before-ai-import-fe200af077c0.csv": {
+      "sha256": "adf43ec77d52139cf8aee579ed70bb7f25d852bec80938eac649c73456016232",
+      "bytes": 94086
+    },
+    "ai_scope_review.json": {
+      "sha256": "478cfc80f0737b7520ab8d384cd3af4c24e735e176cc2fd69103e16db14e2950",
+      "bytes": 1126
+    },
+    "reporting_lock.json": {
+      "sha256": "6a7143c8628ee4849714ff3b5f019a69329f33848e02a9b525f397da839523bf",
+      "bytes": 1550492
+    },
+    "evaluation_started.json": {
+      "sha256": "34f2802fb4a4157802c8fd1c67ff7e2c13a07d44101eb98a2dbfd44f17ade2ba",
+      "bytes": 147
+    },
+    "ood_report_predictions.csv": {
+      "sha256": "de74d4abd1de88ea4538bb329721d1c944418b3be5f1fd253d5536d54fbbb989",
+      "bytes": 308540
+    },
+    "evaluation.json": {
+      "sha256": "917b29b1d92881b97e85049d7866d4de6b665575c6aae7695505c8fa94d6f5bb",
+      "bytes": 738
+    },
+    "runtime_preflight/provider-pip-check.log": {
+      "sha256": "37d1424e7e7baf5773da177026d9e79e132c00d72d45d7745332ef49fa5244d7",
+      "bytes": 382
+    },
+    "runtime_preflight/pip-bootstrap.log": {
+      "sha256": "f7d0419e9f6b805062195adb3de5d9bf91b9138a3a87aa8c7332088620b84acf",
+      "bytes": 502
+    },
+    "runtime_preflight/installation.log": {
+      "sha256": "63b4fe24e5788be5745e6c83607b715cd4aae773da8cb035156f477a187a6331",
+      "bytes": 15212
+    },
+    "runtime_preflight/training-audit.json": {
+      "sha256": "c25d028beb68e2f50db135e82b02a282f9ed4141c63da7c3d089619774bd964f",
+      "bytes": 4016
+    },
+    "runtime_preflight/training-audit.log": {
+      "sha256": "6d5085911020ff44e3db97df2f5318e71b3072eae399a0f01982584df90b8b89",
+      "bytes": 266
+    },
+    "runtime_preflight/installation.json": {
+      "sha256": "ee3fdcc83508dc056f9ad5d894a3b333f71b0b674bb4bebfaf20ac4f600eb55a",
+      "bytes": 550
+    },
+    "runtime_preflight/training-runtime-lock.txt": {
+      "sha256": "b7a918905890ee89515776a4ec07c20c66d0ae291e8f0408c253534d63cfc38a",
+      "bytes": 1254
+    },
+    "fresh_ood_review/page_001.jpg": {
+      "sha256": "128e2671b6b85201edfbba9679b3a80028f85f0187ea7da99cdc3c5935848a21",
+      "bytes": 193811
+    },
+    "fresh_ood_review/page_002.jpg": {
+      "sha256": "515a03c9f784e80f41951c0c07a77b96aa3c30280a9766d6c3280836afcc8391",
+      "bytes": 183017
+    },
+    "fresh_ood_review/page_003.jpg": {
+      "sha256": "856e24263006a502654132f4469999268734abcf2211d0492e68468d5dd8a67a",
+      "bytes": 186467
+    },
+    "fresh_ood_review/page_004.jpg": {
+      "sha256": "a7110c238008abe187fc60687988275c614d1b395f198ec1aa2e5b9e74295298",
+      "bytes": 195401
+    },
+    "fresh_ood_review/page_005.jpg": {
+      "sha256": "87b199b986bb895cc3ed8b289d13dc4f1a4614d7f31393b296c0d36753e64478",
+      "bytes": 192084
+    },
+    "fresh_ood_review/page_006.jpg": {
+      "sha256": "749c55d18556ddfdd63d18303e45e44aaf3b5ff5a3aeb59cf8d4fcdd569dbcdd",
+      "bytes": 198861
+    },
+    "fresh_ood_review/page_007.jpg": {
+      "sha256": "c3f856b4710b9c1bf98e35ea4209c30e969952d55edfb5094582ed3f62ebe31a",
+      "bytes": 175634
+    },
+    "fresh_ood_review/page_008.jpg": {
+      "sha256": "c54698f4c4d5b519674e8ba4096cdbc0555d4e94791e0868b64ebc72f59db380",
+      "bytes": 185401
+    },
+    "fresh_ood_review/page_009.jpg": {
+      "sha256": "827ac2a01c1c8043958e7618a42ee71998ce6a568154a5b66589233ebc7747a7",
+      "bytes": 176457
+    },
+    "fresh_ood_review/page_010.jpg": {
+      "sha256": "3595716c29b3c4e49b5c30f96681e8c1bad5f4541abac7961b4e47448ae88b80",
+      "bytes": 183806
+    },
+    "fresh_ood_review/page_011.jpg": {
+      "sha256": "40a5d990e2c2972d1e349a72613139c5427bd0fac183f8e49fa6b01641fb49e4",
+      "bytes": 195273
+    },
+    "fresh_ood_review/page_012.jpg": {
+      "sha256": "4c002a46bc85515f6386d8ce776abe829f6e6c3821ad9d86032a8de6fa0f7136",
+      "bytes": 175261
+    },
+    "fresh_ood_review/page_013.jpg": {
+      "sha256": "8698859f434be0ffa04223b82b57e64a43d9e608cc5411152aa40d3a333a6f64",
+      "bytes": 180748
+    },
+    "fresh_ood_review/page_014.jpg": {
+      "sha256": "db1c2883c8c8926137bc727a74cb4204ab8a090585059e4161478401245d17a7",
+      "bytes": 182727
+    },
+    "fresh_ood_review/page_015.jpg": {
+      "sha256": "94142324113bffa8093372c05bc42037754b36657919e9e078ea39a434c4f200",
+      "bytes": 214255
+    },
+    "fresh_ood_review/page_016.jpg": {
+      "sha256": "dbc73135cd34482d176df58600fe68a0f3127856ece614cf5d4bf541761de134",
+      "bytes": 191719
+    },
+    "fresh_ood_review/page_017.jpg": {
+      "sha256": "af1ac9fc883df3a1f5deceee95171d881d3e615c76903d4668e3454cfcfec9e0",
+      "bytes": 189194
+    },
+    "fresh_ood_review/page_018.jpg": {
+      "sha256": "009a5ea7717d1b3e69abc8b46f49da458f508357914d95f1b01591c8a426150f",
+      "bytes": 183254
+    },
+    "fresh_ood_review/page_019.jpg": {
+      "sha256": "16508cdc0bd0dcf56d7ceac1102441ac89b71bfe8fe0e4307a7d3d2aac8dee8d",
+      "bytes": 190010
+    },
+    "fresh_ood_review/page_020.jpg": {
+      "sha256": "b25166693ba22f8559ac91bae8b6aa8fe4d1cac3c02d67a506be3977f983a309",
+      "bytes": 192599
+    },
+    "fresh_ood_review/page_021.jpg": {
+      "sha256": "4b29bee2d16cc2de15b9ac9a29b1e1d5a61dc125153c14abde33f46ab2e2e8e1",
+      "bytes": 190415
+    },
+    "fresh_ood_review/page_022.jpg": {
+      "sha256": "2f4cfa4c716ff46694821a88c29e710d5986a8b409c29677884c78b95e2fc8d3",
+      "bytes": 198302
+    },
+    "fresh_ood_review/page_023.jpg": {
+      "sha256": "e85333093fe16286fb217ff22576a864609d39141fc0aba933b9a00f8e8cb585",
+      "bytes": 189423
+    },
+    "fresh_ood_review/page_024.jpg": {
+      "sha256": "22b4912a3a7581d247adbc82c8021f680cb9874506c7669e87c762f1c7665260",
+      "bytes": 196346
+    },
+    "fresh_ood_review/page_025.jpg": {
+      "sha256": "056925c775ef454bb5c3e39c9e166aa9a3ec64e4f5788e666e07efd705f749b9",
+      "bytes": 205529
+    },
+    "fresh_ood_review/page_026.jpg": {
+      "sha256": "c347593365c2cb47754e715c84bb658351715fb525052312103806ead3459ecb",
+      "bytes": 190410
+    },
+    "fresh_ood_review/page_027.jpg": {
+      "sha256": "c86a26dd673b2cd3a40ab8f7d3fbedbd32561c892f32849c016d3c45d4b1432b",
+      "bytes": 197303
+    },
+    "fresh_ood_review/page_028.jpg": {
+      "sha256": "53ebb0f97c86c57599945d6ed4cbd4ecd377a422cad183d75a578fd6183067ed",
+      "bytes": 177298
+    },
+    "fresh_ood_review/page_029.jpg": {
+      "sha256": "66017c14740d07df11f407d926601ae0099a319955d82cc173cc0e3ef31b948e",
+      "bytes": 205338
+    },
+    "fresh_ood_review/page_030.jpg": {
+      "sha256": "80866970c1814b324f09436089889d1a943d76f76344ef3e7dc31b960b201b9f",
+      "bytes": 198757
+    },
+    "fresh_ood_review/page_031.jpg": {
+      "sha256": "d2234847d3172abaf561baf839226725faf379ea04665709d716a475ae28b663",
+      "bytes": 182503
+    },
+    "fresh_ood_review/page_032.jpg": {
+      "sha256": "dc4edae55807f5f20de6651d1fd45a557c3feeb80e9d3fbbe68822903feb2e66",
+      "bytes": 192524
+    },
+    "fresh_ood_review/page_033.jpg": {
+      "sha256": "b4772d1c64adf0e82cd6e69463b506c6135f202e43676e6f07542c5dd430308d",
+      "bytes": 191728
+    },
+    "fresh_ood_review/page_034.jpg": {
+      "sha256": "0050637b3c2076ebca7a6cd22a512349c53aba0def19f3fe7c535e43d29ab89a",
+      "bytes": 203151
+    },
+    "fresh_ood_review/page_035.jpg": {
+      "sha256": "9c48176d970a41fc87d84f175f60c508f8722e8b1e92b3978ba7c6963cfc6dc4",
+      "bytes": 182317
+    },
+    "fresh_ood_review/page_036.jpg": {
+      "sha256": "ca5dc2d3b29cd61f511209aa0859d5a6fceb3812d2e0a42135e020175d17efe8",
+      "bytes": 191872
+    },
+    "fresh_ood_review/page_037.jpg": {
+      "sha256": "547d5c301da521366a5d3468a819e14994728ac0ccb734c095d9ed10bcb7b44a",
+      "bytes": 186473
+    },
+    "fresh_ood_review/page_038.jpg": {
+      "sha256": "9c1fde5d315ab9ac24b642a58411326e842bb8f91e71a4635529cdd87ffbb966",
+      "bytes": 183076
+    },
+    "fresh_ood_review/page_039.jpg": {
+      "sha256": "d994e6a718f56c789177142eb5b16647a8daabeed9539216fee03433f74baf03",
+      "bytes": 182748
+    },
+    "fresh_ood_review/page_040.jpg": {
+      "sha256": "aa807e576fcbef87afa219091ba5991eaa543a12700c5572ed50fbf189758670",
+      "bytes": 191090
+    }
+  },
+  "completedAt": "2026-10-18T21:12:47.833858+00:00"
+}

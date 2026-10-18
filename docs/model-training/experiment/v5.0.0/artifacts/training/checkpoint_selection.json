@@ -1,0 +1,7 @@
+{
+  "selectedEpoch": 5,
+  "validationLoss": 0.07593610137701035,
+  "epoch0ValidationLoss": 0.08137137442827225,
+  "parentRetainedIfNoImprovement": false,
+  "criterion": "minimum clean unweighted mango validation cross-entropy"
+}

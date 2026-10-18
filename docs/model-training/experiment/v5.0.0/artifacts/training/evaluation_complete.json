@@ -1,0 +1,20 @@
+{
+  "configurationHash": "5ee13fe1b483cdbfeb3fb5f4f9bb196ce6c027ca5cf06551f8aa2cb15e11372c",
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": null,
+    "entropyThreshold": null
+  },
+  "calibratedModelSha256": "4e124aa15875e180736e818732a0e899483caaf9b71e8640ad44a1308b53dc1f",
+  "freshOodComplete": false,
+  "artifacts": {
+    "evaluation.json": {
+      "sha256": "9543f74fe5b42e8f8b34a8140681b9d6788b1dbb1f3c64fc3aa48594c3acd3cc",
+      "bytes": 4918
+    },
+    "mango_test_predictions.csv": {
+      "sha256": "bc5f6b9542d5f82d9c5ed7d81838e317c241433731f7e4166d898017ffd751f4",
+      "bytes": 121168
+    }
+  }
+}

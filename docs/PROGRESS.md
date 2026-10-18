@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: October 18, 2026
+Last updated: October 19, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -1098,6 +1098,20 @@ This file tracks the project work from the first committed implementation throug
   - Scoped R02's expected network-error handling to the exact local guideline URL and intentional offline window, and attached that evidence separately. The shared browser-error guard and existing offline History/photo/inference/reconnect assertions remain intact. Application/model source, versions, and CI configuration are unchanged. Focused validation is recorded in [TESTING.md](testing/TESTING.md#r02-intentional-offline-guideline-error-correction).
   - Passed 12 focused R02/G07 repetitions across desktop/mobile Chromium emulation, plus a negative control proving unrelated console errors still fail. Formatting, typecheck, lint, production build, and all 10 export checks passed. Remote CI remains a separate follow-up for the committed correction; no new full-suite or R03 result is claimed.
 
+- **V5.0.0 training batch correction prepared**
+  - Two supplied Colab attempts stopped in GPU augmentation inside the training generator: mango `RandomZoom` after three completed epochs and OE `RandomShear` after one. Isolated checks and a 12-batch combined diagnostic passed without reproducing the later full-run failure; those checks were not a successful training or accuracy result.
+  - Replaced the nested training input generator with completed CPU batches followed by synchronized compiled model updates. Preserved the research settings, clean validation selection, epoch-zero parent candidate, continuous OE order, and short tails. Counts now advance after successful update/readback. Updated both clean notebook/helper hashes, added an early synthetic runtime probe, and check the five-file review bundle before the long inventory.
+  - The [new-attempt instructions](model-training/experiment/v5.0.0/TRIAL_v5_0_0.md#october-18-2026-serial-training-batch-correction) preserve failed attempts and distinguish local control-flow checks from pending Colab training, calibration, export, and evaluation. App/model release identities remain unchanged; this correction does not adopt V5.0.0.
+
+### October 19, 2026
+
+- **Completed V5 evidence review and reversible local candidate**
+  - Verified the completed five-epoch training run and later 995-photo OOD report with two independent agent audits. All 86 training and 58 reporting completion artifacts match their recorded bytes/hashes. Copied 130 source artifacts/figures independently, preserved original receipts, and retained both supplied executed notebooks unchanged. The [V5 review](model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md) links the exact run and copy identities.
+  - Compared the same 397 mango photos at confidence >=0.70 only: both models have 377 correct accepted, 12 wrong accepted, and eight rejected. Raw correctness is 384 for V4.5 and 383 for V5. The new V5 Colab OOD report rejects 942/995 and accepts 53, under AI-assisted scope labels with unknown capture/source independence. A separate matched production-browser run completed 1,990 predictions on the same 995 images: V4.5 accepts 95 and V5 accepts 45, a 5.03 percentage-point reduction. This is a rejection gain on that pool, not a field-accuracy claim. V5 browser/Colab decisions differ on 20 photos; numerical parity remains unverified.
+  - Installed copied V5 graph/shards and current provenance metadata into `public/model/` for the requested local test. Active label/cache identify `v5.0.0-candidate`; app stays `0.7.0`, and V4.5 remains adopted. Verified the exact V4.5 backup and an isolated rollback, including corrupted-backup refusal before mutation. Existing History and source runs remain intact. Adoption, deployment, applicable reliability, physical-device and independent field evaluation remain separate pending work.
+
+  - Clarified the research-only push boundary: V5 records may be published while eight runtime files across `public/model/`, `src/lib/constants.ts`, `src/sw.ts`, and generated `public/sw.js` remain uncommitted. Shared setup/model/architecture/testing guidance describes committed V4.5 separately from the maintainer's local V5 override; PWA stays `0.7.0`. Restored the reusable evaluation template's unset inputs and explicit approval without the collection-specific import dependency, preserved its local preset, and left both completed notebooks unchanged. No Git staging, commit or push occurred.
+
 ## Current Notebook Decision
 
 Keep every training notebook, and keep each trial's clean template separate from its completed run. Historical and adopted trial notebooks live in `notebooks/non-experiment/v{n}/`; this includes the current V4.5.0 model and older models. Candidate workflows and completed experimental evidence live in `notebooks/experiment/v{n}/`. The latter are experimental candidates, not shipped or deployed. V4.5.0's notebooks moved into the adopted/historical group on October 16, 2026, with original cells and outputs intact. The original trial folders were moved from the repository root on August 25, 2026 so the folder does not accumulate one loose file per retraining cycle; they were added on September 8, 2026. The filenames below are unchanged. Earlier dated entries retain the repository paths that described those events; the current locations are listed here and in the notebook index.
@@ -1128,6 +1142,8 @@ Keep every training notebook, and keep each trial's clean template separate from
 <a id="current-adopted-model-v430"></a>
 
 ## Current Adopted Model (v4.5.0)
+
+**Local override, October 19, 2026:** Only the maintainer's uncommitted workspace uses `v5.0.0-candidate` for the requested comparison. The research-only push preserves committed V4.5 runtime files and app `0.7.0`. V4.5 remains adopted and is preserved in a verified rollback backup. The [V5 review](model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md) records the exact active files and distinguishes this local trial from adoption/deployment. Earlier active-V4.5 statements below describe the adopted baseline.
 
 Prepared app `0.7.0` uses the adopted V4.5.0 TensorFlow.js Graph Model in repository source. Output order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold. Both healthy outputs use the `healthy` guideline row. The selected rejection rule is confidence >= `0.70`; margin and entropy are disabled. Temperature `0.8002093839891747` is folded into the saved weights. V4.3.0 remains available as a verified rollback model.
 
