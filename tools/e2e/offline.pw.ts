@@ -12,11 +12,13 @@ import {
   homeHeading,
   historyDetails,
 } from "./support/fixtures";
+import type { ConsoleMessage } from "@playwright/test";
 
 test.use({ serviceWorkers: "allow" });
 test("R02: real service worker reloads history and diagnoses a new photo offline", async ({
   page,
   context,
+  runtimeErrors,
 }, info) => {
   test.setTimeout(180_000);
   await openApp(page);
@@ -81,7 +83,41 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
     if (response.fromServiceWorker())
       hits.push(new URL(response.url()).pathname);
   });
+  const guidelineUrl = new URL(
+    "/__mock__/rest/v1/guidelines?select=id%2Cdisease_name%2Cguidelines_en%2Cguidelines_bis",
+    page.url(),
+  ).href;
+  const offlineGuidelineErrors: string[] = [];
+  const isOfflineGuidelineError = (message: ConsoleMessage) =>
+    message.type() === "error" &&
+    message.location().url === guidelineUrl &&
+    /^Failed to load resource: net::ERR_(INTERNET_DISCONNECTED|FAILED)$/.test(
+      message.text(),
+    );
+  const observeOfflineGuidelineError = (message: ConsoleMessage) => {
+    if (isOfflineGuidelineError(message))
+      offlineGuidelineErrors.push(
+        `${message.text()} (${message.location().url})`,
+      );
+  };
+  // Cutting the network may also interrupt an application's guideline refresh.
+  page.on("console", observeOfflineGuidelineError);
   await context.setOffline(true);
+  // Exercise the expected browser error even when no refresh crosses the cut.
+  const failureMessage = page.waitForEvent("console", {
+    predicate: isOfflineGuidelineError,
+    timeout: 15_000,
+  });
+  const offlineGuidelineResponse = await page.evaluate(async (url) => {
+    try {
+      await fetch(url);
+      return "unexpected response";
+    } catch {
+      return "network failed";
+    }
+  }, guidelineUrl);
+  expect(offlineGuidelineResponse).toBe("network failed");
+  await failureMessage;
   await page.reload();
   await expect(homeHeading(page)).toBeVisible({ timeout: 90_000 });
   await nav(page, "History");
@@ -128,6 +164,19 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
     serviceWorkerResponses: [...new Set(hits)],
     savedHashes: saved.map((row) => row.image_hash),
   });
+  page.off("console", observeOfflineGuidelineError);
+  await attachJson(info, "intentional-offline-guideline-errors", {
+    guidelineUrl,
+    response: offlineGuidelineResponse,
+    expectedErrors: offlineGuidelineErrors,
+  });
+  expect(offlineGuidelineErrors.length).toBeGreaterThan(0);
+  // Consume only exact guideline errors observed during this offline window.
+  // Other requests, application errors, crashes and reconnect errors stay strict.
+  for (const error of offlineGuidelineErrors) {
+    expect(runtimeErrors).toContain(error);
+    runtimeErrors.splice(runtimeErrors.indexOf(error), 1);
+  }
   await context.setOffline(false);
   // A worker update may reload once after reconnection; read IndexedDB only after it settles.
   await page.waitForLoadState("domcontentloaded");
