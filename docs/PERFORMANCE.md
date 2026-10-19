@@ -1,5 +1,15 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## Square camera preview (prepared v0.8.0, October 19, 2026)
+
+The camera now displays one centered square preview bounded to 280–360 CSS pixels per side. `ResizeObserver` updates the display size when its available width changes; fixed corner brackets use CSS rather than per-frame JavaScript. The dialog no longer expands the preview region to distribute spare height, and short screens scroll instead of shrinking the square below 280px. The green brackets are 4px thick and 36px long, with a 16px radius matching the preview. These display dimensions do not constrain the camera's delivered resolution or decoded-video memory.
+
+Capture computes a centered square from the current delivered video dimensions and draws that source rectangle directly into the existing temporary canvas. It then performs the existing single JPEG encoding at quality 0.92. There is no extra capture pass, continuously cropped canvas, image-analysis loop, new library, or model inference for the guide. A 1280×720 video frame yields a 720×720 output canvas; camera resolution remains a browser/device choice. The square output has fewer canvas pixels than a nonsquare full-frame capture, but no phone latency, memory, battery, thermal, or frame-rate improvement is claimed without measurements.
+
+Review and diagnosis receive that square source image. Gallery upload bytes, the model's 224×224 preprocessing, inference workload, rejection gates, and post-inference storage compression remain on their existing paths. Changing camera framing can change predictions because the source pixels differ; this UI/capture release does not establish disease accuracy or resolve the separately observed WebGL timeout. V4.5.0 remains the release model, and local V5 experiments are separate.
+
+The [v0.8.0 testing record](testing/TESTING.md#v080-square-camera-preview-october-19-2026) records candidate verification separately from earlier unversioned local checks. Physical camera timing, crop alignment after rotation, browser/PWA background recovery, low-height layout, and mixed-use reliability are planned through the [physical checklist](testing/PHYSICAL_RELIABILITY_CHECKLIST.md#r04-m01-guided-camera-gallery-and-layout); results remain pending until recorded for the exact release build.
+
 ## V5.0.0 local candidate (October 19, 2026)
 
 The completed V5 model is installed only in the maintainer's uncommitted workspace with unchanged seven-output architecture, full-photo canvas preprocessing, float32 browser weights, forced-float16 WebGL setting, and confidence-only 0.70 gate. Its three shards total 11,886,412 bytes, the same shard size as V4.5. The graph JSON and shard bytes differ; equal size does not establish equal predictions, latency or device memory use. The new cache identity and precache revisions replace older served model bytes; the exact V4.5 backup stays outside `public/`.
@@ -208,6 +218,8 @@ The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag defi
 - **Selection and layout:** Selected IDs persist across pages; Select all captures the current filtered result IDs. Confirmation freezes those IDs before deletion. The phone delete-selection button precedes pagination. History containers use `transition-colors` while their selection layout changes; Home retains its existing `transition-all`. No target-device rendering or interaction-time benchmark is established by these source changes.
 
 ### 2.9 Guided live-camera lifecycle (October 8, 2026)
+
+This dated section describes the original full-frame camera. The [v0.8.0 candidate](#square-camera-preview-prepared-v080-october-19-2026) supersedes its preview sizing and capture rectangle while retaining the stream lifecycle.
 
 - **Ownership:** `useGuidedCamera.ts` acquires and releases the video stream; `scan/guided-camera.tsx` renders a positioning guide and explicit Capture action. Both iOS and Android follow the same secure-context and API checks. Preview requests no microphone access and prefers rear-camera video at 1280×720 with a requested maximum of 30 frames per second. Actual dimensions and lens depend on the browser/device.
 - **Preview work:** The camera runs only while the live dialog is active. The guide resizes from video dimensions and preview-container measurements; it does not analyze each frame or invoke TensorFlow.js. Live video itself still uses camera, decoder, rendering, and battery resources.

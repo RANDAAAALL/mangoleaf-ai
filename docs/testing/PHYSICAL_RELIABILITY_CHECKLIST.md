@@ -1,6 +1,6 @@
 # MangoLeaf AI physical reliability checklist
 
-Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current candidate is app `0.7.0`, model `v4.5.0`, confidence-only threshold 0.70. Fill results only after observing the exact recorded release build; do not transfer a previous build's observations to this candidate.
+Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current candidate is app `0.8.0`, model `v4.5.0`, confidence-only threshold 0.70. Fill results only after observing the exact recorded release build; do not transfer a previous build's observations to this candidate.
 
 Reports/photos stay in this browser's IndexedDB; Supabase supplies public treatment guidance only. No guest sign-in or private scan/photo upload is expected. Use the exact tested build identity below; dated changes are in [Protocol history](#protocol-history).
 
@@ -204,8 +204,9 @@ Take Photo now opens a live browser camera below 768px; it does not launch the o
 
 - [ ] Use HTTPS; below 768px, tap Take Photo and grant browser permission. Live preview appears and Capture becomes available only after a frame is ready.
 - [ ] Record camera/lens selected and delivered frame dimensions; the rear-camera preference does not guarantee a specific lens or 1280×720 output.
-- [ ] Verify the centered guide stays inside the displayed image in portrait and landscape; letterboxing does not place the guide outside the image.
-- [ ] Capture includes the full camera frame, including areas outside the guide; the guide itself is not burned into the photo.
+- [ ] Verify the camera preview is square in portrait and landscape, with both sides between 280 and 360 CSS pixels. Record viewport and observed size; these are display pixels, not captured-image resolution.
+- [ ] All four green corner brackets remain visible, with 4px borders, 36px arms, and 16px rounding matching the clipped preview. Check bright/dark subjects and device rotation.
+- [ ] Capture matches the centered square visible in the preview at the moment of capture, including after rotation; excluded outer camera areas are not included in review. CSS corner rounding and guide marks are not burned into the photo. Record delivered frame dimensions and captured square dimensions separately.
 - [ ] Captured photo opens review; no scan is saved and no diagnosis starts until Run AI Diagnosis is pressed.
 - [ ] Deny camera permission; meaningful message appears, Close works, Upload Photo remains available, and no scan is created.
 - [ ] Allow camera permission again through browser settings and retry; capture can recover without duplicate streams.
@@ -234,6 +235,7 @@ Take Photo now opens a live browser camera below 768px; it does not launch the o
 - [ ] Portrait layout works.
 - [ ] Landscape layout works.
 - [ ] Camera Close and Capture remain reachable around iOS/Android safe areas, browser controls, and the installed PWA's viewport.
+- [ ] Instructions, preview, and controls stay together without tall flex-distributed gaps. On short/landscape screens, scroll to reach Close and Capture; the preview keeps its 280px minimum instead of shrinking. Record any horizontal clipping or scrolling on very narrow viewports.
 - [ ] English/Bisaya framing, permission/error, paused, Capture, and retry text display correctly.
 - [ ] With available assistive technology or keyboard, dialog title/status can be read, focus stays inside camera, and Escape closes it. Record unavailable access as blocked.
 - [ ] Long disease badge stays inside image.
@@ -292,3 +294,8 @@ These notes record checklist changes, oldest first. They do not supply completed
 
 - **V4.5.0 and local-only session alignment**
   - Record the tested app/model versions, model hashes, and actual WebGL precision when available in DevTools. Current repository source uses V4.5.0 and confidence-only rejection at 0.70. Reports and photo Blobs stay local; reconnection refreshes public guidelines and must not upload private scan/photo data. This checklist remains blank until physical observations are recorded.
+
+### October 19, 2026
+
+- **v0.8.0 square-camera protocol**
+  - Added bounded 280–360 CSS-pixel square preview, visible rounded bracket, capture/preview crop alignment, rotation, and short-screen scrolling checks. The earlier full-frame capture expectation is replaced for this candidate; the October 8 historical results remain in [TESTING.md](TESTING.md#guided-live-camera-october-8-2026). Physical-device testing is planned; screenshots and synthetic-stream browser checks do not pre-fill these results. Record the final V4.5 release build identity and actual observations before approval.

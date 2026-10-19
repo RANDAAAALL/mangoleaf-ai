@@ -71,12 +71,12 @@ export const translations = {
     snapCameraBtn: "Snap Camera",
     openGalleryBtn: "Open Gallery",
 
-    // Live camera and its visual positioning guide
+    // Live camera and its square capture preview
     guidedCameraTitle: "Take a Photo",
     guidedCameraHint:
       "Center one whole mango leaf or fruit inside the box. Hold steady and use good light.",
     guidedCameraGuideNote:
-      "The box guides positioning. The photo includes the full camera view.",
+      "The photo includes only what you see inside the square preview.",
     guidedCameraStarting: "Opening camera...",
     guidedCameraCaptureBtn: "Capture Photo",
     guidedCameraCapturing: "Capturing photo...",
@@ -477,12 +477,12 @@ export const translations = {
     snapCameraBtn: "Litrato sa Kamera",
     openGalleryBtn: "Ablihi ang Gallery",
 
-    // Live camera and its visual positioning guide
+    // Live camera and its square capture preview
     guidedCameraTitle: "Pagkuha og Litrato",
     guidedCameraHint:
       "Ibutang sa tunga sa kahon ang usa ka tibuok dahon o bunga sa mangga. Ipirme ang kamera ug gamita ang maayong kahayag.",
     guidedCameraGuideNote:
-      "Giya sa pagpahimutang ang kahon. Apil sa litrato ang tibuok makita sa kamera.",
+      "Ang makita lang sulod sa kuwadradong preview ang maapil sa litrato.",
     guidedCameraStarting: "Giablihan ang kamera...",
     guidedCameraCaptureBtn: "Kuhaa ang Litrato",
     guidedCameraCapturing: "Gikuha ang litrato...",

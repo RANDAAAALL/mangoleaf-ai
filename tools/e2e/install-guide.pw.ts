@@ -396,7 +396,8 @@ for (const platform of ["ios", "ipad"] as const) {
     await page.goto("/?install=1");
     const t = translations.bis;
     const dialog = guide(page, "bis");
-    await expect(dialog).toBeVisible();
+    // QR entry still waits for real model warmup, like openApp's startup check.
+    await expect(dialog).toBeVisible({ timeout: 90_000 });
     for (const title of [
       t.installGuideIOS,
       t.installGuideIOSShare,
@@ -506,12 +507,13 @@ test("I06: installed standalone consumes QR flag silently but desktop still offe
   await page.setViewportSize({ width: 360, height: 740 });
   await installBrowser(page, { platform: "ios", standalone: true });
   await page.goto("/?install=1&source=qr#home");
+  // Use the normal startup budget before checking the installed-app behavior.
   await expect(
     page.getByRole("heading", {
       name: translations.en.HowItWorksTitle,
       exact: true,
     }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 90_000 });
   await expect.poll(() => new URL(page.url()).search).toBe("?source=qr");
   expect(new URL(page.url()).hash).toBe("#home");
   await expect(guide(page)).toHaveCount(0);

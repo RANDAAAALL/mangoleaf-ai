@@ -22,6 +22,7 @@ The PWA version identifies the application people install: screens, camera and u
 - [Release index](#app-releases)
 - [Timeline, oldest first](#release-timeline)
 - [Latest preparation: v0.7.0](#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026)
+- [October 19 candidate: v0.8.0](#v080-square-camera-prepared-release-october-19-2026)
 - [Candidate testing and promotion](#candidate-testing-and-promotion)
 - [Creating a GitHub Release](#creating-a-github-release)
 
@@ -87,6 +88,7 @@ v0.5.5  prepared release: guided camera capture, installation guidance, and resp
 v0.6.0  prepared release: V4.5.0 confidence-only model and local-only History with storage-full recovery
 v0.6.1  prepared patch: uncertain result scores and bilingual Terms clarification; same V4.5.0 model
 v0.7.0  prepared feature release: optional local diagnostics and raw-confidence display; same V4.5.0 model
+v0.8.0  candidate feature release: square guided camera with matching capture and bounded sizing; same V4.5.0 model
 v1.0.0  stable field-tested release
 v1.0.1  small fix after v1.0.0
 ```
@@ -890,6 +892,57 @@ Realtime ordering and changes saved by another tab.
 - **Local evidence:** the [October 18 follow-up in the final validation record](../../testing/TESTING.md#final-local-v070-validation) records 59 tooling tests with 154 assertions, including seven security cases, plus the full-history scan and typecheck/lint/build checks. Application/model inputs did not change; the existing 250-case core and 240-prediction R01 results keep their original identities.
 - **Branch handoff:** `master` was pushed at `116e462`; a local annotated `v0.7.0` candidate tag was prepared for the maintainer. App `0.7.0` and model `v4.5.0` remain unchanged.
 - **Status boundary:** remote CI, tag publication, and production deployment are unverified in this documentation pass. The maintainer handles CI review, tag publication, and manual Vercel promotion; a branch push does not establish those outcomes.
+
+### v0.8.0: square camera prepared release (October 19, 2026)
+
+- **Status: candidate / not released or deployed by this preparation.** The maintainer selected app `0.8.0` for the square guided-camera workflow. Final candidate commit and deployment identities remain to be recorded. The earlier `0.7.0` records retain their original evidence and publication limits.
+
+- The live camera preview is a centered square, bounded between 280 and 360 CSS pixels per side. The dialog scrolls when the available height is short. Four green corner guides are 36 CSS pixels long and 4 CSS pixels thick, with 16 CSS pixel rounding matching the preview. Compact spacing removes the former flexible gaps around the preview.
+
+  - Capture draws the matching centered square from the actual video frame directly into the existing canvas, then encodes one JPEG. This is a capture-time crop, not continuous image processing.
+  - Review Photo and the ordinary diagnosis flow receive that square image. English and Bisaya guidance explain that the captured area matches the preview.
+  - Camera permissions, readiness, background/pause recovery, Retake, cancellation, and stream cleanup remain part of the existing workflow. Gallery upload keeps its existing image handling.
+
+- **Adopted model: V4.5.0, unchanged.** The release retains its five model assets, seven-class mapping, calibration, confidence-only 0.70 gate, classifier preprocessing, WebGL preference, and model-cache identity. The changed camera crop changes the captured image content; it does not establish improved diagnostic accuracy or fix the separately reported phone inference stall.
+
+  - The maintainer's uncommitted V5 runtime trial remains separate. Exclude its model files, model-label override in `src/lib/constants.ts`, and model-cache override in `src/sw.ts` from this app release.
+  - Generate `public/sw.js` from the exact candidate source with the adopted V4.5.0 assets. The local V5-generated worker is not release evidence. Verify all five exported model hashes against the committed V4.5.0 baseline before staging the candidate worker.
+
+- **Candidate identity:** the isolated `0.8.0` / V4.5.0 source is based on `7e08ec7ec7c00e1131e5ec877eb4c69c02958296`, with application fingerprint `3cd772b1226b1ea156db81e77cf25c6da21c8170757cb82cc2b020bc535fa3c2`. It is uncommitted preparation, not a new branch handoff. Earlier V5 and camera checks retain their original source/version/model identities.
+
+- **Local validation:** final formatting, typecheck, lint, production build, tracked-file and full-history security checks, 59 tooling tests with 154 assertions, and 10 export checks passed. All five exported model files match the committed V4.5.0 hashes. The [testing guide](../../testing/TESTING.md#v080-square-camera-release-candidate-october-19-2026) records the detailed evidence and remaining checks.
+
+  - The initial full core run took 34.1 minutes and reported 248 passes, 10 declared platform skips, and six failures. C05 needed a narrow subpixel viewport tolerance; I04/I06 needed the existing 90-second startup allowance for their first readiness assertion because recorded Firefox GPU warmup took longer than their former 15-second UI assertion budget. Later interaction assertions retain their normal budget. These repairs changed tests only, not application behavior or model inputs.
+  - The focused C05/I04/I06 rerun across four browser projects passed all 16 cases in 2.8 minutes. Together, the initial run and focused repairs cover 254 passing core cases and 10 declared platform skips. This is combined evidence, not a claim that a second full core command passed.
+  - R01 passed 240 actual predictions across eight photos, 30 predictions per photo. Classes and acceptance decisions remained stable, with maximum confidence range 0 and maximum tensor growth 0. The recorded runtime was Chromium `153.0.8010.12`, TensorFlow.js `4.22.0`, WebGL with forced 16-bit textures, and ANGLE SwiftShader. This repeatability evidence does not establish physical-phone speed or field accuracy. The separate 30-minute R03 session remains pending at the maintainer's direction.
+  - The source handoff selects 16 approved source, test, package, and documentation paths plus the normal build-generated V4.5.0 worker for the exact base commit. It excludes the five local V5 model files and both model-label/cache overrides. Its ignored manifest records replay and hash-verification evidence; this scope description does not claim a replay result. A source patch is not a deployable export.
+
+  - Final-commit CI, current Vercel dashboard confirmation, physical-device evidence, exact-deployment promotion, live-version verification, and public tag/release publication remain pending or unverified in this preparation.
+  - Use the [physical-device checklist](../../testing/PHYSICAL_RELIABILITY_CHECKLIST.md) to record the actual camera, orientation, background/resume, offline, and stored-photo behavior. Physical testing remains part of the release validation process.
+  - Tag the exact approved tested commit after the [release procedure](#candidate-testing-and-promotion); do not tag a local V5 build or infer deployment from a GitHub Release.
+
+#### v0.8.0 prepared commit, tag, and release text
+
+- **Commit subject:** `feat: prepare v0.8.0 square camera`
+- **App tag:** `v0.8.0`
+- **Release title / annotated-tag subject:** `MangoLeaf AI v0.8.0 - Square guided camera`
+- **Annotated-tag message draft:**
+
+> MangoLeaf AI v0.8.0 - Square guided camera
+>
+> Adds a bounded square camera preview with matching capture and rounded green corner guides. Retains the adopted V4.5.0 model. This tag must identify the exact commit approved through the recorded release checks.
+
+- **GitHub release description draft:**
+
+> Take Photo uses a square preview with clearer rounded green corner guides and compact spacing. The preview stays between 280 and 360 CSS pixels per side, and short screens can scroll to the controls. Captured photos match the visible square before Review Photo and diagnosis; English and Bisaya guidance explain the framing.
+>
+> Retains camera recovery, Retake, stream cleanup, gallery upload, local-only History, and offline treatment-guideline access. The adopted V4.5.0 model and 70% confidence-only gate remain unchanged. V5.0.0 stays a separate local experiment and is not included in this app release.
+>
+> Local candidate checks passed for formatting, types, lint, production build, security, 59 tooling tests, and 10 export checks. All five model assets match the adopted V4.5.0 baseline. Core browser coverage combines 248 initial passes with a successful 16-case focused rerun after narrow test repairs, covering 254 passing cases and 10 declared platform skips; the initial six failures remain recorded. No second full-suite pass is claimed. R01 passed 240 actual predictions with stable classes and acceptance decisions, zero confidence variation, and zero tensor growth in the recorded software-rendered Chromium session. These checks do not establish field accuracy or physical-phone performance.
+>
+> Release status remains candidate preparation. The separate R03 session, physical-device evidence, final-commit CI, dashboard confirmation, approval, promotion, live-version verification, and tag/release publication remain pending. This draft does not claim they have completed.
+
+- The maintainer selected file and release-text preparation only. No staging, commit, push, local tag, tag publication, GitHub Release, or production promotion is included in this task. The proposed text does not authorize those later actions. Do not move an existing published tag; verify that `v0.8.0` is available before creating it.
 
 ## Candidate testing and promotion
 

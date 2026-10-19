@@ -12,6 +12,9 @@ interface GuidedCameraProps {
   onClose: () => void;
 }
 
+const PREVIEW_MIN_SIZE = 280;
+const PREVIEW_MAX_SIZE = 360;
+
 export const GuidedCamera = memo(function GuidedCamera({
   language,
   onCapture,
@@ -24,7 +27,7 @@ export const GuidedCamera = memo(function GuidedCamera({
   const previewRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
   const hintId = useId();
-  const [guideSize, setGuideSize] = useState(0);
+  const [previewSize, setPreviewSize] = useState(0);
 
   useEffect(() => {
     recordDiagnostic("camera.state", {
@@ -94,21 +97,20 @@ export const GuidedCamera = memo(function GuidedCamera({
 
   useEffect(() => {
     const preview = previewRef.current;
-    if (!preview || camera.frameSize.width === 0) return;
+    if (!preview) return;
 
-    const measureGuide = () => {
-      const { width, height } = preview.getBoundingClientRect();
-      const ratio = camera.frameSize.width / camera.frameSize.height;
-      const imageWidth = Math.min(width, height * ratio);
-      const imageHeight = imageWidth / ratio;
-      // Object-contain may leave empty space. Size the guide within the image.
-      setGuideSize(Math.min(imageWidth, imageHeight) * 0.75);
+    const measurePreview = () => {
+      const { width } = preview.getBoundingClientRect();
+      // Keep a bounded square; the dialog scrolls when the screen is too short.
+      setPreviewSize(
+        Math.max(PREVIEW_MIN_SIZE, Math.min(width, PREVIEW_MAX_SIZE)),
+      );
     };
 
-    const observer = new ResizeObserver(measureGuide);
+    const observer = new ResizeObserver(measurePreview);
     observer.observe(preview);
     return () => observer.disconnect();
-  }, [camera.frameSize]);
+  }, []);
 
   const messages = {
     unsupported: t.guidedCameraUnsupported,
@@ -128,7 +130,8 @@ export const GuidedCamera = memo(function GuidedCamera({
           : t.guidedCameraStarting;
   const retryAvailable = camera.phase === "error" || camera.phase === "paused";
   const showGuide =
-    (camera.phase === "ready" || camera.phase === "capturing") && guideSize > 0;
+    (camera.phase === "ready" || camera.phase === "capturing") &&
+    previewSize > 0;
 
   return (
     <div
@@ -160,50 +163,60 @@ export const GuidedCamera = memo(function GuidedCamera({
         </button>
       </div>
 
-      <div className="mx-auto flex min-h-56 w-full max-w-3xl flex-1 flex-col px-4">
+      <div className="mx-auto flex w-full max-w-3xl shrink-0 flex-col px-4">
         <p
           id={hintId}
-          className="shrink-0 pb-3 text-center text-sm text-[#526856]"
+          className="shrink-0 pt-3 pb-6 text-center text-sm text-[#526856]"
         >
           {t.guidedCameraHint}
         </p>
         <div
           ref={previewRef}
-          className="relative min-h-40 flex-1 overflow-hidden rounded-3xl border border-[#cfe2c8] bg-black"
+          className="relative flex shrink-0 items-center justify-center"
+          style={{ minHeight: previewSize || PREVIEW_MIN_SIZE }}
         >
-          <video
-            ref={camera.videoRef}
-            autoPlay
-            playsInline
-            muted
-            aria-hidden="true"
-            onLoadedData={camera.refreshReadiness}
-            onCanPlay={camera.refreshReadiness}
-            onPlaying={camera.refreshReadiness}
-            onResize={camera.refreshReadiness}
-            onError={camera.handleVideoError}
-            className="absolute inset-0 h-full w-full object-contain"
-          />
-
-          {showGuide && (
-            <div
+          <div
+            className="relative shrink-0 overflow-hidden rounded-2xl bg-black"
+            style={{ width: previewSize, height: previewSize }}
+          >
+            <video
+              ref={camera.videoRef}
+              autoPlay
+              playsInline
+              muted
               aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl border-[3px] border-[#a6f2b1] shadow-[0_0_0_1px_rgba(16,42,22,0.6),0_0_0_999px_rgba(0,0,0,0.18)]"
-              style={{ width: guideSize, height: guideSize }}
+              onLoadedData={camera.refreshReadiness}
+              onCanPlay={camera.refreshReadiness}
+              onPlaying={camera.refreshReadiness}
+              onResize={camera.refreshReadiness}
+              onError={camera.handleVideoError}
+              className="absolute inset-0 h-full w-full object-cover object-center"
             />
-          )}
+
+            {showGuide && (
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 text-[#a6f2b1] drop-shadow-[0_1px_2px_rgba(16,42,22,0.9)]"
+              >
+                <span className="absolute top-0 left-0 h-9 w-9 rounded-tl-2xl border-t-4 border-l-4 border-current" />
+                <span className="absolute top-0 right-0 h-9 w-9 rounded-tr-2xl border-t-4 border-r-4 border-current" />
+                <span className="absolute bottom-0 left-0 h-9 w-9 rounded-bl-2xl border-b-4 border-l-4 border-current" />
+                <span className="absolute right-0 bottom-0 h-9 w-9 rounded-br-2xl border-r-4 border-b-4 border-current" />
+              </div>
+            )}
+          </div>
 
           {camera.phase !== "ready" && (
             <div
               role="status"
               aria-live="polite"
-              className="absolute inset-0 flex items-center justify-center bg-[#edf6e9]/95 p-6 text-center"
+              className="absolute inset-0 overflow-y-auto bg-[#edf6e9]/95 p-4 text-center"
             >
-              <div className="max-w-sm space-y-4">
+              <div className="mx-auto flex min-h-full max-w-sm flex-col items-center justify-center gap-4">
                 <Icon
                   name="camera-outline"
                   size={36}
-                  className="mx-auto text-[#277839]"
+                  className="shrink-0 text-[#277839]"
                   aria-hidden="true"
                 />
                 <p className="text-sm leading-relaxed text-[#143519]">
@@ -213,7 +226,7 @@ export const GuidedCamera = memo(function GuidedCamera({
                   <button
                     type="button"
                     onClick={() => void camera.start()}
-                    className="min-h-11 rounded-xl bg-[#277839] px-5 py-3 text-sm font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839]"
+                    className="min-h-11 shrink-0 rounded-xl bg-[#277839] px-5 py-3 text-sm font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839]"
                   >
                     {t.guidedCameraRetryBtn}
                   </button>
@@ -224,7 +237,7 @@ export const GuidedCamera = memo(function GuidedCamera({
         </div>
       </div>
 
-      <div className="mx-auto w-full max-w-3xl shrink-0 space-y-3 px-5 pt-3 pb-4">
+      <div className="mx-auto w-full max-w-3xl shrink-0 space-y-3 px-5 py-6">
         <p className="text-center text-xs text-[#526856]">
           {t.guidedCameraGuideNote}
         </p>

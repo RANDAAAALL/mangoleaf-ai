@@ -4,14 +4,19 @@ Use this guide to choose an app version and prepare its release. For earlier rel
 
 ## Current repository snapshot
 
-| Item                           | Last recorded state                                                            |
-| ------------------------------ | ------------------------------------------------------------------------------ |
-| App version                    | `0.7.0`, from `package.json`                                                   |
-| Adopted AI model               | `v4.5.0`                                                                       |
-| Latest recorded branch handoff | `116e462` on `master`, October 18, 2026                                        |
-| Production status              | CI, tag publication, and Vercel promotion have not been verified in this guide |
+| Item                  | Last recorded state                                                               |
+| --------------------- | --------------------------------------------------------------------------------- |
+| App version           | `0.8.0` candidate, from `package.json`                                            |
+| Adopted AI model      | `v4.5.0`                                                                          |
+| Candidate preparation | Square guided camera, October 19, 2026; candidate commit not yet recorded         |
+| Local validation      | Build, security, tooling, export, recorded core cases, and R01 pass               |
+| Production status     | Candidate; final-commit CI, device validation, publication, and promotion pending |
 
-Version `0.7.0` adds optional local diagnostics and more precise confidence display. See its [release record](history/PWA_RELEASE_HISTORY.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026) for the complete changes and validation.
+Version `0.8.0` prepares a square camera preview with matching capture, bounded sizing, and rounded green corner guides. It retains the adopted V4.5.0 model. See its [candidate release record](history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026) for the release text and validation status. The [v0.7.0 record](history/PWA_RELEASE_HISTORY.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026) preserves the preceding diagnostics and confidence changes.
+
+The maintainer's local V5 model override is separate from this app candidate. Exclude its `public/model/`, `src/lib/constants.ts`, and `src/sw.ts` changes from the release. Generate the candidate's `public/sw.js` from the exact V4.5.0 release source and assets; do not commit the worker produced by the local V5 build.
+
+The current preparation changes files and supplies release text only; it does not stage, commit, push, create a tag, publish a release, or promote a deployment. The [candidate validation record](../testing/TESTING.md#v080-square-camera-release-candidate-october-19-2026) distinguishes the isolated V4.5.0 candidate from the maintainer's V5 working tree, records the initial browser failures and focused repairs, and keeps R03 and physical-device evidence pending.
 
 ## Version labels and release rules
 
@@ -73,6 +78,7 @@ When adopting a different model, follow the [model adoption checklist](AI_MODEL_
 
 - [Full release index and historical status](history/PWA_RELEASE_HISTORY.md#app-releases)
 - [Chronological release records](history/PWA_RELEASE_HISTORY.md#release-timeline)
+- [Current candidate: v0.8.0 square guided camera](history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026)
 - [Latest recorded handoff: October 18, 2026](history/PWA_RELEASE_HISTORY.md#october-18-2026-v070-scanner-follow-up-and-branch-handoff)
 
 Historical records retain their original dates, measurements, and status. Use them as evidence for those builds, not as confirmation of today's production state.

@@ -24,6 +24,7 @@ interface CameraControl {
   encodesCompleted: number;
   releasePermission: () => void;
   allowFrame: () => void;
+  setFrame: (width: number, height: number) => void;
   releaseEncoding: () => void;
   endTrack: () => void;
   hide: () => void;
@@ -56,6 +57,8 @@ async function mockCamera(
   await page.addInitScript((settings) => {
     localStorage.setItem("preferred_language", settings.language ?? "en");
     let frameReady = settings.frame !== "defer";
+    let frameWidth = 1280;
+    let frameHeight = 720;
     let hidden = false;
     const videos = new Set<HTMLVideoElement>();
     const attached = new WeakMap<HTMLMediaElement, MediaStream | null>();
@@ -90,6 +93,11 @@ async function mockCamera(
       allowFrame() {
         frameReady = true;
         deliverFrames();
+      },
+      setFrame(width, height) {
+        frameWidth = width;
+        frameHeight = height;
+        for (const video of videos) video.dispatchEvent(new Event("resize"));
       },
       releaseEncoding() {
         pendingEncoding.splice(0).forEach((encode) => encode());
@@ -159,8 +167,8 @@ async function mockCamera(
           },
           getSettings: {
             value: () => ({
-              width: 1280,
-              height: 720,
+              width: frameWidth,
+              height: frameHeight,
               facingMode: "environment",
             }),
           },
@@ -200,8 +208,14 @@ async function mockCamera(
       },
     });
     Object.defineProperties(HTMLVideoElement.prototype, {
-      videoWidth: { configurable: true, get: () => (frameReady ? 1280 : 0) },
-      videoHeight: { configurable: true, get: () => (frameReady ? 720 : 0) },
+      videoWidth: {
+        configurable: true,
+        get: () => (frameReady ? frameWidth : 0),
+      },
+      videoHeight: {
+        configurable: true,
+        get: () => (frameReady ? frameHeight : 0),
+      },
       readyState: { configurable: true, get: () => (frameReady ? 4 : 0) },
       paused: { configurable: true, get: () => false },
       play: {
@@ -322,7 +336,7 @@ async function cameraStops(page: Page) {
   return page.evaluate(() => window.mangoCameraControl.stops);
 }
 
-test("C01: guided capture keeps full frame, waits for Run, and Retake opens a new stream", async ({
+test("C01: square capture matches preview, waits for Run, and Retake opens a new stream", async ({
   page,
 }) => {
   await mockCamera(page);
@@ -343,9 +357,32 @@ test("C01: guided capture keeps full frame, waits for Run, and Retake opens a ne
   await expect(camera.getByRole("button")).toHaveCount(2);
   const guide = camera.locator('div[aria-hidden="true"]');
   await expect(guide).toBeVisible();
+  await expect(guide.locator("span")).toHaveCount(4);
+  await expect(guide.locator("span").first()).toHaveCSS("width", "36px");
+  await expect(guide.locator("span").first()).toHaveCSS(
+    "border-top-width",
+    "4px",
+  );
+  await expect(guide.locator("span").first()).toHaveCSS(
+    "border-top-left-radius",
+    "16px",
+  );
+  await expect(camera.locator("video").locator("..")).toHaveCSS(
+    "border-radius",
+    "16px",
+  );
+  await expect(camera.locator("video").locator("..")).toHaveCSS(
+    "overflow",
+    "hidden",
+  );
+  await expect(camera.locator("video")).toHaveCSS("object-fit", "cover");
+  await expect(camera.locator("video")).toHaveCSS("object-position", "50% 50%");
   for (const viewport of [
     { width: 360, height: 740 },
     { width: 740, height: 360 },
+    { width: 320, height: 568 },
+    { width: 768, height: 900 },
+    { width: 280, height: 600 },
   ]) {
     await page.setViewportSize(viewport);
     await expect
@@ -353,32 +390,58 @@ test("C01: guided capture keeps full frame, waits for Run, and Retake opens a ne
         const measurement = await guide.evaluate((element) => {
           const rectangle = element.getBoundingClientRect();
           const preview = element.parentElement!.getBoundingClientRect();
-          const imageHeight = Math.min(
-            preview.height,
-            (preview.width * 720) / 1280,
-          );
+          const available =
+            element.parentElement!.parentElement!.getBoundingClientRect();
           return {
             width: rectangle.width,
             height: rectangle.height,
-            expected: imageHeight * 0.75,
-            color: getComputedStyle(element).borderTopColor,
+            availableWidth: available.width,
+            availableHeight: available.height,
+            color: getComputedStyle(element.firstElementChild!).borderTopColor,
+            fillsPreview:
+              Math.abs(rectangle.width - preview.width) < 1 &&
+              Math.abs(rectangle.height - preview.height) < 1,
             centered:
               Math.abs(
                 rectangle.x +
                   rectangle.width / 2 -
-                  preview.x -
-                  preview.width / 2,
+                  available.x -
+                  available.width / 2,
+              ) < 1 &&
+              Math.abs(
+                rectangle.y +
+                  rectangle.height / 2 -
+                  available.y -
+                  available.height / 2,
               ) < 1,
           };
         });
         return (
-          Math.abs(measurement.width - measurement.expected) < 1 &&
+          measurement.width >= 280 &&
+          measurement.width <= 360 &&
+          measurement.width <= Math.max(280, measurement.availableWidth) &&
+          measurement.width <= measurement.availableHeight &&
           Math.abs(measurement.width - measurement.height) < 1 &&
+          measurement.fillsPreview &&
           measurement.centered &&
           measurement.color === "rgb(166, 242, 177)"
         );
       })
       .toBe(true);
+    // The hard bounds survive rotation; short screens scroll to their controls.
+    if (viewport.width === 768) await expect(guide).toHaveCSS("width", "360px");
+    if (viewport.width === 280) await expect(guide).toHaveCSS("width", "280px");
+    await capture().scrollIntoViewIfNeeded();
+    await expect(capture()).toBeInViewport({ ratio: 1 });
+    await camera
+      .getByRole("button", { name: translations.en.closeBtn, exact: true })
+      .scrollIntoViewIfNeeded();
+    await expect(
+      camera.getByRole("button", {
+        name: translations.en.closeBtn,
+        exact: true,
+      }),
+    ).toBeInViewport({ ratio: 1 });
     await test
       .info()
       .attach(`controlled-camera-${viewport.width}x${viewport.height}.png`, {
@@ -409,10 +472,10 @@ test("C01: guided capture keeps full frame, waits for Run, and Retake opens a ne
     name: translations.en.photoPreviewAlt,
     exact: true,
   });
-  await expect(preview).toHaveJSProperty("naturalWidth", 1280);
+  await expect(preview).toHaveJSProperty("naturalWidth", 720);
   await expect(preview).toHaveJSProperty("naturalHeight", 720);
   expect(await page.evaluate(() => window.mangoCameraControl.draws)).toEqual([
-    [0, 0, 1280, 720],
+    [280, 0, 720, 720, 0, 0, 720, 720],
   ]);
   expect(predictions).toBe(0);
   expect(await records(page)).toHaveLength(0);
@@ -431,6 +494,101 @@ test("C01: guided capture keeps full frame, waits for Run, and Retake opens a ne
   await expect(camera).not.toBeVisible();
   await expect.poll(() => cameraStops(page)).toBe(4);
   expect(predictions).toBe(0);
+});
+
+test("C09: live portrait and odd frame sizes keep the square crop aligned in Bisaya", async ({
+  page,
+}) => {
+  await mockCamera(page);
+  await controlledModel(page, scoresFor("Healthy Fruit"));
+  await openApp(page);
+  await page
+    .getByRole("button", { name: /^(EN\/BIS|EN)$/ })
+    .filter({ visible: true })
+    .first()
+    .click();
+  const t = translations.bis;
+  let camera = await openCamera(page, "bis");
+  const scenarios = [
+    {
+      width: 720,
+      height: 1280,
+      viewport: { width: 360, height: 740 },
+      crop: [0, 280, 720, 720, 0, 0, 720, 720],
+      size: 720,
+    },
+    {
+      width: 1001,
+      height: 720,
+      viewport: { width: 740, height: 360 },
+      crop: [140.5, 0, 720, 720, 0, 0, 720, 720],
+      size: 720,
+    },
+    {
+      width: 720,
+      height: 1001,
+      viewport: { width: 360, height: 740 },
+      crop: [0, 140.5, 720, 720, 0, 0, 720, 720],
+      size: 720,
+    },
+    {
+      width: 641,
+      height: 641,
+      viewport: { width: 740, height: 360 },
+      crop: [0, 0, 641, 641, 0, 0, 641, 641],
+      size: 641,
+    },
+  ];
+  for (const [index, scenario] of scenarios.entries()) {
+    if (index > 0) {
+      await page
+        .getByRole("button", { name: t.retakeBtn, exact: true })
+        .click();
+      camera = page.getByRole("dialog", {
+        name: t.guidedCameraTitle,
+        exact: true,
+      });
+    }
+    await page.setViewportSize(scenario.viewport);
+    await page.evaluate(
+      ({ width, height }) => window.mangoCameraControl.setFrame(width, height),
+      scenario,
+    );
+    await expect(camera.locator("video")).toHaveJSProperty(
+      "videoWidth",
+      scenario.width,
+    );
+    await expect(camera.locator("video")).toHaveJSProperty(
+      "videoHeight",
+      scenario.height,
+    );
+    await expect(
+      camera.getByText(t.guidedCameraGuideNote, { exact: true }),
+    ).toBeVisible();
+    const capture = camera.getByRole("button", {
+      name: t.guidedCameraCaptureBtn,
+      exact: true,
+    });
+    await expect(capture).toBeEnabled();
+    await capture.scrollIntoViewIfNeeded();
+    await expect(capture).toBeInViewport({ ratio: 1 });
+    await capture.click();
+    const review = page.getByRole("dialog", {
+      name: t.reviewPhotoTitle,
+      exact: true,
+    });
+    const image = review.getByRole("img", {
+      name: t.photoPreviewAlt,
+      exact: true,
+    });
+    await expect(image).toHaveJSProperty("naturalWidth", scenario.size);
+    await expect(image).toHaveJSProperty("naturalHeight", scenario.size);
+    const draws = await page.evaluate(() => window.mangoCameraControl.draws);
+    expect(draws).toHaveLength(index + 1);
+    expect(draws[index]).toEqual(scenario.crop);
+    await expect.poll(() => cameraStops(page)).toBe((index + 1) * 2);
+  }
+  expect(await records(page)).toHaveLength(0);
 });
 
 test("C02: captured photo reaches one controlled diagnosis through existing review", async ({
@@ -569,12 +727,16 @@ test("C05: missing frame blocks capture and an ended track releases stream", asy
   await page.evaluate(() => window.mangoCameraControl.endTrack());
   await expect(capture).toBeDisabled();
   await expect.poll(() => cameraStops(page)).toBe(2);
-  await camera
-    .getByRole("button", {
-      name: translations.en.guidedCameraRetryBtn,
-      exact: true,
-    })
-    .click();
+  await page.setViewportSize({ width: 740, height: 360 });
+  const retry = camera.getByRole("button", {
+    name: translations.en.guidedCameraRetryBtn,
+    exact: true,
+  });
+  // Landscape errors scroll inside the status area so Retry stays reachable.
+  await retry.scrollIntoViewIfNeeded();
+  // Scroll rounding can leave a subpixel of the 44 px button at the screen edge.
+  await expect(retry).toBeInViewport({ ratio: 0.98 });
+  await retry.click();
   await expect(capture).toBeEnabled();
   await page.evaluate(() => window.dispatchEvent(new Event("pagehide")));
   await expect(capture).toBeDisabled();
@@ -656,6 +818,15 @@ test("C07: real video playback and capture work with a synthetic camera stream",
         const context = canvas.getContext("2d")!;
         context.fillStyle = "#356f31";
         context.fillRect(0, 0, 1280, 720);
+        // Distinct outer and inner edges catch off-center or full-frame capture.
+        context.fillStyle = "#d62828";
+        context.fillRect(0, 0, 280, 720);
+        context.fillStyle = "#283cd6";
+        context.fillRect(1000, 0, 280, 720);
+        context.fillStyle = "#f0d21e";
+        context.fillRect(280, 0, 80, 720);
+        context.fillStyle = "#1ed2dc";
+        context.fillRect(920, 0, 80, 720);
         context.fillStyle = "#8fbb51";
         context.beginPath();
         context.ellipse(640, 360, 250, 145, -0.25, 0, Math.PI * 2);
@@ -705,8 +876,27 @@ test("C07: real video playback and capture work with a synthetic camera stream",
     name: translations.en.photoPreviewAlt,
     exact: true,
   });
-  await expect(preview).toHaveJSProperty("naturalWidth", 1280);
+  await expect(preview).toHaveJSProperty("naturalWidth", 720);
   await expect(preview).toHaveJSProperty("naturalHeight", 720);
+  const samples = await preview.evaluate((image: HTMLImageElement) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    const context = canvas.getContext("2d")!;
+    context.drawImage(image, 0, 0);
+    return [40, 360, 680].map((x) =>
+      Array.from(context.getImageData(x, 360, 1, 1).data).slice(0, 3),
+    );
+  });
+  for (const [index, expected] of [
+    [240, 210, 30],
+    [143, 187, 81],
+    [30, 210, 220],
+  ].entries()) {
+    samples[index].forEach((channel, index) =>
+      expect(Math.abs(channel - expected[index])).toBeLessThan(12),
+    );
+  }
   await expect
     .poll(() => page.evaluate(() => window.mangoRealCameraControl.stops))
     .toBe(1);

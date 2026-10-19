@@ -48,7 +48,6 @@ export function useGuidedCamera() {
   const startupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [phase, setPhase] = useState<CameraPhase>("starting");
   const [error, setError] = useState<CameraError | null>(null);
-  const [frameSize, setFrameSize] = useState({ width: 0, height: 0 });
 
   const clearStartupTimer = useCallback(() => {
     if (startupTimerRef.current !== null) {
@@ -105,12 +104,6 @@ export function useGuidedCamera() {
     }
 
     clearStartupTimer();
-    setFrameSize((previous) =>
-      previous.width === video.videoWidth &&
-      previous.height === video.videoHeight
-        ? previous
-        : { width: video.videoWidth, height: video.videoHeight },
-    );
     setPhase("ready");
   }, [clearStartupTimer]);
 
@@ -220,12 +213,25 @@ export function useGuidedCamera() {
 
       try {
         const canvas = document.createElement("canvas");
-        // Preserve the full frame. The guide never changes the captured area.
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        // Match the square preview's centered object-cover crop at capture time.
+        const size = Math.min(video.videoWidth, video.videoHeight);
+        const sourceX = (video.videoWidth - size) / 2;
+        const sourceY = (video.videoHeight - size) / 2;
+        canvas.width = size;
+        canvas.height = size;
         const context = canvas.getContext("2d");
         if (!context) throw new Error("Camera capture canvas is unavailable.");
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        context.drawImage(
+          video,
+          sourceX,
+          sourceY,
+          size,
+          size,
+          0,
+          0,
+          size,
+          size,
+        );
 
         const blob = await new Promise<Blob>((resolve, reject) => {
           canvas.toBlob(
@@ -291,7 +297,6 @@ export function useGuidedCamera() {
     videoRef,
     phase,
     error,
-    frameSize,
     start,
     stop,
     capture,
