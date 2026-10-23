@@ -1,0 +1,4 @@
+# Merge this block into the target project's function configuration only after review.
+# This public bootstrap issues real Auth credentials; the service-role RPC quota is mandatory.
+[functions.android-backup-vault]
+verify_jwt = false
