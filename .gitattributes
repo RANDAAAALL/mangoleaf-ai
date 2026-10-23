@@ -4,3 +4,13 @@ android/gradlew text eol=lf
 android/gradlew.bat text eol=crlf
 # Both V5 notebooks verify the helper's exact bytes before running.
 notebooks/experiment/v5.0.0/v5_workflow.py text eol=lf
+# Checked historical ledgers use their canonical Git/LF representation.
+docs/model-training/non-experiment/v4.3.0/artifacts/training/training_complete.json text eol=lf
+docs/model-training/non-experiment/v4.3.0/artifacts/evidence_copy_manifest.json text eol=lf
+docs/model-training/experiment/v4.4.0/artifacts/training/training_complete.json text eol=lf
+docs/model-training/experiment/v4.4.0/artifacts/evidence_copy_manifest.json text eol=lf
+# Snapshot receipts retain exact bytes, including their original line endings.
+docs/model-training/non-experiment/v4.3.0/artifacts/training/colab-runtime-snapshot.txt -text
+docs/model-training/non-experiment/v4.3.0/artifacts/training/mask-reuse-note.txt -text
+docs/model-training/experiment/v4.4.0/artifacts/training/training-runtime-snapshot.txt -text
+docs/model-training/experiment/v4.4.0/artifacts/training/converter-runtime-snapshot.txt -text

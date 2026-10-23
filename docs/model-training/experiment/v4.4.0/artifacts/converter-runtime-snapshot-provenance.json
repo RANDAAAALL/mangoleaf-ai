@@ -1,0 +1,18 @@
+{
+  "recordType": "repository-only historical runtime snapshot mapping",
+  "recordedOn": "2026-10-23",
+  "trainingRunId": "v4-4-0-training-20261009T005929Z-28e79277",
+  "originalFilename": "converter_requirements_snapshot.txt",
+  "originalSourceRelative": "training/v4-4-0-training-20261009T005929Z-28e79277/converter_requirements_snapshot.txt",
+  "originalRepositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/converter_requirements_snapshot.txt",
+  "repositoryPath": "docs/model-training/experiment/v4.4.0/artifacts/training/converter-runtime-snapshot.txt",
+  "sha256": "eb95db363f2e8ae3b0c6229e4a8dcc980f9469c015eccb048d6e3ebb1dd3cf5a",
+  "bytes": 1442,
+  "installable": false,
+  "trainingCompleteSha256": "fd2adc7262697fa0064c67475a5160b53affa7dddf57816d4ebc1fb93d86a1a0",
+  "evidenceCopyManifestSha256": "4e8c9b6aba150f1f03cdb3c7478aa0959e09cb3bb62bf0ead59c428c55eee0a8",
+  "reason": "This unchanged pip-freeze file records a completed experimental environment, not a supported installation manifest.",
+  "securityStatus": "Original packages remain vulnerable historical evidence. Rebuilding or running this old environment requires a fresh supported dependency plan and complete advisory audit; the archive rename does not patch it.",
+  "originalRecordsPreserved": true,
+  "ledgerHashEncoding": "utf8-lf"
+}

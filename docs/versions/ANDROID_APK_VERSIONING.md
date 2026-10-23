@@ -1,5 +1,7 @@
 # MangoLeaf AI Android APK Versioning Guide
 
+**October 23 security refresh:** the shared web build now uses patched Next.js 16.4.1. Native host 0.1.4/code 5, bridge/schema 1/1, bounds 5-5 and adopted model V4.5.0 remain unchanged. For the upcoming first stable v0.9.0 release, rebuild the installer and OTA files from the new approved commit after validation; the earlier `4ff19bc` APK/OTA receipts remain historical. Promote that new commit's tested Vercel deployment. README/license-only edits would not require a new installer, but this framework change alters the build inputs. See the [security review](../security/DEPENDENCY_SECURITY.md#october-23-2026-public-release-security-review).
+
 **Shared web release candidate, October 23:** shared web advances to `0.9.0`; native stays `0.1.4`/code `5`, Debug `0.1.4-dev`, bridge/schema `1`/`1`, bounds `5-5`, adopted model `v4.5.0`. The local `v0.9.0-rc.1` tag is a candidate only. Rebuild signed APK/OTA assets for these finalized web inputs; preceding web-0.8.0 receipts remain dated evidence. See the [shared release record](history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026).
 
 Use this guide for current APK versions, builds, signing and updates. The [Android APK history](history/ANDROID_APK_HISTORY.md#candidate-timeline) preserves dated implementation records and earlier behavior. Exact artifact hashes and test outcomes remain in [Android testing](../testing/ANDROID_TESTING.md).

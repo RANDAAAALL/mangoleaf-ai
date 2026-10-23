@@ -120,7 +120,8 @@ async function captureAndRetake(page: Page, file: string) {
       name: t.photoPreviewAlt,
       exact: true,
     });
-    await expect(photo).toHaveJSProperty("naturalWidth", 1280);
+    // The 1280x720 stream is center-cropped to the guide's 720x720 square.
+    await expect(photo).toHaveJSProperty("naturalWidth", 720);
     await expect(photo).toHaveJSProperty("naturalHeight", 720);
     await expect
       .poll(() => page.evaluate(() => window.mangoEnduranceCamera.liveTracks))

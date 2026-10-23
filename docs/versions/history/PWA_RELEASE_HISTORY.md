@@ -10,6 +10,13 @@ The PWA version identifies the application people install: screens, camera and u
 
 ## Current repository snapshot
 
+### v0.9.0 public-readme and security follow-up (October 23, 2026)
+
+- Simplified the public README to product description, walkthrough, features, availability, quick start and documentation/license links. Its complete earlier text remains in [historical README notes](README_CANDIDATE_NOTES.md), with original meanings and compatibility bookmarks preserved.
+- Added the maintainer-selected restricted-use license: official APK/website use is permitted; original source reuse, modification and redistribution require written authorization, preserving contributor, platform, statutory and third-party rights. Custom terms do not establish third-party redistribution clearance or legal enforceability.
+- Reviewed all 83 current Dependabot alerts. Updated Next.js and matching lint packages from 16.3.8 to 16.4.1. The production npm audit is clean; the full audit still reports the known unpatched development `braces` finding. The 80 archived Python alerts remain in the [new complete inventory](../../security/DEPENDABOT_ALERTS_2026-10-23.csv), with byte-preserving V4.4 archive mappings and ledger checks; renaming a receipt does not patch the historical environment.
+- The supplied CI screenshot confirms old candidate `4ff19bc` passed CI #27. Its V4.5 R03 report passed a full 30-minute session, and the maintainer reports initial APK testing without observed issues. Those are evidence for the pre-patch build. The framework refresh requires its own checks, a new approved commit/CI run, refreshed APK/OTA artifacts and matching Vercel deployment; stable publication is not performed by this preparation. The app remains intended 0.9.0, native host 0.1.4/code 5 and model V4.5.0. Keep the existing `v0.9.0-rc.1` tag and assets intact; local V5 runtime files remain excluded.
+
 ### v0.9.0 Android and cloud recovery candidate (October 23, 2026)
 
 - **Identity:** shared app/web `0.9.0`, native `0.1.4`/code `5` (Debug `0.1.4-dev`), bridge/schema `1`/`1`, host bounds `5-5`, adopted model `v4.5.0`. Prepared from `c7d1fb06e53fc50c4565a6d379e91ecc396fec72` plus categorized commits; the annotated `v0.9.0-rc.1` tag identifies the final local candidate commit.
