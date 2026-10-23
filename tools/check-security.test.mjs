@@ -1,7 +1,13 @@
 import { afterEach, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdtempSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -129,6 +135,7 @@ test("a deleted credential is found in history without printing its value", () =
   expect(result.stderr + result.stdout).not.toContain(dummyToken);
 });
 
+// Three real scanner runs plus Git commits exceed Bun's five-second default on Windows.
 test("a finding exception does not hide changed credentials in the same file", () => {
   const cwd = repository();
   const file = "diagnostics.ts";
@@ -161,7 +168,7 @@ test("a finding exception does not hide changed credentials in the same file", (
   expect(result.status).toBe(1);
   expect(result.stderr).toContain(file);
   expect(result.stderr + result.stdout).not.toContain(dummyToken);
-});
+}, 15_000);
 
 test("incomplete history fails instead of reporting a clean scan", () => {
   const cwd = repository();
@@ -171,4 +178,27 @@ test("incomplete history fails instead of reporting a clean scan", () => {
   const result = scan(shallow);
   expect(result.status).toBe(1);
   expect(result.stderr).toContain("full history");
+});
+
+test("exact public-storage exception still detects changed credentials in that source file", () => {
+  const cwd = repository();
+  const path = join(cwd, "src/lib/diagnostics.ts");
+  mkdirSync(join(cwd, "src/lib"), { recursive: true });
+  writeFileSync(
+    join(cwd, ".gitleaks.toml"),
+    readFileSync(new URL("../.gitleaks.toml", import.meta.url)),
+  );
+  const storageName = ["mangoleaf", "diagnostics", "v1"].join("-");
+  writeFileSync(path, `const STORAGE_KEY = ${JSON.stringify(storageName)};\n`);
+  commit(cwd);
+  expect(scan(cwd).status).toBe(0);
+  // Use a generated, nonfunctional generic credential in the same variable/path.
+  const dummyToken = createHash("sha256")
+    .update("synthetic generic key after public storage identifier")
+    .digest("hex");
+  writeFileSync(path, `const STORAGE_KEY = "${dummyToken}";\n`);
+  commit(cwd);
+  const result = scan(cwd);
+  expect(result.status).toBe(1);
+  expect(result.stderr + result.stdout).not.toContain(dummyToken);
 });

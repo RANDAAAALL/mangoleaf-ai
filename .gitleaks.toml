@@ -1,0 +1,13 @@
+[extend]
+useDefault = true
+
+# This public localStorage identifier is not a credential. Keep all default
+# detection rules; allow only this exact value in its three audited source files.
+[[rules]]
+id = "generic-api-key"
+[[rules.allowlists]]
+description = "Public diagnostics storage identifier"
+condition = "AND"
+regexTarget = "secret"
+regexes = ['''^mangoleaf-diagnostics-v1$''']
+paths = ['''(?:^|[\\/])(?:src[\\/]lib[\\/]diagnostics\.ts|tools[\\/]diagnostics\.test\.mjs|tools[\\/]e2e[\\/]diagnostics\.pw\.ts)$''']

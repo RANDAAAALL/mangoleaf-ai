@@ -2,6 +2,10 @@
   "name": "mangoleaf-ai",
   "version": "0.8.0",
   "private": true,
+  "packageManager": "bun@1.4.4",
+  "engines": {
+    "node": ">=24.22.1 <25"
+  },
   "scripts": {
     "dev": "bun --bun next dev --webpack",
     "build": "bun --bun next build --webpack",
@@ -15,6 +19,7 @@
     "prepare": "husky",
     "security:install": "bun tools/install-gitleaks.mjs",
     "security:check": "bun tools/check-security.mjs",
+    "security:runtime": "node tools/check-node-runtime.mjs",
     "security:dependencies": "bun audit",
     "test:tooling": "bun test ./tools",
     "test:build": "bun tools/build-test-app.mjs",
