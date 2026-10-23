@@ -12,7 +12,8 @@ The PWA version identifies the application people install: screens, camera and u
 
 ### v0.9.0 public-readme and security follow-up (October 23, 2026)
 
-- Simplified the public README to product description, walkthrough, features, availability, quick start and documentation/license links. Its complete earlier text remains in [historical README notes](README_CANDIDATE_NOTES.md), with original meanings and compatibility bookmarks preserved.
+- Initially shortened the README and copied its earlier text into a separate archive. The same-day maintainer review restored the useful Features, Technology, Quick start, temporary-device-testing, model/project documentation and Commands sections, updated for Next.js 16.4.1 and the current Android/browser boundaries. Removed the redundant README archive after checking the existing topic histories; old root bookmarks now lead to those records.
+- Historical README material remains in its matching records: [Android host](ANDROID_APK_HISTORY.md#preserved-implementation-notes), [camera](#v080-square-camera-prepared-release-october-19-2026), [diagnostics](#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026), [October 15 local-only History](#local-only-history-candidate-october-15-2026), [V4.5 local trial](AI_MODEL_HISTORY.md#v450-local-candidate-test-october-12-2026), [V4.4 rollback](AI_MODEL_HISTORY.md#v440-local-test-completed-v430-restored-october-9-2026), and [V5 research](AI_MODEL_HISTORY.md#october-19-2026-v500-completed-review-and-local-candidate). Original dates, results and publication limits are retained. Current setup and reference sections remain in the root README.
 - Added the maintainer-selected restricted-use license: official APK/website use is permitted; original source reuse, modification and redistribution require written authorization, preserving contributor, platform, statutory and third-party rights. Custom terms do not establish third-party redistribution clearance or legal enforceability.
 - Reviewed all 83 current Dependabot alerts. Updated Next.js and matching lint packages from 16.3.8 to 16.4.1. The production npm audit is clean; the full audit still reports the known unpatched development `braces` finding. The 80 archived Python alerts remain in the [new complete inventory](../../security/DEPENDABOT_ALERTS_2026-10-23.csv), with byte-preserving V4.4 archive mappings and ledger checks; renaming a receipt does not patch the historical environment.
 - The supplied CI screenshot confirms old candidate `4ff19bc` passed CI #27. Its V4.5 R03 report passed a full 30-minute session, and the maintainer reports initial APK testing without observed issues. Those are evidence for the pre-patch build. The framework refresh requires its own checks, a new approved commit/CI run, refreshed APK/OTA artifacts and matching Vercel deployment; stable publication is not performed by this preparation. The app remains intended 0.9.0, native host 0.1.4/code 5 and model V4.5.0. Keep the existing `v0.9.0-rc.1` tag and assets intact; local V5 runtime files remain excluded.
@@ -746,6 +747,16 @@ Realtime ordering and changes saved by another tab.
   - Local verification passed 187 core cases with four declared skips, filtered R01's 240 actual predictions, and the formatting/security/type/lint/build/export/tooling/archive checks.
   - The new reports identify application fingerprint `2ccdfaede198d91f39c4aa5ca65eabae85869382edcad9fffef3a0feb2127f7d`; the corrected Linux CI result remains pending.
   - GitHub alert re-evaluation and production deployment require the corresponding reviewed changes to be published through the release procedure.
+
+### Local-only History candidate (October 15, 2026)
+
+Preserved from the earlier README. These paragraphs describe the October 15 browser-only candidate; the later Android and automatic-backup records above supersede its storage and cloud behavior.
+
+This working tree stores scan reports and compressed photo Blobs only in this browser's IndexedDB. Supabase supplies public treatment guidelines through HTTP GET and Realtime; the app does not create guest sessions, upload scans/photos, pull private History, or queue cloud deletions. This is a source candidate, not a deployment or release announcement. Existing cloud tables, photos, users, policies, and Auth settings were left unchanged.
+
+Existing local report IDs, photos, hashes, model labels, and legacy metadata are preserved. Version 9 removes unused scan indexes without rewriting those records. Previously hidden `pending-delete` rows stay hidden. New reports have `local-only` status; older status values are retained as historical fields and do not trigger cloud work. Clearing site data, browser eviction, or losing the device can remove local History; there is no account or automatic cloud recovery.
+
+If a scan cannot save because browser storage is full, the translated dialog says so explicitly. Open History retains that unsaved result in memory while the user chooses reports to delete. Retry save uses the same prepared record ID and photo without running inference again. Discard releases the unsaved result; no report is automatically deleted. Reloading or closing the page loses an unsaved result. Other database errors retain the existing failure handling.
 
 ### v0.6.0: local History and V4.5.0 prepared release (October 16, 2026)
 
