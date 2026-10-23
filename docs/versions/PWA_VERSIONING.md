@@ -2,7 +2,7 @@
 
 Use this guide to prepare the shared web application and website release. Native APK and model versions are independent; full dated evidence belongs in the [release history](history/PWA_RELEASE_HISTORY.md#release-timeline).
 
-**October 23 security refresh:** Next.js and its lint configuration now use 16.4.1. This changes the release inputs while the intended app version stays 0.9.0 and model stays V4.5.0. The earlier `4ff19bc` CI/R03 results and RC assets identify the preceding build. Finish the current changes, commit them without V5 overrides, pass CI on that new commit, rebuild/check signed APK/OTA files, and point final `v0.9.0` and Vercel promotion at that approved revision. Keep the existing RC tag intact. See the [security review](../security/DEPENDENCY_SECURITY.md#october-23-2026-public-release-security-review).
+**October 23 security refresh:** Next.js and its lint configuration now use 16.4.1. This changes the release inputs while the intended app version stays 0.9.0 and model stays V4.5.0. The earlier `4ff19bc` CI/R03 results and RC assets identify the preceding build. Use the committed patched candidate without local V5 overrides, pass CI on the chosen release revision, rebuild/check signed APK/OTA files, and point final `v0.9.0` and Vercel promotion at that approved revision. Keep the existing RC tag intact. See the [security review](../security/DEPENDENCY_SECURITY.md#october-23-2026-public-release-security-review).
 
 ## Current repository snapshot
 
@@ -19,7 +19,7 @@ This candidate groups the Android host, SQLite/private photos, signed OTA, autom
 
 APK footers show the installed native version and active model. Android About shows the shared web version; browser footers retain app/model labels. A download page may show an available native version only from a validated label on the published APK asset. See [Android version and publication rules](ANDROID_APK_VERSIONING.md#installed-and-available-apk-versions).
 
-Keep local V5 `public/model/` and `src/lib/constants.ts` overrides uncommitted. `src/sw.ts` also contains release-cache fixes: stage those fixes with the adopted V4.5 cache identity, leaving its V5-only cache changes local. Generate `public/sw.js` from that exact isolated V4.5 candidate; never stage the worker from the local V5 build. The training notebook edit remains unrelated local work.
+Keep local V5 overrides in `public/model/`, `src/lib/constants.ts` and `src/sw.ts` uncommitted. The release-cache fixes are already in committed source; remaining worker-source changes belong to the local V5 experiment. Generate `public/sw.js` from the exact isolated committed V4.5 candidate; never stage the worker from the local V5 build. Preserve the unrelated training notebook edit.
 
 The maintainer pushed the categorized candidate and published `v0.9.0-rc.1`; supplied screenshots show its CI #27 passed for `4ff19bc`. The local V4.5 R03 report also passed for that pre-patch build. Those checks do not certify the later Next.js 16.4.1 inputs. A candidate tag does not establish stable publication or Vercel promotion. Earlier 0.8.0 and pre-patch 0.9.0 APK/OTA receipts remain historical; retain them and prepare matching artifacts for the final approved inputs.
 

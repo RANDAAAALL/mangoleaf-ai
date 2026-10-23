@@ -81,52 +81,60 @@ The saved Colab `colab-runtime-snapshot.txt` and V4.4 `training-runtime-snapshot
 
 ## Configure environment variables
 
-Copy the committed template to a local environment file:
+For a fresh checkout, copy the committed template into separate production and testing files. Skip a copy command when its destination already contains your settings:
 
 ```bash
 cp .env.example .env.local
+cp .env.example .env.testing.local
 ```
 
 On PowerShell, use:
 
 ```powershell
 Copy-Item .env.example .env.local
+Copy-Item .env.example .env.testing.local
 ```
 
-Configure these values in `.env.local`:
+Use the production project's public settings in `.env.local` and the pinned testing project's public settings in `.env.testing.local`:
 
-| Variable                               | Required       | Purpose                                |
-| -------------------------------------- | -------------- | -------------------------------------- |
-| `NEXT_PUBLIC_SUPABASE_URL`             | For guidelines | Supabase project API URL.              |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | For guidelines | Supabase browser-safe publishable key. |
+| Variable                               | Required                 | Purpose                                                          |
+| -------------------------------------- | ------------------------ | ---------------------------------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`             | For the selected backend | Supabase project API URL.                                        |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | For the selected backend | Browser-safe key for public guidelines and authenticated backup. |
 
-Version labels are not environment variables. The footer app version is derived
-from the `version` field in `package.json` by `next.config.ts`, and the model
-label is the `modelVersion` constant in `src/lib/constants.ts`. See
+`bun run dev` and default Android bundles explicitly read testing settings; `android:bundle --release` selects production. Variant, host and project checks must agree. These files do not redirect a client to an arbitrary new project. Use the reviewed projects and [Android routing rules](docs/versions/ANDROID_APK_VERSIONING.md#separate-testing-project); never point automated scans at production.
+
+Version labels are not environment variables. The shared web-bundle version comes
+from `package.json` through `next.config.ts`; the model label comes from
+`modelVersion` in `src/lib/constants.ts`. Browser footers show app/model labels.
+APK footers instead show the installed native host version and model, with the
+independent web-bundle version in About. See
 [PWA versioning](docs/versions/PWA_VERSIONING.md) and [AI model versioning](docs/versions/AI_MODEL_VERSIONING.md).
 
 The committed template uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Older projects may keep `NEXT_PUBLIC_SUPABASE_ANON_KEY` as the compatible public-key setting. Configure one browser-safe project key; neither name may contain a secret or service-role key.
 
-Do not commit `.env.local`. It is already covered by `.gitignore`.
+Do not commit either environment file. Both are covered by `.gitignore`. Anonymous-provider settings and server provisioning flags belong in Supabase, not additional public environment variables.
 
 ## Configure Supabase
 
-The current local-only History candidate needs these Supabase resources:
+Public guideline downloads in the production and testing projects use:
 
 - A `public.guidelines` table containing `id`, `disease_name`, `guidelines_en`, and `guidelines_bis`.
 - Public SELECT access for published guidance, with RLS enabled and no browser write access.
 - The `guidelines` table in the Realtime publication for live INSERT/UPDATE/DELETE notifications.
-- The project URL and a browser-safe publishable key from `.env.local`; never a secret or service-role key.
+- The selected project's URL and browser-safe publishable key; never a secret or service-role key.
 
-Anonymous sign-ins, a cloud `scans` table, and a Storage bucket are not prerequisites for this candidate. Scan reports and compressed photo Blobs stay in IndexedDB online and offline. Initial offline use still requires the app/model assets and treatment guidance to have finished downloading while online. Browser storage is shared with other site data and has a browser-managed quota.
+Android stores reports and guidelines in SQLite and photos in private app files. Both APK variants automatically back up eligible photo reports while foreground and connected. Debug and guarded browser development use testing; Production APK uses production. Private backup also needs the reviewed `scans` and `android_backup_reports` tables, private `scans` bucket, owner policies, transfer functions and provisioning Edge Function. Supabase must allow anonymous sign-ins and new-user signups; the server-only `ANDROID_BACKUP_PROVISIONING_ENABLED` flag permits first enrollment. Use the [reviewed deployment and preservation instructions](docs/security/SECURITY-AND-SYNC.md), not an ad hoc replacement schema. Existing projects are already initialized; do not recreate them.
 
-The candidate does not delete existing cloud resources or change dashboard settings. Keep the existing private bucket, RLS, users, and backups intact until a separately authorized cleanup. Earlier clients may still use them. The [security and preservation guide](docs/security/SECURITY-AND-SYNC.md#local-only-history-candidate-october-15-2026) records the transition and rollback boundary; the SQL overview remains historical maintenance material, not a new-project prerequisite.
+The published website retains browser reports and photo Blobs in Dexie/IndexedDB and does not enroll private backup users or upload scans. Guarded development-browser testing adds automatic testing uploads but no recovery-code controls. Browser storage has a browser-managed quota. Preserve existing cloud resources, users, policies and backups; a client update does not authorize historical cleanup.
+
+An installed APK includes its app/model assets and starter guidelines for offline use. Browser offline use requires a production website load to cache app/model assets and a successful guideline download first; development disables Serwist. Automatic backup and explicit APK recovery need a connection, but local diagnosis and saving do not wait for them. Create and save an APK recovery code outside the phone before losing it; restore merges owned cloud reports rather than replacing local History. See [runtime and recovery behavior](docs/versions/ANDROID_APK_VERSIONING.md#runtime-and-data-preservation).
 
 When storage prevents saving, the app offers Open History, Retry save, and Discard unsaved result. Retry reuses the completed prediction and same record ID. The unsaved result exists only in memory until local commit; reloading or closing the page loses it. Deleting reports requires the user's explicit choice. Clearing all site data removes local reports and photos and does not trigger a cloud restore.
 
 Maintain treatment text in `public.guidelines` only. Use the existing IDs `anthracnose`, `bacterial_black_spot`, `bacterial_canker`, `mango_scab`, `sooty_mold`, and `healthy`; Healthy Leaf and Healthy Fruit both read `healthy`. Populate both language fields with nonblank text. The [dated source review](./docs/treatment-guidelines/TREATMENT-GUIDELINES-REVIEW-2026-10-02.md) contains proposed replacements for manual review and entry; it has not applied them to Supabase.
 
-Successful synchronization saves these rows in IndexedDB. A device can then display its downloaded advice offline, including during a failed later sync. A device with no matching saved row, or a blank selected-language field, displays a translated unavailable message. There is no bundled treatment fallback. Initial use, cleared browser storage, and new guideline updates require a successful online sync; changing the table does not instantly update an offline device.
+Successful synchronization saves these rows in the runtime's local guideline store: SQLite in Android, IndexedDB in browsers. Android seeds an empty store from `android/starter-guidelines.json`; refresh that reviewed build snapshot deliberately with `bun run android:guidelines`. Browsers have no bundled treatment fallback. Missing rows or blank selected-language fields display a translated unavailable message. Downloaded updates remain readable offline; changing Supabase does not instantly update an offline device.
 
 ## Run locally
 

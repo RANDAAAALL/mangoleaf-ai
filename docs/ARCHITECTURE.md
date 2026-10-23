@@ -1,6 +1,6 @@
 # MangoLeaf AI Architecture
 
-**Current release candidate:** shared web `0.9.0`, native `0.1.4`/code `5`, adopted model `v4.5.0`. The local `v0.9.0-rc.1` tag identifies prepared source, not publication. Release exports use an isolated adopted-model snapshot while local V5 experimentation remains separate. See [release identity](versions/history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026).
+**Current release candidate:** shared web `0.9.0`, native `0.1.4`/code `5`, adopted model `v4.5.0`. The published pre-release `v0.9.0-rc.1` identifies the earlier candidate; final stable publication remains separate. Release exports use an isolated adopted-model snapshot while local V5 experimentation remains separate. See [release identity](versions/history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026).
 
 Native APK versions, signing/builds, compatibility and release rules now live in [Android APK versioning](versions/ANDROID_APK_VERSIONING.md). The [Android APK history](versions/history/ANDROID_APK_HISTORY.md) preserves the earlier combined implementation guide and its section bookmarks. The native `android/` project and the application footer are unchanged by this documentation move.
 
@@ -128,19 +128,15 @@ Photo review uses `src/lib/diagnosis-step.ts` to bound preparation, inference, s
 
 ## System overview
 
-MangoLeaf AI is a client-heavy, offline-first Next.js 16 application. The browser is the primary runtime: it loads the TensorFlow.js model, performs image classification, stores scan records and photo Blobs in IndexedDB. Supabase publishes shared treatment-guideline updates when the device is online.
+MangoLeaf AI shares its React screens and on-device TensorFlow.js classifier between the Android APK and companion website. The adopted release model remains V4.5.0. Android runs the bundled static application in a trusted WebView and stores reports and guidelines in SQLite, with photos in private app files. Browser compatibility and development testing use Dexie/IndexedDB for reports, photo Blobs and guidelines. An Android bundle without its trusted native bridge fails closed; it never falls back to browser storage.
 
-```mermaid
-flowchart LR
-  Photo[Camera or uploaded photo] --> AI[On-device TensorFlow.js]
-  AI --> DB[(IndexedDB reports and photos)]
-  DB --> UI[History and scan details]
-  Guidance[Supabase public guidelines] -->|HTTP GET and Realtime| Advice[(IndexedDB guidelines)]
-  Advice --> UI
-  Cache[Cached app and model files] --> AI
-```
+![System overview: shared on-device inference, separate Android SQLite/private files and browser IndexedDB, public guidelines, and authenticated private backup](diagrams/system-overview.svg)
 
-The [earlier cloud-sync diagram](../public/images/mangoleaf-architecture.svg) is retained as historical documentation; the diagram above describes the current candidate.
+The image is a self-contained SVG, so Markdown previews do not need to execute a Mermaid renderer. Its editable [Mermaid source](diagrams/system-overview.mmd) stays beside it; update and export both together when the architecture changes. The [earlier cloud-sync diagram](../public/images/mangoleaf-architecture.svg) remains historical documentation.
+
+Public guidelines refresh independently through HTTP and Realtime and remain available from each runtime's local store. Android seeds its empty guideline store from the bundled public snapshot; browsers need a successful download before reading guidance offline. The APK includes its app/model assets, while the published website uses Serwist caching. Development disables the website service worker.
+
+Both APK variants automatically back up eligible saved photo reports while foreground and connected: Production uses the pinned production project, and Debug uses testing. Guarded development-browser uploads also use testing; the published website preserves browser History without private scan backup. Private transfers require verified Supabase Auth ownership and RLS, not a device UUID. Creating a recovery code and restoring are explicit APK actions; restore merges reports without replacing existing History. Confirmed deletion queues removal from the connected backup but does not propagate deletion to other phones. See [runtime and recovery boundaries](versions/ANDROID_APK_VERSIONING.md#runtime-and-data-preservation).
 
 **Historical prepared-release snapshot, October 10, 2026:** PWA `0.5.5` was prepared with the V4.3.0 model. Repository source later adopted V4.5.0 and selected PWA `0.6.0`; earlier dated release records retain their original evidence.
 
@@ -204,12 +200,17 @@ The tree below highlights the files and directories that define the application.
 
 Testing instructions and physical-device checklists are grouped under `docs/testing/`. Treatment-advice source reviews and proposed English/Bisaya wording are grouped under `docs/treatment-guidelines/`. Supabase ownership, configuration, and recovery instructions live in [SECURITY-AND-SYNC.md](security/SECURITY-AND-SYNC.md), with SQL explanations beside the maintenance files. The short [PWA](versions/PWA_VERSIONING.md) and [model](versions/AI_MODEL_VERSIONING.md) version guides describe current rules and release steps. Their complete dated records live under `docs/versions/history/`; existing section bookmarks remain available. Dated performance reviews stay within `docs/PERFORMANCE.md`. These folder names describe the documents they contain; the Supabase table remains named `guidelines`.
 
+Selected current paths are shown below; generated builds and dependency directories are omitted.
+
 ```text
 mangoleaf-ai/
+|-- android/                         # Java host, SQLite/private files, signed APK/OTA
+|-- docs/diagrams/                   # Documentation-only SVG exports and editable source
 |-- .github/workflows/ci.yml        # Security and app checks on master pushes
 |-- .husky/pre-commit               # Format staged files before committing
 |-- .husky/pre-push                 # Security, TypeScript, lint, and formatting checks
 |-- playwright.config.ts            # Browser projects and core/reliability suites
+|-- supabase/functions/             # Authenticated backup enrollment and recovery
 |-- supabase/sql/                   # Reviewed cloud-security transition and verification SQL
 |   |-- README.md                   # Plain-English guide to the maintenance scripts
 |-- tools/                          # Shared checks and isolated browser-test tooling
@@ -251,6 +252,7 @@ mangoleaf-ai/
 |   |   |-- scan/                   # Scan controls, result card, history list, guide
 |   |   `-- tab/                    # Home, history, about, and optional diagnostics panel
 |   |-- hooks/
+|   |   |-- useAndroidAppLink.ts     # Fixed-package website launch and positive-only hints
 |   |   |-- useDiagnostics.ts       # Shared recorder subscription, independent of modal lifetime
 |   |   |-- useGuidedCamera.ts      # Live camera readiness, capture, and stream cleanup
 |   |   |-- useInstallGuide.ts      # Platform instructions, QR arrival, and focus restoration
@@ -258,6 +260,11 @@ mangoleaf-ai/
 |   |   |-- useScrollLock.ts        # Shared scroll lock for overlapping modals
 |   |   `-- useSync.ts              # Local scan actions and public guideline updates
 |   |-- lib/
+|   |   |-- app-storage.ts          # Runtime-neutral report/guideline reads and writes
+|   |   |-- native-bridge.ts        # Trusted Android host capabilities and requests
+|   |   |-- native-storage.ts       # SQLite/private-photo adapter and observers
+|   |   |-- cloud-backup.ts         # Automatic owned backup, retries and restore
+|   |   |-- cloud-history-delete.ts # Scoped durable cloud deletion jobs
 |   |   |-- classifier.ts           # Model loading, inference; compatible helper exports
 |   |   |-- diagnosis-step.ts       # Diagnosis stage deadlines, cancellation and image decode
 |   |   |-- diagnostics.ts          # Opt-in bounded local event recorder and text export
@@ -270,7 +277,7 @@ mangoleaf-ai/
 |   |   |-- image-hash.ts           # Lightweight upload/saved-photo SHA-256 fingerprints
 |   |   |-- image-storage.ts        # Canvas compression after diagnosis, without TensorFlow.js
 |   |   |-- local-scans.ts          # Prepared IDs, local save/delete, and quota detection
-|   |   |-- supabase-client.ts      # Browser-side Supabase client
+|   |   |-- supabase-client.ts      # Public guidelines and scoped private Auth clients
 |   |   `-- translations.ts         # English and Cebuano/Bisaya interface text
 |   |-- env.d.ts                    # Types for build-time injected public env values
 |   `-- sw.ts                       # Serwist source configuration
@@ -372,9 +379,9 @@ mangoleaf-ai/
 `-- tsconfig.json                    # TypeScript and @/* path-alias configuration
 ```
 
-This is a single Next.js application rather than separate frontend and backend folders. Browser code owns diagnosis and local storage, while Supabase publishes shared public treatment guidance.
+The shared application is a static-export Next.js project, with a separate Java Android host rather than a custom Node.js application server. Shared React code owns diagnosis and screens; storage adapters select native SQLite/private files or browser IndexedDB. Supabase supplies public treatment guidance and authenticated private backup for eligible APK/development clients. Reviewed SQL and Edge Function source live under `supabase/`.
 
-`video/` is the one directory that is not part of the application. It is a self-contained HyperFrames composition project for the promotional video, with its own `package.json`, its own dependency tree, and its own `AGENTS.md`. Nothing in it is imported by `src/`, and nothing in it reaches a device: `public/` is the only directory a static export copies verbatim, so the composition, the voice-over, and the rendered MP4 are absent from `out/` and from the service worker's precache manifest. The `static-video-assets` runtime cache in `public/sw.js` is unrelated to it and matches only `.mp4` and `.webm` files the app itself requests. Treat the two projects as neighbours that share a repository and nothing else; running `bun install` at the root does not install the video project's dependencies, and `bun run build` does not render the video.
+`video/` is a separate project outside the application runtime. It is a self-contained HyperFrames composition project for the promotional video, with its own `package.json`, its own dependency tree, and its own `AGENTS.md`. Nothing in it is imported by `src/`, and nothing in it reaches a device: `public/` is the only directory a static export copies verbatim, so the composition, the voice-over, and the rendered MP4 are absent from `out/` and from the service worker's precache manifest. The `static-video-assets` runtime cache in `public/sw.js` is unrelated to it and matches only `.mp4` and `.webm` files the app itself requests. Treat the two projects as neighbours that share a repository and nothing else; running `bun install` at the root does not install the video project's dependencies, and `bun run build` does not render the video.
 
 ## Application layers
 
@@ -426,7 +433,7 @@ The camera requests video only, preferring the rear camera, 1280×720, and at mo
 
 The dialog packs the instruction, preview, and capture controls in normal flow instead of distributing spare height around a centered preview. Its viewport-height scroll container and safe-area padding keep short-screen controls reachable by scrolling. The 280px minimum is strict: the preview does not shrink below that size, so extremely narrow viewports can require horizontal scrolling. Physical layout checks must record any resulting clipping or access problem.
 
-Capture becomes available only after playback has started and a nonzero video frame is ready. It reads the delivered dimensions at capture time, sets the crop side to `min(videoWidth, videoHeight)`, centers the source rectangle, and draws that square directly into one square canvas before encoding JPEG at quality 0.92. For example, a 1280×720 frame produces a centered 720×720 image. The crop matches the preview's centered `object-cover` area; CSS corner rounding and guide brackets are not burned into the pixels. After encoding, the stream stops and the resulting `File` enters the existing duplicate check and photo-review dialog. Run AI Diagnosis remains an explicit action; capture alone creates no scan or cloud upload. Camera Retake discards the review photo and opens a new live stream, while upload Retake reopens the same gallery input. Gallery bytes are not square-cropped by this camera change. The classifier still uses its existing 224×224 preprocessing and rejection gates, followed by storage compression and local-only persistence, but a camera capture now supplies a cropped source image rather than the full rectangular frame.
+Capture becomes available only after playback has started and a nonzero video frame is ready. It reads the delivered dimensions at capture time, sets the crop side to `min(videoWidth, videoHeight)`, centers the source rectangle, and draws that square directly into one square canvas before encoding JPEG at quality 0.92. For example, a 1280×720 frame produces a centered 720×720 image. The crop matches the preview's centered `object-cover` area; CSS corner rounding and guide brackets are not burned into the pixels. After copying the frame, the live stream is released before JPEG encoding; the canvas is cleared after encoding settles. The resulting `File` enters the existing duplicate check and photo-review dialog. Run AI Diagnosis remains an explicit action; capture alone creates no scan or cloud upload. Camera Retake discards the review photo and opens a new live stream, while upload Retake reopens the same gallery input. Gallery bytes are not square-cropped by this camera change. The classifier still uses its existing 224×224 preprocessing and rejection gates, followed by storage compression and local persistence, but a camera capture now supplies a cropped source image rather than the full rectangular frame.
 
 Close, unmount, a hidden document, and `pagehide` release all stream tracks. Pending permission requests and JPEG encoding results carry a request identity: a late completion after cancellation cannot reopen review, and any late-acquired stream is stopped. Returning from the background shows a paused state and requires an explicit Open camera again action; it does not restart hardware automatically. An ended camera track stops the stream and offers retry. Once a stream is acquired, a 15-second preview-start deadline prevents an indefinite unusable preview; the permission prompt itself has no application deadline.
 
@@ -434,7 +441,7 @@ Permission denial, a missing or busy camera, unsupported capabilities, preview f
 
 ### Installation guide
 
-At 768px and above, the header presents Home, Install, and About; History and Scan entry buttons and the old Upload Photo card are absent. Desktop Home replaces its visible Recent Scans/View All History section with the Install Now card. Phones retain Scan, History, Upload Photo, and their recent-photo preview. These are responsive presentation changes; saved history remains in IndexedDB.
+On the companion website at 768px and above, the header presents Home, Install, and About; History and Scan entry buttons and the old Upload Photo card are absent. Desktop Home replaces its visible Recent Scans/View All History section with the Install Now card. Phones retain Scan, History, Upload Photo, and their recent-photo preview. These are website presentation changes; browser History remains in IndexedDB. The APK keeps its native History and recent-scan preview, backed by SQLite/private files.
 
 `modal/install-guide-overlay.tsx` displays the same bilingual Android APK instructions on every device. `useInstallGuide.ts` manages opening, QR arrival, browser-install prompt suppression and focus restoration. Desktop widths add the QR and website link; phone widths retain the three installation steps. There is no platform-specific install branch, and no user-agent check claims that an APK is installed.
 
@@ -442,7 +449,7 @@ The QR and visible website link point to `https://mangoleafai.vercel.app/?instal
 
 Since the October 21 APK follow-up, Android instructions explain getting the APK, opening the file, approving installation when Android asks and opening the app. The later compact-guide edit removes the extra download-information button, availability paragraph and browser-History explanation from the overlay. Step two uses “Open APK” / “Ablihi ang APK” so it fits narrow phone widths without truncation. Step one refers to official GitHub Releases when available; the separate `/download` page retains accurate availability, compatibility and migration information. Android does not offer the browser PWA installer in this guide; its installed-browser flag never proves APK installation.
 
-The former browser PWA install hook and its platform-specific controls are retired. Browser `beforeinstallprompt` events are prevented rather than invoked or saved. Browser caching, existing reports and export remain available for deliberate migration into the separate Android app. Apple web-app metadata is not emitted; generic browser-engine identification remains in technical diagnostics for unsupported visitors.
+The former browser PWA install hook and its platform-specific controls are retired. Browser `beforeinstallprompt` events are prevented rather than invoked or saved. Browser caching and existing reports remain available. Manual report import/export controls are retired; the APK provides recovery-code controls for its connected cloud backup. Apple web-app metadata is not emitted; generic browser-engine identification remains in technical diagnostics for unsupported visitors.
 
 The overlay locks background scrolling, makes underlying sections inert, contains keyboard focus, supports Close/Escape/Back to website, and restores launcher focus. Its fixed Close control includes safe-area offsets outside the scroller's backdrop filter. Tests cover Android-only wording, both languages, narrow step headings, breakpoints, QR URL preservation, suppressed browser prompts, legacy shortcuts, metadata and the separate download page. Actual Android installation, QR use, permissions and safe-area behavior remain physical-device checks.
 
@@ -496,23 +503,25 @@ Each inference prints a collapsed browser-console table of all seven class proba
 
 ### Local persistence
 
-`src/lib/db.ts` defines version 10 of `MangoLeafDB`:
+Browser compatibility/development storage uses version 10 of `MangoLeafDB`, defined in `src/lib/db.ts`:
 
 - `scans` stores report IDs, predictions, confidence, original-file hashes, exact model labels, compressed photo Blobs, and timestamps. Its indexes are `id`, `image_hash`, and `updated_at`. Other fields remain stored without needing an index.
 - `guidelines` stores downloaded English/Bisaya guidance, with `id` and `disease_name` indexes.
 - `cloudDeletes` stores only scoped record IDs awaiting connected-backup cleanup, indexed by `[scope+record_id]` and `scope`. The v10 upgrade adds this store without rewriting reports/photos.
 
+Android storage goes through `app-storage.ts`, `native-storage.ts` and the trusted native bridge to `NativeStore`: SQLite holds reports/guidelines/settings and private app files hold photo copies. Native observers and browser live queries publish changes through the same storage-facing UI. Android never opens IndexedDB or substitutes it after a bridge failure.
+
 The v9 upgrade changes indexes only. It preserves earlier Blob bytes, IDs, hashes, model labels, status values, and any historical owner/cloud/path/device fields without writing every large row again. New reports use `local-only` status and no device or guest identity. History reads newest dates first and filters legacy `pending-delete` tombstones, which remain hidden and do not cause cloud cleanup.
 
-`local-scans.ts` prepares a stable report ID once, then saves it in an abortable transaction. Retrying a committed prepared ID returns its saved report; a conflicting report cannot overwrite it. A quota failure leaves the new result unsaved and preserves existing reports. The storage-full modal retains one draft in memory for History management, retry, or explicit discard. No successful save is announced before local commit. Reloading loses an unsaved draft.
+`local-scans.ts` prepares a stable report ID once, then saves it through the runtime's local storage adapter with cancellation handling. Retrying a committed prepared ID returns its saved report; a conflicting report cannot overwrite it. A quota failure leaves the new result unsaved and preserves existing reports. The storage-full modal retains one draft in memory for History management, retry, or explicit discard. No successful save is announced before local commit. Reloading loses an unsaved draft.
 
-Treatment guidance is authored in Supabase's `public.guidelines` table and read from its downloaded IndexedDB copy. `getGuidelineForScan()` in `src/app/page.tsx` maps both healthy classes to `healthy`, preserves valid cached text during offline use, and handles English and Bisaya independently. While the local query is pending it shows a translated loading message. A missing row or blank language field shows a translated unavailable message from `src/lib/translations.ts`. The application no longer bundles treatment advice in `src/lib/constants.ts` or uses generic treatment instructions when guidance is missing. Users need a successful guideline download before advice is available offline.
+Treatment guidance is authored in Supabase's `public.guidelines` table and read through `app-storage.ts` from SQLite in Android or IndexedDB in browsers. `getGuidelineForScan()` in `src/app/page.tsx` maps both healthy classes to `healthy`, preserves valid cached text during offline use, and handles English and Bisaya independently. While the local query is pending it shows a translated loading message. A missing row or blank language field shows a translated unavailable message from `src/lib/translations.ts`. The application no longer bundles treatment advice in `src/lib/constants.ts` or uses generic treatment instructions when guidance is missing. Browsers need a successful guideline download before advice is available offline. Android seeds an empty guideline store from the bundled public snapshot, then saves later downloaded updates in SQLite.
 
 An `Uncertain / Unrecognized` result is handled before the cached-guideline lookup. It displays the approved English/Bisaya photo reminder immediately, including offline use and while IndexedDB is loading. Scan details use the heading “Try another photo” / “Sulayi og laing litrato” for this result. The reminder is interface text in `src/lib/translations.ts`; it does not require a Supabase guideline row or change model rejection rules. Loading and unavailable guideline messages still apply to accepted class results.
 
 Historical trial and legacy rows remain visible in local history. Committed-source duplicate reuse requires exact active `model_version` `v4.5.0`, so other candidate identities and unlabeled legacy rows do not substitute for V4.5 inference. The maintainer's local override instead requires `v5.0.0-candidate`. New local reports retain the active label without relabeling earlier diagnoses.
 
-`useSync.ts` exposes local save/delete actions. `deleteScans(ids)` deduplicates IDs and removes those local records with `bulkDelete()`; the shared confirmation dialog waits for the local deletion. No cloud upload, tombstone creation, or remote deletion follows a new deletion. The previous v8 tombstones are preserved hidden historical state.
+`useSync.ts` exposes local save/delete actions. `deleteScans(ids)` delegates to `deleteLocalScans()` and `cloud-history-delete.ts`, which atomically remove local report records and queue scoped connected-backup cleanup in native SQLite or browser Dexie v10. Browser photo Blobs are part of the Dexie transaction; Android removes private photo files after the SQLite commit, so interrupted file cleanup can leave an inaccessible orphan. The confirmation dialog waits for the local deletion operation. The separate worker retries confirmed deletion jobs while foreground and connected, even if uploads are paused; it acknowledges a job only after Storage and SQL cleanup succeed. Native deletion records prevent local restore from resurrecting intentionally removed reports. Legacy v8 tombstones remain hidden historical state and never become new remote cleanup jobs. Deletion does not propagate to another phone retaining its own copy.
 
 ### Optional local diagnostics (October 17, 2026)
 
@@ -534,7 +543,9 @@ A card keeps its displayed photo while comparison is pending. Newer inputs cance
 
 ### Synchronization
 
-`src/hooks/useSync.ts` now synchronizes public treatment guidance only. Its public client has session persistence, token refresh, and URL-session detection disabled. It performs a full four-field GET at startup, online recovery, foreground recovery, and subscription readiness; it subscribes to direct Realtime INSERT/UPDATE/DELETE changes. Failed downloads retain saved advice and retry while online after 10, 30, 60, then 300 seconds. Each HTTP request has a 10-second bound.
+`src/hooks/useSync.ts` handles public treatment-guideline synchronization independently of private backup. Its public client has session persistence, token refresh, and URL-session detection disabled. It performs a full four-field GET at startup, online recovery, foreground recovery, and subscription readiness; it subscribes to direct Realtime INSERT/UPDATE/DELETE changes. Failed downloads retain saved advice and retry while online after 10, 30, 60, then 300 seconds. Each HTTP request has a 10-second bound.
+
+`src/app/page.tsx` starts the separate `cloud-backup.ts` worker. Eligible APK reports upload automatically to their pinned project; guarded development-browser uploads use testing, while published browser History stays local. The worker lazily obtains verified anonymous Auth ownership, preserves explicit pauses and processes scoped deletion jobs. Recovery-code creation attaches credentials to the same owner; APK restore explicitly merges owned cloud reports.
 
 Local saving, deleting, photo display, and exact-file duplicate checks do not use a network connection or guest identity. HTTP and Realtime remain complementary: the GET catches changes missed while offline or before subscription readiness; received live events update the cached row directly. The existing overlap, cross-tab, and unchanged-content safeguards remain in `guidelines-sync.ts`.
 
@@ -548,7 +559,7 @@ Older cloud rows/files remain preserved without automatically assigning them to 
 
 ### PWA and offline caching
 
-Private cloud endpoints for Auth, scans metadata, and Storage, together with public guideline REST reads, use a `NetworkOnly` rule before Serwist's default runtime rules. Their responses are not kept in a shared service-worker URL cache. Worker activation removes matching responses left by earlier workers, including old guideline HTTP responses. Offline scan/photo access comes from IndexedDB Blobs; downloaded guideline rows remain in their local table. Removing old HTTP responses does not clear that offline advice.
+In the published browser build, private cloud endpoints for Auth, scans metadata, and Storage, together with public guideline REST reads, use a `NetworkOnly` rule before Serwist's default runtime rules. Their responses are not kept in a shared service-worker URL cache. Worker activation removes matching responses left by earlier workers, including old guideline HTTP responses. Browser offline scan/photo access comes from IndexedDB Blobs; downloaded guideline rows remain in their local table. Android disables Serwist, loads bundled or verified OTA assets and uses SQLite/private files for offline History and guidance. Removing old HTTP responses does not clear that offline advice.
 
 `src/sw.ts` configures Serwist. It precaches the generated application assets, claims active clients, applies a `CacheFirst` strategy to `/model/*`, and adds its own `activate` handler that deletes every superseded model cache listed in `OUTDATED_MODEL_CACHES`. `next.config.ts` integrates Serwist, disables it during development, and enables static export. It also reads the `version` field from `package.json` and injects it as `NEXT_PUBLIC_APP_VERSION`, which Next replaces with a literal string at build time wherever the code references it. Because the site is a static export, every public value must be baked in during the build; nothing is resolved at runtime. See [PWA versioning](versions/PWA_VERSIONING.md).
 
@@ -564,13 +575,14 @@ These files must stay tracked in git. `.gitignore` patterns that could match the
 
 ## Data flow for a scan
 
-1. The user captures or selects an image from the scan sheet.
-2. The app hashes the original file and checks IndexedDB for a matching eligible scan. Reuse requires the exact committed active `model_version` `v4.5.0`; another label or an unlabeled legacy row cannot substitute for that model's inference. The local V5 override uses its own exact candidate label.
-3. The single classifier preprocesses the image and runs on-device inference.
-4. The completed result and compressed image are prepared under one stable report ID.
-5. The report is committed to IndexedDB, then displayed; live queries update History.
-6. If the browser rejects the save because storage is full, the modal offers explicit History management, retry of that same result, or discard. The model does not run again for a save retry.
-7. Public treatment guidance comes from its separately refreshed IndexedDB table. No scan metadata or photo is sent to Supabase.
+1. The user captures or selects a photo and reviews it before diagnosis.
+2. The app hashes the original file and queries `findStoredScan()` through the runtime storage adapter. Reuse requires the exact active `model_version`, which is `v4.5.0` in committed release source. Other models and unlabeled legacy rows cannot substitute for current-model inference; the local V5 experiment has its own candidate label.
+3. The shared classifier preprocesses the photo and runs on-device inference.
+4. The completed result and compressed photo are prepared under one stable report ID.
+5. The report/photo commit goes to SQLite/private files in Android or IndexedDB in browsers. Storage notifications update History only after the commit succeeds.
+6. If storage is full, the modal offers explicit History management, retry of the same prepared result, or discard. A save retry does not rerun the model.
+7. Public treatment guidance comes from the runtime's local guideline store, refreshed independently from Supabase; Android also seeds starter guidance for an empty store.
+8. While foreground and online, the independent private-backup worker uploads eligible APK/development reports under verified ownership. Production APK uses production; Debug and guarded browser development use testing. Published browser History does not upload scan metadata or photos. Local diagnosis and saving do not wait for backup.
 
 ## Build and deployment constraints
 

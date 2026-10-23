@@ -1,0 +1,16 @@
+%% Keep this editable source beside its exported SVG; Markdown embeds the image.
+%% This documentation asset is not copied into website or APK bundles.
+%%{init: {"theme":"base","htmlLabels":false,"fontFamily":"Arial, sans-serif","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#eef8eb","primaryTextColor":"#173f23","primaryBorderColor":"#8ab496","lineColor":"#52705b","secondaryColor":"#ffffff","tertiaryColor":"#f4f9f1"},"flowchart":{"htmlLabels":false}}}%%
+flowchart TB
+  accTitle: MangoLeaf AI runtime and storage
+  accDescr: Shared React screens and on-device V4.5.0 inference use Android SQLite and private photo files, or browser IndexedDB. Public guidelines are separate from authenticated cloud backup. Production APK backs up to production; Debug and guarded browser development use testing. Recovery-code restore is explicit and available in APKs.
+
+  Photo["Camera or uploaded photo"] --> UI["Shared React UI and History<br/>On-device TensorFlow.js<br/>Adopted model V4.5.0"]
+  Assets["Offline app and model assets<br/>APK bundle / website cache"] --> UI
+  UI <--> Native["Android APK<br/>SQLite reports and guidelines<br/>Private photo files"]
+  UI <--> Browser["Companion website / development browser<br/>Dexie / IndexedDB<br/>Reports, photo Blobs and guidelines"]
+  Guidance["Public Supabase guidelines<br/>HTTP and Realtime"] --> Native
+  Guidance --> Browser
+  Native -->|"Automatic backup"| Backup["Private Supabase backup<br/>Verified Auth ownership and RLS<br/>Production APK: production<br/>Debug / browser development: testing"]
+  Backup -->|"Explicit APK code restore"| Native
+  Browser -.->|"Development uploads only"| Backup
