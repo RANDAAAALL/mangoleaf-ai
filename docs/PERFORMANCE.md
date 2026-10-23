@@ -1,5 +1,69 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## Implementation audit (October 23, 2026)
+
+The later version-display change reuses cached native initialization for the APK footer and the existing GitHub release response for download metadata. It adds no photo/APK download, extra metadata request or polling loop. Browser footers do not contact the native bridge. Labels remain presentation metadata; installed identity and publisher download identity are separate.
+
+Native History reads share an in-flight request and replay after a storage revision changes, preventing late subscribers from receiving a deleted snapshot. The observer coalesces invalidations and suppresses stale results. Photo reads run four at a time; immutable native photo URIs reuse at most 64 Blobs totaling 16 MiB across refreshes. Missing files retain report metadata and retry on later reads. Backup hydration remains strict. Controlled tests verify read counts, cache limits, deletion during a read, and error recovery; these are not physical-phone timing measurements.
+
+OTA launch selection avoids hashing the same newly verified pending bundle twice in one selection. Restart hashing occurs off the UI thread and outside state locks, with final state checks before activation. Cancellation retains ownership until the worker has actually exited. Backup rechecks foreground/connection/diagnosis/pause between reports and before starting photo bytes; a started mutation or Storage/SQL deletion pair finishes safely.
+
+**Remaining scaling limits:** the first History view still hydrates all visible photos and retains them in its returned array; the refresh cache does not bound total History memory. In a controlled 100-report fixture, revisiting 100 completed backups still hydrated 100 photos, computed 200 digests and sent 100 begin RPCs, with no new uploads. No unsafe completion cache was added. Large-History pagination and durable verified upload indexing require a separate preservation-aware design. Current local checks do not establish low-end-device speed or model accuracy.
+
+## Bounded installed-app hints (October 22, 2026)
+
+The website coalesces simultaneous related-app queries, keeps results only in memory for five seconds, and checks again on visible page return. An unavailable or unsettled browser API becomes unknown after at most two seconds; install/open controls never wait for it. No polling loop, APK fetch, cloud query or persistent installation flag is added. Unknown results keep the guide available. These are implementation bounds, not measured device-speed improvements.
+
+## Automatic backup and foreground update observation (October 22, 2026)
+
+Production reuses the sequential one-photo backup worker and backoff instead of adding another uploader. Empty History creates no identity. Native status observation runs every 15 seconds while visible and idle, requests a check at most every 15 minutes through the existing native throttle, and stops polling while hidden. Busy UI defers presentation; disabled Debug OTA stops observation. No preprocessing/model asset change or measured speed/battery improvement is claimed. Native restart and low-end-device behavior remain pending intended-device checks.
+
+## Public APK availability lookup (October 22, 2026)
+
+Only the website's download screen requests public GitHub release metadata. It makes one request per mount, limits JSON to 256 KiB, aborts after eight seconds or navigation, and never downloads the APK to check availability. Missing/offline/rate-limited metadata keeps the direct download unavailable without affecting diagnosis. The exact latest-release API uses a NetworkOnly worker rule and activation-time cache eviction so cached metadata cannot claim current availability; unrelated caches and the local V5 experiment's model cache label are preserved. These are bounds and freshness behavior, not measured phone speed improvements. Native APKs disable Serwist and use their signed OTA protocol separately.
+
+## Physical-phone capture delay and permission interruption (October 21, 2026)
+
+The supplied `MangoLeafAI-diagnostics-1792579604202.txt` export records app `v0.8.0`, model `v4.5.0`, Android and Chromium `155.0.8059.43`; phone model/Android OS version and exact native APK hash were not supplied. At 10:45:26 UTC the camera started, then the app became hidden and the camera paused during the permission prompt. After visibility returned, preview only became ready following a manual retry. The native host called `WebView.onPause()` for the permission dialog, which triggered the existing privacy cancellation. The old APK reproduced this in the API 36 emulator. The fix preserves this pending permission interaction while retaining actual-background camera shutdown.
+
+The same phone log measures **4,056 ms** from camera capturing state to `photo.selected`, then **154 ms** for hash/duplicate checks and approximately **170 ms** from selection to ready review. Existing capture instrumentation cannot divide that 4,056 ms among frame copying, encoder scheduling and JPEG serialization. Diagnosis later completed in **1,950 ms**, including inference **781 ms**, preparation **165 ms**, processing **375 ms** and saving **585 ms**; overlapping stage/UI intervals are not additive benchmarks. This is one successful device run, not accuracy, repeated reliability or resolution of every earlier GPU timeout.
+
+Capture now releases live video/hardware immediately after snapshotting the unchanged square crop, uses an opaque canvas, and clears its backing surface after encoding. This reduces overlapping camera/encoder resource use without resizing the photo, changing JPEG quality or altering model preprocessing/thresholds. Added optional events identify frame/encode/handoff timing and source dimensions without private content. A controlled delayed encoder must show the stream already stopped, retain one capture and ignore cancelled work. No physical-phone latency improvement is claimed until this rebuilt APK is measured on that phone.
+
+The final API 36 emulator observed **4 ms** frame copy, **61 ms** JPEG encoding and **71 ms** capture/handoff for one virtual-camera photo; Review Photo decoded the expected 720 × 720 image. Both permission grant choices reached preview directly, while actual Home/background still detached the camera. This validates the exercised lifecycle and instrumentation, not a reduction from the phone's 4,056 ms to the emulator's 71 ms. See [exact APK and validation scope](testing/ANDROID_TESTING.md#october-21-2026-camera-permission-and-capture-follow-up).
+
+The log also shows a guideline Realtime `CHANNEL_ERROR` while hidden, followed by `SUBSCRIBED` and successful six-row HTTP refreshes after foregrounding. That recovered guideline connection is separate from the earlier capture delay. The installed-app intent affordance adds no polling or background package detection; it runs only on a deliberate link click.
+
+## Automatic testing Auth and recovery (October 21, 2026)
+
+Testing uploads now start without an enable action. Empty History, deleted rows and reports without an eligible local photo do not provision identities. The first eligible transfer adds anonymous Auth, quota-limited enrollment and a claim refresh; subsequent work reuses the project-scoped owner/session. Explicit code creation is allowed with empty History and attaches credentials to that same owner, without duplicating its uploaded photos. Production remains opt-in.
+
+Transfers retain bounded responses, sequential photo hydration, foreground/reconnection retries and diagnosis priority. Local saving and public guidelines do not await backup. Removing report archive controls does not change model loading, preprocessing, thresholds or accuracy. Hosted synthetic-transfer checks establish ownership and byte preservation, not phone throughput, battery life or successful inference. No new physical-phone performance measurements are claimed.
+
+## History cloud-deletion queue (October 21, 2026)
+
+Confirmed History deletion adds a small, indexed project/vault-scoped browser outbox write or an existing-settings write in the same native SQLite transaction as local removal. Jobs contain labels/record IDs, not photo bytes or diagnosis fields. The foreground worker reads at most 200 pending jobs per pass, reuses bounded authenticated requests and retry backoff, and performs Storage/SQL cleanup before uploads. Existing request timeouts still apply to operations already in flight; app suspension does not guarantee delivery. No additional inference, photo compression or model change is introduced. Native host code 2 is required; no phone latency, memory, battery or reliability improvement is claimed without measurement.
+
+## Android-only installation flow (October 21, 2026)
+
+The APK-only guide removes alternate mobile installation cards and the deferred browser-install workflow. A small event handler suppresses browser install prompts. Website caching, model loading, preprocessing, prediction thresholds, compression, storage and cloud routing are unchanged. Apple web-app metadata is no longer emitted. This is a scope/UI change; no latency, memory, accuracy or battery improvement is claimed from removing those branches.
+
+## Automatic development/test uploads (October 21, 2026)
+
+The later October 21 follow-up removes browser enablement UI. Verified browser development provisions its test owner only when a visible, connected upload batch encounters a saved non-deleted report; empty History does not create an Auth identity. This adds no inference or image conversion. Native backup still requires consent. Diagnostic text export uses the existing document lifecycle with a 128 KiB native transport bound and temporary-file cleanup; reports/photos are not included.
+
+Browser development observes Dexie primary keys and hydrates one photo per upload; Android uses its metadata list and private-file hydration. Enabled transfers coalesce notifications, yield between photos during diagnosis, and retry with 10/30/60/300-second backoff while visible and connected. No extra diagnosis, pixel conversion or model inference was added. Supabase Auth, hashing and network transfers consume resources; diagnosis/local saving do not await them. Closed/suspended apps do not guarantee delivery. No phone throughput, battery or memory improvement is claimed. See [Android routing](versions/history/ANDROID_APK_HISTORY.md#development-and-production-routing-october-21-2026).
+
+## Android storage, OTA, and backup candidate (October 20, 2026)
+
+The separate testing database now indexes backup `cloud_id` references and evaluates the JWT subquery once per policy statement before extracting its trusted metadata flag. Its advisor no longer reports an unindexed backup foreign key or per-row Auth policy evaluation. Empty-database unused-index notices are expected; no hosted throughput or latency improvement has been measured. These test-project changes do not modify production or phone inference.
+
+Actual emulator observation: Pixel 7/API 36 with WebView `133.0.6943.137` loaded the packaged app and model assets, then stalled during real WebGL warm-up. The host-graphics run reported `MODEL_WARMUP_TIMEOUT` after approximately 99,621.98 ms; the existing 60-second recovery timer was delayed by work. Recovery UI and History navigation worked offline. Successful native inference remains unverified. This earlier APK observation is not a phone benchmark or a final-APK pass; [Android testing](testing/ANDROID_TESTING.md#october-20-2026-evidence-and-limits) records its environment and limits. Model/backend/thresholds were preserved.
+
+Android reports/photos use SQLite and private files through a bounded asynchronous message bridge, avoiding IndexedDB operations in the native target. Photo transfers are capped at 8 MiB each; History currently hydrates local photos with concurrency four, so total retained History memory still grows with its photos. Manual archives cap at 64 MiB/1,000 records and import one report at a time. Browser Dexie remains for safe migration. These limits are implementation bounds, not measured low-end-device memory or latency results.
+
+OTA file verification and native storage run off the UI thread. Updates stage for a cold process launch, pause during foreground diagnosis/backgrounding, and retain the prior healthy bundle. Hashing, decompression, temporary disk use, and rollback copies consume resources. Opt-in backup handles one compressed photo at a time, checks connectivity/consent between transfers, and yields between photos during diagnosis. An already-started request may still settle. Public guidelines use a separate client and retain offline access through a bundled seed and later refreshes. No phone battery, thermal, performance, accuracy, or reliability improvement is claimed from compilation or emulator checks. See the [Android candidate guide](versions/ANDROID_APK_VERSIONING.md).
+
 ## Square camera preview (prepared v0.8.0, October 19, 2026)
 
 The camera now displays one centered square preview bounded to 280–360 CSS pixels per side. `ResizeObserver` updates the display size when its available width changes; fixed corner brackets use CSS rather than per-frame JavaScript. The dialog no longer expands the preview region to distribute spare height, and short screens scroll instead of shrinking the square below 280px. The green brackets are 4px thick and 36px long, with a 16px radius matching the preview. These display dimensions do not constrain the camera's delivered resolution or decoded-video memory.

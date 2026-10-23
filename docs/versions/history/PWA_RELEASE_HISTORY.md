@@ -10,6 +10,46 @@ The PWA version identifies the application people install: screens, camera and u
 
 ## Current repository snapshot
 
+### v0.9.0 Android and cloud recovery candidate (October 23, 2026)
+
+- **Identity:** shared app/web `0.9.0`, native `0.1.4`/code `5` (Debug `0.1.4-dev`), bridge/schema `1`/`1`, host bounds `5-5`, adopted model `v4.5.0`. Prepared from `c7d1fb06e53fc50c4565a6d379e91ecc396fec72` plus categorized commits; the annotated `v0.9.0-rc.1` tag identifies the final local candidate commit.
+- **Scope:** Java Android host with SQLite/private photos; signed compatible OTA; automatic anonymous-owner cloud backup and explicit recovery-code restore; scoped cloud deletion; Android-only installation and installed-app hints; permission/capture fixes, diagnostics and independent installed/web/model labels. Node security floor and exact Bun CI selection are included.
+- **Model preservation:** release model files/constants remain byte-identical to the committed V4.5 baseline. Local V5 model/constants/cache overrides and the unrelated V4.5 training notebook edit are excluded. The website worker is generated from isolated V4.5 source, retaining the new uncached release metadata behavior.
+- **Status:** local candidate preparation, not a public release. Final-commit CI, approved reliability including R03, physical-device validation, portable protected signing backup, APK/OTA asset publication and exact Vercel promotion remain pending. Earlier web `0.8.0` APK/OTA receipts do not validate web `0.9.0`; rebuild and verify matching assets before uploading.
+- **Local validation:** ordered typecheck/lint/build, ten export assets and 169 tooling cases passed. The full browser run had 272 passes/seven platform skips and nine obsolete/browser-specific test assertions; all failures were covered by 12 passing focused rechecks after test-only fixes. A fresh full run remains pending in final-commit CI. Detailed candidate results and their limits are recorded in [October 23 testing evidence](../../testing/TESTING.md#v090-categorized-release-candidate-october-23-2026). Local logs/model hashes are retained under ignored `.tools/release-090/`; no secret-bearing files or experimental weights belong in the commits.
+
+**Prepared release title:** `MangoLeaf AI v0.9.0 - Android and cloud recovery`
+
+**Short description:** Android APK with SQLite, signed OTA, automatic cloud backup and recovery codes. Improves camera capture, installation and diagnostics. Retains Model v4.5.0. Candidate; release approval pending.
+
+**Local candidate tag:** `v0.9.0-rc.1`. Push the candidate branch for CI first. After the approved checks and exact deployment promotion, create the stable `v0.9.0` tag on that tested commit. Attach the signed APK plus `web-update.zip`, `update.json` and `update.sig` under GitHub Release Assets; set the APK's verified native asset label. Git commits and tag pushes do not upload those assets or promote Vercel.
+
+### Installed and available APK labels (October 23, 2026)
+
+APK footers now show the installed host version and active model; About retains the independent web version. Browser footers retain shared app/model labels. The download page distinguishes a GitHub release tag from an optional native version on the verified APK asset label. Native host/schema/bounds remain unchanged because the host already exposes its version name. No app/model adoption, public release or deployment follows automatically. See [native version-display record](ANDROID_APK_HISTORY.md#installed-and-available-version-labels-october-23-2026).
+
+### Implementation audit (October 23, 2026)
+
+History resilience, recovery/session races, foreground transfers and native OTA rollback/restart/cancellation were repaired with focused regressions. Java changes advance the unpublished native candidate to 0.1.4/code 5 and host bounds 5-5; shared web stays the 0.8.0 working candidate, bridge/schema 1/1 and default Android model committed V4.5.0. The native version remains absent from the footer. No PWA tag, Vercel promotion or GitHub publication occurs. See [native audit record](ANDROID_APK_HISTORY.md#implementation-audit-october-23-2026) and [exact evidence](../../testing/ANDROID_TESTING.md#october-23-2026-implementation-audit).
+
+### Website Open or install (October 22, 2026)
+
+Added positive-only installed-native-app detection and a synchronous Open or install action with an explicit APK guide fallback. Confirmed installations show Open app; repeat APK downloads require a deliberate reinstall/update choice. Release-only website association changes the unpublished native candidate to 0.1.3/code 4 and default host bounds 4-4. Shared web 0.8.0, bridge/schema 1/1 and committed V4.5 remain unchanged. The association needs a new matching-signer APK; OTA alone cannot add it. No public tag, release or Vercel promotion is created. See [current native behavior](ANDROID_APK_HISTORY.md#website-open-or-install-october-22-2026) and [candidate evidence](../../testing/ANDROID_TESTING.md#october-22-2026-website-open-or-install).
+
+### Automatic production backup and restart prompt (October 22, 2026)
+
+Automatic production anonymous-owner backup supersedes the prior opt-in candidate. The About update card is replaced by a verified idle-only Restart now/Later offer. The native method changes the unpublished host to 0.1.2/code 3 with default bounds 3-3; bridge/schema stay 1/1, web stays 0.8.0 and committed V4.5 stays selected. Earlier APK/OTA receipts below do not verify this source. See [follow-up validation](../../testing/ANDROID_TESTING.md#october-22-2026-automatic-production-backup-and-update-prompt). No tag/public release is created by implementation.
+
+### Production Android preparation (October 22, 2026)
+
+Prepared permanent external APK/OTA signing with maintainer approval, a checked signed-APK pipeline, signed packaged public trust, strict download availability and compatible OTA preparation. Native Release remains `0.1.1`/code `2`, web `0.8.0`, bridge/schema `1`/`1`; committed V4.5 remains selected while local V5 overrides are preserved. Candidate receipts record APK/input/model/source identity. The reviewed additive Supabase backup setup was deployed after access returned and its server flag was enabled, preserving all historical data/policies. Catalog and safe HTTP checks do not establish a real-device backup/recovery pass. No public APK/OTA asset, tag, commit or Vercel promotion was created. Exact validation and remaining publication gates belong to [Android testing evidence](../../testing/ANDROID_TESTING.md#october-22-2026-production-apk-preparation).
+
+Local signed APK SHA-256: `f4875f120718c4c8d925bf28651fd058e4f2f6468c188767b9ab77176270e501` (14,540,614 bytes); production input fingerprint `3ce903b05e3e5545f9f8f1aa4bf531f76e10750b22baebc06dcb33a8218173bd`. The candidate is based on `c7d1fb06e53fc50c4565a6d379e91ecc396fec72` plus working-tree changes. Locally signed OTA sequence 2 was verified with the same pinned host/model; no public tag or remote sequence history is established by that preparation. Native unit/runtime/physical/reliability and remote-release evidence remain separately identified in the testing record.
+
+### Android host implementation candidate (October 20, 2026)
+
+Prepared a separate Java Android host (`0.1.0-dev`, code `1`) for shared web `0.8.0`, native SQLite/private photos, archive migration, signed GitHub Release OTA, and optional Supabase recovery-code backup without Sign In/Register screens. The committed V4.5 model remains the default APK input; local V5 experimentation is preserved separately. No app tag, GitHub asset, production signing key, Vercel promotion, or live Supabase migration was created by this preparation. The [Android guide](../ANDROID_APK_VERSIONING.md) records build fingerprints, server deployment boundaries, verification, and remaining device/release checks. Earlier v0.8.0 browser results do not certify this Android candidate.
+
 - **Prepared app:** `0.7.0`; **adopted model:** V4.5.0 (`v4.5.0`). The model accepts a diagnosis only when raw confidence is at least 0.70. Margin and entropy rejection are disabled.
 - **Current features:** optional local Diagnostics in About and raw confidence in new reports. Badges truncate to at most one decimal percentage and omit `.0`. Older reports retain their saved precision.
 - **Branch handoff:** `88a479d` contains the feature preparation; `116e462` contains the scanner follow-up and was pushed to `master`. A local annotated `v0.7.0` candidate tag was prepared. Remote CI, tag publication, and Vercel promotion are not verified by this documentation pass.

@@ -1,22 +1,25 @@
 # MangoLeaf AI PWA Versioning Guide
 
-Use this guide to choose an app version and prepare its release. For earlier releases, measurements, and original commit templates, use the [release history](history/PWA_RELEASE_HISTORY.md#release-timeline).
+Use this guide to prepare the shared web application and website release. Native APK and model versions are independent; full dated evidence belongs in the [release history](history/PWA_RELEASE_HISTORY.md#release-timeline).
 
 ## Current repository snapshot
 
-| Item                  | Last recorded state                                                               |
-| --------------------- | --------------------------------------------------------------------------------- |
-| App version           | `0.8.0` candidate, from `package.json`                                            |
-| Adopted AI model      | `v4.5.0`                                                                          |
-| Candidate preparation | Square guided camera, October 19, 2026; candidate commit not yet recorded         |
-| Local validation      | Build, security, tooling, export, recorded core cases, and R01 pass               |
-| Production status     | Candidate; final-commit CI, device validation, publication, and promotion pending |
+| Item                    | Prepared state                                                                                           |
+| ----------------------- | -------------------------------------------------------------------------------------------------------- |
+| Shared app / web bundle | `0.9.0`, from `package.json`                                                                             |
+| Adopted model           | `v4.5.0`; local V5 experiments excluded                                                                  |
+| Android host            | `0.1.4` / code `5`; Debug `0.1.4-dev`                                                                    |
+| Compatibility           | Bridge/schema `1`/`1`, host bounds `5-5`                                                                 |
+| Local tag               | Annotated candidate `v0.9.0-rc.1`                                                                        |
+| Publication             | Pending final-commit CI, approved reliability/device checks, signing-key backup and deployment promotion |
 
-Version `0.8.0` prepares a square camera preview with matching capture, bounded sizing, and rounded green corner guides. It retains the adopted V4.5.0 model. See its [candidate release record](history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026) for the release text and validation status. The [v0.7.0 record](history/PWA_RELEASE_HISTORY.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026) preserves the preceding diagnostics and confidence changes.
+This candidate groups the Android host, SQLite/private photos, signed OTA, automatic authenticated cloud backup, recovery codes, Android installation, camera fixes and independent version labels. It is a substantial pre-1.0 feature update; `1.0.0` remains reserved for the first approved stable, field-tested release. See the [v0.9.0 candidate record](history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026).
 
-The maintainer's local V5 model override is separate from this app candidate. Exclude its `public/model/`, `src/lib/constants.ts`, and `src/sw.ts` changes from the release. Generate the candidate's `public/sw.js` from the exact V4.5.0 release source and assets; do not commit the worker produced by the local V5 build.
+APK footers show the installed native version and active model. Android About shows the shared web version; browser footers retain app/model labels. A download page may show an available native version only from a validated label on the published APK asset. See [Android version and publication rules](ANDROID_APK_VERSIONING.md#installed-and-available-apk-versions).
 
-The current preparation changes files and supplies release text only; it does not stage, commit, push, create a tag, publish a release, or promote a deployment. The [candidate validation record](../testing/TESTING.md#v080-square-camera-release-candidate-october-19-2026) distinguishes the isolated V4.5.0 candidate from the maintainer's V5 working tree, records the initial browser failures and focused repairs, and keeps R03 and physical-device evidence pending.
+Keep local V5 `public/model/` and `src/lib/constants.ts` overrides uncommitted. `src/sw.ts` also contains release-cache fixes: stage those fixes with the adopted V4.5 cache identity, leaving its V5-only cache changes local. Generate `public/sw.js` from that exact isolated V4.5 candidate; never stage the worker from the local V5 build. The training notebook edit remains unrelated local work.
+
+The maintainer requested categorized local commits and an annotated candidate tag and will push personally. A local candidate tag does not establish CI approval, a published GitHub Release or Vercel promotion. Earlier 0.8.0 APK/OTA receipts remain historical: rebuild matching assets for web 0.9.0 before publication.
 
 ## Version labels and release rules
 
@@ -78,7 +81,7 @@ When adopting a different model, follow the [model adoption checklist](AI_MODEL_
 
 - [Full release index and historical status](history/PWA_RELEASE_HISTORY.md#app-releases)
 - [Chronological release records](history/PWA_RELEASE_HISTORY.md#release-timeline)
-- [Current candidate: v0.8.0 square guided camera](history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026)
+- [Current candidate: v0.9.0 Android and cloud recovery](history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026)
 - [Latest recorded handoff: October 18, 2026](history/PWA_RELEASE_HISTORY.md#october-18-2026-v070-scanner-follow-up-and-branch-handoff)
 
 Historical records retain their original dates, measurements, and status. Use them as evidence for those builds, not as confirmation of today's production state.

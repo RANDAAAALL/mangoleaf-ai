@@ -2,7 +2,7 @@
 
 Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current candidate is app `0.8.0`, model `v4.5.0`, confidence-only threshold 0.70. Fill results only after observing the exact recorded release build; do not transfer a previous build's observations to this candidate.
 
-Reports/photos stay in this browser's IndexedDB; Supabase supplies public treatment guidance only. No guest sign-in or private scan/photo upload is expected. Use the exact tested build identity below; dated changes are in [Protocol history](#protocol-history).
+For published browser compatibility builds, reports/photos stay in IndexedDB and Supabase supplies public treatment guidance only. The unpublished Android candidate uses SQLite/private photos and automatic private cloud backup with separately saved recovery credentials. Record the target, APK/bundle hashes, native host/bridge/schema versions, and backup pause state and recovery-code availability when testing Android; do not apply the browser-only network expectation to an enabled native backup. Use the exact tested build identity below; dated changes are in [Protocol history](#protocol-history). See [Android verification](../versions/ANDROID_APK_VERSIONING.md#verification-and-remaining-evidence) for additional native cases.
 
 Do not mark a case as passed before every required observation is recorded. Use `Pass`, `Fail`, or `Blocked`; explain every failure or block.
 
@@ -26,7 +26,7 @@ Need an answer-format example? See [PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md](PH
 - [ ] Device model:
 - [ ] Operating system and version:
 - [ ] Browser and version:
-- [ ] Mode: installed PWA / browser tab:
+- [ ] Mode: Android APK / development-browser tab:
 - [ ] Diagnostics enabled before this session: Yes / No; memory-only warning: Yes / No:
 - [ ] Actual inference backend / texture precision, if available in diagnostics:
 - [ ] Network used before offline checks:
@@ -70,7 +70,7 @@ Logs rotate at 200 events and 64 KiB of serialized UTF-8 JSON. They stay in memo
 - [ ] Incident time/time zone and elapsed time:
 - [ ] Action: disabled Run / enabled Run did not advance / analyzing / confirmed deletion / other:
 - [ ] Button appearance, photo-check text, visible stage, and 15/45/75/90% milestone, if present:
-- [ ] Phone model, exact OS/browser version, PWA or tab, network, and background/lock-screen activity:
+- [ ] Phone model, exact OS/browser version, APK or dev tab, network, and background/lock-screen activity:
 - [ ] Cancel/Close/retry/reload action attempted and observed response:
 - [ ] Log export location, persistence warning, screenshot/video, and issue link:
 - [ ] History rows/photos checked after recovery; save/delete already completed, not completed, or unknown:
@@ -134,7 +134,7 @@ Use two different photos. Photo B must not have been scanned on this device befo
 ### Airplane-mode check
 
 - [ ] Enable airplane mode and turn Wi-Fi off.
-- [ ] Fully close then reopen installed PWA or browser tab.
+- [ ] Fully close then reopen the Android APK or development-browser tab.
 - [ ] App opens offline.
 - [ ] History and Photo A remain visible.
 - [ ] Scan new Photo B offline.
@@ -198,7 +198,7 @@ Mix actual guided-camera capture and gallery uploads. Record the tested app/mode
 
 ## R04-M01: guided camera, gallery, and layout
 
-Take Photo now opens a live browser camera below 768px; it does not launch the old native-camera picker. Complete these checks on both the recorded iOS and Android environments, including browser-tab and installed-PWA modes where required. Desktop browser emulation and synthetic camera streams do not satisfy physical observations.
+Take Photo opens live camera preview below 768px. Complete these checks on the recorded Android devices in APK mode, and in development-browser mode when applicable. The supported mobile product is Android only; former iOS observations remain historical evidence. Desktop emulation and synthetic camera streams do not satisfy physical observations.
 
 ### Camera and picker
 
@@ -234,7 +234,7 @@ Take Photo now opens a live browser camera below 768px; it does not launch the o
 - [ ] History search, filter, pagination, Details, and delete work.
 - [ ] Portrait layout works.
 - [ ] Landscape layout works.
-- [ ] Camera Close and Capture remain reachable around iOS/Android safe areas, browser controls, and the installed PWA's viewport.
+- [ ] Camera Close and Capture remain reachable around Android safe areas, APK controls, and the development browser's viewport where applicable.
 - [ ] Instructions, preview, and controls stay together without tall flex-distributed gaps. On short/landscape screens, scroll to reach Close and Capture; the preview keeps its 280px minimum instead of shrinking. Record any horizontal clipping or scrolling on very narrow viewports.
 - [ ] English/Bisaya framing, permission/error, paused, Capture, and retry text display correctly.
 - [ ] With available assistive technology or keyboard, dialog title/status can be read, focus stays inside camera, and Escape closes it. Record unavailable access as blocked.
@@ -246,26 +246,40 @@ Take Photo now opens a live browser camera below 768px; it does not launch the o
 
 Complete one row for every physical environment tested. Do not claim untested combinations.
 
-| Device | OS / version | Browser / version | PWA or tab | R01 | R02 | R03 | R04 | Evidence location | Notes |
-| ------ | ------------ | ----------------- | ---------- | --- | --- | --- | --- | ----------------- | ----- |
-|        |              |                   |            |     |     |     |     |                   |       |
-|        |              |                   |            |     |     |     |     |                   |       |
-|        |              |                   |            |     |     |     |     |                   |       |
+| Device | OS / version | Browser / version | APK or dev tab | R01 | R02 | R03 | R04 | Evidence location | Notes |
+| ------ | ------------ | ----------------- | -------------- | --- | --- | --- | --- | ----------------- | ----- |
+|        |              |                   |                |     |     |     |     |                   |       |
+|        |              |                   |                |     |     |     |     |                   |       |
+|        |              |                   |                |     |     |     |     |                   |       |
 
 ## R04-M03: installation guide and installed launch
 
-Record actual installation outcomes for the same release build and browser. An emulated phone user-agent or controlled `appinstalled` event is not physical installation evidence.
+Record actual Android APK installation outcomes for the exact candidate. A phone user-agent, browser shortcut or controlled install event is not APK installation evidence. Keep the original section bookmark for earlier records.
 
-- [ ] Below 768px, open Install in English and Bisaya; the detected platform's instructions are appropriate for the recorded browser/device.
-- [ ] On iOS Safari, follow Share, Add to Home Screen, and Add; record actual menu wording and whether launch opens in installed-PWA mode.
-- [ ] On Android, use the offered native install action or documented browser-menu fallback; record the browser's available controls and installation outcome.
-- [ ] If native installation is unavailable, browser-menu instructions and Continue in Browser remain usable; record the limitation without claiming an installation pass.
-- [ ] Where a native install prompt is available, dismiss it and verify the app does not immediately repeat it. A further prompt requires a newly offered browser event.
-- [ ] On a wide display, both Android/iOS instructions and the QR are visible; scan the QR with a physical phone and record that the public `?install=1` page opens its guide without an automatic native prompt.
-- [ ] Close, Escape where available, and Continue in Browser dismiss the guide; background controls and scrolling work afterward.
-- [ ] In portrait, landscape, and installed-PWA mode, Close remains reachable around browser controls and safe areas; guide contents can scroll without losing that control.
-- [ ] Launch the installed app, verify the footer's app/model versions, and record whether installed status is recognized in that launch context.
+- [ ] Open the website installation action in English and Bisaya at phone and desktop widths; only Android APK instructions are offered.
+- [ ] With updated Release host 0.1.4/code 5 and its associated HTTPS website, supporting Android Chrome confirms the package and shows Open app. A direct tap opens the existing Activity without another download; another APK remains an explicit reinstall/update choice.
+- [ ] With no APK, an older APK, unsupported API/browser or unassociated origin, Open or install and the download guide remain usable. An empty/failed check never claims the app is absent. Check visible-page return refresh, fixed package/fallback and Debug/production separation.
+- [ ] Record Android version, System WebView version, APK hash, application ID, native host version and selected cloud environment. Distinguish debug from production artifacts.
+- [ ] Install the prepared APK on Android through the system installer. Record any source permission, cancellation, failure or success without treating a browser shortcut as an APK install.
+- [ ] If a public APK is not available, record that distribution step as pending/blocked; a local debug artifact does not establish public production distribution.
+- [ ] Confirm the website never launches a browser PWA install prompt or claims that an APK is installed from standalone display mode.
+- [ ] On a wide display, Android instructions and the QR are visible. Scan with an Android phone; the public `?install=1` link opens the guide without starting an installer automatically.
+- [ ] Close, Escape where available, and Back to website dismiss the guide; background controls and scrolling work afterward.
+- [ ] In portrait and landscape, Close remains reachable around Android browser controls and safe areas.
+- [ ] Launch the installed APK and verify app/model labels and native host version. Check local reports, offline launch and deliberate browser-export migration separately.
 - [ ] R04-M03 result: Pass / Fail / Blocked — reason and evidence location:
+
+## Android audit follow-up
+
+- [ ] Compare the installed APK version in the footer with Android app/package information on Debug and Release. Check EN/BIS, narrow screens, offline reopening and an OTA whose web version differs from the installed native version. Android About must retain the separate web-bundle version. Browser footers must show app/model only; a website download version describes the labeled published asset, not this phone's installation.
+
+- [ ] Record exact APK, signer, native/bundle/model identities and System WebView version. Install the matching-signer update with data retained.
+- [ ] Before an OTA health acknowledgment, reproduce a renderer-only failure while the host survives. Reopen and verify the previous trusted bundle is selected. Healthy bundles and ordinary Activity recreation must not roll back or activate pending updates.
+- [ ] While explicit restart is verifying, background the app or open a picker/camera flow. Verify activation waits until safe and the UI stays responsive. Retry only the exact still-pending candidate.
+- [ ] Cancel an OTA download and immediately check/restart again. Verify another task cannot begin until the old worker's staging cleanup exits.
+- [ ] With a missing private photo, verify other History reports remain visible, affected metadata remains readable and backup does not upload a fabricated/remote fallback photo. Delete during a held History refresh and verify the deleted item does not reappear.
+- [ ] On testing only, delete while first anonymous enrollment or recovery verification is settling. Verify no deleted report is uploaded or old-scope job stranded. Try wrong recovery input and Clear; verify the existing owner remains connected. Check foreground resume after interrupted batches.
+- [ ] Audit follow-up result: Pass / Fail / Blocked — reason and evidence location:
 
 ## Final decision
 
@@ -299,3 +313,16 @@ These notes record checklist changes, oldest first. They do not supply completed
 
 - **v0.8.0 square-camera protocol**
   - Added bounded 280–360 CSS-pixel square preview, visible rounded bracket, capture/preview crop alignment, rotation, and short-screen scrolling checks. The earlier full-frame capture expectation is replaced for this candidate; the October 8 historical results remain in [TESTING.md](TESTING.md#guided-live-camera-october-8-2026). Physical-device testing is planned; screenshots and synthetic-stream browser checks do not pre-fill these results. Record the final V4.5 release build identity and actual observations before approval.
+
+### October 22, 2026
+
+- **Installed-app website guidance**
+  - Added positive-only related-app detection, user-tapped fixed-package launch, explicit repeat-download choice and unknown/unsupported fallback checks. Test the updated Release APK against its matching HTTPS website; controlled responses do not complete these physical observations.
+
+### October 23, 2026
+
+- **Installed/downloadable version labels**
+  - Added installed-host versus web-bundle versus available-download comparisons. These remain manual observations; browser/native-port mocks do not prove installed package information or publication.
+
+- **Native/cloud audit protocol**
+  - Added renderer-only rollback, restart verification interruption, canceled-worker cleanup, missing-photo History and enrollment/recovery deletion races. These remain blank physical observations until completed on the exact candidate; compiled instrumentation and mocked fixtures do not fill them.

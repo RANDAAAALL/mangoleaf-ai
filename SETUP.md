@@ -1,13 +1,39 @@
 # MangoLeaf AI Setup Guide
 
+**Version display, October 23:** APK footers now show the installed Android version and bundled model, with Debug retaining `-dev`; About keeps the separate web-bundle version. Browser footers retain app/model labels. The download page accepts a native version only from the validated APK asset label printed by the release builder. See [version display and publishing](docs/versions/ANDROID_APK_VERSIONING.md#installed-and-available-apk-versions).
+
+**Earlier implementation audit, October 23 (superseded by the version-display follow-up):** native candidate **0.1.4/code 5** (Debug **0.1.4-dev**), default host bounds **5-5**, repairs OTA rollback/restart/cancellation and History/recovery races. Rebuild and install the matching-signer APK to test the Java changes; `adb install -r` alone installs the existing file. Web remains the 0.8.0 working candidate, bridge/schema 1/1, and default Android model committed V4.5.0. Native version stays out of the footer. See [audit evidence](docs/testing/ANDROID_TESTING.md#october-23-2026-implementation-audit). No deployment or publication is performed.
+
+**Website install follow-up, October 22:** Android actions say **Open or install**, changing to **Open app** only when a supporting browser confirms the exact package. Unknown/older installs retain an explicit guide; confirmed installs put another APK download behind a reinstall/update choice. Release association needs native **0.1.3/code 4** and the matching website manifest; web 0.8.0/model V4.5 remain unchanged. See [website launch and detection](docs/versions/ANDROID_APK_VERSIONING.md#website-open-or-install). No APK download or public deployment happens automatically.
+
+**Earlier October 22 backup follow-up:** both APK variants back up eligible saved reports automatically, without an initial enable step. Production uses production Supabase; Debug/development browser use testing. Create/save a recovery code outside the phone for recovery. Pause/Resume remains available. A verified-update modal replaces the About update card; Debug retains its production-OTA block. Native 0.1.2/code 3 needs a rebuilt/reinstalled APK. See [current behavior and release flow](docs/versions/history/ANDROID_APK_HISTORY.md#automatic-production-backup-and-update-prompt-october-22-2026). Earlier dated notes describe preceding candidates.
+
 This guide covers local development and the external services required by the current application.
 
-The prepared camera candidate uses app version `0.8.0` and adopted model `v4.5.0`, with confidence >=0.70 only; margin and entropy are disabled. The maintainer's uncommitted local V5 override is separate from this app release. A fresh checkout uses V4.5 unless the experimental model is deliberately installed. See the [V5 local test and rollback record](docs/model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md#local-installation-and-rollback). The camera update needs no new environment variables, Supabase resources, or retraining. Its [candidate release record](docs/versions/history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026) tracks validation, publication, and promotion separately.
+**Production APK, October 22:** use `bun run android:release:windows -Action check` and then `bun run android:release:windows -Action build` from the repository root. This account's approved permanent keys live outside the repository under `%USERPROFILE%\.mangoleaf-ai\signing`; its protected credentials must be accessible to that Windows account. A missing key fails closed rather than creating a replacement. The wrapper validates, builds, signs and retains an unpublished APK/receipt under ignored `.tools/android-release/`. Debug still uses testing and its SDK debug key. Production backup resources/function are deployed and the maintainer enabled its server-only flag; automatic enrollment and real-device checks remain separate. See [production preparation](docs/versions/history/ANDROID_APK_HISTORY.md#production-apk-preparation-october-22-2026) for prerequisites, portable key/password backup, OTA, exact-artifact verification, current server evidence and publication gates. No new public environment variables are required; signing passwords never belong in public app settings.
+
+**October 21 camera follow-up:** rebuild/reinstall the Debug APK for the native permission-dialog lifecycle fix and `mangoleaf://open` handler. The website's Android **Open MangoLeaf AI** link targets Debug during `bun run dev` and the production package in published builds, with a same-origin download-information fallback. That October 21 version did not detect installation or download an APK automatically; the later positive-only detection is described above. No new dependency, backend setting or environment variable is required. See [camera and launch behavior](docs/versions/history/ANDROID_APK_HISTORY.md#camera-permission-capture-and-installed-app-opening-october-21-2026).
+
+**October 21 automatic testing backup:** in `mangoleafai-testing`, enable both **Allow anonymous sign-ins** and **Allow new users to sign up** in Authentication settings. The maintainer enabled both and a real signup was verified. Testing provisioning function version 2 enrolls that verified owner before private uploads; creating an APK recovery code keeps its UUID. No enable button or recovery code is required for testing uploads. Production backup remains opt-in and its server rollout is pending. See [testing recovery setup](docs/versions/history/ANDROID_APK_HISTORY.md#automatic-testing-backup-and-recovery-october-21-2026).
+
+**October 21 synchronized History deletion:** rebuild/reinstall Android host `0.1.1-dev`/code `2` for the atomic cloud-delete queue. Browser development uses Dexie v10; keep that schema declaration in rollback builds and never clear user storage to downgrade it. Confirmed deletions remove connected backup copies with foreground/offline retries, including when uploads are paused. Preserve recovery credentials and pause other writers holding stale copies. See [deletion, recovery and rollback](docs/versions/history/ANDROID_APK_HISTORY.md#history-deletion-and-recovery-october-21-2026). Production server rollout remains a separate pending step.
+
+The supported mobile product is the Android APK, requiring Android 8.0 or newer and an up-to-date Android System WebView. There is no supported iPhone/iPad app or browser PWA installation workflow. Desktop website access, browser development scanning and legacy browser History remain available. Manual report import/export controls are retired. The installation overlay and `/download` show Android-only instructions on every device; a browser shortcut is not proof that the APK is installed. The local debug APK is separate from pending public production distribution.
+
+The prepared Android/cloud recovery candidate uses shared app version `0.9.0` and adopted model `v4.5.0`, with confidence >=0.70 only; margin and entropy are disabled. The maintainer's uncommitted local V5 override is separate from this app release. A fresh checkout uses V4.5 unless the experimental model is deliberately installed. See the [V5 local test and rollback record](docs/model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md#local-installation-and-rollback). Android/cloud setup uses the resources and settings described below; model retraining is unnecessary. Its [candidate release record](docs/versions/history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026) tracks validation, publication, and promotion separately.
 
 ## Prerequisites
 
-- [Bun](https://bun.sh/) available on the command line (CI uses 1.4.0)
-- Git and Node.js 24 for local tooling; Git for Windows supplies the hook shell
+For the new Java Android candidate, follow [Android build and recovery setup](docs/versions/ANDROID_APK_VERSIONING.md). JDK 21, SDK platform 36, and the checked-in Gradle Wrapper build the APK from VS Code/PowerShell. `bun run android:guidelines` prepares public offline advice; `bun run android:bundle` stages the separate Android export. Browser-only instructions below remain applicable to the compatibility PWA. Cloud backup needs the additional reviewed SQL and provisioning function; no service-role secret belongs in the web environment.
+
+Use the [separate testing project](docs/versions/ANDROID_APK_VERSIONING.md#separate-testing-project) for development cloud tests. Keep production public settings in `.env.local`; put the testing URL/public key under the same variable names in ignored `.env.testing.local`. `bun run dev` and default `bun run android:bundle` explicitly select testing, including when Bun inherited production variables. The six public production guideline rows were copied with permission on October 21; production reports/photos/users were not copied. Restart the development server after configuration changes.
+
+Browser development automatically uploads saved Dexie reports/photos to the testing `scans` table/private bucket while open and connected; reconnect retries offline saves. The guard requires development mode, a browser target, the testing environment and its exact pinned URL. No test-sync panel or enable button is needed. Real anonymous Auth ownership is created lazily for the first eligible photo report; empty History and hidden deletion rows create none. Recovery controls remain APK-only. Debug APKs use SQLite/private photos and automatic testing uploads; create/save a code when testing recovery on another installation. `bun run android:bundle --release` selects production for a release APK; its backup remains opt-in and its server rollout is pending. No additional public environment variable is needed. See the Android guide for target checks and verification limits.
+
+Diagnostics is available in debug and production APK builds. The development-browser panel is visible only below 768 CSS pixels. Recording stays optional; APK log download opens Android's document picker. Android installation guidance now describes APK installation; the built debug APK is for local testing and is not a published production download.
+
+- [Bun](https://bun.sh/) **1.4.4** available on the command line. Root `package.json` pins `bun@1.4.4`; both CI jobs read that field through `bun-version-file: package.json`.
+- Git and Node.js **24.22.1 or a newer stable 24.x patch** for local tooling; `.node-version` pins the reviewed default. Git for Windows supplies the hook shell.
 - `tar` for scanner installation (included with current Windows, macOS, and typical Linux installations)
 - A modern browser with IndexedDB, Web Workers, Web Crypto, Canvas, and WebGL support
 - A Supabase project for public treatment-guideline downloads and Realtime updates
@@ -18,6 +44,23 @@ Confirm Bun is installed:
 ```bash
 bun --version
 ```
+
+Expect `1.4.4`. Use [Bun's installation instructions](https://bun.sh/docs/installation) to install that version if needed, then check again. The `packageManager` field records the project version; it does not replace your installed executable. Keep `bun.lock` unchanged unless intentionally changing dependencies.
+
+### Check and update Node.js
+
+The October 21, 2026 Node security release requires updating the Node executable, even though the main Next.js development/build commands use Bun. Playwright, OTA packaging, archive verification, and the separate video project's `npx` commands use Node. `@types/node` is only a type package and does not patch that executable.
+
+On Windows, install the official **24.22.1 LTS or newer stable 24.x** installer from the [Node 24 security release](https://nodejs.org/en/blog/release/v24.22.1/). Close and reopen VS Code and its terminals after upgrading. Then, from this project folder, run:
+
+```powershell
+node --version
+bun run security:runtime
+```
+
+Both must identify an accepted patched Node 24 runtime. The version file and `package.json` engine requirement describe the policy; they do not install Node. The explicit check rejects an old executable or Bun's reported Node compatibility version. The browser test runner checks its actual Node child before building, and the OTA/archive CLIs check before processing files.
+
+CI reads `.node-version`, enables `check-latest`, and runs the same check before browser tooling. With an exact version file, `check-latest` ensures that selected version is available; it does not automatically advance the pin to future patches. Review and update the version file and engine floor together for later security releases. Vercel manages patches within the selected Node major; verify the actual version in its build log rather than assuming the local pin controls its patch level. See the [dated exposure review](docs/security/DEPENDENCY_SECURITY.md#october-21-2026-nodejs-runtime-security-review).
 
 ## Install the project
 
@@ -185,10 +228,11 @@ Tooling regression tests cover secret/file history checks, export assets, diagno
 
 ## Browser tests and reliability
 
-Use Node.js 24 alongside Bun. Install the pinned browser binaries once after `bun install`:
+Use Node.js 24.22.1 or a newer stable 24.x patch alongside Bun. Install the pinned browser binaries once after `bun install`:
 
 ```bash
-node node_modules/@playwright/test/cli.js install chromium firefox webkit
+bun run security:runtime
+node node_modules/@playwright/test/cli.js install chromium firefox
 bun run test:e2e
 bun run test:report
 ```
@@ -205,7 +249,7 @@ For why `.test-app/`, `.tools/`, `playwright-report/`, and `test-results/` appea
 
 To review each `master` deployment before it serves users, open Vercel **Settings > Environments > Production > Branch Tracking**, keep `master`, and disable **Auto-assign Custom Production Domains**. Confirm the dashboard setting; these repository changes do not configure Vercel. Builds remain Production/Staged until manually promoted. The previous Current deployment keeps serving the production domain.
 
-Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Prepared version labels and documentation may be pushed before approval, but must not claim an unpublished version has shipped. Follow the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion) and [v0.8.0 preparation record](docs/versions/history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026). Earlier dated results remain evidence for their original builds. The [October 7 release-status confirmation](docs/versions/history/PWA_RELEASE_HISTORY.md#release-status-confirmation-october-7-2026) preserves its earlier publication and live-version report.
+Wait for CI and the approved release validation, then promote the exact tested deployment. Staged builds still use Production environment variables and do not create an isolated database. Prepared version labels and documentation may be pushed before approval, but must not claim an unpublished version has shipped. Follow the [release procedure](docs/versions/PWA_VERSIONING.md#candidate-testing-and-promotion) and [v0.9.0 preparation record](docs/versions/history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026). Earlier dated results remain evidence for their original builds. The [October 7 release-status confirmation](docs/versions/history/PWA_RELEASE_HISTORY.md#release-status-confirmation-october-7-2026) preserves its earlier publication and live-version report.
 
 ## Threshold-fitting notebook inputs
 
@@ -233,7 +277,7 @@ V5.0.0 completed five fine-tuning epochs and a later 995-photo OOD report. Its [
 
 ## Phone diagnostics and stalled operations
 
-Diagnostics in About was introduced in v0.7.0 and remains in the v0.8.0 candidate. It needs no account, backend table, or new environment setting, and works offline after the app is available. Recording is off by default. Enable **Record diagnostic events** before reproducing a problem; the choice is remembered when localStorage works. Unchecking stops new events without clearing earlier history. Earlier actions performed while recording was off cannot be recovered.
+Diagnostics in About was introduced in v0.7.0 and remains in the v0.9.0 candidate. It needs no account, backend table, or new environment setting, and works offline after the app is available. Recording is off by default. Enable **Record diagnostic events** before reproducing a problem; the choice is remembered when localStorage works. Unchecking stops new events without clearing earlier history. Earlier actions performed while recording was off cannot be recovered.
 
 Use **View logs** in About to inspect, copy, download a `.txt` file, or clear diagnostic history. If clipboard permission fails, select and copy the visible text manually. This is one shared recorder, not separate logs for each modal. Events remain when a modal closes or the user changes tabs; no log controls are added to scan, result, or deletion dialogs. Clearing diagnostic logs does not delete IndexedDB scans, photos, or guidelines.
 
@@ -255,7 +299,7 @@ New accepted and uncertain reports keep the raw classifier confidence. Scan deta
 
 ## Common setup issues
 
-The release model in prepared app `0.8.0` remains [V4.5.0](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md). The October 19 maintainer workspace temporarily uses uncommitted `v5.0.0-candidate` files for local testing; these runtime overrides are excluded from the camera release. Keep all five matching model files together in `public/model/`. The [local installation receipt](docs/model-training/experiment/v5.0.0/artifacts/local_test_installation.json) records that tested override, its original hashes and exact V4.5 backup; it does not change what a fresh checkout loads. Build the release worker from the matching V4.5.0 model, label, and cache identity rather than copying a local V5-generated worker. After an intentional model swap, restart the development server and reload the page; a production preview also needs a rebuild and activated worker. Production promotion remains separate.
+The release model in prepared app `0.9.0` remains [V4.5.0](docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md). The October 19 maintainer workspace temporarily uses uncommitted `v5.0.0-candidate` files for local testing; these runtime overrides are excluded from the app release. Keep all five matching model files together in `public/model/`. The [local installation receipt](docs/model-training/experiment/v5.0.0/artifacts/local_test_installation.json) records that tested override, its original hashes and exact V4.5 backup; it does not change what a fresh checkout loads. Build the release worker from the matching V4.5.0 model, label, and cache identity rather than copying a local V5-generated worker. After an intentional model swap, restart the development server and reload the page; a production preview also needs a rebuild and activated worker. Production promotion remains separate.
 
 - If a push reports a missing scanner, run `bun run security:install`. If the hook cannot find Bun, make Bun available to the terminal or Git GUI's PATH and restart that application.
 - For a shallow clone, run `git fetch --unshallow` before scanning. If hooks were not registered during dependency installation, run `bun run prepare` and confirm `git config --get core.hooksPath` prints `.husky/_`.

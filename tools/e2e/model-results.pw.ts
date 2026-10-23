@@ -13,6 +13,7 @@ import {
   historyDetails,
 } from "./support/fixtures";
 import { CLASSES, modelVersion } from "../../src/lib/constants";
+import { translations } from "../../src/lib/translations";
 
 for (const photo of photos) {
   test(`M01: real-model report and saved UI — ${photo.file}`, async ({
@@ -107,7 +108,10 @@ for (const photo of photos) {
       // Desktop Home directs users to install; saved photos remain in History.
       await expect(savedPhoto).toHaveCount(0);
       await expect(
-        page.getByRole("heading", { name: "Install Now", exact: true }),
+        page.getByRole("heading", {
+          name: translations.en.downloadPromptTitle,
+          exact: true,
+        }),
       ).toBeVisible();
     } else {
       await expect(savedPhoto).toBeVisible();

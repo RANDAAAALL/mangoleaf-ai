@@ -1,13 +1,38 @@
 <h1 align="center">
-  <img src="public/images/icons/svg/favicon.svg" alt="mangoleaf-ai icon" width="80"><br/>
-  MangoLeaf AI
+
+<img src="public/images/icons/svg/favicon.svg" alt="mangoleaf-ai icon" width="80"><br/>
+MangoLeaf AI
 </h1>
+
+**Prepared release candidate:** shared app **v0.9.0**, Android **v0.1.4**, model **v4.5.0**. Local candidate `v0.9.0-rc.1`; publication and approval checks remain pending. See [release notes](docs/versions/history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026).
+
+**Version display, October 23:** APK footers now show the installed Android version and bundled model, with Debug retaining `-dev`; About keeps the separate web-bundle version. Browser footers retain app/model labels. The download page accepts a native version only from the validated APK asset label printed by the release builder. See [version display and publishing](docs/versions/ANDROID_APK_VERSIONING.md#installed-and-available-apk-versions).
+
+**Earlier implementation audit, October 23 (superseded by the version-display follow-up):** native candidate **0.1.4/code 5** (Debug **0.1.4-dev**), default host bounds **5-5**, repairs OTA rollback/restart/cancellation and History/recovery races. Rebuild and install the matching-signer APK to test the Java changes; `adb install -r` alone installs the existing file. Web remains the 0.8.0 working candidate, bridge/schema 1/1, and default Android model committed V4.5.0. Native version stays out of the footer. See [audit evidence](docs/testing/ANDROID_TESTING.md#october-23-2026-implementation-audit). No deployment or publication is performed.
+
+**Website install follow-up, October 22:** Android actions say **Open or install**, changing to **Open app** only when a supporting browser confirms the exact package. Unknown/older installs retain an explicit guide; confirmed installs put another APK download behind a reinstall/update choice. Release association needs native **0.1.3/code 4** and the matching website manifest; web 0.8.0/model V4.5 remain unchanged. See [website launch and detection](docs/versions/ANDROID_APK_VERSIONING.md#website-open-or-install). No APK download or public deployment happens automatically.
+
+**October 22 Android release preparation:** production signing and checked APK/OTA preparation are implemented locally. Run `bun run android:release:windows -Action build` with the approved external keys to create an unpublished signed candidate. Production backup SQL/function setup is deployed and its explicit server flag is enabled; existing data remains unchanged; eligible photo reports back up automatically, with Pause/Resume available. `/download` offers an APK only after GitHub confirms the actual stable asset. Device/reliability checks, final-commit CI and publication remain pending; see [the Android release guide](docs/versions/history/ANDROID_APK_HISTORY.md#production-apk-preparation-october-22-2026).
 
 https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 
-MangoLeaf AI is an offline-first progressive web application that helps identify possible diseases affecting mango leaves and fruit. Classification runs in the browser with TensorFlow.js, scan reports and compressed photos stay in this browser's IndexedDB, and Supabase publishes shared treatment guidelines.
+MangoLeaf AI targets Android phones with offline-first identification of possible diseases affecting mango leaves and fruit. The Android APK requests portrait orientation, runs TensorFlow.js on the device, stores reports in SQLite and photo copies in private app files, and supports private Supabase backup. Both APK variants back up eligible photo reports automatically; Pause/Resume remains available. The companion website remains available on desktop and other devices; browser development testing and existing IndexedDB History are preserved. Manual report import/export controls are retired. iPhone/iPad installation is not supported. See [Android setup and APK availability](docs/versions/ANDROID_APK_VERSIONING.md).
 
-**Adopted repository model: V4.5.0; prepared PWA candidate: `0.8.0`.** The camera update retains confidence >=0.70 only, with margin and entropy disabled. V5 training, figures, and evaluation remain research evidence in the [V5 review](docs/model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md). The maintainer separately tests an uncommitted V5 override locally; its `public/model/`, `src/lib/constants.ts`, and `src/sw.ts` changes are excluded from this app release. The candidate worker must be generated from the matching V4.5.0 source and assets. See the [model guide](docs/versions/AI_MODEL_VERSIONING.md) and [v0.8.0 preparation record](docs/versions/history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026) for adoption, validation, and promotion requirements.
+**Adopted repository model: V4.5.0; prepared shared app candidate: `0.9.0`.** The camera update retains confidence >=0.70 only, with margin and entropy disabled. V5 training, figures, and evaluation remain research evidence in the [V5 review](docs/model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md). The maintainer separately tests an uncommitted V5 override locally; its `public/model/` and `src/lib/constants.ts` changes and V5-only `src/sw.ts` cache changes are excluded from this app release. The candidate worker must be generated from the matching V4.5.0 source and assets. See the [model guide](docs/versions/AI_MODEL_VERSIONING.md) and [v0.8.0 preparation record](docs/versions/history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026) for adoption, validation, and promotion requirements.
+
+## Android implementation candidate (October 20, 2026)
+
+**Earlier October 22 backup follow-up:** both APK variants back up eligible saved reports automatically, without an initial enable step. Production uses production Supabase; Debug/development browser use testing. Create/save a recovery code outside the phone for recovery. Pause/Resume remains available. A verified-update modal replaces the About update card; Debug retains its production-OTA block. Native 0.1.2/code 3 needs a rebuilt/reinstalled APK. See [current behavior and release flow](docs/versions/history/ANDROID_APK_HISTORY.md#automatic-production-backup-and-update-prompt-october-22-2026). Earlier dated notes describe preceding candidates.
+
+**October 21 camera follow-up:** fixed the native permission dialog interrupting camera startup, released the live camera before JPEG encoding, and added capture-stage timings. Android website visitors can explicitly open the installed app from the guide/download page instead of downloading again. These native changes need a rebuilt APK; [camera evidence and limits](docs/testing/ANDROID_TESTING.md#october-21-2026-camera-permission-and-capture-follow-up) distinguish the supplied successful phone diagnosis from pending repeated-device evaluation.
+
+**October 21 recovery follow-up:** development-browser and Debug APK reports upload automatically to the separate testing project using verified anonymous Auth ownership. APK recovery codes attach to that same owner and restore by merging History. About now offers create/show/copy/enter/clear-input/restore controls instead of report files. Testing scans, manifests and photos were cleared with permission; all six guidelines were preserved. See [current testing recovery behavior](docs/versions/history/ANDROID_APK_HISTORY.md#automatic-testing-backup-and-recovery-october-21-2026). Production rollout remains pending.
+
+**October 21 History follow-up:** deleting a report now queues deletion of its copies in the connected cloud backup, including offline retries. Native host `0.1.1-dev`/code `2` supplies the atomic SQLite queue; browser development uses an additive Dexie v10 store. Other devices with stale copies must pause backup before deletion. Existing historical cloud data is not automatically purged. See [deletion and recovery behavior](docs/versions/history/ANDROID_APK_HISTORY.md#history-deletion-and-recovery-october-21-2026).
+
+The Java host under `android/app/` runs the shared React UI offline with native SQLite and private photo files. Backup reuses the existing Supabase `scans` table/private image bucket with Auth ownership and no Sign In/Register screens. Signed GitHub Release bundles support custom OTA staging and cold-start rollback. Browser IndexedDB History is preserved; its report-file controls are retired in the recovery follow-up. See [Android setup, backup deployment, signing, and checks](docs/versions/ANDROID_APK_VERSIONING.md). This is unpublished candidate work; cloud migration, production keys/assets, and device validation must be recorded before release. `bun run android:bundle` uses the committed model by default and preserves uncommitted V5 overrides.
+
+The earlier Android emulator run recovered to History after a real GPU warm-up timeout without completing inference. The later October 21 supplied phone log records one completed diagnosis; repeated native inference and release reliability still need verification. See [Android test evidence and limits](docs/testing/ANDROID_TESTING.md#october-21-2026-camera-permission-and-capture-follow-up) before treating the APK as ready for release.
 
 ## Square guided camera (candidate v0.8.0)
 
@@ -44,14 +69,14 @@ If a scan cannot save because browser storage is full, the translated dialog say
 - Protect received guideline updates from older overlapping downloads and changes made by another open tab.
 - Skip rewriting saved guidance when a valid full download contains exactly the same records and text.
 - Read downloaded treatment guidelines offline; missing guidance shows an English/Bisaya status message rather than bundled treatment advice.
-- Install the app on supported devices as a PWA.
+- Install the Android APK when a signed production download is published; use the debug APK for local testing.
 - Enable optional diagnostics in About, reproduce an issue, and copy or download recent local events without opening phone DevTools.
 
 **Historical local candidate test, October 12, 2026:** V4.5.0 was temporarily installed as `v4.5.0-candidate` with its original fitted gates for reversible evaluation. The October 16 adoption supersedes that temporary state; see the current model record above.
 
 **Local development state, October 9, 2026:** The V4.4.0 candidate completed training and threshold fitting, was tested locally, and was declined by the maintainer. The verified V4.3.0 model, label, and fitted settings are restored in `public/model/`. [V4.4.0 results and figures](docs/model-training/experiment/v4.4.0/TRIAL_v4_4_0.md#completed-results-and-local-rollback-october-9-2026) remain experimental evidence. Original downloaded runs and completed notebooks are preserved.
 
-The [guided camera](docs/ARCHITECTURE.md#guided-camera-capture) and [responsive installation guide](docs/ARCHITECTURE.md#installation-guide), prepared in app `0.5.5` and first implemented under the earlier local `0.5.4` label, remain part of the `0.8.0` candidate; the camera now uses the matching square capture described above. Desktop installation shows both platform instructions and a QR link to the public website; phone instructions use detected iOS/Android identity, while native install support is determined separately by the browser's install event. Phone History now shows four reports per page, with its selection-delete action above pagination; wider History retains six. Photo cards reserve their image height when the viewport changes. The [October 9 development record](docs/versions/history/PWA_RELEASE_HISTORY.md#local-development-changes-october-9-2026) retains its original validation identity.
+The [guided camera](docs/ARCHITECTURE.md#guided-camera-capture) and [responsive installation guide](docs/ARCHITECTURE.md#installation-guide), prepared in app `0.5.5` and first implemented under the earlier local `0.5.4` label, remain part of the `0.8.0` candidate; the camera now uses the matching square capture described above. The current guide shows Android APK instructions on every device, with a desktop QR link to the public website. Browser install prompts and iPhone/iPad instructions are retired; historical guide evidence remains in dated records. Phone History now shows four reports per page, with its selection-delete action above pagination; wider History retains six. Photo cards reserve their image height when the viewport changes. The [October 9 development record](docs/versions/history/PWA_RELEASE_HISTORY.md#local-development-changes-october-9-2026) retains its original validation identity.
 
 [App `0.4.9`](docs/versions/history/PWA_RELEASE_HISTORY.md#v049-adoption-of-v430-combined) adopted the seven-class V4.3.0 Combined model (`v4.3.0`) on October 2, 2026, replacing the former six-class V3 baseline. The single scan flow remains in use, with separate Healthy Fruit and Healthy Leaf results. The [adopted trial report](./docs/model-training/non-experiment/v4.3.0/TRIAL_v4_3_0.md) and [adoption receipt](docs/model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) preserve export provenance, fitted gates, and model hashes. Its [comparison with V4.1.1](docs/model-training/non-experiment/v4.3.0/COMPARISON_v4_1_1_vs_v4_3_0.md) reports mixed reused-set results; adoption does not establish improved field accuracy. App `0.5.2` introduced responsive Home and History layouts, report selection with confirmed deletion, filter counts, compact photo tips, and badge/icon refinements. See the [v0.5.2 candidate record](docs/versions/history/PWA_RELEASE_HISTORY.md#v052-scan-history-and-deletion-candidate-october-6-2026) for its dated scope and release checks. The [v0.5.1 validation](docs/testing/TESTING.md#v051-candidate-validation-october-5-2026) remains evidence for the earlier thumbnail-stability build. Earlier trials and rollback backups remain preserved.
 
@@ -73,12 +98,16 @@ The [treatment-source date clarification](docs/treatment-guidelines/TREATMENT-GU
 
 ## Quick start
 
-Install dependencies, copy the environment template, and start the development server:
+Use **Bun 1.4.4**, pinned by `packageManager` in root `package.json`, and Node.js **24.22.1 or a newer stable 24.x patch**. Both CI jobs read the Bun pin from `package.json`; `.node-version` selects the reviewed Node default. See [runtime setup](SETUP.md#prerequisites) and [Node security checks](SETUP.md#check-and-update-nodejs).
+
+Check the runtime, install dependencies, copy the environment template, and start the development server:
 
 ```bash
+bun run security:runtime
 bun install --frozen-lockfile
 bun run security:install
 cp .env.example .env.local
+cp .env.example .env.testing.local
 bun run dev
 ```
 
@@ -86,7 +115,7 @@ Then open `http://localhost:3000` on the same computer. This is the usual way to
 
 Next.js's built-in development MCP endpoint is disabled in `next.config.ts`. This setting is independent of an agent's GitHub MCP connector. See the [dependency security review](docs/security/DEPENDENCY_SECURITY.md) for the October 10 framework patch and its validation status.
 
-The Supabase values in `.env.local` must be replaced before public treatment-guideline downloads and Realtime updates will work. See [SETUP.md](./SETUP.md) for the complete local setup, Supabase requirements, static-export notes, and pre-commit checks.
+Replace `.env.local` with production public settings and `.env.testing.local` with the separate testing project's URL/public key. Development and default debug bundles explicitly select testing. Browser development automatically synchronizes saved test reports/photos; native APKs use SQLite and automatic private cloud backup. Diagnostics is available in both APK variants, with native document export; its development-browser panel is shown only below 768px. Android installation guidance uses the APK path, whose production publication is pending. See [SETUP.md](./SETUP.md) and [Android routing](docs/versions/history/ANDROID_APK_HISTORY.md#development-and-production-routing-october-21-2026).
 
 Dependency installation registers Husky hooks. Before commits, `lint-staged` formats staged files with the project's Prettier configuration and includes the fixes in the commit; no editor extension is required. The separate scanner setup downloads a pinned, checksum-verified Gitleaks binary into ignored `.tools/`. Pushes check Git history for secrets and forbidden files, TypeScript, linting, and formatting locally. GitHub repeats these checks and verifies the app on pushes to `master`; see [local checks and CI](./SETUP.md#local-security-checks-and-github-ci).
 

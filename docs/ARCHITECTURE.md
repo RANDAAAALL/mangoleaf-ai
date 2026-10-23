@@ -1,5 +1,87 @@
 # MangoLeaf AI Architecture
 
+**Current release candidate:** shared web `0.9.0`, native `0.1.4`/code `5`, adopted model `v4.5.0`. The local `v0.9.0-rc.1` tag identifies prepared source, not publication. Release exports use an isolated adopted-model snapshot while local V5 experimentation remains separate. See [release identity](versions/history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026).
+
+Native APK versions, signing/builds, compatibility and release rules now live in [Android APK versioning](versions/ANDROID_APK_VERSIONING.md). The [Android APK history](versions/history/ANDROID_APK_HISTORY.md) preserves the earlier combined implementation guide and its section bookmarks. The native `android/` project and the application footer are unchanged by this documentation move.
+
+## Storage and lifecycle audit (October 23, 2026)
+
+**Version-display follow-up:** `useAndroidVersion` reuses the trusted native `app.info` initialization and validates its optional `hostVersionName`. APK footers pair that installed version with the active model; About retains the web-bundle version. Browser footers stay app/model-only. `android-version.mjs` shares a side-effect-free parser/label formatter between browser and Node release tools. The download page reads an optional production version from the already-validated APK asset's publisher label, independently of its GitHub release tag. Missing/invalid labels never invent a native version or authorize a download. No new native API, network endpoint, environment variable or database resource is introduced.
+
+`useStorageQuery` delegates native observation to `storage-query.ts`: one active query, one coalesced replay, stale-publication suppression and unsubscribe cleanup. `native-storage.ts` shares History reads, retries if its storage revision changes, hydrates four photos concurrently and bounds immutable-photo reuse to 64 entries/16 MiB. An unreadable photo leaves usable metadata; backup reads still fail closed. This cache does not paginate the full History result.
+
+`cloud-history-delete.ts` serializes only scope-sensitive local commits. Recovery Auth candidates use isolated in-memory storage and server verification before a short local promotion; retired session adapters reject stale refresh writes. Network verification and old-owner deletion drains happen outside that guard. Uploads recheck foreground/busy/pause between reports and re-read a report after first-owner enrollment. `backup-recovery-form.tsx` owns presentation/focus callbacks; `backup-recovery-panel.tsx` retains operation and session state with synchronous duplicate-action and stale-preference guards.
+
+Native OTA restart verification captures state under short locks, verifies outside locks and commits only after the Activity rechecks current foreground/camera/picker/busy state and the exact pending candidate. Cancellation keeps task ownership through cleanup. An unacknowledged OTA renderer crash invalidates only the cached selection so durable cold-launch rollback can run. These native changes require **0.1.4/code 5**, default host range **5-5**; bridge/schema and stored reports remain unchanged. See [audit evidence](testing/ANDROID_TESTING.md#october-23-2026-implementation-audit).
+
+## Website launch and installation hints (October 22, 2026)
+
+`android-installation.ts` and `useAndroidAppLink` share bounded, short-lived positive-only related-app hints. `android-install-action.tsx` keeps the original user tap on a fixed package intent and provides a synchronous guide fallback. Header, download prompt and desktop About actions share this behavior. `/download` puts repeat downloads behind an explicit choice when installed. The web manifest and Release-only native `asset_statements` link the exact production package/website; Debug has no production association. This is presentation metadata, never native bridge or Auth authorization. New native metadata needs 0.1.3/code 4 and default bundle host bounds 4-4; bridge/schema and storage remain unchanged. See [behavior and release requirements](versions/ANDROID_APK_VERSIONING.md#website-open-or-install).
+
+## Automatic native backup and verified update offers (October 22, 2026)
+
+Production now uses lazy anonymous Auth and quota-limited enrollment, scoped to its verified native host/project. Development browser and Debug remain testing-only. Recovery creation keeps the same owner; restore remains an explicit merge. Pause/Resume preserves explicit pauses. No SQL/RLS/provider changes accompany this follow-up.
+
+`android-update.ts` observes verified native status while foreground and idle. `android-update-modal.tsx` replaces the About update card. Guarded `ota.restart` releases process-owned selection only after native writes settle, then recreates the trusted local Activity; ordinary recreation retains selection. Host 0.1.2/code 3 and default bundle bounds 3-3 gate the method. Debug retains its production-OTA block. See [current behavior and release channels](versions/history/ANDROID_APK_HISTORY.md#automatic-production-backup-and-update-prompt-october-22-2026). Earlier dated sections describe preceding candidates.
+
+## Production APK and release assets (October 22, 2026)
+
+Release builds use external permanent signing material, pinned production Supabase settings and committed model inputs. `tools/android-release.ps1` temporarily unlocks CurrentUser DPAPI credentials on Windows; `android-release.mjs` keeps secrets out of web/SDK children, validates the signing configuration, builds/lints, and verifies the signed package. Gradle's `verifyReleaseBundle` and independent APK inspection bind a local receipt to actual signed web/model files and `production-trust.json`. Debug has a separate package/testing target and always disables production OTA trust. SQLite/photos/recovery credentials remain outside replaceable bundles.
+
+`android-ota-release.mjs` verifies the installed host's signed identity, builds a production Android export, enforces pinned model/bridge/schema/host compatibility and signs/verifies an unpublished OTA candidate. The operator must choose a sequence higher than every published update, including rollback. A stable latest GitHub Release needs `mangoleaf-ai.apk`, `web-update.zip`, `update.json` and `update.sig`; preparation never publishes them. The website's download screen makes one bounded public metadata request and exposes the APK only after strict repository/tag/asset validation. It preserves an honest unavailable state when verification fails and retains explicit installed-app opening.
+
+Production cloud setup was deployed after exact existing owner/path policy preflight and private preservation snapshots. New backup resources and the provisioning function are installed; the maintainer enabled its explicit server flag. Nine catalog checks and safe HTTP checks passed, with all original scans, guidelines, Auth users, photo metadata, policies and grants unchanged. Production app backup remains opt-in; no automated production identity/scan/photo was created. See [current deployment evidence](versions/history/ANDROID_APK_HISTORY.md#production-cloud-deployment-status-october-22-2026) and [production security review](security/SECURITY-AND-SYNC.md#production-release-preparation-october-22-2026). Earlier dated pending-rollout statements below retain their original scope.
+
+## Camera permission lifecycle and website app opening (October 21, 2026)
+
+Native camera permission prompts temporarily pause the activity without a true app stop. `MainActivity` keeps WebView visible during that pending prompt so `useGuidedCamera` can finish its original `getUserMedia` request; actual `onStop`, closure and permission denial still release/cancel work. After a frame is copied, the camera hook releases tracks before encoding the fixed square JPEG and clears its canvas after settlement. The cancellation token remains valid until completion unless the user closes/backgrounds the camera. Optional diagnostics distinguish frame copying, JPEG encoding and final handoff without logging content.
+
+`useAndroidAppLink.ts` provides Android-browser installation/download UI with a user-initiated, package-pinned Chrome intent and same-origin information-page fallback. Development opens the separate debug package; published sites target release. No package presence is inferred. The native `mangoleaf://open` entry brings a single existing activity forward and ignores URI data/extras rather than navigating trusted content. This requires an updated native APK, adds no remote backend and preserves separate browser/debug/release storage. See [native behavior and limits](versions/history/ANDROID_APK_HISTORY.md#camera-permission-capture-and-installed-app-opening-october-21-2026).
+
+## Automatic testing ownership and recovery (October 21, 2026)
+
+The latest testing path requires the pinned testing URL, testing environment and either verified Android host or browser development mode. An eligible saved JPEG/WebP report lazily starts real Supabase anonymous Auth. The testing Edge Function verifies the bearer with Auth, applies its existing provisioning quota and marks the same owner through protected `app_metadata`; the client refreshes its claims before using existing owner/path RLS and transfer RPCs. Existing credentialed owners are reused. Public guidelines and local saving never wait for this setup. Production still requires explicit recovery-code consent and does not create anonymous guests automatically.
+
+Creating a code attaches recovery credentials to the same testing Auth UUID, preserving its uploaded records. Connecting another code verifies it in an isolated client before replacing the persisted session; wrong credentials preserve the current owner. Confirmed deletion jobs must settle before an owner switch. A project-scoped public owner label routes deletion jobs before a code exists, while server Auth remains the authorization boundary. Existing code-based scopes and native deletion records remain compatible. Cross-device deletion propagation is intentionally absent: another device retaining a stale local report can upload it again.
+
+The APK recovery panel supports create, show/hide, copy, focused entry, clear-input and restore. Clearing input does not erase credentials or reports; restore merges by record ID and preserves original dates. The report archive UI and browser archive modules are retired; bounded legacy native methods remain for compatible older bundles and cloud recovery's internal import. Stored browser/native History is preserved. The native manifest requests portrait orientation on phones; browser orientation is unchanged. See [current recovery setup and limits](versions/history/ANDROID_APK_HISTORY.md#automatic-testing-backup-and-recovery-october-21-2026). Earlier dated sections describe their original implementation stage.
+
+## Android system-bar layout (October 21, 2026)
+
+`MainActivity` enables AndroidX edge-to-edge layout and places its WebView inside an inset-aware native `FrameLayout`. System bars, display cutouts and keyboard space shrink the actual child viewport; sticky/fixed web controls therefore remain inside the usable screen. The container consumes those insets instead of passing them into WebView/CSS for a second application. Native startup failures use the same container. This replaces ineffective padding on the WebView itself and requires a rebuilt APK, with no React layout, storage, model or bridge changes. See [native layout and checks](versions/history/ANDROID_APK_HISTORY.md#system-bars-and-web-viewport-october-21-2026).
+
+## Synchronized History deletion (October 21, 2026)
+
+`local-scans.ts` delegates confirmed deletion to `cloud-history-delete.ts`. Browser development atomically records a project/vault-scoped outbox job and deletes the local report/photo in Dexie v10. Native host `0.1.1-dev`/code `2` commits the job in existing SQLite settings alongside local removal and its permanent anti-resurrection record; SQLite/bridge versions remain 1. The browser production compatibility path remains local-only. Existing reports, metadata and hidden legacy tombstones are preserved by the additive browser store upgrade.
+
+`cloud-backup.ts` drains current-vault deletions before uploads and again after settling uploads. It processes bounded batches, validates the server Auth identity against the connected recovery code, reads only owned manifests, removes the private object via Storage, and invokes the existing transactional paired-row delete. Jobs survive failure, offline operation and restart; acknowledgment follows real completion. Pausing uploads does not pause an already confirmed deletion. Switching vaults never transfers pending jobs. Restore drains the connected vault's queue first. Diagnosis, local saving and public advice remain independent.
+
+This changes future confirmed History deletions, not historical cloud cleanup. Existing absent reports/tombstones are never converted into remote deletion jobs. Other devices with stale copies can still reupload; pause other writers. Current Auth/RLS and recovery-code sign-in remain in use; merely calling anonymous sign-in would not satisfy the backup-vault ownership guard. See [native/cloud preservation and rollback](versions/history/ANDROID_APK_HISTORY.md#history-deletion-and-recovery-october-21-2026).
+
+## Android-only mobile platform (October 21, 2026)
+
+The mobile product targets Android APK only. One Android installation guide is used on every screen, with a desktop QR and a link to APK availability information. iPhone/iPad steps, browser PWA install controls and Apple web-app metadata are removed. `useInstallGuide.ts` consumes the QR flag, suppresses browser install prompts, and manages dialog focus; it does not infer APK installation from a user agent or a legacy standalone website. `usePWAInstall.ts` is retired. Desktop website access, browser development scanning and existing Dexie History/export remain available. The footer labels the shared application bundle as App; native host and model versions remain separate.
+
+Current automated browser projects are Chromium desktop, Chromium Android emulation and Firefox desktop. The iPhone WebKit project is retired; browser-engine diagnostics and dated historical platform evidence are preserved without implying mobile support. Android physical-device APK checks remain separate from browser automation.
+
+## Development cloud routing (October 21, 2026)
+
+`cloud-target.ts` pins separate testing/production project identities. `next.config.ts` reads ignored `.env.testing.local` explicitly for browser development; the Android builder selects testing by default and production with `--release`. Both public-key aliases are normalized so inherited `.env.local` values cannot redirect a debug build. Backend selection participates in the Android input fingerprint. Gradle checks variant/target, and private session creation verifies the native host environment. Debug and release have separate application IDs and project-scoped secrets.
+
+Browser development retains Dexie/IndexedDB and automatically uploads saved reports after the development/browser/testing/exact-project guard passes. It creates an owned test credential lazily for the first upload, never for empty History or deletion tombstones; no enable panel or recovery controls are exposed. The shared worker reads one Blob at a time, commits scan/manifest intent, uploads to the private scans bucket and confirms completion. Native targets use SQLite/private files through the same protocol after explicit recovery-code enablement. Local metadata and hidden deletion rows remain intact. Save, reconnect and foreground events retry transfers independently of public guideline refresh. Production browser scanning/History/export behavior is preserved.
+
+Diagnostics remains opt-in in both APK variants, with native document-picker export of bounded technical text. The development-browser panel is hidden from 768px upward; native panels remain available at all widths. Android installation instructions describe APK download/open/install. The later Android-only decision above retires the original iOS and browser-install options. The guide links to download information and honestly distinguishes a local debug APK from unpublished production assets.
+
+Testing has six explicitly copied public production guideline rows and its quota-limited provisioning function. No production reports, photos or Auth users were copied. Production APK configuration targets the preserved production project, whose new backup schema/function rollout remains pending. See [routing and enablement](versions/history/ANDROID_APK_HISTORY.md#development-and-production-routing-october-21-2026).
+
+## Java Android and recovery candidate (October 20, 2026)
+
+The shared React application now has a separate Android build target. Java under `android/app/` hosts local static files through AndroidX WebKit at one trusted HTTPS origin; a main-frame-only message bridge owns SQLite, private photos, document export, camera permissions, and validated-network notifications. Native storage never falls back to IndexedDB. The existing browser app retains Dexie and manual report export so migration preserves user data. The Android target disables Serwist; browser production builds still generate their normal worker.
+
+Optional backup reuses the existing Supabase `public.scans` table and private `scans` bucket, with new immutable owner-scoped recovery manifests. Users explicitly save a recovery code before enabling uploads; server-verified Auth/RLS ownership replaces any trust in device UUIDs. There are no Sign In/Register screens. New backup rows do not claim or rewrite historical cloud resources. Public guideline downloads remain independent of private backup and local saving. The bundled public guideline snapshot seeds an empty native store.
+
+Java/OkHttp OTA consumes signed GitHub Release metadata and complete web bundles, stages verified compatible files, and selects them on a cold process launch. Model/bridge/schema identities are pinned; data and secrets remain outside bundle directories. An acknowledgment after model and SQLite readiness marks a bundle healthy, with fallback on a later cold launch if acknowledgment fails. The [Android guide](versions/ANDROID_APK_VERSIONING.md) defines build inputs, archive migration, credential handling, server preparation, rollback, and pending release evidence. At this original candidate stage, testing-function deployment and build separation were pending; the October 21 section records their implementation. Production backup deployment and APK/OTA publication remain pending. Dated local-only/browser descriptions below retain their original scope.
+
 ## Square-camera release candidate (v0.8.0, October 19, 2026)
 
 The prepared PWA candidate is `0.8.0`. It changes the live-camera framing and capture path: one bounded square preview shows the same centered area passed to photo review and diagnosis. The release model remains V4.5.0 with confidence-only rejection at 0.70; the separate local V5 overrides below are excluded from the release candidate. The [prepared release](versions/history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026) and [testing record](testing/TESTING.md#v080-square-camera-preview-october-19-2026) separate exact-build validation from CI, physical-device checks, approval, promotion, and publication. Those remaining steps are pending until their results are recorded.
@@ -67,6 +149,8 @@ The [earlier cloud-sync diagram](../public/images/mangoleaf-architecture.svg) is
 **October 7, 2026 ordering implementation:** Guidance downloads and direct Realtime writes share ordering protection, and guideline REST reads bypass the service-worker HTTP cache. The [initial implementation record](testing/TESTING.md#guideline-update-ordering-october-7-2026) preserves its `0.5.2` identity. The [v0.5.3 preparation record](versions/history/PWA_RELEASE_HISTORY.md#v053-guideline-update-ordering-candidate-october-7-2026) has separate [versioned validation](testing/TESTING.md#v053-candidate-validation-october-7-2026). Existing local `v0.5.2` at `ee91cf693fd52acb6f882f2c049a3b2ddd599a1f` excludes the fix. The later reported release status is recorded above.
 
 ## Test and release boundaries
+
+**October 21 Node runtime boundary:** `.node-version` selects reviewed Node 24.22.1, and the package engine floor permits later stable 24.x patches. CI and Node-based browser/OTA/archive entry points check the actual executable; Bun remains the main build runner. Neither the static website nor the Java APK embeds Node. See the [runtime exposure review](security/DEPENDENCY_SECURITY.md#october-21-2026-nodejs-runtime-security-review) for the advisory scope and machine/hosting verification limits.
 
 Root ESLint excludes the separate video project's generated `video/.venv/` Python dependencies. Tracked application and tooling sources remain checked; this exclusion does not change the video project's code or environment.
 
@@ -139,8 +223,8 @@ mangoleaf-ai/
 |   |-- verify-v4-notebooks.py      # Seven-class notebook contracts and optional read-only data audit
 |   |-- verify-v4-1-notebooks.py    # Four-arm experiment contracts and synthetic data-boundary checks
 |   |-- run-browser-tests.mjs       # Build verification and Node.js Playwright runner
-|   |-- verify-v4-4-notebooks.py     # V4.4.0 isolated-kernel notebook contract checks
-|   `-- verify-v4-5-notebooks.py     # V4.5.0 ordinary-cell OE and evaluation checks
+|   |-- verify-v4-4-notebooks.py    # V4.4.0 isolated-kernel notebook contract checks
+|   `-- verify-v4-5-notebooks.py    # V4.5.0 ordinary-cell OE and evaluation checks
 |-- public/                         # Files served directly from the site root
 |   |-- images/
 |   |   |-- icons/
@@ -158,7 +242,7 @@ mangoleaf-ai/
 |   |-- app/                        # Next.js App Router entry points
 |   |   |-- globals.css             # Global Tailwind and application styles
 |   |   |-- layout.tsx              # Root document, metadata, fonts, and viewport
-|   |   |-- manifest.ts             # Installable PWA manifest
+|   |   |-- manifest.ts             # Browser manifest and offline compatibility
 |   |   `-- page.tsx                # Main client-side application coordinator
 |   |-- components/                 # Reusable interface components, grouped by role
 |   |   |-- brand/                  # Application logo and icon set
@@ -170,7 +254,6 @@ mangoleaf-ai/
 |   |   |-- useDiagnostics.ts       # Shared recorder subscription, independent of modal lifetime
 |   |   |-- useGuidedCamera.ts      # Live camera readiness, capture, and stream cleanup
 |   |   |-- useInstallGuide.ts      # Platform instructions, QR arrival, and focus restoration
-|   |   |-- usePWAInstall.ts        # PWA installation prompt state and actions
 |   |   |-- useScanPhotoUrl.ts      # Stable card photo URLs and cleanup
 |   |   |-- useScrollLock.ts        # Shared scroll lock for overlapping modals
 |   |   `-- useSync.ts              # Local scan actions and public guideline updates
@@ -192,11 +275,11 @@ mangoleaf-ai/
 |   |-- env.d.ts                    # Types for build-time injected public env values
 |   `-- sw.ts                       # Serwist source configuration
 |-- docs/                           # Detailed engineering and project history
-|   |-- CODEBASE_REVIEW.md           # Shared AI-agent review instructions; attach with your own prompt
-|   |-- local-ignored-files/         # Optional local review/Q&A outputs; not included in Git clones
+|   |-- CODEBASE_REVIEW.md          # Shared AI-agent review instructions; attach with your own prompt
+|   |-- local-ignored-files/        # Optional local review/Q&A outputs; not included in Git clones
 |   |-- security/                   # Dependency risks, cloud ownership, and recovery
-|   |   |-- DEPENDENCY_SECURITY.md   # Advisory review, remediation, and residual findings
-|   |   `-- SECURITY-AND-SYNC.md     # Overview, setup links, evidence, and recovery
+|   |   |-- DEPENDENCY_SECURITY.md  # Advisory review, remediation, and residual findings
+|   |   `-- SECURITY-AND-SYNC.md    # Overview, setup links, evidence, and recovery
 |   |-- treatment-guidelines/       # Treatment-advice source reviews and bilingual drafts
 |   |-- testing/                    # Test instructions and physical-device checklists
 |   |   |-- TESTING.md              # Automated cases, reliability protocol, device checklist
@@ -211,8 +294,8 @@ mangoleaf-ai/
 |   |   |   |-- v4.1.1/             # TRIAL_v4_1_1.md, artifacts/, figures/; completed candidate
 |   |   |   |-- v4.2.0/             # TRIAL_v4_2_0.md; mangoleaf/ and mangofruit/ evidence
 |   |   |   |-- v4.4.0/             # TRIAL_v4_4_0.md; completed, declined experiment
-|   |   |   |   |-- artifacts/     # Curated training/fitting receipts, metrics, copy manifest, review
-|   |   |   |   `-- figures/       # Original training/ and threshold_fitting/ figures
+|   |   |   |   |-- artifacts/      # Curated training/fitting receipts, metrics, copy manifest, review
+|   |   |   |   `-- figures/        # Original training/ and threshold_fitting/ figures
 |   |   |   `-- v5.0.0/             # Trial/review, copied artifacts and figures; completed candidate
 |   |   `-- non-experiment/         # Historical and adopted model trials
 |   |       |-- v1/                 # TRIAL_v1.md
@@ -223,10 +306,12 @@ mangoleaf-ai/
 |   |       `-- v4.5.0/             # Current adopted OE model, confidence-only evidence and figures
 |   |-- ARCHITECTURE.md             # This architecture reference
 |   |-- versions/                   # Short current guides and full historical records
-|   |   |-- PWA_VERSIONING.md        # App version rules and release procedure
-|   |   |-- AI_MODEL_VERSIONING.md   # Active model, version rules, and adoption steps
+|   |   |-- PWA_VERSIONING.md         # App version rules and release procedure
+|   |   |-- ANDROID_APK_VERSIONING.md # Native versions, builds, signing, and update rules
+|   |   |-- AI_MODEL_VERSIONING.md    # Active model, version rules, and adoption steps
 |   |   `-- history/
 |   |       |-- PWA_RELEASE_HISTORY.md # Dated app records, checks, and release templates
+|   |       |-- ANDROID_APK_HISTORY.md # Dated native candidates and preserved implementation notes
 |   |       `-- AI_MODEL_HISTORY.md # Dated model decisions, notebooks, and evidence
 |   |-- PERFORMANCE.md              # Performance mechanisms, dated reviews, and measurements
 |   `-- PROGRESS.md                 # Development timeline and current baseline
@@ -248,8 +333,8 @@ mangoleaf-ai/
 |   |   |   |-- MangoLeaf_AI_Training_v3_Post_Training.ipynb    # Completed Trial 3 run, manuscript evidence, do not rerun
 |   |   |   |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb         # Trial 3 threshold template, 8 cells, outputs cleared
 |   |   |   `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb # Trial 3 fitting run; cell 9 settles the margin at 0.40
-|   |   |-- v4.3.0/                 # Previous adopted model; templates and completed runs
-|   |   `-- v4.5.0/                 # Current adopted model; unchanged templates and completed outputs
+|   |   |-- v4.3.0/                  # Previous adopted model; templates and completed runs
+|   |   `-- v4.5.0/                  # Current adopted model; unchanged templates and completed outputs
 |   `-- experiment/                  # Experimental notebooks/evidence; candidates, not shipped or deployed
 |       |-- README.md                # Status, scope, and notebook-version boundary
 |       |-- v3.1/                    # v3.1 workflow templates and completed results
@@ -268,7 +353,7 @@ mangoleaf-ai/
 |           |-- MangoLeaf_AI_Evaluate_v5_0_0.ipynb     # Later unseen-OOD report without retraining
 |           |-- MangoLeaf_AI_OE_Fine_Tuning_v5_0_0_Post_Training.ipynb
 |           |-- MangoLeaf_AI_Evaluate_v5_0_0_Reults.ipynb # Original supplied filename preserved
-|           `-- v5_workflow.py        # Required Colab helper; not application code
+|           `-- v5_workflow.py       # Required Colab helper; not application code
 |-- video/                           # Promotional video, a separate HyperFrames project
 |   |-- assets/                      # Render inputs plus the thumbnail still
 |   |-- index.html                   # Root composition and timeline
@@ -296,7 +381,7 @@ This is a single Next.js application rather than separate frontend and backend f
 ### App shell and orchestration
 
 - `src/app/layout.tsx` defines metadata, fonts, viewport behavior, and the root document.
-- `src/app/manifest.ts` defines installable PWA metadata and icons.
+- `src/app/manifest.ts` preserves generic browser metadata and icons for offline compatibility; the supported installation workflow uses the Android APK.
 - `src/app/page.tsx` is the main client coordinator for navigation, model loading, image selection, diagnosis, language state, scan history, and modals.
 
 ### User interface
@@ -335,7 +420,7 @@ Since the October 8, 2026 guided-camera change, the phone Take Photo action call
 
 ### Guided live camera
 
-`scan/guided-camera.tsx` renders the full-screen camera dialog; `useGuidedCamera.ts` owns its stream, readiness, and JPEG capture. Both iOS and Android use the same capability checks: a secure context and `navigator.mediaDevices.getUserMedia`. The hook does not select different camera instructions from the browser's user-agent string. HTTPS or a browser-recognized secure localhost origin is required; plain HTTP on a phone's LAN address can fail the secure-context check. Browser permission and actual camera availability still determine whether preview can start.
+`scan/guided-camera.tsx` renders the full-screen camera dialog; `useGuidedCamera.ts` owns its stream, readiness, and JPEG capture. The Android development browser and native WebView use the same capability checks: a secure context and `navigator.mediaDevices.getUserMedia`. The hook does not select different camera instructions from the browser's user-agent string. HTTPS or a browser-recognized secure localhost origin is required; plain HTTP on a phone's LAN address can fail the secure-context check. Browser permission and actual camera availability still determine whether preview can start.
 
 The camera requests video only, preferring the rear camera, 1280×720, and at most 30 frames per second. Those are browser constraints, not a promise of a particular lens or frame size. In the v0.8.0 candidate, muted inline video uses centered `object-cover` inside a square preview. A `ResizeObserver` measures available content width and clamps both preview dimensions to 280–360 CSS pixels. This is a display bound, not a captured-image resolution. Four 36px corner brackets have 4px green borders and the same 16px corner radius as the clipped preview. The guide provides positioning advice; it does not segment the subject, check image quality, or run continuous inference. The [October 8 camera record](testing/TESTING.md#guided-live-camera-october-8-2026) preserves the earlier full-frame behavior.
 
@@ -351,13 +436,15 @@ Permission denial, a missing or busy camera, unsupported capabilities, preview f
 
 At 768px and above, the header presents Home, Install, and About; History and Scan entry buttons and the old Upload Photo card are absent. Desktop Home replaces its visible Recent Scans/View All History section with the Install Now card. Phones retain Scan, History, Upload Photo, and their recent-photo preview. These are responsive presentation changes; saved history remains in IndexedDB.
 
-`modal/install-guide-overlay.tsx` displays bilingual installation instructions; `useInstallGuide.ts` manages opening, QR arrival, platform instructions, and focus restoration. Below 768px, the guide shows the detected phone platform's instructions: iPhone/iPad/iPod user-agent values, or `MacIntel` with more than one touch point, choose iOS; Android user-agent values choose Android; other values show the browser-menu fallback. This chooses wording only. User-agent detection can be altered or spoofed and is not proof of physical hardware or installation support. At 768px and above, the guide intentionally shows both Android and iOS cards plus a QR code, even on a wide phone or tablet. Width controls presentation; it does not select the operating system.
+`modal/install-guide-overlay.tsx` displays the same bilingual Android APK instructions on every device. `useInstallGuide.ts` manages opening, QR arrival, browser-install prompt suppression and focus restoration. Desktop widths add the QR and website link; phone widths retain the three installation steps. There is no platform-specific install branch, and no user-agent check claims that an APK is installed.
 
-The QR and visible website link point to `https://mangoleafai.vercel.app/?install=1`, including when the guide is opened on localhost. They do not open a local development or tunnel URL. On arrival, the hook consumes only `install=1`, preserves other query values, the URL hash, and history state, and opens the guide unless standalone display mode is already detected. Loading the QR link never opens a native installation prompt automatically. The installed state is observed through `(display-mode: standalone)`, iOS `navigator.standalone`, or `appinstalled`; it does not prove that an app installed in another browser is discoverable from the current tab.
+The QR and visible website link point to `https://mangoleafai.vercel.app/?install=1`, including on localhost. They do not point to a local tunnel. On arrival, the hook consumes only `install=1`, preserves other query values/hash/history state and opens the Android guide. A legacy standalone website also receives the guide because a website shortcut never proves APK installation. The native Android target does not open this website installation overlay. Loading the QR link never invokes an OS installer automatically.
 
-`usePWAInstall.ts` stores an actual `beforeinstallprompt` event separately from platform detection. An explicit Install tap may use that single-use event when available below 768px and outside the iOS instruction path. A dismissed prompt consumes the event too; another native request requires a new event. The hook guards repeated taps, reports prompt errors, and confirms installed status from browser events/display mode rather than the user's accepted choice alone. Without an event, the guide retains browser-menu instructions and Continue in Browser. iOS instructions explain Safari's Share, Add to Home Screen, and Add steps; Android instructions include menu fallback when native installation is not offered.
+Since the October 21 APK follow-up, Android instructions explain getting the APK, opening the file, approving installation when Android asks and opening the app. The later compact-guide edit removes the extra download-information button, availability paragraph and browser-History explanation from the overlay. Step two uses “Open APK” / “Ablihi ang APK” so it fits narrow phone widths without truncation. Step one refers to official GitHub Releases when available; the separate `/download` page retains accurate availability, compatibility and migration information. Android does not offer the browser PWA installer in this guide; its installed-browser flag never proves APK installation.
 
-The overlay locks background scrolling, makes underlying app sections inert, keeps keyboard focus among visible controls, supports Close/Escape/Continue in Browser, and restores focus to the initiating button or main content. Its fixed Close control includes safe-area offsets; the backdrop filter is separate from the scroll container so it does not change the control's containing block. These are source behaviors and automated UI conditions, not recorded physical iOS/Android installation results. `tools/e2e/install-guide.pw.ts` covers platform wording, breakpoint layout, QR arrival, prompt events, installed/failure states, and keyboard focus with controlled browser signals. Actual browser installation, OS menu behavior, QR use, and safe-area rendering remain device checks.
+The former browser PWA install hook and its platform-specific controls are retired. Browser `beforeinstallprompt` events are prevented rather than invoked or saved. Browser caching, existing reports and export remain available for deliberate migration into the separate Android app. Apple web-app metadata is not emitted; generic browser-engine identification remains in technical diagnostics for unsupported visitors.
+
+The overlay locks background scrolling, makes underlying sections inert, contains keyboard focus, supports Close/Escape/Back to website, and restores launcher focus. Its fixed Close control includes safe-area offsets outside the scroller's backdrop filter. Tests cover Android-only wording, both languages, narrow step headings, breakpoints, QR URL preservation, suppressed browser prompts, legacy shortcuts, metadata and the separate download page. Actual Android installation, QR use, permissions and safe-area behavior remain physical-device checks.
 
 A reusable SVG belongs in `brand/icon.tsx` under a name in the exported `IconName` union, not inline in whichever component needs it first. Icons that share the 24x24 stroke wrapper are held in the `STROKE_24_SHAPES` map, so adding one is a shape entry rather than another render branch. No entry hardcodes a colour or a size: every icon inherits `currentColor` from the surrounding text colour and takes its pixel dimensions from the `size` prop, which is what lets one shape serve call sites with different colours. Two entries can look like duplicates without being interchangeable. `camera` is a filled FontAwesome glyph on a 640x640 viewBox and `camera-outline` is a stroked viewfinder on a 24x24 one, so they are separate names rather than one icon with a variant flag.
 
@@ -409,10 +496,11 @@ Each inference prints a collapsed browser-console table of all seven class proba
 
 ### Local persistence
 
-`src/lib/db.ts` defines version 9 of `MangoLeafDB`:
+`src/lib/db.ts` defines version 10 of `MangoLeafDB`:
 
 - `scans` stores report IDs, predictions, confidence, original-file hashes, exact model labels, compressed photo Blobs, and timestamps. Its indexes are `id`, `image_hash`, and `updated_at`. Other fields remain stored without needing an index.
 - `guidelines` stores downloaded English/Bisaya guidance, with `id` and `disease_name` indexes.
+- `cloudDeletes` stores only scoped record IDs awaiting connected-backup cleanup, indexed by `[scope+record_id]` and `scope`. The v10 upgrade adds this store without rewriting reports/photos.
 
 The v9 upgrade changes indexes only. It preserves earlier Blob bytes, IDs, hashes, model labels, status values, and any historical owner/cloud/path/device fields without writing every large row again. New reports use `local-only` status and no device or guest identity. History reads newest dates first and filters legacy `pending-delete` tombstones, which remain hidden and do not cause cloud cleanup.
 
@@ -470,7 +558,7 @@ The precache manifest that Serwist generates covers the build output _and every 
 
 ### Static assets
 
-Application images live under `public/images/`, with the icon set in `public/images/icons/png/` and `public/images/icons/svg/`. The PNG icons are not decorative: `src/app/manifest.ts` declares the 192x192 and 512x512 files as `maskable`, and browsers refuse to offer the install prompt when a declared icon of at least 192x192 cannot be fetched. `src/app/layout.tsx` points the favicon and Apple touch icon at the same tree. Renaming or moving this directory means updating both files and rebuilding.
+Application images live under `public/images/`, with the icon set in `public/images/icons/png/` and `public/images/icons/svg/`. The PNG icons are not decorative: `src/app/manifest.ts` declares the 192x192 and 512x512 files as `maskable`, and browsers refuse to offer the install prompt when a declared icon of at least 192x192 cannot be fetched. `src/app/layout.tsx` points favicons at the same tree; the former Apple touch icon remains an unreferenced legacy asset, not current platform metadata. Renaming or moving this directory means updating both files and rebuilding.
 
 These files must stay tracked in git. `.gitignore` patterns that could match them need a leading slash so they stay anchored to the repository root; a bare pattern such as `images` matches a directory of that name at _any_ depth and silently excludes `public/images/`. Such a mistake does not surface in `git status`, because ignored paths are not reported as untracked, and it cannot be undone with a negation such as `!public/images/`, because git never descends into a directory that a parent pattern has excluded. The symptom appears only after a fresh clone or a deployment build: no favicon, and an uninstallable PWA.
 
@@ -496,7 +584,7 @@ These files must stay tracked in git. `.gitignore` patterns that could match the
 
 Husky registers `.husky/pre-commit` and `.husky/pre-push` during root dependency installation. Before commits, `lint-staged` formats staged files with Prettier and stages the fixes. `.prettierignore` keeps generated assets, model files, notebooks, and the separate video project outside formatting. Before upload, the push hook checks secrets and private filenames with `tools/check-security.mjs`, then runs TypeScript, ESLint, and Prettier's check-only command. The security scan includes tracked filenames and fetched Git history, including explicit push commits. `tools/install-gitleaks.mjs` installs the pinned, checksum-verified scanner under ignored `.tools/`. No scanner code or binaries are included in the application export.
 
-`.github/workflows/ci.yml` runs only on pushes to `master`. Independent security and application jobs run tooling tests, repeat the history scan, and perform typecheck, lint, formatting checks, static build, and exported-asset verification. The application job also runs core E2E against an isolated export and retains browser reports for 14 days. Its 45-minute job budget includes dependency/browser installation, both static builds, the core suite, and artifact upload; it does not add R03. R01 and R03 remain explicit reliability runs. CI invokes checks directly with Husky disabled. The build uses public-client fallback settings and does not deploy; production configuration and hosting deployment remain separate. Local checks can stop an upload, while CI reports failures after the push. See [SETUP.md](../SETUP.md#local-security-checks-and-github-ci) for installation, file rules, and limits.
+`.github/workflows/ci.yml` runs only on pushes to `master`. Both jobs read the exact Bun version from root `package.json` (`packageManager: bun@1.4.4`) using `bun-version-file`, keeping one shared pin. Independent security and application jobs run tooling tests, repeat the history scan, and perform typecheck, lint, formatting checks, static build, and exported-asset verification. The application job also runs core E2E against an isolated export and retains browser reports for 14 days. Its 45-minute job budget includes dependency/browser installation, both static builds, the core suite, and artifact upload; it does not add R03. R01 and R03 remain explicit reliability runs. CI invokes checks directly with Husky disabled. The build uses public-client fallback settings and does not deploy; production configuration and hosting deployment remain separate. Local checks can stop an upload, while CI reports failures after the push. See [SETUP.md](../SETUP.md#local-security-checks-and-github-ci) for installation, file rules, and limits.
 
 CI records the runner platform and Node, Bun, and Playwright versions, while guided-camera cases attach controlled media and focus state for diagnosis. The October 10 Linux CI evidence showed native camera-permission handling in a controlled allow case. The controlled fixture now supplies its own stable `navigator.mediaDevices` object and checks that mocked camera requests occur; C07 retains real synthetic-stream playback and C08 retains unsupported-API coverage. Pinned WebKit source supports a wrapper-lifetime explanation, but the trace does not record its exact collection event. The corrected Linux rerun remains pending. [TESTING.md](testing/TESTING.md) records the sources and actual outcomes.
 

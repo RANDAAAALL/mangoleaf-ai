@@ -184,8 +184,8 @@ test("A01: verified update waits for idle; modal supports both languages, focus,
     await expect(
       dialog.getByRole("button", { name: t.androidUpdateRestart, exact: true }),
     ).toBeFocused();
-    await page.keyboard.press("Tab");
-    await page.keyboard.press("Tab");
+    // Native browser-toolbar tab stops differ; verify reverse movement inside the dialog.
+    await page.keyboard.press("Shift+Tab");
     await expect(
       dialog.getByRole("button", { name: t.androidUpdateLater, exact: true }),
     ).toBeFocused();

@@ -8,6 +8,8 @@ The committed app remains V4.5.0. The maintainer's local workspace separately co
 
 ## Current adopted model: V4.5.0 (October 16, 2026)
 
+The [shared app v0.9.0 candidate](history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026) continues to use committed V4.5.0 weights, constants and cache identity. Its Android/backup changes do not adopt V5; local experimental runtime files remain uncommitted.
+
 The separate [v0.8.0 square-camera PWA candidate](history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026) retains V4.5.0. Its release checks must use the committed V4.5.0 assets, label, and worker cache, rather than the maintainer's local V5 override. Preparing that app version does not adopt V5 or change the earlier research-only commit's identity. Keep the experimental runtime files out of the app release commit, and regenerate the release worker from the V4.5.0 source snapshot.
 
 | Item                 | Recorded value                                                    |
