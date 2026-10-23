@@ -14,6 +14,7 @@
 # testing
 /coverage
 /.test-app/
+/.android-web/
 /test-results/
 /playwright-report/
 /.playwright-mcp/
@@ -28,6 +29,10 @@
 # misc
 .DS_Store
 *.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
 
 # debug
 npm-debug.log*

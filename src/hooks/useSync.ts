@@ -1,30 +1,30 @@
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { guidelinesClient } from "@/lib/supabase-client";
-import { db, type DiseaseGuideline } from "@/lib/db";
+import { type DiseaseGuideline } from "@/lib/db";
+import { connectionHint, subscribeConnection } from "@/lib/native-bridge";
+import {
+  readStoredGuidelines,
+  replaceStoredGuidelines,
+  applyStoredGuidelineChange,
+} from "@/lib/app-storage";
 import { deleteLocalScans, saveLocalScan } from "@/lib/local-scans";
 import {
   createDiagnosticOperation,
   diagnosticErrorName,
   recordDiagnostic,
 } from "@/lib/diagnostics";
-import {
-  createGuidelineSyncManager,
-  sameGuidelineSnapshot,
-} from "@/lib/guidelines-sync";
+import { createGuidelineSyncManager } from "@/lib/guidelines-sync";
 
 const SYNC_RETRY_DELAYS_MS = [10_000, 30_000, 60_000, 300_000];
 
-/** Scan reports stay local; only public treatment guidelines synchronize. */
+/** Public guidelines refresh independently; the separate opt-in worker uploads local reports. */
 export function useSync() {
-  const [isOnline, setIsOnline] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    return navigator.onLine;
-  });
+  const [isOnline, setIsOnline] = useState(connectionHint);
 
   const [guidelinesSync] = useState(() =>
     createGuidelineSyncManager({
-      isOnline: () => typeof navigator !== "undefined" && navigator.onLine,
-      readSnapshot: () => db.guidelines.toArray(),
+      isOnline: connectionHint,
+      readSnapshot: readStoredGuidelines,
       fetchSnapshot: async () => {
         const operation = createDiagnosticOperation("guidelines");
         recordDiagnostic("guidelines.download.started", { operation });
@@ -47,34 +47,8 @@ export function useSync() {
           throw error;
         }
       },
-      replaceSnapshot: (rows, baseline, canWrite) =>
-        db
-          .transaction("rw", db.guidelines, async (transaction) => {
-            const stored = await db.guidelines.toArray();
-            // Another tab may have saved advice while this tab was downloading.
-            if (!canWrite() || !sameGuidelineSnapshot(stored, baseline)) {
-              return false;
-            }
-            // An unchanged download is successful; keep the saved advice as is.
-            if (sameGuidelineSnapshot(stored, rows)) return true;
-
-            await db.guidelines.clear();
-            await db.guidelines.bulkPut(rows);
-            // Roll back this snapshot if a notification arrived during saving.
-            if (!canWrite()) transaction.abort();
-            return true;
-          })
-          .catch((error) => {
-            if (error?.name === "AbortError" && !canWrite()) return false;
-            throw error;
-          }),
-      applyChange: async (change) => {
-        if (change.type === "DELETE") {
-          await db.guidelines.delete(change.id);
-        } else {
-          await db.guidelines.put(change.guideline);
-        }
-      },
+      replaceSnapshot: replaceStoredGuidelines,
+      applyChange: applyStoredGuidelineChange,
       onError: (error) =>
         console.warn("Public guideline synchronization deferred:", error),
     }),
@@ -91,7 +65,7 @@ export function useSync() {
   }, []);
 
   const scheduleRetry = useCallback(() => {
-    if (!navigator.onLine || retryTimerRef.current !== null) return;
+    if (!connectionHint() || retryTimerRef.current !== null) return;
     const delay =
       SYNC_RETRY_DELAYS_MS[
         Math.min(retryAttemptRef.current, SYNC_RETRY_DELAYS_MS.length - 1)
@@ -104,7 +78,7 @@ export function useSync() {
   }, []);
 
   const sync = useCallback(async () => {
-    if (!navigator.onLine) return;
+    if (!connectionHint()) return;
     // The manager coalesces overlapping downloads and reconciles Realtime edits.
     // It never needs a guest identity or a private scan request.
     const ready = await guidelinesSync.refresh();
@@ -123,19 +97,12 @@ export function useSync() {
   useEffect(() => clearScheduledRetry, [clearScheduledRetry]);
 
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
+    return subscribeConnection(() => setIsOnline(connectionHint()));
   }, []);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.visibilityState !== "visible" || !navigator.onLine) return;
+      if (document.visibilityState !== "visible" || !connectionHint()) return;
       clearScheduledRetry();
       retryAttemptRef.current = 0;
       void sync();
@@ -195,7 +162,7 @@ export function useSync() {
               id: String(previous.id),
             });
           }
-          if (!saved && active && navigator.onLine) scheduleRetry();
+          if (!saved && active && connectionHint()) scheduleRetry();
         },
       )
       .subscribe((status) => {
@@ -203,7 +170,7 @@ export function useSync() {
         // Reconcile edits missed while the Realtime connection was unavailable.
         if (status === "SUBSCRIBED" && active) {
           void guidelinesSync.refresh(true).then((saved) => {
-            if (!saved && active && navigator.onLine) scheduleRetry();
+            if (!saved && active && connectionHint()) scheduleRetry();
           });
         }
       });

@@ -5,6 +5,9 @@ out/
 build/
 coverage/
 .test-app/
+.android-web/
+android/.gradle/
+android/**/build/
 test-results/
 playwright-report/
 .playwright-mcp/

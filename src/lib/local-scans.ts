@@ -1,6 +1,9 @@
 import type { Transaction } from "dexie";
 import { db, type ScanRecord } from "@/lib/db";
 import { modelVersion } from "@/lib/constants";
+import { isAndroidBuild } from "@/lib/native-bridge";
+import { saveNativeScan } from "@/lib/native-storage";
+import { deleteScansWithCloudQueue } from "@/lib/cloud-history-delete";
 import {
   createDiagnosticOperation,
   diagnosticErrorName,
@@ -63,28 +66,28 @@ export async function saveLocalScan(
   };
   signal?.addEventListener("abort", onAbort, { once: true });
   try {
-    const saved = await db.transaction(
-      "rw",
-      db.scans,
-      async (activeTransaction) => {
-        transaction = activeTransaction;
-        recordDiagnostic("database.save.transaction-entered", { operation });
-        // Opening the database can itself outlast a cancellation or deadline.
-        signal?.throwIfAborted();
-        const existing = await db.scans.get(record.id);
-        signal?.throwIfAborted();
-        if (existing) {
-          if (!samePreparedScan(existing, record)) {
-            throw new Error("Prepared scan ID belongs to a different report.");
+    const saved = isAndroidBuild()
+      ? await saveNativeScan(record, signal)
+      : await db.transaction("rw", db.scans, async (activeTransaction) => {
+          transaction = activeTransaction;
+          recordDiagnostic("database.save.transaction-entered", { operation });
+          // Opening the database can itself outlast a cancellation or deadline.
+          signal?.throwIfAborted();
+          const existing = await db.scans.get(record.id);
+          signal?.throwIfAborted();
+          if (existing) {
+            if (!samePreparedScan(existing, record)) {
+              throw new Error(
+                "Prepared scan ID belongs to a different report.",
+              );
+            }
+            recordDiagnostic("database.save.existing-returned", { operation });
+            return existing;
           }
-          recordDiagnostic("database.save.existing-returned", { operation });
-          return existing;
-        }
-        await db.scans.add(record);
-        signal?.throwIfAborted();
-        return record;
-      },
-    );
+          await db.scans.add(record);
+          signal?.throwIfAborted();
+          return record;
+        });
     // The transaction promise has settled; an individual add request is not a commit.
     recordDiagnostic("database.save.completed", {
       operation,
@@ -103,7 +106,7 @@ export async function saveLocalScan(
   }
 }
 
-/** Delete local rows immediately; no cloud queue or network retry is involved. */
+/** Remove local reports/photos and atomically retain any owned cloud-deletion intent. */
 export async function deleteLocalScans(ids: string[]): Promise<void> {
   const uniqueIds = [...new Set(ids)];
   if (uniqueIds.length === 0) return;
@@ -114,7 +117,7 @@ export async function deleteLocalScans(ids: string[]): Promise<void> {
     count: uniqueIds.length,
   });
   try {
-    await db.scans.bulkDelete(uniqueIds);
+    await deleteScansWithCloudQueue(uniqueIds);
     recordDiagnostic("database.delete.completed", {
       operation,
       count: uniqueIds.length,

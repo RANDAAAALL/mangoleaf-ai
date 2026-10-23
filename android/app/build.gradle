@@ -1,0 +1,330 @@
+plugins {
+    id 'com.android.application'
+}
+
+def quoted = { String value -> '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"' }
+// Keep private signing values in the user's Gradle properties or process environment.
+def externalValue = { String property, String environment ->
+    providers.gradleProperty(property).orElse(providers.environmentVariable(environment)).getOrElse('')
+}
+def releaseSigning = [
+    storeFile: externalValue('releaseStoreFile', 'MANGOLEAF_ANDROID_KEYSTORE'),
+    storePassword: externalValue('releaseStorePassword', 'MANGOLEAF_ANDROID_STORE_PASSWORD'),
+    keyAlias: externalValue('releaseKeyAlias', 'MANGOLEAF_ANDROID_KEY_ALIAS'),
+    keyPassword: externalValue('releaseKeyPassword', 'MANGOLEAF_ANDROID_KEY_PASSWORD'),
+    certificateSha256: externalValue('releaseCertificateSha256', 'MANGOLEAF_ANDROID_CERTIFICATE_SHA256').replace(':', '').toLowerCase(Locale.ROOT)
+]
+def otaTrust = [
+    repository: externalValue('otaRepository', 'MANGOLEAF_OTA_REPOSITORY'),
+    metadataUrl: externalValue('otaMetadataUrl', 'MANGOLEAF_OTA_METADATA_URL'),
+    signatureUrl: externalValue('otaSignatureUrl', 'MANGOLEAF_OTA_SIGNATURE_URL'),
+    publicKeyBase64: externalValue('otaPublicKeyBase64', 'MANGOLEAF_OTA_PUBLIC_KEY_BASE64')
+]
+
+android {
+    namespace 'com.mangoleaf.ai'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.mangoleaf.ai'
+        minSdk 26
+        targetSdk 36
+        versionCode 5
+        versionName '0.1.4'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        buildConfigField 'int', 'BRIDGE_VERSION', '1'
+        buildConfigField 'int', 'SCHEMA_VERSION', '1'
+        buildConfigField 'String', 'OTA_METADATA_URL', quoted(otaTrust.metadataUrl)
+        buildConfigField 'String', 'OTA_SIGNATURE_URL', quoted(otaTrust.signatureUrl)
+        buildConfigField 'String', 'OTA_ALLOWED_REPOSITORY', quoted(otaTrust.repository)
+        buildConfigField 'String', 'OTA_PUBLIC_KEY', quoted(otaTrust.publicKeyBase64)
+    }
+
+    buildFeatures { buildConfig true }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets.main.assets.srcDir layout.buildDirectory.dir('generated/web-assets')
+    sourceSets.release.assets.srcDir layout.buildDirectory.dir('generated/release-assets')
+    signingConfigs {
+        release {
+            if (releaseSigning.values().every { it }) {
+                storeFile file(releaseSigning.storeFile)
+                storePassword releaseSigning.storePassword
+                keyAlias releaseSigning.keyAlias
+                keyPassword releaseSigning.keyPassword
+            }
+        }
+    }
+    androidResources {
+        // Android's default asset filter drops underscore-prefixed directories.
+        // Next.js requires _next/ for every client script and stylesheet.
+        ignoreAssetsPattern = '!.git:!.svn:!*.DS_Store:!*~'
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-dev'
+            buildConfigField 'String', 'CLOUD_ENVIRONMENT', quoted('testing')
+            // User-level production properties must never turn Debug into a production OTA client.
+            buildConfigField 'String', 'OTA_METADATA_URL', quoted('')
+            buildConfigField 'String', 'OTA_SIGNATURE_URL', quoted('')
+            buildConfigField 'String', 'OTA_ALLOWED_REPOSITORY', quoted('')
+            buildConfigField 'String', 'OTA_PUBLIC_KEY', quoted('')
+        }
+        release {
+            buildConfigField 'String', 'CLOUD_ENVIRONMENT', quoted('production')
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+    lint {
+        abortOnError true
+        checkReleaseBuilds true
+    }
+}
+
+def digestBytes = { byte[] bytes ->
+    java.security.MessageDigest.getInstance('SHA-256').digest(bytes).encodeHex().toString()
+}
+
+tasks.register('verifyReleaseConfiguration') {
+    doLast {
+        if (!releaseSigning.values().every { it }
+            || !(releaseSigning.certificateSha256 ==~ /[a-f0-9]{64}/)) {
+            throw new GradleException('Release signing is incomplete. Configure the external keystore, passwords, alias, and pinned certificate SHA-256. See docs/versions/ANDROID_APK_VERSIONING.md.')
+        }
+        try {
+            def keyFile = file(releaseSigning.storeFile).canonicalFile
+            def repositoryRoot = rootProject.projectDir.canonicalFile.parentFile.toPath()
+            if (!keyFile.isFile() || keyFile.toPath().startsWith(repositoryRoot)
+                || releaseSigning.keyAlias.equalsIgnoreCase('androiddebugkey')) {
+                throw new IllegalArgumentException()
+            }
+            def store = java.security.KeyStore.getInstance(keyFile, releaseSigning.storePassword.toCharArray())
+            def certificate = store.getCertificate(releaseSigning.keyAlias)
+            if (!(certificate instanceof java.security.cert.X509Certificate)
+                || !store.isKeyEntry(releaseSigning.keyAlias)
+                || store.getKey(releaseSigning.keyAlias, releaseSigning.keyPassword.toCharArray()) == null
+                || certificate.subjectX500Principal.name.toLowerCase(Locale.ROOT).contains('cn=android debug')
+                || digestBytes(certificate.encoded) != releaseSigning.certificateSha256) {
+                throw new IllegalArgumentException()
+            }
+            certificate.checkValidity()
+        } catch (Exception ignored) {
+            // Keystore errors can contain private paths or values. Keep the public failure bounded.
+            throw new GradleException('Release keystore validation failed. Use the external permanent production key and its matching certificate fingerprint; never use the debug key.')
+        }
+        try {
+            if (!otaTrust.values().every { it }
+                || !(otaTrust.repository ==~ /[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+/)) {
+                throw new IllegalArgumentException()
+            }
+            [otaTrust.metadataUrl, otaTrust.signatureUrl].each { value ->
+                def uri = new java.net.URI(value)
+                def prefix = '/' + otaTrust.repository + '/releases/'
+                def suffix = uri.rawPath?.startsWith(prefix) ? uri.rawPath.substring(prefix.length()) : ''
+                if (uri.scheme != 'https' || uri.host != 'github.com' || uri.port != -1
+                    || uri.userInfo != null || uri.rawQuery != null || uri.rawFragment != null
+                    || (uri.rawPath.toLowerCase(Locale.ROOT) ==~ /.*%(2f|5c|2e).*/)
+                    || !(suffix ==~ /(?:download\/[^\/]+\/[^\/]+|latest\/download\/[^\/]+)/)) {
+                    throw new IllegalArgumentException()
+                }
+            }
+            if (otaTrust.metadataUrl == otaTrust.signatureUrl) throw new IllegalArgumentException()
+            def otaKey = java.security.KeyFactory.getInstance('RSA').generatePublic(
+                new java.security.spec.X509EncodedKeySpec(Base64.decoder.decode(otaTrust.publicKeyBase64)))
+            if (!(otaKey instanceof java.security.interfaces.RSAPublicKey) || otaKey.modulus.bitLength() < 3072) {
+                throw new IllegalArgumentException()
+            }
+        } catch (Exception ignored) {
+            throw new GradleException('Production OTA trust is incomplete or invalid. Configure distinct HTTPS GitHub Release metadata/signature URLs for the allowed repository and an RSA 3072-bit public key.')
+        }
+        logger.lifecycle('Production signing identity and OTA trust passed configuration checks.')
+    }
+}
+tasks.matching { it.name == 'preReleaseBuild' }.configureEach {
+    dependsOn tasks.named('verifyReleaseConfiguration')
+}
+
+// Bind the public OTA trust values to the signed APK, rather than only a sidecar receipt.
+tasks.register('prepareReleaseTrust') {
+    dependsOn tasks.named('verifyReleaseConfiguration')
+    def trustFile = layout.buildDirectory.file('generated/release-assets/production-trust.json')
+    inputs.property('certificateSha256', releaseSigning.certificateSha256)
+    inputs.properties(otaTrust)
+    outputs.file(trustFile)
+    doLast {
+        def destination = trustFile.get().asFile
+        destination.parentFile.mkdirs()
+        def trust = [
+            format: 1,
+            certificateSha256: releaseSigning.certificateSha256,
+            ota: [repository: otaTrust.repository, metadataUrl: otaTrust.metadataUrl,
+                signatureUrl: otaTrust.signatureUrl,
+                publicKeySha256: digestBytes(Base64.decoder.decode(otaTrust.publicKeyBase64))]
+        ]
+        destination.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(trust)) + '\n'
+    }
+}
+tasks.matching { it.name == 'mergeReleaseAssets' }.configureEach {
+    dependsOn tasks.named('prepareReleaseTrust')
+}
+tasks.matching { it.name == 'preReleaseBuild' }.configureEach {
+    // Lint also reads Release assets, before mergeReleaseAssets necessarily runs.
+    dependsOn tasks.named('prepareReleaseTrust')
+}
+
+tasks.register('verifyWebBundle') {
+    def webDirectory = layout.buildDirectory.dir('generated/web-assets/web')
+    inputs.dir(webDirectory)
+    doLast {
+        if (!webDirectory.get().file('index.html').asFile.isFile()
+            || !webDirectory.get().file('android-bundle.json').asFile.isFile()) {
+            throw new GradleException('Prepare the Android web bundle with bun run android:bundle before building the APK.')
+        }
+    }
+}
+tasks.named('preBuild').configure { dependsOn tasks.named('verifyWebBundle') }
+
+// A release label must not package testing assets (or a debug host production assets).
+['Debug': 'testing', 'Release': 'production'].each { variant, environment ->
+    tasks.register("verify${variant}CloudTarget") {
+        dependsOn tasks.named('verifyWebBundle')
+        doLast {
+            def inputs = layout.buildDirectory.file('generated/web-assets/build-inputs.json').get().asFile
+            if (!inputs.isFile() || new groovy.json.JsonSlurper().parse(inputs).cloudEnvironment != environment) {
+                throw new GradleException("Stage the ${environment} web bundle before building ${variant}.")
+            }
+        }
+    }
+    tasks.matching { it.name == "pre${variant}Build" }.configureEach {
+        dependsOn tasks.named("verify${variant}CloudTarget")
+    }
+}
+
+// Verify the packaged APK, not only the staging directory; aapt can filter assets.
+['Debug': 'testing', 'Release': 'production'].each { variant, environment ->
+tasks.register("verify${variant}Bundle") {
+    dependsOn "assemble${variant}"
+    doLast {
+        def name = variant.toLowerCase(Locale.ROOT)
+        def apk = layout.buildDirectory.file("outputs/apk/${name}/app-${name}.apk").get().asFile
+        new java.util.zip.ZipFile(apk).withCloseable { archive ->
+            def names = new HashSet<String>()
+            def packagedWeb = new HashSet<String>()
+            archive.entries().each { entry ->
+                if (!names.add(entry.name.toLowerCase(Locale.ROOT))) throw new GradleException('The APK contains duplicate or case-colliding paths.')
+                if (!entry.directory && entry.name.startsWith('assets/web/')) packagedWeb.add(entry.name.substring('assets/web/'.length()))
+            }
+            def descriptorEntry = archive.getEntry('assets/web/android-bundle.json')
+            if (descriptorEntry == null) throw new GradleException('The APK has no Android bundle descriptor.')
+            def descriptor = new groovy.json.JsonSlurper().parse(archive.getInputStream(descriptorEntry))
+            def inputsEntry = archive.getEntry('assets/build-inputs.json')
+            if (inputsEntry == null) throw new GradleException('The APK has no build-input identity.')
+            def inputs = new groovy.json.JsonSlurper().parse(archive.getInputStream(inputsEntry))
+            def expectedProject = environment == 'production' ? 'uuvvvoznajjqknedxpdg' : 'ajwlojaclehxupntnsve'
+            if (inputs.cloudEnvironment != environment || inputs.cloudProject != expectedProject
+                || inputs.bundleVersion != descriptor.bundleVersion || inputs.sourceCommit != descriptor.sourceCommit
+                || !(inputs.fingerprint ==~ /[a-f0-9]{64}/)
+                || (variant == 'Release' && inputs.modelSource != 'committed-HEAD')
+                || descriptor.protocol != 1 || descriptor.bridgeVersion != 1 || descriptor.schemaVersion != 1
+                || descriptor.nativeHostMin > android.defaultConfig.versionCode
+                || descriptor.nativeHostMax < android.defaultConfig.versionCode) {
+                throw new GradleException('The packaged APK backend, model source, or native compatibility differs from its build target.')
+            }
+            if (!descriptor.files.any { it.path.startsWith('_next/') }) {
+                throw new GradleException('The web bundle has no Next.js client assets.')
+            }
+            def expectedNames = new HashSet<String>(['android-bundle.json'])
+            def modelIdentity = new StringBuilder()
+            def previous = ''
+            descriptor.files.each { expected ->
+                if (!(expected.path instanceof String) || expected.path <= previous
+                    || expected.path.startsWith('/') || expected.path.contains('\\')
+                    || expected.path.split('/', -1).any { it == '' || it == '.' || it == '..' }
+                    || !(expected.sha256 ==~ /[a-f0-9]{64}/) || expected.bytes < 0
+                    || !expectedNames.add(expected.path)) throw new GradleException('The APK inventory contains an invalid asset.')
+                previous = expected.path
+                def entry = archive.getEntry('assets/web/' + expected.path)
+                if (entry == null || entry.size != expected.bytes) {
+                    throw new GradleException('APK web asset is missing or has changed size: ' + expected.path)
+                }
+                def digest = java.security.MessageDigest.getInstance('SHA-256')
+                archive.getInputStream(entry).withCloseable { input ->
+                    byte[] buffer = new byte[8192]
+                    int read
+                    while ((read = input.read(buffer)) != -1) digest.update(buffer, 0, read)
+                }
+                if (digest.digest().encodeHex().toString() != expected.sha256) {
+                    throw new GradleException('APK web asset hash differs: ' + expected.path)
+                }
+                if (expected.path.startsWith('model/')) modelIdentity.append(expected.path).append('\t').append(expected.bytes).append('\t').append(expected.sha256).append('\n')
+            }
+            if (packagedWeb != expectedNames || !expectedNames.contains('index.html')
+                || !expectedNames.contains('model/model.json') || !expectedNames.contains('model/model_config.json')
+                || digestBytes(modelIdentity.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8)) != descriptor.modelIdentity) {
+                throw new GradleException('The packaged web inventory or complete model identity differs.')
+            }
+            def modelConfig = new groovy.json.JsonSlurper().parse(archive.getInputStream(archive.getEntry('assets/web/model/model_config.json')))
+            def receipt = [
+                format: 1,
+                status: 'local-unpublished-candidate',
+                variant: name,
+                applicationId: android.defaultConfig.applicationId + (variant == 'Debug' ? '.debug' : ''),
+                nativeVersionName: android.defaultConfig.versionName + (variant == 'Debug' ? '-dev' : ''),
+                nativeVersionCode: android.defaultConfig.versionCode,
+                bridgeVersion: descriptor.bridgeVersion,
+                schemaVersion: descriptor.schemaVersion,
+                bundleVersion: descriptor.bundleVersion,
+                bundledSequence: descriptor.sequence,
+                sourceCommit: descriptor.sourceCommit,
+                inputFingerprint: inputs.fingerprint,
+                workingTreeCandidate: inputs.workingTreeCandidate,
+                modelSource: inputs.modelSource,
+                modelVersion: modelConfig.modelVersion,
+                modelIdentity: descriptor.modelIdentity,
+                cloudEnvironment: inputs.cloudEnvironment,
+                cloudProject: inputs.cloudProject,
+                packagedWebFiles: descriptor.files.size(),
+                descriptorSha256: digestBytes(archive.getInputStream(descriptorEntry).bytes),
+                apkSha256: digestBytes(apk.bytes),
+                apkBytes: apk.length(),
+                certificateSha256: variant == 'Release' ? releaseSigning.certificateSha256 : null,
+                ota: variant == 'Release' ? [
+                    repository: otaTrust.repository,
+                    metadataUrl: otaTrust.metadataUrl,
+                    signatureUrl: otaTrust.signatureUrl,
+                    publicKeySha256: digestBytes(Base64.decoder.decode(otaTrust.publicKeyBase64))
+                ] : null
+            ]
+            def receiptFile = layout.buildDirectory.file("outputs/apk/${name}/packaged-bundle-receipt.json").get().asFile
+            if (variant == 'Release') {
+                def trustEntry = archive.getEntry('assets/production-trust.json')
+                if (trustEntry == null) throw new GradleException('The signed APK has no pinned production trust identity.')
+                def trust = new groovy.json.JsonSlurper().parse(archive.getInputStream(trustEntry))
+                if (trust.format != 1 || trust.certificateSha256 != receipt.certificateSha256 || trust.ota != receipt.ota) {
+                    throw new GradleException('The packaged production trust differs from the release identity.')
+                }
+            }
+            receiptFile.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(receipt)) + '\n'
+            logger.lifecycle('Verified {} packaged web assets, including Next.js scripts and model files.', descriptor.files.size())
+        }
+    }
+}
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+    implementation 'androidx.webkit:webkit:1.17.1'
+    implementation 'androidx.core:core:1.17.0'
+    implementation 'androidx.activity:activity:1.13.0'
+    // 5.5.0 requires compileSdk 37; 5.4.0 is the newest compatible Android artifact.
+    implementation 'com.squareup.okhttp3:okhttp:5.4.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20250517'
+    androidTestImplementation 'androidx.test:runner:1.7.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+}

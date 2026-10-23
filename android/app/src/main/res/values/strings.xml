@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Debug must not advertise a relationship with the production website. Release overrides this. -->
+    <string name="asset_statements" translatable="false">[]</string>
+    <!-- Bootstrap text must work before React loads; keep paired with translations.ts. -->
+    <string name="native_webview_unsupported">Update Android System WebView to open MangoLeaf AI.\n\nI-update ang Android System WebView aron maablihan ang MangoLeaf AI.</string>
+    <string name="native_startup_error">MangoLeaf AI could not start. Close and reopen the app. Your saved data has not been deleted.\n\nWala makasugod ang MangoLeaf AI. Isira ug ablihi pag-usab ang app. Wala mapapas ang imong natipig nga datos.</string>
+</resources>

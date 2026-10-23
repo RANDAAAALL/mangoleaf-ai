@@ -24,9 +24,15 @@ export interface DiseaseGuideline {
   guidelines_bis: string; // Bisaya pre-written treatment rules
 }
 
+export interface CloudHistoryDeletion {
+  scope: string;
+  record_id: string;
+}
+
 class MangoLeafDB extends Dexie {
   scans!: Table<ScanRecord>;
   guidelines!: Table<DiseaseGuideline>;
+  cloudDeletes!: Table<CloudHistoryDeletion, [string, string]>;
 
   constructor() {
     super("MangoLeafDB");
@@ -50,6 +56,12 @@ class MangoLeafDB extends Dexie {
     this.version(9).stores({
       scans: "id, image_hash, updated_at",
       guidelines: "id, disease_name",
+    });
+    // Add only the durable outbox; original reports, photos and legacy tombstones stay intact.
+    this.version(10).stores({
+      scans: "id, image_hash, updated_at",
+      guidelines: "id, disease_name",
+      cloudDeletes: "[scope+record_id], scope",
     });
   }
 }

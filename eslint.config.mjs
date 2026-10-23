@@ -24,6 +24,9 @@ const eslintConfig = defineConfig([
     // Local audit output; tracked tools/ still receives the normal checks.
     ".tools/**",
     ".test-app/**",
+    ".android-web/**",
+    "android/**/build/**",
+    "android/.gradle/**",
     "test-results/**",
     "playwright-report/**",
     ".playwright-mcp/**",

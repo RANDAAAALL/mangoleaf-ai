@@ -35,6 +35,9 @@
     "node_modules",
     "scratch",
     ".test-app",
+    ".android-web",
+    "android",
+    "supabase/functions",
     "test-results",
     "playwright-report"
   ]

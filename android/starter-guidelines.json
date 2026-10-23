@@ -1,0 +1,38 @@
+[
+  {
+    "id": "anthracnose",
+    "disease_name": "Anthracnose",
+    "guidelines_en": "1. Chemical Control: Use registered contact fungicides for emerging leaf flushes in rainy weather. The GAP advice excludes systemic fungicides for this flush treatment. Blossom and fruit protection are separate treatments, used when needed and according to the product label.\r\n\r\n2. Cultural Management: Prune after harvest, remove fallen leaves and dead twigs, and bag developing fruit. Avoid intercropping mango with papaya or cacao.\r\n\r\n3. Post-Harvest Fruit Care: For controlled hot-water treatment, use 52–55°C for about 10 minutes within 24 hours of harvest; cool in running water for 10 minutes and air-dry for 10 minutes before packing. This procedure is for harvested fruit.",
+    "guidelines_bis": "1. Tambal (Kemikal): Gamit og rehistradong contact fungicide sa bag-ong tubo nga dahon panahon sa ting-ulan. Dili apil ang systemic fungicide sa tambag sa GAP alang niini nga pagtambal sa bag-ong tubo. Lahi ang pagpanalipod sa bulak ug bunga; buhata kung gikinahanglan ug sunda ang label sa produkto.\r\n\r\n2. Kultural nga Pagdumala: Putla ang mga sanga human sa ani, hipusa ang nangahulog nga dahon ug patay nga sanga, ug bag-a ang nagatubo nga bunga. Likayi ang intercropping, o pagdungan og tanom sa mangga ug papaya o cacao sa samang manggaan.\r\n\r\n3. Pag-atiman sa Giani nga Bunga: Sa kontroladong hot-water treatment, gamita ang 52–55°C sulod sa mga 10 minutos, sulod sa 24 oras human sa ani; pabugnawa sa nagaagay nga tubig sulod sa 10 minutos ug pauga sa hangin sulod sa 10 minutos sa dili pa i-pack. Para kini sa giani nga bunga."
+  },
+  {
+    "id": "bacterial_black_spot",
+    "disease_name": "Bacterial Black Spot",
+    "guidelines_en": "1. Management: Copper sprays can reduce bacteria on plant surfaces but do not cure established infection. Follow the label of a product registered for the intended use. Repeated copper use can accumulate copper in soil.\r\n\r\n2. Cultural Control: Use disease-free planting material, sanitize tools between trees, monitor symptoms, and use windbreaks. Published advice discusses eliminating diseased trees in areas with low disease incidence; it is not a blanket instruction to uproot every tree.",
+    "guidelines_bis": "1. Pagdumala: Ang copper spray makamenos sa bakterya sa ibabaw sa tanom apan dili makaayo sa natakdan nga bahin. Sunda ang label sa produktong rehistrado alang sa maong paggamit. Ang balik-balik nga paggamit sa copper mahimong makapatigom niini sa yuta.\r\n\r\n2. Kultural nga Kontrol: Gamit og materyal nga pangtanom nga walay sakit, limpyohi ang mga gamit matag kahoy, bantayi ang sintomas, ug gamit og windbreak. Ang gipatik nga tambag naghisgot sa pagtangtang sa natakdan nga kahoy sa lugar nga diyutay pa ang sakit; dili kini sugo nga laguton ang matag kahoy."
+  },
+  {
+    "id": "bacterial_canker",
+    "disease_name": "Bacterial Canker",
+    "guidelines_en": "1. Management: Copper sprays can reduce bacteria on plant surfaces but do not cure established infection. Follow the label of a product registered for the intended use. Repeated copper use can accumulate copper in soil.\r\n\r\n2. Cultural Control: Use disease-free planting material, sanitize tools between trees, monitor symptoms, and use windbreaks. Published advice discusses eliminating diseased trees in areas with low disease incidence; it is not a blanket instruction to uproot every tree.",
+    "guidelines_bis": "1. Pagdumala: Ang copper spray makamenos sa bakterya sa ibabaw sa tanom apan dili makaayo sa natakdan nga bahin. Sunda ang label sa produktong rehistrado alang sa maong paggamit. Ang balik-balik nga paggamit sa copper mahimong makapatigom niini sa yuta.\r\n\r\n2. Kultural nga Kontrol: Gamit og materyal nga pangtanom nga walay sakit, limpyohi ang mga gamit matag kahoy, bantayi ang sintomas, ug gamit og windbreak. Ang gipatik nga tambag naghisgot sa pagtangtang sa natakdan nga kahoy sa lugar nga diyutay pa ang sakit; dili kini sugo nga laguton ang matag kahoy."
+  },
+  {
+    "id": "healthy",
+    "disease_name": "Healthy",
+    "guidelines_en": "1. Maintenance: The photo was classified as healthy; continue checking the plant for symptoms. Base fertilizer choice, amount, timing, and placement on soil or tissue analysis and tree age. Water as needed and prune after harvest for airflow. Avoid insecticide spraying during full bloom to protect pollinators.",
+    "guidelines_bis": "1. Pagmentinar: Giila sa modelo nga himsog ang naa sa litrato; padayong bantayi ang tanom alang sa sintomas. Ibase ang klase, kadaghanon, panahon, ug dapit sa pagbutang sa abono sa soil o tissue analysis ug edad sa kahoy. Bisbisi kung gikinahanglan ug putla ang mga sanga human sa ani aron makaagi ang hangin. Likayi ang pag-spray og insecticide panahon sa bug-os nga pagpamulak aron mapanalipdan ang mga pollinator."
+  },
+  {
+    "id": "mango_scab",
+    "disease_name": "Mango Scab",
+    "guidelines_en": "1. Chemical Control: In scab-prone areas, GAP recommends registered fungicides for young fruit around 35–50 days after flower induction (DAFI). Follow the product label for application details.\r\n\r\n2. Cultural Management: Prune after harvest, remove fallen leaves and dead plant material, and bag developing fruit.",
+    "guidelines_bis": "1. Tambal (Kemikal): Sa lugar nga kasagarang adunay scab, ang GAP nagrekomendar og rehistradong fungicide sa linghod nga bunga sa mga 35–50 ka adlaw human sa flower induction (DAFI). Sunda ang label sa produkto alang sa paggamit niini.\r\n\r\n2. Kultural nga Pagdumala: Putla ang mga sanga human sa ani, hipusa ang nangahulog nga dahon ug patay nga materyales sa tanom, ug bag-a ang nagatubo nga bunga."
+  },
+  {
+    "id": "sooty_mold",
+    "disease_name": "Sooty Mold",
+    "guidelines_en": "1. Insect Control: Manage the sap-sucking insects that produce honeydew, such as leafhoppers, scales, and mealybugs. Use registered insecticides according to their labels.\r\n\r\n2. Cultural Management: Prune dense branches to improve airflow and bag clean fruit. These measures address the insects and conditions associated with sooty mold.",
+    "guidelines_bis": "1. Kontrol sa Insekto: Kontrola ang mga insekto nga mosuyop sa duga ug mopagawas og honeydew, sama sa leafhopper, scale insect, ug mealybug. Gamit og rehistradong insecticide ug sunda ang label niini.\r\n\r\n2. Kultural nga Pagdumala: Putla ang dasok nga mga sanga aron makaagi ang hangin ug bag-a ang limpyo nga bunga. Kini nga mga pamaagi motubag sa mga insekto ug kahimtang nga may kalabotan sa sooty mold."
+  }
+]
