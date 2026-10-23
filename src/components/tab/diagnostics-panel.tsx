@@ -8,6 +8,7 @@ import {
   setDiagnosticsEnabled,
 } from "@/lib/diagnostics";
 import { translations, type Language } from "@/lib/translations";
+import { downloadDiagnosticLog } from "@/lib/diagnostics-export";
 
 /** One optional viewer for the recorder shared by the whole application. */
 export function DiagnosticsPanel({ language }: { language: Language }) {
@@ -18,6 +19,7 @@ export function DiagnosticsPanel({ language }: { language: Language }) {
     "copied" | "copyFailed" | "downloadFailed" | "cleared" | null
   >(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
+  const [downloading, setDownloading] = useState(false);
   const buttonClass =
     "min-h-11 rounded-xl border border-[#b4d2ac] bg-white px-4 py-2 text-sm font-bold text-[#245f2d] hover:bg-[#edf6e9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839]";
   const feedbackText = {
@@ -42,29 +44,17 @@ export function DiagnosticsPanel({ language }: { language: Language }) {
     }
   }
 
-  function downloadLogs() {
+  async function downloadLogs() {
+    if (downloading) return;
+    setDownloading(true);
     recordDiagnostic("diagnostics.download");
-    let url: string | null = null;
-    let link: HTMLAnchorElement | null = null;
     try {
-      url = URL.createObjectURL(
-        new Blob([formatDiagnostics()], { type: "text/plain;charset=utf-8" }),
-      );
-      link = document.createElement("a");
-      link.href = url;
-      link.download = `MangoLeafAI-diagnostics-${Date.now()}.txt`;
-      document.body.appendChild(link);
-      link.click();
+      await downloadDiagnosticLog(formatDiagnostics());
       setFeedback(null);
     } catch {
       setFeedback("downloadFailed");
     } finally {
-      link?.remove();
-      // Give the browser time to consume the download before releasing its URL.
-      if (url) {
-        const downloadUrl = url;
-        setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
-      }
+      setDownloading(false);
     }
   }
 
@@ -140,7 +130,9 @@ export function DiagnosticsPanel({ language }: { language: Language }) {
             <button
               type="button"
               className={buttonClass}
-              onClick={downloadLogs}
+              onClick={() => void downloadLogs()}
+              disabled={downloading}
+              aria-busy={downloading}
             >
               {t.diagnosticsDownload}
             </button>

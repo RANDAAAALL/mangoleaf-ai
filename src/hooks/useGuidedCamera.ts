@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createDiagnosticOperation, recordDiagnostic } from "@/lib/diagnostics";
 
 type CameraPhase = "starting" | "ready" | "capturing" | "paused" | "error";
 
@@ -56,12 +57,8 @@ export function useGuidedCamera() {
     }
   }, []);
 
-  const stop = useCallback(() => {
-    // Cancel pending permission and encoding work before releasing hardware.
-    requestRef.current += 1;
+  const releaseCamera = useCallback(() => {
     playbackReadyRef.current = false;
-    capturingRef.current = false;
-    clearStartupTimer();
 
     const stream = streamRef.current;
     streamRef.current = null;
@@ -72,7 +69,15 @@ export function useGuidedCamera() {
       video.pause();
       video.srcObject = null;
     }
-  }, [clearStartupTimer]);
+  }, []);
+
+  const stop = useCallback(() => {
+    // Cancel pending permission and encoding work before releasing hardware.
+    requestRef.current += 1;
+    capturingRef.current = false;
+    clearStartupTimer();
+    releaseCamera();
+  }, [clearStartupTimer, releaseCamera]);
 
   const fail = useCallback(
     (reason: CameraError) => {
@@ -208,18 +213,26 @@ export function useGuidedCamera() {
       }
 
       const request = requestRef.current;
+      const operation = createDiagnosticOperation("camera-capture");
+      const started = performance.now();
       capturingRef.current = true;
       setPhase("capturing");
+      const canvas = document.createElement("canvas");
 
       try {
-        const canvas = document.createElement("canvas");
         // Match the square preview's centered object-cover crop at capture time.
         const size = Math.min(video.videoWidth, video.videoHeight);
         const sourceX = (video.videoWidth - size) / 2;
         const sourceY = (video.videoHeight - size) / 2;
         canvas.width = size;
         canvas.height = size;
-        const context = canvas.getContext("2d");
+        recordDiagnostic("camera.capture.started", {
+          operation,
+          width: size,
+          height: size,
+        });
+        const frameStarted = performance.now();
+        const context = canvas.getContext("2d", { alpha: false });
         if (!context) throw new Error("Camera capture canvas is unavailable.");
         context.drawImage(
           video,
@@ -233,6 +246,15 @@ export function useGuidedCamera() {
           size,
         );
 
+        recordDiagnostic("camera.capture.frame.completed", {
+          operation,
+          durationMs: Math.round(performance.now() - frameStarted),
+        });
+        // Encoding needs the copied canvas only. Stop video/hardware now instead of keeping
+        // the live stream competing for resources throughout a potentially slow JPEG encode.
+        releaseCamera();
+        const encodingStarted = performance.now();
+
         const blob = await new Promise<Blob>((resolve, reject) => {
           canvas.toBlob(
             (encoded) => {
@@ -243,12 +265,21 @@ export function useGuidedCamera() {
             0.92,
           );
         });
+        recordDiagnostic("camera.capture.encode.completed", {
+          operation,
+          durationMs: Math.round(performance.now() - encodingStarted),
+        });
 
         if (
           !mountedRef.current ||
           requestRef.current !== request ||
           isBackgrounded()
         ) {
+          recordDiagnostic("camera.capture.finished", {
+            operation,
+            outcome: "cancelled",
+            durationMs: Math.round(performance.now() - started),
+          });
           return;
         }
 
@@ -257,14 +288,28 @@ export function useGuidedCamera() {
           lastModified: Date.now(),
         });
         stop();
+        recordDiagnostic("camera.capture.finished", {
+          operation,
+          outcome: "complete",
+          durationMs: Math.round(performance.now() - started),
+        });
         onCapture(file);
       } catch {
+        recordDiagnostic("camera.capture.finished", {
+          operation,
+          outcome: "error",
+          durationMs: Math.round(performance.now() - started),
+        });
         if (mountedRef.current && requestRef.current === request) {
           fail("capture");
         }
+      } finally {
+        // Release the full-resolution backing surface after encoding settles, including late cancellation.
+        canvas.width = 0;
+        canvas.height = 0;
       }
     },
-    [fail, stop],
+    [fail, releaseCamera, stop],
   );
 
   const handleVideoError = useCallback(() => {

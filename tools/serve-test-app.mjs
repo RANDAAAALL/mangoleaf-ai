@@ -375,7 +375,30 @@ Bun.serve({
     }
     if (path.startsWith("/__mock__/"))
       return json({ error: "Unimplemented mock endpoint" }, 501);
-    return localFile(exportRoot, path === "/" ? "index.html" : path.slice(1));
+    // Static exports include extensionless page URLs as .html files and router payloads as .txt files.
+    const name = path === "/" ? "index.html" : path.slice(1);
+    if (request.headers.get("rsc") === "1" && name.includes("/__next.")) {
+      // Next 16 requests the page segment with dots; its export stores the __PAGE__ leaf in a directory.
+      const response = await localFile(
+        exportRoot,
+        name.replace(/\.__PAGE__\.txt$/, "/__PAGE__.txt"),
+      );
+      if (response.status === 200)
+        response.headers.set("Content-Type", "text/x-component");
+      return response;
+    }
+    if (!path.split("/").pop().includes(".")) {
+      const pageName = path === "/" ? "index" : name.replace(/\/$/, "");
+      const routerPayload = request.headers.get("rsc") === "1";
+      const response = await localFile(
+        exportRoot,
+        pageName + (routerPayload ? ".txt" : ".html"),
+      );
+      if (routerPayload && response.status === 200)
+        response.headers.set("Content-Type", "text/x-component");
+      if (response.status !== 404) return response;
+    }
+    return localFile(exportRoot, name);
   },
   websocket: {
     open(socket) {

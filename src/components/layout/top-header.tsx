@@ -2,6 +2,8 @@ import { memo } from "react";
 import { translations, type Language } from "@/lib/translations";
 import { Logo } from "@/components/brand/logo";
 import { Icon } from "@/components/brand/icon";
+import { isAndroidBuild } from "@/lib/native-bridge";
+import { AndroidInstallAction } from "@/components/layout/android-install-action";
 
 interface TopHeaderProps {
   language: Language;
@@ -44,13 +46,14 @@ export const TopHeader = memo(function TopHeader({
 
         {/* Mobile: Install icon only (hidden on desktop) */}
         {showInstallButton && (
-          <button
-            onClick={onInstall}
-            aria-label={t.downloadApp}
+          <AndroidInstallAction
+            language={language}
+            onGuide={onInstall}
+            labelClassName="sr-only"
             className="md:hidden p-2 bg-[#277839] text-white rounded-xl shadow-sm cursor-pointer"
           >
             <Icon name="install" size={18} fill="#ffffff" />
-          </button>
+          </AndroidInstallAction>
         )}
 
         {/* Desktop Navigation (hidden on mobile — bottom nav handles it) */}
@@ -65,12 +68,20 @@ export const TopHeader = memo(function TopHeader({
               {t.navHome}
             </button>
             {/* The desktop action opens the phone QR guide regardless of install support. */}
-            <button
-              onClick={onInstall}
-              className="hover:text-[#277839] transition-colors cursor-pointer"
-            >
-              {t.downloadApp}
-            </button>
+            {isAndroidBuild() ? (
+              <button
+                onClick={() => onTabChange("history")}
+                className="hover:text-[#277839] transition-colors cursor-pointer"
+              >
+                {t.navHistory}
+              </button>
+            ) : (
+              <AndroidInstallAction
+                language={language}
+                onGuide={onInstall}
+                className="hover:text-[#277839] transition-colors cursor-pointer"
+              />
+            )}
             <button
               onClick={() => onTabChange("about")}
               className={`hover:text-[#277839] transition-colors cursor-pointer ${

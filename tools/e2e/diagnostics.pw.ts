@@ -156,12 +156,7 @@ test("A02: diagnostics remain readable when saving and clipboard access fail, wi
 
 test("A03: completed photo checks, scan stages and deletion stay in About after their modals close", async ({
   page,
-}, info) => {
-  // Windows WebKit's existing inference exclusion still applies to this flow.
-  test.skip(
-    info.project.name === "webkit-mobile",
-    "This case needs the controlled WebGL inference path.",
-  );
+}) => {
   await controlledModel(page, scoresFor("Healthy Fruit"));
   await openApp(page);
   await viewLogs(page);

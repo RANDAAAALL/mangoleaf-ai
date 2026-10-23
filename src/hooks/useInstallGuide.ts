@@ -5,33 +5,23 @@ import {
   useState,
   type MouseEvent,
 } from "react";
-
-export type InstallPlatform = "android" | "ios" | "other";
+import { isAndroidBuild } from "@/lib/native-bridge";
 
 /** Open the optional installation guide from a button or a QR landing URL. */
 export function useInstallGuide() {
   const [isOpen, setIsOpen] = useState(false);
-  const [platform, setPlatform] = useState<InstallPlatform>("other");
   const launcherRef = useRef<HTMLElement | null>(null);
   const restoreFocusRef = useRef(false);
 
   useEffect(() => {
+    if (isAndroidBuild()) return;
     let cancelled = false;
+    // The supported mobile app is the Android APK, not a browser installation.
+    const suppressBrowserInstall = (event: Event) => event.preventDefault();
+    window.addEventListener("beforeinstallprompt", suppressBrowserInstall);
     // Read the browser after hydration; StrictMode's cancelled pass consumes nothing.
     queueMicrotask(() => {
       if (cancelled) return;
-      // Choose instructions only. Native install support comes from its event.
-      const isIOS =
-        /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-      setPlatform(
-        isIOS
-          ? "ios"
-          : /Android/.test(navigator.userAgent)
-            ? "android"
-            : "other",
-      );
-
       const url = new URL(window.location.href);
       if (url.searchParams.get("install") !== "1") return;
 
@@ -43,13 +33,12 @@ export function useInstallGuide() {
         url.pathname + url.search + url.hash,
       );
 
-      const isStandalone =
-        window.matchMedia("(display-mode: standalone)").matches ||
-        (navigator as unknown as Record<string, unknown>).standalone === true;
-      if (!isStandalone) setIsOpen(true);
+      // A legacy Home Screen website does not prove the separate Android APK is installed.
+      setIsOpen(true);
     });
     return () => {
       cancelled = true;
+      window.removeEventListener("beforeinstallprompt", suppressBrowserInstall);
     };
   }, []);
 
@@ -65,7 +54,8 @@ export function useInstallGuide() {
   }, [isOpen]);
 
   const openGuide = useCallback((event?: MouseEvent<HTMLButtonElement>) => {
-    // Safari clicks need not focus a button. Keep the actual launcher before
+    if (isAndroidBuild()) return;
+    // Pointer clicks need not focus a button. Keep the actual launcher before
     // the underlying page becomes inert and loses focus.
     launcherRef.current =
       event?.currentTarget ??
@@ -79,5 +69,5 @@ export function useInstallGuide() {
     setIsOpen(false);
   }, []);
 
-  return { isOpen, platform, openGuide, closeGuide };
+  return { isOpen, openGuide, closeGuide };
 }

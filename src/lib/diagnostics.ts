@@ -1,4 +1,5 @@
 import { modelVersion } from "@/lib/constants";
+import { connectionHint } from "@/lib/native-bridge";
 
 type DiagnosticValue = string | number | boolean | null;
 export interface DiagnosticEvent {
@@ -20,6 +21,8 @@ const DETAIL_KEYS = new Set([
   "operation",
   "stage",
   "durationMs",
+  "width",
+  "height",
   "count",
   "backend",
   "textureBits",
@@ -178,7 +181,7 @@ function diagnosticContext(): Record<string, DiagnosticValue> {
   };
   try {
     const agent = navigator.userAgent ?? "";
-    context.online = navigator.onLine;
+    context.online = connectionHint();
     context.platform =
       /iPhone|iPad|iPod/.test(agent) ||
       (/Macintosh/.test(agent) && navigator.maxTouchPoints > 1)

@@ -39,6 +39,13 @@ function isGuidelineRequest(url: URL) {
   return /\/rest\/v1\/guidelines(?:\/|$)/.test(url.pathname);
 }
 
+function isAndroidReleaseRequest(url: URL) {
+  return (
+    url.origin === "https://api.github.com" &&
+    url.pathname === "/repos/RANDAAAALL/mangoleaf-ai/releases/latest"
+  );
+}
+
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   skipWaiting: true,
@@ -47,7 +54,9 @@ const serwist = new Serwist({
     {
       // IndexedDB keeps offline advice. An old HTTP cache must not look fresh.
       matcher: ({ url }) =>
-        isPrivateCloudRequest(url) || isGuidelineRequest(url),
+        isPrivateCloudRequest(url) ||
+        isGuidelineRequest(url) ||
+        isAndroidReleaseRequest(url),
       handler: new NetworkOnly(),
     },
     {
@@ -85,7 +94,8 @@ self.addEventListener("activate", (event) => {
                     .filter(
                       (request) =>
                         isPrivateCloudRequest(new URL(request.url)) ||
-                        isGuidelineRequest(new URL(request.url)),
+                        isGuidelineRequest(new URL(request.url)) ||
+                        isAndroidReleaseRequest(new URL(request.url)),
                     )
                     .map((request) => cache.delete(request)),
                 );

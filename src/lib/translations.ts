@@ -2,60 +2,163 @@ export type Language = "en" | "bis";
 
 export const translations = {
   en: {
+    backupTestingDescription:
+      "Test reports and photos back up automatically while this app is open and online. Create and save a recovery code to restore them on another device. Offline reports wait on this device until they can upload.",
+    backupAutomatic: "Cloud backup starts automatically",
+    backupPause: "Pause backup",
+    backupResume: "Resume backup",
+    backupNewCodeHint:
+      "Already have a recovery code? Enter it below. Creating a new code does not recover a forgotten code's backup.",
+    backupShowCode: "Show recovery code",
+    backupHideCode: "Hide recovery code",
+    backupEnterCode: "Enter recovery code",
+    backupClearInput: "Clear input",
+    backupMergeHint:
+      "Restored reports merge into History without replacing existing reports. Clearing this field only removes the typed code.",
+    testingPrivacySections: [
+      {
+        title: "1. Local reports",
+        text: "Diagnosis runs on this device. Reports and compressed photos are saved locally, including when offline.",
+      },
+      {
+        title: "2. Automatic testing backup",
+        text: "This testing build automatically uploads saved test reports and photos to the separate testing Supabase project while open and online. Supabase creates an anonymous authentication identity behind the scenes; no Sign In/Register screen or personal contact details are required. Uploads resume after reconnection.",
+      },
+      {
+        title: "3. Recovery and deletion",
+        text: "Creating a private recovery code connects recovery to the same authenticated owner. Save it outside this device. Restoring requires that code, a connection and completed cloud uploads; restored reports merge with local History. History deletion removes the local report and queues cloud deletion. Another device with an older copy can upload it again. Clearing app/browser data can erase local reports, credentials and pending deletions.",
+      },
+      {
+        title: "4. Guidelines and diagnostics",
+        text: "Guideline requests are public and contain no photos or diagnosis results. Diagnostic recording remains optional and contains bounded technical events, without photos, diagnosis results, report identifiers or recovery credentials. Logs stay local unless you choose to share them.",
+      },
+    ],
+    siteDescription:
+      "Offline-first mango leaf and fruit disease diagnosis for Android, with on-device AI and automatic private cloud backup.",
+    nativePrivacyUpdated: "Updated October 22, 2026",
+    nativePrivacySections: [
+      {
+        title: "1. Diagnosis and local reports",
+        text: "Photos are analyzed on your phone. Saved reports and compressed photos stay in the Android app's private storage. Diagnosis and saving work without a cloud account or connection.",
+      },
+      {
+        title: "2. Automatic private backup",
+        text: "Saved reports and photos upload automatically to private Supabase storage while the app is open and online. An anonymous authenticated identity protects ownership without Sign In/Register screens. Create and save a private recovery code outside this phone to recover completed uploads on another phone. Anyone holding that code can access the backup; losing the phone without a saved code prevents recovery.",
+      },
+      {
+        title: "3. Recovery and deletion",
+        text: "Restoring a cloud backup is your choice. History deletion removes the local report/photo and queues deletion of its copies in the connected backup. Offline deletion retries while the app is open and online, even when uploads are paused. Keep the same recovery code connected until deletion finishes. Another device with an older copy can upload it again; pause backup there first. Uninstalling or clearing app data can erase local reports, queued deletions and the saved recovery code.",
+      },
+      {
+        title: "4. Guidelines and updates",
+        text: "Public treatment guidelines can refresh when connected. The app may download verified updates, which activate after a full restart. Public guideline requests do not contain scan photos or diagnosis results. Backup and updates need a working connection.",
+      },
+      {
+        title: "5. Diagnostics",
+        text: "Optional diagnostic logs contain bounded technical events, not photos, diagnosis results, report identifiers, or recovery credentials. Logs stay local unless you choose to share them.",
+      },
+    ],
+    nativeWebViewUnsupported:
+      "Update Android System WebView to open MangoLeaf AI.",
+    nativeStartupError:
+      "MangoLeaf AI could not start. Close and reopen the app. Your saved data has not been deleted.",
+    androidUpdateReadyTitle: "Update ready",
+    androidUpdateReadyText:
+      "A verified update has downloaded. Restart MangoLeaf AI now to apply it. Your saved reports and photos stay on this phone.",
+    androidUpdateManualRestart:
+      "A verified update has downloaded. Fully close and reopen MangoLeaf AI to apply it. Your saved reports and photos stay on this phone.",
+    androidUpdateRestart: "Restart now",
+    androidUpdateLater: "Later",
+    androidUpdateRestarting: "Restarting MangoLeaf AI...",
+    androidUpdateRestartError:
+      "Restart could not finish. Fully close and reopen the app when ready.",
+    androidDownloadTitle: "MangoLeaf AI for Android",
+    androidAlreadyInstalled:
+      "Already installed? Open the app without downloading the APK again.",
+    androidOpenApp: "Open app",
+    androidOpenOrInstall: "Open or install",
+    androidInstalledConfirmed:
+      "MangoLeaf AI is installed on this device. Open the app to continue.",
+    androidDownloadGuide: "APK download guide",
+    androidDownloadAgain: "Reinstall or update Android app",
+    androidDownloadAgainHint:
+      "You already have the app. Download another APK only to reinstall it or update the Android version.",
+    androidDownloadDescription:
+      "The Android app saves reports on your phone and backs them up automatically when online. Save a private recovery code to recover them on another phone.",
+    androidDownloadPending:
+      "The Android APK download could not be confirmed. Check the official releases page or try again when connected.",
+    androidDownloadChecking: "Checking Android APK availability...",
+    androidDownloadAvailable: "Android APK available from release {version}.",
+    androidDownloadVersion: "Available Android APK v{version}",
+    androidDownloadApk: "Download Android APK",
+    androidDownloadReleases: "View official releases",
+    androidDownloadCompatibility:
+      "The mobile app supports Android only. Android 8.0 or newer and an up-to-date Android System WebView are required.",
+    androidDownloadMigration:
+      "The APK has its own History. Existing browser reports stay in that browser and are not transferred automatically.",
+    androidDownloadBrowser: "Open website",
+    backupTitle: "Private cloud backup",
+    backupDescription:
+      "Reports and photos back up automatically while this app is open and online. No Sign In/Register screen is needed. Create and save a recovery code outside this phone to restore completed backups on another phone. Offline reports upload after reconnection.",
+    backupCreate: "Create recovery code",
+    backupRecoveryLabel: "Your private recovery code",
+    backupRecoveryHint:
+      "Anyone holding this code can access your backup. Save it outside this phone. If you lose both your phone and this code, your cloud backup cannot be recovered.",
+    backupCopy: "Copy recovery code",
+    backupSavedCode: "I saved my recovery code outside this phone",
+    backupEnable: "Enable backup",
+    backupRestoreCodeLabel: "Recovery code from your previous device",
+    backupConnect: "Use recovery code",
+    backupEnabled: "Cloud backup enabled",
+    backupDisabled: "Cloud backup is off",
+    backupNow: "Back up now",
+    backupRestore: "Restore cloud reports",
+    backupDisable: "Turn off backup on this device",
+    backupDeleteCloud: "Delete this cloud backup",
+    backupDeleteConfirm:
+      "I paused backup on my other devices and understand this permanently deletes this recovery code's cloud reports and photos. Another enabled device can create new copies.",
+    backupDeletionExplanation:
+      "History deletion removes the local report/photo and deletes its copies in the connected cloud backup. Offline deletions retry while the app is open and online, even if uploads are paused. Keep the recovery code connected until deletion finishes. Pause backup on other devices holding older copies so they cannot upload those copies again. Restore remains manual.",
+    backupBusy: "Working…",
+    backupError:
+      "Backup could not finish. Check your connection and recovery code, then retry. Local reports are safe.",
+    backupDone: "Backup operation completed.",
+    backupCodeCopied: "Recovery code copied. Save it outside this phone.",
+    backupCodeCopyFailed: "Could not copy. Save the displayed code carefully.",
+    backupRestored: "Restored {n} new reports.",
+    backupUploaded: "Backed up {n} reports.",
+    backupCloudDeleted:
+      "Cloud backup deleted. Local reports remain on this device.",
     // Navigation
     navHome: "Home",
     navAbout: "About",
     navHistory: "History",
     installApp: "Install App",
     downloadApp: "Install",
-    downloadPromptTitle: "Install Now",
+    downloadPromptTitle: "Get MangoLeaf AI",
     downloadPromptDescription:
-      "Open MangoLeaf AI on your phone and add it to your Home Screen for quick access.",
+      "Get the MangoLeaf AI Android APK for offline diagnosis on your phone.",
 
     // Installation guide
-    installGuideDesktopTitle: "Install MangoLeaf AI on your phone",
-    installGuideMobileTitle: "Install MangoLeaf AI",
+    installGuideDesktopTitle: "Get MangoLeaf AI for Android",
+    installGuideMobileTitle: "Install MangoLeaf AI for Android",
     installGuideDescription:
-      "Add MangoLeaf AI to your Home Screen for quick access. You can also keep using it in your phone browser.",
+      "MangoLeaf AI supports Android phones only. Install the app using its APK. The website remains available from other devices.",
     installGuideQRDescription:
-      "Scan this QR code using your phone camera, then tap the website link.",
-    installGuideQRAlt: "QR code to open MangoLeaf AI on your phone",
+      "Scan this QR code with an Android phone to open the APK installation guide.",
+    installGuideQRAlt: "QR code for MangoLeaf AI Android installation",
     installGuideWebsiteLink: "Open MangoLeaf AI website",
     installGuideAndroid: "Android",
-    installGuideIOS: "iPhone / iPad",
-    installGuideAndroidOpen: "Open the website",
+    installGuideAndroidOpen: "Get the Android APK",
     installGuideAndroidOpenDescription:
-      "Open the QR link in your phone browser, such as Chrome.",
-    installGuideAndroidInstall: "Tap Install",
+      "Open the APK download guide below. Its download button gets the installer from official GitHub Releases when available.",
+    installGuideAndroidInstall: "Open APK",
     installGuideAndroidInstallDescription:
-      "Tap Install on this guide when the button is available.",
+      "Open the APK file. If Android asks, allow this browser or file manager to install the trusted download.",
     installGuideConfirm: "Confirm installation",
     installGuideConfirmDescription:
-      "Choose Install in the browser confirmation, then find MangoLeaf AI on your Home Screen or app list.",
-    installGuideManualAndroid:
-      "If the Install button is unavailable, open your browser menu and look for Install app or Add to Home screen. If neither appears, continue in your browser.",
-    installGuideIOSBrowser:
-      "Use Safari for these steps. If you opened the link in another browser and cannot find Add to Home Screen, open the website in Safari.",
-    installGuideIOSShare: "Tap Share",
-    installGuideIOSShareDescription:
-      "Tap the Share icon in Safari. If it is hidden, open the browser menu first.",
-    installGuideIOSHome: "Add to Home Screen",
-    installGuideIOSHomeDescription:
-      "Scroll through the Share menu and choose Add to Home Screen.",
-    installGuideIOSAdd: "Tap Add",
-    installGuideIOSAddDescription:
-      "Confirm the app name, then tap Add. Open MangoLeaf AI from your Home Screen.",
-    installGuideFallbackTitle: "Install from your browser menu",
-    installGuideFallbackDescription:
-      "Look for Install app or Add to Home screen in your browser menu. If installation is not offered, you can keep using MangoLeaf AI in this browser.",
-    installGuideInstall: "Install",
-    installGuideInstalling: "Opening install prompt...",
-    installGuideContinue: "Continue in Browser",
-    installGuideInstalled: "MangoLeaf AI is already installed",
-    installGuideInstalledDescription:
-      "Open it from your Home Screen or continue here in your browser.",
-    installGuideInstallError:
-      "The installation prompt could not open. Use your browser menu or continue in your browser.",
+      "Tap Install in the Android installer, then open MangoLeaf AI from your app list.",
+    installGuideContinue: "Back to website",
 
     // Scanner Section
     desktopHeroHeadline: "Diagnose Mango Diseases Instantly",
@@ -193,9 +296,11 @@ export const translations = {
     historyDeleteConfirmTitle: "Delete selected scans ({n})?",
     historyDeleteConfirmOneTitle: "Delete selected scan ({n})?",
     historyDeleteConfirmDescription:
-      "The selected reports and saved photos will be deleted from this browser. This cannot be undone.",
+      "The selected reports and saved photos will be deleted from this device. This cannot be undone.",
     historyDeleteConfirmOneDescription:
-      "The selected report and saved photo will be deleted from this browser. This cannot be undone.",
+      "The selected report and saved photo will be deleted from this device. This cannot be undone.",
+    historyCloudDeleteHint:
+      "Copies in your connected cloud backup will also be deleted. Offline deletions retry when the app is open and online.",
     historyDeleteConfirmBtn: "Delete",
     historyDeletingBtn: "Deleting...",
     historyDeleteFailed:
@@ -251,7 +356,7 @@ export const translations = {
     // About Page
     aboutHeroTitle: "Technology that works where the mango farmer works.",
     aboutHeroDesc:
-      "MangoLeaf AI is an offline-first Progressive Web Application that brings AI-assisted mango disease detection closer to Filipino Dabawenyo farmers.",
+      "MangoLeaf AI is an offline-first Android application that brings AI-assisted mango disease detection closer to Filipino Dabawenyo farmers.",
     aboutBrandName: "MangoLeaf AI",
     aboutScanLeafCta: "Scan a Leaf or Fruit",
     aboutWhyTitle: "Why we built it",
@@ -288,7 +393,7 @@ export const translations = {
     aboutAiStepDesc: "Training and evaluating the image classification model.",
     aboutApplicationTitle: "APPLICATION",
     aboutApplicationDesc:
-      "Bringing the model into an offline-first Progressive Web Application.",
+      "Bringing the model into an offline-first Android application.",
     aboutMissionTitle: "Our Mission",
     aboutMissionStatement:
       "Technology should work where the mango farmer works.",
@@ -357,7 +462,9 @@ export const translations = {
     diagnosticsCleared: "Diagnostic logs cleared. Scan history is unchanged.",
 
     // Footer
-    footerVersions: "PWA {appVersion} / Model {modelVersion}",
+    footerVersions: "App {appVersion} / Model {modelVersion}",
+    footerApkVersions: "Android APK v{apkVersion} / Model {modelVersion}",
+    aboutWebVersion: "Web app {version}",
     footerCopyright:
       "© 2026 MangoLeaf AI. Designed for the Future of Filipino Dabawenyo Agriculture.",
     privacyPolicy: "Privacy Policy",
@@ -407,61 +514,166 @@ export const translations = {
       "Use only photographs you own or have permission to use, and respect content licenses and source attribution. AI results are advisory and are not professional certification.",
   },
   bis: {
+    backupTestingDescription:
+      "Awtomatikong i-back up ang test report ug litrato samtang abli ug online ang app. Paghimo ug tipigi ang recovery code aron mabawi kini sa laing device. Ang offline nga mga report maghulat niini nga device hangtod ma-upload.",
+    backupAutomatic: "Awtomatikong magsugod ang cloud backup",
+    backupPause: "I-pause ang backup",
+    backupResume: "Ipadayon ang backup",
+    backupNewCodeHint:
+      "Aduna ka nay recovery code? Isulod kini sa ubos. Ang bag-ong code dili makabawi sa backup sa nakalimtang code.",
+    backupShowCode: "Ipakita ang recovery code",
+    backupHideCode: "Itago ang recovery code",
+    backupEnterCode: "Isulod ang recovery code",
+    backupClearInput: "Haw-asa ang gisulod",
+    backupMergeHint:
+      "Ang gi-restore nga mga report idugang sa Dating Scan nga walay pag-ilis sa anaa nang report. Ang paghaw-as niini nga field motangtang lamang sa gisulod nga code.",
+    testingPrivacySections: [
+      {
+        title: "1. Lokal nga mga report",
+        text: "Dinhi sa device himoon ang diagnosis. Lokal nga tipigan ang mga report ug gipagamay nga litrato bisan offline.",
+      },
+      {
+        title: "2. Awtomatikong testing backup",
+        text: "Kini nga testing build awtomatikong mo-upload sa natipig nga test report ug litrato ngadto sa lahi nga testing Supabase project samtang abli ug online. Maghimo ang Supabase og anonymous nga identidad sa luyo sa app; walay Sign In/Register nga screen o personal nga detalye nga gikinahanglan. Mopadayon ang upload human makakonekta pag-usab.",
+      },
+      {
+        title: "3. Pagbawi ug pagtangtang",
+        text: "Ang paghimo og pribadong recovery code magkonektar sa pagbawi ngadto sa samang napamatud-ang tag-iya. Tipigi kini gawas sa device. Gikinahanglan ang code, koneksyon ug nahuman nga cloud upload aron ma-restore; idugang ang mga report sa lokal nga Dating Scan. Ang pagtangtang sa History mopapas sa lokal nga report ug mopila sa cloud deletion. Ang laing device nga adunay karaang kopya mahimong mo-upload niini pag-usab. Ang paglimpyo sa app/browser data mahimong mopapas sa lokal nga report, credential ug pending nga pagtangtang.",
+      },
+      {
+        title: "4. Mga giya ug diagnostics",
+        text: "Publiko ang mga request sa giya ug walay litrato o resulta sa diagnosis. Opsyonal gihapon ang diagnostic recording ug limitado sa teknikal nga panghitabo, walay litrato, resulta sa diagnosis, identifier sa report o recovery credential. Lokal ang logs gawas kon imong pilion nga ipaambit.",
+      },
+    ],
+    siteDescription:
+      "Offline-first nga pag-ila sa sakit sa dahon ug bunga sa mangga para sa Android, nga adunay AI sa device ug awtomatikong pribadong cloud backup.",
+    nativePrivacyUpdated: "Gi-update niadtong Oktubre 22, 2026",
+    nativePrivacySections: [
+      {
+        title: "1. Diagnosis ug lokal nga mga report",
+        text: "Sa imong telepono analisahon ang mga litrato. Ang natipig nga mga report ug compressed nga litrato anaa sa pribadong storage sa Android app. Magamit ang diagnosis ug pagtipig bisan walay cloud account o koneksyon.",
+      },
+      {
+        title: "2. Awtomatikong pribadong backup",
+        text: "Awtomatikong i-upload ang natipig nga mga report ug litrato ngadto sa pribadong Supabase storage samtang abli ug online ang app. Protektado ang pagpanag-iya pinaagi sa anonymous nga identidad nga walay Sign In/Register nga screen. Paghimo ug tipigi ang pribadong recovery code gawas sa telepono aron mabawi ang nahuman nga upload sa laing telepono. Bisan kinsa nga adunay code makaabli sa backup; kon mawala ang telepono nga walay natipig nga code, dili na kini mabawi.",
+      },
+      {
+        title: "3. Pagbawi ug pagtangtang",
+        text: "Imong pilion ang pag-restore sa cloud backup. Ang pagtangtang sa History mopapas sa lokal nga report/litrato ug mopila sa pagtangtang sa mga kopya niini sa konektadong backup. Sulayan pag-usab ang offline nga pagtangtang samtang abli ug online ang app, bisan gi-pause ang upload. Ipadayon ang koneksyon sa samang recovery code hangtod mahuman ang pagtangtang. Mahimong ma-upload pag-usab sa laing device ang karaang kopya; i-pause una ang backup didto. Ang pag-uninstall o paglimpyo sa app data mahimong mopapas sa lokal nga report, gipilang pagtangtang ug natipig nga recovery code.",
+      },
+      {
+        title: "4. Mga giya ug update",
+        text: "Mahimong ma-refresh ang publikong mga giya sa pagtambal kon konektado. Mahimong mo-download ang app og napamatud-ang update nga magamit human hingpit nga i-restart. Walay litrato o resulta sa diagnosis sa publikong guideline request. Nagkinahanglan og koneksyon ang backup ug mga update.",
+      },
+      {
+        title: "5. Diagnostics",
+        text: "Limitadong teknikal nga mga hitabo ra ang opsyonal nga diagnostic log, dili mga litrato, resulta, report ID, o recovery credential. Lokal ra ang log hangtod imo kining ipaambit.",
+      },
+    ],
+    nativeWebViewUnsupported:
+      "I-update ang Android System WebView aron maablihan ang MangoLeaf AI.",
+    nativeStartupError:
+      "Wala makasugod ang MangoLeaf AI. Isira ug ablihi pag-usab ang app. Wala mapapas ang imong natipig nga datos.",
+    androidUpdateReadyTitle: "Andam na ang update",
+    androidUpdateReadyText:
+      "Na-download na ang napamatud-ang update. I-restart ang MangoLeaf AI karon aron magamit kini. Magpabilin sa telepono ang imong natipig nga mga report ug litrato.",
+    androidUpdateManualRestart:
+      "Na-download na ang napamatud-ang update. Hingpit nga isira ug ablihi pag-usab ang MangoLeaf AI aron magamit kini. Magpabilin sa telepono ang imong mga report ug litrato.",
+    androidUpdateRestart: "I-restart karon",
+    androidUpdateLater: "Unya na",
+    androidUpdateRestarting: "Gisugdan pag-usab ang MangoLeaf AI...",
+    androidUpdateRestartError:
+      "Wala mahuman ang pag-restart. Hingpit nga isira ug ablihi pag-usab ang app kon andam na.",
+    androidDownloadTitle: "MangoLeaf AI alang sa Android",
+    androidAlreadyInstalled:
+      "Na-install na? Ablihi ang app nga dili na mag-download pag-usab sa APK.",
+    androidOpenApp: "Ablihi ang app",
+    androidOpenOrInstall: "Ablihi o i-install",
+    androidInstalledConfirmed:
+      "Na-install na ang MangoLeaf AI niini nga device. Ablihi ang app aron mopadayon.",
+    androidDownloadGuide: "Giya sa pag-download sa APK",
+    androidDownloadAgain: "I-install pag-usab o i-update ang Android app",
+    androidDownloadAgainHint:
+      "Aduna ka nay app. Pag-download lamang og laing APK aron i-install pag-usab o i-update ang Android nga bersiyon.",
+    androidDownloadDescription:
+      "Ang Android app magtipig sa report sa telepono ug awtomatikong mo-back up kon online. Tipigi ang pribadong recovery code aron mabawi kini sa laing telepono.",
+    androidDownloadPending:
+      "Wala mapamatud-i ang Android APK download. Tan-awa ang opisyal nga mga release o sulayi pag-usab kon konektado.",
+    androidDownloadChecking: "Gisusi ang pagkaanaa sa Android APK...",
+    androidDownloadAvailable:
+      "Anaa ang Android APK gikan sa release {version}.",
+    androidDownloadVersion: "Anaa nga Android APK v{version}",
+    androidDownloadApk: "I-download ang Android APK",
+    androidDownloadReleases: "Tan-awa ang opisyal nga mga release",
+    androidDownloadCompatibility:
+      "Android lamang ang gisuportahan sa mobile app. Gikinahanglan ang Android 8.0 o mas bag-o ug updated nga Android System WebView.",
+    androidDownloadMigration:
+      "Ang APK adunay kaugalingong Dating Scan. Ang daang mga report sa browser magpabilin didto ug dili awtomatikong mabalhin.",
+    androidDownloadBrowser: "Ablihi ang website",
+    backupTitle: "Pribadong cloud backup",
+    backupDescription:
+      "Awtomatikong i-back up ang mga report ug litrato samtang abli ug online ang app. Walay Sign In/Register nga screen. Paghimo ug tipigi ang recovery code gawas sa telepono aron mabawi ang nahuman nga backup sa laing telepono. Ma-upload ang offline nga report human makakonekta pag-usab.",
+    backupCreate: "Paghimo og recovery code",
+    backupRecoveryLabel: "Imong pribadong recovery code",
+    backupRecoveryHint:
+      "Bisan kinsa nga adunay code makaabli sa imong backup. Tipigi kini gawas niining telepono. Kon mawala ang telepono ug code, dili na mabawi ang cloud backup.",
+    backupCopy: "Kopyaha ang recovery code",
+    backupSavedCode: "Natipig na nako ang recovery code gawas niining telepono",
+    backupEnable: "I-enable ang backup",
+    backupRestoreCodeLabel: "Recovery code gikan sa daang device",
+    backupConnect: "Gamita ang recovery code",
+    backupEnabled: "Na-enable ang cloud backup",
+    backupDisabled: "Naka-off ang cloud backup",
+    backupNow: "I-back up karon",
+    backupRestore: "I-restore ang mga report sa cloud",
+    backupDisable: "I-off ang backup niini nga device",
+    backupDeleteCloud: "Papasa kining cloud backup",
+    backupDeleteConfirm:
+      "Gi-pause nako ang backup sa ubang device ug nasabtan nga permanenteng mapapas ang mga report ug litrato sa cloud alang niining recovery code. Ang laing naka-enable nga device mahimong maghimo og bag-ong kopya.",
+    backupDeletionExplanation:
+      "Ang pagtangtang sa History mopapas sa lokal nga report/litrato ug sa mga kopya niini sa konektadong cloud backup. Sulayan pag-usab ang offline nga pagtangtang samtang abli ug online ang app, bisan gi-pause ang upload. Ipadayon ang koneksyon sa recovery code hangtod mahuman. I-pause ang backup sa ubang device nga adunay karaang kopya aron dili kini ma-upload pag-usab. Manwal gihapon ang restore.",
+    backupBusy: "Nagtrabaho…",
+    backupError:
+      "Wala mahuman ang backup. Susiha ang koneksyon ug recovery code, dayon sulayi pag-usab. Luwas ang lokal nga mga report.",
+    backupDone: "Nahuman ang operasyon sa backup.",
+    backupCodeCopied:
+      "Nakopya ang recovery code. Tipigi kini gawas niining telepono.",
+    backupCodeCopyFailed: "Wala makopya. Tipigi pag-ayo ang gipakitang code.",
+    backupRestored: "Na-restore ang {n} bag-ong report.",
+    backupUploaded: "Na-back up ang {n} ka report.",
+    backupCloudDeleted:
+      "Napapas ang cloud backup. Magpabilin sa device ang lokal nga mga report.",
     // Navigation
     navHome: "Home",
     navAbout: "Bahin",
     navHistory: "Dating Scan",
     installApp: "I-install ang App",
     downloadApp: "I-install",
-    downloadPromptTitle: "I-install Karon",
+    downloadPromptTitle: "Kuhaa ang MangoLeaf AI",
     downloadPromptDescription:
-      "Ablihi ang MangoLeaf AI sa imong telepono ug idugang kini sa imong Home Screen aron dali maablihan.",
+      "Kuhaa ang MangoLeaf AI Android APK alang sa offline nga diagnosis sa imong telepono.",
 
     // Installation guide
-    installGuideDesktopTitle: "I-install ang MangoLeaf AI sa imong telepono",
-    installGuideMobileTitle: "I-install ang MangoLeaf AI",
+    installGuideDesktopTitle: "Kuhaa ang MangoLeaf AI para sa Android",
+    installGuideMobileTitle: "I-install ang MangoLeaf AI para sa Android",
     installGuideDescription:
-      "Idugang ang MangoLeaf AI sa imong Home Screen aron dali maablihan. Mahimo usab kini gamiton sa imong browser.",
+      "Mga Android phone lamang ang gisuportahan sa MangoLeaf AI. I-install ang app gamit ang APK niini. Maablihan gihapon ang website sa ubang device.",
     installGuideQRDescription:
-      "I-scan kini nga QR code gamit ang kamera sa imong telepono, dayon i-tap ang link sa website.",
+      "I-scan kini nga QR code gamit ang Android phone aron maablihan ang giya sa pag-install sa APK.",
     installGuideQRAlt:
-      "QR code aron maablihan ang MangoLeaf AI sa imong telepono",
+      "QR code alang sa pag-install sa MangoLeaf AI sa Android",
     installGuideWebsiteLink: "Ablihi ang website sa MangoLeaf AI",
     installGuideAndroid: "Android",
-    installGuideIOS: "iPhone / iPad",
-    installGuideAndroidOpen: "Ablihi ang website",
+    installGuideAndroidOpen: "Kuhaa ang Android APK",
     installGuideAndroidOpenDescription:
-      "Ablihi ang link gikan sa QR code sa browser sa imong telepono, sama sa Chrome.",
-    installGuideAndroidInstall: "I-tap ang Install",
+      "Ablihi ang giya sa pag-download sa APK sa ubos. Ang download button niini mokuha sa installer gikan sa opisyal nga GitHub Releases kon anaa na.",
+    installGuideAndroidInstall: "Ablihi ang APK",
     installGuideAndroidInstallDescription:
-      "I-tap ang Install niini nga giya kung makita ang buton.",
+      "Ablihi ang APK file. Kung mangayo ang Android, tugoti kini nga browser o file manager sa pag-install sa kasaligang download.",
     installGuideConfirm: "Kumpirmaha ang pag-install",
     installGuideConfirmDescription:
-      "Pilia ang Install sa kumpirmasyon sa browser, dayon pangitaa ang MangoLeaf AI sa imong Home Screen o listahan sa mga app.",
-    installGuideManualAndroid:
-      "Kung walay Install nga buton, ablihi ang menu sa imong browser ug pangitaa ang Install app o Add to Home screen. Kung wala kining duha, padayon sa browser.",
-    installGuideIOSBrowser:
-      "Gamit og Safari alang niini nga mga lakang. Kung naa sa laing browser ug walay Add to Home Screen, ablihi ang website sa Safari.",
-    installGuideIOSShare: "I-tap ang Share",
-    installGuideIOSShareDescription:
-      "I-tap ang Share nga icon sa Safari. Kung wala kini makita, ablihi una ang menu sa browser.",
-    installGuideIOSHome: "Add to Home Screen",
-    installGuideIOSHomeDescription:
-      "I-scroll ang menu sa Share ug pilia ang Add to Home Screen.",
-    installGuideIOSAdd: "I-tap ang Add",
-    installGuideIOSAddDescription:
-      "Kumpirmaha ang ngalan sa app, dayon i-tap ang Add. Ablihi ang MangoLeaf AI gikan sa imong Home Screen.",
-    installGuideFallbackTitle: "I-install gikan sa menu sa browser",
-    installGuideFallbackDescription:
-      "Pangitaa ang Install app o Add to Home screen sa menu sa imong browser. Kung walay kapilian sa pag-install, mahimo gihapon gamiton ang MangoLeaf AI sa browser.",
-    installGuideInstall: "I-install",
-    installGuideInstalling: "Giablihan ang kumpirmasyon sa pag-install...",
-    installGuideContinue: "Padayon sa Browser",
-    installGuideInstalled: "Na-install na ang MangoLeaf AI",
-    installGuideInstalledDescription:
-      "Ablihi kini gikan sa imong Home Screen o padayon dinhi sa imong browser.",
-    installGuideInstallError:
-      "Wala maablihan ang kumpirmasyon sa pag-install. Gamit ang menu sa browser o padayon sa browser.",
+      "I-tap ang Install sa Android installer, dayon ablihi ang MangoLeaf AI sa imong listahan sa mga app.",
+    installGuideContinue: "Balik sa website",
 
     // Scanner Section
     desktopHeroHeadline: "Pag-diagnose sa Sakit sa Mangga Dihadiha",
@@ -601,9 +813,11 @@ export const translations = {
     historyDeleteConfirmTitle: "I-delete ang mga gipiling scan ({n})?",
     historyDeleteConfirmOneTitle: "I-delete ang gipiling scan ({n})?",
     historyDeleteConfirmDescription:
-      "I-delete ang mga gipiling report ug natipig nga litrato gikan niini nga browser. Dili na kini mabalik.",
+      "I-delete ang mga gipiling report ug natipig nga litrato gikan niining device. Dili na kini mabalik.",
     historyDeleteConfirmOneDescription:
-      "I-delete ang gipiling report ug natipig nga litrato gikan niini nga browser. Dili na kini mabalik.",
+      "I-delete ang gipiling report ug natipig nga litrato gikan niining device. Dili na kini mabalik.",
+    historyCloudDeleteHint:
+      "Papason usab ang mga kopya sa imong konektadong cloud backup. Sulayan pag-usab ang offline nga pagtangtang kon abli ug online ang app.",
     historyDeleteConfirmBtn: "I-delete",
     historyDeletingBtn: "Ginadelete...",
     historyDeleteFailed:
@@ -661,7 +875,7 @@ export const translations = {
     // About Page
     aboutHeroTitle: "Teknolohiya nga molihok diin nagtrabaho ang mag-uuma.",
     aboutHeroDesc:
-      "Ang MangoLeaf AI usa ka offline-first Progressive Web Application nga nagpaabot sa AI-assisted nga pag-ila sa sakit sa mangga ngadto sa mga mag-uuma sa Pilipinas.",
+      "Ang MangoLeaf AI usa ka offline-first Android application nga nagpaabot sa AI-assisted nga pag-ila sa sakit sa mangga ngadto sa mga mag-uuma sa Pilipinas.",
     aboutBrandName: "MangoLeaf AI",
     aboutScanLeafCta: "I-scan ang Dahon",
     aboutWhyTitle: "Ngano nga gihimo namo kini",
@@ -699,7 +913,7 @@ export const translations = {
     aboutAiStepDesc: "Pag-train ug pag-evaluate sa image classification model.",
     aboutApplicationTitle: "APPLICATION",
     aboutApplicationDesc:
-      "Pagdala sa model ngadto sa offline-first Progressive Web Application.",
+      "Pagdala sa model ngadto sa offline-first Android application.",
     aboutMissionTitle: "Among Misyon",
     aboutMissionStatement:
       "Ang teknolohiya kinahanglan molihok diin nagtrabaho ang mag-uuma.",
@@ -772,7 +986,9 @@ export const translations = {
     // Footer
     footerCopyright:
       "© 2026 MangoLeaf AI. Gidisenyo alang sa Kaugmaon sa Agrikultura sa Pilipinas.",
-    footerVersions: "PWA {appVersion} / Modelo {modelVersion}",
+    footerVersions: "App {appVersion} / Modelo {modelVersion}",
+    footerApkVersions: "Android APK v{apkVersion} / Modelo {modelVersion}",
+    aboutWebVersion: "Bersyon sa web app {version}",
     privacyPolicy: "Polisiya sa Pribasya",
     termsOfService: "Kondisyon sa Serbisyo",
     legalCloseBtn: "Nasabtan ug Isara",

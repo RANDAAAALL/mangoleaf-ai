@@ -208,7 +208,8 @@ assert.equal(diagnostics.diagnosticErrorName({ name: "private-error-content" }),
 assert.equal(diagnostics.diagnosticErrorName({ get name() { throw new Error("secret"); } }), "Error");
 const output = diagnostics.formatDiagnostics();
 assert.match(output, /database\.delete\.started operation=delete-1 count=2/);
-assert.match(output, /modelVersion=v4\.5\.0/);
+// Diagnostics must identify whichever model is active, including an explicit local experiment.
+assert.equal(output.includes("modelVersion=" + (await import("./src/lib/constants.ts")).modelVersion), true);
 assert.match(output, /browser=Chromium-143\.0\.0\.0/);
 assert.equal(output.includes("private"), false);
 assert.equal(Object.isFrozen(diagnostics.getDiagnosticsSnapshot().events), true);

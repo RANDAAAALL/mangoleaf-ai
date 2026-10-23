@@ -10,6 +10,8 @@ function run(arguments_, env = process.env, executable = process.execPath) {
   if (result.error) throw result.error;
   if (result.status !== 0) process.exit(result.status || 1);
 }
+// Check the actual child runtime before spending time on the isolated build.
+run(["tools/check-node-runtime.mjs"], process.env, "node");
 run(["tools/build-test-app.mjs"]);
 run(
   ["node_modules/@playwright/test/cli.js", "test", ...args],

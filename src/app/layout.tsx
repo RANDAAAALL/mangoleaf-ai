@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { translations } from "@/lib/translations";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,14 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "MangoLeaf AI",
-  description:
-    "Offline-First Mango Leaf Disease Diagnostic PWA powered by TensorFlow.js and Supabase.",
+  description: translations.en.siteDescription,
   manifest: "/manifest.webmanifest",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "MangoLeaf AI",
-  },
   icons: {
     icon: [
       { url: "/images/icons/svg/favicon.svg", type: "image/svg+xml" },
@@ -38,7 +33,6 @@ export const metadata: Metadata = {
         type: "image/png",
       },
     ],
-    apple: "/images/icons/png/apple-touch-icon.png",
   },
   formatDetection: {
     telephone: false,

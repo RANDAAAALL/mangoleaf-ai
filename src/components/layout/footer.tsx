@@ -2,6 +2,7 @@ import { memo } from "react";
 import { translations, type Language } from "@/lib/translations";
 import { Logo } from "@/components/brand/logo";
 import { modelVersion } from "@/lib/constants";
+import { useAndroidVersion } from "@/hooks/useAndroidVersion";
 
 interface FooterProps {
   language: Language;
@@ -9,12 +10,14 @@ interface FooterProps {
   onOpenTerms?: () => void;
 }
 
+/** APK identity comes from the installed host; browser app/model labels remain independent. */
 export const Footer = memo(function Footer({
   language,
   onOpenPrivacy,
   onOpenTerms,
 }: FooterProps) {
   const t = translations[language];
+  const apkVersion = useAndroidVersion();
 
   return (
     <footer className="border-t border-[#e2ebd9] bg-[#edf4e8]/60 mt-16 pt-12 pb-28 md:pb-12 text-center transition-colors">
@@ -29,7 +32,8 @@ export const Footer = memo(function Footer({
         <div className="flex flex-col gap-1 text-xs text-[#526856]">
           <p>{t.footerCopyright}</p>
           <p className="font-medium text-[#66786a]">
-            {t.footerVersions
+            {(apkVersion ? t.footerApkVersions : t.footerVersions)
+              .replace("{apkVersion}", apkVersion ?? "")
               .replace(
                 "{appVersion}",
                 process.env.NEXT_PUBLIC_APP_VERSION ?? "",

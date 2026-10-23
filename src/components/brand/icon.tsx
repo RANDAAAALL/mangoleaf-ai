@@ -25,8 +25,6 @@ export type IconName =
   | "trash"
   | "android"
   | "phone"
-  | "share-ios"
-  | "home-add"
   | "browser"
   | "menu";
 
@@ -71,17 +69,6 @@ const STROKE_24_SHAPES: Partial<Record<IconName, React.ReactNode>> = {
     <>
       <rect x="6" y="2" width="12" height="20" rx="3" />
       <path d="M10 5h4m-3 14h2" />
-    </>
-  ),
-  "share-ios": (
-    <>
-      <path d="M8 8H5v14h14V8h-3M12 15V2m-4 4 4-4 4 4" />
-    </>
-  ),
-  "home-add": (
-    <>
-      <rect x="3" y="3" width="18" height="18" rx="3" />
-      <path d="M12 7v10M7 12h10" />
     </>
   ),
   browser: (

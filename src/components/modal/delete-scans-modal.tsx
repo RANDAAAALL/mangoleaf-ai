@@ -2,6 +2,8 @@ import { useEffect, useId, useRef, type RefObject } from "react";
 import { translations, type Language } from "@/lib/translations";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { Icon } from "@/components/brand/icon";
+import { isAndroidBuild } from "@/lib/native-bridge";
+import { isBrowserTestSync } from "@/lib/cloud-target";
 
 interface DeleteScansModalProps {
   count: number;
@@ -109,6 +111,9 @@ export function DeleteScansModal({
           {singleScan
             ? t.historyDeleteConfirmOneDescription
             : t.historyDeleteConfirmDescription}
+          {(isAndroidBuild() || isBrowserTestSync()) && (
+            <span className="mt-2 block">{t.historyCloudDeleteHint}</span>
+          )}
         </p>
         {hasError && (
           <p role="alert" className="text-sm font-semibold text-rose-700">

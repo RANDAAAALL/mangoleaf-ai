@@ -35,7 +35,7 @@ test("R04: cross-browser navigation and mobile scan controls remain usable", asy
     ).toBeVisible();
     await expect(
       guide.getByRole("heading", {
-        name: translations.en.installGuideIOS,
+        name: translations.en.installGuideAndroid,
         exact: true,
       }),
     ).toBeVisible();
@@ -101,6 +101,7 @@ test("R04: About and footer show the current app and model versions in both lang
       .replace("{appVersion}", `v${packageInfo.version}`)
       .replace("{modelVersion}", modelVersion);
     await expect(page.getByText(versions, { exact: true })).toBeVisible();
+    await expect(page.locator("footer")).not.toContainText("Android APK");
     for (const type of ["privacy", "terms"] as const) {
       await page
         .getByRole("button", {
@@ -216,7 +217,7 @@ test("R04: scan cards keep photo proportions and compact details after viewport 
         capability.name === "UnknownError" &&
         capability.message ===
           "Error preparing Blob/File data to be stored in object store",
-      "This WebKit runtime cannot persist the layout fixture's native PNG Blob. Chromium/Firefox retain photo-layout coverage; physical iOS validation remains separate.",
+      "This browser runtime cannot persist the layout fixture's native PNG Blob. Chromium/Firefox retain photo-layout coverage; physical Android validation remains separate.",
     );
     expect(capability.supported, JSON.stringify(capability)).toBe(true);
   }

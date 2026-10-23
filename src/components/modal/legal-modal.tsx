@@ -1,5 +1,7 @@
 import { memo, useEffect, useId, useRef } from "react";
 import { translations, type Language } from "@/lib/translations";
+import { isAndroidBuild } from "@/lib/native-bridge";
+import { isAutomaticTestBackup } from "@/lib/cloud-target";
 import { Icon } from "@/components/brand/icon";
 
 interface LegalModalProps {
@@ -67,8 +69,15 @@ export const LegalModal = memo(function LegalModal({
         >
           {isPrivacy ? (
             <>
-              <p className="font-semibold">{t.privacyUpdated}</p>
-              {t.privacySections.map((section) => (
+              <p className="font-semibold">
+                {isAndroidBuild() ? t.nativePrivacyUpdated : t.privacyUpdated}
+              </p>
+              {(isAutomaticTestBackup()
+                ? t.testingPrivacySections
+                : isAndroidBuild()
+                  ? t.nativePrivacySections
+                  : t.privacySections
+              ).map((section) => (
                 <section key={section.title}>
                   <h3 className="font-bold">{section.title}</h3>
                   <p>{section.text}</p>

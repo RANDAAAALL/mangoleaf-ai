@@ -1,84 +1,98 @@
 import type { Page } from "@playwright/test";
 import { test, expect, nav, openApp, records } from "./support/fixtures";
 import { translations, type Language } from "../../src/lib/translations";
-
-interface InstallControl {
-  calls: number;
-  prevented: boolean;
-  offer: (reject?: boolean) => void;
-  finish: (outcome: "accepted" | "dismissed") => void;
-}
+import {
+  androidApkAsset,
+  androidReleaseApi,
+  androidReleasePage,
+} from "../../src/lib/android-release";
 
 declare global {
   interface Window {
-    mangoInstallControl: InstallControl;
+    mangoInstallControl: { calls: number; prevented: boolean; offer(): void };
     mangoLegacyInstallListeners: { added: string[]; removed: string[] };
+    mangoRelatedApps: { calls: number; installed: boolean };
   }
 }
 
 const installURL = "https://mangoleafai.vercel.app/?install=1";
 
-// Controlled browser events prove the app's behavior. They do not prove a
-// phone's native installation dialog or real device installation support.
+/** Controlled signals prove website behavior, never physical APK installation. */
 async function installBrowser(
   page: Page,
-  settings: {
-    platform?: "android" | "ios" | "ipad" | "other";
-    standalone?: boolean;
+  options: {
     language?: Language;
+    legacyStandalone?: boolean;
+    otherDevice?: boolean;
+    relatedApps?: "confirmed" | "empty" | "reject" | "hang" | "wrong-package";
   } = {},
 ) {
-  await page.addInitScript((options) => {
-    localStorage.setItem("preferred_language", options.language ?? "en");
-    const agents = {
-      android:
-        "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36",
-      ios: "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
-      ipad: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
-      other:
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0",
-    };
-    const platform = options.platform ?? "android";
-    Object.defineProperties(navigator, {
-      userAgent: { configurable: true, value: agents[platform] },
-      platform: {
-        configurable: true,
-        value: platform === "ipad" ? "MacIntel" : platform,
-      },
-      maxTouchPoints: {
-        configurable: true,
-        value: platform === "ipad" ? 5 : 1,
-      },
-      standalone: { configurable: true, value: Boolean(options.standalone) },
+  // The isolated server blocks all external connections. Permit only this
+  // mocked endpoint on the download document, preserving every other policy.
+  await page.route("http://127.0.0.1:4173/download", async (route) => {
+    const response = await route.fetch();
+    const headers = response.headers();
+    headers["content-security-policy"] = headers[
+      "content-security-policy"
+    ].replace("connect-src 'self'", `connect-src 'self' ${androidReleaseApi}`);
+    await route.fulfill({ response, headers });
+  });
+  // Download-screen checks use controlled metadata, never real release traffic.
+  await page.route(androidReleaseApi, (route) =>
+    route.fulfill({
+      headers: { "Access-Control-Allow-Origin": "*" },
+      json: { assets: [] },
+    }),
+  );
+  await page.addInitScript((settings) => {
+    localStorage.setItem("preferred_language", settings.language ?? "en");
+    Object.defineProperty(navigator, "userAgent", {
+      configurable: true,
+      value: settings.otherDevice
+        ? "Unsupported mobile device"
+        : "Mozilla/5.0 (Linux; Android 14; Pixel 7) Chrome/130.0.0.0 Mobile",
     });
-    let resolveChoice:
-      ((value: { outcome: "accepted" | "dismissed" }) => void) | null = null;
-    const control: InstallControl = {
+    Object.defineProperty(navigator, "standalone", {
+      configurable: true,
+      value: !!settings.legacyStandalone,
+    });
+    window.mangoRelatedApps = {
+      calls: 0,
+      installed: settings.relatedApps === "confirmed",
+    };
+    Object.defineProperty(navigator, "getInstalledRelatedApps", {
+      configurable: true,
+      value: !settings.relatedApps
+        ? undefined
+        : async () => {
+            window.mangoRelatedApps.calls++;
+            if (settings.relatedApps === "reject")
+              throw new DOMException("Unavailable", "SecurityError");
+            if (settings.relatedApps === "hang") return new Promise(() => {});
+            if (settings.relatedApps === "wrong-package")
+              return [{ platform: "play", id: "com.mangoleaf.ai.debug" }];
+            return window.mangoRelatedApps.installed
+              ? [{ platform: "play", id: "com.mangoleaf.ai" }]
+              : [];
+          },
+    });
+    const control = {
       calls: 0,
       prevented: false,
-      offer(reject = false) {
+      offer() {
         const event = new Event("beforeinstallprompt", { cancelable: true });
         Object.assign(event, {
-          userChoice: new Promise<{ outcome: "accepted" | "dismissed" }>(
-            (resolve) => {
-              resolveChoice = resolve;
-            },
-          ),
           prompt: async () => {
-            control.calls += 1;
-            if (reject) throw new Error("Controlled installation unavailable");
+            control.calls++;
           },
+          userChoice: Promise.resolve({ outcome: "accepted" }),
         });
         window.dispatchEvent(event);
         control.prevented = event.defaultPrevented;
       },
-      finish(outcome) {
-        resolveChoice?.({ outcome });
-        resolveChoice = null;
-      },
     };
     window.mangoInstallControl = control;
-  }, settings);
+  }, options);
 }
 
 const guide = (page: Page, language: Language = "en", desktop = false) =>
@@ -88,45 +102,44 @@ const guide = (page: Page, language: Language = "en", desktop = false) =>
       : translations[language].installGuideMobileTitle,
     exact: true,
   });
-
 async function openDownload(page: Page, language: Language = "en") {
+  const launch = page
+    .getByRole("link", {
+      name: translations[language].androidOpenOrInstall,
+      exact: true,
+    })
+    .filter({ visible: true })
+    .first();
+  if (await launch.count()) {
+    // Exercise the synchronous guide fallback without launching an external APK.
+    await launch.evaluate((element) =>
+      element.addEventListener("click", (event) => event.preventDefault(), {
+        once: true,
+      }),
+    );
+    await launch.click();
+    return;
+  }
   await nav(page, translations[language].downloadApp);
 }
 
-test("I01: desktop Download shows QR and both translated guides with accessible dismissal", async ({
-  page,
-}, info) => {
-  await page.setViewportSize({ width: 1280, height: 640 });
-  await installBrowser(page);
-  await openApp(page);
-  const download = page
-    .getByRole("button", { name: translations.en.downloadApp, exact: true })
-    .filter({ visible: true })
-    .first();
-  await expect(download).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: translations.en.navScan, exact: true }),
-  ).toHaveCount(0);
-  await expect(
-    page.getByRole("button", { name: translations.en.navHistory, exact: true }),
-  ).toHaveCount(0);
-  await expect(
-    page.getByRole("heading", { name: /^Recent Scans?$/ }),
-  ).toHaveCount(0);
+async function openLocalizedApp(page: Page, language: Language) {
+  // The shared startup helper waits for English; localized tests need their translated heading.
+  await page.goto("/");
   await expect(
     page.getByRole("heading", {
-      name: translations.en.downloadPromptTitle,
+      name: translations[language].HowItWorksTitle,
       exact: true,
     }),
-  ).toBeVisible();
-  await expect(page.getByRole("button", { name: /^Upload Photo/ })).toHaveCount(
-    0,
-  );
-  await info.attach("desktop-download-home.png", {
-    body: await page.screenshot({ fullPage: true }),
-    contentType: "image/png",
-  });
+  ).toBeVisible({ timeout: 90_000 });
+}
 
+test("I01: desktop Android-only QR guide supports both languages, focus and dismissal", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 640 });
+  await installBrowser(page, { otherDevice: true });
+  await openApp(page);
   for (const language of ["en", "bis"] as const) {
     if (language === "bis")
       await page
@@ -145,25 +158,9 @@ test("I01: desktop Download shows QR and both translated guides with accessible 
     const close = dialog.getByRole("button", { name: t.closeBtn, exact: true });
     await expect(close).toBeFocused();
     await expect(close).toHaveCSS("position", "fixed");
-    const qrImage = dialog.getByRole("img", { name: t.installGuideQRAlt });
-    await expect(qrImage).toBeVisible();
-    await expect
-      .poll(() =>
-        qrImage.evaluate(
-          (image: HTMLImageElement) => image.complete && image.naturalWidth > 0,
-        ),
-      )
-      .toBe(true);
-    if (language === "en") {
-      await info.attach("desktop-install-guide-top.png", {
-        body: await page.screenshot(),
-        contentType: "image/png",
-      });
-      await info.attach("desktop-install-qr.png", {
-        body: await qrImage.screenshot(),
-        contentType: "image/png",
-      });
-    }
+    await expect(
+      dialog.getByRole("img", { name: t.installGuideQRAlt, exact: true }),
+    ).toBeVisible();
     await expect(
       dialog.getByRole("link", {
         name: t.installGuideWebsiteLink,
@@ -172,21 +169,16 @@ test("I01: desktop Download shows QR and both translated guides with accessible 
     ).toHaveAttribute("href", installURL);
     for (const title of [
       t.installGuideAndroid,
-      t.installGuideIOS,
       t.installGuideAndroidOpen,
       t.installGuideAndroidInstall,
       t.installGuideConfirm,
-      t.installGuideIOSShare,
-      t.installGuideIOSHome,
-      t.installGuideIOSAdd,
     ])
       await expect(
         dialog.getByRole("heading", { name: title, exact: true }),
       ).toBeVisible();
-    await expect(dialog.locator(".backdrop-blur-sm")).toHaveCSS(
-      "backdrop-filter",
-      /blur\(/,
-    );
+    await expect(
+      dialog.getByRole("heading", { name: /iPhone|iPad|Safari/i }),
+    ).toHaveCount(0);
     await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
     const before = await close.boundingBox();
     await dialog.evaluate((element) => {
@@ -201,442 +193,588 @@ test("I01: desktop Download shows QR and both translated guides with accessible 
     ).toBeFocused();
     await page.keyboard.press("Tab");
     await expect(close).toBeFocused();
-    if (language === "en") {
-      await info.attach("desktop-install-guide-bottom.png", {
-        body: await page.screenshot({ fullPage: false }),
-        contentType: "image/png",
-      });
-      await page.keyboard.press("Escape");
-    } else await close.click();
+    await page.keyboard.press("Escape");
     await expect(dialog).toHaveCount(0);
     await expect(launcher).toBeFocused();
     await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
   }
-  await page
-    .getByRole("button", { name: "BIS/EN", exact: true })
-    .filter({ visible: true })
-    .click();
-  const homeCardDownload = page
-    .locator("main section")
-    .filter({
-      has: page.getByRole("heading", {
-        name: translations.en.downloadPromptTitle,
-        exact: true,
-      }),
-    })
-    .getByRole("button", { name: translations.en.downloadApp, exact: true });
-  // Safari pointer clicks do not necessarily focus a button. Each launcher
-  // must still restore its own focus after the guide closes.
-  await homeCardDownload.click();
-  await expect(guide(page, "en", true)).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(guide(page, "en", true)).toHaveCount(0);
-  await expect(homeCardDownload).toBeFocused();
-  await nav(page, translations.en.navAbout);
-  const aboutDownloads = page
-    .locator("main")
-    .getByRole("button", { name: translations.en.downloadApp, exact: true });
-  await expect(aboutDownloads).toHaveCount(2);
-  for (const launcher of await aboutDownloads.all()) {
-    await launcher.click();
-    const dialog = guide(page, "en", true);
-    await expect(dialog).toBeVisible();
-    await dialog
-      .getByRole("button", { name: translations.en.closeBtn, exact: true })
-      .click();
-    await expect(dialog).toHaveCount(0);
-    await expect(launcher).toBeFocused();
-  }
-  expect(await page.evaluate(() => window.mangoInstallControl.calls)).toBe(0);
   expect(await records(page)).toHaveLength(0);
 });
 
-test("I02: 767 and 768 CSS pixels switch Scan/History to Download without losing phone controls", async ({
+test("I02: 767 and 768 pixels preserve Android guidance and phone scan controls", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 767, height: 800 });
   await installBrowser(page);
   await openApp(page);
-  await nav(page, translations.en.navScan);
-  await expect(page.getByRole("button", { name: /^Take Photo/ })).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: /^Upload Photo/ }),
-  ).toBeVisible();
-  await page
-    .getByRole("button", { name: translations.en.cancelBtn, exact: true })
-    .click();
-  await nav(page, translations.en.navScan);
+  await openDownload(page);
+  await expect(guide(page)).toBeVisible();
   await page.setViewportSize({ width: 768, height: 800 });
-  await expect(
-    page.getByRole("heading", {
-      name: translations.en.scanSheetTitle,
-      exact: true,
-    }),
-  ).toHaveCount(0);
-  await expect(page.getByRole("button", { name: /^Upload Photo/ })).toHaveCount(
-    0,
-  );
+  await expect(guide(page, "en", true)).toBeVisible();
+  await page.keyboard.press("Escape");
   await expect(
     page.getByRole("button", { name: translations.en.navScan, exact: true }),
   ).toHaveCount(0);
-  await expect(
-    page.getByRole("button", { name: translations.en.navHistory, exact: true }),
-  ).toHaveCount(0);
-  await expect(guide(page, "en", true)).toBeVisible();
-  await page.keyboard.press("Escape");
-  await openDownload(page);
-  await expect(guide(page, "en", true)).toBeVisible();
-  await page.keyboard.press("Escape");
   await page.setViewportSize({ width: 767, height: 800 });
-  await expect(
-    page.getByRole("button", { name: translations.en.navHistory, exact: true }),
-  ).toBeVisible();
   await nav(page, translations.en.navScan);
   await expect(page.getByRole("button", { name: /^Take Photo/ })).toBeVisible();
   await expect(
     page.getByRole("button", { name: /^Upload Photo/ }),
   ).toBeVisible();
-  expect(await records(page)).toHaveLength(0);
 });
 
-test("I03: QR arrival consumes only install flag and waits for a user tap on a late native prompt", async ({
+test("I03: QR arrival preserves URL state and suppresses browser installation prompts", async ({
   page,
-}, info) => {
-  await page.setViewportSize({ width: 360, height: 740 });
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await installBrowser(page);
   await page.goto("/?source=qr&install=1&keep=yes#guide");
   const dialog = guide(page);
-  await expect(dialog).toBeVisible();
+  await expect(dialog).toBeVisible({ timeout: 90_000 });
   await expect
     .poll(() => new URL(page.url()).search)
     .toBe("?source=qr&keep=yes");
   expect(new URL(page.url()).hash).toBe("#guide");
-  await expect(
-    dialog.getByRole("heading", {
-      name: translations.en.installGuideAndroid,
-      exact: true,
-    }),
-  ).toBeVisible();
-  await expect(
-    dialog.getByRole("heading", {
-      name: translations.en.installGuideIOS,
-      exact: true,
-    }),
-  ).toHaveCount(0);
-  await expect(
-    dialog.getByRole("button", {
-      name: translations.en.installGuideInstall,
-      exact: true,
-    }),
-  ).toHaveCount(0);
-  expect(await page.evaluate(() => window.mangoInstallControl.calls)).toBe(0);
   await page.evaluate(() => window.mangoInstallControl.offer());
-  const install = dialog.getByRole("button", {
-    name: translations.en.installGuideInstall,
-    exact: true,
-  });
-  await expect(install).toBeEnabled();
-  await install.scrollIntoViewIfNeeded();
-  await info.attach("android-native-install-ready.png", {
-    body: await page.screenshot(),
-    contentType: "image/png",
-  });
   expect(await page.evaluate(() => window.mangoInstallControl.prevented)).toBe(
     true,
   );
   expect(await page.evaluate(() => window.mangoInstallControl.calls)).toBe(0);
-  await install.click();
-  const pending = dialog.getByRole("button", {
-    name: translations.en.installGuideInstalling,
-    exact: true,
-  });
-  await expect(pending).toBeDisabled();
-  await pending.dispatchEvent("click");
-  expect(await page.evaluate(() => window.mangoInstallControl.calls)).toBe(1);
-  await page.evaluate(() => window.mangoInstallControl.finish("dismissed"));
-  await expect(pending).toHaveCount(0);
-  await expect(install).toHaveCount(0);
-  await page.evaluate(() => window.mangoInstallControl.offer());
-  await expect(install).toBeEnabled();
-  await install.click();
-  await page.evaluate(() => window.mangoInstallControl.finish("accepted"));
-  await expect(pending).toHaveCount(0);
-  // Accepting the prompt is not installation proof; the browser confirms it.
-  await expect(
-    dialog.getByText(translations.en.installGuideInstalled, { exact: true }),
-  ).toHaveCount(0);
-  await page.evaluate(() => window.dispatchEvent(new Event("appinstalled")));
-  await expect(
-    dialog.getByText(translations.en.installGuideInstalled, { exact: true }),
-  ).toBeVisible();
-  expect(await page.evaluate(() => window.mangoInstallControl.calls)).toBe(2);
-  await dialog
-    .getByRole("button", {
-      name: translations.en.installGuideContinue,
-      exact: true,
-    })
-    .click();
-  await expect(dialog).toHaveCount(0);
+  await expect(dialog.getByRole("button")).toHaveCount(2);
+  await expect(dialog.locator('a[href="/download"]')).toHaveCount(1);
+  await expect(dialog.getByRole("status")).toHaveCount(0);
+  await page.keyboard.press("Escape");
   await page.reload();
   await expect(
     page.getByRole("heading", {
       name: translations.en.HowItWorksTitle,
       exact: true,
     }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 90_000 });
   await expect(guide(page)).toHaveCount(0);
 });
 
-for (const platform of ["ios", "ipad"] as const) {
-  test(`I04: ${platform} QR arrival shows Bisaya Apple steps without an automatic or fake Install button`, async ({
+for (const language of ["en", "bis"] as const) {
+  test(`I04: other devices receive Android-only information in ${language}`, async ({
     page,
-  }, info) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await installBrowser(page, { platform, language: "bis" });
-    await page.goto("/?install=1");
-    const t = translations.bis;
-    const dialog = guide(page, "bis");
-    // QR entry still waits for real model warmup, like openApp's startup check.
-    await expect(dialog).toBeVisible({ timeout: 90_000 });
-    for (const title of [
-      t.installGuideIOS,
-      t.installGuideIOSShare,
-      t.installGuideIOSHome,
-      t.installGuideIOSAdd,
-    ])
-      await expect(
-        dialog.getByRole("heading", { name: title, exact: true }),
-      ).toBeVisible();
+  }) => {
+    await page.setViewportSize({ width: 320, height: 740 });
+    await installBrowser(page, { language, otherDevice: true });
+    await openLocalizedApp(page, language);
+    await openDownload(page, language);
+    const t = translations[language];
+    const dialog = guide(page, language);
+    // Short copy should fit a narrow phone without truncation or forced no-wrap.
+    const openAPK = dialog.getByRole("heading", {
+      name: t.installGuideAndroidInstall,
+      exact: true,
+    });
+    await expect(openAPK).toBeVisible();
+    expect(
+      await openAPK.evaluate(
+        (heading) =>
+          heading.getBoundingClientRect().height <=
+          Number.parseFloat(getComputedStyle(heading).lineHeight) + 1,
+      ),
+    ).toBe(true);
+    await expect(
+      dialog.getByText(t.installGuideDescription, { exact: true }),
+    ).toBeVisible();
     await expect(
       dialog.getByRole("heading", { name: t.installGuideAndroid, exact: true }),
+    ).toBeVisible();
+    await expect(
+      dialog.getByRole("heading", { name: /iPhone|iPad|Safari/i }),
     ).toHaveCount(0);
     await expect(
-      dialog.getByText(t.installGuideIOSBrowser, { exact: true }),
-    ).toBeVisible();
-    await page.evaluate(() => window.mangoInstallControl.offer());
-    await expect(
-      dialog.getByRole("button", { name: t.installGuideInstall, exact: true }),
+      page.locator(
+        'meta[name="apple-mobile-web-app-capable"], link[rel="apple-touch-icon"]',
+      ),
     ).toHaveCount(0);
-    expect(await page.evaluate(() => window.mangoInstallControl.calls)).toBe(0);
-    if (platform === "ios")
-      await info.attach("ios-install-guide.png", {
-        body: await page.screenshot(),
-        contentType: "image/png",
-      });
-    await dialog
-      .getByRole("button", { name: t.installGuideContinue, exact: true })
-      .click();
-    await expect(dialog).toHaveCount(0);
-    await nav(page, t.navScan);
-    await expect(
-      page.getByRole("button", { name: new RegExp(`^${t.uploadPhotoBtn}`) }),
-    ).toBeVisible();
   });
 }
 
-test("I05: unsupported browser guide stays available and native prompt failures remain recoverable", async ({
+test("I05: Android download information opens without claiming a public APK exists", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 360, height: 740 });
-  await installBrowser(page, { platform: "other" });
-  await openApp(page);
-  await openDownload(page);
-  const dialog = guide(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await installBrowser(page, { language: "bis" });
+  // Availability remains on its own page after the guide's extra block was removed.
+  await page.goto("/download");
+  await expect(page).toHaveURL(/\/download$/);
   await expect(
-    dialog.getByRole("heading", {
-      name: translations.en.installGuideFallbackTitle,
+    page.getByRole("heading", {
+      name: translations.bis.androidDownloadTitle,
       exact: true,
     }),
   ).toBeVisible();
-  await expect(
-    dialog.getByText(translations.en.installGuideFallbackDescription, {
-      exact: true,
-    }),
-  ).toBeVisible();
-  await expect(
-    dialog.getByRole("button", {
-      name: translations.en.installGuideInstall,
-      exact: true,
-    }),
-  ).toHaveCount(0);
-  await page.evaluate(() => window.mangoInstallControl.offer(true));
-  await dialog
-    .getByRole("button", {
-      name: translations.en.installGuideInstall,
-      exact: true,
-    })
-    .click();
-  await expect(dialog.getByRole("alert")).toHaveText(
-    translations.en.installGuideInstallError,
+  await expect(page.getByRole("status")).toHaveText(
+    translations.bis.androidDownloadPending,
   );
   await expect(
-    dialog.getByRole("button", {
-      name: translations.en.installGuideInstall,
+    page.getByText(translations.bis.androidDownloadCompatibility, {
       exact: true,
     }),
-  ).toHaveCount(0);
-  await page.evaluate(() => window.mangoInstallControl.offer());
-  await dialog
-    .getByRole("button", {
-      name: translations.en.installGuideInstall,
-      exact: true,
-    })
-    .click();
-  await page.evaluate(() => window.dispatchEvent(new Event("appinstalled")));
-  await expect(
-    dialog.getByText(translations.en.installGuideInstalled, { exact: true }),
-  ).toBeVisible();
-  await page.evaluate(() => window.mangoInstallControl.finish("accepted"));
-  await dialog
-    .getByRole("button", { name: translations.en.closeBtn, exact: true })
-    .click();
-  await expect(
-    page
-      .getByRole("button", { name: translations.en.downloadApp, exact: true })
-      .filter({ visible: true }),
-  ).toHaveCount(0);
-  await nav(page, translations.en.navScan);
-  await expect(
-    page.getByRole("button", { name: /^Upload Photo/ }),
   ).toBeVisible();
 });
 
-test("I06: installed standalone consumes QR flag silently but desktop still offers phone QR guide", async ({
+test("I06: a legacy standalone website does not claim the Android APK is installed", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 360, height: 740 });
-  await installBrowser(page, { platform: "ios", standalone: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await installBrowser(page, { legacyStandalone: true });
   await page.goto("/?install=1&source=qr#home");
-  // Use the normal startup budget before checking the installed-app behavior.
-  await expect(
-    page.getByRole("heading", {
-      name: translations.en.HowItWorksTitle,
-      exact: true,
-    }),
-  ).toBeVisible({ timeout: 90_000 });
+  await expect(guide(page)).toBeVisible({ timeout: 90_000 });
   await expect.poll(() => new URL(page.url()).search).toBe("?source=qr");
-  expect(new URL(page.url()).hash).toBe("#home");
-  await expect(guide(page)).toHaveCount(0);
   await expect(
-    page
-      .getByRole("button", { name: translations.en.downloadApp, exact: true })
-      .filter({ visible: true }),
-  ).toHaveCount(0);
-  await page.setViewportSize({ width: 1024, height: 768 });
-  await openDownload(page);
-  const dialog = guide(page, "en", true);
-  await expect(dialog).toBeVisible();
-  await expect(
-    dialog.getByRole("link", {
-      name: translations.en.installGuideWebsiteLink,
-      exact: true,
-    }),
-  ).toHaveAttribute("href", installURL);
-  await expect(
-    dialog.getByRole("heading", {
-      name: translations.en.installGuideIOS,
+    guide(page).getByRole("heading", {
+      name: translations.en.installGuideAndroidInstall,
       exact: true,
     }),
   ).toBeVisible();
-  await expect(
-    dialog.getByRole("heading", {
-      name: translations.en.installGuideAndroid,
-      exact: true,
-    }),
-  ).toBeVisible();
-  expect(await page.evaluate(() => window.mangoInstallControl.calls)).toBe(0);
-});
-
-test("I07: ordinary visits and other install flag values never open installation automatically", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 360, height: 740 });
-  await installBrowser(page);
-  await page.goto("/?install=0&source=normal#home");
-  await expect(
-    page.getByRole("heading", {
-      name: translations.en.HowItWorksTitle,
-      exact: true,
-    }),
-  ).toBeVisible();
-  await expect(guide(page)).toHaveCount(0);
-  expect(new URL(page.url()).search).toBe("?install=0&source=normal");
-  expect(new URL(page.url()).hash).toBe("#home");
-  await page.evaluate(() => window.mangoInstallControl.offer());
-  await expect(guide(page)).toHaveCount(0);
-  expect(await page.evaluate(() => window.mangoInstallControl.calls)).toBe(0);
-});
-
-test("I08: new install and scan-width listeners support legacy addListener APIs", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 767, height: 800 });
-  await installBrowser(page);
-  await page.addInitScript(() => {
-    const matchMedia = window.matchMedia.bind(window);
-    const trace = { added: [] as string[], removed: [] as string[] };
-    window.mangoLegacyInstallListeners = trace;
-    window.matchMedia = (query) => {
-      const media = matchMedia(query);
-      // Scope this fixture to the two new listeners. It does not claim whole
-      // app compatibility with old Safari, which has other platform limits.
-      if (
-        query !== "(display-mode: standalone)" &&
-        query !== "(min-width: 48rem)"
-      )
-        return media;
-      const addListener = media.addListener.bind(media);
-      const removeListener = media.removeListener.bind(media);
-      Object.defineProperties(media, {
-        addEventListener: { configurable: true, value: undefined },
-        removeEventListener: { configurable: true, value: undefined },
-        addListener: {
-          configurable: true,
-          value(listener: Parameters<typeof addListener>[0]) {
-            trace.added.push(query);
-            addListener(listener);
-          },
-        },
-        removeListener: {
-          configurable: true,
-          value(listener: Parameters<typeof removeListener>[0]) {
-            trace.removed.push(query);
-            removeListener(listener);
-          },
-        },
-      });
-      return media;
-    };
-  });
-  await openApp(page);
-  await nav(page, translations.en.navScan);
-  await expect(
-    page.getByRole("button", { name: /^Upload Photo/ }),
-  ).toBeVisible();
-  await page.setViewportSize({ width: 768, height: 800 });
-  await expect(guide(page, "en", true)).toBeVisible();
-  const trace = await page.evaluate(() => window.mangoLegacyInstallListeners);
-  expect(trace.added).toContain("(display-mode: standalone)");
-  expect(trace.added).toContain("(min-width: 48rem)");
-  await expect
-    .poll(() => page.evaluate(() => window.mangoLegacyInstallListeners.removed))
-    .toContain("(min-width: 48rem)");
   await page.keyboard.press("Escape");
-  await page.setViewportSize({ width: 767, height: 800 });
   await openDownload(page);
-  await page.evaluate(() => window.mangoInstallControl.offer());
-  const dialog = guide(page);
-  await dialog
-    .getByRole("button", {
-      name: translations.en.installGuideInstall,
+  await expect(guide(page)).toBeVisible();
+});
+
+test("I07: ordinary visits and unrelated install flag values do not open the guide", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await installBrowser(page);
+  for (const path of ["/", "/?install=0", "/?install=yes"]) {
+    await page.goto(path);
+    await expect(
+      page.getByRole("heading", {
+        name: translations.en.HowItWorksTitle,
+        exact: true,
+      }),
+    ).toBeVisible({ timeout: 90_000 });
+    await expect(guide(page)).toHaveCount(0);
+  }
+});
+
+test("I08: Android visitors can open the installed app with a safe download fallback in both languages", async ({
+  page,
+}) => {
+  await installBrowser(page);
+  await openApp(page);
+  for (const language of ["en", "bis"] as const) {
+    const t = translations[language];
+    if (language === "bis")
+      await page
+        .getByRole("button", { name: /^(EN\/BIS|EN)$/ })
+        .filter({ visible: true })
+        .first()
+        .click();
+    await openDownload(page, language);
+    const dialog = guide(page, language, page.viewportSize()!.width >= 768);
+    const open = dialog.getByRole("link", {
+      name: t.androidOpenOrInstall,
       exact: true,
-    })
-    .click();
-  expect(await page.evaluate(() => window.mangoInstallControl.calls)).toBe(1);
-  await page.evaluate(() => window.mangoInstallControl.finish("dismissed"));
-  await dialog
-    .getByRole("button", { name: translations.en.closeBtn, exact: true })
-    .click();
-  await nav(page, translations.en.navScan);
-  await expect(page.getByRole("button", { name: /^Take Photo/ })).toBeVisible();
+    });
+    await expect(open).toBeVisible();
+    const href = await open.getAttribute("href");
+    expect(href).toContain(
+      "intent://open#Intent;scheme=mangoleaf;package=com.mangoleaf.ai;",
+    );
+    expect(href).toContain(
+      `S.browser_fallback_url=${encodeURIComponent(new URL("/download", page.url()).href)};end`,
+    );
+    await expect(
+      dialog.getByText(t.androidAlreadyInstalled, { exact: true }),
+    ).toBeVisible();
+    // Inspect the link without launching an external app or downloading/installing anything from automation.
+    await dialog.getByRole("button", { name: t.closeBtn, exact: true }).click();
+  }
+  await page.goto("/download");
+  await expect(
+    page.getByRole("link", {
+      name: translations.bis.androidOpenOrInstall,
+      exact: true,
+    }),
+  ).toBeVisible();
+});
+
+test("I09: a published Android APK appears in both languages without downloading or installing", async ({
+  page,
+}) => {
+  await installBrowser(page);
+  const downloadUrl = `${androidReleasePage}/download/v9.8.7/${androidApkAsset}`;
+  // Fictional release metadata verifies presentation and URL validation only.
+  await page.route(androidReleaseApi, (route) =>
+    route.fulfill({
+      headers: { "Access-Control-Allow-Origin": "*" },
+      json: {
+        draft: false,
+        prerelease: false,
+        published_at: "2026-10-22T00:00:00Z",
+        tag_name: "v9.8.7",
+        html_url: `${androidReleasePage}/tag/v9.8.7`,
+        assets: [
+          {
+            name: androidApkAsset,
+            label: "Android APK v0.1.4",
+            state: "uploaded",
+            size: 15_000_000,
+            content_type: "application/vnd.android.package-archive",
+            browser_download_url: downloadUrl,
+          },
+        ],
+      },
+    }),
+  );
+  await page.goto("/download");
+  for (const language of ["bis", "en"] as const) {
+    if (language === "en")
+      await page.getByRole("button", { name: "EN / BIS", exact: true }).click();
+    const t = translations[language];
+    await expect(page.getByRole("status")).toHaveText(
+      t.androidDownloadAvailable.replace("{version}", "v9.8.7"),
+    );
+    await expect(page.getByTestId("available-apk-version")).toHaveText(
+      t.androidDownloadVersion.replace("{version}", "0.1.4"),
+    );
+    await expect(
+      page.getByRole("link", { name: t.androidDownloadApk, exact: true }),
+    ).toHaveAttribute("href", downloadUrl);
+    await expect(
+      page.getByRole("link", { name: t.androidOpenOrInstall, exact: true }),
+    ).toBeVisible();
+  }
+});
+
+test("I15: an unlabeled older APK stays downloadable without inventing its native version from the release tag", async ({
+  page,
+}) => {
+  await installBrowser(page);
+  const downloadUrl = `${androidReleasePage}/download/v9.8.7/${androidApkAsset}`;
+  await page.route(androidReleaseApi, (route) =>
+    route.fulfill({
+      headers: { "Access-Control-Allow-Origin": "*" },
+      json: {
+        draft: false,
+        prerelease: false,
+        published_at: "2026-10-22T00:00:00Z",
+        tag_name: "v9.8.7",
+        html_url: `${androidReleasePage}/tag/v9.8.7`,
+        assets: [
+          {
+            name: androidApkAsset,
+            state: "uploaded",
+            size: 15_000_000,
+            content_type: "application/vnd.android.package-archive",
+            browser_download_url: downloadUrl,
+          },
+        ],
+      },
+    }),
+  );
+  await page.goto("/download");
+  await expect(page.getByRole("status")).toContainText("v9.8.7");
+  await expect(page.getByTestId("available-apk-version")).toHaveCount(0);
+  await expect(
+    page.getByRole("link", {
+      name: translations.bis.androidDownloadApk,
+      exact: true,
+    }),
+  ).toHaveAttribute("href", downloadUrl);
+});
+
+test("I10: untrusted APK URLs keep the download unavailable and preserve official release navigation", async ({
+  page,
+}) => {
+  await installBrowser(page);
+  await page.route(androidReleaseApi, (route) =>
+    route.fulfill({
+      headers: { "Access-Control-Allow-Origin": "*" },
+      json: {
+        draft: false,
+        prerelease: false,
+        published_at: "2026-10-22T00:00:00Z",
+        tag_name: "v9.8.7",
+        html_url: `${androidReleasePage}/tag/v9.8.7`,
+        assets: [
+          {
+            name: androidApkAsset,
+            state: "uploaded",
+            size: 15_000_000,
+            content_type: "application/vnd.android.package-archive",
+            browser_download_url: "https://untrusted.invalid/app.apk",
+          },
+        ],
+      },
+    }),
+  );
+  await page.goto("/download");
+  await expect(page.getByRole("status")).toHaveText(
+    translations.bis.androidDownloadPending,
+  );
+  await expect(
+    page.getByRole("link", {
+      name: translations.bis.androidDownloadApk,
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("link", {
+      name: translations.bis.androidDownloadReleases,
+      exact: true,
+    }),
+  ).toHaveAttribute("href", androidReleasePage);
+});
+
+for (const relatedApps of [
+  "empty",
+  "reject",
+  "hang",
+  "wrong-package",
+] as const) {
+  test(`I12: ${relatedApps} installation hints keep the main action and guide usable`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await installBrowser(page, { relatedApps });
+    await openApp(page);
+    const launch = page
+      .getByRole("link", {
+        name: translations.en.androidOpenOrInstall,
+        exact: true,
+      })
+      .filter({ visible: true })
+      .first();
+    await expect(launch).toBeVisible();
+    await expect(launch).toHaveAttribute("href", /package=com\.mangoleaf\.ai;/);
+    await openDownload(page);
+    await expect(guide(page)).toBeVisible();
+    await guide(page)
+      .getByRole("link", {
+        name: translations.en.androidDownloadGuide,
+        exact: true,
+      })
+      .click();
+    await expect(page).toHaveURL(/\/download$/);
+    await expect(
+      page.getByRole("link", {
+        name: translations.bis.androidOpenOrInstall,
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(page.getByRole("status")).toHaveText(
+      translations.bis.androidDownloadPending,
+    );
+  });
+}
+
+test("I13: confirmed production installation opens directly and makes another APK an explicit choice", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await installBrowser(page, { relatedApps: "confirmed" });
+  await openApp(page);
+  const launch = page
+    .getByRole("link", { name: translations.en.androidOpenApp, exact: true })
+    .filter({ visible: true })
+    .first();
+  await expect(launch).toBeVisible();
+  await launch.evaluate((element) =>
+    element.addEventListener("click", (event) => event.preventDefault(), {
+      once: true,
+    }),
+  );
+  await launch.click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  expect(await page.evaluate(() => window.mangoRelatedApps.calls)).toBe(1);
+  const downloadUrl = `${androidReleasePage}/download/v9.8.7/${androidApkAsset}`;
+  await page.route(androidReleaseApi, (route) =>
+    route.fulfill({
+      headers: { "Access-Control-Allow-Origin": "*" },
+      json: {
+        draft: false,
+        prerelease: false,
+        published_at: "2026-10-22T00:00:00Z",
+        tag_name: "v9.8.7",
+        html_url: `${androidReleasePage}/tag/v9.8.7`,
+        assets: [
+          {
+            name: androidApkAsset,
+            state: "uploaded",
+            size: 15_000_000,
+            content_type: "application/vnd.android.package-archive",
+            browser_download_url: downloadUrl,
+          },
+        ],
+      },
+    }),
+  );
+  await page.goto("/download");
+  for (const language of ["bis", "en"] as const) {
+    if (language === "en")
+      await page.getByRole("button", { name: "EN / BIS", exact: true }).click();
+    const t = translations[language];
+    await expect(
+      page.getByRole("link", { name: t.androidOpenApp, exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: t.androidDownloadApk, exact: true }),
+    ).not.toBeVisible();
+    const choice = page
+      .locator("summary")
+      .filter({ hasText: t.androidDownloadAgain });
+    await choice.click();
+    await expect(
+      page.getByRole("link", { name: t.androidDownloadApk, exact: true }),
+    ).toHaveAttribute("href", downloadUrl);
+    await choice.click();
+  }
+  // No overflow at the narrow supported layout, including translated controls.
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  const manifest = await (
+    await page.request.get("/manifest.webmanifest")
+  ).json();
+  expect(manifest.related_applications).toEqual([
+    { platform: "play", id: "com.mangoleaf.ai" },
+  ]);
+  expect(manifest.prefer_related_applications).toBe(false);
+});
+
+test("I14: unsupported desktop ignores a native-looking result and retains its QR guide", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await installBrowser(page, { otherDevice: true, relatedApps: "confirmed" });
+  await openApp(page);
+  await openDownload(page);
+  await expect(guide(page, "en", true)).toBeVisible();
+  expect(await page.evaluate(() => window.mangoRelatedApps.calls)).toBe(0);
+});
+
+test.describe("release metadata service-worker freshness", () => {
+  test.use({ serviceWorkers: "allow" });
+
+  test("I11: real worker evicts old release metadata and never falls back to a cached APK announcement", async ({
+    page,
+    context,
+    browserName,
+    runtimeErrors,
+  }) => {
+    test.skip(
+      browserName !== "chromium",
+      "Service-worker request interception is verified in Chromium only.",
+    );
+    test.setTimeout(180_000);
+    const metadata = { marker: "old release announcement" };
+    const workerPage = "http://127.0.0.1:4173/__test__/release-worker";
+    const policy = `connect-src 'self' ${androidReleaseApi}; object-src 'none'`;
+    // A minimal local document avoids model inference and lets activation be
+    // observed before any application has automatically registered its worker.
+    await page.route(workerPage, (route) =>
+      route.fulfill({
+        contentType: "text/html",
+        headers: { "Content-Security-Policy": policy },
+        body: "<!doctype html><html><body>Release freshness fixture</body></html>",
+      }),
+    );
+    await context.route("http://127.0.0.1:4173/sw.js", async (route) => {
+      const response = await route.fetch();
+      await route.fulfill({
+        response,
+        headers: { ...response.headers(), "Content-Security-Policy": policy },
+      });
+    });
+    let networkAvailable = true;
+    let networkReads = 0;
+    await context.route(androidReleaseApi, (route) => {
+      networkReads++;
+      return networkAvailable
+        ? route.fulfill({
+            headers: { "Access-Control-Allow-Origin": "*" },
+            json: { marker: "current network metadata" },
+          })
+        : route.abort("internetdisconnected");
+    });
+    await page.goto(workerPage);
+    const unrelated = "https://example.invalid/unrelated-public-metadata";
+    await page.evaluate(
+      async ({ api, metadata, unrelated }) => {
+        const cache = await caches.open("cross-origin");
+        await cache.put(api, Response.json(metadata));
+        await cache.put(unrelated, Response.json({ keep: true }));
+        await navigator.serviceWorker.register("/sw.js");
+        await navigator.serviceWorker.ready;
+      },
+      { api: androidReleaseApi, metadata, unrelated },
+    );
+    await page.waitForFunction(() =>
+      Boolean(navigator.serviceWorker.controller),
+    );
+    await expect
+      .poll(() =>
+        page.evaluate(
+          async (api) => Boolean(await caches.match(api)),
+          androidReleaseApi,
+        ),
+      )
+      .toBe(false);
+    expect(
+      await page.evaluate(
+        async (url) => Boolean(await caches.match(url)),
+        unrelated,
+      ),
+    ).toBe(true);
+    const response = page.waitForResponse(androidReleaseApi);
+    expect(
+      await page.evaluate(
+        async (api) => (await fetch(api, { cache: "no-store" })).json(),
+        androidReleaseApi,
+      ),
+    ).toEqual({ marker: "current network metadata" });
+    expect((await response).fromServiceWorker()).toBe(true);
+    expect(networkReads).toBe(1);
+    // Reintroduce a stale entry after activation. A cache-fallback strategy
+    // would return it after this controlled network failure; NetworkOnly must fail.
+    await page.evaluate(
+      async ({ api, metadata }) => {
+        for (const name of ["cross-origin", "others"])
+          await (await caches.open(name)).put(api, Response.json(metadata));
+      },
+      { api: androidReleaseApi, metadata },
+    );
+    networkAvailable = false;
+    const expectedFailures: string[] = [];
+    const observeFailure = (
+      message: import("@playwright/test").ConsoleMessage,
+    ) => {
+      if (
+        message.type() === "error" &&
+        message.location().url === androidReleaseApi &&
+        /^Failed to load resource: net::ERR_(INTERNET_DISCONNECTED|FAILED)$/.test(
+          message.text(),
+        )
+      )
+        expectedFailures.push(`${message.text()} (${message.location().url})`);
+    };
+    page.on("console", observeFailure);
+    expect(
+      await page.evaluate(async (api) => {
+        try {
+          await fetch(api, { cache: "no-store" });
+          return "unexpected cached release";
+        } catch {
+          return "network failed";
+        }
+      }, androidReleaseApi),
+    ).toBe("network failed");
+    expect(networkReads).toBe(2);
+    await expect.poll(() => expectedFailures.length).toBeGreaterThan(0);
+    page.off("console", observeFailure);
+    for (const error of expectedFailures) {
+      expect(runtimeErrors).toContain(error);
+      runtimeErrors.splice(runtimeErrors.indexOf(error), 1);
+    }
+  });
 });

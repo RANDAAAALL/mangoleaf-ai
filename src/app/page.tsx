@@ -1,10 +1,22 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import { useLiveQuery } from "dexie-react-hooks";
-import { db, type ScanRecord, type DiseaseGuideline } from "@/lib/db";
+import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
+import { useStorageQuery } from "@/hooks/useStorageQuery";
+import {
+  readStoredScans,
+  readStoredGuidelines,
+  findStoredScan,
+} from "@/lib/app-storage";
+import {
+  isAndroidBuild,
+  connectionHint,
+  subscribeConnection,
+  initializeNativeRuntime,
+  nativeRequest,
+} from "@/lib/native-bridge";
+import { startCloudBackup, setCloudBackupBusy } from "@/lib/cloud-backup";
 import { useSync } from "@/hooks/useSync";
-import { usePWAInstall } from "@/hooks/usePWAInstall";
 import { useInstallGuide } from "@/hooks/useInstallGuide";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { computeImageHash } from "@/lib/image-hash";
@@ -37,6 +49,7 @@ import { HomeTab } from "@/components/tab/home-tab";
 import { HistoryTab } from "@/components/tab/history-tab";
 import { AboutTab } from "@/components/tab/about-tab";
 import { LegalModal } from "@/components/modal/legal-modal";
+import { AndroidUpdateModal } from "@/components/modal/android-update-modal";
 import { StorageFullModal } from "@/components/modal/storage-full-modal";
 import { UnsavedScanNotice } from "@/components/scan/unsaved-scan-notice";
 import { ScanSheet } from "@/components/modal/scan-sheet";
@@ -71,31 +84,15 @@ type PhotoCheck =
   | { status: "ready"; hash: string; duplicate: ScanRecord | null };
 
 function findDuplicateScan(imageHash: string) {
-  return db.scans
-    .where("image_hash")
-    .equals(imageHash)
-    .filter(
-      (scan) =>
-        scan._status !== "pending-delete" &&
-        // Legacy reports have no reliable model identity; keep them in History.
-        scan.model_version === modelVersion,
-    )
-    .first();
+  return findStoredScan(imageHash, modelVersion);
 }
 
 export default function Home() {
+  useEffect(startCloudBackup, []);
   const { createScan, deleteScan, deleteScans } = useSync();
 
   const {
-    showInstallButton,
-    installApp,
-    isInstalled,
-    isInstalling,
-    installError,
-  } = usePWAInstall();
-  const {
     isOpen: isInstallGuideOpen,
-    platform: installPlatform,
     openGuide: openInstallGuide,
     closeGuide: closeInstallGuide,
   } = useInstallGuide();
@@ -113,7 +110,7 @@ export default function Home() {
   useEffect(() => {
     initializeDiagnostics();
     recordDiagnostic("app.opened", {
-      online: navigator.onLine,
+      online: connectionHint(),
       visibility: document.visibilityState,
       standalone: window.matchMedia("(display-mode: standalone)").matches,
     });
@@ -122,7 +119,7 @@ export default function Home() {
         visibility: document.visibilityState,
       });
     const onConnectivity = () =>
-      recordDiagnostic("app.connectivity", { online: navigator.onLine });
+      recordDiagnostic("app.connectivity", { online: connectionHint() });
     const onError = (event: ErrorEvent) =>
       recordDiagnostic("app.error", {
         errorName: diagnosticErrorName(event.error),
@@ -132,14 +129,12 @@ export default function Home() {
         errorName: diagnosticErrorName(event.reason),
       });
     document.addEventListener("visibilitychange", onVisibility);
-    window.addEventListener("online", onConnectivity);
-    window.addEventListener("offline", onConnectivity);
+    const unsubscribe = subscribeConnection(onConnectivity);
     window.addEventListener("error", onError);
     window.addEventListener("unhandledrejection", onRejection);
     return () => {
       document.removeEventListener("visibilitychange", onVisibility);
-      window.removeEventListener("online", onConnectivity);
-      window.removeEventListener("offline", onConnectivity);
+      unsubscribe();
       window.removeEventListener("error", onError);
       window.removeEventListener("unhandledrejection", onRejection);
     };
@@ -216,6 +211,13 @@ export default function Home() {
   >(null);
   const [isScanSheetOpen, setIsScanSheetOpen] = useState(false);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  useEffect(() => {
+    if (!isAndroidBuild()) return;
+    const busy = isScanning || isCameraOpen || isRetryingSave;
+    setCloudBackupBusy(busy);
+    // One combined flag prevents a camera-close event from clearing an active diagnosis.
+    void nativeRequest("app.busy", { busy }).catch(() => {});
+  }, [isScanning, isCameraOpen, isRetryingSave]);
   const closeScanSheet = useCallback(() => {
     recordDiagnostic("scan-sheet.closed");
     setIsScanSheetOpen(false);
@@ -228,7 +230,10 @@ export default function Home() {
         return;
       }
       // Wider layouts direct new scans to the phone installation guide.
-      if (window.matchMedia("(min-width: 48rem)").matches) {
+      if (
+        !isAndroidBuild() &&
+        window.matchMedia("(min-width: 48rem)").matches
+      ) {
         openInstallGuide(event);
         return;
       }
@@ -244,7 +249,7 @@ export default function Home() {
   );
 
   useEffect(() => {
-    if (!isScanSheetOpen) return;
+    if (!isScanSheetOpen || isAndroidBuild()) return;
     const desktop = window.matchMedia("(min-width: 48rem)");
     const handleWidthChange = () => {
       if (!desktop.matches) return;
@@ -307,15 +312,8 @@ export default function Home() {
 
   // Legacy deletion tombstones remain hidden; current deletions remove local
   // rows immediately. Read dates through the index instead of sorting in JS.
-  const scansQuery = useLiveQuery(
-    () =>
-      db.scans
-        .orderBy("updated_at")
-        .reverse()
-        .filter((scan) => scan._status !== "pending-delete")
-        .toArray(),
-    [],
-  );
+  const { data: scansQuery, error: scansError } =
+    useStorageQuery(readStoredScans);
   const activeScans = useMemo(() => scansQuery ?? [], [scansQuery]);
 
   useEffect(() => {
@@ -390,7 +388,33 @@ export default function Home() {
   }, [selectedScanImageUrl]);
 
   // Guidelines cached from Supabase, so treatment advice is readable offline
-  const cachedGuidelines = useLiveQuery(() => db.guidelines.toArray(), []);
+  const { data: cachedGuidelines, error: guidelinesError } =
+    useStorageQuery(readStoredGuidelines);
+  const [nativeFailed, setNativeFailed] = useState(false);
+  const nativeMarkedHealthy = useRef(false);
+  useEffect(() => {
+    if (
+      !isAndroidBuild() ||
+      !model ||
+      scansQuery === undefined ||
+      cachedGuidelines === undefined ||
+      nativeMarkedHealthy.current
+    )
+      return;
+    // A new OTA bundle is healthy only after the model and both SQLite readers work.
+    let active = true;
+    void initializeNativeRuntime()
+      .then(() => nativeRequest("app.ready"))
+      .then(() => {
+        nativeMarkedHealthy.current = true;
+      })
+      .catch(() => {
+        if (active) setNativeFailed(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [model, scansQuery, cachedGuidelines]);
 
   const guidelineMap = useMemo(() => {
     const map: Record<string, DiseaseGuideline> = {};
@@ -903,7 +927,7 @@ export default function Home() {
         {/* Top Header: mobile = minimal logo, desktop = full nav */}
         <TopHeader
           language={language}
-          showInstallButton={!isInstalled}
+          showInstallButton={!isAndroidBuild()}
           activeTab={activeTab}
           onTabChange={handleTabChange}
           onLanguageChange={setLanguage}
@@ -926,6 +950,15 @@ export default function Home() {
           tabIndex={-1}
           className="max-w-7xl mx-auto px-6 py-8 pb-28 md:pb-8 flex flex-col outline-none"
         >
+          {isAndroidBuild() &&
+            (nativeFailed || scansError || guidelinesError) && (
+              <p
+                role="alert"
+                className="mb-4 rounded-xl border border-red-300 p-4"
+              >
+                {translations[language].nativeStartupError}
+              </p>
+            )}
           {modelLoadFailed && (
             <ModelStatusBanner
               language={language}
@@ -981,16 +1014,7 @@ export default function Home() {
       )}
 
       {isInstallGuideOpen && (
-        <InstallGuideOverlay
-          language={language}
-          platform={installPlatform}
-          canInstall={showInstallButton}
-          isInstalled={isInstalled}
-          isInstalling={isInstalling}
-          installError={installError}
-          onInstall={installApp}
-          onClose={closeInstallGuide}
-        />
+        <InstallGuideOverlay language={language} onClose={closeInstallGuide} />
       )}
 
       {isCameraOpen && (
@@ -1062,6 +1086,23 @@ export default function Home() {
       />
 
       {/* Footer */}
+      {isAndroidBuild() && (
+        <AndroidUpdateModal
+          language={language}
+          blocked={Boolean(
+            previewUrl ||
+            selectedScan ||
+            legalModalType ||
+            isCameraOpen ||
+            isScanSheetOpen ||
+            isStorageFullOpen ||
+            unsavedScan ||
+            isScanning ||
+            isRetryingSave ||
+            isInstallGuideOpen,
+          )}
+        />
+      )}
       <div inert={isInstallGuideOpen}>
         <Footer
           language={language}

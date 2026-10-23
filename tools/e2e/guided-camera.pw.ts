@@ -710,6 +710,84 @@ test("C04: backgrounding stops camera and ignores delayed capture encoding", asy
   expect(await records(page)).toHaveLength(0);
 });
 
+test("C10: capture releases the stream before JPEG encoding settles and records stage timings", async ({
+  page,
+}) => {
+  await mockCamera(page, { encoding: "defer" });
+  await page.addInitScript(() => {
+    localStorage.setItem(
+      "mangoleaf-diagnostics-v1",
+      JSON.stringify({ version: 1, enabled: true, events: [] }),
+    );
+  });
+  await controlledModel(page, scoresFor("Healthy Fruit"));
+  await openApp(page);
+  const camera = await openCamera(page);
+  const capture = camera.getByRole("button", {
+    name: translations.en.guidedCameraCaptureBtn,
+    exact: true,
+  });
+  await expect(capture).toBeEnabled();
+  await capture.click();
+  // Keep the encoder blocked: hardware must already be stopped without a second photo or premature review.
+  await expect.poll(() => cameraStops(page)).toBe(2);
+  expect(
+    await page.evaluate(() => window.mangoCameraControl.encodesCompleted),
+  ).toBe(0);
+  await expect(camera.locator("video")).toHaveJSProperty("srcObject", null);
+  await expect(
+    camera.getByRole("button", {
+      name: translations.en.guidedCameraCapturing,
+      exact: true,
+    }),
+  ).toBeDisabled();
+  await page.evaluate(() => window.mangoCameraControl.releaseEncoding());
+  const review = page.getByRole("dialog", {
+    name: translations.en.reviewPhotoTitle,
+    exact: true,
+  });
+  await expect(review).toBeVisible();
+  await expect(
+    review.getByRole("img", {
+      name: translations.en.photoPreviewAlt,
+      exact: true,
+    }),
+  ).toHaveJSProperty("naturalWidth", 720);
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const events =
+          JSON.parse(localStorage.getItem("mangoleaf-diagnostics-v1") || "{}")
+            .events || [];
+        return events
+          .filter((row: { event: string }) =>
+            row.event.startsWith("camera.capture."),
+          )
+          .map((row: { event: string }) => row.event);
+      }),
+    )
+    .toEqual([
+      "camera.capture.started",
+      "camera.capture.frame.completed",
+      "camera.capture.encode.completed",
+      "camera.capture.finished",
+    ]);
+  const captureEvents = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("mangoleaf-diagnostics-v1")!).events.filter(
+      (row: { event: string }) => row.event.startsWith("camera.capture."),
+    ),
+  );
+  expect(captureEvents[0].details).toMatchObject({ width: 720, height: 720 });
+  expect(captureEvents[3].details.outcome).toBe("complete");
+  expect(
+    captureEvents.every(
+      (row: { details: { operation: string } }) =>
+        row.details.operation === captureEvents[0].details.operation,
+    ),
+  ).toBe(true);
+  expect(await records(page)).toHaveLength(0);
+});
+
 test("C05: missing frame blocks capture and an ended track releases stream", async ({
   page,
 }) => {

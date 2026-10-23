@@ -4,6 +4,10 @@ import { Logo } from "@/components/brand/logo";
 import { translations, type Language } from "@/lib/translations";
 import { modelVersion } from "@/lib/constants";
 import { DiagnosticsPanel } from "@/components/tab/diagnostics-panel";
+import { AndroidInstallAction } from "@/components/layout/android-install-action";
+import { BackupRecoveryPanel } from "@/components/tab/backup-recovery-panel";
+import { isBrowserTestSync } from "@/lib/cloud-target";
+import { isAndroidBuild } from "@/lib/native-bridge";
 
 interface AboutTabProps {
   language: Language;
@@ -113,7 +117,7 @@ export const AboutTab = memo(function AboutTab({
           <button
             type="button"
             onClick={onScanPress}
-            className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-extrabold text-[#1b5e28] shadow-sm transition-colors hover:bg-[#eef8eb] active:scale-98"
+            className={`inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-extrabold text-[#1b5e28] shadow-sm transition-colors hover:bg-[#eef8eb] active:scale-98 ${isAndroidBuild() ? "" : "md:hidden"}`}
           >
             <Icon
               name="scan"
@@ -128,9 +132,22 @@ export const AboutTab = memo(function AboutTab({
               className="hidden md:block"
               aria-hidden="true"
             />
-            <span className="md:hidden">{t.aboutScanLeafCta}</span>
-            <span className="hidden md:inline">{t.downloadApp}</span>
+            <span className={isAndroidBuild() ? "" : "md:hidden"}>
+              {t.aboutScanLeafCta}
+            </span>
+            {!isAndroidBuild() && (
+              <span className="hidden md:inline">{t.downloadApp}</span>
+            )}
           </button>
+          {!isAndroidBuild() && (
+            <AndroidInstallAction
+              language={language}
+              onGuide={onScanPress}
+              className="hidden min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-extrabold text-[#1b5e28] shadow-sm transition-colors hover:bg-[#eef8eb] active:scale-98 md:inline-flex"
+            >
+              <Icon name="install" size={18} aria-hidden="true" />
+            </AndroidInstallAction>
+          )}
         </div>
       </section>
 
@@ -207,6 +224,14 @@ export const AboutTab = memo(function AboutTab({
             <p className="mt-1 text-xs font-medium text-[#526856]">
               {t.aboutModelVersionLabel}
             </p>
+            {isAndroidBuild() && (
+              <p className="mt-2 text-xs font-medium text-[#526856]">
+                {t.aboutWebVersion.replace(
+                  "{version}",
+                  process.env.NEXT_PUBLIC_APP_VERSION ?? "",
+                )}
+              </p>
+            )}
           </div>
           <div className="mt-9 grid w-full gap-7 sm:grid-cols-3 sm:gap-5">
             <TechnicalFact
@@ -274,7 +299,10 @@ export const AboutTab = memo(function AboutTab({
         </ol>
       </section>
 
-      <DiagnosticsPanel language={language} />
+      <div className={isBrowserTestSync() ? "md:hidden" : undefined}>
+        <DiagnosticsPanel language={language} />
+      </div>
+      {isAndroidBuild() && <BackupRecoveryPanel language={language} />}
 
       <section className="rounded-3xl border border-[#cfe2c8] bg-[#edf6e9] px-6 py-9 text-center shadow-xs sm:px-10 sm:py-12">
         <div className="mx-auto flex max-w-2xl flex-col items-center">
@@ -297,7 +325,7 @@ export const AboutTab = memo(function AboutTab({
           <button
             type="button"
             onClick={onScanPress}
-            className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#277839] px-5 py-2.5 text-sm font-extrabold text-white shadow-sm transition-colors hover:bg-[#1f622d] active:scale-98"
+            className={`mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#277839] px-5 py-2.5 text-sm font-extrabold text-white shadow-sm transition-colors hover:bg-[#1f622d] active:scale-98 ${isAndroidBuild() ? "" : "md:hidden"}`}
           >
             <Icon
               name="scan"
@@ -312,9 +340,22 @@ export const AboutTab = memo(function AboutTab({
               className="hidden md:block"
               aria-hidden="true"
             />
-            <span className="md:hidden">{t.aboutScanLeafCta}</span>
-            <span className="hidden md:inline">{t.downloadApp}</span>
+            <span className={isAndroidBuild() ? "" : "md:hidden"}>
+              {t.aboutScanLeafCta}
+            </span>
+            {!isAndroidBuild() && (
+              <span className="hidden md:inline">{t.downloadApp}</span>
+            )}
           </button>
+          {!isAndroidBuild() && (
+            <AndroidInstallAction
+              language={language}
+              onGuide={onScanPress}
+              className="mt-6 hidden min-h-11 items-center gap-2 rounded-xl bg-[#277839] px-5 py-2.5 text-sm font-extrabold text-white shadow-sm transition-colors hover:bg-[#1f622d] active:scale-98 md:inline-flex"
+            >
+              <Icon name="install" size={18} aria-hidden="true" />
+            </AndroidInstallAction>
+          )}
         </div>
       </section>
     </div>

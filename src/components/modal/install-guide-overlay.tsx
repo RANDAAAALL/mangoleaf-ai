@@ -6,15 +6,10 @@ import { Icon, type IconName } from "@/components/brand/icon";
 import { Logo } from "@/components/brand/logo";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { translations, type Language } from "@/lib/translations";
+import { useAndroidAppLink } from "@/hooks/useAndroidAppLink";
 
 interface InstallGuideOverlayProps {
   language: Language;
-  platform: "android" | "ios" | "other";
-  canInstall: boolean;
-  isInstalled: boolean;
-  isInstalling: boolean;
-  installError: boolean;
-  onInstall: () => void;
   onClose: () => void;
 }
 
@@ -57,15 +52,10 @@ function InstallationSteps({ steps }: { steps: GuideStep[] }) {
 
 export const InstallGuideOverlay = memo(function InstallGuideOverlay({
   language,
-  platform,
-  canInstall,
-  isInstalled,
-  isInstalling,
-  installError,
-  onInstall,
   onClose,
 }: InstallGuideOverlayProps) {
   const t = translations[language];
+  const { href: appLink, installed } = useAndroidAppLink();
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const onCloseRef = useRef(onClose);
@@ -98,7 +88,7 @@ export const InstallGuideOverlay = memo(function InstallGuideOverlay({
       }
       if (event.key !== "Tab") return;
 
-      // Query each time: the install button may appear after the browser event.
+      // Recheck visible controls because resizing changes the desktop QR link.
       const controls = Array.from(
         dialog.querySelectorAll<HTMLElement>(
           'a[href], button:not(:disabled), [tabindex]:not([tabindex="-1"])',
@@ -132,14 +122,6 @@ export const InstallGuideOverlay = memo(function InstallGuideOverlay({
     };
   }, []);
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    // A used prompt or completed installation can remove the focused button.
-    if (dialog && !dialog.contains(document.activeElement)) {
-      closeRef.current?.focus({ preventScroll: true });
-    }
-  }, [canInstall, isInstalling, isInstalled, platform]);
-
   const androidSteps: GuideStep[] = [
     {
       title: t.installGuideAndroidOpen,
@@ -157,24 +139,6 @@ export const InstallGuideOverlay = memo(function InstallGuideOverlay({
       icon: "check",
     },
   ];
-  const iosSteps: GuideStep[] = [
-    {
-      title: t.installGuideIOSShare,
-      description: t.installGuideIOSShareDescription,
-      icon: "share-ios",
-    },
-    {
-      title: t.installGuideIOSHome,
-      description: t.installGuideIOSHomeDescription,
-      icon: "home-add",
-    },
-    {
-      title: t.installGuideIOSAdd,
-      description: t.installGuideIOSAddDescription,
-      icon: "check",
-    },
-  ];
-
   return (
     <div
       ref={dialogRef}
@@ -222,7 +186,9 @@ export const InstallGuideOverlay = memo(function InstallGuideOverlay({
             id={titleId}
             className="mt-4 text-center text-2xl font-bold tracking-tight sm:text-3xl"
           >
-            <span className="md:hidden">{t.installGuideMobileTitle}</span>
+            <span className="md:hidden">
+              {installed ? t.androidOpenApp : t.installGuideMobileTitle}
+            </span>
             <span className="hidden md:inline">
               {t.installGuideDesktopTitle}
             </span>
@@ -231,8 +197,33 @@ export const InstallGuideOverlay = memo(function InstallGuideOverlay({
             id={descriptionId}
             className="mx-auto mt-3 max-w-xl text-center text-sm leading-relaxed text-[#526856] sm:text-base"
           >
-            {t.installGuideDescription}
+            {installed
+              ? t.androidInstalledConfirmed
+              : t.installGuideDescription}
           </p>
+
+          {appLink && (
+            <div className="mt-5 text-center">
+              <p className="mb-2 text-sm text-[#526856]">
+                {installed
+                  ? t.androidInstalledConfirmed
+                  : t.androidAlreadyInstalled}
+              </p>
+              <a
+                href={appLink}
+                className="inline-flex min-h-11 items-center rounded-xl bg-[#277839] px-5 py-3 font-bold text-white"
+              >
+                {installed ? t.androidOpenApp : t.androidOpenOrInstall}
+              </a>
+              {/* Use a fresh document for the download page and its availability policy. */}
+              <a
+                href="/download"
+                className="mt-3 block text-sm font-semibold underline"
+              >
+                {t.androidDownloadGuide}
+              </a>
+            </div>
+          )}
 
           <div className="mx-auto mt-6 hidden max-w-md flex-col items-center md:flex">
             <p className="mb-4 text-center text-sm leading-relaxed text-[#526856]">
@@ -258,96 +249,26 @@ export const InstallGuideOverlay = memo(function InstallGuideOverlay({
           </div>
         </div>
 
-        {/* Width controls layout; the phone platform controls its instructions. */}
-        <div className="mt-5 grid gap-5 md:grid-cols-2">
-          <section
-            className={`${platform === "android" && !isInstalled ? "" : "hidden md:block "}rounded-3xl border border-[#cfe2c8] bg-[#edf6e9] p-6 shadow-lg sm:p-8`}
-          >
-            <h3 className="mb-6 flex items-center gap-3 text-lg font-bold">
-              <Icon
-                name="android"
-                size={27}
-                className="text-[#277839]"
-                aria-hidden="true"
-              />
-              {t.installGuideAndroid}
-            </h3>
-            <InstallationSteps steps={androidSteps} />
-            <p className="mt-5 border-t border-[#cfe2c8] pt-4 text-sm leading-relaxed text-[#526856]">
-              {t.installGuideManualAndroid}
-            </p>
-          </section>
-
-          <section
-            className={`${platform === "ios" && !isInstalled ? "" : "hidden md:block "}rounded-3xl border border-[#cfe2c8] bg-[#edf6e9] p-6 shadow-lg sm:p-8`}
-          >
-            <h3 className="mb-6 flex items-center gap-3 text-lg font-bold">
-              <Icon
-                name="phone"
-                size={27}
-                className="text-[#277839]"
-                aria-hidden="true"
-              />
-              {t.installGuideIOS}
-            </h3>
-            <p className="mb-5 text-sm leading-relaxed text-[#526856]">
-              {t.installGuideIOSBrowser}
-            </p>
-            <InstallationSteps steps={iosSteps} />
-          </section>
-        </div>
-
-        {platform === "other" && !isInstalled && (
-          <section className="mt-5 rounded-3xl border border-[#cfe2c8] bg-[#edf6e9] p-6 shadow-lg md:hidden">
-            <h3 className="mb-3 flex items-center gap-3 text-lg font-bold">
-              <Icon
-                name="menu"
-                size={25}
-                className="text-[#277839]"
-                aria-hidden="true"
-              />
-              {t.installGuideFallbackTitle}
-            </h3>
-            <p className="text-sm leading-relaxed text-[#526856]">
-              {t.installGuideFallbackDescription}
-            </p>
-          </section>
+        {/* The supported APK and its instructions are the same on every screen. */}
+        {!installed && (
+          <div className="mt-5">
+            <section className="rounded-3xl border border-[#cfe2c8] bg-[#edf6e9] p-6 shadow-lg sm:p-8">
+              <h3 className="mb-6 flex items-center gap-3 text-lg font-bold">
+                <Icon
+                  name="android"
+                  size={27}
+                  className="text-[#277839]"
+                  aria-hidden="true"
+                />
+                {t.installGuideAndroid}
+              </h3>
+              <InstallationSteps steps={androidSteps} />
+            </section>
+          </div>
         )}
 
         <div className="mt-5 rounded-3xl border border-[#cfe2c8] bg-[#edf6e9] p-5 shadow-lg sm:p-6">
-          {isInstalled && (
-            <div role="status" className="mb-4 text-center">
-              <p className="flex items-center justify-center gap-2 font-bold">
-                <Icon name="check" size={20} aria-hidden="true" />
-                {t.installGuideInstalled}
-              </p>
-              <p className="mt-2 text-sm text-[#526856]">
-                {t.installGuideInstalledDescription}
-              </p>
-            </div>
-          )}
-          {installError && (
-            <p role="alert" className="mb-4 text-center text-sm text-[#526856]">
-              {t.installGuideInstallError}
-            </p>
-          )}
           <div className="mx-auto flex max-w-md flex-col gap-3">
-            {(canInstall || isInstalling) &&
-              !isInstalled &&
-              platform !== "ios" && (
-                <button
-                  type="button"
-                  onClick={onInstall}
-                  disabled={isInstalling}
-                  aria-busy={isInstalling}
-                  className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#277839] px-5 py-3 font-bold text-white transition-colors hover:bg-[#1f622d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839] disabled:cursor-wait disabled:opacity-60 md:hidden"
-                >
-                  <Icon name="install" size={21} aria-hidden="true" />
-                  {isInstalling
-                    ? t.installGuideInstalling
-                    : t.installGuideInstall}
-                </button>
-              )}
             <button
               type="button"
               onClick={onClose}

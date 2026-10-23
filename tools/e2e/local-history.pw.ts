@@ -326,7 +326,7 @@ test("L06: v8 upgrade preserves reports and hidden deletions without writing pho
       }),
   );
   expect(schema).toEqual({
-    version: 90,
+    version: 100,
     indexes: ["image_hash", "updated_at"],
   });
   await nav(page, "History");

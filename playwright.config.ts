@@ -30,7 +30,7 @@ export default defineConfig({
   // .pw.ts keeps browser tests separate from bun test ./tools.
   testMatch: reliability
     ? /(?:repeatability|endurance)\.pw\.ts/
-    : /(?:browser-ui|diagnostics|scan-flow|diagnosis-recovery|guided-camera|install-guide|history|model-results|offline|local-history|storage-quota|guideline-sync)\.pw\.ts/,
+    : /(?:browser-ui|diagnostics|scan-flow|diagnosis-recovery|guided-camera|install-guide|android-update|history|model-results|offline|local-history|storage-quota|guideline-sync)\.pw\.ts/,
   fullyParallel: false,
   workers: 1,
   retries: 0,
@@ -77,13 +77,6 @@ export default defineConfig({
       name: "firefox-desktop",
       use: { ...devices["Desktop Firefox"] },
       testIgnore: /(?:offline|model-results|repeatability|endurance)\.pw\.ts/,
-    },
-    // Windows WebKit cannot complete this WebGL TFJS path; it still catches iPhone-size UI regressions.
-    {
-      name: "webkit-mobile",
-      use: { ...devices["iPhone 13"] },
-      testIgnore:
-        /(?:history|scan-flow|diagnosis-recovery|model-results|offline|local-history|storage-quota|guideline-sync|repeatability|endurance)\.pw\.ts/,
     },
   ],
   webServer: {

@@ -5,6 +5,7 @@ import { HowItWorksSteps } from "@/components/scan/how-it-works-steps";
 import { DiseaseCoverageCard } from "@/components/scan/disease-coverage-card";
 import { ScanHistoryList } from "@/components/scan/scan-history-list";
 import { DownloadPromptCard } from "@/components/scan/download-prompt-card";
+import { isAndroidBuild } from "@/lib/native-bridge";
 
 // Pass up to four newest reports. The list shows only one below 768px.
 const HOME_PREVIEW_COUNT = 4;
@@ -34,7 +35,7 @@ export const HomeTab = memo(function HomeTab({
     <>
       <HowItWorksSteps language={language} />
       <DiseaseCoverageCard language={language} />
-      <div className="md:hidden">
+      <div className={isAndroidBuild() ? "" : "md:hidden"}>
         <ScanHistoryList
           scans={homeScans}
           language={language}
@@ -45,7 +46,7 @@ export const HomeTab = memo(function HomeTab({
           isFullHistoryPage={false}
         />
       </div>
-      <div className="hidden md:block">
+      <div className={isAndroidBuild() ? "hidden" : "hidden md:block"}>
         <DownloadPromptCard language={language} onDownload={onDownload} />
       </div>
     </>

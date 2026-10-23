@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Icon } from "@/components/brand/icon";
 import { translations, type Language } from "@/lib/translations";
+import { AndroidInstallAction } from "@/components/layout/android-install-action";
 
 interface DownloadPromptCardProps {
   language: Language;
@@ -28,14 +29,13 @@ export const DownloadPromptCard = memo(function DownloadPromptCard({
       <p className="mx-auto mt-2 max-w-lg text-sm leading-relaxed text-[#526856]">
         {t.downloadPromptDescription}
       </p>
-      <button
-        type="button"
-        onClick={onDownload}
+      <AndroidInstallAction
+        language={language}
+        onGuide={onDownload}
         className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#277839] px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-[#1f622d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839]"
       >
         <Icon name="install" size={18} aria-hidden="true" />
-        {t.downloadApp}
-      </button>
+      </AndroidInstallAction>
     </section>
   );
 });
