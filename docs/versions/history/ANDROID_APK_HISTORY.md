@@ -1,5 +1,15 @@
 <a id="android-host-updates-and-recovery-candidate-october-20-2026"></a>
 
+## October 24, 2026 white-backed installer correction
+
+**Later maintainer check:** the maintainer reported the provided Debug APK/icon are okay and authorized categorized source commits. The prepared branding-r2 APK has SHA-256 `617ea1dd476cf4dba06f83ec062a96e2c603ac86101588fda0436158b4a23907`; its phone-side hash was not separately confirmed. Model stays V4.5.0. This report does not establish that all OEM surfaces remove framing, nor production-signed or current-build R03 validation.
+
+The maintainer's fresh-file One UI 8.5 screenshots showed that the plain package-leaf experiment did not remove My Files framing and made Package Installer display a bare leaf. Restored application and round/package icons to the same white-backed adaptive resource used by MainActivity; removed the now-unused plain vector. Existing launcher layers and the separate startup leaf remain unchanged. This is another unpublished 0.1.6/code 7 attempt, identified by `branding-r2` filename and byte-hashed receipt, not a version-label-only approval. My Files may add OEM styling; neither its exact render path nor a per-app bypass was verified on the phone. Physical appearance and release approval remain separate from raw resource checks. Earlier attempts below retain their original evidence.
+
+## October 24, 2026 capture and package-thumbnail candidate
+
+Prepared native 0.1.6/code 7 with shared app 0.10.1, default bounds 7-7 and unchanged bridge/schema/model 1/1/V4.5.0. The application and round package icons now use a transparent vector leaf; MainActivity explicitly retains the existing adaptive launcher, and the system-splash artwork is unchanged. A new installer is required; OTA cannot replace these resources or update code-6 hosts with code-7-only bundles. The camera worker and eager first-result details are web-bundle fixes. Publication and physical My Files/capture timing checks remain pending; OEM wrapping is outside application control. Published 0.1.5/code 6 assets remain immutable.
+
 ## October 24, 2026 navigation and branding candidate
 
 Prepared shared app 0.10.0/native 0.1.5/code 6, default bounds 6-6, bridge/schema 1/1 and adopted model V4.5.0. Transparent native artwork and the APK-delivery follow-up are separate from the first-About fix: private About panels now load with the APK application instead of triggering its global loading fallback on first navigation. Local verification passed 21 JVM tests, Debug lint/assembly/asset checks and two controlled compiled-Android cases. Physical phone appearance/lifecycle and release approval remain pending; no new production signing or publication occurred. Earlier 0.1.4/code 5 and v0.9.0 records below retain their original identities.
