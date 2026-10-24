@@ -220,7 +220,15 @@ export async function releaseGuidelineReads(page: Page) {
   });
 }
 
+// Only the private test build exports this compatibility route. The website
+// and development server never expose scanner, History, or diagnostic controls.
+export const scannerHarnessPath = "/__scan-harness";
 export async function openApp(page: Page) {
+  await page.goto(scannerHarnessPath);
+  await expect(homeHeading(page)).toBeVisible({ timeout: 90_000 });
+}
+
+export async function openWebsite(page: Page) {
   await page.goto("/");
   await expect(homeHeading(page)).toBeVisible({ timeout: 90_000 });
 }

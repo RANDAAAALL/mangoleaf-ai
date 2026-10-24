@@ -4,9 +4,9 @@
 MangoLeaf AI
 </h1>
 
-MangoLeaf AI helps identify possible conditions affecting mango leaves and fruit from photos. Built for Android phones, it runs diagnosis on the device and keeps scan History available offline. Treatment guidance is available in English and Cebuano/Bisaya. The companion website remains accessible on desktop.
+MangoLeaf AI helps identify possible conditions affecting mango leaves and fruit from photos. Built for Android phones, it runs diagnosis on the device and keeps scan History available offline. Treatment guidance is available in English and Cebuano/Bisaya. The companion website explains the app and provides Android installation on phones and desktop.
 
-## Walkthrough
+## Walkthrough (depricated)
 
 https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 
@@ -17,7 +17,7 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 - Review the predicted condition, confidence percentage with up to one decimal, and treatment guidance. Uncertain results also show confidence.
 - Switch the interface and treatment guidance between English and Cebuano/Bisaya.
 - Keep reports and photos in local History for offline access. The APK requests portrait orientation on phones.
-- Browse one recent scan on phone-sized screens. At 768px and wider, the website's Home shows an Android download prompt; the APK keeps its History preview.
+- Browse recent scans and manage History in the APK. The website offers Home, About and Android installation on every screen size, including local development. Phone websites use a centered header and bottom navigation with Home, About, open/install and language controls; scanning and Diagnostics are APK features.
 - Search History, view condition-filter counts, select matching reports across pages, and confirm single or bulk deletion.
 - Read compact photo tips in the scan sheet while Cancel stays visible as the content scrolls.
 - Check exact-file duplicates before diagnosis; retake, cancel, or open a saved result. Reuse requires the saved report's model version to match the active model.
@@ -30,13 +30,11 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 - Queue deletion of a report's copies in its connected cloud backup, including offline retries. This does not delete copies already restored on another phone; see [backup and deletion behavior](docs/security/SECURITY-AND-SYNC.md).
 - Open an installed Android app from the website, or follow the APK installation guide. Supported browsers show **Open app** when they can confirm the installation.
 - Offer **Restart now** / **Later** when a compatible, signed web update is ready in the production APK. Debug does not install production OTA updates.
-- Enable optional diagnostics in About, reproduce an issue, and copy or download recent local events without phone DevTools. Both APK variants include diagnostics; the development-browser panel appears below 768px.
+- Enable optional diagnostics in the APK About tab, reproduce an issue, and copy or download recent local events without phone DevTools. Recording is off by default.
 
 ## Download and status
 
-**Release candidate; production APK publication is pending.** The prepared candidate uses shared app **v0.9.0**, Android **v0.1.4**, and adopted model **v4.5.0**. These version labels do not indicate a published release.
-
-The [official download page](https://mangoleafai.vercel.app/download) offers the installer when a stable GitHub Release includes the expected APK file. See the [Android release guide](docs/versions/ANDROID_APK_VERSIONING.md) and [candidate release record](docs/versions/history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026) for availability, validation, and approval status.
+The [official download page](https://mangoleafai.vercel.app/download) provides the published v0.9.0 release, with Android APK v0.1.4 and model v4.5.0. This source's v0.10.0 browser landing changes are still a candidate. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md) and [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
 
 ## Technology
 
@@ -44,7 +42,7 @@ The [official download page](https://mangoleafai.vercel.app/download) offers the
 - Bun **1.4.4**, TypeScript, and Tailwind CSS **4**
 - TensorFlow.js for on-device inference
 - Java Android host and WebView, SQLite reports, and photos in private app files
-- Dexie / IndexedDB for browser History and development compatibility
+- Dexie / IndexedDB retained for legacy browser data compatibility and isolated regression tests; the website does not open History
 - Supabase Auth, Database and Storage for private cloud backup; public treatment guidelines through Database and Realtime
 - Serwist service worker for the website; separately bundled offline assets and signed OTA updates for Android
 
@@ -77,7 +75,7 @@ Start the development server:
 bun run dev
 ```
 
-Open `http://localhost:3000` on the same computer. Guarded development-browser testing automatically uploads eligible saved test reports/photos to testing; APKs use SQLite and their variant's pinned backend. Browser testing has no recovery-code controls. See the [Android routing record](docs/versions/history/ANDROID_APK_HISTORY.md#development-and-production-routing-october-21-2026) for the separation between testing and production.
+Open `http://localhost:3000` on the same computer. Development and production browsers provide the same landing/download experience without scanning, History controls, Diagnostics or private backup uploads. Use the Debug APK for scan testing against the separate testing project. Existing browser reports remain stored without migration or deletion. See [Android setup](docs/versions/ANDROID_APK_VERSIONING.md).
 
 Dependency installation registers Husky hooks. Before a commit, `lint-staged` formats staged files using the project's Prettier configuration. Pushes run local secret/history, TypeScript, lint and formatting checks. GitHub CI also builds and tests the application on `master` pushes; automation uses a local mock backend. See [local checks and CI](SETUP.md#local-security-checks-and-github-ci).
 

@@ -1,12 +1,10 @@
 # MangoLeaf AI Android APK Versioning Guide
 
-**October 23 security refresh:** the shared web build now uses patched Next.js 16.4.1. Native host 0.1.4/code 5, bridge/schema 1/1, bounds 5-5 and adopted model V4.5.0 remain unchanged. For the upcoming first stable v0.9.0 release, rebuild the installer and OTA files from the new approved commit after validation; the earlier `4ff19bc` APK/OTA receipts remain historical. Promote that new commit's tested Vercel deployment. README/license-only edits would not require a new installer, but this framework change alters the build inputs. See the [security review](../security/DEPENDENCY_SECURITY.md#october-23-2026-public-release-security-review).
-
-**Shared web release candidate, October 23:** shared web advances to `0.9.0`; native stays `0.1.4`/code `5`, Debug `0.1.4-dev`, bridge/schema `1`/`1`, bounds `5-5`, adopted model `v4.5.0`. The published pre-release `v0.9.0-rc.1` remains a candidate; it is separate from the final stable release. Rebuild signed APK/OTA assets for these finalized web inputs; preceding web-0.8.0 receipts remain dated evidence. See the [shared release record](history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026).
+**Current status, October 24:** stable [v0.9.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.9.0) is published from `8ae294d1b059a8d5e633747e49da98428afe4ca7`, with APK v0.1.4, model v4.5.0 and signed OTA sequence 3; the matching Vercel deployment was promoted. Its current-build V4.5 R03 passed, and the maintainer reported APK testing. The source now prepares **v0.10.0**, an unpublished browser landing-only candidate. Native host/code/bounds and model remain unchanged. Preserve the v0.9.0 tag/assets; new publication needs its own tested commit and higher OTA sequence. Earlier candidate notes below describe prior preparation, not the new candidate's validation.
 
 Use this guide for current APK versions, builds, signing and updates. The [Android APK history](history/ANDROID_APK_HISTORY.md#candidate-timeline) preserves dated implementation records and earlier behavior. Exact artifact hashes and test outcomes remain in [Android testing](../testing/ANDROID_TESTING.md).
 
-## Current candidate
+## Current native identity
 
 | Identity                      | Current value | Source                                       |
 | ----------------------------- | ------------- | -------------------------------------------- |
@@ -15,10 +13,10 @@ Use this guide for current APK versions, builds, signing and updates. The [Andro
 | Android update number         | `5`           | `versionCode` in `android/app/build.gradle`  |
 | Default compatible host range | `5-5`         | `tools/android-bundle.mjs`                   |
 | Native bridge / SQLite schema | `1` / `1`     | Android host and bundle compatibility checks |
-| Shared website / web bundle   | `0.9.0`       | Root `package.json`                          |
+| Shared website / web bundle   | `0.10.0`      | Root `package.json`                          |
 | Adopted bundled model         | `v4.5.0`      | Committed model assets and constants         |
 
-This is an unpublished working-tree candidate, not a public Android release. The [October 23 version-display evidence and pending device checks](../testing/ANDROID_TESTING.md#october-23-2026-version-display) identify this iteration. Native renderer rollback and restart/cancellation fixes require installing the rebuilt APK with its existing signer; OTA cannot update Java in an older host. Older receipts remain historical evidence.
+The published v0.9.0 installer uses this native identity. The source prepares web v0.10.0; no new signed installer or OTA has been produced for it. Its browser entry changes do not require a new native API or SQLite migration. Repeat affected checks on exact new artifacts before distribution.
 
 APK, web bundle, OTA sequence and model versions are separate identities. **APK footers now show installed APK/model versions**; the web-bundle version remains separately visible in About. Browser footers keep shared app/model labels. Native names come from the trusted host, not a hardcoded React version. The shared web candidate is 0.9.0; public distribution still needs the reviewed shared-version and release gates below. See [version-display evidence](../testing/ANDROID_TESTING.md#october-23-2026-version-display).
 
@@ -67,12 +65,12 @@ Permanent keys live outside Git under `%USERPROFILE%\.mangoleaf-ai\signing`: APK
 
 ## Runtime and data preservation
 
-| Runtime                          | Local reports/photos         | Cloud target                 | Upload/recovery                                      |
-| -------------------------------- | ---------------------------- | ---------------------------- | ---------------------------------------------------- |
-| Development phone browser/tunnel | Dexie / IndexedDB Blobs      | Pinned testing project       | Automatic test sync; no recovery controls            |
-| Debug APK                        | SQLite / private photo files | Pinned testing project       | Automatic uploads; deliberate code/restore controls  |
-| Production APK                   | SQLite / private photo files | Pinned production project    | Automatic backup; deliberate code/restore controls   |
-| Published website                | Preserved browser History    | Public production guidelines | No development test sync or native recovery controls |
+| Runtime                                    | Local reports/photos                               | Cloud target                 | Upload/recovery                             |
+| ------------------------------------------ | -------------------------------------------------- | ---------------------------- | ------------------------------------------- |
+| Development browser/tunnel, every viewport | Legacy IndexedDB data retained, no scan/History UI | Testing public settings only | No private uploads, diagnostics or recovery |
+| Debug APK                                  | SQLite / private photo files                       | Pinned testing project       | Automatic uploads; explicit code/restore    |
+| Production APK                             | SQLite / private photo files                       | Pinned production project    | Automatic backup; explicit code/restore     |
+| Published website, every viewport          | Legacy IndexedDB data retained, no scan/History UI | No private backend work      | Landing/download only                       |
 
 ### Separate testing project
 

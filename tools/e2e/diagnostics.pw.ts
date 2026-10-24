@@ -24,6 +24,8 @@ const log = (page: Page) =>
 
 async function viewLogs(page: Page) {
   await nav(page, t.navAbout);
+  // The panel loads lazily; wait before inspecting its expanded/collapsed state.
+  await expect(panel(page)).toBeVisible();
   const show = panel(page).getByRole("button", {
     name: t.diagnosticsView,
     exact: true,

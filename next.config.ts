@@ -43,6 +43,8 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = {
   output: "export",
+  // Keep the floating development badge from covering the phone Home control.
+  devIndicators: false,
   allowedDevOrigins: ["*.trycloudflare.com"],
   experimental: {
     // Public development tunnels do not need the DevTools MCP endpoint.

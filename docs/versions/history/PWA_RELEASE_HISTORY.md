@@ -8,6 +8,21 @@ References to a "current" model, pending check, or deployment describe the recor
 
 The PWA version identifies the application people install: screens, camera and upload flows, local History, offline behavior, and release packaging. The [model guide](../AI_MODEL_VERSIONING.md) separately tracks model weights, classes, training, rejection settings, and scientific evidence.
 
+## October 24, 2026
+
+### v0.10.0 browser landing-only candidate
+
+**Phone navigation/About follow-up, October 24:** phone websites now use Home, About, open/install and language controls in a fixed bottom bar with a centered header brand. Desktop navigation is unchanged. The APK loads its private About panels with its application entry, removing their first-visit global splash trigger. Versions remain 0.10.0/0.1.4/code 5/model V4.5.0; this is unpublished candidate work.
+
+- Production and development browsers on phones and desktop provide Home, About, language/legal controls and Android installation. Browser scanning, History controls and Diagnostics are retired; legacy IndexedDB records are preserved and no private browser backup worker starts.
+- The APK keeps scanning, History, diagnostics, SQLite/private files, automatic variant-scoped backup and explicit recovery. Native v0.1.4/code 5, bridge/schema 1/1, host bounds 5-5 and adopted model V4.5.0 remain unchanged. Local V5 overrides are excluded.
+- Split the website entry from the shared scanner orchestrator; retain desktop QR/download and related-app hints. The isolated test build alone adds a compatibility scanner harness, preserving regression coverage without shipping a browser scanner bypass.
+- Status: local preparation only. Ordered source/build/export checks, 179 tooling tests and 84 final affected browser checks passed. Combined coverage with the initial full run verifies 290 unique browser cases with seven platform skips; development viewport and controlled native checks also passed. See [evidence, repaired test assumptions and limits](../../testing/TESTING.md#october-24-2026). No new tag, signed installer/OTA publication or website promotion was performed; final-commit CI and release approval remain separate.
+
+### v0.9.0 stable publication
+
+The maintainer published v0.9.0 at `8ae294d1b059a8d5e633747e49da98428afe4ca7` and promoted its Vercel deployment. Unauthenticated checks confirmed the latest stable GitHub release, all four signed asset hashes, the public APK download link, and website app v0.9.0/model v4.5.0. The exact-release V4.5 R03 passed in 30.5 minutes. APK identity is 0.1.4/code 5; OTA sequence is 3. These results certify those recorded inputs, not subsequent source changes.
+
 ## Current repository snapshot
 
 ### v0.9.0 public-readme and security follow-up (October 23, 2026)

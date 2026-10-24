@@ -3,6 +3,7 @@ import {
   expect,
   photos,
   openApp,
+  scannerHarnessPath,
   runScan,
   closeDetails,
   records,
@@ -39,17 +40,17 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
   // Static-export HTML enters the runtime cache on a controlled online visit.
   await page.reload();
   await expect(homeHeading(page)).toBeVisible();
-  const required = await page.evaluate(async () => {
+  const required = await page.evaluate(async (navigationPath) => {
     const model = await (await fetch("/model/model.json")).json();
     return [
-      "/",
+      navigationPath,
       "/model/model.json",
       "/model/model_config.json",
       ...model.weightsManifest.flatMap((group: { paths: string[] }) =>
         group.paths.map((path) => "/model/" + path),
       ),
     ];
-  });
+  }, scannerHarnessPath);
   const cacheInventory = await page.evaluate(async () =>
     Object.fromEntries(
       await Promise.all(

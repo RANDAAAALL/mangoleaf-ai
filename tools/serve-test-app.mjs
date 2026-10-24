@@ -398,7 +398,18 @@ Bun.serve({
         response.headers.set("Content-Type", "text/x-component");
       if (response.status !== 404) return response;
     }
-    return localFile(exportRoot, name);
+    const response = await localFile(exportRoot, name);
+    if (
+      response.status === 404 &&
+      path.startsWith("/_next/static/chunks/app/__scan-harness/") &&
+      url.pathname !== path
+    ) {
+      // Next exports this test route's encoded folder literally, while Serwist
+      // precaches its singly encoded URL. Retry raw bytes with the same root
+      // validation; never decode again or widen the fallback beyond this route.
+      return localFile(exportRoot, url.pathname.slice(1));
+    }
+    return response;
   },
   websocket: {
     open(socket) {

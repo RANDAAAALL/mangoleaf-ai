@@ -1,5 +1,9 @@
 # MangoLeaf AI physical reliability checklist
 
+**Current runtime scope (v0.10.0 candidate):** use the Android APK for scan, History, Diagnostics, recovery and backup checks. Production and development websites at all viewport sizes provide Home/About/Android installation only; check desktop QR arrival and phone download guidance there. Existing browser data must remain untouched. The automated compatibility scanner harness is not a supported phone-browser scanning product.
+
+Check the first About visit after a cold APK launch for a repeated full-screen splash. Phone websites must center the brand above Home/About/open-install/language bottom controls, without Scan or History; verify English/Bisaya and desktop QR navigation separately.
+
 Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current candidate is shared app `0.9.0`, native APK `0.1.4`, model `v4.5.0`, confidence-only threshold 0.70. Fill results only after observing the exact recorded release build; do not transfer a previous build's observations to this candidate.
 
 For published browser compatibility builds, reports/photos stay in IndexedDB and Supabase supplies public treatment guidance only. The unpublished Android candidate uses SQLite/private photos and automatic private cloud backup with separately saved recovery credentials. Record the target, APK/bundle hashes, native host/bridge/schema versions, and backup pause state and recovery-code availability when testing Android; do not apply the browser-only network expectation to an enabled native backup. Use the exact tested build identity below; dated changes are in [Protocol history](#protocol-history). See [Android verification](../versions/ANDROID_APK_VERSIONING.md#verification-and-remaining-evidence) for additional native cases.

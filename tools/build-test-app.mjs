@@ -28,6 +28,8 @@ files.push(
   "next.config.ts",
   "tsconfig.json",
   "postcss.config.mjs",
+  // The generated scanner route is part of this isolated test artifact only.
+  "tools/build-test-app.mjs",
 );
 const inputs = Object.fromEntries(
   files
@@ -51,6 +53,12 @@ if (!existsSync(marker) || !existsSync(join(directory, "out/index.html"))) {
     mkdirSync(resolve(destination, ".."), { recursive: true });
     cpSync(file, destination);
   }
+  const scannerRoute = join(directory, "src/app/%5F%5Fscan-harness/page.tsx");
+  mkdirSync(resolve(scannerRoute, ".."), { recursive: true });
+  writeFileSync(
+    scannerRoute,
+    'export { Application as default } from "@/components/layout/application";\n',
+  );
   const result = spawnSync(
     process.execPath,
     ["--bun", resolve("node_modules/next/dist/bin/next"), "build", "--webpack"],
@@ -61,6 +69,7 @@ if (!existsSync(marker) || !existsSync(join(directory, "out/index.html"))) {
         ...process.env,
         HUSKY: "0",
         NEXT_TELEMETRY_DISABLED: "1",
+        NEXT_PUBLIC_APP_TARGET: "browser",
         // Test uploads can only reach the local mock server, even with .env.local present.
         NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:4173/__mock__",
         NEXT_PUBLIC_SUPABASE_ANON_KEY: "test-only-public-placeholder",

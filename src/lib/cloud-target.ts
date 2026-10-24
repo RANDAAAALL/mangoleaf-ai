@@ -17,15 +17,9 @@ export function validateCloudTarget(
   return environment;
 }
 
-/** Browser uploads exist only in development and always use the separate testing project. */
+/** Websites never enroll or upload, including local development. Kept for bounded legacy callers. */
 export function isBrowserTestSync() {
-  return (
-    process.env.NODE_ENV === "development" &&
-    process.env.NEXT_PUBLIC_APP_TARGET !== "android" &&
-    process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT === "testing" &&
-    process.env.NEXT_PUBLIC_SUPABASE_URL ===
-      `https://${cloudProjects.testing}.supabase.co`
-  );
+  return false;
 }
 
 /** Automatic backup is restricted to the exact testing project and a supported testing runtime. */
@@ -34,7 +28,7 @@ export function isAutomaticTestBackup() {
     process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT === "testing" &&
     process.env.NEXT_PUBLIC_SUPABASE_URL ===
       `https://${cloudProjects.testing}.supabase.co` &&
-    (process.env.NEXT_PUBLIC_APP_TARGET === "android" || isBrowserTestSync())
+    process.env.NEXT_PUBLIC_APP_TARGET === "android"
   );
 }
 

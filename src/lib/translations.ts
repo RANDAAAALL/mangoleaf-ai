@@ -2,6 +2,7 @@ export type Language = "en" | "bis";
 
 export const translations = {
   en: {
+    websiteNavigationLabel: "Website navigation",
     backupTestingDescription:
       "Test reports and photos back up automatically while this app is open and online. Create and save a recovery code to restore them on another device. Offline reports wait on this device until they can upload.",
     backupAutomatic: "Cloud backup starts automatically",
@@ -373,7 +374,7 @@ export const translations = {
       "AI inference happens directly on the device, allowing images to be analyzed locally.",
     aboutSyncTitle: "Updated treatment guidance",
     aboutSyncDesc:
-      "Treatment guidelines refresh when connected. Your scan history and photos stay in this browser.",
+      "Treatment guidelines refresh when connected. The Android app keeps scan History and photos in private app storage.",
     aboutAiEngineHeading: "The AI Engine",
     aboutModelVersionLabel: "Current model for mango leaves and fruit",
     aboutModelArchitectureValue: "MobileNetV3",
@@ -470,31 +471,31 @@ export const translations = {
     privacyPolicy: "Privacy Policy",
     termsOfService: "Terms of Service",
     legalCloseBtn: "Understood & Close",
-    privacyUpdated: "Last updated: October 17, 2026",
+    privacyUpdated: "Last updated: October 24, 2026",
     privacySections: [
       {
-        title: "1. No account required",
-        text: "You can use MangoLeaf AI without registration or sign-in. The app does not request your name, email address, or phone number.",
+        title: "1. Website use",
+        text: "The website explains MangoLeaf AI and provides Android installation. It does not scan photos, show History, record diagnostics or upload private reports, including during development. No registration or sign-in is needed.",
       },
       {
-        title: "2. Photos and scan history stay on this device",
-        text: "The AI analyzes photos in your browser. Saved results and compressed photos are stored in this browser’s IndexedDB database, online or offline. New scans are not uploaded to Supabase.",
+        title: "2. Android reports and earlier browser data",
+        text: "The Android APK analyzes photos on the device and stores its reports and photos in private app storage. Earlier browser reports and photos remain in that browser profile without a History interface; this website does not read, transfer or delete them.",
       },
       {
-        title: "3. Treatment guideline updates",
-        text: "When connected, the app downloads public treatment guidelines from Supabase and saves them on this device for offline reading. These requests do not include your scan photos or results.",
+        title: "3. Website storage and download checks",
+        text: "The website remembers your language choice locally when browser storage is available. The download page checks public GitHub release metadata to offer the official APK. These checks contain no scan photos or diagnosis results.",
       },
       {
-        title: "4. Local storage and data loss",
-        text: "Scan history belongs to this browser profile. Clearing site data, removing the browser profile, or browser storage removal can erase it. There is no account or automatic cloud recovery. A storage-full warning lets you manage History and retry an unsaved result.",
+        title: "4. Legacy browser storage and data loss",
+        text: "Clearing site data, removing a browser profile or browser storage eviction can erase earlier browser reports, photos and saved settings. They are not transferred automatically into the APK, and this website offers no browser recovery controls.",
       },
       {
-        title: "5. Deletion and earlier cloud copies",
-        text: "You can delete saved reports and photos from History. Deletion is permanent in this browser. Earlier app versions may have uploaded cloud copies; this version does not download or delete those earlier copies.",
+        title: "5. Earlier cloud copies",
+        text: "This website does not start private backup, restore or deletion workers. Earlier cloud copies and stored browser deletion jobs are left unchanged. The Android app has its own authenticated backup, recovery and deletion behavior.",
       },
       {
-        title: "6. Optional diagnostic logs",
-        text: "Recording is off by default. If you enable it in About, the app keeps recent technical events in memory and attempts to save them in this browser's localStorage. Logs include action timing, error types, app/model versions, and browser/runtime information, but exclude scan photos, diagnosis results, report identifiers, and account credentials. You can view, copy, download, or clear logs. Clearing logs preserves scan history; turning recording off retains earlier logs. Logs are not automatically uploaded. Saving can fail or lose recent events during a crash, and downloaded or copied logs remain wherever you save or share them.",
+        title: "6. Diagnostics",
+        text: "The website has no Diagnostics panel and does not start diagnostic recording. Earlier browser logs are left unchanged. APK diagnostics remain optional and local unless you choose to share them.",
       },
     ],
     termsUpdated: "Last updated: October 17, 2026",
@@ -514,6 +515,7 @@ export const translations = {
       "Use only photographs you own or have permission to use, and respect content licenses and source attribution. AI results are advisory and are not professional certification.",
   },
   bis: {
+    websiteNavigationLabel: "Navigasyon sa website",
     backupTestingDescription:
       "Awtomatikong i-back up ang test report ug litrato samtang abli ug online ang app. Paghimo ug tipigi ang recovery code aron mabawi kini sa laing device. Ang offline nga mga report maghulat niini nga device hangtod ma-upload.",
     backupAutomatic: "Awtomatikong magsugod ang cloud backup",
@@ -892,7 +894,7 @@ export const translations = {
       "Ang AI inference mahitabo mismo sa device aron lokal masusi ang mga hulagway.",
     aboutSyncTitle: "Bag-ong giya sa pagtambal",
     aboutSyncDesc:
-      "Ma-update ang giya sa pagtambal kung konektado. Ang imong mga scan ug litrato magpabilin niini nga browser.",
+      "Mo-refresh ang giya sa pagtambal kon konektado. Tipigan sa Android app ang Dating Scan ug mga litrato sa pribadong app storage.",
     aboutAiEngineHeading: "Ang AI Engine",
     aboutModelVersionLabel:
       "Kasamtangang modelo para sa dahon ug bunga sa mangga",
@@ -992,31 +994,31 @@ export const translations = {
     privacyPolicy: "Polisiya sa Pribasya",
     termsOfService: "Kondisyon sa Serbisyo",
     legalCloseBtn: "Nasabtan ug Isara",
-    privacyUpdated: "Kataposang gi-update: Oktubre 17, 2026",
+    privacyUpdated: "Kataposang gi-update: Oktubre 24, 2026",
     privacySections: [
       {
-        title: "1. Walay account nga gikinahanglan",
-        text: "Magamit ang MangoLeaf AI bisan walay pagrehistro o pag-sign in. Dili mangayo ang app sa imong ngalan, email address, o numero sa telepono.",
+        title: "1. Paggamit sa website",
+        text: "Ang website nagpasabot sa MangoLeaf AI ug naghatag og paagi sa pag-install sa Android app. Wala kini nag-scan og litrato, nagpakita og Dating Scan, nagrekord og diagnostics o nag-upload og pribadong report, bisan sa development. Dili kinahanglan magparehistro o mo-sign in.",
       },
       {
-        title: "2. Ang litrato ug mga scan magpabilin sa device",
-        text: "Susihon sa AI ang litrato sa imong browser. Ang natipig nga resulta ug gipagamay nga litrato anaa sa IndexedDB niini nga browser, online man o offline. Dili i-upload sa Supabase ang bag-ong mga scan.",
+        title: "2. Android reports ug karaang browser data",
+        text: "Ang Android APK mag-analisar sa litrato sa device ug magtipig sa report ug litrato sa pribadong app storage. Ang karaang browser reports ug litrato magpabilin sa maong browser profile nga walay History interface; dili kini basahon, ibalhin o papason sa website.",
       },
       {
-        title: "3. Mga update sa giya sa pagtambal",
-        text: "Kung konektado, i-download sa app ang publikong giya sa pagtambal gikan sa Supabase ug tipigan sa device aron mabasa offline. Dili iapil sa maong mga request ang imong litrato o resulta sa scan.",
+        title: "3. Website storage ug download checks",
+        text: "Kon gitugotan ang browser storage, hinumdoman sa website ang imong piniling pinulongan. Ang download page mosusi sa publikong GitHub release aron itanyag ang opisyal nga APK. Walay litrato sa scan o resulta sa diagnosis nga ilakip niini.",
       },
       {
-        title: "4. Lokal nga storage ug pagkawala sa datos",
-        text: "Ang mga scan iya niini nga browser profile. Mahimong mawala kini kung papason ang site data, tangtangon ang browser profile, o tangtangon sa browser ang storage. Walay account o awtomatikong pagbawi gikan sa cloud. Kung puno ang storage, adunay pahimangno aron madumala ang Dating Scan ug masulayan pagtipig ang resulta.",
+        title: "4. Karaang browser storage ug pagkawala sa data",
+        text: "Ang pag-clear sa site data, pagtangtang sa browser profile o paglimpyo sa storage sa browser mahimong makapapas sa karaang report, litrato ug settings. Dili kini awtomatikong ibalhin ngadto sa APK ug walay browser recovery controls niini nga website.",
       },
       {
-        title: "5. Pag-delete ug karaang kopya sa cloud",
-        text: "Mahimo nimong i-delete ang natipig nga report ug litrato sa Dating Scan. Permanente kini niini nga browser. Posibleng naka-upload og kopya sa cloud ang karaang bersyon sa app; dili na i-download o i-delete niini nga bersyon ang maong karaang mga kopya.",
+        title: "5. Karaang cloud copies",
+        text: "Dili magpadagan ang website og pribadong backup, restore o deletion worker. Dili usbon ang karaang cloud copies ug natipig nga browser deletion jobs. Ang Android app adunay kaugalingong authenticated backup, recovery ug deletion.",
       },
       {
-        title: "6. Opsyonal nga diagnostic logs",
-        text: "Naka-off daan ang recording. Kon imong i-on sa Bahin, tipigan sa app ang bag-ong teknikal nga panghitabo sa memory ug sulayan kining i-save sa localStorage niini nga browser. Lakip sa logs ang oras ug gidugayon sa aksiyon, matang sa error, bersyon sa app/model, ug impormasyon sa browser/runtime, apan walay litrato sa scan, resulta sa diagnosis, identifier sa report, o credential sa account. Mahimo nimong tan-awon, kopyahon, i-download, o papason ang logs. Dili mapapas ang Dating Scan kon papason ang logs; magpabilin ang daang logs kon i-off ang recording. Dili awtomatikong i-upload ang logs. Mahimong mapakyas ang pag-save o mawala ang pinakabag-ong panghitabo kon mo-crash ang app; ang na-download o nakopyang logs magpabilin diin nimo kini gitipigan o gipakigbahin.",
+        title: "6. Diagnostics",
+        text: "Walay Diagnostics panel ang website ug dili kini magsugod og diagnostic recording. Dili usbon ang karaang browser logs. Opsyonal ug lokal ang APK diagnostics gawas kon imo kining ipakigbahin.",
       },
     ],
     termsUpdated: "Kataposang gi-update: Oktubre 17, 2026",

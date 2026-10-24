@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { test, expect, nav, openApp, records } from "./support/fixtures";
+import { test, expect, nav, openWebsite } from "./support/fixtures";
 import { translations, type Language } from "../../src/lib/translations";
 import {
   androidApkAsset,
@@ -139,7 +139,7 @@ test("I01: desktop Android-only QR guide supports both languages, focus and dism
 }) => {
   await page.setViewportSize({ width: 1280, height: 640 });
   await installBrowser(page, { otherDevice: true });
-  await openApp(page);
+  await openWebsite(page);
   for (const language of ["en", "bis"] as const) {
     if (language === "bis")
       await page
@@ -198,15 +198,15 @@ test("I01: desktop Android-only QR guide supports both languages, focus and dism
     await expect(launcher).toBeFocused();
     await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
   }
-  expect(await records(page)).toHaveLength(0);
+  expect(await page.evaluate(() => indexedDB.databases())).toEqual([]);
 });
 
-test("I02: 767 and 768 pixels preserve Android guidance and phone scan controls", async ({
+test("I02: 767 and 768 pixels preserve Android guidance without website scan controls", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 767, height: 800 });
   await installBrowser(page);
-  await openApp(page);
+  await openWebsite(page);
   await openDownload(page);
   await expect(guide(page)).toBeVisible();
   await page.setViewportSize({ width: 768, height: 800 });
@@ -216,11 +216,15 @@ test("I02: 767 and 768 pixels preserve Android guidance and phone scan controls"
     page.getByRole("button", { name: translations.en.navScan, exact: true }),
   ).toHaveCount(0);
   await page.setViewportSize({ width: 767, height: 800 });
-  await nav(page, translations.en.navScan);
-  await expect(page.getByRole("button", { name: /^Take Photo/ })).toBeVisible();
   await expect(
-    page.getByRole("button", { name: /^Upload Photo/ }),
-  ).toBeVisible();
+    page.getByRole("button", { name: translations.en.navScan, exact: true }),
+  ).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /^Take Photo/ })).toHaveCount(
+    0,
+  );
+  await expect(page.getByRole("button", { name: /^Upload Photo/ })).toHaveCount(
+    0,
+  );
 });
 
 test("I03: QR arrival preserves URL state and suppresses browser installation prompts", async ({
@@ -358,7 +362,7 @@ test("I08: Android visitors can open the installed app with a safe download fall
   page,
 }) => {
   await installBrowser(page);
-  await openApp(page);
+  await openWebsite(page);
   for (const language of ["en", "bis"] as const) {
     const t = translations[language];
     if (language === "bis")
@@ -535,7 +539,7 @@ for (const relatedApps of [
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await installBrowser(page, { relatedApps });
-    await openApp(page);
+    await openWebsite(page);
     const launch = page
       .getByRole("link", {
         name: translations.en.androidOpenOrInstall,
@@ -571,7 +575,7 @@ test("I13: confirmed production installation opens directly and makes another AP
 }) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await installBrowser(page, { relatedApps: "confirmed" });
-  await openApp(page);
+  await openWebsite(page);
   const launch = page
     .getByRole("link", { name: translations.en.androidOpenApp, exact: true })
     .filter({ visible: true })
@@ -647,7 +651,7 @@ test("I14: unsupported desktop ignores a native-looking result and retains its Q
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await installBrowser(page, { otherDevice: true, relatedApps: "confirmed" });
-  await openApp(page);
+  await openWebsite(page);
   await openDownload(page);
   await expect(guide(page, "en", true)).toBeVisible();
   expect(await page.evaluate(() => window.mangoRelatedApps.calls)).toBe(0);

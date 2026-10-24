@@ -43,8 +43,19 @@ function run(source, environment = {}) {
   expect(result.exitCode, result.stderr.toString()).toBe(0);
 }
 
-test("development worker automatically uploads local Blobs after reconnect, retries and yields during diagnosis", () => {
-  run(`
+// Preserve the bounded legacy worker's retry/deletion proof through a test-only
+// capability mock. Production/browser development never enables this path.
+const compatibilityWorker = `
+  if(process.env.NEXT_PUBLIC_APP_TARGET==='browser') {
+    const target={...await import('./src/lib/cloud-target.ts')};
+    mock.module('./src/lib/cloud-target.ts',()=>({...target,isBrowserTestSync:()=>true,isAutomaticTestBackup:()=>true,isAutomaticBackup:()=>true}));
+  }
+`;
+
+test("isolated compatibility worker uploads Blobs after reconnect, retries and yields during diagnosis", () => {
+  run(
+    compatibilityWorker +
+      `
     globalThis.fetch=()=>{throw new Error('unexpected network')};
     const events=new EventTarget(); globalThis.window=events;
     globalThis.document=Object.assign(new EventTarget(),{visibilityState:'visible'});
@@ -83,10 +94,11 @@ test("development worker automatically uploads local Blobs after reconnect, retr
     cloud.setCloudBackupBusy(true);changed();await fire();assert.equal(uploads,before);
     cloud.setCloudBackupBusy(false);await fire();assert.equal(creates,1);assert.equal(uploads,before);
     assert.ok([...settings.keys()].every(key=>key.endsWith(':ajwlojaclehxupntnsve')));stop();
-  `);
+  `,
+  );
 });
 
-test("native host mismatch and production browser reject before client construction or network", () => {
+test("native host mismatch and every website runtime reject before client construction or network", () => {
   const source = `
     globalThis.fetch=()=>{throw new Error('unexpected network')};let clients=0;
     mock.module('dexie',()=>({liveQuery:()=>{throw new Error('must not observe')}}));
@@ -95,18 +107,49 @@ test("native host mismatch and production browser reject before client construct
     mock.module('./src/lib/native-bridge.ts',()=>({isAndroidBuild:()=>process.env.NEXT_PUBLIC_APP_TARGET==='android',initializeNativeRuntime:async()=>({cloudEnvironment:'production'}),nativeRequest:()=>{throw new Error('must not read credentials')},connectionHint:()=>true,subscribeConnection:()=>()=>{}}));
     const cloud=await import('./src/lib/cloud-backup.ts');
     if(process.env.NEXT_PUBLIC_APP_TARGET==='android')await assert.rejects(cloud.createBackupVault(),/do not match/);
-    else {await assert.rejects(cloud.createBackupVault(),/Android/);assert.equal(await cloud.backUpScans(),0);}
+    else {await assert.rejects(cloud.createBackupVault(),/Android/);assert.equal(await cloud.backUpScans(),0);cloud.startCloudBackup()();}
     assert.equal(clients,0);
   `;
   run(source, { NEXT_PUBLIC_APP_TARGET: "android" });
+  run(source);
   run(source, { NODE_ENV: "production" });
   run(source, {
     NEXT_PUBLIC_SUPABASE_URL: "https://uuvvvoznajjqknedxpdg.supabase.co",
   });
 });
 
+test("real cloud capability matrix confines automatic uploads to the matching APK project", () => {
+  const testing = "https://ajwlojaclehxupntnsve.supabase.co";
+  const production = "https://uuvvvoznajjqknedxpdg.supabase.co";
+  for (const node of ["development", "production"])
+    for (const target of ["browser", "android"])
+      for (const environment of ["testing", "production"])
+        for (const url of [
+          testing,
+          production,
+          `${testing}/`,
+          "https://invalid.example",
+        ])
+          run(
+            `const target=await import('./src/lib/cloud-target.ts');
+             const expected=process.env.NEXT_PUBLIC_APP_TARGET==='android' &&
+               process.env.NEXT_PUBLIC_SUPABASE_URL===(process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT==='testing'?'${testing}':'${production}');
+             assert.equal(target.isBrowserTestSync(),false);
+             assert.equal(target.isAutomaticTestBackup(),expected && process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT==='testing');
+             assert.equal(target.isAutomaticBackup(),expected);`,
+            {
+              NODE_ENV: node,
+              NEXT_PUBLIC_APP_TARGET: target,
+              NEXT_PUBLIC_CLOUD_ENVIRONMENT: environment,
+              NEXT_PUBLIC_SUPABASE_URL: url,
+            },
+          );
+});
+
 // These synthetic stores isolate every cloud request. Native transaction/reopen proof lives in NativeStoreTest.
-const deletionFixture = `
+const deletionFixture =
+  compatibilityWorker +
+  `
   globalThis.fetch=()=>{throw new Error('unexpected live network')};
   const project=process.env.NEXT_PUBLIC_SUPABASE_URL.split('/')[2].split('.')[0];
   const vault='11111111-1111-4111-8111-111111111111', owner='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
@@ -158,7 +201,7 @@ const deletionFixture = `
 `;
 
 for (const [runtime, environment] of [
-  ["development browser", {}],
+  ["isolated compatibility worker", {}],
   ["debug APK", { NEXT_PUBLIC_APP_TARGET: "android" }],
   [
     "production APK",

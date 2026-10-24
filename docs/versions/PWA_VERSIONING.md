@@ -1,27 +1,27 @@
 # MangoLeaf AI PWA Versioning Guide
 
-Use this guide to prepare the shared web application and website release. Native APK and model versions are independent; full dated evidence belongs in the [release history](history/PWA_RELEASE_HISTORY.md#release-timeline).
+**Current status, October 24:** stable [v0.9.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.9.0) is published from `8ae294d1b059a8d5e633747e49da98428afe4ca7`, with APK v0.1.4, model v4.5.0 and signed OTA sequence 3; the matching Vercel deployment was promoted. Its current-build V4.5 R03 passed, and the maintainer reported APK testing. The source now prepares **v0.10.0**, an unpublished browser landing-only candidate. Native host/code/bounds and model remain unchanged. Preserve the v0.9.0 tag/assets; new publication needs its own tested commit and higher OTA sequence. Earlier candidate notes below describe prior preparation, not the new candidate's validation.
 
-**October 23 security refresh:** Next.js and its lint configuration now use 16.4.1. This changes the release inputs while the intended app version stays 0.9.0 and model stays V4.5.0. The earlier `4ff19bc` CI/R03 results and RC assets identify the preceding build. Use the committed patched candidate without local V5 overrides, pass CI on the chosen release revision, rebuild/check signed APK/OTA files, and point final `v0.9.0` and Vercel promotion at that approved revision. Keep the existing RC tag intact. See the [security review](../security/DEPENDENCY_SECURITY.md#october-23-2026-public-release-security-review).
+Use this guide to prepare the shared web application and website release. Native APK and model versions are independent; full dated evidence belongs in the [release history](history/PWA_RELEASE_HISTORY.md#release-timeline).
 
 ## Current repository snapshot
 
-| Item                    | Prepared state                                                                                        |
-| ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| Shared app / web bundle | `0.9.0`, from `package.json`                                                                          |
-| Adopted model           | `v4.5.0`; local V5 experiments excluded                                                               |
-| Android host            | `0.1.4` / code `5`; Debug `0.1.4-dev`                                                                 |
-| Compatibility           | Bridge/schema `1`/`1`, host bounds `5-5`                                                              |
-| Earlier RC tag          | Published pre-release `v0.9.0-rc.1`, commit `4ff19bc`; final stable tag remains separate              |
-| Publication             | Patched candidate needs its own validation, new-commit CI, signed artifacts, key backup and promotion |
+| Item                    | Source state                                                                             |
+| ----------------------- | ---------------------------------------------------------------------------------------- |
+| Shared app / web bundle | `0.10.0`, from `package.json`                                                            |
+| Adopted model           | `v4.5.0`; local V5 experiments excluded                                                  |
+| Android host            | `0.1.4` / code `5`; Debug `0.1.4-dev`                                                    |
+| Compatibility           | Bridge/schema `1`/`1`, host bounds `5-5`                                                 |
+| Earlier RC tag          | Historical `v0.9.0-rc.1` at `4ff19bc`; stable `v0.9.0` is published at `8ae294d`         |
+| Publication             | Local v0.10.0 candidate; new-commit CI, release approval and publication remain separate |
 
-This candidate groups the Android host, SQLite/private photos, signed OTA, automatic authenticated cloud backup, recovery codes, Android installation, camera fixes and independent version labels. It is a substantial pre-1.0 feature update; `1.0.0` remains reserved for the first approved stable, field-tested release. See the [v0.9.0 candidate record](history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026).
+This candidate retires the browser scanner and exposes the existing desktop landing/download workflow on every browser size. APK scanning, SQLite/private photos, signed OTA, automatic backup and recovery remain intact. It is a substantial pre-1.0 feature update; `1.0.0` remains reserved for the first approved stable, field-tested release. See the [v0.9.0 candidate record](history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026).
 
 APK footers show the installed native version and active model. Android About shows the shared web version; browser footers retain app/model labels. A download page may show an available native version only from a validated label on the published APK asset. See [Android version and publication rules](ANDROID_APK_VERSIONING.md#installed-and-available-apk-versions).
 
 Keep local V5 overrides in `public/model/`, `src/lib/constants.ts` and `src/sw.ts` uncommitted. The release-cache fixes are already in committed source; remaining worker-source changes belong to the local V5 experiment. Generate `public/sw.js` from the exact isolated committed V4.5 candidate; never stage the worker from the local V5 build. Preserve the unrelated training notebook edit.
 
-The maintainer pushed the categorized candidate and published `v0.9.0-rc.1`; supplied screenshots show its CI #27 passed for `4ff19bc`. The local V4.5 R03 report also passed for that pre-patch build. Those checks do not certify the later Next.js 16.4.1 inputs. A candidate tag does not establish stable publication or Vercel promotion. Earlier 0.8.0 and pre-patch 0.9.0 APK/OTA receipts remain historical; retain them and prepare matching artifacts for the final approved inputs.
+Published v0.9.0 inputs are immutable historical release evidence. The v0.10.0 candidate changes website behavior without adopting V5 or altering the native host. Its checks, CI and publication are separate; see the [October 24 record](history/PWA_RELEASE_HISTORY.md#v0100-browser-landing-only-candidate).
 
 ## Version labels and release rules
 
@@ -83,7 +83,7 @@ When adopting a different model, follow the [model adoption checklist](AI_MODEL_
 
 - [Full release index and historical status](history/PWA_RELEASE_HISTORY.md#app-releases)
 - [Chronological release records](history/PWA_RELEASE_HISTORY.md#release-timeline)
-- [Current candidate: v0.9.0 Android and cloud recovery](history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026)
+- [Historical v0.9.0 Android and cloud recovery preparation](history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026)
 - [Latest recorded handoff: October 18, 2026](history/PWA_RELEASE_HISTORY.md#october-18-2026-v070-scanner-follow-up-and-branch-handoff)
 
 Historical records retain their original dates, measurements, and status. Use them as evidence for those builds, not as confirmation of today's production state.

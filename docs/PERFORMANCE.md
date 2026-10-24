@@ -1,5 +1,9 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## Browser startup boundary (October 24, 2026)
+
+The v0.10.0 website entry mounts a landing page instead of the scan application at all viewport sizes, including development. It does not call model loading/GPU warm-up, scan History queries, diagnostic initialization or private backup startup. APK-only Diagnostics and recovery panels load with the separate Android application entry, avoiding a second whole-app loading fallback on the first About visit. They remain outside the website entry. This trades deferred APK panel loading for an uninterrupted first navigation; no device startup-speed improvement is claimed. The native scanner retains its existing startup and storage behavior. This is a removal of unnecessary browser work, not a measured phone speed claim; service-worker static precaching and existing caches are unchanged.
+
 ## Implementation audit (October 23, 2026)
 
 The later version-display change reuses cached native initialization for the APK footer and the existing GitHub release response for download metadata. It adds no photo/APK download, extra metadata request or polling loop. Browser footers do not contact the native bridge. Labels remain presentation metadata; installed identity and publisher download identity are separate.

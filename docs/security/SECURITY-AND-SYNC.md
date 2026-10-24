@@ -1,5 +1,9 @@
 # Supabase guidelines, preserved cloud data, and recovery
 
+## Current website boundary (October 24, 2026)
+
+The v0.10.0 candidate removes browser scanning, History controls and Diagnostics at every viewport, including development. The landing entry point does not mount scan storage or the private backup worker. The cloud runtime guard rejects browsers even with valid testing settings. No browser anonymous owner is enrolled, and existing sessions, legacy IndexedDB records and deletion outboxes are not cleared. Older dated browser-upload notes below remain historical. Debug APK automatic testing backup and production APK automatic production backup continue unchanged; public guideline retrieval remains separate inside the APK. No hosted SQL, RLS, Storage, Auth, function or server-secret change is required. This client boundary leaves server authorization with verified ownership and existing [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security); hiding website controls does not change grants or policies.
+
 ## Recovery and deletion race audit (October 23, 2026)
 
 Recovery sign-in uses a separate in-memory Auth storage binding until password acceptance and server `getUser` confirm the protected vault claim and expected owner. Old-owner deletion jobs drain before promotion. A short local-only guard checks the scope again, persists the verified candidate and changes ownership; History deletion uses the same guard around its scope read and atomic outbox commit. No Auth HTTP call runs inside that local guard. Adapter generations prevent retired refresh operations from overwriting/removing the new session. Failed candidates preserve the connected identity; a failed local promotion attempts to restore prior settings and fails closed.

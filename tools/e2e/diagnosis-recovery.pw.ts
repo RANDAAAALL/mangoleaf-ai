@@ -5,6 +5,7 @@ import {
   controlledModel,
   scoresFor,
   openApp,
+  scannerHarnessPath,
   homeHeading,
   choosePhoto,
   photos,
@@ -71,7 +72,7 @@ test("D11: stalled startup warmup recovers and discards its late model", async (
   // Install before navigation so the real initialization deadline is governed
   // by the virtual clock, including timers scheduled during application startup.
   await page.clock.install();
-  await page.goto("/");
+  await page.goto(scannerHarnessPath);
   await expect
     .poll(() => page.evaluate(() => window.mangoStartupReadControl.waits))
     .toBeGreaterThan(0);

@@ -1,6 +1,12 @@
 # MangoLeaf AI Architecture
 
-**Current release candidate:** shared web `0.9.0`, native `0.1.4`/code `5`, adopted model `v4.5.0`. The published pre-release `v0.9.0-rc.1` identifies the earlier candidate; final stable publication remains separate. Release exports use an isolated adopted-model snapshot while local V5 experimentation remains separate. See [release identity](versions/history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026).
+## Browser landing boundary (October 24, 2026)
+
+The v0.10.0 candidate routes by the compiled Android build target, never by viewport or user agent. `src/app/page.tsx` mounts `BrowserLanding` for every website browser, including development. Only an Android bundle loads the separate `Application` component with model initialization, scan/storage hooks, diagnostics and the backup worker. An Android build without the trusted native bridge still fails closed.
+
+Browser Home reuses the existing explanatory cards and download prompt; About exposes Android installation actions without diagnostics or recovery panels. Below 768px, the website centers its leaf/name header and provides a fixed Home, About, open/install and language bottom bar without Scan or History. At 768px and above, the existing header navigation remains. The APK supplies Diagnostics and recovery as children of the shared About view, importing both with its application entry so first navigation cannot suspend the entire application; the website imports neither panel. The floating Next development indicator is disabled because its default lower-left placement covers Home on narrow screens; development errors still surface. Desktop QR links and `?install=1` guide behavior are preserved. No website History database is opened or migrated by this entry point, and private browser backup is disabled even in development. Dexie compatibility code and stored records remain for preservation and regression coverage. APK storage and cloud routing are unchanged.
+
+**Current source candidate:** shared web `0.10.0`, native `0.1.4`/code `5`, adopted model `v4.5.0`. Stable `v0.9.0` remains published at `8ae294d`; the new browser-only workflow has separate validation/publication. Release exports use an isolated adopted-model snapshot while local V5 experimentation remains separate.
 
 Native APK versions, signing/builds, compatibility and release rules now live in [Android APK versioning](versions/ANDROID_APK_VERSIONING.md). The [Android APK history](versions/history/ANDROID_APK_HISTORY.md) preserves the earlier combined implementation guide and its section bookmarks. The native `android/` project and the application footer are unchanged by this documentation move.
 
@@ -128,15 +134,13 @@ Photo review uses `src/lib/diagnosis-step.ts` to bound preparation, inference, s
 
 ## System overview
 
-MangoLeaf AI shares its React screens and on-device TensorFlow.js classifier between the Android APK and companion website. The adopted release model remains V4.5.0. Android runs the bundled static application in a trusted WebView and stores reports and guidelines in SQLite, with photos in private app files. Browser compatibility and development testing use Dexie/IndexedDB for reports, photo Blobs and guidelines. An Android bundle without its trusted native bridge fails closed; it never falls back to browser storage.
+MangoLeaf AI's Android APK runs the shared React scanner and V4.5.0 TensorFlow.js model in its trusted WebView. SQLite stores reports and guidelines; photos stay in private app files. Public guidelines are independent of private authenticated backup. Production APK uses production Supabase; Debug APK uses testing. Recovery-code restore is explicit. A missing trusted native bridge fails closed.
 
-![System overview: shared on-device inference, separate Android SQLite/private files and browser IndexedDB, public guidelines, and authenticated private backup](diagrams/system-overview.svg)
+The companion website is a responsive landing and Android download site in both production and development. It does not start inference, scanning, History, Diagnostics or private backup. Existing browser IndexedDB data remains untouched; there is no automatic browser-to-APK migration.
 
-The image is a self-contained SVG, so Markdown previews do not need to execute a Mermaid renderer. Its editable [Mermaid source](diagrams/system-overview.mmd) stays beside it; update and export both together when the architecture changes. The [earlier cloud-sync diagram](../public/images/mangoleaf-architecture.svg) remains historical documentation.
+![System overview: browser landing and installation, Android on-device inference and SQLite/private files, public guidelines, and private backup](diagrams/system-overview.svg)
 
-Public guidelines refresh independently through HTTP and Realtime and remain available from each runtime's local store. Android seeds its empty guideline store from the bundled public snapshot; browsers need a successful download before reading guidance offline. The APK includes its app/model assets, while the published website uses Serwist caching. Development disables the website service worker.
-
-Both APK variants automatically back up eligible saved photo reports while foreground and connected: Production uses the pinned production project, and Debug uses testing. Guarded development-browser uploads also use testing; the published website preserves browser History without private scan backup. Private transfers require verified Supabase Auth ownership and RLS, not a device UUID. Creating a recovery code and restoring are explicit APK actions; restore merges reports without replacing existing History. Confirmed deletion queues removal from the connected backup but does not propagate deletion to other phones. See [runtime and recovery boundaries](versions/ANDROID_APK_VERSIONING.md#runtime-and-data-preservation).
+The self-contained SVG does not need a Markdown Mermaid renderer. Its editable [Mermaid source](diagrams/system-overview.mmd) stays beside it. Both are documentation assets, excluded from application bundles. The [earlier cloud-sync diagram](../public/images/mangoleaf-architecture.svg) remains historical evidence. Public guideline HTTP/Realtime sync and the empty-store seed remain independent inside the APK; the website still uses Serwist for static assets and development disables it.
 
 **Historical prepared-release snapshot, October 10, 2026:** PWA `0.5.5` was prepared with the V4.3.0 model. Repository source later adopted V4.5.0 and selected PWA `0.6.0`; earlier dated release records retain their original evidence.
 
@@ -157,6 +161,8 @@ The production application is a static export with unoptimized images. It has no
 The earlier October 10 dependency and development-configuration patch retained app `0.5.5` and model `v4.3.0`; its core and R01 results identify that historical snapshot. The October 23 security refresh retains the unpublished shared app `0.9.0` candidate and adopted model `v4.5.0`, with new framework/lockfile inputs. Package, lockfile, and configuration hashes contribute to the application fingerprint, so the patched build requires its own checks and report identity; [TESTING.md](testing/TESTING.md) records the actual evidence.
 
 `tools/e2e/` holds Playwright functional and reliability cases. Controlled model responses exercise all accepted/rejected UI branches; separate real-model cases import the production classifier in a test-only harness and upload the supplied photos through the real app. Diagnostics remain in reports. The harness is served only by the local test server and is not part of `src/` or the deployed export.
+
+`tools/build-test-app.mjs` adds `/__scan-harness` only inside its isolated copy, importing the shared application to retain compatibility storage and scan regression coverage. This route is absent from website and APK source exports. Real website cases visit `/`; scanner cases visit that harness. These cases do not prove physical SQLite or native camera behavior.
 
 `tools/build-test-app.mjs` copies application inputs into an ignored, hash-addressed `.test-app/` directory and builds a private static export with a loopback mock backend. It excludes the existing generated worker and regenerates one there. This leaves the normal `out/` and tracked `public/sw.js` alone. Fresh browser contexts isolate local data; the server's connection policy prevents external service access. The mock verifies client flow, not Supabase's server behavior or RLS.
 
@@ -244,7 +250,7 @@ mangoleaf-ai/
 |   |   |-- globals.css             # Global Tailwind and application styles
 |   |   |-- layout.tsx              # Root document, metadata, fonts, and viewport
 |   |   |-- manifest.ts             # Browser manifest and offline compatibility
-|   |   `-- page.tsx                # Main client-side application coordinator
+|   |   `-- page.tsx                # Build-target router: Android app or browser landing
 |   |-- components/                 # Reusable interface components, grouped by role
 |   |   |-- brand/                  # Application logo and icon set
 |   |   |-- layout/                 # Top header, navigation bar, footer, and splash screen
@@ -389,7 +395,7 @@ The shared application is a static-export Next.js project, with a separate Java 
 
 - `src/app/layout.tsx` defines metadata, fonts, viewport behavior, and the root document.
 - `src/app/manifest.ts` preserves generic browser metadata and icons for offline compatibility; the supported installation workflow uses the Android APK.
-- `src/app/page.tsx` is the main client coordinator for navigation, model loading, image selection, diagnosis, language state, scan history, and modals.
+- `src/app/page.tsx` selects the APK application or website landing. `src/components/layout/application.tsx` is the APK coordinator for navigation, model loading, image selection, diagnosis, language state, scan history, and modals. `src/components/layout/browser-landing.tsx` owns website Home/About, install, language and legal state.
 
 ### User interface
 
@@ -405,7 +411,7 @@ Components are grouped into subfolders by the role they play rather than kept in
 | `scan/`   | `guided-camera.tsx`, `diagnostic-scanner.tsx`, `scan-card.tsx`, `scan-history-list.tsx`, `how-it-works-steps.tsx`, `disease-coverage-card.tsx` | Diagnosis feature surface               |
 | `tab/`    | `home-tab.tsx`, `history-tab.tsx`, `about-tab.tsx`, `diagnostics-panel.tsx`                                                                    | Navigation tabs and About diagnostics   |
 
-The three tab components are the boundary between `page.tsx` and screen content. `page.tsx` owns all state and handlers, and renders exactly one of `HomeTab`, `HistoryTab`, or `AboutTab` per active tab. Adding a screen means adding a tab component and one branch in `page.tsx`, not editing shared markup.
+The three tab components are the boundary between `Application` and screen content. `Application` owns all state and handlers, and renders exactly one of `HomeTab`, `HistoryTab`, or `AboutTab` per active tab. Adding a screen means adding a tab component and one branch in `Application`, not editing shared markup.
 
 Grouping is by role, not by which tab uses a file. `scan/scan-history-list.tsx` is rendered by both `HistoryTab` in full and by `HomeTab` as a phone preview, so it belongs to the scan feature rather than to either tab. Below 768px, Home shows the newest one card with Recent Scans and View All History. At or above that breakpoint, a responsive wrapper hides the entire recent list and shows the Install prompt card instead. The hidden list remains mounted and can contain up to four passed records; visual hiding is not proof of reduced database reads or zero hidden-card resources. Folders group files for navigation and do not define access boundaries.
 
@@ -421,7 +427,7 @@ The sheet shows a compact shared English/Bisaya photo-tips panel below its title
 
 **The sheet's drag deliberately bypasses React, and that is not an oversight to tidy up.** The drag-move handler assigns `sheetRef.current.style.transform` and `backdropRef.current.style.opacity` directly instead of calling `setState`, because a `touchmove` handler runs at the digitizer's sampling rate and a React re-render per event is far more work than the one style write the frame needs. To keep the imperative writes and React consistent, the render path reads `dragYRef.current` rather than the `dragY` state while a drag is in progress, so an unrelated parent re-render commits the live drag offset instead of a stale zero. `dragY` state is written only at drag end, which is what lets React clear the imperative `transform` and run the snap-back or dismiss transition. Reverting any one of those three pieces to ordinary state breaks the other two.
 
-Since the October 8, 2026 guided-camera change, the phone Take Photo action calls `onCamera` to open a live browser camera. It no longer clicks a hidden native-camera file input. Upload Photo still clicks the mounted `scan-gallery-input` in `page.tsx` synchronously from the user gesture; keep that ID and its input in step with `ScanSheet` and upload Retake. The Take Photo button remains hidden at widths of 768px or more. This is a responsive layout rule, not identification of Android or iOS hardware. The gallery option remains available below that breakpoint after closing an unavailable camera.
+Since the October 8, 2026 guided-camera change, the phone Take Photo action calls `onCamera` to open a live browser camera. It no longer clicks a hidden native-camera file input. Upload Photo still clicks the mounted `scan-gallery-input` in `Application` synchronously from the user gesture; keep that ID and its input in step with `ScanSheet` and upload Retake. The Take Photo button remains hidden at widths of 768px or more. This is a responsive layout rule, not identification of Android or iOS hardware. The gallery option remains available below that breakpoint after closing an unavailable camera.
 
 <a id="guided-camera-capture"></a>
 
@@ -473,7 +479,7 @@ When adding a relative-time string, add it to both the `en` and `bis` objects in
 
 ### On-device AI pipeline
 
-`src/app/page.tsx` coordinates photo review and saving. `src/lib/image-hash.ts` fingerprints upload files and saved-photo Blobs without importing TensorFlow.js, and `src/lib/image-storage.ts` creates the compressed photo saved after diagnosis. `src/lib/classifier.ts` provides browser inference and re-exports both helpers for existing callers. The page imports storage compression directly and dynamically loads the prediction function when diagnosis starts:
+`src/components/layout/application.tsx` coordinates photo review and saving. `src/lib/image-hash.ts` fingerprints upload files and saved-photo Blobs without importing TensorFlow.js, and `src/lib/image-storage.ts` creates the compressed photo saved after diagnosis. `src/lib/classifier.ts` provides browser inference and re-exports both helpers for existing callers. The page imports storage compression directly and dynamically loads the prediction function when diagnosis starts:
 
 1. During initial loading, fetch `/model/model.json` with `tf.loadGraphModel` and `/model/model_config.json` for its rejection settings.
 2. Cache and warm the single seven-class adopted V4.5.0 model once per browser session, using the existing explicit forced-16-bit WebGL texture setting.
@@ -515,7 +521,7 @@ The v9 upgrade changes indexes only. It preserves earlier Blob bytes, IDs, hashe
 
 `local-scans.ts` prepares a stable report ID once, then saves it through the runtime's local storage adapter with cancellation handling. Retrying a committed prepared ID returns its saved report; a conflicting report cannot overwrite it. A quota failure leaves the new result unsaved and preserves existing reports. The storage-full modal retains one draft in memory for History management, retry, or explicit discard. No successful save is announced before local commit. Reloading loses an unsaved draft.
 
-Treatment guidance is authored in Supabase's `public.guidelines` table and read through `app-storage.ts` from SQLite in Android or IndexedDB in browsers. `getGuidelineForScan()` in `src/app/page.tsx` maps both healthy classes to `healthy`, preserves valid cached text during offline use, and handles English and Bisaya independently. While the local query is pending it shows a translated loading message. A missing row or blank language field shows a translated unavailable message from `src/lib/translations.ts`. The application no longer bundles treatment advice in `src/lib/constants.ts` or uses generic treatment instructions when guidance is missing. Browsers need a successful guideline download before advice is available offline. Android seeds an empty guideline store from the bundled public snapshot, then saves later downloaded updates in SQLite.
+Treatment guidance is authored in Supabase's `public.guidelines` table and read through `app-storage.ts` from SQLite in Android or IndexedDB in the isolated compatibility harness. `getGuidelineForScan()` in `src/components/layout/application.tsx` maps both healthy classes to `healthy`, preserves valid cached text during offline use, and handles English and Bisaya independently. While the local query is pending it shows a translated loading message. A missing row or blank language field shows a translated unavailable message from `src/lib/translations.ts`. The application no longer bundles treatment advice in `src/lib/constants.ts` or uses generic treatment instructions when guidance is missing. The compatibility harness needs a successful guideline download before advice is available offline; the landing website exposes no report advice. Android seeds an empty guideline store from the bundled public snapshot, then saves later downloaded updates in SQLite.
 
 An `Uncertain / Unrecognized` result is handled before the cached-guideline lookup. It displays the approved English/Bisaya photo reminder immediately, including offline use and while IndexedDB is loading. Scan details use the heading “Try another photo” / “Sulayi og laing litrato” for this result. The reminder is interface text in `src/lib/translations.ts`; it does not require a Supabase guideline row or change model rejection rules. Loading and unavailable guideline messages still apply to accepted class results.
 
@@ -545,7 +551,7 @@ A card keeps its displayed photo while comparison is pending. Newer inputs cance
 
 `src/hooks/useSync.ts` handles public treatment-guideline synchronization independently of private backup. Its public client has session persistence, token refresh, and URL-session detection disabled. It performs a full four-field GET at startup, online recovery, foreground recovery, and subscription readiness; it subscribes to direct Realtime INSERT/UPDATE/DELETE changes. Failed downloads retain saved advice and retry while online after 10, 30, 60, then 300 seconds. Each HTTP request has a 10-second bound.
 
-`src/app/page.tsx` starts the separate `cloud-backup.ts` worker. Eligible APK reports upload automatically to their pinned project; guarded development-browser uploads use testing, while published browser History stays local. The worker lazily obtains verified anonymous Auth ownership, preserves explicit pauses and processes scoped deletion jobs. Recovery-code creation attaches credentials to the same owner; APK restore explicitly merges owned cloud reports.
+`src/components/layout/application.tsx` starts the separate `cloud-backup.ts` worker only through the APK entry. Eligible APK reports upload automatically to their pinned project; browsers, including development, never start private backup. The worker lazily obtains verified anonymous Auth ownership, preserves explicit pauses and processes scoped deletion jobs. Recovery-code creation attaches credentials to the same owner; APK restore explicitly merges owned cloud reports.
 
 Local saving, deleting, photo display, and exact-file duplicate checks do not use a network connection or guest identity. HTTP and Realtime remain complementary: the GET catches changes missed while offline or before subscription readiness; received live events update the cached row directly. The existing overlap, cross-tab, and unchanged-content safeguards remain in `guidelines-sync.ts`.
 

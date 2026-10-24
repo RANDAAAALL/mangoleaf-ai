@@ -6,6 +6,10 @@ Preparing shared web `0.9.0` and local candidate tag `v0.9.0-rc.1` leaves native
 
 # Android APK history
 
+## Browser companion change (October 24, 2026)
+
+App v0.10.0 is an unpublished shared-web candidate; native APK v0.1.4/code 5, bridge/schema 1/1, bounds 5-5 and V4.5.0 model are unchanged. All website browsers, including development, become landing/download-only. APK scanning, diagnostics, SQLite/private photos, automatic backup and explicit recovery remain. Existing browser records/outboxes are preserved without UI or private worker startup; Debug APK replaces supported development-browser scanning. This needs a new tested web candidate before OTA or website promotion and does not alter published v0.9.0 artifacts.
+
 This archive preserves the combined Android implementation notes through October 23, 2026. Use the [Android APK versioning guide](../ANDROID_APK_VERSIONING.md) for current versions, commands and release rules; exact APK hashes and completed checks remain in [Android testing](../../testing/ANDROID_TESTING.md).
 
 References below to a current version, opt-in backup, pending deployment or host range describe that record's stage. Later records and the current guide supersede earlier behavior. Reorganization does not establish a release, deployment, successful device evaluation or model adoption. Original section bookmarks are preserved; local link destinations are rebased for this location.

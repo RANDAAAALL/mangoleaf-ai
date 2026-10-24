@@ -1,5 +1,11 @@
 # Android candidate verification
 
+## Browser boundary candidate (October 24, 2026)
+
+Shared app v0.10.0 keeps the native host at 0.1.4/code 5 and model V4.5.0. Verify scanner, History, Diagnostics, recovery and automatic backup still work in Debug/testing and production/production APKs. A website browser at any viewport, including development, must show only Home/About/Android installation, with no scan/History/Diagnostics entry points or private backup enrollment. Confirm desktop QR arrival opens the phone installation guide. Do not clear legacy browser storage to test this change. Isolated compatibility E2E does not establish native SQLite/camera results; record physical checks separately.
+
+On a fresh APK cold launch, wait for Home, then open About for the first time: Diagnostics and recovery must appear without returning to the full-screen loading splash. Revisit Home/About and confirm scanner and History still work. On phone websites below 768px, verify the centered brand and four bottom controls in both languages; desktop header navigation and QR installation stay available.
+
 ## October 23, 2026 version display
 
 APK footers now show the actual installed host version paired with the active model. Default committed-model examples are `Android APK v0.1.4 / Model v4.5.0` and Debug `Android APK v0.1.4-dev / Model v4.5.0`; browser footers retain app/model labels. Android About separately shows the web-bundle version. The existing `hostVersionName` bridge field is reused; native version/code, bridge/schema and host bounds remain unchanged.
