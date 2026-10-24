@@ -2,6 +2,16 @@
 
 # PWA release history and archived notes
 
+## v0.10.1 capture and package thumbnail candidate
+
+**Commit preparation after Debug acceptance:** the maintainer reported the prepared Debug APK/icon are okay and requested categorized source commits. Model remains adopted V4.5.0. This records reported physical acceptance, not new timing data, current-build R03, production signing, CI or publication. Earlier uncommitted-attempt statements below retain their original preparation scope.
+
+**Later branding correction:** restored the white-backed application/archive icon after the plain-leaf experiment made Package Installer show only the green mark. Launcher/startup layers and web behavior remain unchanged. My Files framing on reported One UI 8.5 remains an independently observed OEM surface; see the [native attempt record](ANDROID_APK_HISTORY.md#october-24-2026-white-backed-installer-correction).
+
+**Later October 24 follow-up:** extended the EN/BIS single-code phone label to development too, and ended the local V5 runtime override by restoring actual adopted V4.5.0 assets/configuration/constants plus model-cache cleanup. Earlier V5-preservation statements below describe the preceding attempt; research records remain preserved. The candidate is still unpublished and uncommitted.
+
+October 24, 2026: after the maintainer published v0.10.0 at `e624441` (APK 0.1.5/code 6, V4.5.0, OTA sequence 4), two-phone diagnostics and a recording exposed delayed JPEG encoding and first-result suspension. Prepared unpublished app 0.10.1 / native 0.1.6/code 7, bounds 7-7. JPEG encoding moves to a cancellable worker with a five-second compatibility fallback; result details load with the APK entry. Only production phone website language labels shorten to EN/BIS single codes. Transparent package artwork separates from the adaptive launcher. Model, SQLite schema, bridge and cloud ownership remain unchanged. New phone checks, exact-build reliability, CI and release approval remain separate; earlier passes do not validate this candidate. V5 is preserved uncommitted.
+
 This archive preserves the full earlier version guide as maintained on October 18, 2026, including original records, evidence, and release templates. For current instructions, use the [short version guide](../PWA_VERSIONING.md).
 
 References to a "current" model, pending check, or deployment describe the record's date. They do not verify today's production state. The archived guide was titled **MangoLeaf AI PWA Versioning Guide**.
