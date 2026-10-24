@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createDiagnosticOperation, recordDiagnostic } from "@/lib/diagnostics";
+import { encodeCameraImage } from "@/lib/camera-image";
 
 type CameraPhase = "starting" | "ready" | "capturing" | "paused" | "error";
 
@@ -46,6 +47,7 @@ export function useGuidedCamera() {
   const requestRef = useRef(0);
   const playbackReadyRef = useRef(false);
   const capturingRef = useRef(false);
+  const encodingRef = useRef<AbortController | null>(null);
   const startupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [phase, setPhase] = useState<CameraPhase>("starting");
   const [error, setError] = useState<CameraError | null>(null);
@@ -75,6 +77,8 @@ export function useGuidedCamera() {
     // Cancel pending permission and encoding work before releasing hardware.
     requestRef.current += 1;
     capturingRef.current = false;
+    encodingRef.current?.abort();
+    encodingRef.current = null;
     clearStartupTimer();
     releaseCamera();
   }, [clearStartupTimer, releaseCamera]);
@@ -215,6 +219,8 @@ export function useGuidedCamera() {
       const request = requestRef.current;
       const operation = createDiagnosticOperation("camera-capture");
       const started = performance.now();
+      const encoding = new AbortController();
+      encodingRef.current = encoding;
       capturingRef.current = true;
       setPhase("capturing");
       const canvas = document.createElement("canvas");
@@ -255,19 +261,15 @@ export function useGuidedCamera() {
         releaseCamera();
         const encodingStarted = performance.now();
 
-        const blob = await new Promise<Blob>((resolve, reject) => {
-          canvas.toBlob(
-            (encoded) => {
-              if (encoded) resolve(encoded);
-              else reject(new Error("Camera photo encoding failed."));
-            },
-            "image/jpeg",
-            0.92,
-          );
-        });
+        const { blob, source, reason } = await encodeCameraImage(
+          canvas,
+          encoding.signal,
+        );
         recordDiagnostic("camera.capture.encode.completed", {
           operation,
           durationMs: Math.round(performance.now() - encodingStarted),
+          source,
+          reason,
         });
 
         if (
@@ -295,15 +297,20 @@ export function useGuidedCamera() {
         });
         onCapture(file);
       } catch {
+        const cancelled =
+          encoding.signal.aborted ||
+          requestRef.current !== request ||
+          !mountedRef.current;
         recordDiagnostic("camera.capture.finished", {
           operation,
-          outcome: "error",
+          outcome: cancelled ? "cancelled" : "error",
           durationMs: Math.round(performance.now() - started),
         });
-        if (mountedRef.current && requestRef.current === request) {
+        if (!cancelled) {
           fail("capture");
         }
       } finally {
+        if (encodingRef.current === encoding) encodingRef.current = null;
         // Release the full-resolution backing surface after encoding settles, including late cancellation.
         canvas.width = 0;
         canvas.height = 0;

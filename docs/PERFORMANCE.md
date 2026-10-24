@@ -1,8 +1,20 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## Local model restore (October 24, 2026)
+
+The maintainer ended the local V5 override. Restored adopted V4.5.0 model bytes/configuration/constants and the V4.5 runtime cache identity. Activation now also removes the superseded V5 model runtime cache; generated precache revisions follow the restored bytes. This touches model caches, not stored History/photos. Websites still avoid classifier initialization. The maintainer reported no problems with the self-built Debug capture changes but supplied no new timing measurements; no quantified speedup is claimed from that report.
+
+## Camera encoding and first-result follow-up (October 24, 2026)
+
+Two supplied production APK 0.1.5 / app 0.10.0 / model V4.5.0 logs recorded 720-square frame copies of 16 ms and 11 ms, followed by JPEG encoding of **13,042 ms and 13,043 ms**. Inference took 322 ms and 344 ms. Both identify Chromium 155. This points to encoding rather than inference. Chromium's [canvas encoder source](https://chromium.googlesource.com/chromium/src/third_party/+/master/blink/renderer/core/html/canvas/canvas_async_blob_creator.cc) documents Android idle deadlines of 4 + 9 seconds and restricts idle encoding to the main thread. The matching delay is strong evidence of this scheduling path; the exact phone binary was not inspected.
+
+The 0.10.1 / APK 0.1.6 candidate encodes the unchanged copied square as JPEG quality 0.92 in a dedicated OffscreenCanvas worker. A five-second worker timer or failure terminates it and uses immediate same-quality canvas encoding; unsupported workers use that fallback directly. Cancellation terminates the worker, closes late bitmaps and suppresses stale results. The fallback can briefly block the main thread, and timer delays remain possible under blocked scheduling. No phone speed improvement is claimed before testing the new APK.
+
+The supplied 26.1-second recording shows a brief whole-app spinner at approximately 23.5 seconds immediately before the first result details. Those details were dynamically imported beneath the root loading boundary. They now load with the APK entry, trading deferred modal loading for uninterrupted first-result presentation while leaving the website scanner-free. A later diagnostics session restart occurs outside this recorded transition; its cause is unconfirmed and no native lifecycle fix is inferred from it.
+
 ## Installer-delivery and startup artwork follow-up (October 24, 2026)
 
-The native 0.1.5 candidate uses vector/adaptive artwork and a separate system-startup leaf, with no artificial startup delay or change to camera/model timing. The production website delegates installer bytes to a same-origin Vercel rewrite; it does not fetch a 14 MB APK into a JavaScript Blob. Installer responses and service-worker requests bypass caching to avoid stale or partial download reuse. Transfer time, final browser completion and actual device appearance remain unmeasured. Earlier browser startup evidence precedes this follow-up.
+The earlier native 0.1.5 candidate used vector/adaptive artwork and a separate system-startup leaf, with no artificial startup delay or change to camera/model timing. The production website delegates installer bytes to a same-origin Vercel rewrite; it does not fetch a 14 MB APK into a JavaScript Blob. Installer responses and service-worker requests bypass caching to avoid stale or partial download reuse. Transfer time, final browser completion and actual device appearance remain unmeasured. Earlier browser startup evidence precedes this follow-up.
 
 ## Browser startup boundary (October 24, 2026)
 

@@ -59,15 +59,8 @@ import { InstallGuideOverlay } from "@/components/modal/install-guide-overlay";
 import { DiagnosticScanner } from "@/components/scan/diagnostic-scanner";
 import { GuidedCamera } from "@/components/scan/guided-camera";
 import { Footer } from "@/components/layout/footer";
-import dynamic from "next/dynamic";
-
-// Defer loading this component into the page until a scan result is opened.
-// The production service worker still precaches its chunk for offline use.
-const ScanDetailsModal = dynamic(() =>
-  import("@/components/modal/scan-details-modal").then((mod) => ({
-    default: mod.ScanDetailsModal,
-  })),
-);
+// The first result must not suspend the APK entry into its full-screen startup splash.
+import { ScanDetailsModal } from "@/components/modal/scan-details-modal";
 
 // Module scope keeps the initialization flag across page remounts. The
 // classifier also shares its model-loading promise during an in-flight load.

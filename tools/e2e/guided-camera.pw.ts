@@ -22,6 +22,8 @@ interface CameraControl {
   stops: number;
   draws: number[][];
   encodesCompleted: number;
+  encoderJobs: number;
+  encoderStops: number;
   releasePermission: () => void;
   allowFrame: () => void;
   setFrame: (width: number, height: number) => void;
@@ -50,7 +52,7 @@ async function mockCamera(
   options: {
     permission?: "allow" | "defer" | "deny";
     frame?: "ready" | "defer";
-    encoding?: "normal" | "defer";
+    encoding?: "normal" | "defer" | "error";
     language?: Language;
   } = {},
 ) {
@@ -87,6 +89,8 @@ async function mockCamera(
       stops: 0,
       draws: [],
       encodesCompleted: 0,
+      encoderJobs: 0,
+      encoderStops: 0,
       releasePermission() {
         pendingPermission.splice(0).forEach((resolve) => resolve());
       },
@@ -242,20 +246,40 @@ async function mockCamera(
       }
       Reflect.apply(drawImage, this, [image, ...coordinates]);
     };
-    if (settings.encoding === "defer") {
-      const toBlob = HTMLCanvasElement.prototype.toBlob;
-      HTMLCanvasElement.prototype.toBlob = function (...args) {
-        pendingEncoding.push(() =>
-          toBlob.call(
-            this,
-            (encoded) => {
-              control.encodesCompleted += 1;
-              args[0](encoded);
+    if (settings.encoding === "defer" || settings.encoding === "error") {
+      const NativeWorker = window.Worker;
+      window.Worker = class extends NativeWorker {
+        stopped = false;
+        postMessage(
+          message: { bitmap: ImageBitmap },
+          options: Transferable[] | StructuredSerializeOptions = [],
+        ) {
+          const transfer = Array.isArray(options)
+            ? options
+            : (options.transfer ?? []);
+          control.encoderJobs++;
+          this.addEventListener(
+            "message",
+            () => {
+              control.encodesCompleted++;
             },
-            args[1],
-            args[2],
-          ),
-        );
+            { once: true },
+          );
+          if (settings.encoding === "error") {
+            message.bitmap.close();
+            queueMicrotask(() => this.dispatchEvent(new ErrorEvent("error")));
+          } else {
+            pendingEncoding.push(() => {
+              if (this.stopped) message.bitmap.close();
+              else super.postMessage(message, transfer);
+            });
+          }
+        }
+        terminate() {
+          if (!this.stopped) control.encoderStops++;
+          this.stopped = true;
+          super.terminate();
+        }
       };
     }
   }, options);
@@ -692,15 +716,21 @@ test("C04: backgrounding stops camera and ignores delayed capture encoding", asy
   await expect
     .poll(() => page.evaluate(() => window.mangoCameraControl.draws.length))
     .toBe(1);
+  await expect
+    .poll(() => page.evaluate(() => window.mangoCameraControl.encoderJobs))
+    .toBe(1);
   await page.evaluate(() => window.mangoCameraControl.hide());
   await expect.poll(() => cameraStops(page)).toBe(2);
+  await expect
+    .poll(() => page.evaluate(() => window.mangoCameraControl.encoderStops))
+    .toBe(1);
   await page.evaluate(() => {
     window.mangoCameraControl.show();
     window.mangoCameraControl.releaseEncoding();
   });
-  await expect
-    .poll(() => page.evaluate(() => window.mangoCameraControl.encodesCompleted))
-    .toBe(1);
+  expect(
+    await page.evaluate(() => window.mangoCameraControl.encodesCompleted),
+  ).toBe(0);
   await expect(
     page.getByRole("dialog", {
       name: translations.en.reviewPhotoTitle,
@@ -735,6 +765,9 @@ test("C10: capture releases the stream before JPEG encoding settles and records 
     await page.evaluate(() => window.mangoCameraControl.encodesCompleted),
   ).toBe(0);
   await expect(camera.locator("video")).toHaveJSProperty("srcObject", null);
+  await expect
+    .poll(() => page.evaluate(() => window.mangoCameraControl.encoderJobs))
+    .toBe(1);
   await expect(
     camera.getByRole("button", {
       name: translations.en.guidedCameraCapturing,
@@ -778,6 +811,7 @@ test("C10: capture releases the stream before JPEG encoding settles and records 
     ),
   );
   expect(captureEvents[0].details).toMatchObject({ width: 720, height: 720 });
+  expect(captureEvents[2].details).toMatchObject({ source: "worker" });
   expect(captureEvents[3].details.outcome).toBe("complete");
   expect(
     captureEvents.every(
@@ -787,6 +821,67 @@ test("C10: capture releases the stream before JPEG encoding settles and records 
   ).toBe(true);
   expect(await records(page)).toHaveLength(0);
 });
+
+for (const encoding of ["error", "defer"] as const) {
+  test(`C${encoding === "error" ? "11" : "12"}: ${encoding === "error" ? "failed" : "unresponsive"} worker falls back to a decodable JPEG and ignores late work`, async ({
+    page,
+  }) => {
+    await mockCamera(page, { encoding });
+    await page.addInitScript(() =>
+      localStorage.setItem(
+        "mangoleaf-diagnostics-v1",
+        JSON.stringify({ version: 1, enabled: true, events: [] }),
+      ),
+    );
+    await controlledModel(page, scoresFor("Healthy Fruit"));
+    await openApp(page);
+    const camera = await openCamera(page);
+    await camera
+      .getByRole("button", {
+        name: translations.en.guidedCameraCaptureBtn,
+        exact: true,
+      })
+      .click();
+    await expect
+      .poll(() => page.evaluate(() => window.mangoCameraControl.encoderJobs))
+      .toBe(1);
+    const review = page.getByRole("dialog", {
+      name: translations.en.reviewPhotoTitle,
+      exact: true,
+    });
+    await expect(review).toBeVisible();
+    await expect(
+      review.getByRole("img", {
+        name: translations.en.photoPreviewAlt,
+        exact: true,
+      }),
+    ).toHaveJSProperty("naturalWidth", 720);
+    expect(await cameraStops(page)).toBe(2);
+    expect(
+      await page.evaluate(() => window.mangoCameraControl.encoderStops),
+    ).toBe(1);
+    // Diagnostics batch their writes; a fast fallback can reach Review before the log flush.
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            JSON.parse(
+              localStorage.getItem("mangoleaf-diagnostics-v1")!,
+            ).events.find(
+              (row: { event: string }) =>
+                row.event === "camera.capture.encode.completed",
+            )?.details,
+        ),
+      )
+      .toMatchObject({
+        source: "main-fallback",
+        reason: encoding === "error" ? "error" : "timeout",
+      });
+    await page.evaluate(() => window.mangoCameraControl.releaseEncoding());
+    await expect(review).toHaveCount(1);
+    expect(await records(page)).toHaveLength(0);
+  });
+}
 
 test("C05: missing frame blocks capture and an ended track releases stream", async ({
   page,
