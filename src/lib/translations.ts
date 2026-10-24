@@ -4,8 +4,12 @@ export const translations = {
   en: {
     websiteNavigationLabel: "Website navigation",
     backupTestingDescription:
-      "Test reports and photos back up automatically while this app is open and online. Create and save a recovery code to restore them on another device. Offline reports wait on this device until they can upload.",
-    backupAutomatic: "Cloud backup starts automatically",
+      "Test reports and photos stay on this phone until you create a recovery code or use an existing one. Code creation enables automatic backup to the separate testing project while the app is open and online. Save the code outside this phone.",
+    backupAutomatic: "Automatic cloud backup enabled",
+    backupLocalOnly: "New scans stay on this phone until backup setup",
+    backupPaused: "Cloud backup paused",
+    backupStarted:
+      "Backup enabled. Uploads may still be in progress. Keep the app open and online; unfinished reports retry when you reopen or reconnect.",
     backupPause: "Pause backup",
     backupResume: "Resume backup",
     backupNewCodeHint:
@@ -23,7 +27,7 @@ export const translations = {
       },
       {
         title: "2. Automatic testing backup",
-        text: "This testing build automatically uploads saved test reports and photos to the separate testing Supabase project while open and online. Supabase creates an anonymous authentication identity behind the scenes; no Sign In/Register screen or personal contact details are required. Uploads resume after reconnection.",
+        text: "Test reports and photos stay on this phone by default. Creating a recovery code or connecting an existing code enables automatic backup to the separate testing Supabase project while open and online, unless paused. Verified Auth ownership protects the backup without Sign In/Register screens. Code creation uses the existing authenticated owner when present. Unfinished reports retry after reopening or reconnection; interrupted photos may restart uploading.",
       },
       {
         title: "3. Recovery and deletion",
@@ -35,8 +39,8 @@ export const translations = {
       },
     ],
     siteDescription:
-      "Offline-first mango leaf and fruit disease diagnosis for Android, with on-device AI and automatic private cloud backup.",
-    nativePrivacyUpdated: "Updated October 22, 2026",
+      "Offline-first mango leaf and fruit disease diagnosis for Android, with on-device AI and optional private cloud backup.",
+    nativePrivacyUpdated: "Updated October 25, 2026",
     nativePrivacySections: [
       {
         title: "1. Diagnosis and local reports",
@@ -44,7 +48,7 @@ export const translations = {
       },
       {
         title: "2. Automatic private backup",
-        text: "Saved reports and photos upload automatically to private Supabase storage while the app is open and online. An anonymous authenticated identity protects ownership without Sign In/Register screens. Create and save a private recovery code outside this phone to recover completed uploads on another phone. Anyone holding that code can access the backup; losing the phone without a saved code prevents recovery.",
+        text: "Reports and photos stay on this phone by default. Creating a recovery code enables automatic uploads to private Supabase storage while the app is open and online. Connecting an existing code also allows backup unless uploads were explicitly paused. No Sign In/Register screen or extra save-code confirmation is needed. Verified Auth and ownership rules protect access. Save the code outside this phone; anyone holding it can access the backup. Code creation does not mean all uploads have finished. Completed backups remain available, and unfinished reports retry after reopening or reconnection.",
       },
       {
         title: "3. Recovery and deletion",
@@ -85,7 +89,7 @@ export const translations = {
     androidDownloadAgainHint:
       "You already have the app. Download another APK only to reinstall it or update the Android version.",
     androidDownloadDescription:
-      "The Android app saves reports on your phone and backs them up automatically when online. Save a private recovery code to recover them on another phone.",
+      "The Android app saves reports on your phone. Create a private recovery code in the app to enable automatic cloud backup and recover completed uploads on another phone.",
     androidDownloadPending:
       "The Android APK download could not be confirmed. Check the official releases page or try again when connected.",
     androidDownloadChecking: "Checking Android APK availability...",
@@ -103,8 +107,8 @@ export const translations = {
     androidDownloadBrowser: "Open website",
     backupTitle: "Private cloud backup",
     backupDescription:
-      "Reports and photos back up automatically while this app is open and online. No Sign In/Register screen is needed. Create and save a recovery code outside this phone to restore completed backups on another phone. Offline reports upload after reconnection.",
-    backupCreate: "Create recovery code",
+      "Reports and photos stay on this phone until you create a recovery code or use an existing one. Code creation enables automatic cloud backup while the app is open and online. No Sign In/Register screen or extra confirmation is needed. Save the code outside this phone.",
+    backupCreate: "Create recovery code and enable backup",
     backupRecoveryLabel: "Your private recovery code",
     backupRecoveryHint:
       "Anyone holding this code can access your backup. Save it outside this phone. If you lose both your phone and this code, your cloud backup cannot be recovered.",
@@ -520,8 +524,13 @@ export const translations = {
   bis: {
     websiteNavigationLabel: "Navigasyon sa website",
     backupTestingDescription:
-      "Awtomatikong i-back up ang test report ug litrato samtang abli ug online ang app. Paghimo ug tipigi ang recovery code aron mabawi kini sa laing device. Ang offline nga mga report maghulat niini nga device hangtod ma-upload.",
-    backupAutomatic: "Awtomatikong magsugod ang cloud backup",
+      "Ang test report ug litrato magpabilin niini nga telepono hangtod maghimo ka og recovery code o mogamit sa anaa nang code. Ang paghimo sa code mo-enable sa awtomatikong backup ngadto sa lahi nga testing project samtang abli ug online ang app. Tipigi ang code gawas niining telepono.",
+    backupAutomatic: "Na-enable ang awtomatikong cloud backup",
+    backupLocalOnly:
+      "Magpabilin sa telepono ang bag-ong scan hangtod ma-set up ang backup",
+    backupPaused: "Gi-pause ang cloud backup",
+    backupStarted:
+      "Na-enable ang backup. Mahimong nagpadayon pa ang upload. Ipadayon nga abli ug online ang app; sulayan pag-usab ang wala mahuman nga report kon ablihan o ikonektar pag-usab.",
     backupPause: "I-pause ang backup",
     backupResume: "Ipadayon ang backup",
     backupNewCodeHint:
@@ -539,7 +548,7 @@ export const translations = {
       },
       {
         title: "2. Awtomatikong testing backup",
-        text: "Kini nga testing build awtomatikong mo-upload sa natipig nga test report ug litrato ngadto sa lahi nga testing Supabase project samtang abli ug online. Maghimo ang Supabase og anonymous nga identidad sa luyo sa app; walay Sign In/Register nga screen o personal nga detalye nga gikinahanglan. Mopadayon ang upload human makakonekta pag-usab.",
+        text: "Ang test report ug litrato magpabilin sa telepono sa sinugdanan. Ang paghimo og recovery code o pagkonektar sa anaa nang code mo-enable sa awtomatikong backup ngadto sa lahi nga testing Supabase project samtang abli ug online, gawas kon gi-pause. Protektado ang backup sa napamatud-ang Auth ug pagpanag-iya nga walay Sign In/Register nga screen. Gamita ang kasamtangang napamatud-ang tag-iya sa paghimo sa code kon aduna. Sulayan pag-usab ang wala mahuman nga report human ablihan o ikonektar pag-usab; mahimong magsugod pag-usab ang naputol nga photo upload.",
       },
       {
         title: "3. Pagbawi ug pagtangtang",
@@ -551,8 +560,8 @@ export const translations = {
       },
     ],
     siteDescription:
-      "Offline-first nga pag-ila sa sakit sa dahon ug bunga sa mangga para sa Android, nga adunay AI sa device ug awtomatikong pribadong cloud backup.",
-    nativePrivacyUpdated: "Gi-update niadtong Oktubre 22, 2026",
+      "Offline-first nga pag-ila sa sakit sa dahon ug bunga sa mangga para sa Android, nga adunay AI sa device ug opsyonal nga pribadong cloud backup.",
+    nativePrivacyUpdated: "Gi-update niadtong Oktubre 25, 2026",
     nativePrivacySections: [
       {
         title: "1. Diagnosis ug lokal nga mga report",
@@ -560,7 +569,7 @@ export const translations = {
       },
       {
         title: "2. Awtomatikong pribadong backup",
-        text: "Awtomatikong i-upload ang natipig nga mga report ug litrato ngadto sa pribadong Supabase storage samtang abli ug online ang app. Protektado ang pagpanag-iya pinaagi sa anonymous nga identidad nga walay Sign In/Register nga screen. Paghimo ug tipigi ang pribadong recovery code gawas sa telepono aron mabawi ang nahuman nga upload sa laing telepono. Bisan kinsa nga adunay code makaabli sa backup; kon mawala ang telepono nga walay natipig nga code, dili na kini mabawi.",
+        text: "Ang report ug litrato magpabilin sa telepono sa sinugdanan. Ang paghimo og recovery code mo-enable sa awtomatikong upload ngadto sa pribadong Supabase storage samtang abli ug online ang app. Ang pagkonektar sa anaa nang code motugot usab sa backup gawas kon klarong gi-pause ang upload. Walay Sign In/Register nga screen o dugang nga pagkumpirma sa pagtipig sa code. Protektado ang access sa napamatud-ang Auth ug mga lagda sa pagpanag-iya. Tipigi ang code gawas niining telepono; bisan kinsa nga adunay code makaabli sa backup. Ang paghimo sa code wala magpasabot nga nahuman na ang tanang upload. Magpabilin ang nahuman nga backup, ug sulayan pag-usab ang wala mahuman nga report human ablihan o ikonektar pag-usab.",
       },
       {
         title: "3. Pagbawi ug pagtangtang",
@@ -601,7 +610,7 @@ export const translations = {
     androidDownloadAgainHint:
       "Aduna ka nay app. Pag-download lamang og laing APK aron i-install pag-usab o i-update ang Android nga bersiyon.",
     androidDownloadDescription:
-      "Ang Android app magtipig sa report sa telepono ug awtomatikong mo-back up kon online. Tipigi ang pribadong recovery code aron mabawi kini sa laing telepono.",
+      "Ang Android app magtipig sa report sa imong telepono. Paghimo og pribadong recovery code sulod sa app aron ma-enable ang awtomatikong cloud backup ug mabawi ang nahuman nga upload sa laing telepono.",
     androidDownloadPending:
       "Wala mapamatud-i ang Android APK download. Tan-awa ang opisyal nga mga release o sulayi pag-usab kon konektado.",
     androidDownloadChecking: "Gisusi ang pagkaanaa sa Android APK...",
@@ -620,8 +629,8 @@ export const translations = {
     androidDownloadBrowser: "Ablihi ang website",
     backupTitle: "Pribadong cloud backup",
     backupDescription:
-      "Awtomatikong i-back up ang mga report ug litrato samtang abli ug online ang app. Walay Sign In/Register nga screen. Paghimo ug tipigi ang recovery code gawas sa telepono aron mabawi ang nahuman nga backup sa laing telepono. Ma-upload ang offline nga report human makakonekta pag-usab.",
-    backupCreate: "Paghimo og recovery code",
+      "Ang report ug litrato magpabilin niini nga telepono hangtod maghimo ka og recovery code o mogamit sa anaa nang code. Ang paghimo sa code mo-enable sa awtomatikong cloud backup samtang abli ug online ang app. Walay Sign In/Register nga screen o dugang nga pagkumpirma. Tipigi ang code gawas niining telepono.",
+    backupCreate: "Paghimo og recovery code ug i-enable ang backup",
     backupRecoveryLabel: "Imong pribadong recovery code",
     backupRecoveryHint:
       "Bisan kinsa nga adunay code makaabli sa imong backup. Tipigi kini gawas niining telepono. Kon mawala ang telepono ug code, dili na mabawi ang cloud backup.",

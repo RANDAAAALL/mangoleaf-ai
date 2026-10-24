@@ -97,7 +97,11 @@ export function BackupRecoveryPanel({ language }: { language: Language }) {
         {testing ? t.backupTestingDescription : t.backupDescription}
       </p>
       <p className="mt-3 font-semibold">
-        {preferences.enabled ? t.backupAutomatic : t.backupDisabled}
+        {!preferences.hasCode
+          ? t.backupLocalOnly
+          : preferences.enabled
+            ? t.backupEnabled
+            : t.backupPaused}
       </p>
 
       <div className="mt-4 flex flex-col gap-3">
@@ -110,6 +114,9 @@ export function BackupRecoveryPanel({ language }: { language: Language }) {
               onClick={() =>
                 void run(async () => {
                   setCode(await createBackupVault());
+                  return (await backupPreferences()).enabled
+                    ? t.backupStarted
+                    : t.backupPaused;
                 })
               }
             >
@@ -221,14 +228,18 @@ export function BackupRecoveryPanel({ language }: { language: Language }) {
           </button>
         )}
 
-        <button
-          type="button"
-          className={secondary}
-          disabled={busy}
-          onClick={() => void run(() => setBackupEnabled(!preferences.enabled))}
-        >
-          {preferences.enabled ? t.backupPause : t.backupResume}
-        </button>
+        {preferences.hasCode && (
+          <button
+            type="button"
+            className={secondary}
+            disabled={busy}
+            onClick={() =>
+              void run(() => setBackupEnabled(!preferences.enabled))
+            }
+          >
+            {preferences.enabled ? t.backupPause : t.backupResume}
+          </button>
+        )}
       </div>
       <p role="status" aria-live="polite" className="mt-3 text-sm">
         {busy ? t.backupBusy : message}

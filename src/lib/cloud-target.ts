@@ -32,7 +32,7 @@ export function isAutomaticTestBackup() {
   );
 }
 
-/** Both APK variants back up automatically; a published website never enrolls a production owner. */
+/** Both APK variants support automatic transfers after recovery-code setup; websites never enroll. */
 export function isAutomaticBackup() {
   return (
     isAutomaticTestBackup() ||

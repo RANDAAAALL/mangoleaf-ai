@@ -211,12 +211,18 @@ async function backupClient() {
   return client;
 }
 
-async function authenticatedOwner() {
+async function authenticatedOwner(
+  reconnect = true,
+): Promise<{ active: SupabaseClient; owner: string }> {
   const active = await backupClient();
   // Server validation prevents a stored device label or edited session JSON from becoming ownership evidence.
   const { data, error } = await active.auth.getUser();
   const code = await setting(recoveryKey);
   const boundOwner = await setting(ownerKey);
+  if (reconnect && (error || !data.user) && code) {
+    await connectCode(code);
+    return authenticatedOwner(false);
+  }
   if (
     error ||
     !data.user ||
@@ -236,11 +242,20 @@ export async function backupPreferences() {
     setting(enabledKey),
     setting(recoveryKey),
   ]);
+  let hasCode = false;
+  if (code) {
+    try {
+      parseRecoveryCode(code);
+      hasCode = true;
+    } catch {
+      // A damaged credential must not start Auth or private transfers on startup.
+    }
+  }
   return {
-    // Earlier builds wrote "false" before consent. Both APK variants now start automatically;
-    // only an explicit pause in this implementation uses the distinct "paused" value.
-    enabled: isAutomaticBackup() ? enabled !== "paused" : enabled === "true",
-    hasCode: !!code,
+    // A valid saved code gates uploads. Keep earlier explicit disables and pauses;
+    // a legacy connected code with no preference retains its existing automatic backup.
+    enabled: hasCode && enabled !== "paused" && enabled !== "false",
+    hasCode,
   };
 }
 
@@ -249,7 +264,7 @@ export async function savedRecoveryCode() {
   return setting(recoveryKey);
 }
 
-/** Recovery-code creation stays explicit; automatic ownership is established separately for the first eligible photo. */
+/** Only this explicit action may establish anonymous ownership before a recovery code exists. */
 export async function createBackupVault() {
   requireNativeRecovery();
   return provisionVault();
@@ -261,6 +276,8 @@ async function provisionVault() {
 
 /** Caller owns the operation queue, preventing automatic setup from waiting on its own upload batch. */
 async function provisionVaultUnlocked() {
+  if (!canTransfer())
+    throw new Error("Recovery creation requires a connection.");
   if ((await backupPreferences()).hasCode)
     throw new Error("A backup vault is already connected.");
   const active = isAutomaticBackup()
@@ -272,22 +289,21 @@ async function provisionVaultUnlocked() {
   );
   if (error || typeof data?.recoveryCode !== "string")
     throw new Error("Backup vault could not be created.");
-  await connectCode(data.recoveryCode);
+  await connectCode(data.recoveryCode, "create");
+  if ((await backupPreferences()).enabled) scheduleBackup();
   return data.recoveryCode as string;
 }
 
-async function connectCode(input: string) {
+async function connectCode(
+  input: string,
+  activation: "create" | "connect" | false = false,
+) {
+  if (!canTransfer()) throw new Error("Recovery requires a connection.");
   const credential = parseRecoveryCode(input);
   const active = await backupClient();
-  // Finish already-confirmed deletes under the old owner before changing its credentials.
+  // Verify the candidate before draining deletes: the saved same-vault code may
+  // be the only way to recover a lost session. Never use another vault's session.
   const oldScope = await cloudHistoryScope();
-  if (oldScope) {
-    await flushHistoryDeletes();
-    if ((await pendingHistoryDeletes(oldScope)).length)
-      throw new Error(
-        "Pending cloud deletions must finish before changing recovery codes.",
-      );
-  }
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const key =
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
@@ -326,9 +342,16 @@ async function connectCode(input: string) {
       verified.data.user.app_metadata?.android_backup_vault !== true
     )
       throw new Error("Recovery owner could not be verified.");
-    // History remains deletable during credential verification; drain any new old-owner jobs before switching.
-    await flushHistoryDeletes();
     const verifiedOwner = verified.data.user.id;
+    const priorOwner = await setting(ownerKey);
+    const sameVault =
+      oldScope === `${project}:${credential.email.split("@")[0]}` &&
+      (priorOwner === null || priorOwner === verifiedOwner);
+    // History remains deletable during verification. Drain old-owner jobs before
+    // promotion; a verified same-vault candidate can replace an expired session.
+    await flushHistoryDeletes(
+      sameVault ? { active: candidate, owner: verifiedOwner } : undefined,
+    );
     await withCloudHistoryMutation(async () => {
       if (
         (await cloudHistoryScope()) !== oldScope ||
@@ -345,6 +368,7 @@ async function connectCode(input: string) {
         setting(sessionKey),
         setting(ownerKey),
         setting(recoveryKey),
+        setting(enabledKey),
       ]);
       sessionGeneration++;
       if (previousBinding) previousBinding.revoked = true;
@@ -353,6 +377,13 @@ async function connectCode(input: string) {
         await setSetting(ownerKey, verifiedOwner);
         await setSetting(recoveryKey, credential.code);
         await setSetting(sessionKey, binding.value);
+        if (
+          activation === "create" ||
+          (activation === "connect" &&
+            previous[3] !== "paused" &&
+            !(previous[2] && previous[3] === "false"))
+        )
+          await setSetting(enabledKey, "true");
         binding.generation = sessionGeneration;
         binding.staged = false;
         clientBinding = binding;
@@ -361,6 +392,7 @@ async function connectCode(input: string) {
       } catch (error) {
         await setSetting(ownerKey, previous[1]);
         await setSetting(recoveryKey, previous[2]);
+        await setSetting(enabledKey, previous[3]);
         sessionGeneration = previousGeneration;
         if (previousBinding) previousBinding.revoked = false;
         // Reactivate before the last session write so a settling original refresh can persist its newest token.
@@ -378,28 +410,27 @@ async function connectCode(input: string) {
   }
 }
 
-/** Automatic backup gets a verified anonymous Auth owner; recovery creation later keeps that same ID. */
+/** Explicit setup keeps an older anonymous owner's ID; connected-code retries never create a replacement owner. */
 async function ensureAutomaticOwner() {
   if (!isAutomaticBackup())
     throw new Error("Automatic identity is unavailable for this build.");
-  let active = await backupClient();
+  const active = await backupClient();
   const current = await active.auth.getSession();
+  const code = await setting(recoveryKey);
+  if (code) {
+    if (current.error || !current.data.session) {
+      await connectCode(code);
+      return authenticatedOwner(false);
+    }
+    return authenticatedOwner();
+  }
   if (current.error) throw new Error("Backup session could not be read.");
   if (!current.data.session) {
-    const code = await setting(recoveryKey);
-    if (code) {
-      await connectCode(code);
-      // Recovery promotes a different client and disposes the prior one.
-      active = await backupClient();
-    } else {
-      if (await setting(ownerKey))
-        throw new Error(
-          "Reconnect the existing backup owner before uploading.",
-        );
-      const anonymous = await active.auth.signInAnonymously();
-      if (anonymous.error)
-        throw new Error("Backup anonymous sign-in is unavailable.");
-    }
+    if (await setting(ownerKey))
+      throw new Error("Reconnect the existing backup owner before uploading.");
+    const anonymous = await active.auth.signInAnonymously();
+    if (anonymous.error)
+      throw new Error("Backup anonymous sign-in is unavailable.");
   }
   const verified = await active.auth.getUser();
   if (verified.error || !verified.data.user)
@@ -424,22 +455,18 @@ async function ensureAutomaticOwner() {
 export async function connectBackupVault(input: string) {
   requireNativeRecovery();
   return exclusive(async () => {
-    await connectCode(input);
+    await connectCode(input, "connect");
+    if ((await backupPreferences()).enabled) scheduleBackup();
   });
 }
 
-export async function setBackupEnabled(
-  enabled: boolean,
-  recoveryCodeAcknowledged = false,
-) {
+export async function setBackupEnabled(enabled: boolean) {
   requireNativeRecovery();
   if (enabled) {
-    if (
-      !isAutomaticBackup() &&
-      (!recoveryCodeAcknowledged || !(await savedRecoveryCode()))
-    )
-      throw new Error("Recovery code must be saved first.");
-    if (!isAutomaticBackup()) await authenticatedOwner();
+    if (!(await backupPreferences()).hasCode)
+      throw new Error(
+        "Create or connect a recovery code before enabling backup.",
+      );
   }
   await setSetting(
     enabledKey,
@@ -505,13 +532,14 @@ export async function backUpScans() {
         continue;
       if (!canTransfer()) break;
       if (!session) {
-        // Empty History and tombstones never create identities. Both APK variants enroll lazily.
+        // backupPreferences gates this path on a saved recovery code. Existing sessions
+        // can reconnect that code, but scanning alone never creates an anonymous owner.
         session = isAutomaticBackup()
           ? await ensureAutomaticOwner()
           : await authenticatedOwner();
       }
       const { active, owner } = session;
-      // The first anonymous sign-in may outlast a local deletion made before any owner existed.
+      // Session recovery may outlast a local deletion.
       // Wait for that local commit, then confirm the report remains before creating a cloud intent.
       const stored = await withCloudHistoryMutation<
         NativeRecord | null | undefined
@@ -627,7 +655,8 @@ async function listBackups(active: SupabaseClient, owner: string) {
 export async function restoreCloudBackup(code?: string) {
   requireNativeRecovery();
   return exclusive(async () => {
-    if (code !== undefined) await connectCode(code);
+    if (!canTransfer()) throw new Error("Recovery requires a connection.");
+    if (code !== undefined) await connectCode(code, "connect");
     const { active, owner } = await authenticatedOwner();
     await flushHistoryDeletes({ active, owner });
     const rows = await listBackups(active, owner);

@@ -1,5 +1,9 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## Recovery-code-first backup candidate (October 25, 2026)
+
+Both APK variants now gate new scan/photo uploads on a saved valid recovery code. Opening the app or saving scans before setup reads local preferences without constructing a private Supabase client or enrolling an owner. Public guideline refresh remains independent. Explicit code creation still performs Auth/provisioning; existing anonymous owners retain their identity and confirmed deletion jobs can drain independently of the upload gate. After setup, foreground/reconnect retries reuse completed manifests and retry unfinished reports; interrupted photo requests may restart rather than resume from a byte offset. This changes when network work starts, with no claimed timing, battery or bandwidth measurements. Physical-device and release validation remain pending.
+
 ## Local model restore (October 24, 2026)
 
 The maintainer ended the local V5 override. Restored adopted V4.5.0 model bytes/configuration/constants and the V4.5 runtime cache identity. Activation now also removes the superseded V5 model runtime cache; generated precache revisions follow the restored bytes. This touches model caches, not stored History/photos. Websites still avoid classifier initialization. The maintainer reported no problems with the self-built Debug capture changes but supplied no new timing measurements; no quantified speedup is claimed from that report.
