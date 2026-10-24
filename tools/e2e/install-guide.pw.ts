@@ -445,6 +445,12 @@ test("I09: a published Android APK appears in both languages without downloading
     await expect(
       page.getByRole("link", { name: t.androidOpenOrInstall, exact: true }),
     ).toBeVisible();
+    await expect(
+      page.getByRole("link", {
+        name: t.androidDownloadFallback,
+        exact: true,
+      }),
+    ).toHaveAttribute("href", `${androidReleasePage}/tag/v9.8.7`);
   }
 });
 

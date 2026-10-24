@@ -1,15 +1,88 @@
 import { expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
 import {
   androidApkAssetLabel,
   parseAndroidVersion,
 } from "../src/lib/android-version.mjs";
 import {
   androidApkAsset,
+  androidApkDownloadHref,
   androidReleaseApi,
   androidReleasePage,
   fetchAndroidRelease,
   parseAndroidRelease,
 } from "../src/lib/android-release";
+
+test("the production download path resolves only to the fixed APK and disables intermediary caching", () => {
+  const config = JSON.parse(
+    readFileSync(new URL("../vercel.json", import.meta.url), "utf8"),
+  );
+  expect(config.rewrites).toHaveLength(1);
+  const rewrite = config.rewrites[0];
+  const parameter = /^\/apk\/:tag\((.+)\)\/mangoleaf-ai\.apk$/.exec(
+    rewrite.source,
+  );
+  expect(parameter).not.toBeNull();
+  const route = new RegExp(`^/apk/(${parameter[1]})/mangoleaf-ai\\.apk$`);
+  const release = parseAndroidRelease(published());
+  const path = androidApkDownloadHref(
+    release,
+    "https://mangoleafai.vercel.app",
+  );
+  const matched = route.exec(path);
+  expect(matched).not.toBeNull();
+  expect(rewrite.destination.replace(":tag", matched[1])).toBe(
+    release.downloadUrl,
+  );
+  for (const invalid of [
+    "/apk/../mangoleaf-ai.apk",
+    "/apk/v1%2fother/mangoleaf-ai.apk",
+    "/apk/v1/other.apk",
+    "/apk/v1/mangoleaf-ai.apk/extra",
+  ])
+    expect(route.test(invalid)).toBe(false);
+  const response = config.headers.find(
+    (entry) => entry.source === rewrite.source,
+  );
+  const headers = Object.fromEntries(
+    response.headers.map(({ key, value }) => [key.toLowerCase(), value]),
+  );
+  expect(headers["content-disposition"]).toBe(
+    'attachment; filename="mangoleaf-ai.apk"',
+  );
+  expect(headers["cache-control"]).toContain("no-store");
+  expect(headers["cdn-cache-control"]).toBe("no-store");
+  expect(headers["x-vercel-enable-rewrite-caching"]).toBe("0");
+});
+
+test("production APK links stay on the website while local hosts retain validated GitHub URLs", () => {
+  const release = parseAndroidRelease(published());
+  expect(release).not.toBeNull();
+  expect(
+    androidApkDownloadHref(release, "https://mangoleafai.vercel.app"),
+  ).toBe("/apk/v9.8.7/mangoleaf-ai.apk");
+  for (const origin of [
+    null,
+    "http://localhost:3000",
+    "https://example.trycloudflare.com",
+    "https://mangoleafai.vercel.app.evil.invalid",
+    "http://mangoleafai.vercel.app",
+  ])
+    expect(androidApkDownloadHref(release, origin)).toBe(release.downloadUrl);
+  for (const tag of ["../other", "v1/other", "v1%2fother", "v1..2", "v1\n"])
+    expect(
+      androidApkDownloadHref(
+        { ...release, tag },
+        "https://mangoleafai.vercel.app",
+      ),
+    ).toBeUndefined();
+  expect(
+    androidApkDownloadHref(
+      { ...release, downloadUrl: "https://evil.invalid/app.apk" },
+      "https://mangoleafai.vercel.app",
+    ),
+  ).toBeUndefined();
+});
 
 function published() {
   return {

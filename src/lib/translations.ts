@@ -93,6 +93,9 @@ export const translations = {
     androidDownloadVersion: "Available Android APK v{version}",
     androidDownloadApk: "Download Android APK",
     androidDownloadReleases: "View official releases",
+    androidDownloadTrouble:
+      "Download not finishing? Open this release on GitHub and tap mangoleaf-ai.apk.",
+    androidDownloadFallback: "Download from GitHub instead",
     androidDownloadCompatibility:
       "The mobile app supports Android only. Android 8.0 or newer and an up-to-date Android System WebView are required.",
     androidDownloadMigration:
@@ -607,6 +610,9 @@ export const translations = {
     androidDownloadVersion: "Anaa nga Android APK v{version}",
     androidDownloadApk: "I-download ang Android APK",
     androidDownloadReleases: "Tan-awa ang opisyal nga mga release",
+    androidDownloadTrouble:
+      "Wala mahuman ang download? Ablihi kini nga release sa GitHub ug i-tap ang mangoleaf-ai.apk.",
+    androidDownloadFallback: "I-download gikan sa GitHub",
     androidDownloadCompatibility:
       "Android lamang ang gisuportahan sa mobile app. Gikinahanglan ang Android 8.0 o mas bag-o ug updated nga Android System WebView.",
     androidDownloadMigration:

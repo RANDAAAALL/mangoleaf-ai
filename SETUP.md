@@ -1,6 +1,6 @@
 # MangoLeaf AI Setup Guide
 
-**October 24 native branding follow-up:** source native v0.1.5/code 6 requires a freshly built same-signer installer for launcher/system-splash artwork. Keep signed APKs outside Git; see [the current Android guide](docs/versions/ANDROID_APK_VERSIONING.md#icon-and-apk-download-follow-up-october-24-2026).
+**October 24 native/download follow-up:** source native v0.1.5/code 6 requires a freshly built same-signer installer for the launcher/system-splash artwork. The production `/apk/<tag>/mangoleaf-ai.apk` path depends on root `vercel.json`; local/tunnel hosts keep direct GitHub downloads. Keep signed APKs outside Git and use the exact-release fallback if a browser does not finish. Deployed proxy headers, byte integrity, range handling and phone completion still require verification; see [the current Android guide](docs/versions/ANDROID_APK_VERSIONING.md#icon-and-apk-download-follow-up-october-24-2026).
 
 ## Current browser and APK behavior (October 24, 2026)
 

@@ -41,8 +41,9 @@ function isGuidelineRequest(url: URL) {
 
 function isAndroidReleaseRequest(url: URL) {
   return (
-    url.origin === "https://api.github.com" &&
-    url.pathname === "/repos/RANDAAAALL/mangoleaf-ai/releases/latest"
+    (url.origin === self.location.origin && url.pathname.startsWith("/apk/")) ||
+    (url.origin === "https://api.github.com" &&
+      url.pathname === "/repos/RANDAAAALL/mangoleaf-ai/releases/latest")
   );
 }
 

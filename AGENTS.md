@@ -118,3 +118,4 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Native branding and installer delivery
 
 - Keep Android launcher artwork as transparent vectors with an adaptive background supplied separately. System splash resources use the transparent foreground directly; do not restore a precomposed square, circle or shadow inside the leaf. Android/Samsung may still apply their own outer mask. Resource changes need a new native version/code and installer; OTA changes only web assets.
+- Production APK delivery uses the fixed-repository `/apk/<tag>/mangoleaf-ai.apk` Vercel rewrite and a validated release tag. Never accept a download origin, repository or arbitrary filename from URL parameters. Keep installer requests NetworkOnly in the service worker, preserve the exact-release fallback, and do not add APK binaries to `public/` or Git. Verify the deployed bytes/hash and Android browser completion before publication.

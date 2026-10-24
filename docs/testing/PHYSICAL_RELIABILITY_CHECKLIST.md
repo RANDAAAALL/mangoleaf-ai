@@ -1,6 +1,6 @@
 # MangoLeaf AI physical reliability checklist
 
-**Native 0.1.5 follow-up:** record file-manager APK thumbnail, home-screen adaptive mask and the Android starting-window leaf before the web spinner. Install over the existing same-signer app and confirm reports/credentials remain. These checks are pending; do not pre-mark passes from resource compilation.
+**Native 0.1.5 follow-up:** record file-manager APK thumbnail, home-screen adaptive mask and the Android starting-window leaf before the web spinner. Install over the existing same-signer app and confirm reports/credentials remain. Test production-site APK completion in Brave/Chrome, duplicate filename and safety prompts, then compare the completed file size/hash with GitHub. These checks are pending; do not pre-mark passes from resource compilation.
 
 **Current runtime scope (v0.10.0 candidate):** use the Android APK for scan, History, Diagnostics, recovery and backup checks. Production and development websites at all viewport sizes provide Home/About/Android installation only; check desktop QR arrival and phone download guidance there. Existing browser data must remain untouched. The automated compatibility scanner harness is not a supported phone-browser scanning product.
 

@@ -5,14 +5,14 @@ import Link from "next/link";
 import { translations, type Language } from "@/lib/translations";
 import { useAndroidAppLink } from "@/hooks/useAndroidAppLink";
 import { useAndroidRelease } from "@/hooks/useAndroidRelease";
-import { androidReleasePage } from "@/lib/android-release";
+import { androidApkAsset, androidReleasePage } from "@/lib/android-release";
 
 /** Keep download availability honest until a signed APK is actually published. */
 export default function DownloadPage() {
   const [language, setLanguage] = useState<Language>("bis");
   const t = translations[language];
   const { href: appLink, installed } = useAndroidAppLink();
-  const { checking, release } = useAndroidRelease();
+  const { checking, release, downloadHref } = useAndroidRelease();
   return (
     <main className="mx-auto flex max-w-2xl flex-col gap-5 p-6 text-[#143519]">
       <button
@@ -51,6 +51,7 @@ export default function DownloadPage() {
         </p>
       )}
       {release &&
+        downloadHref &&
         (installed ? (
           <details className="rounded-xl border border-[#b8d7b5] p-4">
             <summary className="cursor-pointer font-semibold">
@@ -59,7 +60,10 @@ export default function DownloadPage() {
             <p className="my-3 text-sm">{t.androidDownloadAgainHint}</p>
             <a
               className="inline-flex min-h-11 items-center rounded-xl border border-[#277839] px-5 py-3 font-bold"
-              href={release.downloadUrl}
+              href={downloadHref}
+              download={
+                downloadHref.startsWith("/apk/") ? androidApkAsset : undefined
+              }
               rel="noopener noreferrer"
             >
               {t.androidDownloadApk}
@@ -68,19 +72,27 @@ export default function DownloadPage() {
         ) : (
           <a
             className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#277839] px-5 py-3 font-bold text-white"
-            href={release.downloadUrl}
+            href={downloadHref}
+            download={
+              downloadHref.startsWith("/apk/") ? androidApkAsset : undefined
+            }
             rel="noopener noreferrer"
           >
             {t.androidDownloadApk}
           </a>
         ))}
+      {release && <p className="text-sm">{t.androidDownloadTrouble}</p>}
       <a
         className="underline"
-        href={androidReleasePage}
+        href={
+          release
+            ? `${androidReleasePage}/tag/${release.tag}`
+            : androidReleasePage
+        }
         rel="noopener noreferrer"
         target="_blank"
       >
-        {t.androidDownloadReleases}
+        {release ? t.androidDownloadFallback : t.androidDownloadReleases}
       </a>
       <p>{t.androidDownloadCompatibility}</p>
       <p>{t.androidDownloadMigration}</p>

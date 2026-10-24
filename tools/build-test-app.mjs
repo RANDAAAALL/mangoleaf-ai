@@ -26,6 +26,7 @@ files.push(
   "package.json",
   "bun.lock",
   "next.config.ts",
+  "vercel.json",
   "tsconfig.json",
   "postcss.config.mjs",
   // The generated scanner route is part of this isolated test artifact only.

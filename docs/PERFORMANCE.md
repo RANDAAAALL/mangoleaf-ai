@@ -2,7 +2,7 @@
 
 ## Installer-delivery and startup artwork follow-up (October 24, 2026)
 
-The native 0.1.5 candidate uses vector/adaptive artwork and a separate system-startup leaf, with no artificial startup delay or change to camera/model timing. Actual device appearance remains subject to physical verification.
+The native 0.1.5 candidate uses vector/adaptive artwork and a separate system-startup leaf, with no artificial startup delay or change to camera/model timing. The production website delegates installer bytes to a same-origin Vercel rewrite; it does not fetch a 14 MB APK into a JavaScript Blob. Installer responses and service-worker requests bypass caching to avoid stale or partial download reuse. Transfer time, final browser completion and actual device appearance remain unmeasured. Earlier browser startup evidence precedes this follow-up.
 
 ## Browser startup boundary (October 24, 2026)
 

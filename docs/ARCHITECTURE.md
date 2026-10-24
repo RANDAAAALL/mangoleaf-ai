@@ -4,6 +4,8 @@
 
 The Java host now prepares native v0.1.5/code 6 with adaptive launcher resources and separate transparent system-startup artwork. Default bundles target 6-6; SQLite/bridge remain 1/1. This changes installer resources, not scan storage or backup ownership. The shipped 0.1.4/code 5 release remains unchanged.
 
+For the pinned production website origin, the verified release tag selects a same-origin `/apk/<tag>/mangoleaf-ai.apk` attachment. Root `vercel.json` proxies only the fixed repository APK path; no API function, private token or APK under `public/` is introduced. Other origins retain GitHub links. APK and latest-release requests bypass service-worker caching; the page also links the exact release. This is a mitigation for the observed GitHub/Brave handoff, not a verified browser root-cause fix. Actual Vercel redirect/range/hash behavior and phone completion remain pending. Vercel serves the APK bytes and its normal transfer accounting applies. [External rewrite behavior](https://vercel.com/docs/routing/rewrites) is independent of Supabase backup.
+
 ## Browser landing boundary (October 24, 2026)
 
 The v0.10.0 candidate routes by the compiled Android build target, never by viewport or user agent. `src/app/page.tsx` mounts `BrowserLanding` for every website browser, including development. Only an Android bundle loads the separate `Application` component with model initialization, scan/storage hooks, diagnostics and the backup worker. An Android build without the trusted native bridge still fails closed.

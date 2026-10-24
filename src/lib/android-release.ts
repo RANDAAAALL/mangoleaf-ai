@@ -5,6 +5,7 @@ export const androidReleasePage =
 export const androidReleaseApi =
   "https://api.github.com/repos/RANDAAAALL/mangoleaf-ai/releases/latest";
 export const androidApkAsset = "mangoleaf-ai.apk";
+const productionWebsiteOrigin = "https://mangoleafai.vercel.app";
 const metadataByteLimit = 256 * 1024;
 const apkByteLimit = 128 * 1024 * 1024;
 
@@ -13,6 +14,24 @@ export type AndroidRelease = {
   downloadUrl: string;
   apkVersion?: string;
 };
+
+/** Only the published website has the Vercel rewrite; local/tunnel hosts retain GitHub links. */
+export function androidApkDownloadHref(
+  release: AndroidRelease,
+  origin: string | null,
+): string | undefined {
+  if (
+    !/^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/.test(release.tag) ||
+    release.tag !== release.tag.trim() ||
+    release.tag.includes("..") ||
+    release.downloadUrl !==
+      `${androidReleasePage}/download/${release.tag}/${androidApkAsset}`
+  )
+    return undefined;
+  return origin === productionWebsiteOrigin
+    ? `/apk/${encodeURIComponent(release.tag)}/${androidApkAsset}`
+    : release.downloadUrl;
+}
 
 function object(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -31,6 +50,7 @@ export function parseAndroidRelease(value: unknown): AndroidRelease | null {
     !Number.isFinite(Date.parse(value.published_at)) ||
     typeof value.tag_name !== "string" ||
     !/^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/.test(value.tag_name) ||
+    value.tag_name !== value.tag_name.trim() ||
     value.tag_name.includes("..") ||
     !Array.isArray(value.assets) ||
     value.assets.length > 1000 ||

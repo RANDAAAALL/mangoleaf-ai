@@ -1,5 +1,9 @@
 # Supabase guidelines, preserved cloud data, and recovery
 
+## Public APK transfer boundary (October 24, 2026)
+
+The prepared Vercel rewrite serves only the fixed public repository's `mangoleaf-ai.apk` under a constrained release-tag path. Client metadata still requires the exact stable uploaded asset; installer URLs never come from arbitrary query parameters. The proxy introduces no service-role/private key or private backup request. No-store attachment headers and NetworkOnly handling keep APK responses out of website runtime caches. Native APK signatures and existing OTA verification remain the trust boundaries; a same-origin URL alone is not installer approval. Live byte/hash, redirect/range handling and Android completion must be checked before distribution.
+
 ## Current website boundary (October 24, 2026)
 
 The v0.10.0 candidate removes browser scanning, History controls and Diagnostics at every viewport, including development. The landing entry point does not mount scan storage or the private backup worker. The cloud runtime guard rejects browsers even with valid testing settings. No browser anonymous owner is enrolled, and existing sessions, legacy IndexedDB records and deletion outboxes are not cleared. Older dated browser-upload notes below remain historical. Debug APK automatic testing backup and production APK automatic production backup continue unchanged; public guideline retrieval remains separate inside the APK. No hosted SQL, RLS, Storage, Auth, function or server-secret change is required. This client boundary leaves server authorization with verified ownership and existing [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security); hiding website controls does not change grants or policies.

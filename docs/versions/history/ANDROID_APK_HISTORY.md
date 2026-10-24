@@ -14,6 +14,8 @@ Preparing shared web `0.9.0` and local candidate tag `v0.9.0-rc.1` leaves native
 
 Prepared versionName 0.1.5 (Debug 0.1.5-dev), versionCode 6 and default host bounds 6-6; bridge/schema remain 1/1, web candidate 0.10.0 and model V4.5.0. Replaced opaque PNG launcher artwork with transparent vector/adaptive resources, and supplied dedicated system-splash styling for Android 12+ plus a plain legacy starting window. Native resources require a new same-signer APK; old code-5 APKs cannot apply them through web OTA. SQLite, private files, credentials, signing keys and deployed resources remain unchanged.
 
+The same follow-up prepares a fixed-repository Vercel download rewrite, validated production-origin href, NetworkOnly APK requests and an exact-release fallback for the reported Brave download that reached full size without producing a usable file. Browser handoff is a working hypothesis. Fifteen focused tests, resource compile/link and syntax checks passed; full release gates and physical/hosted verification remain pending. No installer, tag or release was published.
+
 ## Browser companion change (October 24, 2026)
 
 App v0.10.0 is an unpublished shared-web candidate; native APK v0.1.4/code 5, bridge/schema 1/1, bounds 5-5 and V4.5.0 model are unchanged. All website browsers, including development, become landing/download-only. APK scanning, diagnostics, SQLite/private photos, automatic backup and explicit recovery remain. Existing browser records/outboxes are preserved without UI or private worker startup; Debug APK replaces supported development-browser scanning. This needs a new tested web candidate before OTA or website promotion and does not alter published v0.9.0 artifacts.

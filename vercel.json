@@ -1,0 +1,40 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/apk/:tag([A-Za-z0-9][A-Za-z0-9._-]{0,127})/mangoleaf-ai.apk",
+      "destination": "https://github.com/RANDAAAALL/mangoleaf-ai/releases/download/:tag/mangoleaf-ai.apk"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/apk/:tag([A-Za-z0-9][A-Za-z0-9._-]{0,127})/mangoleaf-ai.apk",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/vnd.android.package-archive"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment; filename=\"mangoleaf-ai.apk\""
+        },
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "x-vercel-enable-rewrite-caching",
+          "value": "0"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    }
+  ]
+}
