@@ -1,5 +1,7 @@
 # V5.0.0 Outlier Exposure fine-tuning experiment
 
+**October 24 local-runtime follow-up:** the maintainer ended the V5 local runtime test and restored adopted V4.5.0 weights/configuration/labels. The completed V5 research evidence, notebooks and original ledgers remain preserved. This does not adopt V5, alter its metrics, or rerun training. See the [restore record](../../../versions/history/AI_MODEL_HISTORY.md#local-v5-runtime-ended-october-24-2026). Earlier installation/status statements below describe their dated test.
+
 **Research-only publication scope:** V5 records may be committed without the maintainer's local runtime overrides. The committed app remains V4.5.0 with PWA `0.7.0`; see the [exact excluded paths](RESULTS_REVIEW_v5_0_0.md#research-only-push-scope). The reusable evaluation template starts with unset input paths and an explicit review gate; completed notebooks remain unchanged.
 
 **October 19, 2026 status:** Training, calibration, export, and the later OOD report completed. Verified original-byte copies now occupy this folder's `artifacts/` and `figures/`. The [results review](RESULTS_REVIEW_v5_0_0.md) compares the exact 397 mango inputs with active confidence-only V4.5, records the 942/995 OOD rejection result and its AI-assisted label limitations, and identifies the reversible local candidate installation. V4.5 remains the adopted baseline. Earlier pending statements below describe their dated preparation/failed attempts, not the current completed run. Do not rerun the completed report or change its frozen pool to improve its score.

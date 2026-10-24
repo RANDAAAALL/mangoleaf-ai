@@ -1,5 +1,7 @@
 # V5.0.0 results, V4.5.0 comparison, and local candidate test
 
+**October 24 local-runtime follow-up:** the maintainer ended the V5 local runtime test and restored adopted V4.5.0 weights/configuration/labels. The completed V5 research evidence, notebooks and original ledgers remain preserved. This does not adopt V5, alter its metrics, or rerun training. See the [restore record](../../../versions/history/AI_MODEL_HISTORY.md#local-v5-runtime-ended-october-24-2026). Earlier installation/status statements below describe their dated test.
+
 Review date: October 19, 2026. V5 is a completed experimental model installed for the requested reversible local test. V4.5 remains the adopted baseline. No deployment, adoption, threshold tuning, or additional training is included in this review.
 
 ## Decision

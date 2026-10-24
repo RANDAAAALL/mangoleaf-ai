@@ -2,6 +2,10 @@
 
 # AI model history and archived notes
 
+## Local V5 runtime ended (October 24, 2026)
+
+At the maintainer's request, restored `public/model/` weights/configuration and `src/lib/constants.ts` to committed adopted V4.5.0 bytes. The service worker uses the V4.5 cache and explicitly retires the V5 runtime cache; the normal build regenerates its output. The previous eight runtime files were backed up with SHA-256 receipts under ignored `.tools/model-runtime-restore-20261024/`. Original V5 experiment notebooks, reports, artifacts and ledgers remain unchanged. History/photos and existing model-version metadata are not migrated or deleted. This ends a local override; V5 was not adopted or deployed. No training rerun or scientific-result change accompanies the restore.
+
 This archive preserves the full earlier version guide as maintained on October 18, 2026, including original records, evidence, and release templates. For current instructions, use the [short version guide](../AI_MODEL_VERSIONING.md).
 
 References to a "current" model, pending check, or deployment describe the record's date. They do not verify today's production state. The archived guide was titled **MangoLeaf AI Model Versioning Guide**.
