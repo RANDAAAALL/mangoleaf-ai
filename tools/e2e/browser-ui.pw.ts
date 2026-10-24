@@ -109,6 +109,12 @@ test("R04: every website size offers Home, About and Android installation withou
       if (width < 768) {
         await expect(phoneNav).toBeVisible();
         await expect(
+          phoneNav.getByRole("button", {
+            name: language.toUpperCase(),
+            exact: true,
+          }),
+        ).toBeVisible();
+        await expect(
           phoneNav.getByRole("button").or(phoneNav.getByRole("link")),
         ).toHaveCount(4);
         await expect(
@@ -227,7 +233,10 @@ test("R04: website language changes survive denied preference writes with an old
   for (const width of [390, 1280]) {
     await page.setViewportSize({ width, height: 740 });
     await page
-      .getByRole("button", { name: "EN/BIS", exact: true })
+      .getByRole("button", {
+        name: width < 768 ? "EN" : "EN/BIS",
+        exact: true,
+      })
       .filter({ visible: true })
       .click();
     await expect(
@@ -238,7 +247,10 @@ test("R04: website language changes survive denied preference writes with an old
     ).toBeVisible();
     await nav(page, translations.bis.navAbout);
     await page
-      .getByRole("button", { name: "BIS/EN", exact: true })
+      .getByRole("button", {
+        name: width < 768 ? "BIS" : "BIS/EN",
+        exact: true,
+      })
       .filter({ visible: true })
       .click();
     await nav(page, translations.en.navHome);

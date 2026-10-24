@@ -57,7 +57,7 @@ export const BrowserBottomNav = memo(function BrowserBottomNav({
           className="flex min-h-16 min-w-0 cursor-pointer flex-col items-center justify-center gap-1 px-1 text-center text-[10px] font-bold leading-tight text-[#738a77]"
         >
           <Icon name="language" size={22} />
-          <span>{language === "en" ? "EN/BIS" : "BIS/EN"}</span>
+          <span>{language.toUpperCase()}</span>
         </button>
       </div>
     </nav>
