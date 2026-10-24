@@ -20,6 +20,36 @@ let script: Buffer;
 let styles: Buffer;
 const clockPages = new WeakSet<Page>();
 
+test("A06: native backup stays local before code setup and offers no Resume bypass in either language", async ({
+  page,
+}) => {
+  for (const language of ["en", "bis"] as const) {
+    const t = translations[language];
+    await openHarness(page, language === "bis" ? "?bis" : "");
+    await expect(
+      page.getByText(t.backupLocalOnly, { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: t.backupCreate, exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: t.backupResume, exact: true }),
+    ).toHaveCount(0);
+    await expect(
+      page.getByRole("button", { name: t.backupPause, exact: true }),
+    ).toHaveCount(0);
+    await expect(page.getByRole("checkbox")).toHaveCount(0);
+    expect(
+      await page.evaluate(
+        () =>
+          window.updateTest.calls.filter(
+            (call) => call === "storage.settings.set",
+          ).length,
+      ),
+    ).toBe(0);
+  }
+});
+
 test("A05: APK footers use installed Release/Debug versions and hide missing or invalid native labels", async ({
   page,
 }) => {
@@ -153,7 +183,7 @@ test("A01: verified update waits for idle; modal supports both languages, focus,
     await openHarness(page, language === "bis" ? "?bis" : "");
     const t = translations[language];
     await expect(
-      page.getByRole("button", { name: t.backupPause, exact: true }),
+      page.getByRole("button", { name: t.backupCreate, exact: true }),
     ).toBeVisible();
     await expect(
       page.getByRole("button", { name: t.backupEnable, exact: true }),

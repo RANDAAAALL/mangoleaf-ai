@@ -33,7 +33,7 @@ const photo=new Blob([new Uint8Array([255,216,255,0])],{type:'image/jpeg'});
 const report=(id,date='2026-10-21T00:00:00.000Z')=>({id,disease_name:'Healthy Leaf',confidence:0.974321987,updated_at:date,_status:'local-only',image_url:null,image_blob:photo,model_version:'v4.5.0'});
 const local=report('33333333-3333-4333-8333-333333333333'); records.set(local.id,local);
 let online=true;
-let user=null, session=null, candidateUser=null, anonymous=0, creates=0, enrolls=0, sessionChanges=0, uploads=0;
+let user=null, session=null, candidateUser=null, anonymous=0, creates=0, enrolls=0, sessionChanges=0, uploads=0, clients=0;
 let activeStorage,candidateStorage,activeOptions,candidateOptions,failSetting,holdInitialization,beforeSetting;
 mock.module('./src/lib/db.ts',()=>({db:{}}));
 mock.module('dexie',()=>({liveQuery:()=>{throw new Error('Native must not observe Dexie')}}));
@@ -80,7 +80,10 @@ const active={auth:{
     range:async(start,end)=>({data:[...manifests.values()].filter(row=>row.owner_id===filters.owner_id).slice(start,end+1)}),
     maybeSingle:async()=>({data:manifests.get(filters.owner_id+'/'+filters.record_id)??null})};return query;}
 };
-const candidate={...active,auth:{...active.auth,
+const candidate={...active,rpc:async(name,p)=>{
+  if(name==='delete_android_backup_report'){manifests.delete(candidateUser.id+'/'+p.p_record_id);return{data:true}}
+  return active.rpc(name,p);
+},auth:{...active.auth,
   signInWithPassword:async({email,password})=>{
     if(password!=='A'.repeat(43))return{data:{session:null},error:{code:'invalid_credentials'}};
     candidateUser={id:email.startsWith(other)?other:owner,email,is_anonymous:false,app_metadata:{android_backup_vault:true}};
@@ -90,30 +93,193 @@ const candidate={...active,auth:{...active.auth,
   },getUser:async()=>({data:{user:candidateUser}}),stopAutoRefresh(){},dispose:async()=>{},
 }};
 mock.module('@supabase/supabase-js',()=>({createClient:(_url,_key,options)=>{
+  clients++;
   if(options.auth.storageKey.includes(':candidate:')){candidateStorage=options.auth.storage;candidateOptions=options;return candidate;}
   activeStorage=options.auth.storage;activeOptions=options;return active;
 }}));
 const cloud=await import('./src/lib/cloud-backup.ts');
 const {prepareBackupRow}=await import('./src/lib/cloud-backup-format.ts');
+// Existing installations keep their authenticated owner and encrypted native settings.
+function seedOwner(withCode=true){
+  user={id:owner,is_anonymous:!withCode,app_metadata:{android_backup_vault:true}};
+  if(withCode)user.email=owner+'@backup.mangoleaf.invalid';
+  session={access_token:'existing',refresh_token:'existing-refresh',user};
+  settings.set('backup-owner:'+project,owner);settings.set('supabase-backup-session:'+project,JSON.stringify(session));
+  if(withCode)settings.set('backup-recovery-code:'+project,'MLB1.'+owner+'.'+'A'.repeat(43));
+}
+async function backedUp(){seedOwner();return cloud.backUpScans()}
 `;
 
-test("Debug APK uploads anonymously without a recovery code, then keeps the same owner when creating one", () => {
-  run(`
-    assert.equal((await cloud.backupPreferences()).enabled,true);
-    assert.equal(await cloud.backUpScans(),1);
-    assert.equal(anonymous,1);assert.equal(enrolls,1);assert.equal(creates,0);
-    assert.equal((await cloud.backupPreferences()).hasCode,false);
-    const uploaded=[...manifests.values()][0];assert.equal(uploaded.owner_id,owner);
+test("both APK variants stay local without a code and automatically enable only after explicit successful creation", () => {
+  for (const production of [false, true])
+    run(
+      `
+    for(const oldFlag of [null,'false','true']){
+      oldFlag===null?settings.delete('backup-enabled:'+project):settings.set('backup-enabled:'+project,oldFlag);
+      assert.deepEqual(await cloud.backupPreferences(),{enabled:false,hasCode:false});
+      assert.equal(await cloud.backUpScans(),0);assert.equal(clients,0);assert.equal(uploads,0);
+    }
+    await assert.rejects(cloud.setBackupEnabled(true),/recovery code/);assert.equal(clients,0);
+    online=false;await assert.rejects(cloud.createBackupVault(),/connection/);assert.equal(clients,0);online=true;
     const code=await cloud.createBackupVault();assert.ok(code.startsWith('MLB1.'+owner+'.'));
-    assert.equal(user.id,owner);assert.equal(anonymous,1);assert.equal(creates,1);
-    assert.equal(await cloud.savedRecoveryCode(),code);
-    assert.equal(uploaded.owner_id,user.id);
+    assert.equal(anonymous,1);assert.equal(enrolls,1);assert.equal(creates,1);
+    assert.equal(await cloud.savedRecoveryCode(),code);assert.equal(uploads,0);
+    assert.deepEqual(await cloud.backupPreferences(),{enabled:true,hasCode:true});
+    assert.equal(await cloud.backUpScans(),1);assert.equal(user.id,owner);assert.equal(records.get(local.id),local);
+    assert.equal(await cloud.backUpScans(),0);assert.equal(uploads,1);
+  `,
+      production,
+    );
+});
+
+test("failed creation or local activation never enables private uploads in either APK", () => {
+  for (const production of [false, true])
+    for (const failure of [
+      "service",
+      "credential",
+      "owner",
+      "session",
+      "enable",
+    ])
+      run(
+        `
+        if('${failure}'==='service')active.functions.invoke=async()=>({error:{code:'controlled'}});
+        if('${failure}'==='credential')candidate.auth.signInWithPassword=async()=>({error:{code:'controlled'},data:{session:null}});
+        if('${failure}'==='owner')candidate.auth.getUser=async()=>({data:{user:null},error:{code:'controlled'}});
+        if('${failure}'==='session')failSetting='supabase-backup-session:'+project;
+        if('${failure}'==='enable')failSetting='backup-enabled:'+project;
+        await assert.rejects(cloud.createBackupVault());
+        assert.deepEqual(await cloud.backupPreferences(),{enabled:false,hasCode:false});
+        const beforeClients=clients;assert.equal(await cloud.backUpScans(),0);assert.equal(clients,beforeClients);
+        assert.equal(uploads,0);assert.equal(manifests.size,0);assert.equal(records.get(local.id),local);
+      `,
+        production,
+      );
+});
+
+test("damaged saved codes fail closed without constructing Auth clients", () => {
+  for (const production of [false, true])
+    run(
+      `
+    settings.set('backup-recovery-code:'+project,'damaged-code');settings.set('backup-enabled:'+project,'true');
+    assert.deepEqual(await cloud.backupPreferences(),{enabled:false,hasCode:false});
+    await assert.rejects(cloud.backUpScans());assert.equal(clients,0);
+    await assert.rejects(cloud.setBackupEnabled(true),/recovery code/);assert.equal(clients,0);
+  `,
+      production,
+    );
+});
+
+test("existing code preferences preserve both legacy disables and explicit pauses", () => {
+  for (const production of [false, true])
+    run(
+      `
+    seedOwner();
+    for(const flag of ['false','paused']){
+      settings.set('backup-enabled:'+project,flag);
+      const beforeClients=clients;
+      assert.equal((await cloud.backupPreferences()).enabled,false);assert.equal(await cloud.backUpScans(),0);
+      assert.equal(clients,beforeClients);await cloud.restoreCloudBackup('MLB1.'+owner+'.'+'A'.repeat(43));
+      assert.equal((await cloud.backupPreferences()).enabled,false);
+    }
+    settings.delete('backup-enabled:'+project);assert.equal((await cloud.backupPreferences()).enabled,true);
+  `,
+      production,
+    );
+});
+
+test("fresh existing-code restore enables future backups while retaining local History", () => {
+  for (const production of [false, true])
+    run(
+      `
+    assert.equal(await cloud.restoreCloudBackup('MLB1.'+other+'.'+'A'.repeat(43)),0);
+    assert.equal(anonymous,0);assert.equal(creates,0);assert.equal(enrolls,0);
+    assert.equal((await cloud.backupPreferences()).enabled,true);assert.equal(records.get(local.id),local);
+    assert.equal(await cloud.backUpScans(),1);assert.equal(manifests.get(other+'/'+local.id).completed,true);
+  `,
+      production,
+    );
+});
+
+test("lost legacy anonymous sessions cannot be replaced by a new owner during code creation", () => {
+  run(`
+    seedOwner(false);session=null;
+    await assert.rejects(cloud.createBackupVault(),/existing backup owner/);
+    assert.equal(anonymous,0);assert.equal(creates,0);assert.equal(uploads,0);
+    assert.equal(settings.get('backup-owner:'+project),owner);
   `);
+});
+
+test("verified same-vault recovery drains pending deletion despite a lost original session", () => {
+  for (const production of [false, true])
+    run(
+      `
+    await backedUp();const queue=await import('./src/lib/cloud-history-delete.ts');
+    await cloud.setBackupEnabled(false);await queue.deleteScansWithCloudQueue([local.id]);
+    session=null;user=null;settings.delete('supabase-backup-session:'+project);
+    assert.equal(jobs.size,1);assert.equal(await cloud.backUpScans(),0);
+    assert.equal(jobs.size,0);assert.equal(manifests.size,0);assert.equal(anonymous,0);
+    assert.equal((await cloud.backupPreferences()).enabled,false);
+  `,
+      production,
+    );
+});
+
+test("another vault cannot consume pending jobs when the original session is lost", () => {
+  run(`
+    await backedUp();const queue=await import('./src/lib/cloud-history-delete.ts');
+    await queue.deleteScansWithCloudQueue([local.id]);user=null;session=null;
+    settings.set('backup-recovery-code:'+project,'MLB1.'+owner+'.'+'B'.repeat(43));
+    await assert.rejects(cloud.restoreCloudBackup('MLB1.'+other+'.'+'A'.repeat(43)),/accepted/);
+    assert.equal(jobs.size,1);assert.equal(manifests.size,1);
+    assert.equal(settings.get('backup-owner:'+project),owner);
+    assert.equal(await cloud.savedRecoveryCode(),'MLB1.'+owner+'.'+'B'.repeat(43));
+  `);
+});
+
+test("a rejected stored session reconnects its saved code before retrying uploads", () => {
+  for (const production of [false, true])
+    run(
+      `
+    await backedUp();active.auth.getUser=async()=>({data:{user:null},error:{code:'expired'}});
+    const next=report('44444444-4444-4444-8444-444444444444');records.set(next.id,next);
+    assert.equal(await cloud.backUpScans(),1);assert.equal(anonymous,0);assert.equal(creates,0);
+    assert.equal(manifests.get(owner+'/'+next.id).completed,true);assert.equal(user.id,owner);
+  `,
+      production,
+    );
+});
+
+// Restart the actual scheduler after backgrounding; persisted manifests, not
+// an in-memory counter, decide which photos need retrying.
+test("both APK schedulers stay local before setup and resume unfinished backups after reopening", () => {
+  for (const production of [false, true])
+    run(
+      `
+    globalThis.document=Object.assign(new EventTarget(),{visibilityState:'visible'});
+    const timers=new Map();let timer=0;
+    globalThis.setTimeout=(fn,delay)=>{timers.set(++timer,{fn,delay});return timer};
+    globalThis.clearTimeout=id=>timers.delete(id);globalThis.setInterval=()=>0;globalThis.clearInterval=()=>{};
+    async function fire(){const first=[...timers.entries()][0];assert.ok(first);timers.delete(first[0]);await first[1].fn()}
+    const stop=cloud.startCloudBackup();await fire();assert.equal(clients,0);assert.equal(anonymous,0);
+    await cloud.createBackupVault();const code=await cloud.savedRecoveryCode();
+    const next=report('44444444-4444-4444-8444-444444444444');records.set(next.id,next);
+    const storage=active.storage.from();let hidden=false;
+    active.storage.from=()=>({...storage,upload:async()=>{uploads++;if(!hidden){hidden=true;document.visibilityState='hidden'}return{}}});
+    await fire();assert.equal(uploads,1);assert.equal(manifests.get(owner+'/'+local.id).completed,true);
+    assert.equal(manifests.has(owner+'/'+next.id),false);stop();
+    document.visibilityState='visible';const stopReopened=cloud.startCloudBackup();await fire();
+    assert.equal(uploads,2);assert.equal(manifests.get(owner+'/'+next.id).completed,true);
+    assert.equal(anonymous,1);assert.equal(creates,1);assert.equal(await cloud.savedRecoveryCode(),code);
+    stopReopened();
+  `,
+      production,
+    );
 });
 
 test("wrong recovery credentials preserve the connected session; valid recovery merges five reports with the new local report", () => {
   run(`
-    await cloud.backUpScans();const before=session;
+    await backedUp();const before=session;
     await assert.rejects(cloud.restoreCloudBackup('MLB1.'+other+'.'+'B'.repeat(43)));
     assert.equal(session,before);assert.equal(sessionChanges,0);assert.equal(user.id,owner);
     for(let i=4;i<=8;i++){
@@ -127,42 +293,44 @@ test("wrong recovery credentials preserve the connected session; valid recovery 
   `);
 });
 
-test("anonymous-owner History deletion removes only its own backup before any recovery code exists", () => {
+test("legacy anonymous owners retain their session and confirmed deletions without resuming uploads", () => {
   run(`
-    await cloud.backUpScans();
+    seedOwner(false);const original=session;const saved=settings.get('supabase-backup-session:'+project);
+    const backup=await prepareBackupRow(owner,local);manifests.set(owner+'/'+local.id,{...backup,completed:true});
+    await cloud.backUpScans();assert.equal(clients,0);assert.equal(uploads,0);
+    assert.equal(session,original);assert.equal(settings.get('supabase-backup-session:'+project),saved);
     const {deleteScansWithCloudQueue}=await import('./src/lib/cloud-history-delete.ts');
     await deleteScansWithCloudQueue([local.id]);assert.equal(jobs.size,1);
     assert.equal([...jobs.values()][0].scope,project+':'+owner);
     await cloud.backUpScans();assert.equal(jobs.size,0);assert.equal(manifests.size,0);
-    assert.equal(anonymous,1);assert.equal(creates,0);
+    assert.equal(anonymous,0);assert.equal(creates,0);
+    const code=await cloud.createBackupVault();assert.equal(user.id,owner);assert.equal(anonymous,0);
+    assert.equal(await cloud.savedRecoveryCode(),code);assert.equal((await cloud.backupPreferences()).enabled,true);
   `);
 });
 
-test("Production APK starts automatic backup, waits offline and keeps the anonymous owner when creating recovery", () => {
+test("legacy Production anonymous ownership attaches recovery without replacing earlier cloud data", () => {
   run(
     `
-    settings.set('backup-enabled:'+project,'false');
-    assert.equal((await cloud.backupPreferences()).enabled,true);
-    records.clear();await cloud.backUpScans();assert.equal(anonymous,0);assert.equal(enrolls,0);
-    records.set(local.id,{...local,_status:'pending-delete'});await cloud.backUpScans();assert.equal(anonymous,0);
-    records.set(local.id,local);online=false;await cloud.backUpScans();assert.equal(uploads,0);assert.equal(anonymous,0);
-    online=true;assert.equal(await cloud.backUpScans(),1);assert.equal(anonymous,1);assert.equal(enrolls,1);
-    assert.equal((await cloud.backupPreferences()).hasCode,false);
-    const code=await cloud.createBackupVault();assert.equal(user.id,owner);assert.equal(anonymous,1);
+    seedOwner(false);settings.set('backup-enabled:'+project,'true');
+    const original=await prepareBackupRow(owner,local);manifests.set(owner+'/'+local.id,{...original,completed:true});
+    assert.equal((await cloud.backupPreferences()).enabled,false);assert.equal(await cloud.backUpScans(),0);assert.equal(clients,0);
+    const code=await cloud.createBackupVault();assert.equal(user.id,owner);assert.equal(anonymous,0);assert.equal(enrolls,0);
     assert.equal(await cloud.savedRecoveryCode(),code);assert.equal((await cloud.backupPreferences()).enabled,true);
+    assert.equal(await cloud.backUpScans(),0);assert.equal(uploads,0);assert.equal(manifests.size,1);
     assert.ok([...settings.keys()].every(key=>key.endsWith(':'+project)));
   `,
     true,
   );
 });
 
-test("Production automatic backup preserves explicit pauses and refuses to silently replace a lost owner session", () => {
+test("Production keeps a paused existing code and reconnects that code instead of creating another identity", () => {
   run(
     `
-    await cloud.setBackupEnabled(false);assert.equal(settings.get('backup-enabled:'+project),'paused');
+    seedOwner();await cloud.setBackupEnabled(false);assert.equal(settings.get('backup-enabled:'+project),'paused');
     assert.equal((await cloud.backupPreferences()).enabled,false);await cloud.backUpScans();assert.equal(anonymous,0);
-    await cloud.setBackupEnabled(true);await cloud.backUpScans();assert.equal(anonymous,1);
-    session=null;await assert.rejects(cloud.backUpScans(),/existing backup owner/);assert.equal(anonymous,1);
+    await cloud.setBackupEnabled(true);await cloud.backUpScans();assert.equal(anonymous,0);
+    session=null;await cloud.backUpScans();assert.equal(anonymous,0);assert.equal(user.id,owner);
   `,
     true,
   );
@@ -170,7 +338,7 @@ test("Production automatic backup preserves explicit pauses and refuses to silen
 
 test("a missing session reconnects its saved recovery code and continues with the promoted client", () => {
   run(`
-    await cloud.backUpScans();
+    await backedUp();
     const code='MLB1.'+owner+'.'+'A'.repeat(43);settings.set('backup-recovery-code:'+project,code);
     const next=report('44444444-4444-4444-8444-444444444444');records.set(next.id,next);
     session=null;settings.delete('supabase-backup-session:'+project);
@@ -178,7 +346,7 @@ test("a missing session reconnects its saved recovery code and continues with th
     active.auth.dispose=async()=>{retired=true};
     active.auth.getUser=async()=>{assert.equal(retired,false,'must use the promoted Auth client');return getUser()};
     assert.equal(await cloud.backUpScans(),1);assert.equal(retired,true);
-    assert.equal(anonymous,1);assert.equal(creates,0);assert.equal(user.id,owner);
+    assert.equal(anonymous,0);assert.equal(creates,0);assert.equal(user.id,owner);
     assert.equal(manifests.get(owner+'/'+next.id).completed,true);
     assert.equal(await cloud.savedRecoveryCode(),code);
   `);
@@ -187,7 +355,7 @@ test("a missing session reconnects its saved recovery code and continues with th
 test("Production wrong-code recovery preserves its current owner and valid recovery merges local reports", () => {
   run(
     `
-    await cloud.backUpScans();const before=session;
+    await backedUp();const before=session;
     await assert.rejects(cloud.restoreCloudBackup('MLB1.'+other+'.'+'B'.repeat(43)));
     assert.equal(session,before);assert.equal(sessionChanges,0);
     const row=await prepareBackupRow(other,report('44444444-4444-4444-8444-444444444444','2026-10-19T00:00:00.000Z'));
@@ -201,12 +369,13 @@ test("Production wrong-code recovery preserves its current owner and valid recov
   );
 });
 
-test("recovery-code creation and reconnection preserve an explicit upload pause in both APK variants", () => {
+test("creation explicitly enables backup and later reconnection preserves its pause in both APK variants", () => {
   for (const production of [false, true])
     run(
       `
-    await cloud.backUpScans();await cloud.setBackupEnabled(false);
-    const code=await cloud.createBackupVault();assert.equal((await cloud.backupPreferences()).enabled,false);
+    seedOwner(false);await cloud.setBackupEnabled(false);
+    const code=await cloud.createBackupVault();assert.equal((await cloud.backupPreferences()).enabled,true);
+    await cloud.setBackupEnabled(false);
     await cloud.restoreCloudBackup(code);assert.equal((await cloud.backupPreferences()).enabled,false);
     await cloud.setBackupEnabled(true);assert.equal((await cloud.backupPreferences()).enabled,true);
   `,
@@ -217,6 +386,7 @@ test("recovery-code creation and reconnection preserve an explicit upload pause 
 // Backgrounding must allow an in-flight photo/commit to settle, then yield before the next report.
 test("automatic backup finishes its current photo but waits for foreground before the next report", () => {
   run(`
+    seedOwner();
     const next=report('44444444-4444-4444-8444-444444444444');records.set(next.id,next);
     const storage=active.storage.from();let hide=true;
     active.storage.from=()=>({...storage,upload:async()=>{uploads++;if(hide)document.visibilityState='hidden';return{}}});
@@ -238,6 +408,7 @@ test("a pending intent never starts its photo after backgrounding, diagnosis, di
     "await cloud.setBackupEnabled(false)",
   ])
     run(`
+      seedOwner();
       const rpc=active.rpc;let interrupt=true;
       active.rpc=async(name,p)=>{const result=await rpc(name,p);if(name==='begin_android_backup_report'&&interrupt){${change}}return result};
       assert.equal(await cloud.backUpScans(),0);assert.equal(uploads,0);
@@ -250,7 +421,7 @@ test("a pending intent never starts its photo after backgrounding, diagnosis, di
 
 test("History deletion during candidate login drains under its original owner before recovery switches", () => {
   run(`
-    await cloud.backUpScans();
+    await backedUp();
     const queue=await import('./src/lib/cloud-history-delete.ts');
     const signIn=candidate.auth.signInWithPassword;
     candidate.auth.signInWithPassword=async input=>{await queue.deleteScansWithCloudQueue([local.id]);return signIn(input)};
@@ -263,7 +434,7 @@ test("History deletion during candidate login drains under its original owner be
 // Hold a local commit until after verification: the final guard must see its old-owner outbox job.
 test("an overlapping local delete aborts a late recovery switch without replacing the owner", () => {
   run(`
-    await cloud.backUpScans();const before=session;
+    await backedUp();const before=session;
     const queue=await import('./src/lib/cloud-history-delete.ts');
     let release;const blocker=queue.withCloudHistoryMutation(()=>new Promise(resolve=>{release=resolve}));
     const deletion=queue.deleteScansWithCloudQueue([local.id]);
@@ -274,31 +445,31 @@ test("an overlapping local delete aborts a late recovery switch without replacin
     release();await blocker;await deletion;await connecting;
     assert.match(failed.message,/Pending cloud deletions/);assert.equal(session,before);assert.equal(user.id,owner);
     assert.equal(records.size,0);assert.equal(jobs.size,1);assert.equal(manifests.size,1);
-    await cloud.backUpScans();assert.equal(jobs.size,0);assert.equal(manifests.size,0);
+    await backedUp();assert.equal(jobs.size,0);assert.equal(manifests.size,0);
     await cloud.connectBackupVault('MLB1.'+other+'.'+'A'.repeat(43));assert.equal(user.id,other);
   `);
 });
 
-test("deletion during first anonymous sign-in cannot upload the removed in-memory report", () => {
+test("deletion during explicit recovery setup cannot upload the removed local report", () => {
   run(`
     const queue=await import('./src/lib/cloud-history-delete.ts');
     const signIn=active.auth.signInAnonymously;
     active.auth.signInAnonymously=async()=>{const result=await signIn();await queue.deleteScansWithCloudQueue([local.id]);return result};
-    assert.equal(await cloud.backUpScans(),0);
+    await cloud.createBackupVault();assert.equal(await cloud.backUpScans(),0);
     assert.equal(records.size,0);assert.equal(jobs.size,0);assert.equal(manifests.size,0);assert.equal(uploads,0);
   `);
 });
 
 test("candidate verification uses memory only and leaves local History deletion available", () => {
   run(`
-    await cloud.backUpScans();const before=settings.get('supabase-backup-session:'+project);
+    await backedUp();const before=settings.get('supabase-backup-session:'+project);
     const queue=await import('./src/lib/cloud-history-delete.ts');
     const getUser=candidate.auth.getUser;let release;
     candidate.auth.getUser=async()=>{await new Promise(resolve=>{release=resolve});return getUser()};
     const connecting=cloud.connectBackupVault('MLB1.'+other+'.'+'A'.repeat(43));
     for(let i=0;i<20;i++)await new Promise(resolve=>setImmediate(resolve));
     assert.equal(typeof release,'function');assert.equal(settings.get('supabase-backup-session:'+project),before);
-    assert.equal(settings.get('backup-owner:'+project),owner);assert.equal(settings.has('backup-recovery-code:'+project),false);
+    assert.equal(settings.get('backup-owner:'+project),owner);assert.equal(settings.get('backup-recovery-code:'+project),'MLB1.'+owner+'.'+'A'.repeat(43));
     let deleted=false;const deletion=queue.deleteScansWithCloudQueue([local.id]).then(()=>{deleted=true});
     for(let i=0;i<20;i++)await new Promise(resolve=>setImmediate(resolve));
     assert.equal(deleted,true);assert.equal(jobs.size,1);assert.equal(user.id,owner);
@@ -312,7 +483,7 @@ test("candidate verification uses memory only and leaves local History deletion 
 // dispose does not cancel an older HTTP response: its storage adapter must independently reject that late write.
 test("a retired refresh waiting on host validation cannot overwrite or remove the promoted recovery session", () => {
   run(`
-    await cloud.backUpScans();const retired=activeStorage;let release;
+    await backedUp();const retired=activeStorage;let release;
     holdInitialization=new Promise(resolve=>{release=resolve});
     const late=retired.setItem('ignored',JSON.stringify({...session,access_token:'late-old-owner'}));
     await cloud.connectBackupVault('MLB1.'+other+'.'+'A'.repeat(43));
@@ -327,7 +498,7 @@ test("a retired refresh waiting on host validation cannot overwrite or remove th
 
 test("a retired session read finishing after promotion cannot receive the new owner's refresh token", () => {
   run(`
-    await cloud.backUpScans();const retired=activeStorage;let release;
+    await backedUp();const retired=activeStorage;let release;
     const original=await retired.getItem('ignored');
     holdInitialization=new Promise(resolve=>{release=resolve});const late=retired.getItem('ignored');
     await cloud.connectBackupVault('MLB1.'+other+'.'+'A'.repeat(43));
@@ -339,23 +510,23 @@ test("a retired session read finishing after promotion cannot receive the new ow
 
 test("a candidate failing server ownership verification never persists and its later refresh stays isolated", () => {
   run(`
-    await cloud.backUpScans();const before=settings.get('supabase-backup-session:'+project);
+    await backedUp();const before=settings.get('supabase-backup-session:'+project);
     candidate.auth.getUser=async()=>({data:{user:{...candidateUser,app_metadata:{}}}});
     await assert.rejects(cloud.connectBackupVault('MLB1.'+other+'.'+'A'.repeat(43)),/verified/);
     assert.equal(settings.get('supabase-backup-session:'+project),before);assert.equal(user.id,owner);
     await candidateStorage.setItem('ignored',JSON.stringify({access_token:'failed-candidate'}));await candidateStorage.removeItem('ignored');
     assert.equal(settings.get('supabase-backup-session:'+project),before);
-    assert.equal(settings.get('backup-owner:'+project),owner);assert.equal(settings.has('backup-recovery-code:'+project),false);
+    assert.equal(settings.get('backup-owner:'+project),owner);assert.equal(settings.get('backup-recovery-code:'+project),'MLB1.'+owner+'.'+'A'.repeat(43));
   `);
 });
 
 test("a failed local promotion restores prior credentials and keeps the prior session adapter usable", () => {
   run(`
-    await cloud.backUpScans();const before=settings.get('supabase-backup-session:'+project);const previous=activeStorage;
+    await backedUp();const before=settings.get('supabase-backup-session:'+project);const previous=activeStorage;
     failSetting='supabase-backup-session:'+project;
     await assert.rejects(cloud.connectBackupVault('MLB1.'+other+'.'+'A'.repeat(43)),/persistence failure/);
     assert.equal(settings.get('supabase-backup-session:'+project),before);assert.equal(user.id,owner);
-    assert.equal(settings.get('backup-owner:'+project),owner);assert.equal(settings.has('backup-recovery-code:'+project),false);
+    assert.equal(settings.get('backup-owner:'+project),owner);assert.equal(settings.get('backup-recovery-code:'+project),'MLB1.'+owner+'.'+'A'.repeat(43));
     await candidateStorage.setItem('ignored',JSON.stringify({access_token:'failed-promotion'}));
     assert.equal(settings.get('supabase-backup-session:'+project),before);
     await previous.setItem('ignored',JSON.stringify({...session,access_token:'refreshed-original-owner'}));
@@ -365,7 +536,7 @@ test("a failed local promotion restores prior credentials and keeps the prior se
 
 test("a settling original-owner refresh is retained when candidate promotion rolls back", () => {
   run(`
-    await cloud.backUpScans();const previous=activeStorage;const original={...session};
+    await backedUp();const previous=activeStorage;const original={...session};
     let settled=false;
     beforeSetting=async p=>{
       if(!settled&&p.key==='backup-owner:'+project&&p.value===owner){
@@ -377,7 +548,7 @@ test("a settling original-owner refresh is retained when candidate promotion rol
     assert.equal(settled,true);assert.equal(settings.get('backup-owner:'+project),owner);
     const saved=JSON.parse(settings.get('supabase-backup-session:'+project));
     assert.equal(saved.user.id,owner);assert.equal(saved.access_token,'rotated-original-owner');
-    assert.equal(settings.has('backup-recovery-code:'+project),false);
+    assert.equal(settings.get('backup-recovery-code:'+project),'MLB1.'+owner+'.'+'A'.repeat(43));
   `);
 });
 

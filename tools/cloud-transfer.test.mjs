@@ -72,8 +72,9 @@ test("isolated compatibility worker uploads Blobs after reconnect, retries and y
     const record={id:'33333333-3333-4333-8333-333333333333',disease_name:'Healthy Leaf',confidence:0.974321987,updated_at:'2026-10-21T00:00:00.000Z',_status:'local-only',image_url:null,image_blob:photo,model_version:'model-v4.5.0'};
     const rows=new Map([['deleted',{...record,id:'44444444-4444-4444-8444-444444444444',_status:'pending-delete'}]]);
     let reads=0; mock.module('./src/lib/db.ts',()=>({db:{cloudDeletes:{where:()=>({equals:()=>({limit:()=>({toArray:async()=>[]})})})},scans:{toCollection:()=>({primaryKeys:async()=>[...rows.keys()]}),get:async id=>{reads++;return rows.get(id)}}}}));
-    let creates=0,clients=0,uploads=0,attempts=0,anonymous=0;let signedIn=false,approved=false,completeFails=true;const manifests=new Map();
-    const active={auth:{getSession:async()=>({data:{session:signedIn?{}:null}}),signInAnonymously:async()=>{anonymous++;signedIn=true;return{error:null}},refreshSession:async()=>({error:null}),getUser:async()=>({data:{user:{id:'11111111-1111-4111-8111-111111111111',is_anonymous:true,app_metadata:approved?{android_backup_vault:true}:{}}}}),stopAutoRefresh(){}},functions:{invoke:async(_name,options)=>{assert.equal(options.body.action,'enroll');creates++;approved=true;return{data:{ownerId:'11111111-1111-4111-8111-111111111111'}}}},storage:{from:()=>({upload:async(path,blob)=>{assert.equal(blob,photo);uploads++;return{error:null}}})},rpc:async(name,p)=>{
+    settings.set('backup-recovery-code:ajwlojaclehxupntnsve','MLB1.11111111-1111-4111-8111-111111111111.'+'A'.repeat(43));
+    let creates=0,clients=0,uploads=0,attempts=0,anonymous=0;let signedIn=true,approved=true,completeFails=true;const manifests=new Map();
+    const active={auth:{getSession:async()=>({data:{session:signedIn?{}:null}}),signInAnonymously:async()=>{anonymous++;signedIn=true;return{error:null}},refreshSession:async()=>({error:null}),getUser:async()=>({data:{user:{id:'11111111-1111-4111-8111-111111111111',email:'11111111-1111-4111-8111-111111111111@backup.mangoleaf.invalid',is_anonymous:false,app_metadata:approved?{android_backup_vault:true}:{}}}}),stopAutoRefresh(){}},functions:{invoke:async(_name,options)=>{assert.equal(options.body.action,'enroll');creates++;approved=true;return{data:{ownerId:'11111111-1111-4111-8111-111111111111'}}}},storage:{from:()=>({upload:async(path,blob)=>{assert.equal(blob,photo);uploads++;return{error:null}}})},rpc:async(name,p)=>{
       if(name==='begin_android_backup_report'){attempts++;const row=manifests.get(p.p_manifest.record_id)||p.p_manifest;manifests.set(row.record_id,row);return{data:row}};
       if(completeFails){completeFails=false;return{data:false}};
       manifests.get(p.p_record_id).completed=true;return{data:true};
@@ -85,14 +86,14 @@ test("isolated compatibility worker uploads Blobs after reconnect, retries and y
     await fire();assert.equal(clients,0);assert.equal(creates,0);
     online=true;notify();await fire();assert.equal(creates,0);assert.equal(clients,0);
     online=false;rows.set(record.id,record);changed();await fire();assert.equal(uploads,0);
-    online=true;notify();await fire();assert.equal(creates,1);assert.equal(uploads,1);assert.equal(attempts,1);
-    assert.equal(anonymous,1);assert.equal(await cloud.savedRecoveryCode().catch(()=>null),null);
+    online=true;notify();await fire();assert.equal(creates,0);assert.equal(uploads,1);assert.equal(attempts,1);
+    assert.equal(anonymous,0);assert.equal(await cloud.savedRecoveryCode().catch(()=>null),null);
     assert.equal([...timers.values()][0].delay,10000);await fire();assert.equal(attempts,2);
     assert.equal(manifests.get(record.id).completed,true);assert.equal(record.confidence,0.974321987);assert.equal(record._status,'local-only');
     const before=uploads;changed();await fire();assert.equal(uploads,before);assert.ok(reads>=3);
     await assert.rejects(cloud.restoreCloudBackup());await assert.rejects(cloud.createBackupVault());await assert.rejects(cloud.savedRecoveryCode());
     cloud.setCloudBackupBusy(true);changed();await fire();assert.equal(uploads,before);
-    cloud.setCloudBackupBusy(false);await fire();assert.equal(creates,1);assert.equal(uploads,before);
+    cloud.setCloudBackupBusy(false);await fire();assert.equal(creates,0);assert.equal(uploads,before);
     assert.ok([...settings.keys()].every(key=>key.endsWith(':ajwlojaclehxupntnsve')));stop();
   `,
   );
@@ -239,7 +240,7 @@ test("deletion during a settling upload drains afterward and foreign manifests a
   run(
     deletionFixture +
       `
-    online=true;const id='33333333-3333-4333-8333-333333333333';await seed(id);server.clear();photos.clear();
+    online=true;settings.set('backup-enabled:'+project,'true');const id='33333333-3333-4333-8333-333333333333';await seed(id);server.clear();photos.clear();
     onUpload=async()=>{await queue.deleteScansWithCloudQueue([id])};
     await cloud.backUpScans();assert.equal(uploads,1);assert.equal(records.size,0);assert.equal(jobs.size,0);assert.equal(server.size,0);assert.equal(photos.size,0);
     onUpload=undefined;await seed(id);await queue.deleteScansWithCloudQueue([id]);
