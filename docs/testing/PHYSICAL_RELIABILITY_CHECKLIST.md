@@ -1,6 +1,6 @@
 # MangoLeaf AI physical reliability checklist
 
-**Current patch candidate:** app 0.10.1 / APK 0.1.6/code 7, bounds 7-7, model V4.5.0, bridge/schema 1/1; unpublished. Published v0.10.0 / APK 0.1.5 has separate earlier evidence. Repeat real capture several times on both reported phones and keep encode-stage diagnostics. Confirm preview arrives without a prolonged Capturing photo state; closing/backgrounding must stop encoding and never deliver a late preview. Open the first completed result after a cold start and confirm no whole-app loading flash. Keep model accuracy separate from UI/timing checks.
+**Current candidate:** app 0.11.0 / APK 0.1.7/code 8, bounds 8-8, model V4.5.0, bridge/schema 1/1; unpublished. Published v0.10.1 and the earlier source-only backup attempt have separate evidence. Repeat real capture several times on both reported phones and keep encode-stage diagnostics. Confirm preview arrives without a prolonged Capturing photo state; closing/backgrounding must stop encoding and never deliver a late preview. Open the first completed result after a cold start and confirm no whole-app loading flash. Keep model accuracy separate from UI/timing checks.
 
 Install over the existing same-signer app, preserve History/photos/credentials, and test offline restart. Inspect a freshly downloaded, distinctly named APK in Samsung My Files as well as the launcher and system splash. Application/archive and launcher icons share the white-backed adaptive leaf; the startup leaf remains transparent. The earlier bare Package Installer leaf was an application-resource regression. The maintainer still sees a framed My Files thumbnail on One UI 8.5; OEM styling is plausible but the exact phone loader is uninspected. Confirm the new installer white backing separately, and do not treat My Files border removal as passed. Production and development phone websites must show only the current EN or BIS code; desktop/APK controls retain their existing behavior.
 
@@ -8,9 +8,9 @@ Install over the existing same-signer app, preserve History/photos/credentials, 
 
 Check the first About visit after a cold APK launch for a repeated full-screen splash. Phone websites must center the brand above Home/About/open-install/language bottom controls, without Scan or History; verify English/Bisaya and desktop QR navigation separately.
 
-Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current candidate is shared app `0.10.1`, native APK `0.1.6`, model `v4.5.0`, confidence-only threshold 0.70. Fill results only after observing the exact recorded release build; do not transfer a previous build's observations to this candidate.
+Use one completed copy for each release build, device, operating system, browser, and test date. This sheet records physical-device reliability evidence. It does not measure model accuracy or replace expert-reviewed evaluation data. The current candidate is shared app `0.11.0`, native APK `0.1.7`, model `v4.5.0`, confidence-only threshold 0.70. Fill results only after observing the exact recorded release build; do not transfer a previous build's observations to this candidate.
 
-Historical browser compatibility reports/photos remain preserved in IndexedDB; the current website does not open that database. The Android APK uses SQLite/private photos and automatic private cloud backup with separately saved recovery credentials. Record the target, APK/bundle hashes, native host/bridge/schema versions, and backup pause state and recovery-code availability when testing Android; do not apply the browser-only network expectation to an enabled native backup. Use the exact tested build identity below; dated changes are in [Protocol history](#protocol-history). See [Android verification](../versions/ANDROID_APK_VERSIONING.md#verification-and-remaining-evidence) for additional native cases.
+Historical browser compatibility reports/photos remain preserved in IndexedDB; the current website does not open that database. The Android APK uses SQLite/private photos and keeps scans local until recovery-code setup; enabled private cloud backup then runs while foreground and online. Record the target, APK/bundle hashes, native host/bridge/schema versions, and backup pause state and recovery-code availability when testing Android; do not apply the browser-only network expectation to an enabled native backup. Use the exact tested build identity below; dated changes are in [Protocol history](#protocol-history). See [Android verification](../versions/ANDROID_APK_VERSIONING.md#verification-and-remaining-evidence) for additional native cases.
 
 Do not mark a case as passed before every required observation is recorded. Use `Pass`, `Fail`, or `Blocked`; explain every failure or block.
 
@@ -277,6 +277,18 @@ Record actual Android APK installation outcomes for the exact candidate. A phone
 - [ ] Launch the installed APK and verify app/model labels and native host version. Check local reports, offline launch and deliberate browser-export migration separately.
 - [ ] R04-M03 result: Pass / Fail / Blocked — reason and evidence location:
 
+## Recovery-code-first backup candidate
+
+Run synthetic cloud cases on testing; record production artifact configuration/preservation separately. Do not infer a completed backup from an enabled label.
+
+- [ ] On a fresh Debug APK, create scans online/offline before setup. Verify local History/photos survive restart, no private identity/upload starts, and public guidelines can still refresh. No Pause/Resume control appears before a valid code.
+- [ ] Tap Create recovery code and enable backup online. Verify the code is displayed with an outside-phone reminder, no extra confirmation is required and eligible saved History begins uploading. Repeat successful creation on an older no-code installation with uploads paused; this explicit enable action must start backup. Creation failure leaves uploads off and local reports safe.
+- [ ] Update an existing anonymous-owner installation without clearing data; create a code and verify the same owned backup remains accessible. Existing code users retain enabled state or deliberate pause, including an older paused installation.
+- [ ] Close/background during an incomplete batch, then reopen online. Verify completed copies are skipped and incomplete reports retry without duplicate History; note whether the interrupted photo restarts.
+- [ ] Pause backup, save another scan and reopen. Verify the scan stays local until Resume. Pending confirmed deletions still retry while open/online even with uploads paused.
+- [ ] Enter the valid existing code on another testing APK; completed reports/photos merge with existing History. Verify wrong codes/Clear preserve the session, and deliberately deleted local IDs are not restored. Preserve an existing pause during reconnection.
+- [ ] Recovery-code-first result: Pass / Fail / Blocked - exact build, target, reason and evidence location:
+
 ## Android audit follow-up
 
 - [ ] Compare the installed APK version in the footer with Android app/package information on Debug and Release. Check EN/BIS, narrow screens, offline reopening and an OTA whose web version differs from the installed native version. Android About must retain the separate web-bundle version. Browser footers must show app/model only; a website download version describes the labeled published asset, not this phone's installation.
@@ -334,3 +346,7 @@ These notes record checklist changes, oldest first. They do not supply completed
 
 - **Native/cloud audit protocol**
   - Added renderer-only rollback, restart verification interruption, canceled-worker cleanup, missing-photo History and enrollment/recovery deletion races. These remain blank physical observations until completed on the exact candidate; compiled instrumentation and mocked fixtures do not fill them.
+
+### October 25, 2026
+
+- Added recovery-code-first candidate observations for pre-setup local-only saves, explicit setup, preserved identity/pauses, interrupted uploads and existing-code restore. These are blank acceptance checks, not completed device evidence.

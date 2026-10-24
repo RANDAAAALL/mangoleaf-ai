@@ -2,7 +2,17 @@
 
 # PWA release history and archived notes
 
+## v0.11.0 recovery-code-first backup candidate
+
+October 25, 2026: the maintainer authorized distinct new versions after implementing recovery-code-first backup. Prepared shared app/web bundle 0.11.0 and APK 0.1.7/code 8, with default host bounds 8-8 and unchanged Model V4.5.0, bridge 1 and SQLite schema 1. New scans/photos stay local until explicit code creation or existing-code connection; successful new-code creation enables foreground/online backup without another confirmation. Existing identities, connected-code pauses, local/cloud records and queued deletions remain preserved. Debug/testing and Release/production stay separate; no hosted resource changes accompany the candidate.
+
+GitHub lists v0.10.1 as published. Preserve its tag/assets and the earlier source-only backup checks. These new version labels change build inputs, so new artifacts and affected checks must be recorded independently. Current-build R03, physical-device validation, exact production signing, CI and release approval remain pending; this entry does not claim publication or deployment.
+
+**Local versioned verification:** runtime/formatting, ordered typecheck/lint/static build, ten export checks, 197 tooling tests and eight affected Chromium-mobile cases passed. Both Android web targets rebuilt; the matching testing Debug APK passed native unit/lint/assembly, packaged-asset, signer/version and adopted-model checks. These are separate from the earlier 0.10.1 source-only backup results. Exact hashes and remaining scope are in the [October 25 test record](../../testing/TESTING.md#october-25-2026).
+
 ## v0.10.1 capture and package thumbnail candidate
+
+**Publication follow-up, October 25:** read-only GitHub inspection confirmed v0.10.1 is published with the four APK/OTA asset names. Its recorded tag targets `6ed5e60378888595ae26d23247bcb0dd79bc7745`. This does not establish the currently promoted Vercel deployment; the original preparation records below retain their historical scope.
 
 **Commit preparation after Debug acceptance:** the maintainer reported the prepared Debug APK/icon are okay and requested categorized source commits. Model remains adopted V4.5.0. This records reported physical acceptance, not new timing data, current-build R03, production signing, CI or publication. Earlier uncommitted-attempt statements below retain their original preparation scope.
 

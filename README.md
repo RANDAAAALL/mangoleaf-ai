@@ -26,7 +26,7 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 - Refresh public treatment guidelines through HTTP and Realtime, and read saved guidance offline. The APK also includes starter guidelines for first use.
 - Protect guidance from older overlapping downloads and changes made in another open browser tab; skip rewriting identical downloaded guidance.
 - Show an English/Bisaya status message when matching guidance is unavailable. The browser needs a successful download before it can read guidance offline.
-- Back up eligible APK reports and photos automatically while the app is open and online. Create and save a recovery code, then restore and merge cloud reports on another Android phone. Pause/Resume remains available.
+- Keep APK scans/photos local until the user creates a recovery code or connects an existing one. Successful code creation enables automatic backup while the app is open and online, without an extra confirmation checkbox. Save the code outside the phone; restore and merge completed backups on another Android phone. Pause/Resume remains available after setup.
 - Queue deletion of a report's copies in its connected cloud backup, including offline retries. This does not delete copies already restored on another phone; see [backup and deletion behavior](docs/security/SECURITY-AND-SYNC.md).
 - Open an installed Android app from the website, or follow the APK installation guide. Supported browsers show **Open app** when they can confirm the installation.
 - Offer **Restart now** / **Later** when a compatible, signed web update is ready in the production APK. Debug does not install production OTA updates.
@@ -34,7 +34,7 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 
 ## Download and status
 
-The [official download page](https://mangoleafai.vercel.app/download) provides published v0.10.0, with Android APK v0.1.5 and model v4.5.0. Source now prepares unpublished v0.10.1 / APK v0.1.6/code 7 with camera-encoding, first-result loading and installer-branding fixes. Production and development phone websites show EN or BIS. Local runtime weights/configuration and labels use adopted V4.5.0; V5 experiment records remain preserved. New artifacts require their own validation. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md) and [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
+The [official download page](https://mangoleafai.vercel.app/download) links verified published Android assets. GitHub currently lists v0.10.1 as published. Source prepares unpublished app v0.11.0 / APK v0.1.7/code 8 for recovery-code-first backup, with default host bounds 8-8. Debug uses testing and Production APK uses production; scans/photos stay local until recovery-code setup. Production and development phone websites show EN or BIS. Model stays adopted V4.5.0; V5 research records remain preserved. The new same-signer installer and web bundle require their own validation before release. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md) and [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
 
 ## Technology
 

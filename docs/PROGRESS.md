@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: October 24, 2026
+Last updated: October 25, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -1218,6 +1218,13 @@ This file tracks the project work from the first committed implementation throug
 
 - **Stable release publication:** the maintainer published v0.9.0 from `8ae294d` and promoted the matching Vercel deployment. Public release/download checks matched all four asset hashes and app/model labels. The exact V4.5 release R03 passed in 30.5 minutes; this record does not substitute for detailed physical-device evidence.
 - **Browser landing-only candidate:** prepared app v0.10.0 with Home/About/Android installation at every website viewport, including development. Removed browser scanning/History/Diagnostics entry points and scanner/model/private-worker startup while retaining the desktop QR guide and preserving legacy IndexedDB data. APK functionality and native/model identities remain unchanged. Separated the website shell and shared scanner, and retained scanner regressions through an isolated test-only route. Local runtime/type/lint/build/export checks, 179 tooling tests, five development viewport checks and two controlled Android cases passed. The initial full browser run plus 84 passing affected-case reruns verify 290 unique cases with seven platform skips; see [October 24 evidence and limits](testing/TESTING.md#october-24-2026). No R03, new commit, deployment or publication was performed.
+
+### October 25, 2026
+
+- **Versioned backup candidate:** prepared shared app/web bundle 0.11.0 and APK 0.1.7/code 8 (Debug 0.1.7-dev), with default host bounds 8-8 and unchanged Model V4.5.0, bridge/schema 1/1. Repeated runtime, formatting, ordered type/lint/build, ten export checks and 197 tooling tests; all passed. Eight affected browser cases passed on the new export. Both Android web targets rebuilt, and the testing Debug APK passed 21 JVM tests, lint, assembly, 81 packaged-asset checks, version/signer inspection and model-byte verification. Exact artifact/input hashes and remaining physical/R03/production release scope are in the [October 25 test record](testing/TESTING.md#october-25-2026). GitHub v0.10.1 and earlier candidate evidence remain preserved. No hosted changes, installation, production signing, commit or publication occurred.
+
+- **Recovery-code-first backup candidate:** both APK variants keep new scans/photos local until explicit code creation or existing-code connection. Successful verified credential storage enables automatic foreground/online backup without a saved-code checkbox, including after an older no-code pause; failed setup preserves prior state. The panel exposes local-only status before setup and code access/Pause/Resume afterward, with bilingual code privacy and unfinished-upload guidance. Existing anonymous UUIDs/sessions, connected-code pause choices, local/cloud records and pending-deletion retries remain preserved. Existing Supabase resources and production/testing separation are reused; no model or version bump, schema migration or historical cleanup is introduced. Reopening/reconnection retries incomplete reports, while completed copies are skipped. This source change is unpublished; affected verification and physical-device observations must be recorded before release.
+- **Backup candidate verification:** ordered source/build checks, ten exported-asset checks, security checks, all 197 tooling tests and thirteen affected Chromium-mobile cases passed. Read-only inspections confirmed both hosted projects retain their existing private storage, RLS and backup functions without server mutation. Saved-code reconnect now recovers unavailable sessions and drains same-vault deletion jobs while preserving pauses and refusing foreign-vault jobs. See [exact scope and remaining device/release checks](testing/TESTING.md#october-25-2026).
 
 ## Current Notebook Decision
 

@@ -1,5 +1,7 @@
 # MangoLeaf AI Android APK Versioning Guide
 
+**Current candidate, October 25:** shared app **v0.11.0**, Release APK **v0.1.7/code 8**, Debug **v0.1.7-dev**, default bundle bounds **8-8**, Model **V4.5.0**, bridge/schema **1/1**. This labels the recovery-code-first backup workflow; no native API or SQLite migration is introduced. GitHub [v0.10.1](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.10.1) is published; its installer, OTA assets and receipts remain unchanged. Older hosts must install the new same-signer APK to use host-8-only bundles. No OTA sequence or production-signed artifacts are allocated by this metadata change. Earlier preparation and test records below describe their original versions.
+
 **Maintainer acceptance before commit:** after checking the latest provided Debug APK, the maintainer reported that the APK and icon are okay and requested categorized commits. Record this as reported device/appearance acceptance of the prepared 0.1.6-dev / V4.5.0 candidate. No new timing measurements, both-phone diagnostic exports or phone-side hash were supplied; current-build R03, production-signed validation and release approval remain separate. The earlier My Files border observation does not establish that every One UI surface now suppresses OEM styling.
 
 **Branding-r2 local verification:** Android web bundling used committed V4.5.0. Debug lint, assembly and packaged-asset checks passed with 21 JVM cases and three API-36 branding instrumentation cases. Installed application/launcher and archive metadata resolve the white-backed adaptive resource; every pixel of the supplied background layer is white, and system-startup foreground transparency remains. The APK signature matches the maintainer's earlier Debug signer and all five packaged model files match adopted Git bytes. These resource checks do not validate Samsung My Files styling. The r2 APK and receipt are under ignored `.tools/android-debug-candidates/0.1.6-branding-r2/`; the candidate remains unpublished.
@@ -26,15 +28,15 @@ Use this guide for current APK versions, builds, signing and updates. The [Andro
 
 | Identity                      | Current value | Source                                      |
 | ----------------------------- | ------------- | ------------------------------------------- |
-| Candidate production APK      | `0.1.6`       | `versionName` in `android/app/build.gradle` |
-| Candidate Debug APK           | `0.1.6-dev`   | Native version plus Debug suffix            |
-| Android update number         | `7`           | `versionCode` in `android/app/build.gradle` |
-| Default compatible host range | `7-7`         | `tools/android-bundle.mjs`                  |
+| Candidate production APK      | `0.1.7`       | `versionName` in `android/app/build.gradle` |
+| Candidate Debug APK           | `0.1.7-dev`   | Native version plus Debug suffix            |
+| Android update number         | `8`           | `versionCode` in `android/app/build.gradle` |
+| Default compatible host range | `8-8`         | `tools/android-bundle.mjs`                  |
 | Native bridge / SQLite schema | `1` / `1`     | Existing compatibility checks               |
-| Shared website / web bundle   | `0.10.1`      | Root `package.json`                         |
+| Shared website / web bundle   | `0.11.0`      | Root `package.json`                         |
 | Adopted bundled model         | `v4.5.0`      | Committed model assets and constants        |
 
-Published v0.10.0 uses APK 0.1.5/code 6 and OTA sequence 4. The table describes an unpublished patch. No model adoption, native API or SQLite migration accompanies it. APK footers use the installed native version/model; the separately replaceable web version stays visible in About. Available APK labels come only from verified published assets, never the web tag or an installation hint.
+GitHub v0.10.1 is published; its separately prepared installer is APK 0.1.6/code 7. The table describes the new unpublished backup-workflow candidate. No model adoption, native API or SQLite migration accompanies it. APK footers use the installed native version/model; the separately replaceable web version stays visible in About. Available APK labels come only from verified published assets, never the web tag or an installation hint. New source/export/tooling/browser checks and the matching testing Debug build passed; see the [versioned evidence and remaining device/release checks](../testing/TESTING.md#october-25-2026). Previous candidate results do not approve the new installer.
 
 ## Version rules
 
@@ -94,7 +96,9 @@ Permanent keys live outside Git under `%USERPROFILE%\.mangoleaf-ai\signing`: APK
 
 ### Cloud recovery without Sign In/Register screens
 
-The first eligible saved photo lazily establishes verified anonymous ownership and automatic uploads while foreground and connected. Empty History does not create an identity automatically. APK users explicitly create/save a private recovery code outside the phone for future recovery; creating it attaches credentials to the same Auth UUID. On another APK, enter that code and restore completed backups. Restore verifies ownership/photo integrity, merges reports by ID and preserves original scan dates. Wrong codes preserve the current session. Creating an unrelated code cannot recover a forgotten vault.
+Both APK variants save locally by default. Ordinary startup, saved photos and reconnection do not establish private ownership or upload before recovery-code setup. While online, tap **Create recovery code and enable backup**: successful verified session/code storage enables automatic foreground uploads without an additional save-code confirmation. This new-code action explicitly enables uploads even if that older no-code installation had paused them. Save the code outside the phone. Existing anonymous owners retain their UUID/session and earlier backups when recovery credentials are attached. Existing code users retain enablement and deliberate `paused` or legacy `false` choices; a fresh existing-code connection enables backup without overriding a pause. Failed new-code creation preserves prior state and leaves uploads off; a failed existing-code connection preserves the prior verified session and upload choice.
+
+Creating a code does not finish uploads. Existing eligible History and future scans back up while open/online; reopening or reconnection retries unfinished reports and skips completed copies. An interrupted photo may restart. On another APK, enter the existing code and explicitly restore completed backups. Restore verifies ownership/photo integrity, merges reports by ID, preserves original dates and honors local deletion records. Wrong codes preserve the current session. A verified same-vault reconnect can recover an unavailable saved session and finish that vault's pending deletions before promotion; a different vault cannot consume them. Creating an unrelated code cannot recover a forgotten vault. The October 25, 2026 client candidate is unpublished and needs its own affected validation; older installed bundles retain earlier backup behavior.
 
 SQLite, private photos, credentials and deletion jobs stay outside replaceable OTA bundles. Android must fail closed if its trusted bridge is unavailable, never fall back to IndexedDB. Manual report import/export UI remains retired. Pause/Resume preserves deliberate pauses; queued History deletion retries remain active while connected even if uploads are paused. Deletion only targets the connected manifest-paired copies and does not propagate to other devices. Other devices holding stale copies must pause uploads before cleanup. Native launches ignore external URI payloads and retain the trusted local WebView.
 

@@ -1,25 +1,25 @@
 # MangoLeaf AI PWA Versioning Guide
 
-**Current status, October 24:** the maintainer published shared app [v0.10.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.10.0) from `e624441e75896964e996be0e56a88c172b5c2bdb`, with APK v0.1.5/code 6, model V4.5.0 and OTA sequence 4, and reported production promotion. Current-build R03 and the reported APK/download checks passed before publication. Later phone evidence revealed intermittent capture delays and a first-result splash. Source now prepares **unpublished v0.10.1 / APK v0.1.6/code 7**, bounds 7-7; model/bridge/schema remain V4.5.0/1/1. Preserve published assets and tags. New candidate validation, CI, signing and release approval remain separate.
+**Current candidate, October 25:** shared app **v0.11.0**, Android APK **v0.1.7/code 8**, default host bounds **8-8**, and adopted Model **V4.5.0**. The recovery-code-first backup workflow is a substantial app change; the rebuilt installer receives a distinct native identity. Bridge/SQLite schema remain 1/1. GitHub lists [v0.10.1](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.10.1) as the latest published release; these new versions are unpublished. Preserve its tag, signed assets and receipts. CI, exact-artifact/device/reliability validation and production approval remain separate.
 
 Use this guide to prepare the shared web application and website release. Native APK and model versions are independent; full dated evidence belongs in the [release history](history/PWA_RELEASE_HISTORY.md#release-timeline).
 
 ## Current repository snapshot
 
-| Item                    | Source state                                                      |
-| ----------------------- | ----------------------------------------------------------------- |
-| Shared app / web bundle | `0.10.1`, from `package.json`                                     |
-| Adopted model           | `v4.5.0`; local runtime restored to the adopted baseline          |
-| Android host            | `0.1.6` / code `7`; Debug `0.1.6-dev`                             |
-| Compatibility           | Bridge/schema `1`/`1`, host bounds `7-7`                          |
-| Published release       | `v0.10.0` / APK `0.1.5`, commit `e624441`, OTA sequence `4`       |
-| Publication             | Unpublished patch candidate; CI and release checks remain pending |
+| Item                    | Source state                                                  |
+| ----------------------- | ------------------------------------------------------------- |
+| Shared app / web bundle | `0.11.0`, from `package.json`                                 |
+| Adopted model           | `v4.5.0`; local runtime restored to the adopted baseline      |
+| Android host            | `0.1.7` / code `8`; Debug `0.1.7-dev`                         |
+| Compatibility           | Bridge/schema `1`/`1`, host bounds `8-8`                      |
+| Published release       | GitHub `v0.10.1`; previously prepared APK `0.1.6` / code `7`  |
+| Publication             | Unpublished workflow candidate; release checks remain pending |
 
-This patch moves copied-camera JPEG encoding to a cancellable worker with bounded fallback, loads the result modal with the APK entry, keeps white-backed application/archive and launcher branding consistent and uses the current EN or BIS language label on production and development phone websites. Scanning remains APK-only. Native resources require a rebuilt same-signer installer; code-6 installations cannot use code-7-only OTA assets. Select an OTA sequence above every published sequence when preparing a new release; do not reuse sequence 4.
+This candidate keeps scans/photos local until successful recovery-code creation or valid existing-code connection. Code creation enables automatic foreground/online backup without another checkbox; completed cloud copies are reused and unfinished reports retry. Preserve connected-code pauses, existing identities/data and scoped deletion retries. Debug uses testing and Production APK uses production; no hosted schema/configuration change is required. Scanning remains APK-only. Default OTA bounds deliberately target host 8; older hosts need the new same-signer APK for this release. Select an OTA sequence above every published sequence when preparing signed assets; the sequence has not been allocated by this version bump.
 
 APK footers show the installed native version and active model. Android About shows the shared web version; browser footers retain app/model labels. Available APK labels come only from validated published asset labels. See [Android version and publication rules](ANDROID_APK_VERSIONING.md#installed-and-available-apk-versions).
 
-The maintainer ended the local V5 runtime test on October 24. Model weights/configuration/constants now match adopted V4.5.0; regenerate `public/sw.js` from that source. A protected ignored backup preserves the previous V5 runtime, and experiment notebooks/evidence remain intact. Preserve the unrelated training notebook edit uncommitted. Validate the current source/model hashes. Do not carry previous-build test results forward as proof of this patch. See the [patch record](history/PWA_RELEASE_HISTORY.md#v0101-capture-and-package-thumbnail-candidate).
+Model weights/configuration/constants remain adopted V4.5.0; builds regenerate `public/sw.js` from that source. Preserved V5 research and the unrelated training notebook edit remain separate. Validate the newly versioned source/model hashes rather than carrying earlier-build results forward. See the [candidate record](history/PWA_RELEASE_HISTORY.md#v0110-recovery-code-first-backup-candidate).
 
 ## Version labels and release rules
 

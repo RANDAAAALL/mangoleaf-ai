@@ -84,12 +84,12 @@ test("same export produces identical archives with complete matching inventory",
     readFileSync(join(second, "web-update.zip")),
   );
   const entries = readZip(readFileSync(join(first, "web-update.zip")));
-  // Default bundles require the host with guarded restart and renderer-failure recovery fixes.
+  // Default candidate bundles target the matching installer; older receipts remain unchanged.
   const descriptor = JSON.parse(
     readFileSync(join(first, "web/android-bundle.json"), "utf8"),
   );
-  expect(descriptor.nativeHostMin).toBe(7);
-  expect(descriptor.nativeHostMax).toBe(7);
+  expect(descriptor.nativeHostMin).toBe(8);
+  expect(descriptor.nativeHostMax).toBe(8);
   expect(entries.some((file) => file.path === "sw.js")).toBe(false);
   expect(entries.some((file) => file.path === "android-bundle.json")).toBe(
     true,
