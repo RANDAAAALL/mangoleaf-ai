@@ -34,7 +34,7 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 
 ## Download and status
 
-The [official download page](https://mangoleafai.vercel.app/download) provides the published v0.9.0 release, with Android APK v0.1.4 and model v4.5.0. This source's v0.10.0 browser landing changes are still a candidate. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md) and [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
+The [official download page](https://mangoleafai.vercel.app/download) provides the published v0.9.0 release, with Android APK v0.1.4 and model v4.5.0. This source prepares v0.10.0 with browser landing changes and a native v0.1.5/code 6 icon candidate. The new artifacts are not published. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md) and [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
 
 ## Technology
 

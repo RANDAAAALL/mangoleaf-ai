@@ -6,6 +6,7 @@
         <item name="android:statusBarColor">#EFF8EB</item>
         <item name="android:navigationBarColor">#EFF8EB</item>
         <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">@drawable/app_launch_background</item>
         <item name="android:colorAccent">#257B38</item>
     </style>
     <style name="AppTheme" parent="BaseAppTheme" />

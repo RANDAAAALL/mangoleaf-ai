@@ -1,6 +1,6 @@
 # MangoLeaf AI PWA Versioning Guide
 
-**Current status, October 24:** stable [v0.9.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.9.0) is published from `8ae294d1b059a8d5e633747e49da98428afe4ca7`, with APK v0.1.4, model v4.5.0 and signed OTA sequence 3; the matching Vercel deployment was promoted. Its current-build V4.5 R03 passed, and the maintainer reported APK testing. The source now prepares **v0.10.0**, an unpublished browser landing-only candidate. Native host/code/bounds and model remain unchanged. Preserve the v0.9.0 tag/assets; new publication needs its own tested commit and higher OTA sequence. Earlier candidate notes below describe prior preparation, not the new candidate's validation.
+**Current status, October 24:** stable [v0.9.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.9.0) is published from `8ae294d1b059a8d5e633747e49da98428afe4ca7`, with APK v0.1.4, model v4.5.0 and signed OTA sequence 3; the matching Vercel deployment was promoted. Its current-build V4.5 R03 passed, and the maintainer reported APK testing. The source now prepares **v0.10.0**, an unpublished browser landing-only candidate. The later icon follow-up prepares native 0.1.5/code 6 and bounds 6-6; the model stays V4.5.0. Preserve the v0.9.0 tag/assets; new publication needs its own tested commit and higher OTA sequence. Earlier candidate notes below describe prior preparation, not the new candidate's validation.
 
 Use this guide to prepare the shared web application and website release. Native APK and model versions are independent; full dated evidence belongs in the [release history](history/PWA_RELEASE_HISTORY.md#release-timeline).
 
@@ -10,8 +10,8 @@ Use this guide to prepare the shared web application and website release. Native
 | ----------------------- | ---------------------------------------------------------------------------------------- |
 | Shared app / web bundle | `0.10.0`, from `package.json`                                                            |
 | Adopted model           | `v4.5.0`; local V5 experiments excluded                                                  |
-| Android host            | `0.1.4` / code `5`; Debug `0.1.4-dev`                                                    |
-| Compatibility           | Bridge/schema `1`/`1`, host bounds `5-5`                                                 |
+| Android host            | `0.1.5` / code `6`; Debug `0.1.5-dev`                                                    |
+| Compatibility           | Bridge/schema `1`/`1`, host bounds `6-6`                                                 |
 | Earlier RC tag          | Historical `v0.9.0-rc.1` at `4ff19bc`; stable `v0.9.0` is published at `8ae294d`         |
 | Publication             | Local v0.10.0 candidate; new-commit CI, release approval and publication remain separate |
 
@@ -21,7 +21,7 @@ APK footers show the installed native version and active model. Android About sh
 
 Keep local V5 overrides in `public/model/`, `src/lib/constants.ts` and `src/sw.ts` uncommitted. The release-cache fixes are already in committed source; remaining worker-source changes belong to the local V5 experiment. Generate `public/sw.js` from the exact isolated committed V4.5 candidate; never stage the worker from the local V5 build. Preserve the unrelated training notebook edit.
 
-Published v0.9.0 inputs are immutable historical release evidence. The v0.10.0 candidate changes website behavior without adopting V5 or altering the native host. Its checks, CI and publication are separate; see the [October 24 record](history/PWA_RELEASE_HISTORY.md#v0100-browser-landing-only-candidate).
+Published v0.9.0 inputs are immutable historical release evidence. The v0.10.0 candidate changes website behavior without adopting V5. Its later branding follow-up also prepares native 0.1.5/code 6; local native/source and focused website checks now pass; physical-device and hosted proxy validation remain pending. Its checks, CI and publication are separate; see the [October 24 record](history/PWA_RELEASE_HISTORY.md#v0100-browser-landing-only-candidate).
 
 ## Version labels and release rules
 

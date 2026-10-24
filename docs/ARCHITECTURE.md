@@ -1,12 +1,16 @@
 # MangoLeaf AI Architecture
 
+## Native branding and APK delivery (October 24, 2026)
+
+The Java host now prepares native v0.1.5/code 6 with adaptive launcher resources and separate transparent system-startup artwork. Default bundles target 6-6; SQLite/bridge remain 1/1. This changes installer resources, not scan storage or backup ownership. The shipped 0.1.4/code 5 release remains unchanged.
+
 ## Browser landing boundary (October 24, 2026)
 
 The v0.10.0 candidate routes by the compiled Android build target, never by viewport or user agent. `src/app/page.tsx` mounts `BrowserLanding` for every website browser, including development. Only an Android bundle loads the separate `Application` component with model initialization, scan/storage hooks, diagnostics and the backup worker. An Android build without the trusted native bridge still fails closed.
 
 Browser Home reuses the existing explanatory cards and download prompt; About exposes Android installation actions without diagnostics or recovery panels. Below 768px, the website centers its leaf/name header and provides a fixed Home, About, open/install and language bottom bar without Scan or History. At 768px and above, the existing header navigation remains. The APK supplies Diagnostics and recovery as children of the shared About view, importing both with its application entry so first navigation cannot suspend the entire application; the website imports neither panel. The floating Next development indicator is disabled because its default lower-left placement covers Home on narrow screens; development errors still surface. Desktop QR links and `?install=1` guide behavior are preserved. No website History database is opened or migrated by this entry point, and private browser backup is disabled even in development. Dexie compatibility code and stored records remain for preservation and regression coverage. APK storage and cloud routing are unchanged.
 
-**Current source candidate:** shared web `0.10.0`, native `0.1.4`/code `5`, adopted model `v4.5.0`. Stable `v0.9.0` remains published at `8ae294d`; the new browser-only workflow has separate validation/publication. Release exports use an isolated adopted-model snapshot while local V5 experimentation remains separate.
+**Current source candidate:** shared web `0.10.0`, native `0.1.5`/code `6` with host bounds `6-6`, adopted model `v4.5.0`. Stable `v0.9.0` remains published at `8ae294d`; the new browser-only workflow has separate validation/publication. Release exports use an isolated adopted-model snapshot while local V5 experimentation remains separate.
 
 Native APK versions, signing/builds, compatibility and release rules now live in [Android APK versioning](versions/ANDROID_APK_VERSIONING.md). The [Android APK history](versions/history/ANDROID_APK_HISTORY.md) preserves the earlier combined implementation guide and its section bookmarks. The native `android/` project and the application footer are unchanged by this documentation move.
 

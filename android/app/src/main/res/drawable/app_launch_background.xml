@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 8-11 starting windows use the same transparent leaf and app background. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/app_launch_background" />
+    <item android:width="144dp" android:height="144dp" android:gravity="center"
+        android:drawable="@drawable/ic_leaf_foreground" />
+</layer-list>

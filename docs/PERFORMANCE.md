@@ -1,5 +1,9 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## Installer-delivery and startup artwork follow-up (October 24, 2026)
+
+The native 0.1.5 candidate uses vector/adaptive artwork and a separate system-startup leaf, with no artificial startup delay or change to camera/model timing. Actual device appearance remains subject to physical verification.
+
 ## Browser startup boundary (October 24, 2026)
 
 The v0.10.0 website entry mounts a landing page instead of the scan application at all viewport sizes, including development. It does not call model loading/GPU warm-up, scan History queries, diagnostic initialization or private backup startup. APK-only Diagnostics and recovery panels load with the separate Android application entry, avoiding a second whole-app loading fallback on the first About visit. They remain outside the website entry. This trades deferred APK panel loading for an uninterrupted first navigation; no device startup-speed improvement is claimed. The native scanner retains its existing startup and storage behavior. This is a removal of unnecessary browser work, not a measured phone speed claim; service-worker static precaching and existing caches are unchanged.

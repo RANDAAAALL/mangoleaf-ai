@@ -1,6 +1,14 @@
 # MangoLeaf AI Android APK Versioning Guide
 
-**Current status, October 24:** stable [v0.9.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.9.0) is published from `8ae294d1b059a8d5e633747e49da98428afe4ca7`, with APK v0.1.4, model v4.5.0 and signed OTA sequence 3; the matching Vercel deployment was promoted. Its current-build V4.5 R03 passed, and the maintainer reported APK testing. The source now prepares **v0.10.0**, an unpublished browser landing-only candidate. Native host/code/bounds and model remain unchanged. Preserve the v0.9.0 tag/assets; new publication needs its own tested commit and higher OTA sequence. Earlier candidate notes below describe prior preparation, not the new candidate's validation.
+## Icon and APK download follow-up (October 24, 2026)
+
+The current source prepares shared app v0.10.0 and native APK v0.1.5/code 6, with default host bounds 6-6, bridge/schema 1/1 and adopted model V4.5.0. The published v0.9.0 installer remains native v0.1.4/code 5. The new icon resources require rebuilding/signing and installing the same-package, same-signer APK over the existing app; do not uninstall to update. Compatible web OTA cannot replace launcher resources or the Android system starting window.
+
+Transparent vector artwork replaces the opaque launcher bitmap. Android 8+ receives adaptive foreground/background layers; Android 12+ gets a separate transparent leaf on a single launch background. Samsung and other system apps retain control over their final icon mask, badge and thumbnail presentation. See [Android adaptive icons](https://developer.android.com/develop/ui/compose/system/icon_design_adaptive) and [system splash screens](https://developer.android.com/develop/ui/views/launch/splash-screen).
+
+**Validation status:** isolated V4.5.0 runtime/format/type/lint/production-build/export gates passed, with 181 tooling tests (659 assertions), 48 focused website/install cases, 21 JVM tests and Debug lint/assembly/packaged-asset verification. Two controlled compiled-Android cases cover first About navigation without a second splash and missing-bridge fail-closed behavior; they do not establish physical-device results. The first static build had an untraced compiler error and its unchanged-input retry passed; an initial scanner fixture timeout passed with a 30-second CLI timeout. Earlier account review blockage was resolved for these checks. Physical icon/first-About checks, live Vercel transfer/hash/range behavior, Brave/Chrome completion, final-commit CI and release approval remain separate. No production APK signing, tag, deployment or publication was performed. See [October 24 evidence](../testing/TESTING.md#october-24-2026).
+
+**Current status, October 24:** stable [v0.9.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.9.0) is published from `8ae294d1b059a8d5e633747e49da98428afe4ca7`, with APK v0.1.4, model v4.5.0 and signed OTA sequence 3; the matching Vercel deployment was promoted. Its current-build V4.5 R03 passed, and the maintainer reported APK testing. The source now prepares **v0.10.0**, an unpublished browser landing-only candidate. The later icon follow-up advances the native candidate to 0.1.5/code 6 and bounds 6-6; the model remains V4.5.0. Preserve the v0.9.0 tag/assets; new publication needs its own tested commit and higher OTA sequence. Earlier candidate notes below describe prior preparation, not the new candidate's validation.
 
 Use this guide for current APK versions, builds, signing and updates. The [Android APK history](history/ANDROID_APK_HISTORY.md#candidate-timeline) preserves dated implementation records and earlier behavior. Exact artifact hashes and test outcomes remain in [Android testing](../testing/ANDROID_TESTING.md).
 
@@ -8,15 +16,15 @@ Use this guide for current APK versions, builds, signing and updates. The [Andro
 
 | Identity                      | Current value | Source                                       |
 | ----------------------------- | ------------- | -------------------------------------------- |
-| Production APK                | `0.1.4`       | `versionName` in `android/app/build.gradle`  |
-| Debug APK                     | `0.1.4-dev`   | Native version plus Debug suffix             |
-| Android update number         | `5`           | `versionCode` in `android/app/build.gradle`  |
-| Default compatible host range | `5-5`         | `tools/android-bundle.mjs`                   |
+| Candidate production APK      | `0.1.5`       | `versionName` in `android/app/build.gradle`  |
+| Candidate Debug APK           | `0.1.5-dev`   | Native version plus Debug suffix             |
+| Android update number         | `6`           | `versionCode` in `android/app/build.gradle`  |
+| Default compatible host range | `6-6`         | `tools/android-bundle.mjs`                   |
 | Native bridge / SQLite schema | `1` / `1`     | Android host and bundle compatibility checks |
 | Shared website / web bundle   | `0.10.0`      | Root `package.json`                          |
 | Adopted bundled model         | `v4.5.0`      | Committed model assets and constants         |
 
-The published v0.9.0 installer uses this native identity. The source prepares web v0.10.0; no new signed installer or OTA has been produced for it. Its browser entry changes do not require a new native API or SQLite migration. Repeat affected checks on exact new artifacts before distribution.
+The published v0.9.0 installer uses native 0.1.4/code 5; the table describes the new 0.1.5/code 6 candidate. The source prepares web v0.10.0; no new signed installer or OTA has been produced for it. Its browser entry changes do not require a new native API or SQLite migration. Repeat affected checks on exact new artifacts before distribution.
 
 APK, web bundle, OTA sequence and model versions are separate identities. **APK footers now show installed APK/model versions**; the web-bundle version remains separately visible in About. Browser footers keep shared app/model labels. Native names come from the trusted host, not a hardcoded React version. The shared web candidate is 0.9.0; public distribution still needs the reviewed shared-version and release gates below. See [version-display evidence](../testing/ANDROID_TESTING.md#october-23-2026-version-display).
 

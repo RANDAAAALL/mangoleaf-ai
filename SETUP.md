@@ -1,5 +1,7 @@
 # MangoLeaf AI Setup Guide
 
+**October 24 native branding follow-up:** source native v0.1.5/code 6 requires a freshly built same-signer installer for launcher/system-splash artwork. Keep signed APKs outside Git; see [the current Android guide](docs/versions/ANDROID_APK_VERSIONING.md#icon-and-apk-download-follow-up-october-24-2026).
+
 ## Current browser and APK behavior (October 24, 2026)
 
 App v0.10.0 is an unpublished candidate. Production and development browsers at every viewport show Home, About and Android installation. They do not start scanning, open History, mount Diagnostics, or enroll/upload private backups. Existing IndexedDB reports, photos, credentials and queued jobs are preserved; nothing is migrated into an APK automatically. Use a Debug APK for scanning and testing-project backup; the production APK continues using production. Desktop QR installation and the phone download guide remain available. The dated notes below describe earlier implementations.

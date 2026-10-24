@@ -12,7 +12,9 @@ The PWA version identifies the application people install: screens, camera and u
 
 ### v0.10.0 browser landing-only candidate
 
-**Phone navigation/About follow-up, October 24:** phone websites now use Home, About, open/install and language controls in a fixed bottom bar with a centered header brand. Desktop navigation is unchanged. The APK loads its private About panels with its application entry, removing their first-visit global splash trigger. Versions remain 0.10.0/0.1.4/code 5/model V4.5.0; this is unpublished candidate work.
+**Phone navigation/About follow-up, October 24:** phone websites now use Home, About, open/install and language controls in a fixed bottom bar with a centered header brand. Desktop navigation is unchanged. The APK loads its private About panels with its application entry, removing their first-visit global splash trigger. Versions remain 0.10.0/0.1.5/code 6/model V4.5.0; this is unpublished candidate work.
+
+**Later October 24 native follow-up:** the combined v0.10.0 candidate prepares native 0.1.5/code 6 (bounds 6-6) transparent/adaptive launcher and system-startup artwork. Model V4.5.0 remains unchanged. Resource compile/link, 21 JVM tests, Debug lint/assembly and packaged-asset verification passed. Physical and production-release approval remain separate.
 
 - Production and development browsers on phones and desktop provide Home, About, language/legal controls and Android installation. Browser scanning, History controls and Diagnostics are retired; legacy IndexedDB records are preserved and no private browser backup worker starts.
 - The APK keeps scanning, History, diagnostics, SQLite/private files, automatic variant-scoped backup and explicit recovery. Native v0.1.4/code 5, bridge/schema 1/1, host bounds 5-5 and adopted model V4.5.0 remain unchanged. Local V5 overrides are excluded.

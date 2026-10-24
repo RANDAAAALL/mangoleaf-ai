@@ -1,10 +1,18 @@
 <a id="android-host-updates-and-recovery-candidate-october-20-2026"></a>
 
+## October 24, 2026 navigation and branding candidate
+
+Prepared shared app 0.10.0/native 0.1.5/code 6, default bounds 6-6, bridge/schema 1/1 and adopted model V4.5.0. Transparent native artwork and the APK-delivery follow-up are separate from the first-About fix: private About panels now load with the APK application instead of triggering its global loading fallback on first navigation. Local verification passed 21 JVM tests, Debug lint/assembly/asset checks and two controlled compiled-Android cases. Physical phone appearance/lifecycle and release approval remain pending; no new production signing or publication occurred. Earlier 0.1.4/code 5 and v0.9.0 records below retain their original identities.
+
 ## Shared web v0.9.0 candidate (October 23, 2026)
 
 Preparing shared web `0.9.0` and local candidate tag `v0.9.0-rc.1` leaves native `0.1.4`/code `5`, Debug `0.1.4-dev`, bridge/schema `1`/`1`, host bounds `5-5` and adopted model `v4.5.0` unchanged. Local V5 overrides remain excluded. Finalize the categorized commits before rebuilding publication APK/OTA receipts; web-0.8.0 artifacts below remain historical. CI, reliability/device approval, portable key backup and public release/promotion remain pending. See the [shared release record](PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026).
 
 # Android APK history
+
+## Native 0.1.5 branding and APK transfer candidate (October 24, 2026)
+
+Prepared versionName 0.1.5 (Debug 0.1.5-dev), versionCode 6 and default host bounds 6-6; bridge/schema remain 1/1, web candidate 0.10.0 and model V4.5.0. Replaced opaque PNG launcher artwork with transparent vector/adaptive resources, and supplied dedicated system-splash styling for Android 12+ plus a plain legacy starting window. Native resources require a new same-signer APK; old code-5 APKs cannot apply them through web OTA. SQLite, private files, credentials, signing keys and deployed resources remain unchanged.
 
 ## Browser companion change (October 24, 2026)
 
