@@ -1,5 +1,5 @@
 import { memo, useMemo } from "react";
-import { type ScanRecord } from "@/lib/db";
+import { type ScanListRecord } from "@/lib/scan-photo";
 import { type Language } from "@/lib/translations";
 import { HowItWorksSteps } from "@/components/scan/how-it-works-steps";
 import { DiseaseCoverageCard } from "@/components/scan/disease-coverage-card";
@@ -11,9 +11,9 @@ import { isAndroidBuild } from "@/lib/native-bridge";
 const HOME_PREVIEW_COUNT = 4;
 
 interface HomeTabProps {
-  scans: ScanRecord[];
+  scans: ScanListRecord[];
   language: Language;
-  onSelectScan: (scan: ScanRecord) => void;
+  onSelectScan: (scan: ScanListRecord) => void;
   onDeleteScan: (id: string) => Promise<void>;
   onViewAllHistory: () => void;
   onScanPress: () => void;

@@ -78,7 +78,7 @@ export async function deleteScansWithCloudQueue(ids: string[]) {
         scope ? "storage.report.deleteSynced" : "storage.report.delete",
         { ids, scope },
       );
-      notifyStorageChange();
+      notifyStorageChange("reports");
     } else if (scope) {
       await db.transaction("rw", db.scans, db.cloudDeletes, async () => {
         await db.cloudDeletes.bulkPut(

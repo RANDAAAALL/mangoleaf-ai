@@ -1,5 +1,6 @@
 import { memo } from "react";
-import { type ScanRecord } from "@/lib/db";
+import { type ScanListRecord } from "@/lib/scan-photo";
+import { ScanPhoto } from "@/components/scan/scan-photo";
 import { translations, type Language } from "@/lib/translations";
 import { UNCERTAIN_LABEL } from "@/lib/constants";
 import { getBadgeStyles } from "@/lib/get-badge-styles";
@@ -8,8 +9,7 @@ import { formatConfidence } from "@/lib/format-confidence";
 import type { DiagnosisResult } from "@/lib/classifier";
 
 interface ScanDetailsModalProps {
-  scan: ScanRecord;
-  imageUrl: string | null;
+  scan: ScanListRecord;
   language: Language;
   guidelineText: { en: string; bis: string };
   onLanguageChange: (lang: Language) => void;
@@ -18,9 +18,9 @@ interface ScanDetailsModalProps {
   diagnosedResultTabular?: DiagnosisResult["diagnosedResultTabular"];
 }
 
+/** Show the saved metadata and one local photo without loading the rest of History. */
 export const ScanDetailsModal = memo(function ScanDetailsModal({
   scan,
-  imageUrl,
   language,
   guidelineText,
   onLanguageChange,
@@ -82,30 +82,28 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
 
         {/* Left Column: Photo Banner */}
         <div className="w-full min-w-0 min-h-0 aspect-[4/3] md:aspect-auto bg-[#f0f5eb] relative border-b md:border-b-0 md:border-r border-[#e2ebd9] shrink-0 overflow-hidden flex items-center justify-center">
-          {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={scan.disease_name}
-              className="absolute inset-0 object-cover w-full h-full"
-            />
-          ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center text-[#738a77] font-bold text-sm p-6 text-center">
-              <svg
-                className="h-10 w-10 mb-2 opacity-50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-              <span>{t.noImageOffline}</span>
-            </div>
-          )}
+          <ScanPhoto
+            scan={scan}
+            className="absolute inset-0 object-cover w-full h-full"
+            fallback={
+              <div className="w-full h-full flex flex-col items-center justify-center text-[#738a77] font-bold text-sm p-6 text-center">
+                <svg
+                  className="h-10 w-10 mb-2 opacity-50"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.5"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                <span>{t.noImageOffline}</span>
+              </div>
+            }
+          />
 
           {/* Keep both badges inside the photo and let long names wrap. */}
           <div className="absolute bottom-3 inset-x-3 flex items-end justify-between gap-2 pointer-events-none">

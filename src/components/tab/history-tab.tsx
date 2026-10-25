@@ -1,12 +1,12 @@
 import { memo } from "react";
-import { type ScanRecord } from "@/lib/db";
+import { type ScanListRecord } from "@/lib/scan-photo";
 import { type Language } from "@/lib/translations";
 import { ScanHistoryList } from "@/components/scan/scan-history-list";
 
 interface HistoryTabProps {
-  scans: ScanRecord[];
+  scans: ScanListRecord[];
   language: Language;
-  onSelectScan: (scan: ScanRecord) => void;
+  onSelectScan: (scan: ScanListRecord) => void;
   onDeleteScan: (id: string) => Promise<void>;
   onDeleteScans: (ids: string[]) => Promise<void>;
   onScanPress: () => void;

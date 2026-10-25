@@ -7,7 +7,7 @@ import {
   useId,
   useEffect,
 } from "react";
-import { type ScanRecord } from "@/lib/db";
+import { type ScanListRecord } from "@/lib/scan-photo";
 import { ScanCard } from "./scan-card";
 import { translations, type Language } from "@/lib/translations";
 import { Icon } from "@/components/brand/icon";
@@ -19,9 +19,9 @@ import {
 } from "@/lib/diagnostics";
 
 interface ScanHistoryListProps {
-  scans: ScanRecord[];
+  scans: ScanListRecord[];
   language: Language;
-  onSelectScan: (scan: ScanRecord) => void;
+  onSelectScan: (scan: ScanListRecord) => void;
   onDeleteScan: (id: string) => Promise<void>;
   onDeleteScans?: (ids: string[]) => Promise<void>;
   onViewAllHistory?: () => void;
@@ -34,6 +34,7 @@ const DESKTOP_ITEMS_PER_PAGE = 6;
 const MOBILE_HOME_PREVIEW_COUNT = 1;
 const DESKTOP_HOME_PREVIEW_COUNT = 4;
 
+/** Filter metadata across History, then mount photos for the current page only. */
 export const ScanHistoryList = memo(function ScanHistoryList({
   scans,
   language,
@@ -534,7 +535,6 @@ export const ScanHistoryList = memo(function ScanHistoryList({
             <ScanCard
               key={scan.id}
               scan={scan}
-              imageBlob={scan.image_blob || null}
               language={language}
               onSelect={onSelectScan}
               onDelete={openSingleDeleteConfirmation}

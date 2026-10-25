@@ -849,7 +849,7 @@ export function startCloudBackup() {
       })
     : undefined;
   const unsubscribeStorage = isAndroidBuild()
-    ? subscribeStorageChange(changed)
+    ? subscribeStorageChange(changed, "reports")
     : () => {};
   const unsubscribeConnection = subscribeConnection(changed);
   document.addEventListener("visibilitychange", foreground);

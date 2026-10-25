@@ -1,17 +1,16 @@
 import { memo } from "react";
-import { type ScanRecord } from "@/lib/db";
+import { type ScanListRecord } from "@/lib/scan-photo";
 import { translations, type Language } from "@/lib/translations";
 import { getBadgeStyles } from "@/lib/get-badge-styles";
 import { UNCERTAIN_LABEL } from "@/lib/constants";
 import { formatTimeAgo } from "@/lib/format-time-ago";
-import { useScanPhotoUrl } from "@/hooks/useScanPhotoUrl";
+import { ScanPhoto } from "@/components/scan/scan-photo";
 import { Icon } from "@/components/brand/icon";
 
 interface ScanCardProps {
-  scan: ScanRecord;
-  imageBlob: Blob | null;
+  scan: ScanListRecord;
   language: Language;
-  onSelect: (scan: ScanRecord) => void;
+  onSelect: (scan: ScanListRecord) => void;
   onDelete: (id: string) => void;
   // History uses thumbnail rows on phones and full photo cards on wider screens.
   compact?: boolean;
@@ -21,9 +20,9 @@ interface ScanCardProps {
   onToggleSelection?: (id: string) => void;
 }
 
+/** Display one report; its photo loads only while this card is mounted. */
 export const ScanCard = memo(function ScanCard({
   scan,
-  imageBlob,
   language,
   onSelect,
   onDelete,
@@ -42,10 +41,6 @@ export const ScanCard = memo(function ScanCard({
     scan.disease_name === UNCERTAIN_LABEL
       ? scan.disease_name.split(" / ")
       : null;
-
-  // Reuse the Blob URL across metadata updates to avoid blinking.
-  const localImageUrl = useScanPhotoUrl(scan.id, imageBlob);
-  const displayUrl = localImageUrl;
 
   // History changes grid columns in selection mode, so only colors transition.
   return (
@@ -75,29 +70,27 @@ export const ScanCard = memo(function ScanCard({
       <div
         className={`relative shrink-0 bg-[#f0f5eb] overflow-hidden ${compact ? "h-14 w-14 rounded-xl md:h-auto md:w-full md:rounded-none md:pt-[75%]" : "w-full pt-[75%]"}`}
       >
-        {displayUrl ? (
-          <img
-            src={displayUrl}
-            alt={scan.disease_name}
-            loading="lazy"
-            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ${compact ? "md:group-hover:scale-103" : "group-hover:scale-103"}`}
-          />
-        ) : (
-          <div
-            className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center text-center text-[#738a77] text-xs font-semibold bg-[#eef5e9] ${compact ? "p-1 md:p-4" : "p-4"}`}
-          >
-            <Icon
-              name="gallery"
-              size={32}
-              strokeWidth={1.5}
-              aria-hidden="true"
-              className="mb-1 opacity-50"
-            />
-            <span className={compact ? "sr-only md:not-sr-only" : undefined}>
-              {t.noImageOffline}
-            </span>
-          </div>
-        )}
+        <ScanPhoto
+          scan={scan}
+          loading="lazy"
+          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ${compact ? "md:group-hover:scale-103" : "group-hover:scale-103"}`}
+          fallback={
+            <div
+              className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center text-center text-[#738a77] text-xs font-semibold bg-[#eef5e9] ${compact ? "p-1 md:p-4" : "p-4"}`}
+            >
+              <Icon
+                name="gallery"
+                size={32}
+                strokeWidth={1.5}
+                aria-hidden="true"
+                className="mb-1 opacity-50"
+              />
+              <span className={compact ? "sr-only md:not-sr-only" : undefined}>
+                {t.noImageOffline}
+              </span>
+            </div>
+          }
+        />
 
         {!compact && (
           <div className="absolute top-3 right-3">

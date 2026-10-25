@@ -1,4 +1,4 @@
-import { db, type ScanRecord, type DiseaseGuideline } from "@/lib/db";
+import { db, type DiseaseGuideline } from "@/lib/db";
 import { isAndroidBuild, nativeRequest } from "@/lib/native-bridge";
 import {
   findNativeScan,
@@ -10,9 +10,10 @@ import {
   sameGuidelineSnapshot,
   type GuidelineChange,
 } from "@/lib/guidelines-sync";
+import type { ScanListRecord } from "@/lib/scan-photo";
 
 /** The Android branch never opens IndexedDB or falls back after a native failure. */
-export function readStoredScans(): Promise<ScanRecord[]> {
+export function readStoredScans(): Promise<ScanListRecord[]> {
   if (isAndroidBuild()) return readNativeScans();
   return db.scans
     .orderBy("updated_at")
@@ -49,7 +50,7 @@ export async function replaceStoredGuidelines(
       rows,
       expected: baseline,
     });
-    if (saved) notifyStorageChange();
+    if (saved) notifyStorageChange("guidelines");
     return saved;
   }
   return db
@@ -71,7 +72,7 @@ export async function replaceStoredGuidelines(
 export async function applyStoredGuidelineChange(change: GuidelineChange) {
   if (isAndroidBuild()) {
     await nativeRequest("storage.guidelines.change", change);
-    notifyStorageChange();
+    notifyStorageChange("guidelines");
   } else if (change.type === "DELETE") await db.guidelines.delete(change.id);
   else await db.guidelines.put(change.guideline);
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { type ScanRecord, type DiseaseGuideline } from "@/lib/db";
+import type { ScanListRecord } from "@/lib/scan-photo";
 import { useStorageQuery } from "@/hooks/useStorageQuery";
 import {
   readStoredScans,
@@ -70,7 +71,7 @@ type AppTab = "home" | "history" | "about";
 
 // Probability rows exist only for the selected fresh result;
 // they are not saved to History.
-type SelectedScanRecord = ScanRecord & {
+type SelectedScanRecord = ScanListRecord & {
   diagnosedResultTabular?: DiagnosisResult["diagnosedResultTabular"];
 };
 
@@ -306,10 +307,12 @@ export function Application() {
     }
   }, []);
 
-  // Legacy deletion tombstones remain hidden; current deletions remove local
-  // rows immediately. Read dates through the index instead of sorting in JS.
-  const { data: scansQuery, error: scansError } =
-    useStorageQuery(readStoredScans);
+  // SQLite lists metadata only; cards/details load their own private photos.
+  // Legacy deletion tombstones remain hidden and date ordering uses the index.
+  const { data: scansQuery, error: scansError } = useStorageQuery(
+    readStoredScans,
+    "reports",
+  );
   const activeScans = useMemo(() => scansQuery ?? [], [scansQuery]);
 
   useEffect(() => {
@@ -366,26 +369,11 @@ export function Application() {
     isScanSheetOpen,
   ]);
 
-  const selectedScanImageUrl = useMemo(() => {
-    if (selectedScan?.image_blob && selectedScan.image_blob.size > 0) {
-      return URL.createObjectURL(selectedScan.image_blob);
-    }
-    // Retained cloud metadata is historical. Photos are read only from this
-    // browser's Blob; an expired or private legacy URL is never requested.
-    return null;
-  }, [selectedScan]);
-
-  useEffect(() => {
-    return () => {
-      if (selectedScanImageUrl && selectedScanImageUrl.startsWith("blob:")) {
-        URL.revokeObjectURL(selectedScanImageUrl);
-      }
-    };
-  }, [selectedScanImageUrl]);
-
   // Guidelines cached from Supabase, so treatment advice is readable offline
-  const { data: cachedGuidelines, error: guidelinesError } =
-    useStorageQuery(readStoredGuidelines);
+  const { data: cachedGuidelines, error: guidelinesError } = useStorageQuery(
+    readStoredGuidelines,
+    "guidelines",
+  );
   const [nativeFailed, setNativeFailed] = useState(false);
   const nativeMarkedHealthy = useRef(false);
   useEffect(() => {
@@ -1072,7 +1060,6 @@ export function Application() {
         <ScanDetailsModal
           scan={selectedScan}
           // diagnosedResultTabular={selectedScan.diagnosedResultTabular}
-          imageUrl={selectedScanImageUrl}
           language={language}
           guidelineText={getGuidelineForScan(selectedScan.disease_name)}
           onLanguageChange={setLanguage}

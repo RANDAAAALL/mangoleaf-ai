@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { computeImageHash } from "@/lib/image-hash";
+import { isAndroidBuild } from "@/lib/native-bridge";
+import { nativePhotoUrl } from "@/lib/scan-photo";
 
 interface DisplayedPhoto {
   scanId: string;
@@ -8,8 +10,12 @@ interface DisplayedPhoto {
   hash?: Promise<string>;
 }
 
-/** Keep a card's photo visible when IndexedDB returns a new copy of the same Blob. */
-export function useScanPhotoUrl(scanId: string, imageBlob: Blob | null) {
+/** Native views use a validated private file; legacy/fresh Blob views keep stable owned URLs. */
+export function useScanPhotoUrl(
+  scanId: string,
+  imageBlob: Blob | null,
+  photoUri?: string | null,
+) {
   const [photo, setPhoto] = useState<DisplayedPhoto | null>(null);
   const currentPhotoRef = useRef<DisplayedPhoto | null>(null);
   const ownedUrlsRef = useRef(new Set<string>());
@@ -94,6 +100,7 @@ export function useScanPhotoUrl(scanId: string, imageBlob: Blob | null) {
     };
   }, []);
 
+  if (isAndroidBuild() && photoUri) return nativePhotoUrl(photoUri);
   return imageBlob && imageBlob.size > 0 && photo?.scanId === scanId
     ? photo.url
     : null;
