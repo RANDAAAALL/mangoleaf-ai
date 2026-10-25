@@ -2,6 +2,8 @@
 
 ## Recovery-code-first APK backup candidate (October 25, 2026)
 
+**Publication follow-up:** GitHub confirms v0.11.0 is published as Latest with APK 0.1.7/code 8, sequence-6 OTA/host bounds 8-8 and Model V4.5.0; uploaded digests match the local candidate. The maintainer reports completing production-phone checks. The earlier preparation statements below retain their original scope. Publication does not establish Vercel promotion, and later helper/docs commits do not alter the published tag/assets.
+
 Current candidate: app **v0.11.0**, APK **v0.1.7/code 8**, Debug **v0.1.7-dev**, bundle bounds **8-8**, Model **V4.5.0**. Rebuild the Debug APK before testing these version labels. Published release files and prior verification records remain unchanged.
 
 Current source keeps reports/photos local until explicit recovery-code setup in both APK variants. **Create recovery code and enable backup** requires a connection; successful verified credential storage enables automatic foreground/online uploads without an additional saved-code checkbox. Creating a new code is an explicit enable action even if that older no-code installation had paused uploads. Save the displayed code outside the phone. Code creation is not upload completion: existing History and future eligible reports are retried on reopening/reconnection, completed copies are skipped, and an interrupted photo may restart. Pause/Resume remains available after setup; a deliberate pause survives code connection. Connecting an existing recovery code restores completed reports into local History without replacing it.
@@ -150,6 +152,20 @@ Maintain treatment text in `public.guidelines` only. Use the existing IDs `anthr
 
 Successful synchronization saves these rows in the runtime's local guideline store: SQLite in Android, IndexedDB in browsers. Android seeds an empty store from `android/starter-guidelines.json`; refresh that reviewed build snapshot deliberately with `bun run android:guidelines`. Browsers have no bundled treatment fallback. Missing rows or blank selected-language fields display a translated unavailable message. Downloaded updates remain readable offline; changing Supabase does not instantly update an offline device.
 
+## Debug APK shortcuts on Windows
+
+From the project root in PowerShell, use these after installing the Android prerequisites and setting up `.env.testing.local`:
+
+| Command                         | Action                                                            |
+| ------------------------------- | ----------------------------------------------------------------- |
+| `bun run android:devices`       | List connected phones and emulators with their connection status. |
+| `bun run android:debug:install` | Install the existing Debug APK without rebuilding.                |
+| `bun run android:debug`         | Check, build, verify and install a fresh Debug APK.               |
+
+For installation, connect one USB phone, unlock it, enable USB debugging and accept its authorization prompt. The helper selects USB with `-d`, refuses unavailable/ambiguous targets, and uses `install -r` to retain the matching app's data. A listing also includes emulators; installation does not select them. With several USB phones, use the manual `adb -s <serial>` workflow in the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md#build-in-vs-code-on-windows).
+
+`tools/android-debug.ps1` finds ADB through `ANDROID_HOME`, `ANDROID_SDK_ROOT`, the standard `%LOCALAPPDATA%\Android\Sdk` location or `PATH`. The full command runs the Node security check, the testing-target `android:bundle`, then Gradle `assembleDebug verifyDebugBundle --no-daemon --max-workers=2`; it stops on any failure before installation. It uses Android Studio's JBR if `JAVA_HOME` is unset and the shared ignored Gradle cache if `GRADLE_USER_HOME` is unset. It restores its environment/location and does not change `ANDROID_USER_HOME` or the existing Debug signing identity. Output remains `android/app/build/outputs/apk/debug/app-debug.apk`; these shortcuts do not create timestamped release folders or prepare production signing/OTA files. No app/model version bump accompanies these developer shortcuts. Run the separate source/native/reliability release checks when required.
+
 ## Run locally
 
 ```bash
@@ -203,6 +219,40 @@ bun run build
 ```
 
 The project uses `output: "export"` in `next.config.ts`, so the build creates static output in `out/`. Deploy the contents through a static host that serves the generated service worker and model files from the site root.
+
+## Release workflow shortcuts
+
+Use the exact source/artifacts approved for the intended release. The old `release-v0.10.1-assets-latest.json` and `.tools/release-v0101-6ed5e60/` remain historical; they do not select the v0.11.0 candidate.
+
+| Command                                         | Purpose                                                                                                       |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `bun run android:release:windows -Action build` | Build/sign/verify the production APK and save its receipt.                                                    |
+| `bun run android:release:windows -Action ota`   | With APK/receipt/sequence/tag arguments, prepare the three signed OTA assets.                                 |
+| `bun run android:release:install`               | With `-Apk` and `-Receipt`, verify and install that production APK over USB.                                  |
+| `bun run test:reliability:r03`                  | Check Node, build/reuse the isolated export and run only the 30-minute R03 case.                              |
+| `bun run release:tag`                           | With `--tag` and an explicit full `--commit`, create an annotated local release tag; push only with `--push`. |
+
+After both build actions, the four public assets are `mangoleaf-ai.apk`, `web-update.zip`, `update.json` and `update.sig`. Keep their receipts/private signing material local. These preparation commands do not publish or promote anything. See [production signing and OTA arguments](docs/versions/ANDROID_APK_VERSIONING.md#production-signing-and-candidate-preparation).
+
+Default release folder labels use Philippine time (`Asia/Manila`, UTC+08:00), independently of the laptop's timezone: for example `apk-2026-10-25T07-50-02-394-PHT` and `ota-2026-10-25T07-56-08-511-PHT`. Receipt/protocol timestamps retain their original UTC representation; folder naming does not rewrite artifact bytes or signatures. Existing explicitly named output directories remain the caller's choice. If an existing folder is renamed, use its new path for installation/OTA arguments and preserve the old-to-new path/hash receipt.
+
+To test a newly built production APK before GitHub upload, connect one authorized USB phone and replace both timestamp placeholders with paths printed by that same build:
+
+```powershell
+bun run android:release:install -Apk ".tools/android-release/apk-<timestamp>/mangoleaf-ai.apk" -Receipt ".tools/android-release/apk-<timestamp>/release-receipt.json"
+```
+
+The installer uses the public signer pin from the external `signing-config.json`; it does not load DPAPI passwords or private signing keys. It checks the APK hash/receipt, production package/backend, non-Debug flag, signer, packaged files and alignment before any ADB command. It then checks one USB target and runs `install -r`. Matching package/signer updates retain existing app data. It neither builds a new APK nor reads an old release manifest, and installation needs no published GitHub asset or OTA file. Phone internet is independent of this USB transfer; production backup may still run according to the installed app's preferences.
+
+Run `bun run test:reliability:r03` from the source copy you mean to test. The existing runner checks Node before building/testing, so a separate runtime command is optional. `Push-Location` is needed only to intentionally select another source copy; entering the old v0.10.1 copy tests that old source. Total runtime includes build/setup beyond the 30-minute session. Preserve the report/input hashes and keep `.test-app/` out of deployments. This shortcut does not switch commits or run the entire reliability suite.
+
+After the required CI, artifact and release checks, replace `FULL_APPROVED_COMMIT_SHA` with the full 40-character commit you approved:
+
+```powershell
+bun run release:tag --tag v0.11.0 --commit FULL_APPROVED_COMMIT_SHA --message "MangoLeaf AI v0.11.0 - Recovery-code-first backup"
+```
+
+The helper checks the version in that exact commit, never guesses `HEAD`, and refuses mismatched/lightweight local tags. An existing annotated local tag at the same commit can be reused without changing its object/message. Add `--push` to explicitly push only that tag to `origin`; it checks the remote first, refuses an existing remote tag and never forces, moves or deletes tags. It disables `push.followTags` for that push so a user's Git settings cannot include other annotated tags. A failed push retains the local tag for a safe retry. This is not a CI/physical-validation approval checker, a branch push, a GitHub Release or a Vercel promotion. No app/model version bump is needed for these tooling shortcuts.
 
 ## Required pre-commit checks
 

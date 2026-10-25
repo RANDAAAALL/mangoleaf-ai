@@ -1,5 +1,7 @@
 # MangoLeaf AI Architecture
 
+**October 25 publication follow-up:** recovery-code-first backup is included in published GitHub Latest v0.11.0 / APK 0.1.7/code 8 / sequence-6 OTA bounds 8-8, with unchanged Model V4.5.0 and bridge/schema 1/1. The maintainer reports completing production-phone checks; this check verifies publication/asset digests, not live Vercel identity or new physical measurements. Dated candidate descriptions below retain their preparation scope, and subsequent developer tooling remains separate from the published tag.
+
 ## Recovery-code-first private backup candidate (October 25, 2026)
 
 Both Android variants now keep SQLite reports and private photo files local until explicit recovery-code setup. Ordinary startup, saving and reconnecting do not initialize a private Supabase client, enroll a new owner or upload reports before a code exists. Public guideline HTTP/Realtime behavior remains independent. A deliberate create request establishes verified, quota-limited ownership using the existing provisioning function, attaches credentials to the same existing Auth UUID when present, persists the candidate session/code/enablement together and starts foreground/online backup only after that commit. There is no saved-code confirmation checkbox. New code creation is explicit enablement and supersedes an earlier pause on an installation without a code. Failed setup preserves prior settings and does not enable uploads.
@@ -236,6 +238,8 @@ mangoleaf-ai/
 |-- supabase/sql/                   # Reviewed cloud-security transition and verification SQL
 |   |-- README.md                   # Plain-English guide to the maintenance scripts
 |-- tools/                          # Shared checks and isolated browser-test tooling
+|   |-- android-debug.ps1           # Windows USB listing, Debug build/verification and install
+|   |-- tag-release.mjs             # Explicit-commit annotated app tags and optional tag-only push
 |   |-- verify-training-archive.mjs # Verify historical runtime bytes and provenance
 |   |-- e2e/                        # .pw.ts cases, photo fixtures, test-only inference harness
 |   |-- build-test-app.mjs          # Private static export with a local mock backend
@@ -607,6 +611,12 @@ These files must stay tracked in git. `.gitignore` patterns that could match the
 8. After successful recovery-code creation or existing-code connection, the independent private-backup worker uploads eligible APK reports while foreground/online and not paused. Production APK uses production; Debug uses testing. Before setup, scans/photos remain local; websites, including development, do not upload private reports. Local diagnosis, saving and public guideline refresh do not wait for backup.
 
 ## Build and deployment constraints
+
+The Windows Debug commands share `tools/android-debug.ps1`: `android:devices` lists targets, `android:debug:install` updates from the existing Debug artifact, and `android:debug` runs runtime validation, the testing web export, Gradle assembly/packaged-file verification and USB installation. Each external step must succeed before the next one runs. The helper keeps the existing Debug signing identity and uses `install -r`; source/native/reliability release gates remain separate. See [setup and device prerequisites](../SETUP.md#debug-apk-shortcuts-on-windows).
+
+Production USB installation reuses `android-release.mjs` artifact verification through `android:release:install`/the Windows `install` action. Public signer configuration is sufficient; installation does not load private signing credentials, select an old manifest, publish assets or change the backend. The R03-only alias reuses the existing isolated reliability runner and its Node check. `tools/tag-release.mjs` requires an explicit approved commit and matching app version, preserves existing tag objects and pushes only the chosen tag when requested. These tools do not establish release approval; [release workflow instructions](../SETUP.md#release-workflow-shortcuts) keep CI, artifacts, physical checks and promotion separate.
+
+APK/OTA preparation shares `releaseFolderTimestamp` from `android-release.mjs`, formatting local output labels in `Asia/Manila` with a `-PHT` suffix independently of the host timezone. Protocol/receipt UTC timestamps remain unchanged. Folder renames preserve payload/receipt bytes and retain an ignored before/after hash mapping; they do not rebuild or publish artifacts.
 
 - The project uses Next.js App Router inside `src/app`.
 - `output: "export"` produces a static site in `out/`.

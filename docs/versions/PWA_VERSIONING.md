@@ -1,21 +1,23 @@
 # MangoLeaf AI PWA Versioning Guide
 
-**Current candidate, October 25:** shared app **v0.11.0**, Android APK **v0.1.7/code 8**, default host bounds **8-8**, and adopted Model **V4.5.0**. The recovery-code-first backup workflow is a substantial app change; the rebuilt installer receives a distinct native identity. Bridge/SQLite schema remain 1/1. GitHub lists [v0.10.1](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.10.1) as the latest published release; these new versions are unpublished. Preserve its tag, signed assets and receipts. CI, exact-artifact/device/reliability validation and production approval remain separate.
+**Current release, October 25:** shared app **v0.11.0**, Android APK **v0.1.7/code 8**, host bounds **8-8**, sequence **6**, and adopted Model **V4.5.0**. GitHub confirms [v0.11.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.11.0) is published as Latest at `f6e04842c13b1e3f5e86e5bf468be8abcbc18601`. All four uploaded asset SHA-256 digests match the retained local candidate. The maintainer reports completing production-phone checks; recorded browser R03 and artifact checks have separate evidence scopes. Bridge/SQLite schema remain 1/1. Preserve published tags/assets/receipts. Later helper/docs commits do not move the tag or alter those assets, and this check does not establish Vercel promotion/live website identity.
 
 Use this guide to prepare the shared web application and website release. Native APK and model versions are independent; full dated evidence belongs in the [release history](history/PWA_RELEASE_HISTORY.md#release-timeline).
 
+**Earlier October 25 tag/artifact check, before publication:** GitHub confirmed annotated tag `v0.11.0` at `f6e04842c13b1e3f5e86e5bf468be8abcbc18601`; no published v0.11.0 Release was found then. The maintainer prepared a local production APK 0.1.7/code 8 and matching sequence-6 OTA from recorded working-tree inputs. Tag push alone does not publish the release, promote Vercel or include later uncommitted helper/documentation edits. Keep the tag fixed and retain artifact hashes and physical/release evidence. The release helper's default local output names use Philippine time with `-PHT`; this does not change the signed payloads.
+
 ## Current repository snapshot
 
-| Item                    | Source state                                                  |
-| ----------------------- | ------------------------------------------------------------- |
-| Shared app / web bundle | `0.11.0`, from `package.json`                                 |
-| Adopted model           | `v4.5.0`; local runtime restored to the adopted baseline      |
-| Android host            | `0.1.7` / code `8`; Debug `0.1.7-dev`                         |
-| Compatibility           | Bridge/schema `1`/`1`, host bounds `8-8`                      |
-| Published release       | GitHub `v0.10.1`; previously prepared APK `0.1.6` / code `7`  |
-| Publication             | Unpublished workflow candidate; release checks remain pending |
+| Item                    | Source state                                                 |
+| ----------------------- | ------------------------------------------------------------ |
+| Shared app / web bundle | `0.11.0`, from `package.json`                                |
+| Adopted model           | `v4.5.0`; local runtime restored to the adopted baseline     |
+| Android host            | `0.1.7` / code `8`; Debug `0.1.7-dev`                        |
+| Compatibility           | Bridge/schema `1`/`1`, host bounds `8-8`                     |
+| Published release       | GitHub Latest `v0.11.0`; APK `0.1.7` / code `8`              |
+| Publication             | Published; Vercel promotion/live identity checked separately |
 
-This candidate keeps scans/photos local until successful recovery-code creation or valid existing-code connection. Code creation enables automatic foreground/online backup without another checkbox; completed cloud copies are reused and unfinished reports retry. Preserve connected-code pauses, existing identities/data and scoped deletion retries. Debug uses testing and Production APK uses production; no hosted schema/configuration change is required. Scanning remains APK-only. Default OTA bounds deliberately target host 8; older hosts need the new same-signer APK for this release. Select an OTA sequence above every published sequence when preparing signed assets; the sequence has not been allocated by this version bump.
+This release keeps scans/photos local until successful recovery-code creation or valid existing-code connection. Code creation enables automatic foreground/online backup without another checkbox; completed cloud copies are reused and unfinished reports retry. Preserve connected-code pauses, existing identities/data and scoped deletion retries. Debug uses testing and Production APK uses production; no hosted schema/configuration change is required. Scanning remains APK-only. Default OTA bounds deliberately target host 8; older hosts need the new same-signer APK for this release. Sequence 6 is published; future preparations must check every published sequence and choose a higher unused value.
 
 APK footers show the installed native version and active model. Android About shows the shared web version; browser footers retain app/model labels. Available APK labels come only from validated published asset labels. See [Android version and publication rules](ANDROID_APK_VERSIONING.md#installed-and-available-apk-versions).
 
@@ -64,6 +66,8 @@ Also run the applicable security, export, tooling, browser, and reliability chec
 **If a check fails:** fix the candidate and repeat affected checks. Identify attempts by commit and asset hashes. Never move a published tag to conceal a failed attempt, and never describe pending checks as passed.
 
 ## Creating a GitHub Release
+
+The optional `bun run release:tag --tag vX.Y.Z --commit FULL_APPROVED_COMMIT_SHA` helper replaces only the manual annotated-tag command below. It requires an explicit full commit and checks that commit's app version; `--message` supplies a custom annotation. Add `--push` only to intentionally push that tag after approval. The helper preserves an existing matching annotated local tag, refuses different/lightweight or existing remote tags, and never forces or publishes. The caller still supplies CI, exact-artifact and physical/reliability approval; these are not inferred from a tag or a version. See [complete shortcut instructions](../../SETUP.md#release-workflow-shortcuts).
 
 - Use the exact approved commit. Replace `vX.Y.Z` and `TESTED_COMMIT_SHA` below; do not reuse a published tag.
 - If the approved local tag already exists, verify its target and push it rather than recreating it.

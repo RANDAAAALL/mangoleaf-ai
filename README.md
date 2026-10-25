@@ -34,17 +34,19 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 
 ## Download and status
 
-The [official download page](https://mangoleafai.vercel.app/download) links verified published Android assets. GitHub currently lists v0.10.1 as published. Source prepares unpublished app v0.11.0 / APK v0.1.7/code 8 for recovery-code-first backup, with default host bounds 8-8. Debug uses testing and Production APK uses production; scans/photos stay local until recovery-code setup. Production and development phone websites show EN or BIS. Model stays adopted V4.5.0; V5 research records remain preserved. The new same-signer installer and web bundle require their own validation before release. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md) and [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
+The [official download page](https://mangoleafai.vercel.app/download) links verified published Android assets. GitHub lists [v0.11.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.11.0) as Latest, with production APK v0.1.7/code 8 and sequence-6 OTA assets targeting host 8. The maintainer reported completing the production-phone checks; the browser R03 report is recorded separately. Vercel promotion/live website identity was not verified by this release check. Debug uses testing and Production APK uses production; scan/photo uploads start only after recovery-code setup. Production and development phone websites show EN or BIS. Model stays adopted V4.5.0; V5 research records remain preserved. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md) and [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
 
 ## Technology
 
 - Next.js **16.4.1** App Router, static export, and React **19.2.4**
 - Bun **1.4.4**, TypeScript, and Tailwind CSS **4**
 - TensorFlow.js for on-device inference
-- Java Android host and WebView, SQLite reports, and photos in private app files
-- Dexie / IndexedDB retained for legacy browser data compatibility and isolated regression tests; the website does not open History
-- Supabase Auth, Database and Storage for private cloud backup; public treatment guidelines through Database and Realtime
+- Java Android host and WebView; each phone keeps its scan reports in its own SQLite database and photos in private app files by default
+- Optional Supabase private backup after successful recovery-code creation or existing-code connection: photos in the private `scans` Storage bucket, report rows in `public.scans`, and recovery manifests in `public.android_backup_reports`, protected by verified Auth ownership and RLS
+- Public treatment guidance from `public.guidelines` through Supabase Database and Realtime, independently of private-backup setup
 - Serwist service worker for the website; separately bundled offline assets and signed OTA updates for Android
+
+Dexie/IndexedDB remains only for preserved legacy browser data and isolated regression tests. It is not the Android scan store, and current production/development websites do not open scan History or run private backup workers. Scans save locally without enabling cloud uploads; successful code setup enables foreground/online automatic backup. Pausing uploads leaves local saving available and does not cancel already-confirmed cloud-deletion retries.
 
 See [Architecture](docs/ARCHITECTURE.md) for the application layers, storage boundaries and update flow.
 
@@ -75,7 +77,7 @@ Start the development server:
 bun run dev
 ```
 
-Open `http://localhost:3000` on the same computer. Development and production browsers provide the same landing/download experience without scanning, History controls, Diagnostics or private backup uploads. Use the Debug APK for scan testing against the separate testing project. Existing browser reports remain stored without migration or deletion. See [Android setup](docs/versions/ANDROID_APK_VERSIONING.md).
+Open `http://localhost:3000` on the same computer. Development and production browsers provide the same landing/download experience without scanning, History controls, Diagnostics or private backup uploads. Use the Debug APK for scan testing against the separate testing project. Existing browser reports remain stored without migration or deletion. See [Android setup](docs/versions/ANDROID_APK_VERSIONING.md) and the [Windows Debug APK shortcuts](SETUP.md#debug-apk-shortcuts-on-windows).
 
 Dependency installation registers Husky hooks. Before a commit, `lint-staged` formats staged files using the project's Prettier configuration. Pushes run local secret/history, TypeScript, lint and formatting checks. GitHub CI also builds and tests the application on `master` pushes; automation uses a local mock backend. See [local checks and CI](SETUP.md#local-security-checks-and-github-ci).
 
@@ -184,11 +186,17 @@ See [application testing](docs/testing/TESTING.md) for browser installation and 
 | `bun run test:build`                            | Prepare or reuse the isolated production export used by browser tests.                                   |
 | `bun run test:e2e`                              | Build an isolated app and test desktop/mobile scan workflows.                                            |
 | `bun run test:reliability`                      | Run the full reliability suite, including repeated real predictions and the 30-minute R03 session.       |
+| `bun run test:reliability:r03`                  | Check Node and run only the 30-minute R03 case from the intended source copy.                            |
 | `bun run test:report`                           | Open the core browser-test HTML report.                                                                  |
 | `bun run test:report:reliability`               | Open the latest reliability HTML report.                                                                 |
 | `bun run verify:export`                         | Verify required PWA and model assets after a production build.                                           |
 | `bun run android:bundle`                        | Prepare offline Android web assets with testing settings and the committed model; does not build an APK. |
+| `bun run android:devices`                       | List connected Android devices on Windows.                                                               |
+| `bun run android:debug:install`                 | Install the existing Debug APK over one authorized USB phone without rebuilding.                         |
+| `bun run android:debug`                         | Check, build, verify and install a fresh testing-target Debug APK on Windows.                            |
+| `bun run android:release:install`               | With `-Apk` and `-Receipt`, verify and install a production APK over USB.                                |
 | `bun run android:release:windows -Action check` | Check the external production signing configuration on Windows.                                          |
+| `bun run release:tag`                           | With explicit `--tag`/full `--commit`, create an annotated tag; push only with `--push`.                 |
 | `bun run start`                                 | Run `next start`; this is not the deployment path while `output: "export"` is enabled.                   |
 
 For Debug APK rebuild/install commands and production APK/OTA signing, follow the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md). Those steps are separate from building or deploying the website.
