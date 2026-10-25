@@ -4,22 +4,22 @@ export const translations = {
   en: {
     websiteNavigationLabel: "Website navigation",
     backupTestingDescription:
-      "Test reports and photos stay on this phone until you create a recovery code or use an existing one. Code creation enables automatic backup to the separate testing project while the app is open and online. Save the code outside this phone.",
+      "Debug scans stay local by default. Create a recovery code or use Restore backup data to set up this phone’s own backup on testing. Restore copies completed scans without replacing an existing code or Pause setting. Photos upload while open, online and backup enabled; unfinished uploads retry after reopening. Save this phone’s code outside the phone.",
     backupAutomatic: "Automatic cloud backup enabled",
     backupLocalOnly: "New scans stay on this phone until backup setup",
     backupPaused: "Cloud backup paused",
     backupStarted:
-      "Backup enabled. Uploads may still be in progress. Keep the app open and online; unfinished reports retry when you reopen or reconnect.",
+      "This phone’s backup is enabled. Scans upload while the app is open and online; unfinished uploads retry after reopening. Enabling backup does not mean uploads have finished.",
     backupPause: "Pause backup",
     backupResume: "Resume backup",
     backupNewCodeHint:
-      "Already have a recovery code? Enter it below. Creating a new code does not recover a forgotten code's backup.",
+      "Have a code from another phone? Enter it below to restore copies. This phone keeps or creates its own code for its future backup. Save that code outside the phone.",
     backupShowCode: "Show recovery code",
     backupHideCode: "Hide recovery code",
     backupEnterCode: "Enter recovery code",
     backupClearInput: "Clear input",
     backupMergeHint:
-      "Restored reports merge into History without replacing existing reports. Clearing this field only removes the typed code.",
+      "Restore copies completed scans into this phone’s History without replacing existing scans or this phone’s recovery code. If there is no code, Restore creates a separate code and enables this phone’s backup; save the displayed code outside the phone. The source backup is unchanged. Clearing this field only removes the typed code.",
     testingPrivacySections: [
       {
         title: "1. Local reports",
@@ -27,11 +27,11 @@ export const translations = {
       },
       {
         title: "2. Automatic testing backup",
-        text: "Test reports and photos stay on this phone by default. Creating a recovery code or connecting an existing code enables automatic backup to the separate testing Supabase project while open and online, unless paused. Verified Auth ownership protects the backup without Sign In/Register screens. Code creation uses the existing authenticated owner when present. Unfinished reports retry after reopening or reconnection; interrupted photos may restart uploading.",
+        text: "Test reports and photos stay on this phone by default. Creating a recovery code enables backup to testing while open and online. Restore copies completed scans, keeps this phone’s own code and Pause choice, or creates a separate code when none exists. Verified Auth ownership protects the backup without Sign In/Register screens. Code creation uses the existing authenticated owner when present. Unfinished reports retry after reopening or reconnection; interrupted photos may restart uploading.",
       },
       {
         title: "3. Recovery and deletion",
-        text: "Creating a private recovery code connects recovery to the same authenticated owner. Save it outside this device. Restoring requires that code, a connection and completed cloud uploads; restored reports merge with local History. History deletion removes the local report and queues cloud deletion. Another device with an older copy can upload it again. Clearing app/browser data can erase local reports, credentials and pending deletions.",
+        text: "Creating a private recovery code connects recovery to the same authenticated owner. Save it outside this device. Restoring uses the source code and completed cloud uploads to copy scans into History. The receiving phone keeps or creates its own code; copying does not alter the source backup. History deletion removes the local report and queues cloud deletion. Another device with an older copy can upload it again. Clearing app/browser data can erase local reports, credentials and pending deletions.",
       },
       {
         title: "4. Guidelines and diagnostics",
@@ -48,11 +48,11 @@ export const translations = {
       },
       {
         title: "2. Automatic private backup",
-        text: "Reports and photos stay on this phone by default. Creating a recovery code enables automatic uploads to private Supabase storage while the app is open and online. Connecting an existing code also allows backup unless uploads were explicitly paused. No Sign In/Register screen or extra save-code confirmation is needed. Verified Auth and ownership rules protect access. Save the code outside this phone; anyone holding it can access the backup. Code creation does not mean all uploads have finished. Completed backups remain available, and unfinished reports retry after reopening or reconnection.",
+        text: "Reports and photos stay on this phone by default. Creating a recovery code enables automatic uploads to private Supabase storage while the app is open and online. Restore downloads completed scans as copies while keeping this phone’s own code and Pause choice. If no own code exists, Restore creates and displays a separate code and enables backup. Copied scans upload only to this phone’s backup. No Sign In/Register screen or extra save-code confirmation is needed. Verified Auth and ownership rules protect access. Save the code outside this phone; anyone holding it can access the backup. Code creation does not mean all uploads have finished. Completed backups remain available, and unfinished reports retry after reopening or reconnection.",
       },
       {
         title: "3. Recovery and deletion",
-        text: "Restoring a cloud backup is your choice. History deletion removes the local report/photo and queues deletion of its copies in the connected backup. Offline deletion retries while the app is open and online, even when uploads are paused. Keep the same recovery code connected until deletion finishes. Another device with an older copy can upload it again; pause backup there first. Uninstalling or clearing app data can erase local reports, queued deletions and the saved recovery code.",
+        text: "Restoring a cloud backup is your choice. Source credentials are used temporarily to read copies; they do not replace this phone’s saved recovery code. Future scans require this phone’s own code for recovery. Copies restored from a separate backup do not link deletion back to that source. History deletion removes the local report/photo and queues deletion of its copies in the connected backup. Offline deletion retries while the app is open and online, even when uploads are paused. Keep the same recovery code connected until deletion finishes. Another device with an older copy can upload it again; pause backup there first. Uninstalling or clearing app data can erase local reports, queued deletions and the saved recovery code.",
       },
       {
         title: "4. Guidelines and updates",
@@ -107,20 +107,20 @@ export const translations = {
     androidDownloadBrowser: "Open website",
     backupTitle: "Private cloud backup",
     backupDescription:
-      "Reports and photos stay on this phone until you create a recovery code or use an existing one. Code creation enables automatic cloud backup while the app is open and online. No Sign In/Register screen or extra confirmation is needed. Save the code outside this phone.",
+      "Scans and photos stay on this phone by default. Create a recovery code to enable automatic backup while open and online. Restore backup data downloads copies using another code while keeping this phone’s own backup. If this phone has no code, Restore creates and displays its own code and enables backup. Save this phone’s code outside the phone.",
     backupCreate: "Create recovery code and enable backup",
     backupRecoveryLabel: "Your private recovery code",
     backupRecoveryHint:
-      "Anyone holding this code can access your backup. Save it outside this phone. If you lose both your phone and this code, your cloud backup cannot be recovered.",
+      "This is this phone’s backup code. Save it outside the phone to recover its future scans. Another phone’s source code cannot recover scans saved only in this backup. Anyone holding this code can access your backup; losing both the phone and code can prevent recovery.",
     backupCopy: "Copy recovery code",
     backupSavedCode: "I saved my recovery code outside this phone",
     backupEnable: "Enable backup",
-    backupRestoreCodeLabel: "Recovery code from your previous device",
+    backupRestoreCodeLabel: "Recovery code to restore scans from",
     backupConnect: "Use recovery code",
     backupEnabled: "Cloud backup enabled",
     backupDisabled: "Cloud backup is off",
     backupNow: "Back up now",
-    backupRestore: "Restore cloud reports",
+    backupRestore: "Restore backup data",
     backupDisable: "Turn off backup on this device",
     backupDeleteCloud: "Delete this cloud backup",
     backupDeleteConfirm:
@@ -133,7 +133,8 @@ export const translations = {
     backupDone: "Backup operation completed.",
     backupCodeCopied: "Recovery code copied. Save it outside this phone.",
     backupCodeCopyFailed: "Could not copy. Save the displayed code carefully.",
-    backupRestored: "Restored {n} new reports.",
+    backupRestored: "Restored {n} scans",
+    backupRestoredSingle: "Restored {n} scan",
     backupUploaded: "Backed up {n} reports.",
     backupCloudDeleted:
       "Cloud backup deleted. Local reports remain on this device.",
@@ -524,23 +525,23 @@ export const translations = {
   bis: {
     websiteNavigationLabel: "Navigasyon sa website",
     backupTestingDescription:
-      "Ang test report ug litrato magpabilin niini nga telepono hangtod maghimo ka og recovery code o mogamit sa anaa nang code. Ang paghimo sa code mo-enable sa awtomatikong backup ngadto sa lahi nga testing project samtang abli ug online ang app. Tipigi ang code gawas niining telepono.",
+      "Ang Debug scan magpabiling lokal sa sinugdanan. Paghimo og recovery code o gamita ang Restore backup data aron maandam ang kaugalingong backup niini nga telepono sa testing. Mokopya ang Restore sa nahuman nang mga scan nga dili ilisan ang anaa nga code o Pause. Mo-upload ang litrato samtang abli, online ug naka-enable ang backup; sulayan pag-usab ang wala mahuman human ablihan pag-usab. Tipigi ang code gawas sa telepono.",
     backupAutomatic: "Na-enable ang awtomatikong cloud backup",
     backupLocalOnly:
       "Magpabilin sa telepono ang bag-ong scan hangtod ma-set up ang backup",
     backupPaused: "Gi-pause ang cloud backup",
     backupStarted:
-      "Na-enable ang backup. Mahimong nagpadayon pa ang upload. Ipadayon nga abli ug online ang app; sulayan pag-usab ang wala mahuman nga report kon ablihan o ikonektar pag-usab.",
+      "Na-enable ang backup niini nga telepono. Mo-upload ang scan samtang abli ug online ang app; sulayan pag-usab ang wala mahuman human ablihan pag-usab. Ang pagka-enable wala magpasabot nga nahuman na ang upload.",
     backupPause: "I-pause ang backup",
     backupResume: "Ipadayon ang backup",
     backupNewCodeHint:
-      "Aduna ka nay recovery code? Isulod kini sa ubos. Ang bag-ong code dili makabawi sa backup sa nakalimtang code.",
+      "Aduna kay code gikan sa laing telepono? Isulod kini sa ubos aron ma-restore ang mga kopya. Kini nga telepono magpabilin o maghimo sa kaugalingong code alang sa umaabot nga backup. Tipigi kana nga code gawas sa telepono.",
     backupShowCode: "Ipakita ang recovery code",
     backupHideCode: "Itago ang recovery code",
     backupEnterCode: "Isulod ang recovery code",
     backupClearInput: "Haw-asa ang gisulod",
     backupMergeHint:
-      "Ang gi-restore nga mga report idugang sa Dating Scan nga walay pag-ilis sa anaa nang report. Ang paghaw-as niini nga field motangtang lamang sa gisulod nga code.",
+      "Ang Restore mokopya sa nahuman nang mga scan ngadto sa History niini nga telepono nga dili ilisan ang anaa nga scan o kaugalingong recovery code. Kon wala pay code, maghimo ang Restore og lahi nga code ug mo-enable sa backup niini nga telepono; tipigi ang gipakitang code gawas sa telepono. Dili mausab ang gigikanang backup. Ang Clear input motangtang lamang sa gi-type nga code.",
     testingPrivacySections: [
       {
         title: "1. Lokal nga mga report",
@@ -548,7 +549,7 @@ export const translations = {
       },
       {
         title: "2. Awtomatikong testing backup",
-        text: "Ang test report ug litrato magpabilin sa telepono sa sinugdanan. Ang paghimo og recovery code o pagkonektar sa anaa nang code mo-enable sa awtomatikong backup ngadto sa lahi nga testing Supabase project samtang abli ug online, gawas kon gi-pause. Protektado ang backup sa napamatud-ang Auth ug pagpanag-iya nga walay Sign In/Register nga screen. Gamita ang kasamtangang napamatud-ang tag-iya sa paghimo sa code kon aduna. Sulayan pag-usab ang wala mahuman nga report human ablihan o ikonektar pag-usab; mahimong magsugod pag-usab ang naputol nga photo upload.",
+        text: "Ang test report ug litrato magpabilin sa telepono sa sinugdanan. Ang paghimo og kaugalingong recovery code o pag-restore sa mga kopya mo-enable sa awtomatikong backup ngadto sa lahi nga testing Supabase project samtang abli ug online, gawas kon gi-pause. Protektado ang backup sa napamatud-ang Auth ug pagpanag-iya nga walay Sign In/Register nga screen. Gamita ang kasamtangang napamatud-ang tag-iya sa paghimo sa code kon aduna. Sulayan pag-usab ang wala mahuman nga report human ablihan o ikonektar pag-usab; mahimong magsugod pag-usab ang naputol nga photo upload.",
       },
       {
         title: "3. Pagbawi ug pagtangtang",
@@ -569,11 +570,11 @@ export const translations = {
       },
       {
         title: "2. Awtomatikong pribadong backup",
-        text: "Ang report ug litrato magpabilin sa telepono sa sinugdanan. Ang paghimo og recovery code mo-enable sa awtomatikong upload ngadto sa pribadong Supabase storage samtang abli ug online ang app. Ang pagkonektar sa anaa nang code motugot usab sa backup gawas kon klarong gi-pause ang upload. Walay Sign In/Register nga screen o dugang nga pagkumpirma sa pagtipig sa code. Protektado ang access sa napamatud-ang Auth ug mga lagda sa pagpanag-iya. Tipigi ang code gawas niining telepono; bisan kinsa nga adunay code makaabli sa backup. Ang paghimo sa code wala magpasabot nga nahuman na ang tanang upload. Magpabilin ang nahuman nga backup, ug sulayan pag-usab ang wala mahuman nga report human ablihan o ikonektar pag-usab.",
+        text: "Ang report ug litrato magpabilin sa telepono sa sinugdanan. Ang paghimo og recovery code mo-enable sa awtomatikong upload ngadto sa pribadong Supabase storage samtang abli ug online ang app. Ang Restore mokopya sa nahuman nang scan ug magpabilin sa kaugalingong code ug Pause. Kon wala pay kaugalingong code, maghimo ug mopakita kini og lahi nga code ug mo-enable sa backup. Ang mga kopya ma-upload lamang sa kaugalingong backup niini nga telepono. Walay Sign In/Register nga screen o dugang nga pagkumpirma sa pagtipig sa code. Protektado ang access sa napamatud-ang Auth ug mga lagda sa pagpanag-iya. Tipigi ang code gawas niining telepono; bisan kinsa nga adunay code makaabli sa backup. Ang paghimo sa code wala magpasabot nga nahuman na ang tanang upload. Magpabilin ang nahuman nga backup, ug sulayan pag-usab ang wala mahuman nga report human ablihan o ikonektar pag-usab.",
       },
       {
         title: "3. Pagbawi ug pagtangtang",
-        text: "Imong pilion ang pag-restore sa cloud backup. Ang pagtangtang sa History mopapas sa lokal nga report/litrato ug mopila sa pagtangtang sa mga kopya niini sa konektadong backup. Sulayan pag-usab ang offline nga pagtangtang samtang abli ug online ang app, bisan gi-pause ang upload. Ipadayon ang koneksyon sa samang recovery code hangtod mahuman ang pagtangtang. Mahimong ma-upload pag-usab sa laing device ang karaang kopya; i-pause una ang backup didto. Ang pag-uninstall o paglimpyo sa app data mahimong mopapas sa lokal nga report, gipilang pagtangtang ug natipig nga recovery code.",
+        text: "Imong pilion ang pag-restore sa cloud backup. Temporaryong gamiton ang code sa gigikanan aron mokopya; dili niini ilisan ang natipig nga code niini nga telepono. Ang umaabot nga scan nagkinahanglan sa kaugalingong code niini alang sa recovery. Ang pagtangtang sa mga kopya gikan sa lahi nga backup dili mopapas sa gigikanang backup. Ang pagtangtang sa History mopapas sa lokal nga report/litrato ug mopila sa pagtangtang sa mga kopya niini sa konektadong backup. Sulayan pag-usab ang offline nga pagtangtang samtang abli ug online ang app, bisan gi-pause ang upload. Ipadayon ang koneksyon sa samang recovery code hangtod mahuman ang pagtangtang. Mahimong ma-upload pag-usab sa laing device ang karaang kopya; i-pause una ang backup didto. Ang pag-uninstall o paglimpyo sa app data mahimong mopapas sa lokal nga report, gipilang pagtangtang ug natipig nga recovery code.",
       },
       {
         title: "4. Mga giya ug update",
@@ -629,20 +630,20 @@ export const translations = {
     androidDownloadBrowser: "Ablihi ang website",
     backupTitle: "Pribadong cloud backup",
     backupDescription:
-      "Ang report ug litrato magpabilin niini nga telepono hangtod maghimo ka og recovery code o mogamit sa anaa nang code. Ang paghimo sa code mo-enable sa awtomatikong cloud backup samtang abli ug online ang app. Walay Sign In/Register nga screen o dugang nga pagkumpirma. Tipigi ang code gawas niining telepono.",
+      "Ang scan ug litrato magpabilin niini nga telepono sa sinugdanan. Paghimo og recovery code aron ma-enable ang awtomatikong backup samtang abli ug online. Ang Restore backup data mokopya sa datos gamit ang laing code samtang gipabilin ang kaugalingong backup niini nga telepono. Kon wala pay code, ang Restore maghimo ug mopakita sa kaugalingong code ug mo-enable sa backup. Tipigi ang code niini nga telepono gawas niini.",
     backupCreate: "Paghimo og recovery code ug i-enable ang backup",
     backupRecoveryLabel: "Imong pribadong recovery code",
     backupRecoveryHint:
-      "Bisan kinsa nga adunay code makaabli sa imong backup. Tipigi kini gawas niining telepono. Kon mawala ang telepono ug code, dili na mabawi ang cloud backup.",
+      "Kini ang code sa backup niini nga telepono. Tipigi kini gawas sa telepono aron mabawi ang umaabot nga mga scan. Ang code sa gigikanang laing telepono dili makabawi sa mga scan nga niini lamang nga backup natipig. Bisan kinsa nga adunay code makaabli sa imong backup; kon mawala ang telepono ug code, mahimong dili na mabawi ang backup.",
     backupCopy: "Kopyaha ang recovery code",
     backupSavedCode: "Natipig na nako ang recovery code gawas niining telepono",
     backupEnable: "I-enable ang backup",
-    backupRestoreCodeLabel: "Recovery code gikan sa daang device",
+    backupRestoreCodeLabel: "Recovery code sa gigikanan sa mga scan",
     backupConnect: "Gamita ang recovery code",
     backupEnabled: "Na-enable ang cloud backup",
     backupDisabled: "Naka-off ang cloud backup",
     backupNow: "I-back up karon",
-    backupRestore: "I-restore ang mga report sa cloud",
+    backupRestore: "I-restore ang datos sa backup",
     backupDisable: "I-off ang backup niini nga device",
     backupDeleteCloud: "Papasa kining cloud backup",
     backupDeleteConfirm:
@@ -656,7 +657,8 @@ export const translations = {
     backupCodeCopied:
       "Nakopya ang recovery code. Tipigi kini gawas niining telepono.",
     backupCodeCopyFailed: "Wala makopya. Tipigi pag-ayo ang gipakitang code.",
-    backupRestored: "Na-restore ang {n} bag-ong report.",
+    backupRestored: "Na-restore ang {n} ka scan",
+    backupRestoredSingle: "Na-restore ang {n} ka scan",
     backupUploaded: "Na-back up ang {n} ka report.",
     backupCloudDeleted:
       "Napapas ang cloud backup. Magpabilin sa device ang lokal nga mga report.",

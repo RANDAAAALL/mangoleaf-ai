@@ -175,11 +175,23 @@ export async function importNativeRecords(
   let imported = 0;
   try {
     for (const record of records) {
-      const result = await nativeRequest<{ imported?: number }>(
-        "storage.import",
-        { records: [await serializeRecord(record)] },
+      const payload = await serializeRecord(record);
+      const before = await nativeRequest<NativeRecord | null>(
+        "storage.report.get",
+        { id: record.id },
       );
-      imported += result.imported ?? 0;
+      if (before && before.id !== record.id)
+        throw new Error("Native import confirmation returned another report.");
+      await nativeRequest("storage.import", { records: [payload] });
+      const after = await nativeRequest<NativeRecord | null>(
+        "storage.report.get",
+        { id: record.id },
+      );
+      if (after && after.id !== record.id)
+        throw new Error("Native import confirmation returned another report.");
+      // Count the actual visible insertion, not an optional or stale host acknowledgment.
+      // A rejected/timed-out import never reaches this check; tombstones remain absent.
+      if (!before && after && after._status !== "pending-delete") imported++;
     }
     if (guidelines)
       await nativeRequest("storage.import", { records: [], guidelines });

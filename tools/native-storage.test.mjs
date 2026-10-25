@@ -57,3 +57,68 @@ test("a reader joining after deletion cannot inherit the older in-flight History
     const after=readNativeScans();release();assert.deepEqual(await before,[]);assert.deepEqual(await after,[]);
     assert.equal(reads,2);`);
 });
+
+const importFixture = String.raw`
+import assert from 'node:assert/strict';import {mock} from 'bun:test';
+globalThis.fetch=()=>{throw Error('Import counts must not hydrate a photo or use the network')};
+const stored=new Map(),tombstones=new Set(),reads=[];let ack={},commits=0,commitThenError=false,wrongConfirmation=false;
+const record=id=>({id,disease_name:'fixture',confidence:0.5,updated_at:'2026-10-25T00:00:00.000Z',_status:'local-only',
+  image_blob:new Blob([new Uint8Array([255,216,255,0])],{type:'image/jpeg'})});
+mock.module('./src/lib/native-bridge.ts',()=>({nativeRequest:async(method,p)=>{
+  if(method==='storage.report.get'){reads.push(p.id);const found=stored.get(p.id)??null;return wrongConfirmation&&found?{...found,id:'another-report'}:found;}
+  assert.equal(method,'storage.import');assert.equal(p.records.length,1);
+  const {record:next,image}=p.records[0];assert.equal(image.mimeType,'image/jpeg');assert.equal(image.base64,'/9j/AA==');
+  const existing=stored.get(next.id);
+  if(existing&&existing.disease_name!==next.disease_name)throw Error('CONFLICT');
+  if(!existing&&!tombstones.has(next.id)){stored.set(next.id,{...next,photoUri:'https://appassets.androidplatform.net/_native/photos/fixture'});commits++;}
+  if(commitThenError)throw Error('Bridge caller timed out after native commit');
+  return ack;
+}}));
+const {importNativeRecords,subscribeStorageChange}=await import('./src/lib/native-storage.ts');
+let notifications=0;subscribeStorageChange(()=>{notifications++});
+`;
+
+test("native import counts exact visible inserts despite missing or incorrect host acknowledgments", () => {
+  run(
+    `for(const acknowledgment of [{},{imported:0},{imported:-1},{imported:99},{imported:'1'}]){
+      stored.clear();reads.length=0;ack=acknowledgment;const next=record('bounded-report');
+      assert.equal(await importNativeRecords([next]),1);assert.deepEqual(reads,['bounded-report','bounded-report']);
+      assert.equal(stored.get(next.id).disease_name,'fixture');assert.ok(stored.get(next.id).photoUri);
+      assert.equal(await importNativeRecords([next]),0);
+    }assert.equal(commits,5);assert.equal(notifications,10);`,
+    importFixture,
+  );
+});
+
+test("native count verification preserves duplicates, tombstones and hidden pending deletes", () => {
+  run(
+    `const existing=record('existing'),hidden={...record('hidden'),_status:'pending-delete'},deleted=record('deleted');
+    stored.set(existing.id,existing);stored.set(hidden.id,hidden);tombstones.add(deleted.id);ack={imported:1};
+    assert.equal(await importNativeRecords([existing,hidden,deleted,record('fresh'),record('fresh')]),1);
+    assert.equal(commits,1);assert.equal(stored.has(deleted.id),false);assert.equal(stored.get(hidden.id),hidden);
+    assert.equal(stored.size,3);assert.ok(reads.every(id=>['existing','hidden','deleted','fresh'].includes(id)));`,
+    importFixture,
+  );
+});
+
+test("a rejected or timed-out native import never reports success from a later row observation", () => {
+  run(
+    `const next=record('late-commit');commitThenError=true;
+    await assert.rejects(importNativeRecords([next]),/timed out/);
+    assert.equal(stored.has(next.id),true);assert.deepEqual(reads,[next.id]);assert.equal(notifications,1);
+    commitThenError=false;assert.equal(await importNativeRecords([next]),0);assert.equal(notifications,2);
+    const conflicting={...next,disease_name:'changed'};
+    await assert.rejects(importNativeRecords([conflicting]),/CONFLICT/);
+    assert.equal(stored.get(next.id).disease_name,'fixture');`,
+    importFixture,
+  );
+});
+
+test("native import confirmation rejects another report ID instead of manufacturing a count", () => {
+  run(
+    `wrongConfirmation=true;await assert.rejects(importNativeRecords([record('expected')]),/another report/);
+    assert.equal(commits,1);assert.equal(notifications,1);
+    await assert.rejects(importNativeRecords([record('expected')]),/another report/);assert.equal(commits,1);`,
+    importFixture,
+  );
+});

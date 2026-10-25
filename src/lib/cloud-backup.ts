@@ -141,13 +141,23 @@ function sessionStorage(binding: SessionBinding) {
 }
 
 /** Bound backup requests separately; guideline traffic has no session or dependency on this client. */
-async function backupFetch(input: RequestInfo | URL, init?: RequestInit) {
+async function backupFetch(
+  input: RequestInfo | URL,
+  init?: RequestInit,
+  recoverySignal?: AbortSignal,
+) {
   const controller = new AbortController();
-  const parent =
-    init?.signal ?? (input instanceof Request ? input.signal : undefined);
+  const parents = new Set(
+    [
+      init?.signal ?? (input instanceof Request ? input.signal : undefined),
+      recoverySignal,
+    ].filter((signal): signal is AbortSignal => signal != null),
+  );
   const abort = () => controller.abort();
-  if (parent?.aborted) abort();
-  else parent?.addEventListener("abort", abort, { once: true });
+  for (const parent of parents) {
+    if (parent.aborted) abort();
+    else parent.addEventListener("abort", abort, { once: true });
+  }
   const timer = setTimeout(abort, 30_000);
   try {
     const response = await fetch(input, {
@@ -179,7 +189,7 @@ async function backupFetch(input: RequestInfo | URL, init?: RequestInit) {
     });
   } finally {
     clearTimeout(timer);
-    parent?.removeEventListener("abort", abort);
+    for (const parent of parents) parent.removeEventListener("abort", abort);
   }
 }
 
@@ -275,14 +285,19 @@ async function provisionVault() {
 }
 
 /** Caller owns the operation queue, preventing automatic setup from waiting on its own upload batch. */
-async function provisionVaultUnlocked() {
+async function provisionVaultUnlocked(sourceOwner?: string) {
   if (!canTransfer())
     throw new Error("Recovery creation requires a connection.");
   if ((await backupPreferences()).hasCode)
     throw new Error("A backup vault is already connected.");
-  const active = isAutomaticBackup()
-    ? (await ensureAutomaticOwner()).active
-    : await backupClient();
+  const ownSession = isAutomaticBackup()
+    ? await ensureAutomaticOwner()
+    : undefined;
+  // A legacy session may already belong to the source even without a saved code.
+  // Never rotate that source owner's credentials while preparing a receiving vault.
+  if (sourceOwner && ownSession?.owner === sourceOwner)
+    throw new Error("The source backup is already this installation's owner.");
+  const active = ownSession?.active ?? (await backupClient());
   const { data, error } = await active.functions.invoke(
     "android-backup-vault",
     { body: { action: "create" } },
@@ -504,6 +519,11 @@ async function exclusive<T>(action: () => Promise<T>): Promise<T> {
   }
 }
 
+/** Includes a settling operation and any queued explicit recovery/setup work. */
+export function isCloudBackupRunning() {
+  return currentOperation !== undefined;
+}
+
 export async function backUpScans() {
   // Foreground/reconnect notifications coalesce; they must not queue duplicate batches.
   if (currentOperation || !canTransfer()) return 0;
@@ -634,15 +654,24 @@ async function flushHistoryDeletes(
   return session;
 }
 
-async function listBackups(active: SupabaseClient, owner: string) {
+async function listBackups(
+  active: SupabaseClient,
+  owner: string,
+  completedOnly = false,
+  signal?: AbortSignal,
+) {
   const rows: BackupRow[] = [];
   for (let offset = 0; ; offset += 100) {
-    const { data, error } = await active
+    if (completedOnly) requireRecoveryTransfer(signal);
+    let query = active
       .from("android_backup_reports")
       .select(fields)
-      .eq("owner_id", owner)
+      .eq("owner_id", owner);
+    if (completedOnly) query = query.eq("completed", true);
+    const { data, error } = await query
       .order("record_id")
       .range(offset, offset + 99);
+    if (completedOnly) requireRecoveryTransfer(signal);
     if (error || !data) throw new Error("Backup list could not be read.");
     rows.push(...data.map((row) => validateBackupRow(row, owner)));
     if (rows.length > 5000)
@@ -651,32 +680,106 @@ async function listBackups(active: SupabaseClient, owner: string) {
   }
 }
 
-/** Restore is always a deliberate action. Native import skips existing IDs and local deletion tombstones. */
-export async function restoreCloudBackup(code?: string) {
+function requireRecoveryTransfer(signal?: AbortSignal) {
+  signal?.throwIfAborted();
+  if (!canTransfer())
+    throw new Error("Recovery requires the foreground connection.");
+}
+
+/** A typed code grants temporary read access, never ownership of this phone's future backup. */
+async function recoverySource(input: string, signal?: AbortSignal) {
+  requireRecoveryTransfer(signal);
+  const credential = parseRecoveryCode(input);
+  await verifyTarget();
+  requireRecoveryTransfer(signal);
+  const active = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      auth: {
+        storageKey: `${sessionKey}:source:${crypto.randomUUID()}`,
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false,
+      },
+      global: {
+        fetch: (input, init) => backupFetch(input, init, signal),
+      },
+    },
+  );
+  let verified = false;
+  try {
+    const result = await active.auth.signInWithPassword({
+      email: credential.email,
+      password: credential.password,
+    });
+    requireRecoveryTransfer(signal);
+    if (result.error || !result.data.session)
+      throw new Error("Recovery credential was not accepted.");
+    const user = await active.auth.getUser();
+    requireRecoveryTransfer(signal);
+    if (
+      user.error ||
+      !user.data.user ||
+      user.data.user.email !== credential.email ||
+      user.data.user.app_metadata?.android_backup_vault !== true
+    )
+      throw new Error("Recovery owner could not be verified.");
+    verified = true;
+    return { active, owner: user.data.user.id };
+  } finally {
+    if (!verified) await active.auth.dispose();
+  }
+}
+
+/** Native import merges copies, preserving this phone's own code, pause and deletion scope. */
+export async function restoreCloudBackup(code?: string, signal?: AbortSignal) {
   requireNativeRecovery();
   return exclusive(async () => {
-    if (!canTransfer()) throw new Error("Recovery requires a connection.");
-    if (code !== undefined) await connectCode(code, "connect");
-    const { active, owner } = await authenticatedOwner();
-    await flushHistoryDeletes({ active, owner });
-    const rows = await listBackups(active, owner);
-    const existing = await nativeRequest<NativeRecord[]>("storage.report.list");
-    const ids = new Set(existing.map((row) => row.id));
-    let restored = 0;
-    for (const row of rows) {
-      if (row.completed !== true) continue;
-      if (ids.has(row.record_id)) continue;
-      const { data, error } = await active.storage
-        .from("scans")
-        .download(row.storage_path);
-      if (error || !data)
-        throw new Error("Backup photo could not be downloaded.");
-      const record = await restoreBackupPhoto(row, owner, data);
-      restored += await importNativeRecords([record]);
-      ids.add(row.record_id);
+    requireRecoveryTransfer(signal);
+    const source =
+      code !== undefined
+        ? await recoverySource(code, signal)
+        : await authenticatedOwner();
+    try {
+      requireRecoveryTransfer(signal);
+      // Verification of a source happens before any receiving vault is created.
+      if (!(await backupPreferences()).hasCode) {
+        await provisionVaultUnlocked(source.owner);
+        requireRecoveryTransfer(signal);
+      }
+      // Only the receiving owner's authenticated client may finish its own queued deletes.
+      await flushHistoryDeletes();
+      requireRecoveryTransfer(signal);
+      const rows = await listBackups(source.active, source.owner, true, signal);
+      requireRecoveryTransfer(signal);
+      const existing = await nativeRequest<NativeRecord[]>(
+        "storage.report.list",
+      );
+      const ids = new Set(existing.map((row) => row.id));
+      let restored = 0;
+      for (const row of rows) {
+        requireRecoveryTransfer(signal);
+        if (row.completed !== true || ids.has(row.record_id)) continue;
+        const { data, error } = await source.active.storage
+          .from("scans")
+          .download(row.storage_path);
+        requireRecoveryTransfer(signal);
+        if (error || !data)
+          throw new Error("Backup photo could not be downloaded.");
+        const record = await restoreBackupPhoto(row, source.owner, data);
+        requireRecoveryTransfer(signal);
+        restored += await importNativeRecords([record]);
+        ids.add(row.record_id);
+      }
+      requireRecoveryTransfer(signal);
+      return restored;
+    } finally {
+      // Disposal removes this phone's temporary reader; signOut could revoke other devices.
+      if (code !== undefined) await source.active.auth.dispose();
+      if ((await backupPreferences()).enabled) scheduleBackup();
     }
-    if ((await backupPreferences()).enabled) scheduleBackup();
-    return restored;
   });
 }
 

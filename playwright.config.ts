@@ -30,7 +30,7 @@ export default defineConfig({
   // .pw.ts keeps browser tests separate from bun test ./tools.
   testMatch: reliability
     ? /(?:repeatability|endurance)\.pw\.ts/
-    : /(?:browser-ui|diagnostics|scan-flow|diagnosis-recovery|guided-camera|install-guide|android-update|history|model-results|offline|local-history|storage-quota|guideline-sync)\.pw\.ts/,
+    : /(?:browser-ui|diagnostics|scan-flow|diagnosis-recovery|guided-camera|install-guide|android-update|backup-restore|history|model-results|offline|local-history|storage-quota|guideline-sync)\.pw\.ts/,
   fullyParallel: false,
   workers: 1,
   retries: 0,

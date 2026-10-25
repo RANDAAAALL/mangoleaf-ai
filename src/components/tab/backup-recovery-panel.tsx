@@ -79,6 +79,22 @@ export function BackupRecoveryPanel({ language }: { language: Language }) {
     }
   }
 
+  async function restore(inputCode?: string) {
+    const hadCode = (await backupPreferences()).hasCode;
+    setCode("");
+    try {
+      const restored = await restoreCloudBackup(inputCode);
+      setInput("");
+      setInputVisible(false);
+      return (
+        restored === 1 ? t.backupRestoredSingle : t.backupRestored
+      ).replace("{n}", String(restored));
+    } finally {
+      // Setup can finish before a later photo fails. Keep the receiving phone's new code available.
+      if (!hadCode) setCode((await savedRecoveryCode()) || "");
+    }
+  }
+
   const button =
     "min-h-11 rounded-xl bg-[#1c682d] px-4 py-3 font-semibold text-white disabled:opacity-50";
   const secondary =
@@ -199,12 +215,7 @@ export function BackupRecoveryPanel({ language }: { language: Language }) {
             onChange={setInput}
             onRestore={() =>
               void run(async () => {
-                // Hide the previously revealed credential before a potential owner switch.
-                setCode("");
-                const restored = await restoreCloudBackup(input);
-                setInput("");
-                setInputVisible(false);
-                return t.backupRestored.replace("{n}", String(restored));
+                return restore(input);
               })
             }
           />
@@ -215,14 +226,7 @@ export function BackupRecoveryPanel({ language }: { language: Language }) {
             type="button"
             className={secondary}
             disabled={busy}
-            onClick={() =>
-              void run(async () =>
-                t.backupRestored.replace(
-                  "{n}",
-                  String(await restoreCloudBackup()),
-                ),
-              )
-            }
+            onClick={() => void run(() => restore())}
           >
             {t.backupRestore}
           </button>
