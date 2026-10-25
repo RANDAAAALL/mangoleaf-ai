@@ -17,6 +17,7 @@ import {
   publicToolEnvironment,
   packagedWebAssets,
   releaseArguments,
+  releaseFolderTimestamp,
   validatePackageOutput,
   validatePackagedIdentity,
   validateReleaseReceipt,
@@ -514,7 +515,22 @@ test("release output also rejects a redirected artifact root", () => {
   expect(existsSync(join(outside, "new-parent"))).toBe(false);
 });
 
-test("release CLI accepts only bounded build/check/verify options, never secret arguments", () => {
+test("release folder dates use Philippine time across UTC days and midnight", () => {
+  expect(releaseFolderTimestamp(new Date("2026-10-24T23:50:02.394Z"))).toBe(
+    "2026-10-25T07-50-02-394-PHT",
+  );
+  expect(releaseFolderTimestamp(new Date("2026-10-24T23:56:08.511Z"))).toBe(
+    "2026-10-25T07-56-08-511-PHT",
+  );
+  expect(releaseFolderTimestamp(new Date("2026-12-31T16:00:00.000Z"))).toBe(
+    "2027-01-01T00-00-00-000-PHT",
+  );
+  expect(
+    releaseFolderTimestamp(new Date("2026-10-25T07:50:02.394+08:00")),
+  ).toBe("2026-10-25T07-50-02-394-PHT");
+});
+
+test("release CLI bounds build/check/verify/install options and requires install evidence", () => {
   expect(releaseArguments([])).toEqual({ command: "build", options: {} });
   expect(releaseArguments(["check"])).toEqual({
     command: "check",
@@ -535,6 +551,17 @@ test("release CLI accepts only bounded build/check/verify options, never secret 
       certificate,
     ]).command,
   ).toBe("verify");
+  expect(
+    releaseArguments([
+      "install",
+      "--apk",
+      "candidate.apk",
+      "--receipt",
+      "receipt.json",
+      "--certificate-sha256",
+      certificate,
+    ]).command,
+  ).toBe("install");
   for (const arguments_ of [
     ["publish"],
     ["check", "--output", "fixture"],
@@ -542,6 +569,19 @@ test("release CLI accepts only bounded build/check/verify options, never secret 
     ["build", "--output", "one", "--output", "two"],
     ["build", "--password", "fixture-password"],
     ["verify", "--apk", "candidate.apk"],
+    ["install", "--apk", "candidate.apk"],
+    ["install", "--manifest", "old-release.json"],
+    [
+      "install",
+      "--apk",
+      "candidate.apk",
+      "--receipt",
+      "receipt.json",
+      "--certificate-sha256",
+      certificate,
+      "--output",
+      "fixture",
+    ],
   ])
     expect(() => releaseArguments(arguments_)).toThrow();
 });

@@ -15,6 +15,7 @@ import {
 import {
   freshOutputDirectory,
   publicToolEnvironment,
+  releaseFolderTimestamp,
   verifyReleaseArtifact,
 } from "./android-release.mjs";
 
@@ -169,7 +170,7 @@ function main(args) {
         root,
         ".tools",
         "android-release",
-        `ota-${new Date().toISOString().replaceAll(/[:.]/g, "-")}`,
+        `ota-${releaseFolderTimestamp()}`,
       ),
   );
   buildProductionWeb();

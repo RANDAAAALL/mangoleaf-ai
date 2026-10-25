@@ -412,6 +412,25 @@ export function verifyReleaseArtifact(
   return receipt;
 }
 
+export function releaseFolderTimestamp(date = new Date()) {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Manila",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      fractionalSecondDigits: 3,
+      hourCycle: "h23",
+    })
+      .formatToParts(date)
+      .map(({ type, value }) => [type, value]),
+  );
+  return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}-${parts.minute}-${parts.second}-${parts.fractionalSecond}-PHT`;
+}
+
 export function freshOutputDirectory(value, repositoryRoot = root) {
   const destination = resolve(value);
   const privateRoot = resolve(repositoryRoot, ".tools", "android-release");
@@ -457,12 +476,14 @@ export function freshOutputDirectory(value, repositoryRoot = root) {
 
 export function releaseArguments(args) {
   const [command = "build", ...rest] = args;
-  if (!["build", "check", "verify"].includes(command))
-    throw new Error("Use android-release.mjs build, check, or verify.");
+  if (!["build", "check", "verify", "install"].includes(command))
+    throw new Error(
+      "Use android-release.mjs build, check, verify, or install.",
+    );
   const allowed =
     command === "build"
       ? ["--output"]
-      : command === "verify"
+      : ["verify", "install"].includes(command)
         ? ["--apk", "--receipt", "--certificate-sha256"]
         : [];
   const options = {};
@@ -480,9 +501,12 @@ export function releaseArguments(args) {
       );
     options[flag] = value;
   }
-  if (command === "verify" && allowed.some((flag) => !options[flag]))
+  if (
+    ["verify", "install"].includes(command) &&
+    allowed.some((flag) => !options[flag])
+  )
     throw new Error(
-      "Verification requires --apk, --receipt, and --certificate-sha256.",
+      "Verification/installation requires --apk, --receipt, and --certificate-sha256.",
     );
   return { command, options };
 }
@@ -491,7 +515,7 @@ function main(args) {
   assertSupportedNode();
   const { command, options } = releaseArguments(args);
   const tools = findAndroidTools();
-  if (command === "verify") {
+  if (["verify", "install"].includes(command)) {
     verifyReleaseArtifact(
       options["--apk"],
       options["--receipt"],
@@ -501,6 +525,23 @@ function main(args) {
     console.log(
       "Signed production APK, package identity, alignment, and artifact receipt passed verification.",
     );
+    if (command === "install") {
+      const adb = join(
+        tools.sdk,
+        "platform-tools",
+        process.platform === "win32" ? "adb.exe" : "adb",
+      );
+      if (!existsSync(adb))
+        throw new Error(
+          "Install Android SDK Platform-Tools before USB installation.",
+        );
+      // No device operation starts until the exact Release APK and its receipt pass verification.
+      run(adb, ["-d", "get-state"]);
+      run(adb, ["-d", "install", "-r", resolve(options["--apk"])]);
+      console.log(
+        "Production APK installed over the matching app. Nothing uploaded or published.",
+      );
+    }
     return;
   }
   gradle([":app:verifyReleaseConfiguration"], tools);
@@ -511,7 +552,7 @@ function main(args) {
         root,
         ".tools",
         "android-release",
-        `apk-${new Date().toISOString().replaceAll(/[:.]/g, "-")}`,
+        `apk-${releaseFolderTimestamp()}`,
       ),
   );
   run(process.platform === "win32" ? "bun.exe" : "bun", [
