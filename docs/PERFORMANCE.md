@@ -1,5 +1,41 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## History photo loading and scoped refreshes (October 26, 2026)
+
+**Subsequent precommit endurance evidence:** the maintainer's R03 report passed one 30.5-minute Chromium-mobile session with real predictions. All recorded inputs match the current candidate fingerprint `5078d8856b880b5bc9bb7afaa8089f952d00a572829e1d6d4199763939aeee73`. This establishes that exercised local browser session, not native SQLite/camera behavior, phone throughput or a measured speed improvement. See [validation scope](testing/TESTING.md#october-26-2026).
+
+The audit found two avoidable paths in the Android UI: startup read every History photo before presenting metadata, and any storage notification refreshed both reports and guidelines and woke backup. The old 64-entry/16 MiB photo cache limited reuse, not the Blob-bearing array retained by `Application`.
+
+| Controlled local probe                         | Before                         | After   |
+| ---------------------------------------------- | ------------------------------ | ------- |
+| Synthetic History                              | 500 reports, 128 KiB per photo | Same    |
+| Metadata bridge requests                       | 1                              | 1       |
+| Photo fetches from the History reader          | 500                            | 0       |
+| Photo Blob bytes retained by the returned list | 65,536,000 (62.5 MiB)          | 0       |
+| One local execution                            | 39.15 ms                       | 1.19 ms |
+
+These timings use synthetic in-memory responses under Bun, not a phone, SQLite disk, GPU or network benchmark. They demonstrate removed eager work, not a measured launch-speed or total-memory improvement on a device. Evidence is retained in ignored `.tools/performance-20261026/`. Native metadata remains a whole-History list, so its size and filtering still grow with report count. Browser image decoding and the active page still consume memory.
+
+`ScanListRecord` separates display metadata/private file references from the Blob-bearing records used by save, duplicate lookup and backup. Cards and details share `ScanPhoto` and strict `nativePhotoUrl` validation; only mounted photos use the native private handler. Phone Home mounts one card, History four per page (desktop compatibility uses four/six). Missing files keep readable report metadata and use the existing translated placeholder; a refreshed record retries a failed image without replacing successfully displayed photos. Historical cloud URLs are never requested. Blob display retains its existing content comparison and URL cleanup for fresh results/isolated legacy tests.
+
+Report and guideline notifications now have separate scopes. Guideline refreshes neither reload History nor schedule backup; report saves/deletes/imports do not reread guidelines. The default all-scope notification remains compatible with older callers. In-flight report reads still coalesce and replay after report invalidation; confirmed cloud deletions and backup preference/foreground/reconnection scheduling retain their existing behavior.
+
+The review also checked model initialization/inference, camera encoding, storage compression, backup and updater scheduling. Existing model single-flight loading/warm-up, cancellable camera JPEG worker, sequential cloud transfers and dedicated native updater worker remain in place. GPU warm-up, storage encoding and repeated completed-backup verification still warrant physical timing if reported slow; this task does not claim to have eliminated every device-dependent bottleneck. Model V4.5.0, preprocessing, thresholds, image dimensions/quality, SQLite schema and Supabase resources are unchanged. The existing unpublished 0.12.0/0.1.8 candidate now has different source inputs; earlier R03/device results cannot approve them.
+
+## Browser-free APK download (October 26, 2026)
+
+The new native download replaces the browser attachment handoff. Metadata/bytes/signature verification/session staging use a dedicated native worker rather than the SQLite executor. The React controller polls bounded snapshots sequentially every 500 ms while foreground, and never hydrates scan photos. Production backup transfers wait without changing saved Pause preferences. Network loss, timeout, cancellation or actual background during download aborts scoped work and removes temporary data; only expected Android permission/installer UI handoff survives backgrounding. Download bytes are measured, not simulated progress; installation success is never inferred from 100 percent downloaded. No speed, battery or physical reliability improvement is claimed.
+
+## Native APK foreground reminder (October 26, 2026)
+
+APK dismissal now lasts for a foreground visit. Reopening after an APK offer resets discovery, including its per-watcher attempt timer, so a new visit can make a fresh bounded public metadata request; the fifteen-minute backoff still applies within an active watcher. No bytes download automatically. About reuses the verified offer rather than starting a second poller, and its network state uses the existing native connectivity subscription. Offline queued offers wait for reconnection before presentation. This adds no inference/storage work and has no measured phone timing or battery claim.
+
+## Separate-backup restore and APK discovery (October 25, 2026)
+
+The v0.12.0 candidate keeps diagnosis/local saving independent of backup. Explicit restore uses a temporary authenticated source reader, requests completed rows in bounded pages and merges one verified photo at a time. It does not write the source or download already-known report IDs. Interrupted batches preserve committed copies and can retry. Native import verification adds two bounded exact-ID metadata requests per imported report to distinguish actual insertions from missing/incorrect bridge counts; it does not load photos again or scan the entire database. No timing, battery or bandwidth improvement is claimed.
+
+Production APK discovery reuses the existing bounded public GitHub metadata parser, checks at most once per fifteen minutes after an attempt and cancels its request on background/disposal. It compares verified native asset labels with the installed host version; it never downloads an APK automatically. Offers wait for idle UI and cloud work. Debug and websites do not run the production-installer watcher. Physical timing/endurance evidence remains pending for these changed inputs.
+
 ## Recovery-code-first backup candidate (October 25, 2026)
 
 Both APK variants now gate new scan/photo uploads on a saved valid recovery code. Opening the app or saving scans before setup reads local preferences without constructing a private Supabase client or enrolling an owner. Public guideline refresh remains independent. Explicit code creation still performs Auth/provisioning; existing anonymous owners retain their identity and confirmed deletion jobs can drain independently of the upload gate. After setup, foreground/reconnect retries reuse completed manifests and retry unfinished reports; interrupted photo requests may restart rather than resume from a byte offset. This changes when network work starts, with no claimed timing, battery or bandwidth measurements. Physical-device and release validation remain pending.

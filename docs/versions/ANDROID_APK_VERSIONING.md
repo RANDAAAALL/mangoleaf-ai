@@ -1,5 +1,15 @@
 # MangoLeaf AI Android APK Versioning Guide
 
+**Precommit validation, October 26:** the maintainer reports completing latest Debug APK and testing-website checks. The retained browser R03 report passed on current source/model inputs; it does not establish native or production-signed APK reliability. APK **0.1.8/code 9**, bundle **0.12.0**, Model **V4.5.0** remain candidate labels. CI, exact production artifact/staged acceptance and approval are still required before the prepared v0.12.0 tag is created or pushed. See [evidence scope](../testing/TESTING.md#october-26-2026).
+
+**History performance follow-up, October 26:** rebuild the unpublished 0.1.8/code 9 candidate to include metadata-only History, on-demand private photos and scoped refreshes. Model V4.5.0 and SQLite/bridge versions remain unchanged. Confirm Home/History pagination, details, offline photos and deletion on the exact new APK; earlier same-version installer receipts do not cover these source changes. See [performance evidence](../PERFORMANCE.md#history-photo-loading-and-scoped-refreshes-october-26-2026).
+
+**October 26 native updater candidate:** Production APK updates download inside MangoLeaf AI with progress/cancellation, then open Android's installation confirmation. No browser or custom completion/reopen popup is used. About retains Update Now; offline it is disabled. Debug excludes production installers. Existing phones first need an APK containing this capability. App 0.12.0 / APK 0.1.8/code 9 / Model V4.5.0 remain unpublished candidates.
+
+**Current source candidate, October 25:** app **v0.12.0**, Production APK **v0.1.8/code 9**, Debug **v0.1.8-dev**, default OTA host bounds **9-9**, adopted Model **V4.5.0**, bridge/SQLite schema **1/1**. This is an unpublished working-tree candidate. Published v0.11.0 / APK 0.1.7/code 8 / sequence 6 and its tag, signed assets and receipts remain unchanged. No new OTA sequence is allocated. Exact-source CI, current-build reliability, physical-device checks, production signing and publication/promotion require separate evidence. Earlier dated entries retain their original scope.
+
+The candidate’s **Restore backup data** action copies completed scans into the receiving phone’s History while keeping its own code and Pause setting; a phone without a code creates and displays its own separate code after source verification. Uploads and deletion stay scoped to that receiving backup. Production APK adds a dismissible newer-native-version notice with verified internal download and explicit Android installation; Debug excludes production offers. See the [dated candidate record](history/PWA_RELEASE_HISTORY.md#v0120-separate-backup-restore-and-apk-notice-candidate) and [acceptance checks](../testing/TESTING.md#october-25-2026).
+
 **Published follow-up, October 25:** GitHub Latest is now [v0.11.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.11.0), tag target `f6e04842c13b1e3f5e86e5bf468be8abcbc18601`, with production APK 0.1.7/code 8, sequence-6 OTA bounds 8-8 and Model V4.5.0. All four remote asset digests match the retained local files. The maintainer reports completing the exact production-phone checks; no new device logs/timing measurements were supplied. Vercel promotion/live identity is separate and was not verified here. Preserve the published tag/assets; later helper/docs commits do not change them. The dated preparation statements below retain their earlier scope.
 
 **Earlier candidate preparation, October 25:** shared app **v0.11.0**, Release APK **v0.1.7/code 8**, Debug **v0.1.7-dev**, default bundle bounds **8-8**, Model **V4.5.0**, bridge/schema **1/1**. This labels the recovery-code-first backup workflow; no native API or SQLite migration is introduced. GitHub [v0.10.1](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.10.1) was the published release at preparation; its installer, OTA assets and receipts remain unchanged. Older hosts must install the new same-signer APK to use host-8-only bundles. No OTA sequence or production-signed artifacts were allocated by that metadata change. Earlier preparation and test records below describe their original versions.
@@ -30,17 +40,17 @@ Use this guide for current APK versions, builds, signing and updates. The [Andro
 
 ## Current native identity
 
-| Identity                      | Current value | Source                                      |
-| ----------------------------- | ------------- | ------------------------------------------- |
-| Candidate production APK      | `0.1.7`       | `versionName` in `android/app/build.gradle` |
-| Candidate Debug APK           | `0.1.7-dev`   | Native version plus Debug suffix            |
-| Android update number         | `8`           | `versionCode` in `android/app/build.gradle` |
-| Default compatible host range | `8-8`         | `tools/android-bundle.mjs`                  |
-| Native bridge / SQLite schema | `1` / `1`     | Existing compatibility checks               |
-| Shared website / web bundle   | `0.11.0`      | Root `package.json`                         |
-| Adopted bundled model         | `v4.5.0`      | Committed model assets and constants        |
+| Identity                      | Current source candidate | Source                                      |
+| ----------------------------- | ------------------------ | ------------------------------------------- |
+| Production APK                | `0.1.8`                  | `versionName` in `android/app/build.gradle` |
+| Debug APK                     | `0.1.8-dev`              | Native version plus Debug suffix            |
+| Android update number         | `9`                      | `versionCode` in `android/app/build.gradle` |
+| Default compatible host range | `9-9`                    | `tools/android-bundle.mjs`                  |
+| Native bridge / SQLite schema | `1` / `1`                | Existing compatibility checks               |
+| Shared website / web bundle   | `0.12.0`                 | Root `package.json`                         |
+| Adopted bundled model         | `v4.5.0`                 | Committed model assets and constants        |
 
-GitHub v0.10.1 is published; its separately prepared installer is APK 0.1.6/code 7. The table describes the new unpublished backup-workflow candidate. No model adoption, native API or SQLite migration accompanies it. APK footers use the installed native version/model; the separately replaceable web version stays visible in About. Available APK labels come only from verified published assets, never the web tag or an installation hint. New source/export/tooling/browser checks and the matching testing Debug build passed; see the [versioned evidence and remaining device/release checks](../testing/TESTING.md#october-25-2026). Previous candidate results do not approve the new installer.
+Published v0.11.0 remains APK 0.1.7/code 8 with sequence-6 OTA bounds 8-8. The table identifies unpublished source, not a published installer or passed physical test. New default host-9-only assets require the new same-signer installer; old tags and signed metadata are not rewritten. APK footers read the installed host; About separately shows the web-bundle version. Repeat affected source, browser, Android and physical checks for the new candidate.
 
 ## Version rules
 
@@ -49,6 +59,12 @@ GitHub v0.10.1 is published; its separately prepared installer is APK 0.1.6/code
 - Compatible web-only OTA changes need a sequence higher than every published sequence. Do not confuse that sequence with the APK's version code or the shared web version.
 - Give changed shipped web builds their reviewed distinct app label under [PWA versioning](PWA_VERSIONING.md). Follow [model versioning](AI_MODEL_VERSIONING.md) before adopting another model; an APK version bump does not adopt V5.
 - Record the tested commit, input fingerprint, APK hash, signing certificate, model identity and cloud target. A version label alone cannot distinguish multiple uncommitted candidate attempts. Documentation-only moves do not require a version bump.
+
+### Installing a newer APK versus reopening an old installer
+
+The APK in a phone's Downloads folder is a fixed installer file. Opening it does not fetch a newer release. Android's **Update** prompt indicates an installation over an existing package; it does not establish that the selected file is newer than the installed version. For a native update, download the current approved APK from the official website or its exact GitHub Release, install it over the existing same-signer app, then check the installed APK version. Do not uninstall or clear app data to update.
+
+Opening the app can check for signed, compatible web-bundle updates; it does not silently install a new native APK. OTA cannot change the native version shown in the footer. Published v0.11.0 uses APK 0.1.7/code 8 and sequence-6 OTA bounds 8-8, so older native hosts need that installer before they can use those assets. A previously downloaded APK does not change when a newer GitHub Release is published. See [Android's versioning rules](https://developer.android.com/studio/publish/versioning).
 
 ## Build in VS Code on Windows
 
@@ -106,11 +122,13 @@ For local production-artifact testing before upload, use `bun run android:releas
 
 ### Cloud recovery without Sign In/Register screens
 
-Both APK variants save locally by default. Ordinary startup, saved photos and reconnection do not establish private ownership or upload before recovery-code setup. While online, tap **Create recovery code and enable backup**: successful verified session/code storage enables automatic foreground uploads without an additional save-code confirmation. This new-code action explicitly enables uploads even if that older no-code installation had paused them. Save the code outside the phone. Existing anonymous owners retain their UUID/session and earlier backups when recovery credentials are attached. Existing code users retain enablement and deliberate `paused` or legacy `false` choices; a fresh existing-code connection enables backup without overriding a pause. Failed new-code creation preserves prior state and leaves uploads off; a failed existing-code connection preserves the prior verified session and upload choice.
+Both APK variants save locally by default. Ordinary startup, saving and reconnection do not initialize private ownership or uploads before own-code setup, except preserved own deletion retries. Explicit **Create recovery code and enable backup** attaches verified credentials to an existing eligible anonymous owner or establishes a new owner. Persisting verified own credentials enables foreground/online uploads without another saved-code checkbox. Save this phone’s code outside the phone; creation does not mean uploads have finished.
 
-Creating a code does not finish uploads. Existing eligible History and future scans back up while open/online; reopening or reconnection retries unfinished reports and skips completed copies. An interrupted photo may restart. On another APK, enter the existing code and explicitly restore completed backups. Restore verifies ownership/photo integrity, merges reports by ID, preserves original dates and honors local deletion records. Wrong codes preserve the current session. A verified same-vault reconnect can recover an unavailable saved session and finish that vault's pending deletions before promotion; a different vault cannot consume them. Creating an unrelated code cannot recover a forgotten vault. The October 25, 2026 client candidate is unpublished and needs its own affected validation; older installed bundles retain earlier backup behavior.
+**Restore backup data** verifies the typed code in an isolated temporary source reader and copies completed scans into History. An existing receiving Code B, owner and Pause setting stay unchanged. With no own code, Restore creates and displays a separate receiving code after source verification, preserving an eligible legacy receiving identity. It never rotates the source owner into a new credential. Wrong source credentials or failed setup must preserve prior settings and leave unsafe uploads off. A partial photo failure retains committed local copies and leaves a newly created receiving code available. Save that new code: the source code cannot recover scans saved only in the receiving backup. Existing deliberately shared-code installations are not silently split.
 
-SQLite, private photos, credentials and deletion jobs stay outside replaceable OTA bundles. Android must fail closed if its trusted bridge is unavailable, never fall back to IndexedDB. Manual report import/export UI remains retired. Pause/Resume preserves deliberate pauses; queued History deletion retries remain active while connected even if uploads are paused. Deletion only targets the connected manifest-paired copies and does not propagate to other devices. Other devices holding stale copies must pause uploads before cleanup. Native launches ignore external URI payloads and retain the trusted local WebView.
+After copying A’s two scans into B’s five, B has seven local scans and the message says **Restored 2 scans**. B’s cloud backup reaches seven only after its own enabled uploads finish. Source A stays unchanged. Repeating a restore adds zero for existing IDs; native metadata checks count actual visible insertions rather than optional acknowledgments. Preserve local deletion records and hidden pending-delete rows. A timeout/rejection remains a failure even if a native write later settles. Interrupted uploads retry after reopening/reconnection; an interrupted source copy can be retried explicitly.
+
+SQLite/private photos, credentials and deletion jobs remain outside replaceable bundles. History deletion targets the receiving phone’s own manifest-paired cloud copy, independently of upload Pause. It does not delete a separate source backup or another phone’s local copy. Deliberately shared-code devices still share that cloud namespace and must pause stale uploads before deletion. Internal saved-own-code reconnection can recover an expired own session and finish its scoped jobs; temporary foreign readers never consume them. No Sign In/Register, manual file import/export, browser backup or cross-device deletion propagation is added. Public guidelines stay independent.
 
 ### Server preparation and review
 

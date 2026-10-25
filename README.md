@@ -34,7 +34,9 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 
 ## Download and status
 
-The [official download page](https://mangoleafai.vercel.app/download) links verified published Android assets. GitHub lists [v0.11.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.11.0) as Latest, with production APK v0.1.7/code 8 and sequence-6 OTA assets targeting host 8. The maintainer reported completing the production-phone checks; the browser R03 report is recorded separately. Vercel promotion/live website identity was not verified by this release check. Debug uses testing and Production APK uses production; scan/photo uploads start only after recovery-code setup. Production and development phone websites show EN or BIS. Model stays adopted V4.5.0; V5 research records remain preserved. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md) and [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
+Source prepares **app v0.12.0 / APK v0.1.8/code 9** (Debug **0.1.8-dev**, OTA bounds **9-9**) with adopted **Model V4.5.0**. Candidate behavior and validation are maintained in the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md) and [current test record](docs/testing/TESTING.md#october-26-2026).
+
+The [official download page](https://mangoleafai.vercel.app/download) provides published APKs; [v0.11.0 / APK 0.1.7](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.11.0) has its own retained release evidence. New source is unpublished. Debug/testing checks and current-input R03 passed; production-signed/staged checks, CI and release/promotion remain pending. See the [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
 
 ## Technology
 
@@ -42,11 +44,11 @@ The [official download page](https://mangoleafai.vercel.app/download) links veri
 - Bun **1.4.4**, TypeScript, and Tailwind CSS **4**
 - TensorFlow.js for on-device inference
 - Java Android host and WebView; each phone keeps its scan reports in its own SQLite database and photos in private app files by default
-- Optional Supabase private backup after successful recovery-code creation or existing-code connection: photos in the private `scans` Storage bucket, report rows in `public.scans`, and recovery manifests in `public.android_backup_reports`, protected by verified Auth ownership and RLS
+- Optional Supabase private backup after successful receiving-code setup (explicit creation or Restore setup): photos in the private `scans` Storage bucket, report rows in `public.scans`, and recovery manifests in `public.android_backup_reports`, protected by verified Auth ownership and RLS
 - Public treatment guidance from `public.guidelines` through Supabase Database and Realtime, independently of private-backup setup
 - Serwist service worker for the website; separately bundled offline assets and signed OTA updates for Android
 
-Dexie/IndexedDB remains only for preserved legacy browser data and isolated regression tests. It is not the Android scan store, and current production/development websites do not open scan History or run private backup workers. Scans save locally without enabling cloud uploads; successful code setup enables foreground/online automatic backup. Pausing uploads leaves local saving available and does not cancel already-confirmed cloud-deletion retries.
+Dexie/IndexedDB remains only for preserved legacy browser data and isolated regression tests. It is not the Android scan store, and current production/development websites do not open scan History or run private backup workers. Scans save locally without enabling cloud uploads; successful receiving-code setup enables foreground/online automatic backup; restore copies use a temporary source session without replacing that backup. Pausing uploads leaves local saving available and does not cancel already-confirmed cloud-deletion retries.
 
 See [Architecture](docs/ARCHITECTURE.md) for the application layers, storage boundaries and update flow.
 
