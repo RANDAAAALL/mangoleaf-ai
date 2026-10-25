@@ -53,6 +53,10 @@ import { DiagnosticsPanel } from "@/components/tab/diagnostics-panel";
 import { BackupRecoveryPanel } from "@/components/tab/backup-recovery-panel";
 import { LegalModal } from "@/components/modal/legal-modal";
 import { AndroidUpdateModal } from "@/components/modal/android-update-modal";
+import { AndroidUpdatePanel } from "@/components/tab/android-update-panel";
+import { AndroidApkProgressModal } from "@/components/modal/android-apk-progress-modal";
+import { useAndroidApkInstall } from "@/hooks/useAndroidApkInstall";
+import type { AndroidApkOffer } from "@/lib/android-update";
 import { StorageFullModal } from "@/components/modal/storage-full-modal";
 import { UnsavedScanNotice } from "@/components/scan/unsaved-scan-notice";
 import { ScanSheet } from "@/components/modal/scan-sheet";
@@ -96,6 +100,7 @@ export function Application() {
 
   // Which tab is showing
   const [activeTab, setActiveTab] = useState<AppTab>("home");
+  const [apkOffer, setApkOffer] = useState<AndroidApkOffer | null>(null);
   const prevTabRef = useRef<AppTab>("home");
 
   // The loaded model, and whether it is still arriving
@@ -208,13 +213,6 @@ export function Application() {
   >(null);
   const [isScanSheetOpen, setIsScanSheetOpen] = useState(false);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
-  useEffect(() => {
-    if (!isAndroidBuild()) return;
-    const busy = isScanning || isCameraOpen || isRetryingSave;
-    setCloudBackupBusy(busy);
-    // One combined flag prevents a camera-close event from clearing an active diagnosis.
-    void nativeRequest("app.busy", { busy }).catch(() => {});
-  }, [isScanning, isCameraOpen, isRetryingSave]);
   const closeScanSheet = useCallback(() => {
     recordDiagnostic("scan-sheet.closed");
     setIsScanSheetOpen(false);
@@ -297,6 +295,28 @@ export function Application() {
     const saved = localStorage.getItem("preferred_language");
     return saved === "en" || saved === "bis" ? saved : "bis";
   });
+
+  const apkBlocked = Boolean(
+    isModelLoading ||
+    previewUrl ||
+    selectedScan ||
+    legalModalType ||
+    isCameraOpen ||
+    isScanSheetOpen ||
+    isStorageFullOpen ||
+    unsavedScan ||
+    isScanning ||
+    isRetryingSave ||
+    isInstallGuideOpen,
+  );
+  const apkInstaller = useAndroidApkInstall(apkBlocked);
+  useEffect(() => {
+    if (!isAndroidBuild()) return;
+    const busy = isScanning || isCameraOpen || isRetryingSave;
+    // Pause new transfers for this foreground operation without changing the saved backup preference.
+    setCloudBackupBusy(busy || apkInstaller.busy);
+    void nativeRequest("app.busy", { busy }).catch(() => {});
+  }, [isScanning, isCameraOpen, isRetryingSave, apkInstaller.busy]);
 
   // Write the choice back to localStorage so it survives a restart
   const setLanguage = useCallback((newLang: Language) => {
@@ -907,7 +927,7 @@ export function Application() {
 
   return (
     <div className="min-h-screen bg-[#f6faf1] text-[#143519] font-sans flex flex-col justify-between">
-      <div inert={isInstallGuideOpen}>
+      <div inert={isInstallGuideOpen || apkInstaller.busy}>
         {/* Top Header: mobile = minimal logo, desktop = full nav */}
         <TopHeader
           language={language}
@@ -981,7 +1001,18 @@ export function Application() {
             )}
 
             {activeTab === "about" && (
-              <AboutTab language={language} onScanPress={openScanSheet}>
+              <AboutTab
+                language={language}
+                onScanPress={openScanSheet}
+                updateNotice={
+                  <AndroidUpdatePanel
+                    language={language}
+                    offer={apkOffer}
+                    onUpdate={apkInstaller.start}
+                    busy={apkInstaller.busy}
+                  />
+                }
+              >
                 {/* Load these with the APK entry so first About navigation cannot suspend the app. */}
                 <DiagnosticsPanel language={language} />
                 {isAndroidBuild() && (
@@ -1078,21 +1109,19 @@ export function Application() {
       {isAndroidBuild() && (
         <AndroidUpdateModal
           language={language}
-          blocked={Boolean(
-            previewUrl ||
-            selectedScan ||
-            legalModalType ||
-            isCameraOpen ||
-            isScanSheetOpen ||
-            isStorageFullOpen ||
-            unsavedScan ||
-            isScanning ||
-            isRetryingSave ||
-            isInstallGuideOpen,
-          )}
+          onApkOffer={setApkOffer}
+          onUpdate={apkInstaller.start}
+          suppressApkReoffer={apkInstaller.isInstalling}
+          blocked={apkBlocked || apkInstaller.busy}
         />
       )}
-      <div inert={isInstallGuideOpen}>
+      <AndroidApkProgressModal
+        language={language}
+        state={apkInstaller.state}
+        onCancel={apkInstaller.cancel}
+        onDismiss={apkInstaller.dismiss}
+      />
+      <div inert={isInstallGuideOpen || apkInstaller.busy}>
         <Footer
           language={language}
           onOpenPrivacy={() => setLegalModalType("privacy")}

@@ -39,7 +39,8 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
   await nav(page, "Home");
   // Static-export HTML enters the runtime cache on a controlled online visit.
   await page.reload();
-  await expect(homeHeading(page)).toBeVisible();
+  // Reload creates a fresh GPU context; use the same warmup budget as openApp.
+  await expect(homeHeading(page)).toBeVisible({ timeout: 90_000 });
   const required = await page.evaluate(async (navigationPath) => {
     const model = await (await fetch("/model/model.json")).json();
     return [
@@ -149,7 +150,7 @@ test("R02: real service worker reloads history and diagnoses a new photo offline
     ),
   ).toBe(true);
   await page.reload();
-  await expect(homeHeading(page)).toBeVisible();
+  await expect(homeHeading(page)).toBeVisible({ timeout: 90_000 });
   if (page.viewportSize()!.width < 768)
     await expect(recentHeading(page)).toBeVisible();
   else await expect(recentHeading(page)).toHaveCount(0);

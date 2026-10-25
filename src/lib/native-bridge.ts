@@ -28,6 +28,7 @@ export type NativeInfo = {
   validated: boolean;
   cloudEnvironment: "testing" | "production";
   updateRestartSupported?: boolean;
+  apkUpdateSupported?: boolean;
 };
 
 function bridgeError(code: string) {

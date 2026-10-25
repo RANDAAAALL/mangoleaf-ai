@@ -88,8 +88,8 @@ test("same export produces identical archives with complete matching inventory",
   const descriptor = JSON.parse(
     readFileSync(join(first, "web/android-bundle.json"), "utf8"),
   );
-  expect(descriptor.nativeHostMin).toBe(8);
-  expect(descriptor.nativeHostMax).toBe(8);
+  expect(descriptor.nativeHostMin).toBe(9);
+  expect(descriptor.nativeHostMax).toBe(9);
   expect(entries.some((file) => file.path === "sw.js")).toBe(false);
   expect(entries.some((file) => file.path === "android-bundle.json")).toBe(
     true,

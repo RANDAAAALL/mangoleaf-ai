@@ -11,8 +11,14 @@ public final class MangoLeafApplication extends Application {
     private final ExecutorService operations = Executors.newSingleThreadExecutor();
     private NativeStore store;
     private OtaManager ota;
+    private ApkUpdateManager apkUpdater;
 
     ExecutorService operations() { return operations; }
+
+    synchronized ApkUpdateManager apkUpdater() throws Exception {
+        if (apkUpdater == null) apkUpdater = new ApkUpdateManager(this);
+        return apkUpdater;
+    }
 
     synchronized NativeStore store() throws Exception {
         if (store == null) {

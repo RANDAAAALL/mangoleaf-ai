@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.ViewGroup;
 import android.view.View;
 import android.webkit.PermissionRequest;
@@ -48,19 +49,22 @@ import java.util.concurrent.CompletableFuture;
 import org.json.JSONObject;
 
 /** Android owns local storage, permissions and bundle lifecycle; React owns application screens. */
-public final class MainActivity extends ComponentActivity {
+public final class MainActivity extends ComponentActivity implements ApkUpdateManager.Host {
     public static final String APP_ORIGIN = "https://appassets.androidplatform.net";
     private static final int CAMERA_PERMISSION = 100;
     private static final int FILE_PICKER = 101;
     private static final int ARCHIVE_DESTINATION = 102;
+    private static final int APK_PERMISSION = 103;
+    private static final int APK_CONFIRMATION = 104;
     private ExecutorService operations;
     private WebView webView;
     private NativeStore store;
     private NativeBridge bridge;
     private NetworkMonitor network;
     private OtaManager ota;
+    private ApkUpdateManager apkUpdater;
     private volatile boolean destroyed;
-    private boolean foreground;
+    private volatile boolean foreground;
     private volatile boolean applicationReady;
     private PermissionRequest cameraRequest;
     private ValueCallback<Uri[]> fileCallback;
@@ -73,9 +77,11 @@ public final class MainActivity extends ComponentActivity {
     private volatile boolean updateRestartPending;
     private volatile CompletableFuture<Boolean> archiveExport;
     private File archiveFile;
+    private String apkConfirmationAttempt = "";
 
     @Override public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
+        if (savedState != null) apkConfirmationAttempt = savedState.getString("apkConfirmationAttempt", "");
         MangoLeafApplication application = (MangoLeafApplication) getApplication();
         operations = application.operations();
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -93,6 +99,7 @@ public final class MainActivity extends ComponentActivity {
             runOnUiThread(() -> {
                 if (destroyed) return;
                 if (bridge != null) bridge.notifyEvent("connectivity", state);
+                if (apkUpdater != null) apkUpdater.networkChanged(state.optBoolean("validated"));
                 if (ota != null && applicationReady && state.optBoolean("validated") && foreground) ota.checkForUpdates();
             });
         });
@@ -100,6 +107,8 @@ public final class MainActivity extends ComponentActivity {
             try {
                 store = application.store();
                 ota = application.ota();
+                try { apkUpdater = application.apkUpdater(); apkUpdater.attach(this); }
+                catch (Exception optionalUpdaterUnavailable) { apkUpdater = null; }
                 // Candidate activation occurs only during a new Activity launch, before any user task.
                 File bundle = ota.getLaunchBundleDirectory();
                 runOnUiThread(() -> {
@@ -174,6 +183,7 @@ public final class MainActivity extends ComponentActivity {
             @Override public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
                 cancelCameraRequest();
                 cancelFileCallback();
+                if (apkUpdater != null) apkUpdater.backgrounded();
                 if (bridge != null) bridge.close();
                 // A renderer can die while the host process survives. Do not keep reopening a failed first OTA boot.
                 if (ota != null) ota.rendererGone();
@@ -197,7 +207,8 @@ public final class MainActivity extends ComponentActivity {
             @Override public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> callback, FileChooserParams chooser) {
                 cancelFileCallback();
                 fileCallback = callback;
-                if (!foreground || updateRestartPending || !LocalContent.trusted(Uri.parse(view.getUrl() == null ? "" : view.getUrl()))) {
+                if (!foreground || updateRestartPending || (apkUpdater != null && apkUpdater.busy())
+                        || !LocalContent.trusted(Uri.parse(view.getUrl() == null ? "" : view.getUrl()))) {
                     cancelFileCallback();
                     return true;
                 }
@@ -238,7 +249,8 @@ public final class MainActivity extends ComponentActivity {
                 .put("schemaVersion", BuildConfig.SCHEMA_VERSION).put("hostVersion", BuildConfig.VERSION_CODE)
                 .put("hostVersionName", BuildConfig.VERSION_NAME)
                 .put("cloudEnvironment", BuildConfig.CLOUD_ENVIRONMENT)
-                .put("updateRestartSupported", true);
+                .put("updateRestartSupported", true)
+                .put("apkUpdateSupported", apkUpdater != null && ApkUpdateManager.supported());
             case "app.ready" -> {
                 ota.markHealthy();
                 applicationReady = true;
@@ -252,6 +264,10 @@ public final class MainActivity extends ComponentActivity {
             case "ota.status" -> new JSONObject().put("status", ota.getStatus());
             case "ota.check" -> { if (applicationReady && network.snapshot().optBoolean("validated")) ota.checkForUpdates(); yield true; }
             case "ota.restart" -> restartForUpdate();
+            case "apkUpdate.start" -> requireApkUpdater().start(payload.getString("id"), payload.getString("tag"), payload.getString("version"));
+            case "apkUpdate.status" -> requireApkUpdater().snapshot(payload.getString("id"));
+            case "apkUpdate.cancel" -> requireApkUpdater().cancel(payload.getString("id"));
+            case "apkUpdate.install" -> requireApkUpdater().install(payload.getString("id"));
             default -> {
                 boolean writes = method.equals("storage.report.save") || method.equals("storage.report.delete")
                     || method.equals("storage.report.deleteSynced") || method.equals("storage.cloudDelete.ack")
@@ -262,6 +278,11 @@ public final class MainActivity extends ComponentActivity {
                 finally { if (writes) updateBusy(); }
             }
         };
+    }
+
+    private ApkUpdateManager requireApkUpdater() {
+        if (apkUpdater == null) throw new IllegalStateException("METHOD_NOT_ALLOWED");
+        return apkUpdater;
     }
 
     /** Recreate the trusted local view after queued writes finish; never navigate to an external update URL. */
@@ -293,12 +314,41 @@ public final class MainActivity extends ComponentActivity {
 
     /** Both sides of asynchronous verification use this same host-owned guard. */
     private boolean canRestartUpdate() {
+        return hostIdle() && (apkUpdater == null || !apkUpdater.busy());
+    }
+
+    @Override public boolean canUpdate() {
+        return hostIdle() && applicationReady && !updateRestartPending;
+    }
+
+    private boolean hostIdle() {
         return !destroyed && foreground && !applicationBusy && archiveExport == null
             && cameraRequest == null && pendingChooser == null && fileCallback == null;
     }
 
+    @Override public boolean connected() { return network != null && network.snapshot().optBoolean("validated"); }
+
+    @Override public void changed(JSONObject snapshot) {
+        if (destroyed) return;
+        updateBusy();
+        if (bridge != null) bridge.notifyEvent("apkUpdate", snapshot);
+    }
+
+    @Override public void permission(String id) {
+        if (!canUpdate()) throw new IllegalStateException("BUSY");
+        startActivityForResult(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+            Uri.parse("package:" + getPackageName())), APK_PERMISSION);
+    }
+
+    @Override public void confirmation(String id, Intent intent) {
+        if (!canUpdate()) throw new IllegalStateException("BUSY");
+        apkConfirmationAttempt = id;
+        startActivityForResult(intent, APK_CONFIRMATION);
+    }
+
     private void requestCamera(PermissionRequest request) {
-        if (!foreground || updateRestartPending || !LocalContent.trusted(request.getOrigin())) { request.deny(); return; }
+        if (!foreground || updateRestartPending || (apkUpdater != null && apkUpdater.busy())
+                || !LocalContent.trusted(request.getOrigin())) { request.deny(); return; }
         boolean videoOnly = request.getResources().length == 1 && PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(request.getResources()[0]);
         if (!videoOnly) { request.deny(); return; }
         cancelCameraRequest();
@@ -359,6 +409,15 @@ public final class MainActivity extends ComponentActivity {
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == APK_PERMISSION) {
+            if (apkUpdater != null) apkUpdater.permissionReturned(apkUpdater.permissionAttempt());
+            return;
+        }
+        if (requestCode == APK_CONFIRMATION) {
+            if (apkUpdater != null) apkUpdater.confirmationReturned(apkConfirmationAttempt, resultCode);
+            apkConfirmationAttempt = "";
+            return;
+        }
         if (requestCode == ARCHIVE_DESTINATION) {
             finishArchiveDestination(resultCode, data);
             return;
@@ -455,7 +514,7 @@ public final class MainActivity extends ComponentActivity {
         }
     }
 
-    private void updateBusy() { if (ota != null) ota.setBusy(applicationBusy || archiveExport != null); }
+    private void updateBusy() { if (ota != null) ota.setBusy(applicationBusy || archiveExport != null || (apkUpdater != null && apkUpdater.busy())); }
 
     private void openExternal(Uri uri) {
         try { startActivity(new Intent(Intent.ACTION_VIEW, uri).addCategory(Intent.CATEGORY_BROWSABLE)); }
@@ -492,6 +551,7 @@ public final class MainActivity extends ComponentActivity {
     @Override protected void onResume() {
         super.onResume();
         if (webView != null) webView.onResume();
+        if (apkUpdater != null) apkUpdater.permissionReturned(apkUpdater.permissionAttempt());
     }
 
     @Override protected void onPause() {
@@ -506,6 +566,7 @@ public final class MainActivity extends ComponentActivity {
         // Leaving the app must still hide web content and release camera work, including a pending prompt.
         if (webView != null) webView.onPause();
         cancelCameraRequest();
+        if (apkUpdater != null) apkUpdater.backgrounded();
         if (network != null) network.close();
         super.onStop();
     }
@@ -521,11 +582,17 @@ public final class MainActivity extends ComponentActivity {
         cancelCameraRequest();
         cancelFileCallback();
         if (network != null) network.close();
+        if (apkUpdater != null) { apkUpdater.backgrounded(); apkUpdater.detach(this); }
         if (bridge != null) bridge.close();
         if (webView != null) { webView.stopLoading(); webView.destroy(); webView = null; }
         // SQLite and OTA remain process-owned. Ordinary Activity recreation retains the bundle;
         // only the guarded explicit restart releases selection before recreation.
-        operations.execute(() -> { if (ota != null) ota.setBusy(false); });
+        operations.execute(() -> { if (ota != null) ota.setBusy(apkUpdater != null && apkUpdater.busy()); });
         super.onDestroy();
+    }
+
+    @Override protected void onSaveInstanceState(Bundle state) {
+        state.putString("apkConfirmationAttempt", apkConfirmationAttempt);
+        super.onSaveInstanceState(state);
     }
 }

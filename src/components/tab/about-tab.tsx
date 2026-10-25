@@ -9,6 +9,7 @@ import { isAndroidBuild } from "@/lib/native-bridge";
 interface AboutTabProps {
   language: Language;
   onScanPress: () => void;
+  updateNotice?: ReactNode;
   children?: ReactNode;
 }
 
@@ -57,6 +58,7 @@ function FeatureIcon({ name }: { name: FeatureIconName }) {
 export const AboutTab = memo(function AboutTab({
   language,
   onScanPress,
+  updateNotice,
   children,
 }: AboutTabProps) {
   const t = translations[language];
@@ -138,6 +140,8 @@ export const AboutTab = memo(function AboutTab({
           )}
         </div>
       </section>
+
+      {updateNotice}
 
       <section className="grid gap-5 border-y border-[#dbe8d4] py-8 sm:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] sm:gap-10 sm:py-10">
         <h2 className="text-2xl font-bold tracking-tight text-[#143519]">

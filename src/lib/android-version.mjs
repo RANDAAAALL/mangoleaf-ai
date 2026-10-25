@@ -14,6 +14,23 @@ export function parseAndroidVersion(value) {
 
 const assetLabelPrefix = "Android APK v";
 
+/** Compare native release versions without rounding large numeric components or accepting Debug labels. */
+export function isNewerAndroidApk(available, installed) {
+  const next = parseAndroidVersion(available);
+  const current = parseAndroidVersion(installed);
+  if (!next || !current || next.endsWith("-dev") || current.endsWith("-dev"))
+    return false;
+  const left = next.split(".");
+  const right = current.split(".");
+  for (let index = 0; index < 3; index++) {
+    if (left[index] === right[index]) continue;
+    return left[index].length === right[index].length
+      ? left[index] > right[index]
+      : left[index].length > right[index].length;
+  }
+  return false;
+}
+
 /**
  * The publisher copies this label from the verified APK receipt, independently of the web-release tag.
  * @param {unknown} value

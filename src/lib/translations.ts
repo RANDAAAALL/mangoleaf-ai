@@ -135,6 +135,29 @@ export const translations = {
     backupCodeCopyFailed: "Could not copy. Save the displayed code carefully.",
     backupRestored: "Restored {n} scans",
     backupRestoredSingle: "Restored {n} scan",
+    androidApkUpdateTitle: "New Android APK v{version} Update",
+    androidApkUpdateText:
+      "Download the update inside MangoLeaf AI, then confirm Update in Android. Your saved scans and photos stay on this phone.",
+    androidApkUpdateNow: "Update Now!",
+    androidApkUpdateLater: "Update Later!",
+    androidApkUpdateAboutTitle: "Latest update available",
+    androidApkUpdateOffline: "Connect to the internet to download this update.",
+    androidApkUpdateAboutText:
+      "Android APK v{version} is available. Tap Update Now to download it inside MangoLeaf AI, then confirm Update in Android. Internet is needed for the download. Your saved scans and photos stay on this phone.",
+    androidApkDownloadingTitle: "Downloading update...",
+    androidApkDownloadingText:
+      "Please wait while the update downloads. Closing cancels the download and keeps your current app version.",
+    androidApkConnecting: "Connecting...",
+    androidApkDownloadPercent: "{n}% downloaded",
+    androidApkVerifyingTitle: "Checking update...",
+    androidApkInstallingTitle: "Confirm installation in Android",
+    androidApkInstallingText:
+      "Follow Android's update prompt. Canceling keeps your current version. After installation, open MangoLeaf AI again.",
+    androidApkInstallFailedTitle: "Update stopped",
+    androidApkInstallFailedText:
+      "The update could not be completed. You can keep using your current version and try again later.",
+    androidApkInstallUnavailable:
+      "This installation cannot update inside the app. Install the latest official APK to enable in-app updates.",
     backupUploaded: "Backed up {n} reports.",
     backupCloudDeleted:
       "Cloud backup deleted. Local reports remain on this device.",
@@ -659,6 +682,30 @@ export const translations = {
     backupCodeCopyFailed: "Wala makopya. Tipigi pag-ayo ang gipakitang code.",
     backupRestored: "Na-restore ang {n} ka scan",
     backupRestoredSingle: "Na-restore ang {n} ka scan",
+    androidApkUpdateTitle: "Bag-ong Android APK v{version} nga update",
+    androidApkUpdateText:
+      "I-download ang update sulod sa MangoLeaf AI, dayon kumpirmaha ang Update sa Android. Magpabilin niini nga telepono ang imong natipig nga scan ug litrato.",
+    androidApkUpdateNow: "I-update karon!",
+    androidApkUpdateLater: "I-update unya!",
+    androidApkUpdateAboutTitle: "Adunay bag-ong update",
+    androidApkUpdateOffline:
+      "Konektar sa internet aron ma-download kini nga update.",
+    androidApkUpdateAboutText:
+      "Adunay Android APK v{version}. Pislita ang I-update karon aron i-download kini sulod sa MangoLeaf AI, dayon kumpirmaha ang Update sa Android. Kinahanglan ug internet sa pag-download. Magpabilin niini nga telepono ang imong natipig nga scan ug litrato.",
+    androidApkDownloadingTitle: "Gi-download ang update...",
+    androidApkDownloadingText:
+      "Palihog hulat samtang gi-download ang update. Ang pagsira mokansela sa pag-download ug magpabilin ang kasamtangang bersyon sa app.",
+    androidApkConnecting: "Nagkonektar...",
+    androidApkDownloadPercent: "{n}% na-download",
+    androidApkVerifyingTitle: "Gisusi ang update...",
+    androidApkInstallingTitle: "Kumpirmaha ang pag-install sa Android",
+    androidApkInstallingText:
+      "Sunda ang pangutana sa Android bahin sa update. Kon kanselahon, magpabilin ang kasamtangang bersyon. Human ma-install, ablihi pag-usab ang MangoLeaf AI.",
+    androidApkInstallFailedTitle: "Mihunong ang update",
+    androidApkInstallFailedText:
+      "Wala mahuman ang update. Mahimo nimong gamiton ang kasamtangang bersyon ug mosulay pag-usab unya.",
+    androidApkInstallUnavailable:
+      "Kini nga installation dili maka-update sulod sa app. I-install ang pinakabag-ong opisyal nga APK aron magamit ang in-app update.",
     backupUploaded: "Na-back up ang {n} ka report.",
     backupCloudDeleted:
       "Napapas ang cloud backup. Magpabilin sa device ang lokal nga mga report.",
