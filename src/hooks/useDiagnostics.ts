@@ -5,7 +5,7 @@ import {
   subscribeDiagnostics,
 } from "@/lib/diagnostics";
 
-/** The recorder outlives About so modal and tab changes retain the same log. */
+/** The recorder outlives its Settings viewer so modal and tab changes retain the same log. */
 export function useDiagnostics() {
   return useSyncExternalStore(
     subscribeDiagnostics,

@@ -3,8 +3,9 @@
 import { memo } from "react";
 import { translations, type Language } from "@/lib/translations";
 import { Icon, type IconName } from "@/components/brand/icon";
+import { isAndroidBuild } from "@/lib/native-bridge";
 
-type AppTab = "home" | "history" | "about";
+type AppTab = "home" | "history" | "about" | "settings";
 
 interface BottomNavProps {
   activeTab: AppTab;
@@ -31,6 +32,7 @@ function NavItem({
       className={`flex flex-col items-center justify-center gap-0.5 min-w-[56px] pt-2 pb-1 cursor-pointer transition-colors duration-200 ${
         active ? "text-[#277839]" : "text-[#738a77]"
       }`}
+      aria-current={active ? "page" : undefined}
     >
       <Icon name={icon} size={22} fill={active ? "#277839" : "#738a77"} />
       <span className="text-[10px] font-bold leading-tight">{label}</span>
@@ -87,15 +89,24 @@ export const BottomNav = memo(function BottomNav({
           onClick={() => onTabChange("history")}
         />
 
-        <button
-          onClick={onLanguageToggle}
-          className="flex flex-col items-center justify-center gap-0.5 min-w-[56px] pt-2 pb-1 cursor-pointer text-[#738a77] transition-colors"
-        >
-          <Icon name="language" size={22} fill="#738a77" />
-          <span className="text-[10px] font-bold leading-tight">
-            {language === "en" ? "EN" : "BIS"}
-          </span>
-        </button>
+        {isAndroidBuild() ? (
+          <NavItem
+            icon="settings"
+            label={t.navSettings}
+            active={activeTab === "settings"}
+            onClick={() => onTabChange("settings")}
+          />
+        ) : (
+          <button
+            onClick={onLanguageToggle}
+            className="flex flex-col items-center justify-center gap-0.5 min-w-[56px] pt-2 pb-1 cursor-pointer text-[#738a77] transition-colors"
+          >
+            <Icon name="language" size={22} fill="#738a77" />
+            <span className="text-[10px] font-bold leading-tight">
+              {language === "en" ? "EN" : "BIS"}
+            </span>
+          </button>
+        )}
       </div>
     </nav>
   );

@@ -7,7 +7,7 @@ import {
 import type { AndroidApkOffer } from "@/lib/android-update";
 import { isCloudBackupRunning } from "@/lib/cloud-backup";
 
-/** One native transfer shared by the update notice and About; no private cloud identity is created. */
+/** One native transfer shared by the update notice and Settings; no private cloud identity is created. */
 export function useAndroidApkInstall(blocked: boolean) {
   const [state, setState] = useState<AndroidApkInstallState | null>(null);
   const blockedRef = useRef(blocked);

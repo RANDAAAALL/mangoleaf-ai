@@ -2,20 +2,64 @@ export type Language = "en" | "bis";
 
 export const translations = {
   en: {
+    navSettings: "Settings",
+    settingsLanguage: "App language",
+    settingsBackup: "Backup",
+    settingsAppLanguage: "Language",
+    settingsBisaya: "Bisaya",
+    settingsEnglish: "English",
+    settingsBack: "Back to Settings",
+    settingsDiagnosticsSection: "Diagnostics",
+    settingsDiagnostics: "Diagnostic logs",
+    settingsDiagnosticsHint: "Optional logs for troubleshooting.",
+    settingsUpdatesSection: "Updates",
+    settingsUpdates: "App updates",
+    settingsUpdatesHint:
+      "Updates are checked while the app is open and online.",
+    settingsInstalledVersion: "Installed Android APK v{version}",
+    settingsUpdateUnconfirmed: "No newer update has been confirmed yet.",
+    settingsUpdateOffline:
+      "Connect to the internet so MangoLeaf AI can check for updates.",
+    backupToggle: "Back up my scans",
+    backupUploadHint: "Photos upload while the app is open and online.",
+    backupNotSetUp: "Not set up",
+    backupChecking: "Checking backup status...",
+    backupStatusError: "Backup status unavailable",
+    backupRetry: "Retry backup status",
+    backupWaiting: "On - waiting for internet",
+    backupSetupHint:
+      "Scans stay on this phone. Set up backup to save copies online.",
+    backupPausedHint:
+      "Existing copies stay in your cloud backup. Scans on this phone also stay.",
+    backupCodeHidden: "Recovery code hidden",
+    backupRestoreHint:
+      "Enter a recovery code to copy its saved scans to this phone. Your existing scans stay.",
+    backupKeepOwnCode: "Your current recovery code stays the same.",
+    backupRestoreSetupHint:
+      "After verification, this phone gets its own recovery code and backup is enabled.",
+    backupHowWorks: "How backup works",
+    backupHowUploads:
+      "Uploads run while the app is open, online and backup is on. Unfinished uploads retry after reopening. On does not mean all photos have finished uploading.",
+    backupOwnRestoreHint:
+      "Paste the recovery code for the backup you want to restore, including this phone's own backup. The entered code is used temporarily and does not replace this phone's code.",
+    backupCodePlaceholder: "Paste recovery code",
+    backupCodeRequired: "Paste a recovery code first.",
+    backupCodeInvalid:
+      "That recovery code wasn't recognized. Check the complete code and try again.",
     websiteNavigationLabel: "Website navigation",
     backupTestingDescription:
       "Debug scans stay local by default. Create a recovery code or use Restore backup data to set up this phone’s own backup on testing. Restore copies completed scans without replacing an existing code or Pause setting. Photos upload while open, online and backup enabled; unfinished uploads retry after reopening. Save this phone’s code outside the phone.",
     backupAutomatic: "Automatic cloud backup enabled",
     backupLocalOnly: "New scans stay on this phone until backup setup",
-    backupPaused: "Cloud backup paused",
+    backupPaused: "Backup paused",
     backupStarted:
       "This phone’s backup is enabled. Scans upload while the app is open and online; unfinished uploads retry after reopening. Enabling backup does not mean uploads have finished.",
     backupPause: "Pause backup",
     backupResume: "Resume backup",
     backupNewCodeHint:
       "Have a code from another phone? Enter it below to restore copies. This phone keeps or creates its own code for its future backup. Save that code outside the phone.",
-    backupShowCode: "Show recovery code",
-    backupHideCode: "Hide recovery code",
+    backupShowCode: "Show",
+    backupHideCode: "Hide",
     backupEnterCode: "Enter recovery code",
     backupClearInput: "Clear input",
     backupMergeHint:
@@ -102,25 +146,27 @@ export const translations = {
     androidDownloadFallback: "Download from GitHub instead",
     androidDownloadCompatibility:
       "The mobile app supports Android only. Android 8.0 or newer and an up-to-date Android System WebView are required.",
+    androidDownloadAndroidOnly:
+      "APK download is available here on Android phones only. Open this page on an Android phone to download the app.",
     androidDownloadMigration:
       "The APK has its own History. Existing browser reports stay in that browser and are not transferred automatically.",
     androidDownloadBrowser: "Open website",
     backupTitle: "Private cloud backup",
     backupDescription:
       "Scans and photos stay on this phone by default. Create a recovery code to enable automatic backup while open and online. Restore backup data downloads copies using another code while keeping this phone’s own backup. If this phone has no code, Restore creates and displays its own code and enables backup. Save this phone’s code outside the phone.",
-    backupCreate: "Create recovery code and enable backup",
-    backupRecoveryLabel: "Your private recovery code",
+    backupCreate: "Set up backup",
+    backupRecoveryLabel: "Your recovery code",
     backupRecoveryHint:
-      "This is this phone’s backup code. Save it outside the phone to recover its future scans. Another phone’s source code cannot recover scans saved only in this backup. Anyone holding this code can access your backup; losing both the phone and code can prevent recovery.",
-    backupCopy: "Copy recovery code",
+      "Save this code outside your phone. Anyone with it can access your backup. If you lose both your phone and this code, you cannot recover its backup.",
+    backupCopy: "Copy code",
     backupSavedCode: "I saved my recovery code outside this phone",
     backupEnable: "Enable backup",
     backupRestoreCodeLabel: "Recovery code to restore scans from",
     backupConnect: "Use recovery code",
-    backupEnabled: "Cloud backup enabled",
+    backupEnabled: "Backup is on",
     backupDisabled: "Cloud backup is off",
     backupNow: "Back up now",
-    backupRestore: "Restore backup data",
+    backupRestore: "Restore saved scans",
     backupDisable: "Turn off backup on this device",
     backupDeleteCloud: "Delete this cloud backup",
     backupDeleteConfirm:
@@ -132,7 +178,8 @@ export const translations = {
       "Backup could not finish. Check your connection and recovery code, then retry. Local reports are safe.",
     backupDone: "Backup operation completed.",
     backupCodeCopied: "Recovery code copied. Save it outside this phone.",
-    backupCodeCopyFailed: "Could not copy. Save the displayed code carefully.",
+    backupCodeCopyFailed:
+      "Could not copy. Tap Show and save the code carefully.",
     backupRestored: "Restored {n} scans",
     backupRestoredSingle: "Restored {n} scan",
     androidApkUpdateTitle: "New Android APK v{version} Update",
@@ -431,7 +478,7 @@ export const translations = {
       "Technology should work where the mango farmer works.",
     aboutMissionDesc:
       "MangoLeaf AI aims to make AI-assisted disease assessment more accessible to Filipino Dabawenyo agriculture by bringing useful technology closer to the field.",
-    detectableTitle: "5 Detectable Conditions",
+    detectableTitle: "7 Detectable Conditions",
     detectableDesc:
       "The AI model recognizes the following Carabao Mango conditions from a clear and proper single leaf or fruit photo.",
     leafDiseasesLabel: "Leaf Diseases",
@@ -546,21 +593,68 @@ export const translations = {
       "Use only photographs you own or have permission to use, and respect content licenses and source attribution. AI results are advisory and are not professional certification.",
   },
   bis: {
+    navSettings: "Mga Setting",
+    settingsLanguage: "Pinulongan sa app",
+    settingsBackup: "Backup",
+    settingsAppLanguage: "Pinulongan",
+    settingsBisaya: "Bisaya",
+    settingsEnglish: "English",
+    settingsBack: "Balik sa Mga Setting",
+    settingsDiagnosticsSection: "Mga diagnostic",
+    settingsDiagnostics: "Mga diagnostic log",
+    settingsDiagnosticsHint:
+      "Opsyonal nga mga log alang sa pagsusi sa problema.",
+    settingsUpdatesSection: "Mga update",
+    settingsUpdates: "Mga update sa app",
+    settingsUpdatesHint:
+      "Susihon ang mga update samtang abli ug online ang app.",
+    settingsInstalledVersion: "Na-install nga Android APK v{version}",
+    settingsUpdateUnconfirmed: "Wala pay napamatud-ang mas bag-ong update.",
+    settingsUpdateOffline:
+      "Konektaha sa internet aron masusi sa MangoLeaf AI ang mga update.",
+    backupToggle: "I-back up ang akong mga scan",
+    backupUploadHint:
+      "Ma-upload ang mga litrato samtang abli ug online ang app.",
+    backupNotSetUp: "Wala pa ma-set up",
+    backupChecking: "Gisusi ang kahimtang sa backup...",
+    backupStatusError: "Dili mabasa ang kahimtang sa backup",
+    backupRetry: "Sulayi pag-usab ang kahimtang sa backup",
+    backupWaiting: "Naka-on - naghulat og internet",
+    backupSetupHint:
+      "Ang mga scan magpabilin niini nga telepono. I-set up ang backup aron adunay kopya online.",
+    backupPausedHint:
+      "Magpabilin ang daang mga kopya sa imong cloud backup. Magpabilin usab ang mga scan niini nga telepono.",
+    backupCodeHidden: "Gitago ang recovery code",
+    backupRestoreHint:
+      "Isulod ang recovery code aron makopya ang mga scan niini dinhi. Magpabilin ang imong daang mga scan.",
+    backupKeepOwnCode: "Dili mausab ang imong kasamtangang recovery code.",
+    backupRestoreSetupHint:
+      "Human sa pagpamatuod, maghimo kini nga telepono og kaugalingong recovery code ug ma-enable ang backup.",
+    backupHowWorks: "Giunsa paglihok ang backup",
+    backupHowUploads:
+      "Ma-upload ang mga litrato samtang abli ug online ang app ug naka-on ang backup. Ang wala mahuman sulayan pag-usab inig-abli. Ang naka-on wala magpasabot nga nahuman na ang tanang upload.",
+    backupOwnRestoreHint:
+      "I-paste ang recovery code sa backup nga gusto nimong ibalik, apil ang kaugalingong backup niini nga telepono. Temporaryo lamang gamiton ang gisulod nga code ug dili mopuli sa code niini nga telepono.",
+    backupCodePlaceholder: "I-paste ang recovery code",
+    backupCodeRequired: "I-paste una ang recovery code.",
+    backupCodeInvalid:
+      "Wala mailhi kana nga recovery code. Susihi ang tibuok code ug sulayi pag-usab.",
+
     websiteNavigationLabel: "Navigasyon sa website",
     backupTestingDescription:
       "Ang Debug scan magpabiling lokal sa sinugdanan. Paghimo og recovery code o gamita ang Restore backup data aron maandam ang kaugalingong backup niini nga telepono sa testing. Mokopya ang Restore sa nahuman nang mga scan nga dili ilisan ang anaa nga code o Pause. Mo-upload ang litrato samtang abli, online ug naka-enable ang backup; sulayan pag-usab ang wala mahuman human ablihan pag-usab. Tipigi ang code gawas sa telepono.",
     backupAutomatic: "Na-enable ang awtomatikong cloud backup",
     backupLocalOnly:
       "Magpabilin sa telepono ang bag-ong scan hangtod ma-set up ang backup",
-    backupPaused: "Gi-pause ang cloud backup",
+    backupPaused: "Gi-pause ang backup",
     backupStarted:
       "Na-enable ang backup niini nga telepono. Mo-upload ang scan samtang abli ug online ang app; sulayan pag-usab ang wala mahuman human ablihan pag-usab. Ang pagka-enable wala magpasabot nga nahuman na ang upload.",
     backupPause: "I-pause ang backup",
     backupResume: "Ipadayon ang backup",
     backupNewCodeHint:
       "Aduna kay code gikan sa laing telepono? Isulod kini sa ubos aron ma-restore ang mga kopya. Kini nga telepono magpabilin o maghimo sa kaugalingong code alang sa umaabot nga backup. Tipigi kana nga code gawas sa telepono.",
-    backupShowCode: "Ipakita ang recovery code",
-    backupHideCode: "Itago ang recovery code",
+    backupShowCode: "Ipakita",
+    backupHideCode: "Itago",
     backupEnterCode: "Isulod ang recovery code",
     backupClearInput: "Haw-asa ang gisulod",
     backupMergeHint:
@@ -648,25 +742,27 @@ export const translations = {
     androidDownloadFallback: "I-download gikan sa GitHub",
     androidDownloadCompatibility:
       "Android lamang ang gisuportahan sa mobile app. Gikinahanglan ang Android 8.0 o mas bag-o ug updated nga Android System WebView.",
+    androidDownloadAndroidOnly:
+      "Para lamang sa Android nga telepono ang APK download dinhi. Ablihi kini nga panid sa Android nga telepono aron ma-download ang app.",
     androidDownloadMigration:
       "Ang APK adunay kaugalingong Dating Scan. Ang daang mga report sa browser magpabilin didto ug dili awtomatikong mabalhin.",
     androidDownloadBrowser: "Ablihi ang website",
     backupTitle: "Pribadong cloud backup",
     backupDescription:
       "Ang scan ug litrato magpabilin niini nga telepono sa sinugdanan. Paghimo og recovery code aron ma-enable ang awtomatikong backup samtang abli ug online. Ang Restore backup data mokopya sa datos gamit ang laing code samtang gipabilin ang kaugalingong backup niini nga telepono. Kon wala pay code, ang Restore maghimo ug mopakita sa kaugalingong code ug mo-enable sa backup. Tipigi ang code niini nga telepono gawas niini.",
-    backupCreate: "Paghimo og recovery code ug i-enable ang backup",
-    backupRecoveryLabel: "Imong pribadong recovery code",
+    backupCreate: "I-set up ang backup",
+    backupRecoveryLabel: "Imong recovery code",
     backupRecoveryHint:
-      "Kini ang code sa backup niini nga telepono. Tipigi kini gawas sa telepono aron mabawi ang umaabot nga mga scan. Ang code sa gigikanang laing telepono dili makabawi sa mga scan nga niini lamang nga backup natipig. Bisan kinsa nga adunay code makaabli sa imong backup; kon mawala ang telepono ug code, mahimong dili na mabawi ang backup.",
-    backupCopy: "Kopyaha ang recovery code",
+      "Tipigi kini nga code gawas sa imong telepono. Bisan kinsa nga adunay code makaabli sa imong backup. Kon mawala ang telepono ug code, dili na mabawi ang backup.",
+    backupCopy: "Kopyaha ang code",
     backupSavedCode: "Natipig na nako ang recovery code gawas niining telepono",
     backupEnable: "I-enable ang backup",
     backupRestoreCodeLabel: "Recovery code sa gigikanan sa mga scan",
     backupConnect: "Gamita ang recovery code",
-    backupEnabled: "Na-enable ang cloud backup",
+    backupEnabled: "Naka-on ang backup",
     backupDisabled: "Naka-off ang cloud backup",
     backupNow: "I-back up karon",
-    backupRestore: "I-restore ang datos sa backup",
+    backupRestore: "Ibalik ang natipig nga mga scan",
     backupDisable: "I-off ang backup niini nga device",
     backupDeleteCloud: "Papasa kining cloud backup",
     backupDeleteConfirm:
@@ -679,7 +775,8 @@ export const translations = {
     backupDone: "Nahuman ang operasyon sa backup.",
     backupCodeCopied:
       "Nakopya ang recovery code. Tipigi kini gawas niining telepono.",
-    backupCodeCopyFailed: "Wala makopya. Tipigi pag-ayo ang gipakitang code.",
+    backupCodeCopyFailed:
+      "Wala makopya. I-tap ang Ipakita ug tipigi pag-ayo ang code.",
     backupRestored: "Na-restore ang {n} ka scan",
     backupRestoredSingle: "Na-restore ang {n} ka scan",
     androidApkUpdateTitle: "Bag-ong Android APK v{version} nga update",
@@ -985,7 +1082,7 @@ export const translations = {
       "Ang teknolohiya kinahanglan molihok diin nagtrabaho ang mag-uuma.",
     aboutMissionDesc:
       "Tinguha sa MangoLeaf AI nga mas mapadali ang AI-assisted nga pagsusi sa sakit sa tanom alang sa agrikultura sa Pilipinas pinaagi sa pagduol sa mapuslanong teknolohiya sa uma.",
-    detectableTitle: "Mga Madetektar nga Kondisyon",
+    detectableTitle: "7 ka Madetektar nga Kondisyon",
     detectableDesc:
       "Ang AI model nakaila sa mosunod nga mga kondisyon sa Carabao Mangga gikan sa usa ka klaro og tarong nga litrato sa dahon o bunga.",
     leafDiseasesLabel: "Sakit sa Dahon",

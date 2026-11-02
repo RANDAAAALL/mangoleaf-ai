@@ -11,8 +11,9 @@ import { androidApkAsset, androidReleasePage } from "@/lib/android-release";
 export default function DownloadPage() {
   const [language, setLanguage] = useState<Language>("bis");
   const t = translations[language];
-  const { href: appLink, installed } = useAndroidAppLink();
-  const { checking, release, downloadHref } = useAndroidRelease();
+  const { href: appLink, installed, ready } = useAndroidAppLink();
+  const canDownload = appLink !== null;
+  const { checking, release, downloadHref } = useAndroidRelease(canDownload);
   return (
     <main className="mx-auto flex max-w-2xl flex-col gap-5 p-6 text-[#143519]">
       <button
@@ -39,11 +40,13 @@ export default function DownloadPage() {
         </div>
       )}
       <p role="status" className="rounded-xl bg-[#eaf6e5] p-4">
-        {checking
+        {!ready || checking
           ? t.androidDownloadChecking
-          : release
-            ? t.androidDownloadAvailable.replace("{version}", release.tag)
-            : t.androidDownloadPending}
+          : !canDownload
+            ? t.androidDownloadAndroidOnly
+            : release
+              ? t.androidDownloadAvailable.replace("{version}", release.tag)
+              : t.androidDownloadPending}
       </p>
       {release?.apkVersion && (
         <p className="font-semibold" data-testid="available-apk-version">
@@ -82,18 +85,20 @@ export default function DownloadPage() {
           </a>
         ))}
       {release && <p className="text-sm">{t.androidDownloadTrouble}</p>}
-      <a
-        className="underline"
-        href={
-          release
-            ? `${androidReleasePage}/tag/${release.tag}`
-            : androidReleasePage
-        }
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        {release ? t.androidDownloadFallback : t.androidDownloadReleases}
-      </a>
+      {canDownload && (
+        <a
+          className="underline"
+          href={
+            release
+              ? `${androidReleasePage}/tag/${release.tag}`
+              : androidReleasePage
+          }
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {release ? t.androidDownloadFallback : t.androidDownloadReleases}
+        </a>
+      )}
       <p>{t.androidDownloadCompatibility}</p>
       <p>{t.androidDownloadMigration}</p>
       <Link className="underline" href="/">

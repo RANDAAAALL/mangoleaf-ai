@@ -28,6 +28,7 @@ import {
 } from "@/lib/native-storage";
 import {
   parseRecoveryCode,
+  RecoveryCodeError,
   prepareBackupRow,
   restoreBackupPhoto,
   sameBackup,
@@ -715,6 +716,9 @@ async function recoverySource(input: string, signal?: AbortSignal) {
       password: credential.password,
     });
     requireRecoveryTransfer(signal);
+    // Only a confirmed credential rejection is a wrong code; network/rate-limit errors stay general.
+    if (result.error?.code === "invalid_credentials")
+      throw new RecoveryCodeError("Recovery credential was not accepted.");
     if (result.error || !result.data.session)
       throw new Error("Recovery credential was not accepted.");
     const user = await active.auth.getUser();

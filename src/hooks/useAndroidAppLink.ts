@@ -12,13 +12,15 @@ const subscribe = () => () => {};
 const serverSnapshot = () => null;
 
 function appLink() {
-  if (isAndroidBuild() || !/Android/i.test(navigator.userAgent)) return null;
+  if (isAndroidBuild() || !/Android/i.test(navigator.userAgent)) return "";
   return androidLaunchLink(window.location.origin);
 }
 
 /** Installation is a browser hint, independent of native storage/Auth and never an authorization signal. */
 export function useAndroidAppLink() {
-  const href = useSyncExternalStore(subscribe, appLink, serverSnapshot);
+  // One snapshot distinguishes pending hydration (null) from a known unsupported browser (empty).
+  const deviceLink = useSyncExternalStore(subscribe, appLink, serverSnapshot);
+  const href = deviceLink || null;
   const [installed, setInstalled] = useState(false);
   useEffect(() => {
     if (!href) return;
@@ -38,5 +40,5 @@ export function useAndroidAppLink() {
       window.removeEventListener("pageshow", check);
     };
   }, [href]);
-  return { href, installed };
+  return { href, installed, ready: deviceLink !== null };
 }

@@ -50,10 +50,9 @@ import { HomeTab } from "@/components/tab/home-tab";
 import { HistoryTab } from "@/components/tab/history-tab";
 import { AboutTab } from "@/components/tab/about-tab";
 import { DiagnosticsPanel } from "@/components/tab/diagnostics-panel";
-import { BackupRecoveryPanel } from "@/components/tab/backup-recovery-panel";
+import { SettingsTab } from "@/components/tab/settings-tab";
 import { LegalModal } from "@/components/modal/legal-modal";
 import { AndroidUpdateModal } from "@/components/modal/android-update-modal";
-import { AndroidUpdatePanel } from "@/components/tab/android-update-panel";
 import { AndroidApkProgressModal } from "@/components/modal/android-apk-progress-modal";
 import { useAndroidApkInstall } from "@/hooks/useAndroidApkInstall";
 import type { AndroidApkOffer } from "@/lib/android-update";
@@ -71,7 +70,7 @@ import { ScanDetailsModal } from "@/components/modal/scan-details-modal";
 // classifier also shares its model-loading promise during an in-flight load.
 let hasInitialized = false;
 
-type AppTab = "home" | "history" | "about";
+type AppTab = "home" | "history" | "about" | "settings";
 
 // Probability rows exist only for the selected fresh result;
 // they are not saved to History.
@@ -747,7 +746,11 @@ export function Application() {
       if (savedScan) {
         setSelectedScan({
           ...savedScan,
-          diagnosedResultTabular,
+          // These rows are temporary Debug UI data, never part of the saved/cloud report.
+          ...(process.env.NEXT_PUBLIC_APP_TARGET === "android" &&
+          process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT === "testing"
+            ? { diagnosedResultTabular }
+            : {}),
         });
       }
       recordDiagnostic("diagnosis.result.opened", { operation });
@@ -934,6 +937,7 @@ export function Application() {
           showInstallButton={!isAndroidBuild()}
           activeTab={activeTab}
           onTabChange={handleTabChange}
+          onSettings={() => handleTabChange("settings")}
           onLanguageChange={setLanguage}
           onInstall={openInstallGuide}
           onLogoClick={() => handleTabChange("home")}
@@ -1001,24 +1005,19 @@ export function Application() {
             )}
 
             {activeTab === "about" && (
-              <AboutTab
-                language={language}
-                onScanPress={openScanSheet}
-                updateNotice={
-                  <AndroidUpdatePanel
-                    language={language}
-                    offer={apkOffer}
-                    onUpdate={apkInstaller.start}
-                    busy={apkInstaller.busy}
-                  />
-                }
-              >
-                {/* Load these with the APK entry so first About navigation cannot suspend the app. */}
-                <DiagnosticsPanel language={language} />
-                {isAndroidBuild() && (
-                  <BackupRecoveryPanel language={language} />
-                )}
+              <AboutTab language={language} onScanPress={openScanSheet}>
+                {/* The isolated browser scanner harness retains its diagnostic fixture. */}
+                {!isAndroidBuild() && <DiagnosticsPanel language={language} />}
               </AboutTab>
+            )}
+            {activeTab === "settings" && isAndroidBuild() && (
+              <SettingsTab
+                language={language}
+                onLanguageChange={setLanguage}
+                updateOffer={apkOffer}
+                onUpdate={apkInstaller.start}
+                updateBusy={apkInstaller.busy}
+              />
             )}
           </div>
         </main>
@@ -1090,7 +1089,12 @@ export function Application() {
       {selectedScan && (
         <ScanDetailsModal
           scan={selectedScan}
-          // diagnosedResultTabular={selectedScan.diagnosedResultTabular}
+          diagnosedResultTabular={
+            process.env.NEXT_PUBLIC_APP_TARGET === "android" &&
+            process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT === "testing"
+              ? selectedScan.diagnosedResultTabular
+              : undefined
+          }
           language={language}
           guidelineText={getGuidelineForScan(selectedScan.disease_name)}
           onLanguageChange={setLanguage}

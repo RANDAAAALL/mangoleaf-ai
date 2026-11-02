@@ -407,7 +407,7 @@ test("wrong or unverified source credentials cannot create or alter the receivin
         `
     if(${hasOwnCode}){seedOwner();await cloud.setBackupEnabled(false)}
     const before=[...settings],beforeSession=session;
-    await assert.rejects(cloud.restoreCloudBackup('MLB1.'+other+'.'+'B'.repeat(43)),/accepted/);
+    await assert.rejects(cloud.restoreCloudBackup('MLB1.'+other+'.'+'B'.repeat(43)),error=>error.name==='RecoveryCodeError'&&/accepted/.test(error.message));
     sourceVerifiedUser=user=>({...user,app_metadata:{}});
     await assert.rejects(cloud.restoreCloudBackup('MLB1.'+other+'.'+'A'.repeat(43)),/verified/);
     assert.deepEqual([...settings],before);assert.equal(session,beforeSession);
@@ -416,6 +416,20 @@ test("wrong or unverified source credentials cannot create or alter the receivin
   `,
         production,
       );
+});
+
+test("recovery format and credential rejection are distinct from transport failures", () => {
+  run(`
+    const {parseRecoveryCode,RecoveryCodeError}=await import('./src/lib/cloud-backup-format.ts');
+    assert.throws(()=>parseRecoveryCode('incomplete code'),RecoveryCodeError);
+    seedOwner();await cloud.setBackupEnabled(false);
+    const before=[...settings],beforeSession=session;
+    beforeSourceLogin=()=>{throw new Error('controlled connection failure')};
+    await assert.rejects(cloud.restoreCloudBackup('MLB1.'+other+'.'+'A'.repeat(43)),error=>!(error instanceof RecoveryCodeError));
+    assert.deepEqual([...settings],before);assert.equal(session,beforeSession);
+    assert.equal(creates,0);assert.equal(enrolls,0);assert.equal(uploads,0);
+    assert.ok(sourceReaders.every(reader=>reader.disposed));
+  `);
 });
 
 test("a failed receiving-code setup leaves uploads off and never attaches source credentials", () => {

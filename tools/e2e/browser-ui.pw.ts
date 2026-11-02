@@ -152,11 +152,14 @@ test("R04: every website size offers Home, About and Android installation withou
       await expect(
         page.getByRole("checkbox", { name: t.diagnosticsEnable, exact: true }),
       ).toHaveCount(0);
+      await expect(
+        page.getByRole("region", { name: t.backupTitle, exact: true }),
+      ).toHaveCount(0);
       await nav(page, t.navHome);
       await expect(
         page.getByRole("heading", { name: t.HowItWorksTitle, exact: true }),
       ).toBeVisible();
-      for (const label of [t.navHistory, t.navScan])
+      for (const label of [t.navHistory, t.navScan, t.navSettings])
         await expect(
           page.getByRole("button", { name: label, exact: true }),
         ).toHaveCount(0);

@@ -24,6 +24,7 @@ async function installBrowser(
     language?: Language;
     legacyStandalone?: boolean;
     otherDevice?: boolean;
+    userAgent?: string;
     relatedApps?: "confirmed" | "empty" | "reject" | "hang" | "wrong-package";
   } = {},
 ) {
@@ -48,9 +49,11 @@ async function installBrowser(
     localStorage.setItem("preferred_language", settings.language ?? "en");
     Object.defineProperty(navigator, "userAgent", {
       configurable: true,
-      value: settings.otherDevice
-        ? "Unsupported mobile device"
-        : "Mozilla/5.0 (Linux; Android 14; Pixel 7) Chrome/130.0.0.0 Mobile",
+      value:
+        settings.userAgent ??
+        (settings.otherDevice
+          ? "Unsupported mobile device"
+          : "Mozilla/5.0 (Linux; Android 14; Pixel 7) Chrome/130.0.0.0 Mobile"),
     });
     Object.defineProperty(navigator, "standalone", {
       configurable: true,
@@ -787,4 +790,92 @@ test.describe("release metadata service-worker freshness", () => {
       runtimeErrors.splice(runtimeErrors.indexOf(error), 1);
     }
   });
+});
+
+for (const [device, userAgent] of [
+  [
+    "iPhone",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1",
+  ],
+  [
+    "desktop-style iPad",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1",
+  ],
+  [
+    "desktop",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130.0.0.0 Safari/537.36",
+  ],
+])
+  test(`I16: unsupported download page hides APK actions for ${device}`, async ({
+    page,
+  }) => {
+    await installBrowser(page, { userAgent });
+    let metadataRequests = 0;
+    await page.route(androidReleaseApi, (route) => {
+      metadataRequests++;
+      return route.fulfill({
+        headers: { "Access-Control-Allow-Origin": "*" },
+        json: {
+          draft: false,
+          prerelease: false,
+          published_at: "2026-11-03T01:00:00Z",
+          tag_name: "v9.8.7",
+          html_url: `${androidReleasePage}/tag/v9.8.7`,
+          assets: [
+            {
+              name: androidApkAsset,
+              label: "Android APK v0.1.4",
+              state: "uploaded",
+              size: 4096,
+              content_type: "application/vnd.android.package-archive",
+              browser_download_url: `${androidReleasePage}/download/v9.8.7/${androidApkAsset}`,
+            },
+          ],
+        },
+      });
+    });
+    await page.goto("/download");
+    for (const language of ["bis", "en"] as const) {
+      const t = translations[language];
+      await expect(page.getByRole("status")).toHaveText(
+        t.androidDownloadAndroidOnly,
+      );
+      await expect(
+        page.getByRole("link", { name: t.androidDownloadApk, exact: true }),
+      ).toHaveCount(0);
+      await expect(
+        page.getByRole("link", {
+          name: t.androidDownloadFallback,
+          exact: true,
+        }),
+      ).toHaveCount(0);
+      await expect(
+        page.locator('a[href^="intent:"], a[href*=".apk"], a[download]'),
+      ).toHaveCount(0);
+      if (language === "bis")
+        await page
+          .getByRole("button", { name: "EN / BIS", exact: true })
+          .click();
+    }
+    expect(metadataRequests).toBe(0);
+  });
+
+test("I17: Home counts seven conditions including both healthy outcomes in each language", async ({
+  page,
+}) => {
+  await openWebsite(page);
+  for (const language of ["en", "bis"] as const) {
+    // Startup fixtures seed English on reload; exercise the real language control instead.
+    if (language === "bis")
+      await page
+        .getByRole("button", { name: /^(EN|EN\/BIS)$/, exact: true })
+        .filter({ visible: true })
+        .click();
+    const t = translations[language];
+    await expect(
+      page.getByRole("heading", { name: t.detectableTitle, exact: true }),
+    ).toBeVisible();
+    await expect(page.getByText(t.healthyLabel, { exact: true })).toBeVisible();
+    expect(t.detectableTitle.startsWith("7")).toBe(true);
+  }
 });

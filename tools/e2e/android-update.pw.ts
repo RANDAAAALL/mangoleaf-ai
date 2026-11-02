@@ -29,7 +29,7 @@ test("A06: native backup stays local before code setup and offers no Resume bypa
     const t = translations[language];
     await openHarness(page, language === "bis" ? "?bis" : "");
     await expect(
-      page.getByText(t.backupLocalOnly, { exact: true }),
+      page.getByText(t.backupNotSetUp, { exact: true }),
     ).toBeVisible();
     await expect(
       page.getByRole("button", { name: t.backupCreate, exact: true }),
@@ -91,18 +91,14 @@ test("A04: extracted recovery form focuses input and clears text without touchin
   for (const language of ["en", "bis"] as const) {
     await openHarness(page, language === "bis" ? "?bis" : "");
     const t = translations[language];
-    await page
-      .getByRole("button", { name: t.backupEnterCode, exact: true })
-      .click();
     const input = page.getByLabel(t.backupRestoreCodeLabel, { exact: true });
-    await expect(input).toBeFocused();
     await input.fill("incorrect fixture credential");
     await page
       .getByRole("button", { name: t.backupRestore, exact: true })
       .click();
     // Invalid syntax fails locally; the fixture refuses every external request.
     await expect(
-      page.getByRole("status").filter({ hasText: t.backupError }),
+      page.getByRole("alert").filter({ hasText: t.backupCodeInvalid }),
     ).toBeVisible();
     await expect(input).toHaveValue("incorrect fixture credential");
     const writes = await page.evaluate(
@@ -111,9 +107,7 @@ test("A04: extracted recovery form focuses input and clears text without touchin
           (call) => call === "storage.settings.set",
         ).length,
     );
-    await page
-      .getByRole("button", { name: t.backupClearInput, exact: true })
-      .click();
+    await input.fill("");
     await expect(input).toHaveValue("");
     await expect(input).toBeFocused();
     expect(
@@ -273,7 +267,7 @@ test("A08: APK notice Later and Escape dismiss during this foreground visit; Deb
   await page.evaluate(() => window.updateTest.block(false));
   await page.clock.runFor(20_000);
   await expect(page.getByRole("dialog")).toHaveCount(0);
-  await page.locator("#about").click();
+  await openUpdates(page);
   await expect(
     page.getByRole("heading", {
       name: translations.en.androidApkUpdateAboutTitle,
@@ -281,6 +275,23 @@ test("A08: APK notice Later and Escape dismiss during this foreground visit; Deb
     }),
   ).toHaveCount(0);
 });
+
+async function openUpdates(page: Page) {
+  await page.locator("#settings").click();
+  const label = (await page.evaluate(() =>
+    new URLSearchParams(location.search).has("bis"),
+  ))
+    ? translations.bis.settingsUpdates
+    : translations.en.settingsUpdates;
+  const heading = page.getByRole("heading", {
+    name: label,
+    level: 1,
+    exact: true,
+  });
+  // Repeated opening may already be on this child page.
+  if (!(await heading.isVisible()))
+    await page.getByRole("button", { name: new RegExp("^" + label) }).click();
+}
 
 async function setVisibility(page: Page, value: "visible" | "hidden") {
   // Controlled WebView lifecycle signal; physical Activity/background behavior needs phone evidence.
@@ -293,7 +304,7 @@ async function setVisibility(page: Page, value: "visible" | "hidden") {
   }, value);
 }
 
-test("A09: APK close/Later/Escape keep the About download and reoffer on the next online idle foreground visit", async ({
+test("A09: APK close/Later/Escape keep the Settings download and reoffer on the next online idle foreground visit", async ({
   page,
 }) => {
   for (const language of ["en", "bis"] as const) {
@@ -313,7 +324,7 @@ test("A09: APK close/Later/Escape keep the About download and reoffer on the nex
           })
           .click();
       await expect(dialog).toHaveCount(0);
-      await page.locator("#about").click();
+      await openUpdates(page);
       const panel = page.getByRole("region", {
         name: t.androidApkUpdateAboutTitle,
         exact: true,
@@ -327,7 +338,7 @@ test("A09: APK close/Later/Escape keep the About download and reoffer on the nex
       ).toBeEnabled();
       await expect(panel.getByRole("link")).toHaveCount(0);
       await page.locator("#launcher").click();
-      await page.locator("#about").click();
+      await openUpdates(page);
       await page.clock.runFor(60_000);
       await expect(dialog).toHaveCount(0);
       await setVisibility(page, "hidden");
@@ -346,13 +357,13 @@ test("A09: APK close/Later/Escape keep the About download and reoffer on the nex
   }
 });
 
-test("A10: an installed current APK has no popup or About download card", async ({
+test("A10: an installed current APK has no popup or confirmed update card", async ({
   page,
 }) => {
   await openHarness(page, "?apk-update&updated");
   await page.evaluate(() => window.updateTest.block(false));
   await page.clock.runFor(20_000);
-  await page.locator("#about").click();
+  await openUpdates(page);
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(
     page.getByRole("heading", {
@@ -362,7 +373,7 @@ test("A10: an installed current APK has no popup or About download card", async 
   ).toHaveCount(0);
 });
 
-test("A11: known About update stays visible offline with a disabled action and no new popup until reconnection", async ({
+test("A11: known Settings update stays visible offline with a disabled action and no new popup until reconnection", async ({
   page,
 }) => {
   for (const language of ["en", "bis"] as const) {
@@ -374,7 +385,7 @@ test("A11: known About update stays visible offline with a disabled action and n
       .getByRole("dialog")
       .getByRole("button", { name: t.androidApkUpdateLater, exact: true })
       .click();
-    await page.locator("#about").click();
+    await openUpdates(page);
     await page.evaluate(() => window.updateTest.online(false));
     const panel = page.getByRole("region", {
       name: t.androidApkUpdateAboutTitle,
@@ -404,22 +415,22 @@ test("A11: known About update stays visible offline with a disabled action and n
   }
 });
 
-test("A12: popup and About share native download progress and automatic Android handoff without a browser", async ({
+test("A12: popup and Settings share native download progress and automatic Android handoff without a browser", async ({
   page,
   context,
 }) => {
   for (const language of ["en", "bis"] as const) {
     const t = translations[language];
-    for (const entry of ["popup", "about"]) {
+    for (const entry of ["popup", "settings"]) {
       await openHarness(page, `?apk-update&${language === "bis" ? "bis" : ""}`);
       await page.evaluate(() => window.updateTest.block(false));
       await page.clock.runFor(15_000);
-      if (entry === "about") {
+      if (entry === "settings") {
         await page
           .getByRole("dialog")
           .getByRole("button", { name: t.androidApkUpdateLater, exact: true })
           .click();
-        await page.locator("#about").click();
+        await openUpdates(page);
       }
       await page
         .getByRole("button", { name: t.androidApkUpdateNow, exact: true })
@@ -557,7 +568,7 @@ test("A13: progress X and Escape cancel the download; connection failure keeps t
   }
 });
 
-test("A14: returning from Android Cancel does not reoffer immediately; About permits an explicit retry", async ({
+test("A14: returning from Android Cancel does not reoffer immediately; Settings permits an explicit retry", async ({
   page,
 }) => {
   const t = translations.en;
@@ -594,7 +605,7 @@ test("A14: returning from Android Cancel does not reoffer immediately; About per
           .length,
     ),
   ).toBe(1);
-  await page.locator("#about").click();
+  await openUpdates(page);
   await page
     .getByRole("region", { name: t.androidApkUpdateAboutTitle, exact: true })
     .getByRole("button", { name: t.androidApkUpdateNow, exact: true })

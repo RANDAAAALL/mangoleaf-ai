@@ -9,8 +9,9 @@ interface TopHeaderProps {
   language: Language;
   showInstallButton: boolean;
   browserLanding?: boolean;
-  activeTab: "home" | "history" | "about";
+  activeTab: "home" | "history" | "about" | "settings";
   onTabChange: (tab: "home" | "history" | "about") => void;
+  onSettings?: () => void;
   onLanguageChange: (lang: Language) => void;
   onInstall: () => void;
   onLogoClick: () => void;
@@ -22,6 +23,7 @@ export const TopHeader = memo(function TopHeader({
   browserLanding = false,
   activeTab,
   onTabChange,
+  onSettings,
   onLanguageChange,
   onInstall,
   onLogoClick,
@@ -91,17 +93,29 @@ export const TopHeader = memo(function TopHeader({
             >
               {t.navAbout}
             </button>
+            {isAndroidBuild() && (
+              <button
+                onClick={onSettings}
+                className={`hover:text-[#277839] transition-colors cursor-pointer ${activeTab === "settings" ? "text-[#277839] font-bold" : ""}`}
+              >
+                {t.navSettings}
+              </button>
+            )}
           </nav>
 
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => onLanguageChange(language === "en" ? "bis" : "en")}
-              className="flex shrink-0 items-center gap-1.5 px-2 md:px-3.5 py-2 bg-white border border-[#1b3d20] rounded-xl text-xs font-bold text-[#1b3d20] hover:bg-[#f0f7eb] transition-all cursor-pointer shadow-xs"
-            >
-              <Icon name="language" size={16} fill="#1b3d20" />
-              <span>{language === "en" ? "EN/BIS" : "BIS/EN"}</span>
-            </button>
-          </div>
+          {!isAndroidBuild() && (
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() =>
+                  onLanguageChange(language === "en" ? "bis" : "en")
+                }
+                className="flex shrink-0 items-center gap-1.5 px-2 md:px-3.5 py-2 bg-white border border-[#1b3d20] rounded-xl text-xs font-bold text-[#1b3d20] hover:bg-[#f0f7eb] transition-all cursor-pointer shadow-xs"
+              >
+                <Icon name="language" size={16} fill="#1b3d20" />
+                <span>{language === "en" ? "EN/BIS" : "BIS/EN"}</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>

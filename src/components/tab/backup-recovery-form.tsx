@@ -1,5 +1,7 @@
-import type { RefObject } from "react";
+import { useState, type RefObject } from "react";
 import { translations, type Language } from "@/lib/translations";
+import { parseRecoveryCode } from "@/lib/cloud-backup-format";
+import { BackupActionButton } from "@/components/tab/backup-action-button";
 
 /** This form only edits typed input; clearing it never disconnects the saved recovery identity. */
 export function BackupRecoveryForm({
@@ -9,6 +11,7 @@ export function BackupRecoveryForm({
   inputRef,
   onChange,
   onRestore,
+  codeRejected = false,
 }: {
   language: Language;
   busy: boolean;
@@ -16,20 +19,41 @@ export function BackupRecoveryForm({
   inputRef: RefObject<HTMLInputElement | null>;
   onChange: (value: string) => void;
   onRestore: () => void;
+  codeRejected?: boolean;
 }) {
   const t = translations[language];
+  const [validation, setValidation] = useState<"required" | "invalid" | null>(
+    null,
+  );
+  const problem =
+    validation === "required"
+      ? t.backupCodeRequired
+      : validation === "invalid" || codeRejected
+        ? t.backupCodeInvalid
+        : "";
   return (
     <form
       className="flex flex-col gap-3"
       onSubmit={(event) => {
         event.preventDefault();
-        if (value.trim() && !busy) onRestore();
+        if (busy) return;
+        if (!value.trim()) {
+          setValidation("required");
+          inputRef.current?.focus();
+          return;
+        }
+        try {
+          parseRecoveryCode(value);
+        } catch {
+          setValidation("invalid");
+          inputRef.current?.focus();
+          return;
+        }
+        setValidation(null);
+        onRestore();
       }}
     >
-      <label
-        className="flex flex-col gap-2 text-sm font-semibold"
-        htmlFor="backup-code-input"
-      >
+      <label className="sr-only" htmlFor="backup-code-input">
         {t.backupRestoreCodeLabel}
       </label>
       <input
@@ -39,32 +63,29 @@ export function BackupRecoveryForm({
         autoComplete="off"
         autoCapitalize="none"
         spellCheck={false}
+        aria-invalid={!!problem || undefined}
+        aria-describedby={problem ? "backup-code-error" : undefined}
+        placeholder={t.backupCodePlaceholder}
         value={value}
         disabled={busy}
-        onChange={(event) => onChange(event.target.value)}
-        className="min-w-0 rounded-xl border border-[#b8d7b5] p-3 font-mono text-sm"
+        onChange={(event) => {
+          setValidation(null);
+          onChange(event.target.value);
+        }}
+        className="min-w-0 w-full rounded-2xl border border-[#c6d9c0] bg-white p-4 text-base"
       />
-      <p className="text-sm leading-relaxed">{t.backupMergeHint}</p>
-      <div className="grid grid-cols-2 gap-3">
-        <button
-          type="button"
-          disabled={busy || !value}
-          onClick={() => {
-            onChange("");
-            inputRef.current?.focus();
-          }}
-          className="min-h-11 rounded-xl border border-[#277839] px-4 py-3 font-semibold text-[#1c682d] disabled:opacity-50"
+      {problem && (
+        <p
+          id="backup-code-error"
+          role="alert"
+          className="text-sm text-[#99451f]"
         >
-          {t.backupClearInput}
-        </button>
-        <button
-          type="submit"
-          disabled={busy || !value.trim()}
-          className="min-h-11 rounded-xl border border-[#277839] px-4 py-3 font-semibold text-[#1c682d] disabled:opacity-50"
-        >
-          {t.backupRestore}
-        </button>
-      </div>
+          {problem}
+        </p>
+      )}
+      <BackupActionButton type="submit" disabled={busy}>
+        {t.backupRestore}
+      </BackupActionButton>
     </form>
   );
 }

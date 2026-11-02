@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { AndroidUpdateModal } from "@/components/modal/android-update-modal";
 import { BackupRecoveryPanel } from "@/components/tab/backup-recovery-panel";
 import { AboutTab } from "@/components/tab/about-tab";
-import { AndroidUpdatePanel } from "@/components/tab/android-update-panel";
+import { SettingsTab } from "@/components/tab/settings-tab";
 import { AndroidApkProgressModal } from "@/components/modal/android-apk-progress-modal";
 import { useAndroidApkInstall } from "@/hooks/useAndroidApkInstall";
 import type { AndroidApkOffer } from "@/lib/android-update";
@@ -80,6 +80,7 @@ Object.assign(window, { MangoLeafNative: port });
 function Harness() {
   const [blocked, setBlocked] = useState(true);
   const [about, setAbout] = useState(false);
+  const [settings, setSettings] = useState(false);
   const [apkOffer, setApkOffer] = useState<AndroidApkOffer | null>(null);
   const [language] = useState<Language>(query.has("bis") ? "bis" : "en");
   const apkInstaller = useAndroidApkInstall(blocked);
@@ -113,25 +114,42 @@ function Harness() {
   }, []);
   return (
     <>
-      <button id="launcher" onClick={() => setAbout(false)}>
+      <button
+        id="launcher"
+        onClick={() => {
+          setAbout(false);
+          setSettings(false);
+        }}
+      >
         Home
       </button>
-      <button id="about" onClick={() => setAbout(true)}>
+      <button
+        id="about"
+        onClick={() => {
+          setAbout(true);
+          setSettings(false);
+        }}
+      >
         About
       </button>
+      <button
+        id="settings"
+        onClick={() => {
+          setAbout(false);
+          setSettings(true);
+        }}
+      >
+        Settings
+      </button>
       <input id="typing" aria-label="Test text input" />
-      {about && (
-        <AboutTab
+      {about && <AboutTab language={language} onScanPress={() => {}} />}
+      {settings && (
+        <SettingsTab
           language={language}
-          onScanPress={() => {}}
-          updateNotice={
-            <AndroidUpdatePanel
-              language={language}
-              offer={apkOffer}
-              onUpdate={apkInstaller.start}
-              busy={apkInstaller.busy}
-            />
-          }
+          onLanguageChange={() => {}}
+          updateOffer={apkOffer}
+          onUpdate={apkInstaller.start}
+          updateBusy={apkInstaller.busy}
         />
       )}
       <BackupRecoveryPanel language={language} />

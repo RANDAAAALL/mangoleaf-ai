@@ -25,9 +25,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
   guidelineText,
   onLanguageChange,
   onClose,
-  // An empty array hides rows for saved reports.
-  // Enable or disable all three PANEL TABLE sections together.
-  // PANEL TABLE 1/3: Comment only the parameter line below to hide the table.
+  // Saved reports have no score rows; only a fresh Debug APK result supplies them.
   diagnosedResultTabular = [],
 }: ScanDetailsModalProps) {
   const t = translations[language];
@@ -35,37 +33,39 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
 
   // These percentages are model scores,
   // not measured accuracy. Rejected scans keep their existing diagnosis label.
-  // PANEL TABLE 2/3 START: Comment the code below through its closing ); line.
-  const classProbabilityTable = diagnosedResultTabular.length > 0 && (
-    <div className="overflow-x-auto border-t border-[#e2ebd9] pt-4">
-      <table className="w-full text-sm text-[#143519]">
-        <caption className="mb-2 text-center font-semibold">
-          {t.classProbabilityHeading}
-        </caption>
-        <thead>
-          <tr className="border-b border-[#e2ebd9]">
-            <th scope="col" className="py-2 text-left">
-              {t.classColumn}
-            </th>
-            <th scope="col" className="py-2 text-right">
-              {t.probabilityColumn}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {diagnosedResultTabular.map((row) => (
-            <tr key={row.Class} className="border-b border-[#e2ebd9]">
-              <td className="py-2">{row.Class}</td>
-              <td className="py-2 text-right tabular-nums">
-                {row.Probability}
-              </td>
+  // Compile-time product gates also protect against an accidental caller passing rows in Release/web.
+  const classProbabilityTable = process.env.NEXT_PUBLIC_APP_TARGET ===
+    "android" &&
+    process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT === "testing" &&
+    diagnosedResultTabular.length > 0 && (
+      <div className="overflow-x-auto border-t border-[#e2ebd9] pt-4">
+        <table className="w-full text-sm text-[#143519]">
+          <caption className="mb-2 text-center font-semibold">
+            {t.classProbabilityHeading}
+          </caption>
+          <thead>
+            <tr className="border-b border-[#e2ebd9]">
+              <th scope="col" className="py-2 text-left">
+                {t.classColumn}
+              </th>
+              <th scope="col" className="py-2 text-right">
+                {t.probabilityColumn}
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-  // PANEL TABLE 2/3 END
+          </thead>
+          <tbody>
+            {diagnosedResultTabular.map((row) => (
+              <tr key={row.Class} className="border-b border-[#e2ebd9]">
+                <td className="py-2">{row.Class}</td>
+                <td className="py-2 text-right tabular-nums">
+                  {row.Probability}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 md:backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
@@ -155,10 +155,7 @@ export const ScanDetailsModal = memo(function ScanDetailsModal({
               {/* </div> */}
             </div>
 
-            {
-              // PANEL TABLE 3/3: Comment only the line below; keep the surrounding braces.
-              classProbabilityTable
-            }
+            {classProbabilityTable}
 
             {/* Treatment Guidelines Section */}
             <div className="border-t border-[#e2ebd9] pt-4 flex flex-col gap-3">

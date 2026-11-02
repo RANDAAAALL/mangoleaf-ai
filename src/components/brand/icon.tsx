@@ -6,6 +6,12 @@ export type IconName =
   | "history"
   | "install"
   | "language"
+  | "settings"
+  | "cloud-check"
+  | "arrow-left"
+  | "eye"
+  | "eye-off"
+  | "copy"
   | "camera"
   | "upload"
   | "gallery"
@@ -59,6 +65,39 @@ const FA_PATHS: Record<string, string> = {
  * hardcodes either.
  */
 const STROKE_24_SHAPES: Partial<Record<IconName, React.ReactNode>> = {
+  settings: (
+    <>
+      <path d="M3 6h4m4 0h10M3 12h10m4 0h4M3 18h4m4 0h10" />
+      <circle cx="9" cy="6" r="2" />
+      <circle cx="15" cy="12" r="2" />
+      <circle cx="9" cy="18" r="2" />
+    </>
+  ),
+  "cloud-check": (
+    <>
+      <path d="M7 18a5 5 0 0 1-1-9.9A7 7 0 0 1 19 8a5 5 0 0 1-1 10H7Z" />
+      <path d="m9 12 2 2 4-4" />
+    </>
+  ),
+  "arrow-left": <path d="m15 5-7 7 7 7" />,
+  eye: (
+    <>
+      <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </>
+  ),
+  "eye-off": (
+    <>
+      <path d="m3 3 18 18M10.6 5.1 12 5c6 0 10 7 10 7a20 20 0 0 1-3 3.7M6.2 6.2A22 22 0 0 0 2 12s4 7 10 7a11 11 0 0 0 5.8-1.8" />
+      <path d="M10 10a3 3 0 0 0 4 4" />
+    </>
+  ),
+  copy: (
+    <>
+      <rect x="8" y="8" width="12" height="13" rx="2" />
+      <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" />
+    </>
+  ),
   android: (
     <>
       <path d="m7 4-2-3m12 3 2-3M4 11a8 8 0 0116 0v1H4zM6 12v7h12v-7M8 19v3m8-3v3M3 14v4m18-4v4" />

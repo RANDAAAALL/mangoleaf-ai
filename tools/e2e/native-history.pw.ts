@@ -24,7 +24,7 @@ test.beforeAll(() => {
       "-e",
       `
     const result=await Bun.build({entrypoints:['tools/e2e/support/native-history-harness.tsx'],target:'browser',
-      define:{'process.env.NODE_ENV':'"production"','process.env.NEXT_PUBLIC_APP_TARGET':'"android"'}});
+      define:{'process.env.NODE_ENV':'"production"','process.env.NEXT_PUBLIC_APP_TARGET':'"android"','process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT':'"testing"'}});
     if(!result.success)throw Error(String(result.logs));
     await Bun.write('.tools/performance-20261026/native-history-harness.js',result.outputs[0]);
   `,

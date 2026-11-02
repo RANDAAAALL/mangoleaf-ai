@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDiagnostics } from "@/hooks/useDiagnostics";
 import {
   clearDiagnostics,
@@ -11,7 +11,13 @@ import { translations, type Language } from "@/lib/translations";
 import { downloadDiagnosticLog } from "@/lib/diagnostics-export";
 
 /** One optional viewer for the recorder shared by the whole application. */
-export function DiagnosticsPanel({ language }: { language: Language }) {
+export function DiagnosticsPanel({
+  language,
+  embedded = false,
+}: {
+  language: Language;
+  embedded?: boolean;
+}) {
   const t = translations[language];
   const snapshot = useDiagnostics();
   const [expanded, setExpanded] = useState(false);
@@ -20,6 +26,43 @@ export function DiagnosticsPanel({ language }: { language: Language }) {
   >(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
   const [downloading, setDownloading] = useState(false);
+  const [copying, setCopying] = useState(false);
+  const mounted = useRef(false);
+  const feedbackRevision = useRef(0);
+  const downloadPending = useRef(false);
+  const copyPending = useRef(false);
+  // Feedback-only renders reuse the same bounded log; exports still format fresh evidence on demand.
+  const logText = useMemo(
+    () => (expanded ? formatDiagnostics(snapshot) : ""),
+    [expanded, snapshot],
+  );
+
+  useEffect(() => {
+    mounted.current = true;
+    const inactive = () => {
+      feedbackRevision.current++;
+      if (mounted.current) setFeedback(null);
+    };
+    const visibility = () => {
+      if (document.visibilityState !== "visible") inactive();
+    };
+    document.addEventListener("visibilitychange", visibility);
+    window.addEventListener("pagehide", inactive);
+    return () => {
+      mounted.current = false;
+      inactive();
+      document.removeEventListener("visibilitychange", visibility);
+      window.removeEventListener("pagehide", inactive);
+    };
+  }, []);
+
+  function current(revision: number) {
+    return (
+      mounted.current &&
+      feedbackRevision.current === revision &&
+      document.visibilityState === "visible"
+    );
+  }
   const buttonClass =
     "min-h-11 rounded-xl border border-[#b4d2ac] bg-white px-4 py-2 text-sm font-bold text-[#245f2d] hover:bg-[#edf6e9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#277839]";
   const feedbackText = {
@@ -30,46 +73,61 @@ export function DiagnosticsPanel({ language }: { language: Language }) {
   };
 
   async function copyLogs() {
+    if (copyPending.current) return;
+    copyPending.current = true;
+    setCopying(true);
+    const revision = ++feedbackRevision.current;
     recordDiagnostic("diagnostics.copy");
     try {
       if (!navigator.clipboard?.writeText)
         throw new Error("Clipboard unavailable");
       await navigator.clipboard.writeText(formatDiagnostics());
-      setFeedback("copied");
+      if (current(revision)) setFeedback("copied");
     } catch {
       // Keep manual selection available when mobile clipboard permission fails.
-      textRef.current?.focus();
-      textRef.current?.select();
-      setFeedback("copyFailed");
+      if (current(revision)) {
+        textRef.current?.focus();
+        textRef.current?.select();
+        setFeedback("copyFailed");
+      }
+    } finally {
+      copyPending.current = false;
+      if (mounted.current) setCopying(false);
     }
   }
 
   async function downloadLogs() {
-    if (downloading) return;
+    if (downloadPending.current) return;
+    downloadPending.current = true;
+    const revision = ++feedbackRevision.current;
     setDownloading(true);
     recordDiagnostic("diagnostics.download");
     try {
       await downloadDiagnosticLog(formatDiagnostics());
-      setFeedback(null);
+      if (current(revision)) setFeedback(null);
     } catch {
-      setFeedback("downloadFailed");
+      if (current(revision)) setFeedback("downloadFailed");
     } finally {
-      setDownloading(false);
+      downloadPending.current = false;
+      if (mounted.current) setDownloading(false);
     }
   }
 
   return (
     <section
-      aria-labelledby="diagnostics-heading"
+      aria-label={embedded ? t.diagnosticsTitle : undefined}
+      aria-labelledby={embedded ? undefined : "diagnostics-heading"}
       className="rounded-3xl border border-[#cfe2c8] bg-white p-6 sm:p-8"
       lang={language === "en" ? "en" : "ceb"}
     >
-      <h2
-        id="diagnostics-heading"
-        className="text-2xl font-bold tracking-tight text-[#143519]"
-      >
-        {t.diagnosticsTitle}
-      </h2>
+      {!embedded && (
+        <h2
+          id="diagnostics-heading"
+          className="text-2xl font-bold tracking-tight text-[#143519]"
+        >
+          {t.diagnosticsTitle}
+        </h2>
+      )}
       <p className="mt-3 max-w-3xl text-sm leading-6 text-[#526856]">
         {t.diagnosticsDescription}
       </p>
@@ -78,6 +136,7 @@ export function DiagnosticsPanel({ language }: { language: Language }) {
           type="checkbox"
           checked={snapshot.enabled}
           onChange={(event) => {
+            feedbackRevision.current++;
             setDiagnosticsEnabled(event.target.checked);
             setFeedback(null);
           }}
@@ -99,6 +158,7 @@ export function DiagnosticsPanel({ language }: { language: Language }) {
         aria-controls="diagnostics-viewer"
         className={`${buttonClass} mt-4`}
         onClick={() => {
+          feedbackRevision.current++;
           if (!expanded) recordDiagnostic("diagnostics.open");
           setExpanded(!expanded);
           setFeedback(null);
@@ -119,12 +179,18 @@ export function DiagnosticsPanel({ language }: { language: Language }) {
             aria-label={t.diagnosticsLogLabel}
             readOnly
             spellCheck={false}
-            value={formatDiagnostics()}
+            value={logText}
             rows={12}
             className="w-full rounded-xl border border-[#cfe2c8] bg-[#f6faf1] p-3 font-mono text-xs leading-5 text-[#143519] focus-visible:outline-2 focus-visible:outline-[#277839]"
           />
           <div className="mt-3 flex flex-wrap gap-2">
-            <button type="button" className={buttonClass} onClick={copyLogs}>
+            <button
+              type="button"
+              className={buttonClass}
+              onClick={copyLogs}
+              disabled={copying}
+              aria-busy={copying}
+            >
               {t.diagnosticsCopy}
             </button>
             <button
@@ -140,6 +206,8 @@ export function DiagnosticsPanel({ language }: { language: Language }) {
               type="button"
               className={buttonClass}
               onClick={() => {
+                // A late clipboard/export result must not overwrite this newer Clear action.
+                feedbackRevision.current++;
                 clearDiagnostics();
                 setFeedback("cleared");
               }}

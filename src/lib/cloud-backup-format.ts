@@ -51,12 +51,18 @@ export function sameCloudScan(
 }
 
 /** Recovery codes are credentials, not device identifiers or public lookup keys. */
+export class RecoveryCodeError extends Error {
+  constructor(message = "Invalid recovery credential.") {
+    super(message);
+    this.name = "RecoveryCodeError";
+  }
+}
+
 export function parseRecoveryCode(input: string) {
   const match = /^MLB1\.([0-9a-f-]{36})\.([A-Za-z0-9_-]{43})$/.exec(
     input.trim(),
   );
-  if (!match || !uuid.test(match[1]))
-    throw new Error("Invalid recovery credential.");
+  if (!match || !uuid.test(match[1])) throw new RecoveryCodeError();
   return {
     email: `${match[1]}@backup.mangoleaf.invalid`,
     password: match[2],

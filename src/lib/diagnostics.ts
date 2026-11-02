@@ -367,21 +367,23 @@ export function createDiagnosticOperation(prefix: string): string {
 }
 
 /** Technical evidence export; UI labels and help remain in translations.ts. */
-export function formatDiagnostics(): string {
+export function formatDiagnostics(
+  currentSnapshot: DiagnosticSnapshot = snapshot,
+): string {
   const lines = [
     "MangoLeafAI diagnostics",
     `exportedAt=${new Date().toISOString()}`,
     `appVersion=${process.env.NEXT_PUBLIC_APP_VERSION ?? "unknown"}`,
     `modelVersion=${modelVersion}`,
-    `enabled=${snapshot.enabled}`,
-    `persistence=${snapshot.persistence}`,
-    `events=${snapshot.events.length}`,
+    `enabled=${currentSnapshot.enabled}`,
+    `persistence=${currentSnapshot.persistence}`,
+    `events=${currentSnapshot.events.length}`,
     ...Object.entries(diagnosticContext())
       .filter(([key]) => key !== "appVersion" && key !== "modelVersion")
       .map(([key, value]) => `${key}=${value}`),
     "",
   ];
-  for (const entry of snapshot.events) {
+  for (const entry of currentSnapshot.events) {
     const details = Object.entries(entry.details)
       .map(([key, value]) => `${key}=${value}`)
       .join(" ");
