@@ -30,13 +30,13 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 - Queue deletion of a report's copies in its connected cloud backup, including offline retries. This does not delete copies already restored on another phone; see [backup and deletion behavior](docs/security/SECURITY-AND-SYNC.md).
 - Open an installed Android app from the website, or follow the APK installation guide. Supported browsers show **Open app** when they can confirm the installation.
 - Offer **Restart now** / **Later** when a compatible, signed web update is ready in the production APK. Debug does not install production OTA updates.
-- Enable optional diagnostics in the APK About tab, reproduce an issue, and copy or download recent local events without phone DevTools. Recording is off by default.
+- Enable optional diagnostics in the APK Settings screen, reproduce an issue, and copy or download recent local events without phone DevTools. Recording is off by default.
 
 ## Download and status
 
-Source prepares **app v0.12.0 / APK v0.1.8/code 9** (Debug **0.1.8-dev**, OTA bounds **9-9**) with adopted **Model V4.5.0**. Candidate behavior and validation are maintained in the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md) and [current test record](docs/testing/TESTING.md#october-26-2026).
+Source prepares **app v0.13.0 / APK v0.1.9/code 10** (Debug **0.1.9-dev**, OTA bounds **10-10**) with adopted **Model V5.1.0**. Adoption preserves the reviewed model weights and confidence-only 70% rule; release remains pending. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md), [model adoption](docs/versions/AI_MODEL_VERSIONING.md#current-adopted-model-v510-november-3-2026) and [November 3 checks](docs/testing/TESTING.md#november-3-2026).
 
-The [official download page](https://mangoleafai.vercel.app/download) provides published APKs; [v0.11.0 / APK 0.1.7](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.11.0) has its own retained release evidence. New source is unpublished. Debug/testing checks and current-input R03 passed; production-signed/staged checks, CI and release/promotion remain pending. See the [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
+The [official download page](https://mangoleafai.vercel.app/download) provides published APKs; [v0.12.0 / APK 0.1.8](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.12.0) has its own retained release evidence. New source is unpublished. Debug/testing checks and current-input R03 passed; production-signed/staged checks, CI and release/promotion remain pending. See the [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
 
 ## Technology
 

@@ -1,5 +1,37 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## V5.1.0 adoption and cache identity (November 3, 2026)
+
+App 0.13.0 adopts V5.1.0 with the same graph/shard bytes as the reviewed local candidate. Runtime configuration metadata and report/cache identities change; preprocessing, folded temperature, 70% confidence-only acceptance and the forced-16-bit WebGL setting remain unchanged. Adoption retires the candidate/V4.5.0 model caches without clearing History, private photos or credentials. The [adoption receipt](model-training/non-experiment/v5.1.0/artifacts/adoption_20261103.json) records exact file bytes and hashes.
+
+This is not a new speed/memory optimization or numerical Keras/browser parity result. Recorded Colab mango/OOD measurements and the known 193/995 unsupported false acceptances remain separate from application performance and physical-device evidence. Earlier dated timing/R03 results identify their original source/model; current candidate checks are in [November 3 testing](testing/TESTING.md#november-3-2026).
+
+**Follow-up verification:** the offline API-36 emulator recording shows a steady native leaf followed directly by the React loader, with no intermediate smaller leaf/white frame. Its software-rendered timing is not a physical startup benchmark. Some runs had initialization failures/prolonged loading, and Back repeats were inconclusive; these remain explicit limits in [November 2 testing](testing/TESTING.md#november-2-2026).
+
+## Settings status and feedback audit (November 3, 2026)
+
+The audit reproduced redundant status reads on backup entry and return from unrelated pages. One mounted preferences controller now serves Settings and Backup, coalesces refreshes and reads again after mutations. It neither caches a resolved recovery code nor begins Auth/uploads. A controlled comparison compiled preserved pre-audit components and current components against the same mock service and CSS:
+
+| Cumulative preference-service calls | Before | After |
+| ----------------------------------- | ------ | ----- |
+| Open Settings                       | 1      | 1     |
+| Open Backup                         | 2      | 1     |
+| Change On/Pause                     | 3      | 2     |
+| Return from Backup                  | 4      | 2     |
+| Visit Diagnostics and return        | 5      | 2     |
+
+These are synthetic service-invocation counts for that sequence, not measured phone speed, native disk latency or live cloud traffic. Source/script hashes and phase counts remain in ignored `.tools/settings-audit-20261103/preference-comparison.json`. Show/Copy share only an in-flight local code read; privacy guards decide whether each result may be used. Diagnostics formats its bounded viewer snapshot when recorder data or expansion changes, avoiding feedback-only serialization; explicit export remains fresh.
+
+The review retained the existing native visual-state handoff, model loading/warm-up and single native updater. No inference, photo-processing, dependency, native or production-service change is included. Physical startup/clipboard/keyboard timing and reliability remain separate. [November 3 testing](testing/TESTING.md#november-3-2026) identifies completed checks and exact candidate bytes.
+
+## Startup and backup presentation follow-up (November 2, 2026)
+
+The maintainer's two local recordings expose separate presentation problems. In the 2.1-second startup clip, the large system leaf changes to a smaller native window leaf around 0.93 seconds; a white WebView interval follows around 1.27-1.67 seconds before the React loader. In the 37.84-second UI recording, opening backup briefly renders no-code setup around 7.05 seconds before existing preferences arrive, and Copy dims every control around 24 seconds. These are observed frame ranges from the supplied recordings, not general startup-time benchmarks.
+
+The native fix retains the Android 12+ system splash until a trusted completed page's visual-state callback, uses a color-only post-launch window and gives the initial WebView a matching background. The pre-12 cover retains its existing leaf. [Android's splash API](https://developer.android.com/develop/ui/views/launch/splash-screen/) supports app-controlled exit handling; the launcher entrance remains system-controlled. No fixed delay or model-loading timeout is introduced. These changes require native 0.1.9/code 10 and a matching installer; the model, image processing and storage are unchanged.
+
+Backup navigation reuses known local preference state; local Show/Copy skip network-style whole-panel progress and redundant preference refreshes. A reserved feedback line reduces success-message layout movement. Focused verification and emulator/physical limits belong in [the dated test record](testing/TESTING.md#november-2-2026); do not claim a physical-device speedup from the code change alone.
+
 ## History photo loading and scoped refreshes (October 26, 2026)
 
 **Subsequent precommit endurance evidence:** the maintainer's R03 report passed one 30.5-minute Chromium-mobile session with real predictions. All recorded inputs match the current candidate fingerprint `5078d8856b880b5bc9bb7afaa8089f952d00a572829e1d6d4199763939aeee73`. This establishes that exercised local browser session, not native SQLite/camera behavior, phone throughput or a measured speed improvement. See [validation scope](testing/TESTING.md#october-26-2026).
@@ -247,7 +279,7 @@ The matrix distinguishes implementation choices from measured outcomes. Earlier 
 
 - **Implementation, prepared v0.7.0:** `src/lib/classifier.ts` retains the active `tf.env().set("WEBGL_FORCE_F16_TEXTURES", true)` override before `tf.ready()`. It logs the actual enabled/capable flags, and the optional diagnostic recorder captures them. This is an existing maintainer choice included in the prepared source; no automatic 32-bit-first or memory-failure fallback is added. The October 16 capability-based description above remains dated history.
 - **Scope:** Texture precision describes GPU calculations and is separate from saved float32 weights. Half-float textures can use less memory per stored value but may produce different scores near a rejection boundary. The override does not guarantee score parity, prevent out-of-memory/context failures, establish the cause of an observed stall, or prove that every GPU operation uses one precision.
-- **Download trade-off:** The historical Trial 3 bundle was 11.53 MB. The adopted V4.5.0 five-file bundle totals 12,116,197 bytes (three float32 shards, graph, and config), as recorded in the adoption receipt. Texture precision does not change model download size.
+- **Download trade-off:** The historical Trial 3 bundle was 11.53 MB. The adopted V5.1.0 five-file bundle totals 12,116,275 bytes (three float32 shards, graph and adoption config); its receipt records the exact hashes. Historical V4.5.0 totaled 12,116,197 bytes. Texture precision does not change model download size.
 
 The installed behavior can be checked in TensorFlow.js 4.22.0's [WebGL flag definitions](https://github.com/tensorflow/tfjs/blob/tfjs-v4.22.0/tfjs-backend-webgl/src/flags_webgl.ts). Use browser/device evidence before changing this flag or claiming a benefit from another precision setting.
 
@@ -375,9 +407,9 @@ Focused candidate checks and remaining physical-device requirements are recorded
 
 ### 3.1 Service Worker Model Pre-Caching (`sw.ts`)
 
-- **Strategy:** Serwist precaches the five adopted V4.5.0 model files under `/model/`: `model.json`, `model_config.json`, and three weight shards. The `CacheFirst` runtime rule remains as defence in depth.
+- **Strategy:** Serwist precaches the five adopted V5.1.0 model files under `/model/`: `model.json`, `model_config.json`, and three weight shards. The `CacheFirst` runtime rule remains as defence in depth.
 - **Expected effect:** Enables offline model loading after successful service-worker installation and caching, while browser storage remains available. Loading still requires local model initialization; cache eviction, cleared site data, or an incomplete first load can prevent it. R02 and the physical checklist verify this behavior for a recorded environment.
-- **Versioned cache name:** `mangoleaf-model-cache-v4-5-0` for the adopted V4.5.0 model, retained by prepared app `0.7.0`. Activation deletes superseded model caches, including former V4.3.0 and V4.5.0 candidate runtime caches. The active V4.5.0 cache is protected by the activation filter.
+- **Versioned cache name:** `mangoleaf-model-cache-v5-1-0` for adopted V5.1.0 in app `0.13.0`. Activation deletes superseded model caches, including V4.5.0 and the V5.1.0 candidate cache. The active adopted cache is protected by the activation filter.
 - **The precache is the real update mechanism.** Public files receive content-revision hashes in Serwist's precache manifest, which is matched before runtime caching. Replaced weights therefore refetch on next activation. An empty runtime model cache is normal; verify updates in generated `public/sw.js`.
 
 ### 3.2 High-Capacity Offline Database (Dexie.js / IndexedDB)

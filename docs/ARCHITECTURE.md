@@ -1,5 +1,61 @@
 # MangoLeaf AI Architecture
 
+## V5.1.0 adoption and 0.13.0 release preparation (November 3, 2026)
+
+The maintainer selected **V5.1.0** as the repository model for **app/web 0.13.0 / APK 0.1.9/code 10**, bounds **10-10**, bridge/schema **1/1**. Model graph/shards and scientific settings stay byte-identical to the reviewed local candidate; adoption changes runtime metadata, the report label to `v5.1.0`, and the worker model cache to `mangoleaf-model-cache-v5-1-0`. New reports require exact-version duplicate reuse. Older candidate/V4.5.0 reports and all local/private cloud data remain intact.
+
+Scientific notebooks, reference inputs, run artifacts and figures moved unchanged into their `non-experiment/v5.1.0/` locations. A [separate adoption receipt](model-training/non-experiment/v5.1.0/artifacts/adoption_20261103.json) maps original paths/hashes and records limitations; original receipts keep their candidate identities. Default Android bundles use the committed adopted model after its commit. V4.5.0 remains preserved for a deliberate whole-bundle rollback. No database/API/ownership migration is introduced. Numerical Keras/browser parity, signed Production/physical checks, exact-source CI, hosting promotion and publication are separate from adoption.
+
+Published GitHub v0.12.0/APK 0.1.8/code 9 remains unchanged. Earlier dated notes below describe their original candidate states. Current layout/probability/download boundaries and their tests remain as documented below; no Production deployment is claimed.
+
+## Debug probability details and Android downloads (November 3, 2026)
+
+`Application` attaches the existing formatted seven-class prediction rows only to a fresh Debug APK result, after the report has already been saved. Both the producer/prop and `ScanDetailsModal` use the existing Android target plus testing-environment build flags; the modal rejects supplied rows in Production/web builds. This is a compile-time presentation policy, not an authorization signal. Scores remain temporary UI data; no SQLite/IndexedDB/cloud schema, saved report, upload payload, diagnostic log or inference setting changes. Saved/duplicate reports do not reconstruct rows, and rejected results retain their Uncertain label.
+
+The Home heading counts seven outcomes: five disease classes plus Healthy Leaf and Healthy Fruit. Its shared English/Bisaya text does not claim seven diseases.
+
+The website `/download` now waits for the existing Android browser hint before fetching public release metadata or exposing APK/intent/release-download actions. The same device-link snapshot distinguishes pending hydration from a known unsupported browser, avoiding an incorrect first-paint warning. Unsupported browsers receive translated Android-only information. Desktop QR guidance remains available through the main website. This is a user-interface compatibility guard: public GitHub assets and the fixed-repository APK rewrite remain public, and a direct file URL or spoofed browser hint is not access-controlled by it.
+
+See [the dated checks](testing/TESTING.md#november-3-2026) and [APK acceptance](testing/ANDROID_TESTING.md#debug-probability-details-and-download-policy-november-3-2026). No Production deployment is implied by the source change.
+
+## Settings controller audit (November 3, 2026)
+
+`SettingsTab` owns one [`useBackupPreferences`](../src/hooks/useBackupPreferences.ts) controller shared with the backup page. Opening/closing pages reuses local status; mutations request a fresh read after older reads settle. Failed reads remain distinct from first-time setup and offer local Retry. The standalone fixture owns its own controller. [`backup-status.ts`](../src/lib/backup-status.ts), `BackupStatusNotice` and `BackupActionButton` share status selection, retry presentation and existing tap targets. These reads never create Auth sessions, owners or uploads.
+
+[`useBackupRecovery`](../src/hooks/useBackupRecovery.ts) owns UI action state, input and credential visibility. The existing cloud service retains setup, source verification, receiving ownership/Pause, transfers and deletion. Mutation/Copy requests preserve their operation guard; rejected overlapping requests get pending feedback that ends when actual work settles. Show/Copy can share an in-flight local read, discarded after settlement. Hide changes visibility intent immediately; backgrounding/unmount invalidate view callbacks. A late read cannot reveal or initiate a clipboard write after invalidation. Already-issued browser/native operations still settle through their original API; invalidating feedback does not claim to cancel that underlying work.
+
+[`useSettingsNavigation`](../src/hooks/useSettingsNavigation.ts) owns validated same-document entries, duplicate-open guards, Back settlement, Forward reconstruction and cancellable focus restoration. New Settings instances wait for an older pending Back before pushing. Ephemeral history instance markers are navigation state, never backup identity or authorization. Registration callbacks keep mutable entry refs inside the hook while retaining Next's history fields.
+
+Diagnostics retains its app-scoped bounded opt-in recorder. Its viewer memoizes snapshots and ignores obsolete Copy/export feedback after Clear, collapse, backgrounding or unmount. Explicit copy/export formats current evidence; per-action refs retain duplicate-request guards until settlement. App updates reuses the connection hook and existing installer. Debug/website exclusions, the Production entry, startup handoff, model and versions remain unchanged. See [performance evidence](PERFORMANCE.md#settings-status-and-feedback-audit-november-3-2026) and [verification scope](testing/TESTING.md#november-3-2026).
+
+## Settings tools and code feedback (November 2, 2026)
+
+`Application` keeps the shared diagnostic recorder and update/install controllers at application scope. APK About no longer mounts diagnostics or an update notice; `settings-tab.tsx` eagerly imports the existing panels and supplies separate Backup, Diagnostic logs and Production-only App updates screens. Same-document `#settings-*` history entries retain Back/focus behavior, while visible tab state stays in the APK application. Debug has no update entry; Production retains it without an offer, using a neutral unconfirmed/offline message rather than claiming the app is current. Verified offers still call the same native installer controller. The signed web-OTA restart modal remains independent.
+
+The diagnostic recorder keeps its existing opt-in, bounded storage and copy/download/privacy behavior across page changes. Its About location remains only in the generated browser scanner compatibility harness; shipping websites still mount no diagnostics, Settings or private backup. About retains ordinary app/model information.
+
+`RecoveryCodeError` identifies malformed codes and the specific Auth `invalid_credentials` response from temporary source verification. The form validates syntax before transfer and shows translated field feedback; network, rate-limit and other verification failures stay general. No error includes a typed credential, and the existing temporary-reader disposal, receiving identity/Pause and setup order remain unchanged. [Supabase's error-code contract](https://supabase.com/docs/guides/auth/debugging/error-codes) supports checking the returned code rather than treating every failed request as a wrong password. No hosted changes or new API methods are required.
+
+## Startup and backup follow-up (November 2, 2026)
+
+Native candidate **0.1.9/code 10**, bounds **10-10**, preserves bridge/schema 1/1 and web 0.12.0. On Android 12+, `MainActivity` retains the system splash without its default exit transform until the trusted page finishes and a WebView visual-state callback confirms its initial pixels can draw. The Activity's post-launch background is a plain matching color, removing the duplicate smaller leaf. Earlier Android versions retain the same launch artwork until the WebView is ready. WebView and inset backgrounds match. Startup failure and destruction release retained splash/artwork; ordinary Activity recreation, camera permissions, storage and OTA activation rules remain unchanged. The React loader still handles model initialization.
+
+Settings passes its locally read preferences into the backup page so entering an existing backup cannot briefly render first-time setup. Unknown preferences show a neutral loading message. Show/Copy retain duplicate-action and privacy guards but do not start whole-panel progress/dimming or redundant preference reads. Narrow-phone code buttons stack with fixed-size icons. The restore form validates empty/whitespace input locally before invoking the existing authenticated restore service with an explicit code. Empty input no longer implicitly selects the receiving backup; internal saved-code compatibility and owning identity/Pause are preserved. Browser entry/layout and model processing remain unchanged.
+
+## APK Settings and private backup layout (November 2, 2026)
+
+The Android application now uses Home, About, the raised Scan action, History and Settings. `settings-tab.tsx` owns the Bisaya/English control and a private-backup entry with local setup/pause/connection status. Opening backup adds a nested history entry; its Back button and the existing native WebView Back return to Settings. The actual brand header stays in place. Both APK build variants use this layout; the separate website shell and its Home/About/install/language navigation are unchanged.
+
+`Application` imports Settings and backup eagerly with its existing About panels. Diagnostics and APK update information remain in About; recovery moves to Settings. Opening either Settings page reads local preferences and trusted connectivity only, without enrollment or uploads. `useConnectionStatus` subscribes to the existing native connection store. Explicit setup, enabled foreground uploads, temporary source-reader restore, receiving ownership/Pause and scoped deletion retries still use the existing backup service and resources.
+
+The backup page uses a switch after setup, a masked recovery code with separate Show/Copy actions, one restore field/action and expandable help. Code text wraps in full when revealed and is concealed on navigation/backgrounding; stale asynchronous responses cannot reveal it afterward. New receiving codes remain accessible after verified setup/first restore. Both languages retain the visible recovery warning. Status describes setup, pause or connection, never proof that every upload finished. This source candidate requires a rebuilt APK or separately approved web bundle; no publication is implied. See [verification and limits](testing/TESTING.md#november-2-2026).
+
+## V5.1.0 experimental training and local Debug override (November 1, 2026)
+
+The adopted baseline remains V4.5.0. The maintainer's current authorized local runtime uses `v5.1.0-candidate` graph/shards, explicit confidence-only metadata, matching constants and `mangoleaf-model-cache-v5-1-0-candidate` for Debug comparison. This supersedes the earlier local V5.0.0 test and October 24 restore status, without rewriting those dated records. Default Android staging still reads committed model assets/constants; research builds must use `android:bundle --working-model`. A guarded V4.5.0 rollback kit preserves the complete baseline and old-model History remains intact. No app release/model adoption or production deployment follows from the override.
+
+The clean workflows live in `notebooks/non-experiment/v5.1.0/`. Training starts new ImageNet weights, preserves the old mango split, adds 71 photos (2,720 total; 1,904/408/408), reuses exactly 2,511 approved OE identities and keeps 995 previously evaluated unsupported photos separate. Fifteen epochs, checkpoint selection, validation-only temperature/export and the later supplied raw/70% evaluation completed. `docs/model-training/non-experiment/v5.1.0/artifacts/{training,evaluation}/` and `figures/{training,evaluation}/` contain separate original-byte evidence copies; the evaluation adds six plots and recorded results for 408 mango/995 unsupported photos. Its graph/shards match the existing local candidate, so importing evidence does not replace runtime assets or its tested APK identity. Their source mapping and review summary distinguish curated repository evidence from the complete 9.56 GB external run. The evaluation template accepts explicitly enabled shared input shortcuts as read-only and creates its own results in `MyDrive/mangoleaf_v5_1_0_evaluations/`. See the [V5.1.0 trial](model-training/non-experiment/v5.1.0/TRIAL_v5_1_0.md).
+
 ## History display follow-up (October 26, 2026)
 
 Current Android History reads return `ScanListRecord` metadata and validated private photo references instead of hydrating the full History into Blobs. SQLite keeps its existing indexed ordering and schema. `ScanPhoto` is shared by cards and details, using `useScanPhotoUrl` for owned Blob URLs or the native private photo handler. Mounted pages control image loading; failed files show the existing placeholder. Strict save/duplicate/backup readers still hydrate and validate their own photo. No historical cloud URL is a display fallback. Browsers still mount only the landing/download shell; legacy Blob compatibility remains isolated.
@@ -150,7 +206,7 @@ Completed independent copies live under `docs/model-training/experiment/v5.0.0/a
 
 ## Current model and local-only storage architecture (October 17, 2026)
 
-The repository's adopted model is V4.5.0, with confidence >=0.70 as the only rejection gate; margin and entropy gates are disabled. The prepared PWA version is `0.7.0`, sourced from `package.json` through the existing Next.js build configuration. The model label is `v4.5.0` and its service-worker cache identity is `mangoleaf-model-cache-v4-5-0`. See the [October 16 adoption record](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026) and [v0.7.0 prepared release](versions/history/PWA_RELEASE_HISTORY.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026). Current source explicitly forces 16-bit WebGL textures; this retains the maintainer's existing precision choice rather than introducing automatic 32-bit-first selection. Model assets and rejection rules are unchanged by the diagnostics/confidence update. Production deployment remains separate from branch pushes, CI, and manual promotion.
+Historical October 17 snapshot: the repository's adopted model was V4.5.0, with confidence >=0.70 as the only rejection gate; margin and entropy gates are disabled. The prepared PWA version is `0.7.0`, sourced from `package.json` through the existing Next.js build configuration. The model label is `v4.5.0` and its service-worker cache identity is `mangoleaf-model-cache-v4-5-0`. See the [October 16 adoption record](model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026) and [v0.7.0 prepared release](versions/history/PWA_RELEASE_HISTORY.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026). Current source explicitly forces 16-bit WebGL textures; this retains the maintainer's existing precision choice rather than introducing automatic 32-bit-first selection. Model assets and rejection rules are unchanged by the diagnostics/confidence update. Production deployment remains separate from branch pushes, CI, and manual promotion.
 
 Prepared v0.7.0 adds an opt-in shared diagnostic recorder with its only viewer in About, and preserves raw confidence in new scan reports while formatting scan-detail percentages to at most one decimal rounded down. The [diagnostic architecture](#optional-local-diagnostics-october-17-2026) describes retention, privacy, persistence failure, and stalled-operation limits.
 
@@ -220,7 +276,7 @@ The manual release workflow uses Vercel staged production builds: disable automa
 
 Experiment guides live under [experiment/v3.1](model-training/experiment/v3.1/TRIAL_v3_1.md), [experiment/v3.2](model-training/experiment/v3.2/TRIAL_v3_2.md), [experiment/v4](model-training/experiment/v4/TRIAL_v4.md), [experiment/v4.1](model-training/experiment/v4.1/TRIAL_v4_1.md), [experiment/v4.1.1](model-training/experiment/v4.1.1/TRIAL_v4_1_1.md), and [experiment/v4.2.0](model-training/experiment/v4.2.0/TRIAL_v4_2_0.md). Their candidate notebooks and completed experimental evidence live in [notebooks/experiment](../notebooks/experiment/README.md): **experimental candidates, not shipped or deployed**. V4 introduced separate healthy-leaf and healthy-fruit outputs while preserving historical split membership by file contents. V4.1 compared control, background replacement, local lighting, and both effects; V4.1.1 completed a guided reproduction. V4.2.0 completed separate leaf and fruit runs; only leaf met the threshold-selection rule. On October 2, 2026, the single seven-class V4.3.0 Combined model was adopted for app `0.4.9`, replacing V3 as the current application baseline. The [adoption receipt](model-training/non-experiment/v4.3.0/artifacts/adoption_20261002.json) records original export and adopted identities/hashes. Exact earlier model/app backups remain in ignored `.tools/model-backups/`; `.tools/release-backups/v0.4.9-model-v4.3.0-20261002/before/` preserves the pre-adoption state. Production promotion remains pending the final CI and release checks.
 
-Historical and adopted trial reports live under `docs/model-training/non-experiment/v{n}/`. Each version keeps its report beside any saved `artifacts/` and `figures/`; those evidence folders exist only when files are available. Their preserved templates and completed notebooks live under `notebooks/non-experiment/v{n}/`, including the current adopted V4.5.0 model and older versions. Experimental notebooks stay under `notebooks/experiment/v{n}/` and remain candidates regardless of the `TRIAL_*.md` filename. Moving these records does not change notebook cell contents, saved outputs, or original Google Drive run paths. V3.1 also retains its separate [original-weight threshold guide](model-training/experiment/v3.1/THRESHOLD_FITTING_v3_1.md).
+Historical and adopted trial reports live under `docs/model-training/non-experiment/v{n}/`. Each version keeps its report beside any saved `artifacts/` and `figures/`; those evidence folders exist only when files are available. Their preserved templates and completed notebooks live under `notebooks/non-experiment/v{n}/`, including the current adopted V5.1.0 model and older versions. Experimental notebooks stay under `notebooks/experiment/v{n}/` and remain candidates regardless of the `TRIAL_*.md` filename. Moving these records does not change notebook cell contents, saved outputs, or original Google Drive run paths. V3.1 also retains its separate [original-weight threshold guide](model-training/experiment/v3.1/THRESHOLD_FITTING_v3_1.md).
 
 V4 notebook outputs default to `MyDrive/mangoleaf_experiments/v4/training/` and `MyDrive/mangoleaf_experiments/v4/threshold_fitting/`. Each run and downloadable evidence/model ZIP carries its v4 workflow label and unique run ID. See the [Drive output layout](model-training/experiment/v4/TRIAL_v4.md#where-google-drive-outputs-go) for folder contents and existing-run compatibility.
 
@@ -279,14 +335,15 @@ mangoleaf-ai/
 |   |-- verify-v4-1-notebooks.py    # Four-arm experiment contracts and synthetic data-boundary checks
 |   |-- run-browser-tests.mjs       # Build verification and Node.js Playwright runner
 |   |-- verify-v4-4-notebooks.py    # V4.4.0 isolated-kernel notebook contract checks
-|   `-- verify-v4-5-notebooks.py    # V4.5.0 ordinary-cell OE and evaluation checks
+|   |-- verify-v4-5-notebooks.py    # V4.5.0 ordinary-cell OE and evaluation checks
+|   `-- verify-v5-1-notebooks.py    # V5.1.0 recipe, identity, scoring, CPU/shared-input contracts
 |-- public/                         # Files served directly from the site root
 |   |-- images/
 |   |   |-- icons/
 |   |   |   |-- png/                # PWA, favicon, and Apple touch icons
 |   |   |   `-- svg/                # Vector application and favicon icons
 |   |   `-- mangoleaf-architecture.svg  # Historical cloud-sync diagram
-|   |-- model/                      # Committed V4.5.0 model; maintainer's V5 override uncommitted
+|   |-- model/                      # Adopted V5.1.0 graph/shards and runtime configuration
 |   |   |-- model.json              # Seven-output TensorFlow.js graph
 |   |   |-- model_config.json       # Class order, preprocessing, fitted thresholds
 |   |   |-- group1-shard1of3.bin
@@ -304,7 +361,7 @@ mangoleaf-ai/
 |   |   |-- layout/                 # Top header, navigation bar, footer, and splash screen
 |   |   |-- modal/                  # Legal, scan-details, storage-full, and scan bottom sheet
 |   |   |-- scan/                   # Scan controls, result card, history list, guide
-|   |   `-- tab/                    # Home, history, about, and optional diagnostics panel
+|   |   `-- tab/                    # Home, history, about, APK settings/backup, diagnostics
 |   |-- hooks/
 |   |   |-- useAndroidAppLink.ts     # Fixed-package website launch and positive-only hints
 |   |   |-- useDiagnostics.ts       # Shared recorder subscription, independent of modal lifetime
@@ -357,14 +414,15 @@ mangoleaf-ai/
 |   |   |   |-- v4.4.0/             # TRIAL_v4_4_0.md; completed, declined experiment
 |   |   |   |   |-- artifacts/      # Curated training/fitting receipts, metrics, copy manifest, review
 |   |   |   |   `-- figures/        # Original training/ and threshold_fitting/ figures
-|   |   |   `-- v5.0.0/             # Trial/review, copied artifacts and figures; completed candidate
+|   |   |   |-- v5.0.0/             # Trial/review, copied artifacts and figures; completed candidate
 |   |   `-- non-experiment/         # Historical and adopted model trials
 |   |       |-- v1/                 # TRIAL_v1.md
 |   |       |-- v2/                 # TRIAL_v2.md, figures/
 |   |       |-- v2.1/               # TRIAL_v2_1.md, artifacts/, figures/
 |   |       |-- v3/                 # TRIAL_v3.md, artifacts/, figures/; previous released baseline
 |   |       |-- v4.3.0/             # Previous adopted trial/comparison, artifacts/, figures/
-|   |       `-- v4.5.0/             # Current adopted OE model, confidence-only evidence and figures
+|   |       |-- v4.5.0/             # Previous adopted OE model and rollback evidence
+|   |       `-- v5.1.0/             # Current adopted model; preserved trial, artifacts/, figures/
 |   |-- ARCHITECTURE.md             # This architecture reference
 |   |-- versions/                   # Short current guides and full historical records
 |   |   |-- PWA_VERSIONING.md         # App version rules and release procedure
@@ -395,7 +453,8 @@ mangoleaf-ai/
 |   |   |   |-- MangoLeaf_AI_Threshold_Fitting_v3.ipynb         # Trial 3 threshold template, 8 cells, outputs cleared
 |   |   |   `-- MangoLeaf_AI_Threshold_Fitting_v3_Results.ipynb # Trial 3 fitting run; cell 9 settles the margin at 0.40
 |   |   |-- v4.3.0/                  # Previous adopted model; templates and completed runs
-|   |   `-- v4.5.0/                  # Current adopted model; unchanged templates and completed outputs
+|   |   |-- v4.5.0/                  # Previous adopted model and preserved outputs
+|   |   `-- v5.1.0/                  # Adopted templates/completed notebooks, references and repair helpers
 |   `-- experiment/                  # Experimental notebooks/evidence; candidates, not shipped or deployed
 |       |-- README.md                # Status, scope, and notebook-version boundary
 |       |-- v3.1/                    # v3.1 workflow templates and completed results
@@ -409,12 +468,12 @@ mangoleaf-ai/
 |       |   |-- MangoLeaf_AI_Threshold_Fitting_v4_4_0.ipynb
 |       |   |-- MangoLeaf_AI_Training_v4_4_0_Post_Training.ipynb
 |       |   `-- MangoLeaf_AI_Threshold_Fitting_v4_4_0_Results.ipynb
-|       `-- v5.0.0/                  # Templates plus completed fine-tuning/evaluation evidence
+|       |-- v5.0.0/                  # Templates plus completed fine-tuning/evaluation evidence
 |           |-- MangoLeaf_AI_OE_Fine_Tuning_v5_0_0.ipynb
 |           |-- MangoLeaf_AI_Evaluate_v5_0_0.ipynb     # Later unseen-OOD report without retraining
 |           |-- MangoLeaf_AI_OE_Fine_Tuning_v5_0_0_Post_Training.ipynb
 |           |-- MangoLeaf_AI_Evaluate_v5_0_0_Reults.ipynb # Original supplied filename preserved
-|           `-- v5_workflow.py       # Required Colab helper; not application code
+|       |   `-- v5_workflow.py       # Required Colab helper; not application code
 |-- video/                           # Promotional video, a separate HyperFrames project
 |   |-- assets/                      # Render inputs plus the thumbnail still
 |   |-- index.html                   # Root composition and timeline
@@ -451,13 +510,13 @@ Reusable UI lives in `src/components/`. Filenames use lowercase kebab-case, whil
 
 Components are grouped into subfolders by the role they play rather than kept in one flat directory:
 
-| Folder    | Contents                                                                                                                                       | Role                                    |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| `brand/`  | `logo.tsx`, `icon.tsx`                                                                                                                         | Identity marks and the shared icon set  |
-| `layout/` | `top-header.tsx`, `bottom-nav.tsx`, `footer.tsx`, `splash-screen.tsx`, `model-status-banner.tsx`                                               | Application frame around screen content |
-| `modal/`  | `legal-modal.tsx`, `scan-details-modal.tsx`, `scan-sheet.tsx`, `delete-scans-modal.tsx`, `install-guide-overlay.tsx`                           | Overlay dialogs and sheets              |
-| `scan/`   | `guided-camera.tsx`, `diagnostic-scanner.tsx`, `scan-card.tsx`, `scan-history-list.tsx`, `how-it-works-steps.tsx`, `disease-coverage-card.tsx` | Diagnosis feature surface               |
-| `tab/`    | `home-tab.tsx`, `history-tab.tsx`, `about-tab.tsx`, `diagnostics-panel.tsx`                                                                    | Navigation tabs and About diagnostics   |
+| Folder    | Contents                                                                                                                                       | Role                                              |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `brand/`  | `logo.tsx`, `icon.tsx`                                                                                                                         | Identity marks and the shared icon set            |
+| `layout/` | `top-header.tsx`, `bottom-nav.tsx`, `footer.tsx`, `splash-screen.tsx`, `model-status-banner.tsx`                                               | Application frame around screen content           |
+| `modal/`  | `legal-modal.tsx`, `scan-details-modal.tsx`, `scan-sheet.tsx`, `delete-scans-modal.tsx`, `install-guide-overlay.tsx`                           | Overlay dialogs and sheets                        |
+| `scan/`   | `guided-camera.tsx`, `diagnostic-scanner.tsx`, `scan-card.tsx`, `scan-history-list.tsx`, `how-it-works-steps.tsx`, `disease-coverage-card.tsx` | Diagnosis feature surface                         |
+| `tab/`    | `home-tab.tsx`, `history-tab.tsx`, `about-tab.tsx`, `settings-tab.tsx`, `backup-recovery-panel.tsx`, `diagnostics-panel.tsx`                   | Navigation tabs, APK backup and About diagnostics |
 
 The three tab components are the boundary between `Application` and screen content. `Application` owns all state and handlers, and renders exactly one of `HomeTab`, `HistoryTab`, or `AboutTab` per active tab. Adding a screen means adding a tab component and one branch in `Application`, not editing shared markup.
 
@@ -530,16 +589,16 @@ When adding a relative-time string, add it to both the `en` and `bis` objects in
 `src/components/layout/application.tsx` coordinates photo review and saving. `src/lib/image-hash.ts` fingerprints upload files and saved-photo Blobs without importing TensorFlow.js, and `src/lib/image-storage.ts` creates the compressed photo saved after diagnosis. `src/lib/classifier.ts` provides browser inference and re-exports both helpers for existing callers. The page imports storage compression directly and dynamically loads the prediction function when diagnosis starts:
 
 1. During initial loading, fetch `/model/model.json` with `tf.loadGraphModel` and `/model/model_config.json` for its rejection settings.
-2. Cache and warm the single seven-class adopted V4.5.0 model once per browser session, using the existing explicit forced-16-bit WebGL texture setting.
+2. Cache and warm the single seven-class adopted V5.1.0 model once per browser session, using the existing explicit forced-16-bit WebGL texture setting.
 3. On photo selection, show the preview and asynchronously hash the original file with SHA-256. Query the indexed local `image_hash` column before enabling diagnosis. Keep the hash for this selection so diagnosis does not hash the same file again.
-4. If an eligible saved scan matches, keep the preview open with the bilingual "Photo already scanned" message. Retake opens the original picker; Cancel or X closes review; View saved result opens the existing report. Reuse requires an exact `model_version` match with `v4.5.0`. Pending-deletion rows, another model label, and legacy rows without a label do not block a new inference.
+4. If an eligible saved scan matches, keep the preview open with the bilingual "Photo already scanned" message. Retake opens the original picker; Cancel or X closes review; View saved result opens the existing report. Reuse requires an exact `model_version` match with `v5.1.0`. Pending-deletion rows, another model label, and legacy rows without a label do not block a new inference.
 5. For a new photo, Run AI Diagnosis rechecks the local duplicate lookup before inference. Downscale the image to `224 x 224` with a shared canvas, run TensorFlow.js inference, and dispose temporary tensors.
 6. Apply the model's rejection gates and return the highest-probability class only if they pass; otherwise return `Uncertain / Unrecognized`.
 7. Compress the image for storage and save the existing original-file hash with the new scan record.
 
 Photo review uses `scan/diagnostic-scanner.tsx`. X and Escape discard the selected photo before diagnosis, without opening a picker or saving a record. These dismiss controls are unavailable during active diagnosis. A duplicate check must finish successfully before diagnosis can start; a failed check offers a retry. Closing or replacing a photo invalidates its pending check and releases its preview URL, so a delayed result cannot reopen an old selection. `useScrollLock.ts` counts active locks shared by the page and scan sheet so closing the sheet cannot unlock scrolling behind a newly opened preview. Duplicate detection compares file contents, not visual similarity: renaming an unchanged file still matches, while cropping or recompressing can produce a different hash.
 
-The adopted V4.5.0 model uses confidence-only rejection at 0.70. Margin and entropy gates are disabled. Its temperature is already folded into the exported weights.
+The adopted V5.1.0 model uses confidence-only rejection at 0.70. Margin and entropy gates are disabled. Its temperature is already folded into the exported weights.
 
 | Gate       | Test                                        | Source                           | Setting           |
 | ---------- | ------------------------------------------- | -------------------------------- | ----------------- |
@@ -551,9 +610,9 @@ The confidence floor is hardcoded and deliberately not configurable. It is a man
 
 Entropy is normalized by `Math.log(results.length)` so it stays on a 0-to-1 scale comparable to the fitted threshold. Confidence is compared at its raw precision, returned without rounding, and preserved by `prepareLocalScan()` in new reports. Only scan-detail rendering formats the percentage. A raw `0.698` therefore displays `69.8%` and remains uncertain; `0.6999` displays `69.9%`, not a misleading `70%`. Integer percentages omit `.0`. No existing row is rewritten to invent precision it never stored; older reports and eligible duplicate reuse retain their saved value. Formatting does not change classification, preprocessing, thresholds, or model accuracy.
 
-In committed source, root `public/model/` contains the adopted seven-output V4.5.0 model, with confidence 0.70 as the only active rejection gate. The maintainer's uncommitted V5 override is described above. Its class order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold, as defined in `src/lib/constants.ts`. Both healthy outputs reuse the existing `healthy` treatment-guidance key. V4.3.0 remains preserved as a previous model and verified rollback. See [AI model versioning](versions/AI_MODEL_VERSIONING.md).
+Root `public/model/` contains the adopted seven-output V5.1.0 model, with confidence 0.70 as the only active rejection gate. Adoption is recorded separately from Production publication. Its class order is Anthracnose, Bacterial Black Spot, Bacterial Canker, Healthy Fruit, Healthy Leaf, Mango Scab, and Sooty Mold, as defined in `src/lib/constants.ts`. Both healthy outputs reuse the existing `healthy` treatment-guidance key. V4.3.0 remains preserved as a previous model and verified rollback. See [AI model versioning](versions/AI_MODEL_VERSIONING.md).
 
-Each inference prints a collapsed browser-console table of all seven class probabilities in development and production, ranked from highest to lowest. The existing fresh-result modal can also receive the returned probability table; this table predates v0.7.0 and is not saved in History rows. Reopening a saved report therefore does not reconstruct that table. Both tables sort copied values and format only displayed percentages; prediction and rejection still use the original scores. These probabilities describe one photo, not per-class accuracy. An eligible saved duplicate does not run inference or print a new table. The optional persistent diagnostics log deliberately excludes class results and probability tables. See [TESTING.md](testing/TESTING.md#fixture-and-report-interpretation) for reading inference evidence and handling duplicate photos.
+Each inference prints a collapsed browser-console table of all seven class probabilities in development and production, ranked from highest to lowest. The fresh-result modal receives that table only in Debug APK builds; Production/web hide it, and History rows never store it. Reopening a saved report therefore does not reconstruct that table. Both tables sort copied values and format only displayed percentages; prediction and rejection still use the original scores. These probabilities describe one photo, not per-class accuracy. An eligible saved duplicate does not run inference or print a new table. The optional persistent diagnostics log deliberately excludes class results and probability tables. See [TESTING.md](testing/TESTING.md#fixture-and-report-interpretation) for reading inference evidence and handling duplicate photos.
 
 ### Local persistence
 
@@ -573,7 +632,7 @@ Treatment guidance is authored in Supabase's `public.guidelines` table and read 
 
 An `Uncertain / Unrecognized` result is handled before the cached-guideline lookup. It displays the approved English/Bisaya photo reminder immediately, including offline use and while IndexedDB is loading. Scan details use the heading “Try another photo” / “Sulayi og laing litrato” for this result. The reminder is interface text in `src/lib/translations.ts`; it does not require a Supabase guideline row or change model rejection rules. Loading and unavailable guideline messages still apply to accepted class results.
 
-Historical trial and legacy rows remain visible in local history. Committed-source duplicate reuse requires exact active `model_version` `v4.5.0`, so other candidate identities and unlabeled legacy rows do not substitute for V4.5 inference. The maintainer's local override instead requires `v5.0.0-candidate`. New local reports retain the active label without relabeling earlier diagnoses.
+Historical trial and legacy rows remain visible in local history. Duplicate reuse requires exact active `model_version` `v5.1.0`, so V4.5.0, `v5.1.0-candidate` and unlabeled legacy rows do not substitute for current inference. New local reports retain the active label without relabeling earlier diagnoses.
 
 `useSync.ts` exposes local save/delete actions. `deleteScans(ids)` delegates to `deleteLocalScans()` and `cloud-history-delete.ts`, which atomically remove local report records and queue scoped connected-backup cleanup in native SQLite or browser Dexie v10. Browser photo Blobs are part of the Dexie transaction; Android removes private photo files after the SQLite commit, so interrupted file cleanup can leave an inaccessible orphan. The confirmation dialog waits for the local deletion operation. The separate worker retries confirmed deletion jobs while foreground and connected, even if uploads are paused; it acknowledges a job only after Storage and SQL cleanup succeed. Native deletion records prevent local restore from resurrecting intentionally removed reports. Legacy v8 tombstones remain hidden historical state and never become new remote cleanup jobs. Deletion does not propagate to another phone retaining its own copy.
 
@@ -619,7 +678,7 @@ In the published browser build, private cloud endpoints for Auth, scans metadata
 
 The precache manifest that Serwist generates covers the build output _and every file under `public/`_. Anything added to `public/` is therefore downloaded to each installed device during service-worker installation, whether or not the application ever requests it. Keep assets that only documentation uses out of `public/` unless they also have to be reachable at a site URL.
 
-**That manifest, not the `CacheFirst` rule, is what actually updates the model.** `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `/model/*` rule never fires in practice. Every model file carries a content-revision hash in the manifest and is refetched after service-worker activation when its bytes change. The committed cache identity is `mangoleaf-model-cache-v4-5-0` (the uncommitted local test uses `mangoleaf-model-cache-v5-0-0-candidate`); activation removes superseded model caches and protects the active cache.
+**That manifest, not the `CacheFirst` rule, is what actually updates the model.** `PrecacheRoute` is registered before `runtimeCaching`, so the router matches it first and the `/model/*` rule never fires in practice. Every model file carries a content-revision hash in the manifest and is refetched after service-worker activation when its bytes change. The adopted cache identity is `mangoleaf-model-cache-v5-1-0`; activation removes superseded model caches and protects the active cache.
 
 ### Static assets
 

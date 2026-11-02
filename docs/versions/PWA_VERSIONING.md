@@ -1,37 +1,23 @@
 # MangoLeaf AI PWA Versioning Guide
 
-**Precommit validation, October 26:** maintainer-reported Debug/testing-website checks are complete, and the retained 30.5-minute R03 report matches current candidate source/model hashes. CI and production-signed/staged production acceptance remain pending. Version **v0.12.0** is still an unpublished candidate; a prepared annotation description is not an approved or created Git tag. See [validation evidence](../testing/TESTING.md#october-26-2026).
-
-**History performance follow-up, October 26:** the same unpublished 0.12.0 candidate now lists native History metadata without loading every photo, shares card/details photo display and isolates report/guideline refreshes. No app/model/native version or schema change is added by this follow-up. Earlier test/artifact hashes identify earlier inputs; rebuild and repeat affected checks before release. See [performance evidence](../PERFORMANCE.md#history-photo-loading-and-scoped-refreshes-october-26-2026).
-
-**October 26 native updater candidate:** Production APK updates download inside MangoLeaf AI with progress/cancellation, then open Android's installation confirmation. No browser or custom completion/reopen popup is used. About retains Update Now; offline it is disabled. Debug excludes production installers. Existing phones first need an APK containing this capability. App 0.12.0 / APK 0.1.8/code 9 / Model V4.5.0 remain unpublished candidates.
-
-**Current source candidate, October 25:** app **v0.12.0**, Production APK **v0.1.8/code 9**, Debug **v0.1.8-dev**, default OTA host bounds **9-9**, adopted Model **V4.5.0**, bridge/SQLite schema **1/1**. This is an unpublished working-tree candidate. Published v0.11.0 / APK 0.1.7/code 8 / sequence 6 and its tag, signed assets and receipts remain unchanged. No new OTA sequence is allocated. Exact-source CI, current-build reliability, physical-device checks, production signing and publication/promotion require separate evidence. Earlier dated entries retain their original scope.
-
-The candidate’s **Restore backup data** action copies completed scans into the receiving phone’s History while keeping its own code and Pause setting; a phone without a code creates and displays its own separate code after source verification. Uploads and deletion stay scoped to that receiving backup. Production APK adds a dismissible newer-native-version notice with verified internal download and explicit Android installation; Debug excludes production offers. See the [dated candidate record](history/PWA_RELEASE_HISTORY.md#v0120-separate-backup-restore-and-apk-notice-candidate) and [acceptance checks](../testing/TESTING.md#october-25-2026).
-
-**Current release, October 25:** shared app **v0.11.0**, Android APK **v0.1.7/code 8**, host bounds **8-8**, sequence **6**, and adopted Model **V4.5.0**. GitHub confirms [v0.11.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.11.0) is published as Latest at `f6e04842c13b1e3f5e86e5bf468be8abcbc18601`. All four uploaded asset SHA-256 digests match the retained local candidate. The maintainer reports completing production-phone checks; recorded browser R03 and artifact checks have separate evidence scopes. Bridge/SQLite schema remain 1/1. Preserve published tags/assets/receipts. Later helper/docs commits do not move the tag or alter those assets, and this check does not establish Vercel promotion/live website identity.
-
-Use this guide to prepare the shared web application and website release. Native APK and model versions are independent; full dated evidence belongs in the [release history](history/PWA_RELEASE_HISTORY.md#release-timeline).
-
-**Earlier October 25 tag/artifact check, before publication:** GitHub confirmed annotated tag `v0.11.0` at `f6e04842c13b1e3f5e86e5bf468be8abcbc18601`; no published v0.11.0 Release was found then. The maintainer prepared a local production APK 0.1.7/code 8 and matching sequence-6 OTA from recorded working-tree inputs. Tag push alone does not publish the release, promote Vercel or include later uncommitted helper/documentation edits. Keep the tag fixed and retain artifact hashes and physical/release evidence. The release helper's default local output names use Philippine time with `-PHT`; this does not change the signed payloads.
-
 ## Current repository snapshot
 
-| Item                    | Source state                                                     |
-| ----------------------- | ---------------------------------------------------------------- |
-| Shared app / web bundle | `0.12.0`, from `package.json`                                    |
-| Adopted model           | `v4.5.0`; local runtime restored to the adopted baseline         |
-| Android host            | `0.1.8` / code `9`; Debug `0.1.8-dev`                            |
-| Compatibility           | Bridge/schema `1`/`1`, host bounds `9-9`                         |
-| Published release       | GitHub Latest `v0.11.0`; APK `0.1.7` / code `8`                  |
-| Publication             | Source candidate unpublished; published baseline remains v0.11.0 |
+**November 3, 2026:** prepared **app/web bundle 0.13.0**, **Android APK 0.1.9/code 10** (Debug **0.1.9-dev**), host bounds **10-10**, bridge/SQLite schema **1/1**, and adopted **Model V5.1.0**. This is a repository candidate, not a published release or confirmed Vercel deployment.
 
-**Published v0.11.0 baseline:** this earlier release keeps scans/photos local until successful recovery-code creation or valid existing-code connection. Code creation enables automatic foreground/online backup without another checkbox; completed cloud copies are reused and unfinished reports retry. Preserve connected-code pauses, existing identities/data and scoped deletion retries. Debug uses testing and Production APK uses production; no hosted schema/configuration change is required. Scanning remains APK-only. Default OTA bounds deliberately target host 8; older hosts need the new same-signer APK for this release. Sequence 6 is published; future preparations must check every published sequence and choose a higher unused value.
+GitHub's latest published release was checked read-only on November 3: [v0.12.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.12.0), published October 26, with APK **0.1.8/code 9** and Model **V4.5.0**. Preserve that tag and all signed assets. The old notes calling v0.12.0 unpublished are retained only in the [dated history](history/PWA_RELEASE_HISTORY.md#v0130-settings-and-v510-adoption-candidate-november-3-2026).
 
-APK footers show the installed native version and active model. Android About shows the shared web version; browser footers retain app/model labels. Available APK labels come only from validated published asset labels. See [Android version and publication rules](ANDROID_APK_VERSIONING.md#installed-and-available-apk-versions).
+| Item               | Current source                                                                                              |
+| ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| App/web bundle     | `0.13.0`, root `package.json`                                                                               |
+| Adopted model      | `v5.1.0`, whole reviewed runtime bundle                                                                     |
+| Android host       | `0.1.9` / code `10`; Debug `0.1.9-dev`                                                                      |
+| Compatibility      | Bridge/schema `1`/`1`, host bounds `10-10`                                                                  |
+| Published baseline | GitHub `v0.12.0`; APK `0.1.8` / code `9`                                                                    |
+| Pending            | Exact-source CI, signed Production APK/staged-site acceptance, current reliability and publication approval |
 
-Model weights/configuration/constants remain adopted V4.5.0; builds regenerate `public/sw.js` from that source. Preserved V5 research and the unrelated training notebook edit remain separate. Validate the newly versioned source/model hashes rather than carrying earlier-build results forward. See the [current candidate record](history/PWA_RELEASE_HISTORY.md#v0120-separate-backup-restore-and-apk-notice-candidate).
+The candidate adds APK Settings with separate language, backup, diagnostics and Production update screens; startup/backup state fixes; seven-condition Home text; Android-only website download actions; and Debug-only fresh-result class scores. Model adoption changes model/cache identity without retraining or changing the recorded 70% rule. Numerical export parity and physical-device evidence remain separate from recorded Colab accuracy/OOD results.
+
+APK footers identify the installed host and active model; About also shows the web-bundle version. Available APK versions come only from a validated published asset label. [Android guide](ANDROID_APK_VERSIONING.md), [model guide](AI_MODEL_VERSIONING.md), [candidate record](history/PWA_RELEASE_HISTORY.md#v0130-settings-and-v510-adoption-candidate-november-3-2026).
 
 ## Version labels and release rules
 

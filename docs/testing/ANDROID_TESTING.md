@@ -1,5 +1,82 @@
 # Android candidate verification
 
+## Adopted V5.1.0 release candidate (November 3, 2026)
+
+**Current prepared Debug installer:** `android/app/build/outputs/apk/debug/app-debug.apk`, SHA-256 `876b197be10ffe54f2d43b7d60f69d28cae523c0dce656ccb225667220338442`, **0.1.9-dev/code 10 / web 0.13.0 / Model V5.1.0**. Independent APK/receipt: ignored `.tools/android-debug-candidates/release-v0130-20261103/`. Install the already-built file with `bun run android:debug:install`; after the adoption commit, standard rebuilds also use V5.1.0. Required source/build checks, 238 tooling tests, 294 core UI cases, 24 notebook contracts, R01's 240 actual predictions, 29 JVM tests and native lint/assembly/assets passed. Physical/Production/current-source R03 and CI acceptance remain pending.
+
+Current source is **app/web 0.13.0**, **APK 0.1.9/code 10** (Debug **0.1.9-dev**), host bounds **10-10**, bridge/schema **1/1**, adopted **Model V5.1.0**. Earlier prepared installers below retain their exact old hashes/labels and do not certify the adopted build. After committing adoption, standard `android:bundle` / `android:debug` use committed V5.1.0; explicit `--working-model` is needed only for later uncommitted model overrides. Keep the same signer and package to preserve local data.
+
+Verify fresh Debug scores and absence from reopened History, reused duplicates and Production. Check Settings language/backup/diagnostics and the Production-only updater, invalid/empty recovery input, switch/copy feedback, native Back and background cancellation. Test cold startup, real camera/photo sizing, offline History and own-code/Pause preservation. Model adoption must not create backup ownership or uploads at ordinary startup. Numerical browser parity, physical/Production acceptance and exact-source CI remain distinct; current results belong in [November 3 testing](TESTING.md#november-3-2026).
+
+## Debug probability details and download policy (November 3, 2026)
+
+**Earlier prepared Debug installer:** `android/app/build/outputs/apk/debug/app-debug.apk`, SHA-256 `ff4628ae8360d8369b5972818fb8c2ab77261ac6b42f72e1c66739f7ec086f36`; independent APK/receipt under ignored `.tools/android-debug-candidates/debug-predictions-20261103/`. Install the already-built V5.1.0 comparison with `bun run android:debug:install`; the default rebuild shortcut would restage committed V4.5.0. All 69 focused UI checks, 21 affected tooling tests, ordered type/lint/build, security/export checks and Debug assembly/lint/assets passed. Physical phone acceptance remains pending.
+
+Candidate labels remain native **0.1.9-dev/code 10**, bundle **0.12.0**, bounds **10-10**, bridge/schema **1/1**, with the authorized local V5.1.0 comparison. The replacement receipt and completed checks belong in [November 3 testing](TESTING.md#november-3-2026); older same-version APK hashes retain their own source identities.
+
+Use a new photo that produces fresh inference in Debug. Its first result should show seven class scores in both languages, with the existing diagnosis/confidence and Uncertain rejection preserved. Close and reopen History: no table is reconstructed. A saved duplicate can reuse its existing diagnosis without inference, so it has no new score rows. Do not clear real History to force the test. Production APK and website details must omit the table even if a caller supplies rows. No database migration, new column or testing-project change is required.
+
+Check the Home heading counts seven conditions, including the two healthy outcomes. On the website, Android browsers retain validated download/installed-app flows; unsupported phone/tablet/desktop browser hints show Android-only information without APK download actions or metadata requests. The public APK file remains directly downloadable outside this UI guard; it is not device authentication. Actual phone/OS installation and signed Production acceptance remain separate.
+
+## Settings lifetime and status audit (November 3, 2026)
+
+**Earlier audit installer:** `mangoleaf-ai-0.1.9-dev-settings-audit-v5.1.0-candidate.apk`, SHA-256 `c046130de58a19b90b49fc78e4e58a6dfedf4a064b2dc1b27e61f9d681e9065b`; independent APK/receipt under ignored `.tools/android-debug-candidates/settings-audit-20261103/`. This historical installer is preserved separately; use the newer prepared candidate above for the current source. All 238 tooling tests, 100 UI checks, 26 layout observations and ordered type/lint/build passed; native Debug lint/assembly and 81 packaged assets passed. Physical phone acceptance remains pending.
+
+This UI candidate retains native **0.1.9-dev/code 10**, bundle **0.12.0**, bounds **10-10**, bridge/schema **1/1** and the authorized V5.1.0 comparison. The replacement receipt and completed checks are in [November 3 testing](TESTING.md#november-3-2026); earlier same-version installer sections retain their exact identities.
+
+On a designated testing phone, check rapid Back/tab changes and reopening Backup/Diagnostics without a stale close or extra Back step. Hide must remain immediate while reads wait; backgrounding must conceal the code, and delayed Copy must not initiate a private clipboard write after invalidation. Check Clear while diagnostic Copy/export waits, retaining newer feedback and native export settlement.
+
+Use isolated failure injection for initial/post-change status failures: local Retry must preserve the receiving code/Pause and input, then show the saved choice. Do not clear real History/credentials to manufacture failures. Repeat English/Bisaya, narrow width and enlarged text, keeping 14px labels and large tap targets. Mock passes do not establish phone/live-backup acceptance. Production updates remain absent in Debug/websites.
+
+## Backup switch feedback (November 2, 2026)
+
+**Current prepared Debug installer:** `android/app/build/outputs/apk/debug/app-debug.apk`, SHA-256 `7d288a3b250d431b2aee5b1caa1c6d56d0e63855612909907b1fb79747e2394f`. A separate APK/receipt is retained under ignored `.tools/android-debug-candidates/backup-toggle-20261102/`. Install the already-built candidate with `bun run android:debug:install` to retain V5.1.0-candidate. Native **0.1.9-dev/code 10**, bundle **0.12.0**, bounds **10-10**, bridge/schema **1/1**, model bytes and native payload are unchanged. Earlier installer sections below retain their own identities.
+
+Flip Back up my scans On/Pause in both languages while observing Show, Copy and Restore: controls must remain opaque, only the switch is temporarily disabled, and the displayed choice must follow the saved setting. A failed change must show retry feedback and retain the actual saved choice. The operation guard must prevent overlapping restore work. Create/Restore busy feedback, code masking/background concealment and typed input remain preserved. Ordered type/lint/build, all **36** backup UI combinations, Debug lint/assembly and **81** packaged assets passed using isolated fixtures. Physical-phone acceptance and live backup behavior remain separate; see [exact evidence](TESTING.md#november-2-2026).
+
+## Settings action typography (November 2, 2026)
+
+**Current prepared Debug installer:** `android/app/build/outputs/apk/debug/app-debug.apk`, SHA-256 `40855205a46bdd8f5cfc69433e1fce2ab0af7895617dbdf03b023e986bd781de`. A separate APK/receipt is retained under ignored `.tools/android-debug-candidates/settings-typography-20261102/`. Install the already-built candidate with `bun run android:debug:install` to retain V5.1.0-candidate. Native **0.1.9-dev/code 10**, bundle **0.12.0**, bounds **10-10** and bridge/schema **1/1** are unchanged. Earlier installer sections below retain their own source/byte identities.
+
+Backup Show/Hide, Copy, Create, Restore and Production Update action labels now match Diagnostics at 14px bold at the default text scale. Backup buttons retain 48px minimum tap height; Update/Diagnostics retain at least 44px, and input text remains 16px. Check both languages with enlarged phone text and confirm long labels wrap within their buttons. Ordered type/lint/build, eight focused UI cases, 24 controlled layout observations, Debug lint/assembly and 81 packaged-asset checks passed. No new physical-phone or Production-signed acceptance is inferred; see [exact checks and installer identity](TESTING.md#november-2-2026).
+
+## Settings tools and code feedback (November 2, 2026)
+
+Later UI candidate retains **0.1.9-dev/code 10**, bundle **0.12.0**, bounds **10-10**, bridge/schema **1/1**, and the authorized local V5.1.0-candidate comparison. Native startup resources and model bytes are unchanged by this follow-up. Rebuild/install to include the new UI; earlier same-version receipts identify older inputs.
+
+**Current prepared Debug installer:** `android/app/build/outputs/apk/debug/app-debug.apk`, SHA-256 `35cf36e40e9233b3a85874012bfaea804181fa00d8b2767e40ef999b493b3a38`. An independent APK/receipt is retained under ignored `.tools/android-debug-candidates/settings-tools-20261102/`. Install this already-built candidate with `bun run android:debug:install`; rebuilding through the default shortcut would restage committed V4.5.0. Ordered type/lint/build, 81 unit tests, 70 controlled UI checks, Debug lint/assembly and all 81 packaged assets passed. Production UI checks used local fixtures; no Production installer was signed or installed. Earlier installer paragraphs below preserve their own dated bytes and results.
+
+Check APP LANGUAGE above the card while Language remains inside. In both APK variants, Diagnostic logs opens its own Settings page after Backup; About keeps only application information. Diagnostic recording stays off until explicitly enabled, keeps existing events across Back/reopening and preserves its privacy/export limits. Production alone has a persistent App updates entry after Diagnostic logs, including without a confirmed offer. Offline/unknown status must not say the installed APK is latest. A verified newer offer still uses the shared native download/progress/cancel/Android-confirmation flow; the separate signed web-OTA restart flow is unchanged.
+
+Submit empty, malformed and syntactically valid rejected recovery codes. Confirm the translated inline message and retained input/current identity/Pause; edit the input to clear field validation. Malformed input makes no Auth request. A connection/rate-limit/service failure must show general retry feedback, not label the code wrong. Confirm correct own/source-code restores and browser exclusions with isolated mocks before designated testing-phone checks. Native Back, keyboard and clipboard still require phone observation. [Dated checks and exact artifact](TESTING.md#november-2-2026) remain separate from Production signing/publication.
+
+## Startup and backup follow-up (November 2, 2026)
+
+Later unpublished candidate: native **0.1.9-dev/code 10**, web **0.12.0**, bounds **10-10**, bridge/schema **1/1**. Native splash handoff/background changes need this new installer. The local Debug comparison retains V5.1.0-candidate; default/adopted V4.5.0 remains preserved. Earlier same-day 0.1.8 APK evidence stays separate.
+
+**Prepared installer:** `android/app/build/outputs/apk/debug/app-debug.apk`, SHA-256 `054d5ed4f62ddeb9a6ac2cc7c0d6564ecc77bf933f9e7e3c42406562f014fe2e`; an independent APK/receipt is retained under ignored `.tools/android-debug-candidates/ui-followup-20261102/`. Install the existing candidate with `bun run android:debug:install` to retain the working V5.1.0 model. Local gates, 26 UI cases, 59 tooling cases, 29 JVM cases and five API-36 platform cases passed. The emulator captured the direct leaf-to-loader handoff and translated input reminder. Native Back and model-initialization observations were inconclusive on that emulator; physical acceptance remains pending. See [exact evidence and limits](TESTING.md#november-2-2026).
+
+Verify cold launch and Activity recreation: one still system leaf, no smaller duplicate native leaf or white WebView gap, then the React loader/Home. Repeat offline; native startup failures must remain readable. Confirm system bars, keyboard insets and camera permission/background behavior are preserved. Emulator observations do not establish Samsung/One UI or physical-device behavior.
+
+In EN/BIS Settings, check the short language label, stable existing-backup page on entry, stacked narrow-phone Show/Copy controls and no whole-panel dimming for Copy. Confirm paused backup text distinguishes retained cloud copies from local scans. Submit empty and spaces-only recovery input: show the inline paste reminder, focus the field and make no restore call; pasting a code clears validation. Correct explicit own/source codes still restore, and duplicate valid restores can correctly report zero new scans. Receiving code/Pause and wrong-code preservation remain required. This supersedes the initial November 2 blank restore shortcut; all website exclusions remain in force. See [final local checks and artifact identity](TESTING.md#november-2-2026).
+
+## APK Settings and backup layout (November 2, 2026)
+
+Unpublished UI candidate for both APK variants: Home, About, raised Scan, History and Settings. Language and private backup are in Settings; About retains Diagnostics and update information. The prepared Debug comparison uses testing and the explicitly authorized V5.1.0-candidate model. Adopted/default V4.5.0, native 0.1.8-dev/code 9, bundle 0.12.0 and bridge/schema 1/1 remain unchanged. Earlier dated installer hashes identify different inputs.
+
+**Prepared Debug installer:** `android/app/build/outputs/apk/debug/app-debug.apk`, also retained with its receipt under ignored `.tools/android-debug-candidates/settings-backup-20261102/`. Install this existing file with `bun run android:debug:install`; the rebuild-and-install shortcut would restage committed V4.5.0. The [November 2 record](TESTING.md#november-2-2026) identifies exact bytes, signer and passed local checks. No phone installation was performed.
+
+On the exact rebuilt Debug APK, check the following before acceptance:
+
+- Open Settings and backup after a cold start, switch Bisaya/English, return using the page Back and Android Back, and revisit all four tabs/Scan. Keep the existing header and five navigation controls usable.
+- Confirm a phone without backup stays local when merely opening Settings. Use a dedicated testing profile for explicit setup/restore. Save its new code outside the phone; do not reset real History/credentials.
+- Confirm Not set up, On, Paused and On - waiting for internet match the local preference/connection. Pause must retain existing cloud copies; On is not a completed-upload claim.
+- Check hidden code, Copy while hidden, Show/Hide, full code wrapping, concealment after switching tabs/backgrounding and no late reveal. Try large text, the smallest phone width and the restore keyboard; scroll the final help/action above the fixed navigation.
+- Restore a controlled source into an established receiver and a fresh testing receiver. Preserve receiving code/Pause and existing scans; verify the separate new code after fresh setup. Wrong codes keep input/settings and an error; repeat restore counts remain accurate.
+- Check Home/About/install/language on phone and desktop websites: no Settings, private backup, scanner or History. Preserve legacy browser data.
+
+Controlled source/test results are in [the dated testing record](TESTING.md#november-2-2026). Actual Android Back, keyboard, clipboard, background privacy and real testing-project transfers still require phone observations; mocks do not establish those results. No Production artifact or physical-device pass is inferred.
+
 **Latest precommit status, October 26:** the maintainer reports completing latest Debug APK checks plus the testing website on desktop and phone. R03 passed with input hashes matching the current candidate; it runs the local browser scanner harness, not an APK or native SQLite/camera. No new phone-side installer hash/logs were supplied. Production-signed artifact testing, exact-commit CI, staged production checks and release approval remain pending. This later status supersedes pending-R03 statements in the earlier dated preparation records below; [evidence and scope](TESTING.md#october-26-2026) remain separate from publication.
 
 ## History performance follow-up (October 26, 2026)
