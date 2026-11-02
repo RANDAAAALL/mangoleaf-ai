@@ -1,0 +1,16 @@
+{
+  "stage": 2,
+  "epoch": 7,
+  "accuracy": 0.9590336084365845,
+  "loss": 1.231368064880371,
+  "mango_loss": 0.15961596369743347,
+  "oe_loss": 2.1431190967559814,
+  "val_accuracy": 0.9607843160629272,
+  "val_loss": 0.11000916361808777,
+  "val_mango_loss": 0.11000916361808777,
+  "val_oe_loss": 0.0,
+  "learning_rate": 9.999999747378752e-06,
+  "mangoTrainingCount": 1904,
+  "oeBatches": 60,
+  "uniqueOeExposedSoFar": 2511
+}

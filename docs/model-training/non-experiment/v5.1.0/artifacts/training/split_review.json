@@ -1,0 +1,33 @@
+{
+  "complete": true,
+  "notes": "REVIEWED",
+  "counts": {
+    "train": {
+      "anthracnose": 346,
+      "bacterial_black_spot": 210,
+      "bacterial_canker": 350,
+      "healthy_fruit": 115,
+      "healthy_leaf": 361,
+      "mango_scab": 167,
+      "sooty_mold": 355
+    },
+    "val": {
+      "anthracnose": 74,
+      "bacterial_black_spot": 45,
+      "bacterial_canker": 75,
+      "healthy_fruit": 24,
+      "healthy_leaf": 78,
+      "mango_scab": 36,
+      "sooty_mold": 76
+    },
+    "test": {
+      "anthracnose": 74,
+      "bacterial_black_spot": 45,
+      "bacterial_canker": 75,
+      "healthy_fruit": 24,
+      "healthy_leaf": 78,
+      "mango_scab": 36,
+      "sooty_mold": 76
+    }
+  }
+}

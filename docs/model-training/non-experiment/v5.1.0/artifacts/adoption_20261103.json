@@ -1,0 +1,724 @@
+{
+  "schemaVersion": 1,
+  "adoptedDate": "2026-11-03",
+  "authorization": "Maintainer explicitly selected V5.1.0 for the next release in this session.",
+  "adoptionStatus": "repository adoption; production publication pending",
+  "appVersion": "0.13.0",
+  "nativeVersionName": "0.1.9",
+  "nativeVersionCode": 10,
+  "sourceBaselineCommit": "81727cda04a2898f3b8cad5b487006f7468067d8",
+  "previousAdoptedModel": "v4.5.0",
+  "modelVersion": "v5.1.0",
+  "originalCandidateIdentity": "model-v5.1.0-candidate",
+  "adoptedAssetIdentity": "model-v5.1.0",
+  "modelCache": "mangoleaf-model-cache-v5-1-0",
+  "runtimeFiles": {
+    "group1-shard1of3.bin": {
+      "sha256": "10f40fd98cf6b75ebf3cbc5c65c3fd80e692a22b2c7ab1cb5107325032759696",
+      "bytes": 4194304
+    },
+    "group1-shard2of3.bin": {
+      "sha256": "25fa1845530e83476ea2ee9fa10414737a14432cc8aac1bbbb3be0b81f33ec07",
+      "bytes": 4194304
+    },
+    "group1-shard3of3.bin": {
+      "sha256": "279734db4ddef2fc98da1f0b4d8590ce76eba4451a98b921885ca1f9d0ff2f52",
+      "bytes": 3497804
+    },
+    "model.json": {
+      "sha256": "f4da51e246767a3f1e310d53c2e147bc5ab6a22842ec9baf3a21dbb0fa8ea4b2",
+      "bytes": 228393
+    },
+    "model_config.json": {
+      "sha256": "afe95b273df53e3a14048e2f84b506015f52a6c846407ded69d332d38b157b1c",
+      "bytes": 1470
+    }
+  },
+  "previousLocalRuntimeConfigSha256": "9bbd38b90bae0ff8bccb00633adaa32cca4cb215723ce639c76fb9a36512793d",
+  "weightsAndGraphUnchanged": true,
+  "scientificConfigurationUnchanged": true,
+  "recordedEvaluation": {
+    "rawCorrect": 396,
+    "mangoTotal": 408,
+    "acceptedCorrect": 390,
+    "acceptedTotal": 400,
+    "rejectedMango": 8,
+    "unsupportedFalseAccepted": 193,
+    "unsupportedTotal": 995
+  },
+  "limits": [
+    "Previously used study collections, not fresh independent field evidence.",
+    "Cultivar/source/capture independence limits remain as recorded in the trial.",
+    "193 of 995 unsupported reporting photos were falsely accepted.",
+    "Numerical Keras/browser parity and exact Production/physical acceptance remain unconfirmed."
+  ],
+  "originalRecordsPreserved": {
+    "notebooks/non-experiment/v5.1.0/.gitattributes": {
+      "originalRepositoryPath": "notebooks/experiment/v5.1.0/.gitattributes",
+      "sha256": "c7f37eeda0d55a119e2b9395eaee6758dbb7c95e5d6e13626d774f7a843744e5",
+      "bytes": 73
+    },
+    "notebooks/non-experiment/v5.1.0/MangoLeaf_AI_Evaluate_v5_1_0.ipynb": {
+      "originalRepositoryPath": "notebooks/experiment/v5.1.0/MangoLeaf_AI_Evaluate_v5_1_0.ipynb",
+      "sha256": "8da397e2467b7bb406443371bc083b7991c2a9854e102b67475a25dca5fb0de9",
+      "bytes": 65919
+    },
+    "notebooks/non-experiment/v5.1.0/MangoLeaf_AI_Evaluate_v5_1_0_Results.ipynb": {
+      "originalRepositoryPath": "notebooks/experiment/v5.1.0/MangoLeaf_AI_Evaluate_v5_1_0_Results.ipynb",
+      "sha256": "6f62d090bef683b96b020434582d9789205e55c0d5101b62098681071ebd8514",
+      "bytes": 747898
+    },
+    "notebooks/non-experiment/v5.1.0/MangoLeaf_AI_Training_v5_1_0.ipynb": {
+      "originalRepositoryPath": "notebooks/experiment/v5.1.0/MangoLeaf_AI_Training_v5_1_0.ipynb",
+      "sha256": "07941c547788c5d8c07f8275a88bde3a31e2d7885bf019e84354783859e20682",
+      "bytes": 166465
+    },
+    "notebooks/non-experiment/v5.1.0/MangoLeaf_AI_Training_v5_1_0_Post_Training.ipynb": {
+      "originalRepositoryPath": "notebooks/experiment/v5.1.0/MangoLeaf_AI_Training_v5_1_0_Post_Training.ipynb",
+      "sha256": "37fa0c7b310c2eb8629a7aa5d3ee2b279eba4074e6391a0eaf816e0df48042ee",
+      "bytes": 12841307
+    },
+    "notebooks/non-experiment/v5.1.0/reference-inputs/new-dataset-identities.json": {
+      "originalRepositoryPath": "notebooks/experiment/v5.1.0/reference-inputs/new-dataset-identities.json",
+      "sha256": "dc45dd9424b6f5eee387025ce03b3a70e51ba5d9e8f41e3d8728ccdc4b3f915b",
+      "bytes": 18130
+    },
+    "notebooks/non-experiment/v5.1.0/reference-inputs/v5-evaluation-reporting-lock.json": {
+      "originalRepositoryPath": "notebooks/experiment/v5.1.0/reference-inputs/v5-evaluation-reporting-lock.json",
+      "sha256": "b35725b99c960557aca9740665863c012d15053475ceae5efac6bd237fdbaab0",
+      "bytes": 1412042
+    },
+    "notebooks/non-experiment/v5.1.0/reference-inputs/v5-training-input-manifest.json": {
+      "originalRepositoryPath": "notebooks/experiment/v5.1.0/reference-inputs/v5-training-input-manifest.json",
+      "sha256": "7d6bb3e80edd5c96731838c172deec7e836d3f877d8f8fa7007458df165db8cf",
+      "bytes": 2907925
+    },
+    "notebooks/non-experiment/v5.1.0/repair-v5-1-step12.py": {
+      "originalRepositoryPath": "notebooks/experiment/v5.1.0/repair-v5-1-step12.py",
+      "sha256": "1863f41a33ca3e0e564f4e403e3fa5c2be9bb2fac415663e97686aef00e05f50",
+      "bytes": 4546
+    },
+    "notebooks/non-experiment/v5.1.0/repair-v5-1-step4.py": {
+      "originalRepositoryPath": "notebooks/experiment/v5.1.0/repair-v5-1-step4.py",
+      "sha256": "f1b99a5993414ace5ea581ae15ae799c01904c672cb71e157f846f82a29c367c",
+      "bytes": 20272
+    },
+    "notebooks/non-experiment/v5.1.0/repair-v5-1-step5.py": {
+      "originalRepositoryPath": "notebooks/experiment/v5.1.0/repair-v5-1-step5.py",
+      "sha256": "a061f51be2e07f0e91b832e415a5e3e4746054645d87d85dc51c48dec3e77278",
+      "bytes": 22130
+    },
+    "docs/model-training/non-experiment/v5.1.0/.gitattributes": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/.gitattributes",
+      "sha256": "b807f2cef9bc8e6061c2489ce14b8c64ca416755144b8ba8138800cd27ad8f70",
+      "bytes": 181
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/confidence_70_overall_results.csv": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/confidence_70_overall_results.csv",
+      "sha256": "9216d5737bb842cfa336b7dc6157ea5f75dffe7f731c799208029f3088fb5aba",
+      "bytes": 143
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/confidence_70_per_class_metrics.csv": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/confidence_70_per_class_metrics.csv",
+      "sha256": "cf552d9c3b895351a7bc39aaa54087570cde613ed644a799353b1000495e0441",
+      "bytes": 526
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/evaluation.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/evaluation.json",
+      "sha256": "5fa8951b9264f8612214248d05e6c3ed09463ad3dd4e808b9402c07f04b6f908",
+      "bytes": 18480
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/evaluation_complete.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/evaluation_complete.json",
+      "sha256": "fb78e1a7d6543a63272abf110f22df3268b9d14606c1ba1b7e6de79fcc808930",
+      "bytes": 5766
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/evaluation_inputs.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/evaluation_inputs.json",
+      "sha256": "f1bf4b88a89609b305ef6754823a2a457027d1a040ad03f23bae033bfbed96c6",
+      "bytes": 2110173
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/evaluation_started.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/evaluation_started.json",
+      "sha256": "87b916fde30141f2f645cf6545c1a074b6c0cf02f7b7b30500e6e5df1138e439",
+      "bytes": 147
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/mango_predictions.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/mango_predictions.json",
+      "sha256": "528357a76714e87bcab4f47a4e4e9fceefc4defd3b7295e07e1322e4ab2e8462",
+      "bytes": 147575
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/mango_test_probabilities.npy": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/mango_test_probabilities.npy",
+      "sha256": "f94b16e9e268e9abe9b98d7d7156839aa81358354b422722e1c4b94e7f1c7567",
+      "bytes": 11552
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/ood_predictions.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/ood_predictions.json",
+      "sha256": "57d4572ef61057d6fcfb91963671c928a86a11d25a40304027f088b83e880de4",
+      "bytes": 390364
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/ood_probabilities.npy": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/ood_probabilities.npy",
+      "sha256": "953354abdaeeba649c983bc04e604759dcb9cae5d7bb6b1d3db7de7511257110",
+      "bytes": 27988
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/raw_per_class_metrics.csv": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/raw_per_class_metrics.csv",
+      "sha256": "34c777074a4eec9a8a58c74aaa8cb17d4a0a7a655099337dec150a5cb4181c2c",
+      "bytes": 482
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/reporting_plan.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/reporting_plan.json",
+      "sha256": "3f52b7220751f58080a87d5fb092e7912a23744b8e370208245bfb5c1608608d",
+      "bytes": 837
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/runtime.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/runtime.json",
+      "sha256": "743b9f269684b7abef9e30863ceadba8caffc0f433ee8d06d7353d367f0361ea",
+      "bytes": 2388
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/runtime_preflight/installation.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/runtime_preflight/installation.json",
+      "sha256": "6abf0123cb36b43cf65b9f721114894a3b33cd47c294a3d1a31c2cda78302a6d",
+      "bytes": 599
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/runtime_preflight/installation.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/runtime_preflight/installation.log",
+      "sha256": "b6a159e9318bea1138de506de1545992d25f810d7426905857bfc152541b490e",
+      "bytes": 15613
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/runtime_preflight/pip-bootstrap.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/runtime_preflight/pip-bootstrap.log",
+      "sha256": "349f858092a8ced2e69210c9fe392c8523d926c8d66150f131b31af64d59252a",
+      "bytes": 502
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/runtime_preflight/provider-pip-check.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/runtime_preflight/provider-pip-check.log",
+      "sha256": "8bc713b7feac676c3a908168ed6260b1bb208e0b8acd41ebcfa3583b81a30f15",
+      "bytes": 382
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/runtime_preflight/training-audit.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/runtime_preflight/training-audit.json",
+      "sha256": "59276664ac18c685512af8e2102ddd51cefe551c2b41972882e7a768d0a98db2",
+      "bytes": 4015
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/runtime_preflight/training-audit.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/runtime_preflight/training-audit.log",
+      "sha256": "6d5085911020ff44e3db97df2f5318e71b3072eae399a0f01982584df90b8b89",
+      "bytes": 266
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/runtime_preflight/training-runtime-lock.txt": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/runtime_preflight/training-runtime-lock.txt",
+      "sha256": "0ea15fb57dc7396fd52f130aa6839ab20a97cea1cf6836074d1160acd6401d4a",
+      "bytes": 1253
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/tfjs_model/model.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/tfjs_model/model.json",
+      "sha256": "f4da51e246767a3f1e310d53c2e147bc5ab6a22842ec9baf3a21dbb0fa8ea4b2",
+      "bytes": 228393
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/tfjs_model/model_config.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/tfjs_model/model_config.json",
+      "sha256": "daf7048238323c4f0b36aeffea8339b71862496b9763cb2008ba1af6a7d65ef5",
+      "bytes": 1100
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation/training_reference.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation/training_reference.json",
+      "sha256": "03f1b81c6b70706fdb7fe81590de99bb22be93a957d51b4927a43ec00eb6fac3",
+      "bytes": 571
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evaluation_evidence_copy_manifest.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evaluation_evidence_copy_manifest.json",
+      "sha256": "caf2dc4fa617d4058f3be66bd6ab284deb9fdf8f98d4841f0da61bd868818dc1",
+      "bytes": 16801
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/evidence_copy_manifest.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/evidence_copy_manifest.json",
+      "sha256": "bb46f78e72225428c8106de2efe7adea56262cfe85ed3e4bf8d5ecf06d323b02",
+      "bytes": 24768
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/local-debug/browser-smoke-observations.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/local-debug/browser-smoke-observations.json",
+      "sha256": "56721550bbfbbb3330074bafa31c1e5e24420895131a7687c5167bfe62132c11",
+      "bytes": 19310
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/local-debug/copy_manifest.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/local-debug/copy_manifest.json",
+      "sha256": "48770701afdefc1196372abf96540d07f7f5e616976720cd389cf0277a959b75",
+      "bytes": 1117
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/local-debug/local_validation.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/local-debug/local_validation.json",
+      "sha256": "8aab597d515a3aba03e9055c7fbf8ae385ab981d3bdc14e98e2f0de862e5b73e",
+      "bytes": 2913
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/local-debug/model-swap-receipt.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/local-debug/model-swap-receipt.json",
+      "sha256": "bf8221d9c61aa5ddaee3588b20f810939067ecef095fe4c6105b4c7c4f5d2c08",
+      "bytes": 3084
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/local-debug/packaged-bundle-receipt.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/local-debug/packaged-bundle-receipt.json",
+      "sha256": "2b2ce4a8971d4effa7b6172d02c8da911e2ef399d8201411e928e8a9634bc9bb",
+      "bytes": 1034
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/local-debug/runtime-model-config.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/local-debug/runtime-model-config.json",
+      "sha256": "9bbd38b90bae0ff8bccb00633adaa32cca4cb215723ce639c76fb9a36512793d",
+      "bytes": 1364
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/review/evaluation_verification_summary.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/review/evaluation_verification_summary.json",
+      "sha256": "f1a53f76e83e5e9486a65ff9754b8de955e4c085b2765f3255947f6da5efbc6b",
+      "bytes": 2322
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/review/verification_summary.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/review/verification_summary.json",
+      "sha256": "1256e4738034ff93c840e1f829da556b836403f73d505c4141d57a4150bcfaec",
+      "bytes": 2830
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/augmentation_review.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/augmentation_review.json",
+      "sha256": "39ac259bc15ddb1ba86d43a510ba8a834c3bfbd7c155b58d1e768e4f79dbc21f",
+      "bytes": 206
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/calibration_complete.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/calibration_complete.json",
+      "sha256": "b56c3145a401e859f35b93b9a6c3db31118e0e6360438d0b715977b43941bb03",
+      "bytes": 691
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/class_names.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/class_names.json",
+      "sha256": "b96d0d53ca197fa056bf6e161f273009c9d93aa12371cea0339f2e09cf1ffcea",
+      "bytes": 137
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/class_weights.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/class_weights.json",
+      "sha256": "bcf517cb34ad159fe84e1ac99c5ab873d432378d7524721487caba165a028839",
+      "bytes": 276
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/converter_preflight/audit-summary.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/converter_preflight/audit-summary.json",
+      "sha256": "826c93fd151aa3775f7c2de322aaeaf842cdc9f981f1454c3f376165a83ccaaa",
+      "bytes": 16830
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/converter_preflight/audit.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/converter_preflight/audit.json",
+      "sha256": "1f13470650c69477be4d8691d15afc4011f27e26a4e10c3ab3f9ffd6f7378e74",
+      "bytes": 19022
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/converter_preflight/audit.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/converter_preflight/audit.log",
+      "sha256": "4e37e6e2fbc4229ea071be52722792bdee24978fc8d81d34f7592a450e18364f",
+      "bytes": 6441
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/converter_preflight/conversion.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/converter_preflight/conversion.log",
+      "sha256": "61f18f17cd2a695c2d2ff9490ae4ff393931de71b699ecb332139f0b729864e5",
+      "bytes": 2416
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/converter_preflight/converter-runtime-lock.txt": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/converter_preflight/converter-runtime-lock.txt",
+      "sha256": "d85e662f62ff91feaa2eb3d2309b24bf874ae35057e5a3909b2405e01390b745",
+      "bytes": 1498
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/converter_preflight/environment-setup.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/converter_preflight/environment-setup.log",
+      "sha256": "0bbc6b4a84224f98b1192de75017405da0fbe64eb877e82bbd32e0dbfceaff23",
+      "bytes": 404
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/converter_preflight/freeze.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/converter_preflight/freeze.log",
+      "sha256": "3f13618a114e39a406205deeff6d87d9ae1d12e03b7b1d38bc980ea54b918654",
+      "bytes": 1499
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/converter_preflight/package-installation.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/converter_preflight/package-installation.log",
+      "sha256": "48a359327cde7e77fc92d8949fdcdd6e3061a51678bf26586dbb83d1d2a10ea3",
+      "bytes": 1953
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/converter_preflight/pip-check.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/converter_preflight/pip-check.log",
+      "sha256": "a10f75b992f2f250449978aa5040718b580021919b995d4757300e84e5c3a219",
+      "bytes": 31
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/converter_preflight.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/converter_preflight.json",
+      "sha256": "63df178c2a80a77945cb2f5ba34a44163dca82bb2bd00ded7759eab444d382a7",
+      "bytes": 813
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/duplicate_audit.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/duplicate_audit.json",
+      "sha256": "19a50f1aa1da227eb370e782e6653311475c61f54c8c8d26f4f8efaa839cf3ad",
+      "bytes": 314
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/duplicate_review.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/duplicate_review.json",
+      "sha256": "66e9ecca97c76f086398e3b50940ce293b5be19d8799fa49a5f7a6ac6b60cdaa",
+      "bytes": 141709
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_01.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_01.json",
+      "sha256": "b8a150425beab0729c8680aa34080d328f9ebc5df7cf23164e7ef3ee566ac82b",
+      "bytes": 418
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_02.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_02.json",
+      "sha256": "173b8c59795b56e7a4e4fb3825d25db71cd65c5aa97965ed5f53f698cc4410d1",
+      "bytes": 421
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_03.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_03.json",
+      "sha256": "074f57472bd44e68fe4beb13869126bb0f662375050d9200bb0099505330de75",
+      "bytes": 422
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_04.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_04.json",
+      "sha256": "c5763fc6d6e632afccfc6121f58dccd1c91d2c60ed221e4e352c3c852c6c5cdc",
+      "bytes": 421
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_05.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_05.json",
+      "sha256": "55cad06042269ac67a276e69980c1fae2c45e0a573eac51ab87e2d49b279764e",
+      "bytes": 424
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_06.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_06.json",
+      "sha256": "517f617a75052d18980ec822e7fd62865ef98ea310cff03f09d8fbe475b4ba5a",
+      "bytes": 423
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_07.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_07.json",
+      "sha256": "96aef7bfec0f069a0a47f30fc64e6a3b2efbd88e9656e1bde3c62f8ca84cb740",
+      "bytes": 423
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_08.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_08.json",
+      "sha256": "b25bfc186638f82d9883f484ee02c611b33c9c8b6a0b1875601beeec10e7a43d",
+      "bytes": 422
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_09.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_09.json",
+      "sha256": "fd1eb1fb5930ecfceb62f502295da003dcace1d3918ec45ec0499b51c81e91b3",
+      "bytes": 422
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_10.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_10.json",
+      "sha256": "b647d695539d2aa6153f75634988aac6d940f01f786d749c51fe5ef535948a93",
+      "bytes": 425
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_11.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_11.json",
+      "sha256": "6af81bb9ec926d3cea1d87f2e58d838e303cfd2ff5e20de25d3d6fab0adc1604",
+      "bytes": 422
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_12.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_12.json",
+      "sha256": "c65fd6c562f04d66b65ae15ad28a960a1d6383776474ee8101180d825c06a571",
+      "bytes": 420
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_13.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_13.json",
+      "sha256": "3aa063715596115b4aca4b52880ede14374e6496a20510aa7896cefb8afcf8c8",
+      "bytes": 425
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_14.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_14.json",
+      "sha256": "d87dd2cd1c65a3b81dc6899a9f55fd92470be78ff37ca73d47def947d65e39be",
+      "bytes": 423
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/epoch_15.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/epoch_15.json",
+      "sha256": "12ef46109636e7213d9616dfbc9657a3c5430dc4564d7a005b9d55270f476967",
+      "bytes": 423
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/example_selection.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/example_selection.json",
+      "sha256": "824567749eb0edb99d77cae8c0a888973f6e70ea614c6b8fe8fd23ca93637c92",
+      "bytes": 6247
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/export_attempts/20261031T231509Z-734c7c27/conversion.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/export_attempts/20261031T231509Z-734c7c27/conversion.log",
+      "sha256": "01a98fa18782d738bf06992b8fb2650ff7bd65240771d4ee19f9ff722496d05c",
+      "bytes": 2416
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/export_complete.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/export_complete.json",
+      "sha256": "3803734ef88f2c0ad4419df8aa4ebb2d42612bef3f471ed4398f6a8a1fac1319",
+      "bytes": 983
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/figure_manifest.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/figure_manifest.json",
+      "sha256": "da81133fd2e47092117ce2901d85f1b8fafe85cf5a33f15a7d9712c0a6378a63",
+      "bytes": 4577
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/frozen_inputs.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/frozen_inputs.json",
+      "sha256": "17878d56f5cd182003b3e34d251962143f3850fef29488388719f64f159241a0",
+      "bytes": 1235628
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/initial_weights.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/initial_weights.json",
+      "sha256": "8c70ea8589b932e198ff7e31a8e42db65ddfc5853253cc76d6fe3e6b3b001a74",
+      "bytes": 158
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/input_manifest.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/input_manifest.json",
+      "sha256": "f602200d75b2332c56ab38eb95e7e45f40e28af2ec6733b1630bf690e48618a2",
+      "bytes": 2200287
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/new_mango_input_selection_v2.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/new_mango_input_selection_v2.json",
+      "sha256": "b162838061e08752e38a29d3502ec56f430ed836f727e7d05aab58fd5631bf8f",
+      "bytes": 54885
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/oe_dataset_manifest.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/oe_dataset_manifest.json",
+      "sha256": "4b80a484dc74ef1de99cff16ddbc41cc9836d7b665361d1090d7d7bb9dd603bb",
+      "bytes": 2170854
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/oe_exposure.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/oe_exposure.json",
+      "sha256": "33f910c81452b4dd3fecf73f3c5017d486bd52232ce8969307e488f68d30194c",
+      "bytes": 190260
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/phash_drift_audit.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/phash_drift_audit.json",
+      "sha256": "4c29691d3788a8f3bd4d3cc6c42c45a556631199545902d16f1644eee5366ad6",
+      "bytes": 3703
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/plan.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/plan.json",
+      "sha256": "ccd32f740f3a3ee83f29078b0a2dd953f1c94d9f037c3457dc241bca3706f405",
+      "bytes": 2926
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/reference-inputs/new-dataset-identities.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/reference-inputs/new-dataset-identities.json",
+      "sha256": "dc45dd9424b6f5eee387025ce03b3a70e51ba5d9e8f41e3d8728ccdc4b3f915b",
+      "bytes": 18130
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/reference-inputs/v5-evaluation-reporting-lock.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/reference-inputs/v5-evaluation-reporting-lock.json",
+      "sha256": "b35725b99c960557aca9740665863c012d15053475ceae5efac6bd237fdbaab0",
+      "bytes": 1412042
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/reference-inputs/v5-training-input-manifest.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/reference-inputs/v5-training-input-manifest.json",
+      "sha256": "7d6bb3e80edd5c96731838c172deec7e836d3f877d8f8fa7007458df165db8cf",
+      "bytes": 2907925
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/reporting_ood_manifest.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/reporting_ood_manifest.json",
+      "sha256": "704731fc4413c1d90b3617e4cc8c239c43049c503fcb082ff288aa786a5ad78f",
+      "bytes": 1780625
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/reviewed_images.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/reviewed_images.json",
+      "sha256": "e91ba42c835bdb10403c630237f2a9bfabe32563edc8bec5a5a5cc55adc36f70",
+      "bytes": 13840
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/runtime.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/runtime.json",
+      "sha256": "757618951d31c0dc7090ca92806f4bfab967d3c8229e29713c9b6f6e4b0042b6",
+      "bytes": 2259
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/runtime_preflight/installation.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/runtime_preflight/installation.json",
+      "sha256": "b1bba54f32ab306578e62c14c15c6b247757037e0d79cdfed2920bf8b59fa604",
+      "bytes": 599
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/runtime_preflight/installation.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/runtime_preflight/installation.log",
+      "sha256": "4da9db012e09f64b632d0cbff6661c4caf5c1fd8048710ab79e89b3927b6b813",
+      "bytes": 15614
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/runtime_preflight/oe_mathematical_probe.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/runtime_preflight/oe_mathematical_probe.json",
+      "sha256": "e5ae6d5d640668826fc67660aca8578a8f945b8c021b80ba33f7af5f045de6d5",
+      "bytes": 347
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/runtime_preflight/pip-bootstrap.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/runtime_preflight/pip-bootstrap.log",
+      "sha256": "01ee78553575a4c2c6fc09d36d197729c93193564d8c6f55ce54c1e8db56ac54",
+      "bytes": 502
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/runtime_preflight/provider-pip-check.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/runtime_preflight/provider-pip-check.log",
+      "sha256": "8bc713b7feac676c3a908168ed6260b1bb208e0b8acd41ebcfa3583b81a30f15",
+      "bytes": 382
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/runtime_preflight/training-audit.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/runtime_preflight/training-audit.json",
+      "sha256": "59276664ac18c685512af8e2102ddd51cefe551c2b41972882e7a768d0a98db2",
+      "bytes": 4015
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/runtime_preflight/training-audit.log": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/runtime_preflight/training-audit.log",
+      "sha256": "6d5085911020ff44e3db97df2f5318e71b3072eae399a0f01982584df90b8b89",
+      "bytes": 266
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/runtime_preflight/training-runtime-lock.txt": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/runtime_preflight/training-runtime-lock.txt",
+      "sha256": "0ea15fb57dc7396fd52f130aa6839ab20a97cea1cf6836074d1160acd6401d4a",
+      "bytes": 1253
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/split_review.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/split_review.json",
+      "sha256": "e7e23000f14111561f6e9ee19129b7429c0171957705afcc48cea729c1ed0941",
+      "bytes": 701
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/stage1_selection.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/stage1_selection.json",
+      "sha256": "7cf6f0cd227b37609e47650a296def5dbcc83fa4835382a5acd8aaee64b4297d",
+      "bytes": 146
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/stage2_selection.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/stage2_selection.json",
+      "sha256": "9ee597651ce91be91553fdb9fc3954de1cf97cd57e2c073cb5187e3f63dec1b3",
+      "bytes": 147
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/step4_repair_20261101.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/step4_repair_20261101.json",
+      "sha256": "65c145805924d5dccf6172c5f742d09043ccb406c04a44019e38cd6bfdc5ce6f",
+      "bytes": 309
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/temperature.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/temperature.json",
+      "sha256": "b093e027accc93e04b27374f5ac1897aa145d84ec2a5ed8fc1f9a12aea5d4fa9",
+      "bytes": 448
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/tfjs_model/model.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/tfjs_model/model.json",
+      "sha256": "f4da51e246767a3f1e310d53c2e147bc5ab6a22842ec9baf3a21dbb0fa8ea4b2",
+      "bytes": 228393
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/tfjs_model/model_config.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/tfjs_model/model_config.json",
+      "sha256": "7848afe863f829dc5a0e770c8225309e68d8078096a1dce9a14265fd8296f485",
+      "bytes": 973
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/training_complete.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/training_complete.json",
+      "sha256": "a76510fc9cef900c218346dfd4b725603f4a1f2de0ee786eb20142cac18e11ce",
+      "bytes": 1242084
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/training_history.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/training_history.json",
+      "sha256": "e4945e9a28ff47f34c6cce4af685d7dae12f8bd51d110cb07d674bfb1bc010d0",
+      "bytes": 6832
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/training_started.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/training_started.json",
+      "sha256": "dfb2d939858e71a3333b54772f828478ac37bbeea7d789477a65834d20e776a5",
+      "bytes": 145
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/training_state.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/training_state.json",
+      "sha256": "dd2d68ac3e6e4af5b45b3aa764bc6983b943b7d4b90a54257a3c234d50aa22d5",
+      "bytes": 1237019
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/validation_logits.npy": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/validation_logits.npy",
+      "sha256": "f52c66798524741098c197cd645b93a877b2cec7381e43a70ca7a3863651bd27",
+      "bytes": 22976
+    },
+    "docs/model-training/non-experiment/v5.1.0/artifacts/training/validation_probabilities.npy": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/training/validation_probabilities.npy",
+      "sha256": "a435bfcbc90ebae26b621e8f112e731f22357d7c39f8f4dcbddbbd70eb369703",
+      "bytes": 11552
+    },
+    "docs/model-training/non-experiment/v5.1.0/figures/evaluation/confidence_70_confusion_matrix.png": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/figures/evaluation/confidence_70_confusion_matrix.png",
+      "sha256": "3f78d584a2ee4a1bf0a6e5f88065e9dacfc34cba3939db57bcca870b566a4ada",
+      "bytes": 354525
+    },
+    "docs/model-training/non-experiment/v5.1.0/figures/evaluation/confidence_70_per_class_metrics.png": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/figures/evaluation/confidence_70_per_class_metrics.png",
+      "sha256": "92fbf262817c49e87737f336a02e1e73b568523e06e235a47ef917435761ee94",
+      "bytes": 169804
+    },
+    "docs/model-training/non-experiment/v5.1.0/figures/evaluation/figure_captions.json": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/figures/evaluation/figure_captions.json",
+      "sha256": "87a25e3a96d99080ef141bb00ba60041770268068b2fd8b454d1f17314d972fd",
+      "bytes": 1494
+    },
+    "docs/model-training/non-experiment/v5.1.0/figures/evaluation/mango_overall_comparison.png": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/figures/evaluation/mango_overall_comparison.png",
+      "sha256": "dcb766b6eba257eb3a01da9dc8b89f83684d98f7751d63260bb0450482de17c9",
+      "bytes": 82009
+    },
+    "docs/model-training/non-experiment/v5.1.0/figures/evaluation/raw_confusion_matrix.png": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/figures/evaluation/raw_confusion_matrix.png",
+      "sha256": "336369b8b6dd34265396ca9ee4864761363400ba436394471f9e6102b8bbcea8",
+      "bytes": 339675
+    },
+    "docs/model-training/non-experiment/v5.1.0/figures/evaluation/raw_per_class_metrics.png": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/figures/evaluation/raw_per_class_metrics.png",
+      "sha256": "c9924763f964fa2e93bdb3bad5d9bad1cc0d40fc62e4a59673f53437072d6797",
+      "bytes": 163234
+    },
+    "docs/model-training/non-experiment/v5.1.0/figures/evaluation/unsupported_confidence_70.png": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/figures/evaluation/unsupported_confidence_70.png",
+      "sha256": "d3532a70796a442cce4faa1ff23654105d428cc4b78bb7cd577d21fb8e47b1f6",
+      "bytes": 81723
+    },
+    "docs/model-training/non-experiment/v5.1.0/figures/training/augmentation_preview.png": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/figures/training/augmentation_preview.png",
+      "sha256": "117322ba09557898b0ef2bd01875d4074d7142dd5749c7874949ec5853351b36",
+      "bytes": 13039552
+    },
+    "docs/model-training/non-experiment/v5.1.0/figures/training/grad_cam.png": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/figures/training/grad_cam.png",
+      "sha256": "428bed63c788b033afe4f2fbea43624bfc480d83863b73e96fe3633be2488a4b",
+      "bytes": 4279368
+    },
+    "docs/model-training/non-experiment/v5.1.0/figures/training/training_curves.png": {
+      "originalRepositoryPath": "docs/model-training/experiment/v5.1.0/figures/training/training_curves.png",
+      "sha256": "e2e9a35e0f6f4d88b3e9cb969eb61f52191a05db7cf65f2c1eb008d114a8931f",
+      "bytes": 193485
+    }
+  },
+  "guideChanges": {
+    "docs/model-training/experiment/v5.1.0/TRIAL_v5_1_0.md": {
+      "currentPath": "docs/model-training/non-experiment/v5.1.0/TRIAL_v5_1_0.md",
+      "beforeSha256": "be3b6ff729b2a002940f40848c15e12416e36f5619c63b6ebb77e81dc5f88d88",
+      "afterSha256": "6f0620e1e182d157011712363b92cca3119c0ff7889dd735fee0fd56e99b1be8"
+    }
+  },
+  "notebookEvidence": {
+    "MangoLeaf_AI_Evaluate_v5_1_0.ipynb": {
+      "sha256": "8da397e2467b7bb406443371bc083b7991c2a9854e102b67475a25dca5fb0de9",
+      "codeCells": 9,
+      "executedCells": 0,
+      "errorOutputTypes": []
+    },
+    "MangoLeaf_AI_Evaluate_v5_1_0_Results.ipynb": {
+      "sha256": "6f62d090bef683b96b020434582d9789205e55c0d5101b62098681071ebd8514",
+      "codeCells": 9,
+      "executedCells": 9,
+      "errorOutputTypes": []
+    },
+    "MangoLeaf_AI_Training_v5_1_0.ipynb": {
+      "sha256": "07941c547788c5d8c07f8275a88bde3a31e2d7885bf019e84354783859e20682",
+      "codeCells": 20,
+      "executedCells": 0,
+      "errorOutputTypes": []
+    },
+    "MangoLeaf_AI_Training_v5_1_0_Post_Training.ipynb": {
+      "sha256": "37fa0c7b310c2eb8629a7aa5d3ee2b279eba4074e6391a0eaf816e0df48042ee",
+      "codeCells": 21,
+      "executedCells": 21,
+      "errorOutputTypes": [
+        "RuntimeError"
+      ]
+    }
+  },
+  "pathAliases": {
+    "docs/model-training/experiment/v5.1.0/": "docs/model-training/non-experiment/v5.1.0/",
+    "notebooks/experiment/v5.1.0/": "notebooks/non-experiment/v5.1.0/"
+  },
+  "rollback": "Prepare a new reviewed candidate restoring the entire V4.5.0 model/configuration/constants/cache from published v0.12.0 or preserved baseline kit; preserve all reports/photos and scientific originals.",
+  "deploymentConfirmed": false,
+  "browserPredictionParityMeasured": false
+}

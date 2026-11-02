@@ -1,0 +1,47 @@
+{
+  "modelVersion": "model-v5.1.0-candidate",
+  "experimentVersion": "v5.1.0",
+  "status": "local Debug APK experiment only; scientific evaluation and adoption pending",
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "classes": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "inputSize": [
+    224,
+    224
+  ],
+  "inputRange": [
+    0,
+    255
+  ],
+  "inputDtype": "float32",
+  "preprocessing": "RGB decode; bilinear 224x224 without antialias; float32 0-255; MobileNetV3 internal rescaling",
+  "temperature": 0.6105417906980811,
+  "temperatureFoldedIntoWeights": true,
+  "quantized": false,
+  "browserParityStatus": "pending actual browser comparison before adoption",
+  "trainingObjective": "mango supervision plus uniform-target Outlier Exposure",
+  "localTestOnly": true,
+  "thresholds": {
+    "confidenceThreshold": 0.7,
+    "marginThreshold": null,
+    "entropyThreshold": null
+  },
+  "trainingCompleteSha256": "a76510fc9cef900c218346dfd4b725603f4a1f2de0ee786eb20142cac18e11ce",
+  "originalExportConfigSha256": "7848afe863f829dc5a0e770c8225309e68d8078096a1dce9a14265fd8296f485",
+  "browserPredictionParityMeasured": false
+}

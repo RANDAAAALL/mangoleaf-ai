@@ -1,0 +1,60 @@
+{
+  "scope": "Local experimental Debug packaging and eight-fixture browser integration only; no adoption, deployment, independent accuracy or expert validation.",
+  "date": "2026-11-01",
+  "sourceCommit": "81727cda04a2898f3b8cad5b487006f7468067d8",
+  "workingTreeCandidate": true,
+  "modelVersion": "v5.1.0-candidate",
+  "adoptedBaseline": "v4.5.0",
+  "modelAssets": {
+    "group1-shard1of3.bin": {
+      "sha256": "10f40fd98cf6b75ebf3cbc5c65c3fd80e692a22b2c7ab1cb5107325032759696",
+      "bytes": 4194304
+    },
+    "group1-shard2of3.bin": {
+      "sha256": "25fa1845530e83476ea2ee9fa10414737a14432cc8aac1bbbb3be0b81f33ec07",
+      "bytes": 4194304
+    },
+    "group1-shard3of3.bin": {
+      "sha256": "279734db4ddef2fc98da1f0b4d8590ce76eba4451a98b921885ca1f9d0ff2f52",
+      "bytes": 3497804
+    },
+    "model.json": {
+      "sha256": "f4da51e246767a3f1e310d53c2e147bc5ab6a22842ec9baf3a21dbb0fa8ea4b2",
+      "bytes": 228393
+    },
+    "model_config.json": {
+      "sha256": "9bbd38b90bae0ff8bccb00633adaa32cca4cb215723ce639c76fb9a36512793d",
+      "bytes": 1364
+    }
+  },
+  "debugApkSha256": "05af505b8300bf1c296f60fb901caf600ef21a3b97e4032c62a8f122d8c6e9f8",
+  "debugBuildFingerprint": "6ceaaad0e87518bbd46b155ff44d771b89dd99ebf49d2156a6e6b572bdbc059a",
+  "checks": {
+    "nodeRuntime": "passed Node.js 24.22.1",
+    "androidWorkingModelBundle": "passed",
+    "assembleDebug": "passed",
+    "verifyDebugBundle": "passed 81 packaged web assets",
+    "apkModelByteComparison": "passed all five files",
+    "M01ChromiumMobile": "passed 8/8 integration cases",
+    "isolatedRollback": "passed restoration, repeated verification and refusal to overwrite later edits",
+    "typecheck": "passed",
+    "lint": "passed",
+    "build": "passed static production-style build; not deployed",
+    "notebookContracts": "passed 24 focused synthetic contract tests",
+    "security": "passed pinned local scanner and fetched history",
+    "format": "passed pinned Prettier; source assets and pre-existing user work preserved",
+    "archiveCopies": "passed SHA-256 and byte-count checks for 73 original copies"
+  },
+  "smokeObservationLimits": "The Anthracnose fixture was uncertain at 0.6435546875. The other six mango fixtures matched provisional labels and the OOD fixture was uncertain. This is not a representative accuracy estimate.",
+  "pending": [
+    "Separate 408-photo mango and 995-photo unsupported evaluation",
+    "Keras/TensorFlow.js numerical parity",
+    "R01/R03 reliability for this candidate",
+    "Physical Debug APK checks",
+    "Farmer SUS and agriculture-expert assessment",
+    "Adoption/release decision"
+  ],
+  "phoneInstalled": false,
+  "published": false,
+  "verificationNote": "Sandbox dependency-read failures were retried with normal installed-dependency access; required checks passed without dependency or security-gate changes."
+}

@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-01T02:07:54.320622+00:00",
+  "status": "Independent calculations from original archived training records; not new model inference",
+  "checks": {
+    "historicalMembershipPreserved": true,
+    "historicalPhotosPresent": true,
+    "uniqueMangoBytes": true,
+    "uniqueMangoDecodedPixels": true,
+    "selectedEpochIsLowestStage2ValidationLoss": true,
+    "fifteenEpochRecords": true,
+    "approvedOeMatchesV5Reference": true,
+    "mangoOeOodFileIdentitiesDisjoint": true,
+    "mangoOeOodPixelIdentitiesDisjoint": true
+  },
+  "counts": {
+    "mango": 2720,
+    "historicalMango": 2649,
+    "additionalMango": 71,
+    "mangoSplit": {
+      "test": 408,
+      "train": 1904,
+      "val": 408
+    },
+    "additionalSplit": {
+      "train": 50,
+      "test": 11,
+      "val": 10
+    },
+    "additionalClassCounts": {
+      "bacterial_black_spot": 1,
+      "healthy_fruit": 45,
+      "healthy_leaf": 15,
+      "mango_scab": 9,
+      "sooty_mold": 1
+    },
+    "oe": 2511,
+    "reportingOod": 995
+  },
+  "selectedCheckpoint": {
+    "stage": 2,
+    "selectedEpoch": 13,
+    "validationLoss": 0.07510613650083542,
+    "criterion": "clean unweighted mango validation cross-entropy"
+  },
+  "selectedEpochMetrics": {
+    "stage": 2,
+    "epoch": 13,
+    "accuracy": 0.9732142686843872,
+    "loss": 1.1172810792922974,
+    "mango_loss": 0.10849454998970032,
+    "oe_loss": 2.0174849033355713,
+    "val_accuracy": 0.9730392098426819,
+    "val_loss": 0.07510613650083542,
+    "val_mango_loss": 0.07510613650083542,
+    "val_oe_loss": 0.0,
+    "learning_rate": 9.999999747378752e-06,
+    "mangoTrainingCount": 1904,
+    "oeBatches": 60,
+    "uniqueOeExposedSoFar": 2511
+  },
+  "temperature": {
+    "temperature": 0.6105417906980811,
+    "temperatureFoldedIntoWeights": true,
+    "foldCount": 1,
+    "fitSubset": "val",
+    "fitIncludesOE": false,
+    "fitIncludesOOD": false,
+    "validationCount": 408,
+    "beforeNll": 0.07510613069845565,
+    "afterNll": 0.06545311077748221,
+    "searchBounds": [
+      0.25,
+      20.0
+    ],
+    "keepUnitTemperatureUnlessImproved": true,
+    "validationProbabilityOrder": "input_manifest.json images subset=val in listed order"
+  },
+  "oeExposure": {
+    "availableUniquePhotos": 2511,
+    "uniquePhotosExposed": 2511,
+    "selectedCheckpointUniquePhotosExposed": 2511,
+    "successfulExamples": 28800,
+    "selectedCheckpointSuccessfulExamples": 24960,
+    "note": "Selected stage 2 inherits selected stage 1 exposure; discarded updates count only in full-run totals."
+  },
+  "evidenceLimits": {
+    "newTestInferencePerformed": false,
+    "newOodInferencePerformed": false,
+    "browserParityPassed": false,
+    "physicalDevicePassed": false,
+    "adopted": false,
+    "deployed": false,
+    "dataIdentityChecksEstablishExpertLabelsOrCultivar": false
+  }
+}

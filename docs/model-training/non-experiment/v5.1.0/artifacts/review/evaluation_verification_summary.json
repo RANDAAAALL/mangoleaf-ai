@@ -1,0 +1,49 @@
+{
+  "scope": "Independent saved-score/receipt verification; no model rerun, tuning, adoption, or source mutation.",
+  "sourceRun": "v5-1-0-evaluation-20261101T010417Z-d8dc996b",
+  "sealedArtifactsVerified": 32,
+  "copiedFiles": 30,
+  "evaluationCompleteSha256": "fb78e1a7d6543a63272abf110f22df3268b9d14606c1ba1b7e6de79fcc808930",
+  "evaluationSha256": "5fa8951b9264f8612214248d05e6c3ed09463ad3dd4e808b9402c07f04b6f908",
+  "evaluationDevice": "/GPU:0",
+  "mango": {
+    "total": 408,
+    "rawCorrect": 396,
+    "rawAccuracy": 0.9705882352941176,
+    "accepted": 400,
+    "rejected": 8,
+    "correctAccepted": 390,
+    "incorrectAccepted": 10,
+    "correctAcceptedFractionOfAllPhotos": 0.9558823529411765,
+    "acceptedOnlyAccuracy": 0.975
+  },
+  "unsupported": {
+    "total": 995,
+    "falseAccepted": 193,
+    "rejected": 802,
+    "falseAcceptRate": 0.19396984924623115,
+    "rejectionRate": 0.8060301507537688
+  },
+  "verifiedChecks": [
+    "All sealed artifact hashes and byte counts",
+    "Training/calibrated-model identity chain",
+    "Frozen mango/OOD membership",
+    "All 1403 saved score vectors, argmax and fixed-threshold decisions",
+    "All raw/rejection-aware confusion matrices and class metrics, including historical/additional subsets",
+    "Unsupported acceptance/rejection totals",
+    "Copied source bytes",
+    "Runtime model and inference-setting equivalence"
+  ],
+  "publicModelWeights": {
+    "model.json": "f4da51e246767a3f1e310d53c2e147bc5ab6a22842ec9baf3a21dbb0fa8ea4b2",
+    "group1-shard1of3.bin": "10f40fd98cf6b75ebf3cbc5c65c3fd80e692a22b2c7ab1cb5107325032759696",
+    "group1-shard2of3.bin": "25fa1845530e83476ea2ee9fa10414737a14432cc8aac1bbbb3be0b81f33ec07",
+    "group1-shard3of3.bin": "279734db4ddef2fc98da1f0b4d8590ce76eba4451a98b921885ca1f9d0ff2f52"
+  },
+  "publicModelFilesChanged": false,
+  "configurationNote": "Evaluation and local configuration differ only in descriptive status/provenance and equivalent threshold schema. Existing APK/config receipt remains exact as built.",
+  "independenceLimits": "Recorded comparisons; old test and OOD inputs have prior evaluation use; additional labels are not independently verified by hashes.",
+  "browserParityPassed": false,
+  "physicalPhoneEvaluationPassed": false,
+  "adopted": false
+}

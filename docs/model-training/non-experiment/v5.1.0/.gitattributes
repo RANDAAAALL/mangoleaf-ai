@@ -1,0 +1,5 @@
+# Preserve original evidence bytes and ledger hashes across Git checkouts.
+artifacts/training/** -text
+artifacts/evaluation/** -text
+figures/** -text
+artifacts/local-debug/** -text

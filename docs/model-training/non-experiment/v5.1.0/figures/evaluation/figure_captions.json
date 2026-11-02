@@ -1,0 +1,8 @@
+{
+  "raw_confusion_matrix.png": "Raw seven-class predictions before rejection. Rows are actual classes; columns are predicted classes. Each right-panel row sums to 100%; its diagonal is class recall. Calibrated model before rejection; recorded test evidence with prior-use limits.",
+  "confidence_70_confusion_matrix.png": "All true mango test photos remain in the denominator. The Uncertain column shows missed diagnoses; diagonal row percentages are rejection-aware recall. Rejection is a gate, not an eighth trained class.",
+  "raw_per_class_metrics.png": "Blue precision: how often a predicted class is correct. Orange recall: how many real class photos were found. Green F1 balances both. Support n is the actual class count; bar labels are rounded for display only.",
+  "confidence_70_per_class_metrics.png": "All true mango test photos remain in class support. Rejected mango photos count as missed class predictions. The dashed line is correct accepted predictions divided by all test photos, not accepted-only accuracy.",
+  "mango_overall_comparison.png": "Raw accuracy uses all test photos. Correct accepted/all counts uncertain photos as not correctly accepted. Accepted-only accuracy excludes uncertain photos; it must be read with the accepted and rejected counts.",
+  "unsupported_confidence_70.png": "The 995 locked photos were previously evaluated in V5. Accepted unsupported photos are false acceptances; this collection does not have seven-class mango ground-truth labels."
+}

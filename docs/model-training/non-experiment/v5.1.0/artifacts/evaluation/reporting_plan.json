@@ -1,0 +1,22 @@
+{
+  "experimentVersion": "v5.1.0",
+  "trainingCompleteSha256": "a76510fc9cef900c218346dfd4b725603f4a1f2de0ee786eb20142cac18e11ce",
+  "modelSha256": "4135b93672716e3ed148ae63313da1feec1dbc10aa968d3e6c5d43155c487df3",
+  "evaluationInputsSha256": "f1bf4b88a89609b305ef6754823a2a457027d1a040ad03f23bae033bfbed96c6",
+  "classNames": [
+    "anthracnose",
+    "bacterial_black_spot",
+    "bacterial_canker",
+    "healthy_fruit",
+    "healthy_leaf",
+    "mango_scab",
+    "sooty_mold"
+  ],
+  "confidenceThreshold": 0.7,
+  "rule": "max calibrated probability >= 0.70",
+  "rawMeaning": "Same calibrated model highest-scoring predictions before rejection",
+  "temperatureAppliedAgain": false,
+  "modelSelectionUsesTest": false,
+  "evaluationDevice": "/GPU:0",
+  "runtimeSha256": "743b9f269684b7abef9e30863ceadba8caffc0f433ee8d06d7353d367f0361ea"
+}

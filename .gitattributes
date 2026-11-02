@@ -14,3 +14,7 @@ docs/model-training/non-experiment/v4.3.0/artifacts/training/colab-runtime-snaps
 docs/model-training/non-experiment/v4.3.0/artifacts/training/mask-reuse-note.txt -text
 docs/model-training/experiment/v4.4.0/artifacts/training/training-runtime-snapshot.txt -text
 docs/model-training/experiment/v4.4.0/artifacts/training/converter-runtime-snapshot.txt -text
+# V5.1.0 adoption preserves original notebook cells and byte-pinned run records.
+public/model/** -text
+notebooks/non-experiment/v5.1.0/** -text
+docs/model-training/non-experiment/v5.1.0/artifacts/** -text

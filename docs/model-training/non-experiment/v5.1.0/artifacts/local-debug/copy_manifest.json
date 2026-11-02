@@ -1,0 +1,23 @@
+{
+  "scope": "Derived local Debug packaging/model-swap evidence; separate from original scientific training/export evidence",
+  "files": [
+    {
+      "sourceRepositoryPath": ".tools/android-debug-candidates/v5.1.0-20261101/packaged-bundle-receipt.json",
+      "repositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/local-debug/packaged-bundle-receipt.json",
+      "sha256": "2b2ce4a8971d4effa7b6172d02c8da911e2ef399d8201411e928e8a9634bc9bb",
+      "bytes": 1034
+    },
+    {
+      "sourceRepositoryPath": "public/model/model_config.json",
+      "repositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/local-debug/runtime-model-config.json",
+      "sha256": "9bbd38b90bae0ff8bccb00633adaa32cca4cb215723ce639c76fb9a36512793d",
+      "bytes": 1364
+    },
+    {
+      "sourceRepositoryPath": ".tools/model-backups/v4.5.0-before-v5.1.0-20261101/model-swap-receipt.json",
+      "repositoryPath": "docs/model-training/experiment/v5.1.0/artifacts/local-debug/model-swap-receipt.json",
+      "sha256": "bf8221d9c61aa5ddaee3588b20f810939067ecef095fe4c6105b4c7c4f5d2c08",
+      "bytes": 3084
+    }
+  ]
+}

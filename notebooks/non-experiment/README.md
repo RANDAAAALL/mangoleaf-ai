@@ -1,12 +1,13 @@
 # Current and older model notebooks
 
-**Current repository model: V4.5.0.** Prepared app `0.7.0` uses seven classes and confidence-only rejection at 0.70; margin and entropy are disabled. Its diagnostics and confidence presentation changes do not alter training notebooks or model artifacts. See the [current model report](../../docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) for preserved results and adoption identity, and the [PWA release record](../../docs/versions/history/PWA_RELEASE_HISTORY.md#v070-diagnostics-and-raw-confidence-prepared-release-october-17-2026) for app validation and manual promotion.
+**Current repository model: V5.1.0, adopted November 3, 2026.** App 0.13.0/APK 0.1.9/code 10 remain release candidates. Its [trial/adoption record](../../docs/model-training/non-experiment/v5.1.0/TRIAL_v5_1_0.md#repository-adoption-november-3-2026) preserves recorded results and limitations. Original notebook cells, reference inputs, artifacts and figures stay unchanged; adoption is distinct from publication.
 
 This folder contains the current adopted model and older models kept as evidence. A version being here does not mean the app still uses it.
 
 | Folder | Purpose |
 | --- | --- |
-| [v4.5.0](v4.5.0/) | Current adopted model: clean templates and completed training/threshold result notebooks. |
+| [v5.1.0](v5.1.0/) | Current adopted model: clean templates, completed training/evaluation notebooks and required reference inputs; artifacts are archived separately. |
+| [v4.5.0](v4.5.0/) | Previous adopted model: clean templates and completed training/threshold result notebooks. |
 | [v4.3.0](v4.3.0/) | Previous adopted model and rollback baseline: templates and completed results. |
 | [v3](v3/) | Previous adopted model: templates, partial and completed training results, and threshold-fitting results. |
 | [v2.1](v2.1/) | Older model: training template, completed training, and threshold-fitting results. |

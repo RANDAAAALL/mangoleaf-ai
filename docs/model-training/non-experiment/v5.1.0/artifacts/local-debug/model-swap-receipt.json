@@ -1,0 +1,52 @@
+{
+  "projectRoot": "C:\\Users\\My Pc\\Desktop\\workspace\\development\\pwa-projects\\mangoleaf-ai",
+  "sourceTrainingRun": "C:\\Users\\My Pc\\Desktop\\workspace\\capstone\\model\\brain\\v5.1.0\\training\\v5-1-0-training-20261031T185635Z-46c45fe8",
+  "trainingCompleteSha256": "a76510fc9cef900c218346dfd4b725603f4a1f2de0ee786eb20142cac18e11ce",
+  "adoptedModel": "v4.5.0",
+  "localCandidate": "v5.1.0-candidate",
+  "files": {
+    "public/model/group1-shard1of3.bin": {
+      "originalSha256": "3afb04fb4e127cdbe19f71e396966ddab8eb136522ebd1bc4c9eabfd68032692",
+      "candidateSha256": "10f40fd98cf6b75ebf3cbc5c65c3fd80e692a22b2c7ab1cb5107325032759696",
+      "rollbackSha256": "3afb04fb4e127cdbe19f71e396966ddab8eb136522ebd1bc4c9eabfd68032692",
+      "candidateBytes": 4194304
+    },
+    "public/model/group1-shard2of3.bin": {
+      "originalSha256": "72671218e2f2370306f99e28df46873e3063cab258463a1c9a4aec7e2b6dd619",
+      "candidateSha256": "25fa1845530e83476ea2ee9fa10414737a14432cc8aac1bbbb3be0b81f33ec07",
+      "rollbackSha256": "72671218e2f2370306f99e28df46873e3063cab258463a1c9a4aec7e2b6dd619",
+      "candidateBytes": 4194304
+    },
+    "public/model/group1-shard3of3.bin": {
+      "originalSha256": "075e1eabdb172384f5c5df496b211d5463eee12bc54cec6ca1d40ab0a73225d2",
+      "candidateSha256": "279734db4ddef2fc98da1f0b4d8590ce76eba4451a98b921885ca1f9d0ff2f52",
+      "rollbackSha256": "075e1eabdb172384f5c5df496b211d5463eee12bc54cec6ca1d40ab0a73225d2",
+      "candidateBytes": 3497804
+    },
+    "public/model/model.json": {
+      "originalSha256": "0fd24e1f0f6bd5595566b8f4aec130808fbd510208ed82abbdc4d319fd2aa2a1",
+      "candidateSha256": "f4da51e246767a3f1e310d53c2e147bc5ab6a22842ec9baf3a21dbb0fa8ea4b2",
+      "rollbackSha256": "0fd24e1f0f6bd5595566b8f4aec130808fbd510208ed82abbdc4d319fd2aa2a1",
+      "candidateBytes": 228393
+    },
+    "public/model/model_config.json": {
+      "originalSha256": "cf6f3089071b75f99cd4e828440ea54bbfba87d292f9faa8432a08b370084a1f",
+      "candidateSha256": "9bbd38b90bae0ff8bccb00633adaa32cca4cb215723ce639c76fb9a36512793d",
+      "rollbackSha256": "cf6f3089071b75f99cd4e828440ea54bbfba87d292f9faa8432a08b370084a1f",
+      "candidateBytes": 1364
+    },
+    "src/lib/constants.ts": {
+      "originalSha256": "88d963d5568b788bfa8f4f8bf09949b137e0da0061a83eba5d031c189bd628a4",
+      "candidateSha256": "3748bb8ce6831485ee84b1b6410f5f14ea6952a51ccff8812a61af86bf9c0f80",
+      "rollbackSha256": "88d963d5568b788bfa8f4f8bf09949b137e0da0061a83eba5d031c189bd628a4",
+      "candidateBytes": 930
+    },
+    "src/sw.ts": {
+      "originalSha256": "0a51002621b71fad03657ffb6d7a519c89c93dbf2b8065d4aae2078fd13f613a",
+      "candidateSha256": "b6d89bdd1af901295d09446e2d4d010d12c9aaae8a3b14c34da66d401c0c3905",
+      "rollbackSha256": "211a14fb25e7d9375a843f47c46175a1f5167e477579863d2772bdb7be6c71fe",
+      "candidateBytes": 3992
+    }
+  },
+  "rollbackNote": "Exact adopted model/config/constants; worker restores V4.5.0 cache and retains candidate-cache eviction. No app data is changed."
+}

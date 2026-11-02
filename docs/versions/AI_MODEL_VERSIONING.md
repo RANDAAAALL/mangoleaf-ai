@@ -1,29 +1,24 @@
 # MangoLeaf AI Model Versioning Guide
 
-Use this guide to identify the active model and understand how a replacement is adopted. Detailed experiments, original measurements, and past decisions are in the [model history](history/AI_MODEL_HISTORY.md#model-timeline).
+## Current adopted model: V5.1.0 (November 3, 2026)
 
-## Local candidate test: V5.0.0 (October 19, 2026)
+The maintainer explicitly selected **V5.1.0** for the next release. Runtime graph/shards remain byte-identical to the reviewed local candidate; only runtime adoption metadata, the model label (`v5.1.0`) and model cache (`mangoleaf-model-cache-v5-1-0`) change. App **0.13.0** / APK **0.1.9/code 10** remain unpublished candidates. Repository adoption does not assert production deployment or field accuracy.
 
-**October 24 status:** the maintainer ended the local V5 runtime experiment and restored actual weights, model configuration and constants from committed adopted V4.5.0. The browser worker again uses `mangoleaf-model-cache-v4-5-0` and retires the V5 model runtime cache. The normal production build regenerates `public/sw.js`; no manual worker edit is used. Existing History/photos, including V5-labeled reports, remain intact; duplicate reuse still requires an exact active-model match.
+The [adoption receipt](../model-training/non-experiment/v5.1.0/artifacts/adoption_20261103.json) records exact before/after runtime hashes, archive path mapping, recorded evaluation, known limits and rollback. The [trial](../model-training/non-experiment/v5.1.0/TRIAL_v5_1_0.md#repository-adoption-november-3-2026) preserves original training/evaluation receipts and candidate identities. Clean templates, completed training/evaluation notebooks and evidence moved to their `non-experiment/v5.1.0/` locations without modifying notebook cells, run artifacts or figures. Original repository paths inside immutable receipts remain historical provenance, resolved through the separate adoption mapping.
 
-V5 notebooks, frozen artifacts, original ledgers and scientific results remain preserved under the experiment folders. An ignored byte-hashed backup retains the previous local runtime for rollback; it is not an active installation or model adoption. See the [October 24 history](history/AI_MODEL_HISTORY.md#local-v5-runtime-ended-october-24-2026), [comparison and earlier rollback procedure](../model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md), and [original local test hashes](../model-training/experiment/v5.0.0/artifacts/local_test_installation.json). Earlier V5 test hashes describe that historical candidate.
+| Item                        | Adopted value                                                                              |
+| --------------------------- | ------------------------------------------------------------------------------------------ |
+| Model / asset label         | `v5.1.0` / `model-v5.1.0`                                                                  |
+| Classes                     | Seven, in the unchanged `CLASSES` export order                                             |
+| Input                       | RGB, bilinear 224x224, float32 0-255, model-internal rescaling                             |
+| Calibration                 | Temperature already folded into exported weights; do not apply it twice                    |
+| Acceptance                  | Confidence >=0.70 only; margin/entropy gates disabled                                      |
+| Recorded mango test         | 396/408 raw correct (97.06%); 390/400 accepted correct (97.50%); 8 rejected                |
+| Recorded unsupported report | 802/995 rejected; 193 falsely accepted (19.40%)                                            |
+| Evidence limits             | Reused collections; cultivar/source independence and field validity remain limited         |
+| Remaining release evidence  | Numerical Keras/browser parity, current native/physical and exact Production/CI acceptance |
 
-## Current adopted model: V4.5.0 (October 16, 2026)
-
-Published app v0.10.0 and the unpublished v0.10.1 patch retain adopted V4.5.0. Local browser development now uses that same model identity instead of the retired V5 override. Phone websites remain landing/download-only; the Android APK and isolated compatibility harness perform diagnosis. Earlier [v0.9.0 preparation](history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026) and [v0.8.0 preparation](history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026) retain their dated evidence.
-
-| Item                 | Recorded value                                                    |
-| -------------------- | ----------------------------------------------------------------- |
-| Adopted model label  | `v4.5.0`                                                          |
-| Asset identity       | `model-v4.5.0`                                                    |
-| Baseline files       | `public/model/` in committed source; backup for local rollback    |
-| Classification scope | Seven mango leaf/fruit classes                                    |
-| Acceptance rule      | Raw confidence at least `0.70`; margin and entropy gates disabled |
-| Model cache identity | `mangoleaf-model-cache-v4-5-0`                                    |
-
-- **Adopted** means selected in repository source. It does not establish production deployment or field accuracy.
-- Use the [V4.5.0 trial report](../model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) for dataset details, accuracy measures, and their limitations. Its [adoption receipt](../model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json) identifies the adopted files.
-- V5.0.0 completed five fine-tuning epochs and a separate 995-photo OOD report after the earlier failed attempts. Its [review](../model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md) distinguishes the saved measurements, local browser checks, and remaining adoption/device/field checks.
+V4.5.0 remains preserved under `non-experiment/` and at published tag `v0.12.0`. Rollback must restore its entire model/configuration/constants/cache as a new reviewed candidate, never relabel V5 weights or overwrite History/photos. New reports use `v5.1.0`; older V4.5.0 and `v5.1.0-candidate` rows remain visible, with duplicate reuse allowed only for an exact active-model match.
 
 ## Model Versions
 
@@ -75,6 +70,7 @@ git push origin model-vX.Y.Z
 
 ## Historical records
 
+- [V5.1.0 completed training and local Debug candidate](history/AI_MODEL_HISTORY.md#v510-fresh-training-and-local-debug-candidate-november-1-2026)
 - [Chronological model decisions and experiments](history/AI_MODEL_HISTORY.md#model-timeline)
 - [V4.5.0's original adoption context](history/AI_MODEL_HISTORY.md#current-adopted-model-v450-october-16-2026)
 - [Prepared V5.0.0 workflow](history/AI_MODEL_HISTORY.md#v500-oe-fine-tuning-workflow-prepared-october-15-2026)
@@ -120,5 +116,46 @@ Older section bookmarks still resolve here. Each link opens the complete archive
 - <a id="october-16-2026-v450-repository-adoption"></a> [October 16, 2026: V4.5.0 repository adoption](history/AI_MODEL_HISTORY.md#october-16-2026-v450-repository-adoption)
 - <a id="october-17-2026-app-diagnostics-confidence-storage-and-texture-setting"></a> [October 17, 2026: app diagnostics, confidence storage, and texture setting](history/AI_MODEL_HISTORY.md#october-17-2026-app-diagnostics-confidence-storage-and-texture-setting)
 - <a id="october-18-2026-app-scanner-follow-up-and-branch-handoff"></a> [October 18, 2026: app scanner follow-up and branch handoff](history/AI_MODEL_HISTORY.md#october-18-2026-app-scanner-follow-up-and-branch-handoff)
+
+</details>
+
+<details>
+<summary>Historical V5.1.0 Debug and V4.5.0 adoption notices</summary>
+
+Use this guide to identify the active model and understand how a replacement is adopted. Detailed experiments, original measurements, and past decisions are in the [model history](history/AI_MODEL_HISTORY.md#model-timeline).
+
+## Local Debug candidate: V5.1.0 (November 1, 2026)
+
+The maintainer authorized a temporary local `v5.1.0-candidate` override in `public/model/`, matching constants and cache identity `mangoleaf-model-cache-v5-1-0-candidate`, for Debug APK testing. Adopted/committed V4.5.0 remains the baseline; no adoption, production build publication, or deployment is implied. V5.1.0 starts a fresh ImageNet model, completes fifteen epochs, and adds 71 mango photos. The later supplied separate evaluation is complete: 396/408 raw correct (97.06%), 390/408 correct accepted (95.59%), and 390/400 accepted-only accuracy (97.50%). The reused unsupported set had 193/995 false acceptances (19.40%). Numerical browser parity, physical-device validation and adoption remain pending. See the [complete V5.1.0 trial and workflow](../model-training/non-experiment/v5.1.0/TRIAL_v5_1_0.md).
+
+The original graph/shards are copied without learned changes. Derived local runtime metadata explicitly declares confidence >=0.70 only, margin/entropy disabled, and the already-folded temperature; the original training export remains unchanged in its archive. An exact V4.5.0 rollback kit is retained under ignored `.tools/model-backups/v4.5.0-before-v5.1.0-20261101/`. The [rollback procedure](../model-training/non-experiment/v5.1.0/TRIAL_v5_1_0.md#local-debug-model-and-rollback) restores model/configuration, labels and worker cache together without changing History/photos.
+
+Use `bun run android:bundle --working-model` for this research Debug candidate, then assemble/verify Debug through Gradle. Default `android:bundle` and `android:debug` deliberately select committed V4.5.0 and can replace research staging. The application version is independent of this candidate model label. Final accuracy/OOD, numerical export parity, applicable reliability, and physical-device evidence must remain distinct from build/asset checks.
+
+## Local candidate test: V5.0.0 (October 19, 2026)
+
+**October 24 status:** the maintainer ended the local V5 runtime experiment and restored actual weights, model configuration and constants from committed adopted V4.5.0. The browser worker again uses `mangoleaf-model-cache-v4-5-0` and retires the V5 model runtime cache. The normal production build regenerates `public/sw.js`; no manual worker edit is used. Existing History/photos, including V5-labeled reports, remain intact; duplicate reuse still requires an exact active-model match.
+
+V5 notebooks, frozen artifacts, original ledgers and scientific results remain preserved under the experiment folders. An ignored byte-hashed backup retains the previous local runtime for rollback; it is not an active installation or model adoption. See the [October 24 history](history/AI_MODEL_HISTORY.md#local-v5-runtime-ended-october-24-2026), [comparison and earlier rollback procedure](../model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md), and [original local test hashes](../model-training/experiment/v5.0.0/artifacts/local_test_installation.json). Earlier V5 test hashes describe that historical candidate.
+
+## Current adopted model: V4.5.0 (October 16, 2026)
+
+**Historical October 16 adoption; superseded by V5.1.0 on November 3.** The table and candidate notices below preserve their earlier scope.
+
+Published app v0.10.0 and the unpublished v0.10.1 patch retain adopted V4.5.0. The October 24 restore ended the earlier V5.0.0 override; the separately authorized November 1 local V5.1.0 Debug override is described above. Default committed-model Android bundles still select V4.5.0. Phone websites remain landing/download-only; the Android APK and isolated compatibility harness perform diagnosis. Earlier [v0.9.0 preparation](history/PWA_RELEASE_HISTORY.md#v090-android-and-cloud-recovery-candidate-october-23-2026) and [v0.8.0 preparation](history/PWA_RELEASE_HISTORY.md#v080-square-camera-prepared-release-october-19-2026) retain their dated evidence.
+
+| Item                 | Recorded value                                                    |
+| -------------------- | ----------------------------------------------------------------- |
+| Adopted model label  | `v4.5.0`                                                          |
+| Asset identity       | `model-v4.5.0`                                                    |
+| Baseline files       | `public/model/` in committed source; backup for local rollback    |
+| Classification scope | Seven mango leaf/fruit classes                                    |
+| Acceptance rule      | Raw confidence at least `0.70`; margin and entropy gates disabled |
+| Model cache identity | `mangoleaf-model-cache-v4-5-0`                                    |
+
+- **Adopted** means selected in repository source. It does not establish production deployment or field accuracy.
+- Use the [V4.5.0 trial report](../model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md) for dataset details, accuracy measures, and their limitations. Its [adoption receipt](../model-training/non-experiment/v4.5.0/artifacts/adoption_20261016.json) identifies the adopted files.
+- V5.1.0 completed fresh fifteen-epoch training and export. Its [original training artifacts and figures](../model-training/non-experiment/v5.1.0/TRIAL_v5_1_0.md#preserved-figures-and-artifacts) preserve actual evidence. The later completed evaluation adds six original result figures and separate score/receipt/table evidence; its graph and weight shards match the already tested local candidate, so no runtime reinsertion is required.
+- V5.0.0 completed five fine-tuning epochs and a separate 995-photo OOD report after the earlier failed attempts. Its [review](../model-training/experiment/v5.0.0/RESULTS_REVIEW_v5_0_0.md) distinguishes the saved measurements, local browser checks, and remaining adoption/device/field checks.
 
 </details>

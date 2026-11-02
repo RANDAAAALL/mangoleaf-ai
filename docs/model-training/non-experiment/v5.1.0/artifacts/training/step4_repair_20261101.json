@@ -1,0 +1,11 @@
+{
+  "reason": "Treat pHash as a derived similarity descriptor; exact file and decoded-pixel checks remain required.",
+  "recoveredPools": {
+    "original_mango": 2649,
+    "new_mango": 71,
+    "original_oe": 2011,
+    "transferred_ood": 500
+  },
+  "trainingStarted": false,
+  "oldReferencesModified": false
+}

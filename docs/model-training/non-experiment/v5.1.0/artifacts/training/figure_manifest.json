@@ -1,0 +1,121 @@
+{
+  "experimentVersion": "v5.1.0",
+  "subset": "val",
+  "illustrationsEnterTrainingOrScoring": false,
+  "selectionBeforePredictions": true,
+  "examples": [
+    {
+      "id": "ee9676472204c9cdd083",
+      "label": "anthracnose",
+      "sourceRelativePath": "anthracnose/DSC_0488.JPG",
+      "sha256": "ee9676472204c9cdd0830dce3be63a9d47e646ecb9d2c70126ddcdac063e4ecd",
+      "groupId": "ee9676472204c9cdd083",
+      "subset": "val",
+      "gradCamTargetClass": "anthracnose",
+      "predictedClass": "anthracnose",
+      "calibratedConfidence": 0.45029744505882263,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits",
+      "hasPositiveHeatmap": true
+    },
+    {
+      "id": "33409e67c75bacf91843",
+      "label": "bacterial_black_spot",
+      "sourceRelativePath": "bacterial_black_spot/Bc81.jpg",
+      "sha256": "33409e67c75bacf918435cb60888283900c137071edf76dab3b0aa6a0faac233",
+      "groupId": "33409e67c75bacf91843",
+      "subset": "val",
+      "gradCamTargetClass": "bacterial_black_spot",
+      "predictedClass": "bacterial_black_spot",
+      "calibratedConfidence": 0.9999970197677612,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits",
+      "hasPositiveHeatmap": true
+    },
+    {
+      "id": "09778a641c62fbc9511e",
+      "label": "bacterial_canker",
+      "sourceRelativePath": "bacterial_canker/IMG_20211106_142856 (Custom).jpg",
+      "sha256": "09778a641c62fbc9511eaf17ff5e2bb2bae843dd2eeb4807e41a66a49b5a84ae",
+      "groupId": "09778a641c62fbc9511e",
+      "subset": "val",
+      "gradCamTargetClass": "bacterial_canker",
+      "predictedClass": "bacterial_canker",
+      "calibratedConfidence": 0.9999977350234985,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits",
+      "hasPositiveHeatmap": true
+    },
+    {
+      "id": "bccae50356a84611268b",
+      "label": "healthy_fruit",
+      "sourceRelativePath": "healthy_fruit/723624552_976005712089787_680463173797746853_n.jpg",
+      "sha256": "bccae50356a84611268b9fd0b5f5bf5517b222ac223d298084b121e169550b64",
+      "groupId": "bccae50356a84611268b",
+      "subset": "val",
+      "gradCamTargetClass": "healthy_fruit",
+      "predictedClass": "healthy_fruit",
+      "calibratedConfidence": 0.9998238682746887,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits",
+      "hasPositiveHeatmap": true
+    },
+    {
+      "id": "90a7907f7a259e404f6b",
+      "label": "healthy_leaf",
+      "sourceRelativePath": "healthy_leaf/HealthyLeaf_1.jpg",
+      "sha256": "90a7907f7a259e404f6bb8c6558bb1081f2d2942249ebb5cac4b747a2f989e0c",
+      "groupId": "90a7907f7a259e404f6b",
+      "subset": "val",
+      "gradCamTargetClass": "healthy_leaf",
+      "predictedClass": "healthy_leaf",
+      "calibratedConfidence": 0.689057469367981,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits",
+      "hasPositiveHeatmap": true
+    },
+    {
+      "id": "6e99067feab48b78d0e0",
+      "label": "mango_scab",
+      "sourceRelativePath": "mango_scab/verified mango disease 67.jpg",
+      "sha256": "6e99067feab48b78d0e0c4260e342c1b64673dab00a5c18099310bb9053f1dd7",
+      "groupId": "6e99067feab48b78d0e0",
+      "subset": "val",
+      "gradCamTargetClass": "mango_scab",
+      "predictedClass": "mango_scab",
+      "calibratedConfidence": 0.9879200458526611,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits",
+      "hasPositiveHeatmap": true
+    },
+    {
+      "id": "6c1c6c90f2dbfdb3ab1d",
+      "label": "sooty_mold",
+      "sourceRelativePath": "sooty_mold/IMG_20260219_134935.jpg",
+      "sha256": "6c1c6c90f2dbfdb3ab1d451b90a9ce2769222aaa237bb820bf55f782e63498d5",
+      "groupId": "6c1c6c90f2dbfdb3ab1d",
+      "subset": "val",
+      "gradCamTargetClass": "sooty_mold",
+      "predictedClass": "sooty_mold",
+      "calibratedConfidence": 0.9896978735923767,
+      "backboneLayer": "MobileNetV3Large",
+      "logitsLayer": "class_logits",
+      "hasPositiveHeatmap": true
+    }
+  ],
+  "figures": {
+    "augmentation_preview.png": {
+      "sha256": "117322ba09557898b0ef2bd01875d4074d7142dd5749c7874949ec5853351b36",
+      "bytes": 13039552
+    },
+    "grad_cam.png": {
+      "sha256": "428bed63c788b033afe4f2fbea43624bfc480d83863b73e96fe3633be2488a4b",
+      "bytes": 4279368
+    },
+    "training_curves.png": {
+      "sha256": "e2e9a35e0f6f4d88b3e9cb969eb61f52191a05db7cf65f2c1eb008d114a8931f",
+      "bytes": 193485
+    }
+  },
+  "lossPanel": "Weighted augmented mango training loss versus clean unweighted mango validation loss; not total OE objective"
+}

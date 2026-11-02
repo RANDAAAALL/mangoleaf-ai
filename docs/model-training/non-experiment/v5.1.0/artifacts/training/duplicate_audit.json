@@ -1,0 +1,12 @@
+{
+  "newMangoPairs": [],
+  "newCrossPoolPairs": [],
+  "oldMembershipVerified": true,
+  "historicalScreeningReused": true,
+  "changedHistoricalPhashCounts": {
+    "mango": 0,
+    "oe": 2,
+    "reporting": 0
+  },
+  "limits": "Hash checks do not identify all related captures or establish cultivar/label validity."
+}

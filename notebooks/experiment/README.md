@@ -1,10 +1,14 @@
 # Experimental notebooks
 
+**November 3 adoption:** V5.1.0 has moved unchanged to [`../non-experiment/v5.1.0/`](../non-experiment/v5.1.0/). Its earlier candidate notice below is historical; repository adoption and Production deployment remain separate.
+
+**V5.1.0, November 1, 2026:** [`v5.1.0/`](../non-experiment/v5.1.0/) contains clean fresh-training/evaluation notebooks, the three-file `reference-inputs` bundle and preserved one-time inventory-repair helpers. The completed external training run has fifteen epochs, a newly fitted temperature and export; it does not inherit MangoLeaf weights. Original source records, three training figures and six later supplied raw/70% evaluation figures are copied in the [trial archive](../../docs/model-training/non-experiment/v5.1.0/TRIAL_v5_1_0.md). Completed inference covers 408 mango and 995 unsupported photos, with receipts, predictions and score arrays; an executed result notebook with original cell outputs remains unavailable. The evaluation template supports CPU/GPU and explicit read-only shared-input shortcuts, saving new results to the evaluating account's own `MyDrive/mangoleaf_v5_1_0_evaluations/`. Temporary local Debug model testing is separately authorized; adopted V4.5.0 and production remain unchanged.
+
 > **Status: experimental candidates — not shipped or deployed.**
 
 This folder holds candidate notebook workflows and completed experimental evidence. A completed notebook does not automatically change application assets or deployment. An explicit local candidate test may copy verified model files after preserving a rollback backup; adoption and release still follow the model-version policy.
 
-V4.5.0 remains the adopted model; the maintainer's uncommitted workspace temporarily tests V5.0.0 after a verified backup. V4.3.0 is preserved as an older model. Adopted and historical notebooks live under `notebooks/non-experiment/`; see the [notebook index](../README.md) and [V4.5.0 adoption record](../../docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026). Workflows remaining below are experimental candidates.
+V5.1.0 was adopted November 3 and moved to `../non-experiment/v5.1.0/`; V4.5.0/V4.3.0 remain historical adopted evidence. V5.0.0 remains an experiment. V4.3.0 is preserved as an older model. Adopted and historical notebooks live under `notebooks/non-experiment/`; see the [notebook index](../README.md) and [V4.5.0 adoption record](../../docs/model-training/non-experiment/v4.5.0/TRIAL_v4_5_0.md#current-model-adoption-october-16-2026). Workflows remaining below are experimental candidates.
 
 Folder versions identify notebook workflows, not model versions:
 
