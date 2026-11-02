@@ -6,14 +6,16 @@
 
 GitHub's latest published release was checked read-only on November 3: [v0.12.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.12.0), published October 26, with APK **0.1.8/code 9** and Model **V4.5.0**. Preserve that tag and all signed assets. The old notes calling v0.12.0 unpublished are retained only in the [dated history](history/PWA_RELEASE_HISTORY.md#v0130-settings-and-v510-adoption-candidate-november-3-2026).
 
-| Item               | Current source                                                                                              |
-| ------------------ | ----------------------------------------------------------------------------------------------------------- |
-| App/web bundle     | `0.13.0`, root `package.json`                                                                               |
-| Adopted model      | `v5.1.0`, whole reviewed runtime bundle                                                                     |
-| Android host       | `0.1.9` / code `10`; Debug `0.1.9-dev`                                                                      |
-| Compatibility      | Bridge/schema `1`/`1`, host bounds `10-10`                                                                  |
-| Published baseline | GitHub `v0.12.0`; APK `0.1.8` / code `9`                                                                    |
-| Pending            | Exact-source CI, signed Production APK/staged-site acceptance, current reliability and publication approval |
+| Item               | Current source                                                                                                    |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| App/web bundle     | `0.13.0`, root `package.json`                                                                                     |
+| Adopted model      | `v5.1.0`, whole reviewed runtime bundle                                                                           |
+| Android host       | `0.1.9` / code `10`; Debug `0.1.9-dev`                                                                            |
+| Compatibility      | Bridge/schema `1`/`1`, host bounds `10-10`                                                                        |
+| Published baseline | GitHub `v0.12.0`; APK `0.1.8` / code `9`                                                                          |
+| Pending            | Exact-source CI, signed Production APK/staged-site/physical acceptance, numerical parity and publication approval |
+
+**R03 verified November 3:** the report for commit `7ea6a0d9b55af577c53b2d48440b56fd522829f4` passed its 30.1-minute mixed-use case (30.5-minute suite), with 554 actual predictions. All app/model/build hashes match the current candidate; a documentation-only follow-up does not change those inputs. This closes R03, while CI, exact signed Production/staged acceptance and numerical model parity remain separate. [Evidence and limits](../testing/TESTING.md#november-3-2026).
 
 The candidate adds APK Settings with separate language, backup, diagnostics and Production update screens; startup/backup state fixes; seven-condition Home text; Android-only website download actions; and Debug-only fresh-result class scores. Model adoption changes model/cache identity without retraining or changing the recorded 70% rule. Numerical export parity and physical-device evidence remain separate from recorded Colab accuracy/OOD results.
 

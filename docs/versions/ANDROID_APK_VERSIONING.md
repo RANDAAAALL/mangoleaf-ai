@@ -8,6 +8,8 @@ Model V5.1.0 is adopted in source; publication, signed Production testing and fi
 
 GitHub [v0.12.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.12.0), published October 26, is the verified published baseline. No new OTA sequence, signature, tag, upload or Vercel promotion is allocated by preparing these files. Recheck all published OTA sequences before selecting a higher unused sequence.
 
+**R03 verified November 3:** app 0.13.0 / Model V5.1.0 passed the local browser 30-minute mixed-use check with 554 actual predictions and matching input hashes. This completes browser R03 for the candidate, not physical/native/Production acceptance. See [the exact report](../testing/TESTING.md#november-3-2026). Candidate version numbers and the prepared Debug APK stay unchanged.
+
 ## Current native identity
 
 | Identity                      | Current source candidate | Source                                      |

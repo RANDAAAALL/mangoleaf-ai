@@ -6,7 +6,7 @@ Current source prepares **app/web 0.13.0**, **APK 0.1.9/code 10** (Debug **0.1.9
 
 After the adoption commit, ordinary `bun run android:debug` / `bun run android:bundle` use committed V5.1.0; `--working-model` is only needed to include explicit later uncommitted model edits. Use the Production wrapper and exact approved source for signed artifacts. The fresh seven-class table is Debug-only and never saved/uploaded. Settings owns language, private backup, diagnostics and the Production-only update screen; the website keeps Home/About/Android guidance.
 
-Use the [release guide](docs/versions/PWA_VERSIONING.md), [native guide](docs/versions/ANDROID_APK_VERSIONING.md), [model adoption](docs/versions/AI_MODEL_VERSIONING.md#current-adopted-model-v510-november-3-2026) and [current test record](docs/testing/TESTING.md#november-3-2026). Numerical Keras/browser parity, signed Production/staged-site acceptance, current reliability/CI and publication approval remain distinct. Do not treat older R03 or Debug evidence as checks of these new inputs.
+Use the [release guide](docs/versions/PWA_VERSIONING.md), [native guide](docs/versions/ANDROID_APK_VERSIONING.md), [model adoption](docs/versions/AI_MODEL_VERSIONING.md#current-adopted-model-v510-november-3-2026) and [current test record](docs/testing/TESTING.md#november-3-2026). Numerical Keras/browser parity, signed Production/staged-site acceptance, CI and publication approval remain distinct. Current-source browser R03 passed on November 3 with 554 actual predictions and matching input hashes; it does not replace physical/native/Production checks. Do not treat older R03 or Debug evidence as checks of these new inputs.
 
 ## Settings tools follow-up (November 2, 2026)
 
