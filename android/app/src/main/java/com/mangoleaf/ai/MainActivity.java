@@ -9,21 +9,25 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.ViewGroup;
 import android.view.View;
+import android.view.Gravity;
 import android.webkit.PermissionRequest;
 import android.webkit.RenderProcessGoneDetail;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
+import android.webkit.WebResourceError;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -58,6 +62,9 @@ public final class MainActivity extends ComponentActivity implements ApkUpdateMa
     private static final int APK_CONFIRMATION = 104;
     private ExecutorService operations;
     private WebView webView;
+    private ImageView startupArtwork;
+    private Runnable removeSystemSplash;
+    private boolean startupContentVisible;
     private NativeStore store;
     private NativeBridge bridge;
     private NetworkMonitor network;
@@ -81,6 +88,13 @@ public final class MainActivity extends ComponentActivity implements ApkUpdateMa
 
     @Override public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // Keep the system leaf still until web content can replace it in one frame.
+            getSplashScreen().setOnExitAnimationListener(splash -> {
+                removeSystemSplash = splash::remove;
+                if (startupContentVisible) finishStartupPresentation();
+            });
+        }
         if (savedState != null) apkConfirmationAttempt = savedState.getString("apkConfirmationAttempt", "");
         MangoLeafApplication application = (MangoLeafApplication) getApplication();
         operations = application.operations();
@@ -123,6 +137,7 @@ public final class MainActivity extends ComponentActivity implements ApkUpdateMa
     @SuppressWarnings("SetJavaScriptEnabled")
     private void initializeWebView(File bundle) {
         webView = new WebView(this);
+        webView.setBackgroundColor(getColor(R.color.app_launch_background));
         if (!WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
             webView.destroy();
             webView = null;
@@ -180,6 +195,21 @@ public final class MainActivity extends ComponentActivity implements ApkUpdateMa
                 if (bridge != null) bridge.reset();
             }
 
+            @Override public void onPageFinished(WebView view, String url) {
+                if (destroyed || startupContentVisible || view != webView
+                        || !LocalContent.trusted(Uri.parse(url))) return;
+                // Page completion alone does not mean the renderer's pixels are ready to draw.
+                view.postVisualStateCallback(0, new WebView.VisualStateCallback() {
+                    @Override public void onComplete(long requestId) {
+                        if (!destroyed && view == webView) finishStartupPresentation();
+                    }
+                });
+            }
+
+            @Override public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                if (!startupContentVisible && request.isForMainFrame()) showStartupFailure(false);
+            }
+
             @Override public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
                 cancelCameraRequest();
                 cancelFileCallback();
@@ -219,9 +249,29 @@ public final class MainActivity extends ComponentActivity implements ApkUpdateMa
                 return true;
             }
         });
-        setContentView(createInsetContent(this, webView));
+        FrameLayout content = createInsetContent(this, webView);
+        // Android 8-11 need their own still leaf while the initial WebView frame is prepared.
+        startupArtwork = new ImageView(this);
+        startupArtwork.setImageResource(R.drawable.ic_leaf_foreground);
+        startupArtwork.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        int artworkSize = Math.round(144 * getResources().getDisplayMetrics().density);
+        content.addView(startupArtwork, new FrameLayout.LayoutParams(artworkSize, artworkSize, Gravity.CENTER));
+        setContentView(content);
         ViewCompat.requestApplyInsets(webView.getRootView());
         webView.loadUrl(APP_ORIGIN + "/");
+    }
+
+    private void finishStartupPresentation() {
+        startupContentVisible = true;
+        if (startupArtwork != null) {
+            if (startupArtwork.getParent() instanceof ViewGroup parent) parent.removeView(startupArtwork);
+            startupArtwork = null;
+        }
+        if (removeSystemSplash != null) {
+            Runnable remove = removeSystemSplash;
+            removeSystemSplash = null;
+            remove.run();
+        }
     }
 
     /** Resize the web viewport, including fixed CSS controls, outside Android's bars and keyboard. */
@@ -540,6 +590,7 @@ public final class MainActivity extends ComponentActivity implements ApkUpdateMa
         message.setText(unsupportedWebView ? R.string.native_webview_unsupported : R.string.native_startup_error);
         setContentView(createInsetContent(this, message));
         ViewCompat.requestApplyInsets(message.getRootView());
+        finishStartupPresentation();
     }
 
     @Override protected void onStart() {
@@ -578,6 +629,7 @@ public final class MainActivity extends ComponentActivity implements ApkUpdateMa
 
     @Override protected void onDestroy() {
         destroyed = true;
+        finishStartupPresentation();
         completeArchive(new IllegalStateException("CANCELLED"));
         cancelCameraRequest();
         cancelFileCallback();

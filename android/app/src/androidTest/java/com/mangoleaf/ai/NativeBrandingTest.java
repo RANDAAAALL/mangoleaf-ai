@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
 import android.util.TypedValue;
@@ -64,6 +65,13 @@ public final class NativeBrandingTest {
         assertTrue(themed.getTheme().resolveAttribute(android.R.attr.windowSplashScreenIconBackgroundColor,
             background, true));
         assertEquals(Color.TRANSPARENT, background.data);
+
+        // A second, smaller leaf in the Activity window caused the visible launch shrink.
+        TypedValue window = new TypedValue();
+        assertTrue(themed.getTheme().resolveAttribute(android.R.attr.windowBackground, window, true));
+        Drawable windowBackground = themed.getDrawable(window.resourceId);
+        assertTrue(windowBackground instanceof ColorDrawable);
+        assertEquals(context.getColor(R.color.app_launch_background), ((ColorDrawable) windowBackground).getColor());
     }
 
     private static void assertTransparentCorners(Drawable drawable) {
