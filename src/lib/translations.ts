@@ -266,7 +266,7 @@ export const translations = {
     guidedCameraUnsupported:
       "Live camera is unavailable here. Close this screen and choose Upload Photo.",
     guidedCameraPermissionDenied:
-      "Camera access was blocked. Allow camera access in browser settings, then try again.",
+      "Camera access was blocked. Allow camera access for MangoLeaf AI in Android Settings, then try again.",
     guidedCameraUnavailable:
       "Camera is unavailable or in use. Close other camera apps, then try again.",
     guidedCameraStartFailed:
@@ -865,7 +865,7 @@ export const translations = {
     guidedCameraUnsupported:
       'Dili magamit dinhi ang live camera. Isira kini nga screen ug pilia ang "I-upload ang Litrato".',
     guidedCameraPermissionDenied:
-      "Gibabagan ang access sa kamera. Tugoti ang kamera sa mga setting sa browser, dayon sulayi pag-usab.",
+      "Gibabagan ang access sa kamera. Tugoti ang kamera alang sa MangoLeaf AI sa Android Settings, dayon sulayi pag-usab.",
     guidedCameraUnavailable:
       "Dili magamit o gigamit ang kamera. Isira ang ubang app nga naggamit sa kamera, dayon sulayi pag-usab.",
     guidedCameraStartFailed:
