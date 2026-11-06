@@ -173,4 +173,54 @@ public final class NativeStoreTest {
         assertEquals("QUOTA_EXCEEDED", NativeStore.safeError(failure));
         assertEquals("QUOTA_EXCEEDED", NativeStore.safeError(new android.database.sqlite.SQLiteFullException()));
     }
+
+    @Test public void sqliteQuotaFailurePreservesPhotosAndRetriesTheSameReport() throws Exception {
+        quotaFailurePreservesPhotosAndRetries(false);
+    }
+
+    @Test public void sqliteQuotaImportFailurePreservesPhotosAndRetriesTheSameReport() throws Exception {
+        quotaFailurePreservesPhotosAndRetries(true);
+    }
+
+    private void quotaFailurePreservesPhotosAndRetries(boolean importing) throws Exception {
+        android.graphics.Bitmap bitmap = android.graphics.Bitmap.createBitmap(2, 2, android.graphics.Bitmap.Config.ARGB_8888);
+        java.io.ByteArrayOutputStream bytes = new java.io.ByteArrayOutputStream();
+        assertTrue(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, bytes));
+        bitmap.recycle();
+        JSONObject image = new JSONObject().put("base64", android.util.Base64.encodeToString(bytes.toByteArray(), android.util.Base64.NO_WRAP))
+            .put("mimeType", "image/png");
+        store.dispatch("storage.report.save", new JSONObject().put("record", record("quota-keep", "local-only")).put("image", image));
+
+        android.database.sqlite.SQLiteDatabase database = store.getWritableDatabase();
+        database.disableWriteAheadLogging();
+        long previousMaximum = database.getMaximumSize();
+        long pages;
+        try (android.database.Cursor cursor = database.rawQuery("PRAGMA page_count", null)) {
+            assertTrue(cursor.moveToFirst());
+            pages = cursor.getLong(0);
+        }
+        // Cap only this disposable instrumentation database. The retained payload
+        // needs overflow pages, producing a real SQLiteFullException without filling the phone.
+        JSONObject pending = record("quota-retry", "local-only").put("fixture_padding", "x".repeat(32 * 1024));
+        JSONObject item = new JSONObject().put("record", pending).put("image", image);
+        JSONObject payload = importing ? new JSONObject().put("records", new JSONArray().put(item)) : item;
+        String method = importing ? "storage.import" : "storage.report.save";
+        java.io.File photoDirectory = new java.io.File(context.getFilesDir(), "instrumentation-photos");
+        try {
+            database.setMaximumSize(pages * database.getPageSize());
+            android.database.sqlite.SQLiteFullException failure = assertThrows(android.database.sqlite.SQLiteFullException.class,
+                () -> store.dispatch(method, payload));
+            assertEquals("QUOTA_EXCEEDED", NativeStore.safeError(failure));
+            assertEquals(1, ((JSONArray) store.dispatch("storage.report.list", new JSONObject())).length());
+            assertEquals(JSONObject.NULL, store.dispatch("storage.report.get", new JSONObject().put("id", "quota-retry")));
+            assertEquals(1, photoDirectory.listFiles().length);
+        } finally {
+            database.setMaximumSize(previousMaximum);
+        }
+        // Retrying the same retained result is idempotent, including its private photo.
+        store.dispatch(method, payload);
+        store.dispatch(method, payload);
+        assertEquals(2, ((JSONArray) store.dispatch("storage.report.list", new JSONObject())).length());
+        assertEquals(2, photoDirectory.listFiles().length);
+    }
 }

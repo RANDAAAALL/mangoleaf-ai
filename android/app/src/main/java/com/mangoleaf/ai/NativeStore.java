@@ -33,6 +33,17 @@ final class NativeStore extends SQLiteOpenHelper {
     private final Context context;
     private final File photos;
 
+    /** SQLite can auto-rollback on FULL/IOERR; resource closing retains the first failure. */
+    private static final class Transaction implements AutoCloseable {
+        private final SQLiteDatabase database;
+        Transaction(SQLiteDatabase database) {
+            this.database = database;
+            database.beginTransaction();
+        }
+        void successful() { database.setTransactionSuccessful(); }
+        @Override public void close() { database.endTransaction(); }
+    }
+
     NativeStore(Context context) {
         this(context, "mangoleaf-native.db");
     }
@@ -100,11 +111,10 @@ final class NativeStore extends SQLiteOpenHelper {
             }
             byte[] bytes = collected.toByteArray();
             JSONArray rows = StorageRules.guidelines(new JSONArray(new String(bytes, StandardCharsets.UTF_8)));
-            database.beginTransaction();
-            try {
+            try (Transaction transaction = new Transaction(database)) {
                 putGuidelines(database, rows);
-                database.setTransactionSuccessful();
-            } finally { database.endTransaction(); }
+                transaction.successful();
+            }
         }
     }
 
@@ -163,15 +173,24 @@ final class NativeStore extends SQLiteOpenHelper {
         Prepared prepared = prepare(input, image);
         SQLiteDatabase database = getWritableDatabase();
         List<File> created = new ArrayList<>();
-        database.beginTransaction();
-        try {
+        try (Transaction transaction = new Transaction(database)) {
             JSONObject saved = insertReport(database, prepared, false, created);
-            database.setTransactionSuccessful();
+            transaction.successful();
             return saved;
         } catch (Exception error) {
-            for (File file : created) file.delete();
+            removeUncommittedPhotos(database, created);
             throw error;
-        } finally { database.endTransaction(); }
+        }
+    }
+
+    private void removeUncommittedPhotos(SQLiteDatabase database, List<File> created) {
+        for (File file : created) {
+            try (Cursor cursor = database.rawQuery("SELECT 1 FROM reports WHERE photo_name=?", new String[]{file.getName()})) {
+                if (!cursor.moveToFirst()) file.delete();
+            } catch (RuntimeException unavailable) {
+                // An uncertain commit/read must never delete a photo that might be committed.
+            }
+        }
     }
 
     private JSONObject insertReport(SQLiteDatabase database, Prepared prepared, boolean importing, List<File> created) throws Exception {
@@ -226,8 +245,7 @@ final class NativeStore extends SQLiteOpenHelper {
         Set<String> ids = new HashSet<>();
         for (int i = 0; i < input.length(); i++) ids.add(StorageRules.identifier(input.getString(i)));
         SQLiteDatabase database = getWritableDatabase();
-        database.beginTransaction();
-        try {
+        try (Transaction transaction = new Transaction(database)) {
             for (String id : ids) {
                 if (cloudScope != null && id.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")) {
                     // Queue and local deletion share one transaction, including when the phone is offline.
@@ -247,8 +265,8 @@ final class NativeStore extends SQLiteOpenHelper {
                 tombstone.put("id", id);
                 database.insertWithOnConflict("deleted_reports", null, tombstone, SQLiteDatabase.CONFLICT_IGNORE);
             }
-            database.setTransactionSuccessful();
-        } finally { database.endTransaction(); }
+            transaction.successful();
+        }
         // Commit removal first: an interrupted cleanup can leave an inaccessible orphan,
         // but never a visible report whose photo was removed before rollback.
         for (String name : names) new File(photos, name).delete();
@@ -299,14 +317,13 @@ final class NativeStore extends SQLiteOpenHelper {
     private boolean replaceGuidelines(JSONArray input, JSONArray expected) throws JSONException {
         JSONArray rows = StorageRules.guidelines(input);
         SQLiteDatabase database = getWritableDatabase();
-        database.beginTransaction();
-        try {
+        try (Transaction transaction = new Transaction(database)) {
             if (!StorageRules.guidelineIdentity(readGuidelines(database)).equals(StorageRules.guidelineIdentity(expected))) return false;
             database.delete("guidelines", null, null);
             putGuidelines(database, rows);
-            database.setTransactionSuccessful();
+            transaction.successful();
             return true;
-        } finally { database.endTransaction(); }
+        }
     }
 
     private boolean changeGuideline(JSONObject payload) throws JSONException {
@@ -370,8 +387,7 @@ final class NativeStore extends SQLiteOpenHelper {
         if (deletedIds != null && deletedIds.length() > 10000) throw new IllegalArgumentException("INVALID_ARGUMENT");
         SQLiteDatabase database = getWritableDatabase();
         List<File> created = new ArrayList<>();
-        database.beginTransaction();
-        try {
+        try (Transaction transaction = new Transaction(database)) {
             long before = android.database.DatabaseUtils.queryNumEntries(database, "reports");
             if (deletedIds != null) {
                 for (int i = 0; i < deletedIds.length(); i++) {
@@ -390,12 +406,12 @@ final class NativeStore extends SQLiteOpenHelper {
             for (Prepared record : records) insertReport(database, record, true, created);
             if (guidelines != null) putGuidelines(database, guidelines);
             long imported = android.database.DatabaseUtils.queryNumEntries(database, "reports") - before;
-            database.setTransactionSuccessful();
+            transaction.successful();
             return new JSONObject().put("processed", records.size()).put("imported", imported);
         } catch (Exception error) {
-            for (File file : created) file.delete();
+            removeUncommittedPhotos(database, created);
             throw error;
-        } finally { database.endTransaction(); }
+        }
     }
 
     private static boolean secretSetting(String key) {
