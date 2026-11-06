@@ -46,7 +46,11 @@ async function installBrowser(
     }),
   );
   await page.addInitScript((settings) => {
-    localStorage.setItem("preferred_language", settings.language ?? "en");
+    // Seed once so a fresh document can observe the user's subsequent language choice.
+    if (!sessionStorage.getItem("mangoleaf-install-language-seeded")) {
+      localStorage.setItem("preferred_language", settings.language ?? "en");
+      sessionStorage.setItem("mangoleaf-install-language-seeded", "1");
+    }
     Object.defineProperty(navigator, "userAgent", {
       configurable: true,
       value:
@@ -397,7 +401,7 @@ test("I08: Android visitors can open the installed app with a safe download fall
   await page.goto("/download");
   await expect(
     page.getByRole("link", {
-      name: translations.bis.androidOpenOrInstall,
+      name: translations.en.androidOpenOrInstall,
       exact: true,
     }),
   ).toBeVisible();
@@ -432,9 +436,11 @@ test("I09: a published Android APK appears in both languages without downloading
     }),
   );
   await page.goto("/download");
-  for (const language of ["bis", "en"] as const) {
-    if (language === "en")
-      await page.getByRole("button", { name: "EN / BIS", exact: true }).click();
+  for (const language of ["en", "bis"] as const) {
+    if (language === "bis")
+      await page
+        .getByRole("button", { name: /^(EN|EN\/BIS)$/, exact: true })
+        .click();
     const t = translations[language];
     await expect(page.getByRole("status")).toHaveText(
       t.androidDownloadAvailable.replace("{version}", "v9.8.7"),
@@ -488,7 +494,7 @@ test("I15: an unlabeled older APK stays downloadable without inventing its nativ
   await expect(page.getByTestId("available-apk-version")).toHaveCount(0);
   await expect(
     page.getByRole("link", {
-      name: translations.bis.androidDownloadApk,
+      name: translations.en.androidDownloadApk,
       exact: true,
     }),
   ).toHaveAttribute("href", downloadUrl);
@@ -521,17 +527,17 @@ test("I10: untrusted APK URLs keep the download unavailable and preserve officia
   );
   await page.goto("/download");
   await expect(page.getByRole("status")).toHaveText(
-    translations.bis.androidDownloadPending,
+    translations.en.androidDownloadPending,
   );
   await expect(
     page.getByRole("link", {
-      name: translations.bis.androidDownloadApk,
+      name: translations.en.androidDownloadApk,
       exact: true,
     }),
   ).toHaveCount(0);
   await expect(
     page.getByRole("link", {
-      name: translations.bis.androidDownloadReleases,
+      name: translations.en.androidDownloadReleases,
       exact: true,
     }),
   ).toHaveAttribute("href", androidReleasePage);
@@ -569,12 +575,12 @@ for (const relatedApps of [
     await expect(page).toHaveURL(/\/download$/);
     await expect(
       page.getByRole("link", {
-        name: translations.bis.androidOpenOrInstall,
+        name: translations.en.androidOpenOrInstall,
         exact: true,
       }),
     ).toBeVisible();
     await expect(page.getByRole("status")).toHaveText(
-      translations.bis.androidDownloadPending,
+      translations.en.androidDownloadPending,
     );
   });
 }
@@ -621,9 +627,11 @@ test("I13: confirmed production installation opens directly and makes another AP
     }),
   );
   await page.goto("/download");
-  for (const language of ["bis", "en"] as const) {
-    if (language === "en")
-      await page.getByRole("button", { name: "EN / BIS", exact: true }).click();
+  for (const language of ["en", "bis"] as const) {
+    if (language === "bis")
+      await page
+        .getByRole("button", { name: /^(EN|EN\/BIS)$/, exact: true })
+        .click();
     const t = translations[language];
     await expect(
       page.getByRole("link", { name: t.androidOpenApp, exact: true }),
@@ -835,7 +843,7 @@ for (const [device, userAgent] of [
       });
     });
     await page.goto("/download");
-    for (const language of ["bis", "en"] as const) {
+    for (const language of ["en", "bis"] as const) {
       const t = translations[language];
       await expect(page.getByRole("status")).toHaveText(
         t.androidDownloadAndroidOnly,
@@ -852,9 +860,9 @@ for (const [device, userAgent] of [
       await expect(
         page.locator('a[href^="intent:"], a[href*=".apk"], a[download]'),
       ).toHaveCount(0);
-      if (language === "bis")
+      if (language === "en")
         await page
-          .getByRole("button", { name: "EN / BIS", exact: true })
+          .getByRole("button", { name: /^(EN|EN\/BIS)$/, exact: true })
           .click();
     }
     expect(metadataRequests).toBe(0);
@@ -877,5 +885,71 @@ test("I17: Home counts seven conditions including both healthy outcomes in each 
     ).toBeVisible();
     await expect(page.getByText(t.healthyLabel, { exact: true })).toBeVisible();
     expect(t.detectableTitle.startsWith("7")).toBe(true);
+  }
+});
+
+test("I18: language survives Home and download document navigation in both directions", async ({
+  browser,
+}) => {
+  // The default fixture intentionally resets English on every document. A separate
+  // context is needed to test real persistence rather than that startup override.
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:4173",
+    viewport: { width: 390, height: 844 },
+    serviceWorkers: "block",
+  });
+  const page = await context.newPage();
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await context.addInitScript(() =>
+    Reflect.deleteProperty(Object.getPrototypeOf(navigator), "serviceWorker"),
+  );
+  try {
+    await installBrowser(page);
+    await openWebsite(page);
+    for (const language of ["en", "bis"] as const) {
+      const t = translations[language];
+      await page.goto("/download");
+      await expect(
+        page.getByRole("heading", {
+          name: t.androidDownloadTitle,
+          exact: true,
+        }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: language.toUpperCase(), exact: true }),
+      ).toBeVisible();
+      await page.reload();
+      await expect(
+        page.getByRole("heading", {
+          name: t.androidDownloadTitle,
+          exact: true,
+        }),
+      ).toBeVisible();
+      const next = language === "en" ? "bis" : "en";
+      await page
+        .getByRole("button", { name: language.toUpperCase(), exact: true })
+        .click();
+      await expect(
+        page.getByRole("heading", {
+          name: translations[next].androidDownloadTitle,
+          exact: true,
+        }),
+      ).toBeVisible();
+      await page.goto("/");
+      await expect(
+        page.getByRole("heading", {
+          name: translations[next].HowItWorksTitle,
+          exact: true,
+        }),
+      ).toBeVisible();
+    }
+    expect(await page.evaluate(() => indexedDB.databases())).toEqual([]);
+    await expect(
+      page.locator('input[type="file"], input[type="password"]'),
+    ).toHaveCount(0);
+    expect(errors).toEqual([]);
+  } finally {
+    await context.close();
   }
 });

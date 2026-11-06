@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { translations, type Language } from "@/lib/translations";
+import { translations } from "@/lib/translations";
+import { useBrowserLanguage } from "@/hooks/useBrowserLanguage";
 import { useAndroidAppLink } from "@/hooks/useAndroidAppLink";
 import { useAndroidRelease } from "@/hooks/useAndroidRelease";
 import { androidApkAsset, androidReleasePage } from "@/lib/android-release";
 
 /** Keep download availability honest until a signed APK is actually published. */
 export default function DownloadPage() {
-  const [language, setLanguage] = useState<Language>("bis");
+  const { language, changeLanguage } = useBrowserLanguage();
   const t = translations[language];
   const { href: appLink, installed, ready } = useAndroidAppLink();
   const canDownload = appLink !== null;
@@ -17,10 +17,13 @@ export default function DownloadPage() {
   return (
     <main className="mx-auto flex max-w-2xl flex-col gap-5 p-6 text-[#143519]">
       <button
-        onClick={() => setLanguage(language === "en" ? "bis" : "en")}
+        onClick={() => changeLanguage(language === "en" ? "bis" : "en")}
         className="self-end rounded-xl border px-4 py-2"
       >
-        EN / BIS
+        <span className="md:hidden">{language.toUpperCase()}</span>
+        <span className="hidden md:inline">
+          {language === "en" ? "EN/BIS" : "BIS/EN"}
+        </span>
       </button>
       <h1 className="text-3xl font-bold">{t.androidDownloadTitle}</h1>
       <p>{t.androidDownloadDescription}</p>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useSyncExternalStore } from "react";
+import { useRef, useState } from "react";
 import { TopHeader } from "@/components/layout/top-header";
 import { Footer } from "@/components/layout/footer";
 import { BrowserBottomNav } from "@/components/layout/browser-bottom-nav";
@@ -11,54 +11,15 @@ import { DownloadPromptCard } from "@/components/scan/download-prompt-card";
 import { InstallGuideOverlay } from "@/components/modal/install-guide-overlay";
 import { LegalModal } from "@/components/modal/legal-modal";
 import { useInstallGuide } from "@/hooks/useInstallGuide";
-import type { Language } from "@/lib/translations";
-
-let fallbackLanguage: Language = "bis";
-let unsavedLanguage: Language | undefined;
-const languageChanged = "mangoleaf-language-changed";
-
-function readLanguage(): Language {
-  if (unsavedLanguage) return unsavedLanguage;
-  try {
-    const saved = localStorage.getItem("preferred_language");
-    if (saved === "en" || saved === "bis") return saved;
-  } catch {}
-  return fallbackLanguage;
-}
-
-function subscribeLanguage(listener: () => void) {
-  window.addEventListener("storage", listener);
-  window.addEventListener(languageChanged, listener);
-  return () => {
-    window.removeEventListener("storage", listener);
-    window.removeEventListener(languageChanged, listener);
-  };
-}
+import { useBrowserLanguage } from "@/hooks/useBrowserLanguage";
 
 /** The website explains the APK without opening legacy History or starting inference. */
 export function BrowserLanding() {
   const [activeTab, setActiveTab] = useState<"home" | "about">("home");
-  // The server snapshot keeps hydration stable; blocked storage falls back to memory.
-  const language = useSyncExternalStore<Language>(
-    subscribeLanguage,
-    readLanguage,
-    () => "bis",
-  );
+  const { language, changeLanguage } = useBrowserLanguage();
   const [legal, setLegal] = useState<"privacy" | "terms" | null>(null);
   const mainRef = useRef<HTMLElement>(null);
   const { isOpen, openGuide, closeGuide } = useInstallGuide();
-
-  function changeLanguage(next: Language) {
-    fallbackLanguage = next;
-    try {
-      localStorage.setItem("preferred_language", next);
-      unsavedLanguage = undefined;
-    } catch {
-      // Quota or write-only restrictions must not override the user's in-memory choice.
-      unsavedLanguage = next;
-    }
-    window.dispatchEvent(new Event(languageChanged));
-  }
 
   function changeTab(tab: "home" | "history" | "about") {
     if (tab === "history") return;
