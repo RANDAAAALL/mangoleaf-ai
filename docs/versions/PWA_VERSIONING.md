@@ -2,24 +2,22 @@
 
 ## Current repository snapshot
 
-**November 3, 2026:** prepared **app/web bundle 0.13.0**, **Android APK 0.1.9/code 10** (Debug **0.1.9-dev**), host bounds **10-10**, bridge/SQLite schema **1/1**, and adopted **Model V5.1.0**. This is a repository candidate, not a published release or confirmed Vercel deployment.
+**November 6, 2026:** current source prepares unpublished **app/web 0.13.1**, **Android APK 0.1.10/code 11** (Debug **0.1.10-dev**), host bounds **11-11**, bridge/SQLite schema **1/1**, and unchanged adopted **Model V5.1.0**. This candidate fixes shared website language, Android camera permission wording and native storage-full error preservation. No model retraining, threshold change, schema migration or cloud resource change is required.
 
-GitHub's latest published release was checked read-only on November 3: [v0.12.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.12.0), published October 26, with APK **0.1.8/code 9** and Model **V4.5.0**. Preserve that tag and all signed assets. The old notes calling v0.12.0 unpublished are retained only in the [dated history](history/PWA_RELEASE_HISTORY.md#v0130-settings-and-v510-adoption-candidate-november-3-2026).
+| Item                      | Current source                                                                                     |
+| ------------------------- | -------------------------------------------------------------------------------------------------- |
+| App/web bundle            | `0.13.1`, root `package.json`                                                                      |
+| Adopted model             | `v5.1.0`, unchanged reviewed runtime bundle                                                        |
+| Android host              | `0.1.10` / code `11`; Debug `0.1.10-dev`                                                           |
+| Compatibility             | Bridge/schema `1`/`1`, host bounds `11-11`                                                         |
+| Observed Production phone | APK `0.1.10` / code `11`, web `0.13.1`, V5.1.0                                                     |
+| Pending                   | Exact-source release checks, signed Production/staged-site acceptance, CI and publication approval |
 
-| Item               | Current source                                                                                                    |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| App/web bundle     | `0.13.0`, root `package.json`                                                                                     |
-| Adopted model      | `v5.1.0`, whole reviewed runtime bundle                                                                           |
-| Android host       | `0.1.9` / code `10`; Debug `0.1.9-dev`                                                                            |
-| Compatibility      | Bridge/schema `1`/`1`, host bounds `10-10`                                                                        |
-| Published baseline | GitHub `v0.12.0`; APK `0.1.8` / code `9`                                                                          |
-| Pending            | Exact-source CI, signed Production APK/staged-site/physical acceptance, numerical parity and publication approval |
+The earlier November 6 Production artifact was APK 0.1.9/code 10, SHA-256 `1f5f7b4269a10a1cb3e853853d3788a6a6ab614e634a177ff9d0a918c916f227`. Later that day, the maintainer approved an in-place local update to the signed 0.1.10/code 11 candidate, SHA-256 `6fe4ac73900477d555a3cb76f6d1d7f595a550704dd2f646c6ae3e1f0952dbc5`. Its exact installed hash, web 0.13.1, unchanged recovery code/Backup On and three protected History photos were verified. This is local candidate testing, not publication or website promotion. Original 0.1.9 failures/blocked rows and timestamps remain historical.
 
-**R03 verified November 3:** the report for commit `7ea6a0d9b55af577c53b2d48440b56fd522829f4` passed its 30.1-minute mixed-use case (30.5-minute suite), with 554 actual predictions. All app/model/build hashes match the current candidate; a documentation-only follow-up does not change those inputs. This closes R03, while CI, exact signed Production/staged acceptance and numerical model parity remain separate. [Evidence and limits](../testing/TESTING.md#november-3-2026).
+Current-candidate browser R03 passed before the interruption: 347 actual predictions, 1,801,124 ms in its mixed-use loop, 30.2-minute case and 30.7-minute complete run. All recorded app/model input hashes match current source. Native, emulator, mock and physical observations retain their distinct scopes. See [November 7 continuation](../testing/TESTING.md#november-7-2026).
 
-The candidate adds APK Settings with separate language, backup, diagnostics and Production update screens; startup/backup state fixes; seven-condition Home text; Android-only website download actions; and Debug-only fresh-result class scores. Model adoption changes model/cache identity without retraining or changing the recorded 70% rule. Numerical export parity and physical-device evidence remain separate from recorded Colab accuracy/OOD results.
-
-APK footers identify the installed host and active model; About also shows the web-bundle version. Available APK versions come only from a validated published asset label. [Android guide](ANDROID_APK_VERSIONING.md), [model guide](AI_MODEL_VERSIONING.md), [candidate record](history/PWA_RELEASE_HISTORY.md#v0130-settings-and-v510-adoption-candidate-november-3-2026).
+APK footers identify the installed host and active model; About also shows the web-bundle version. Available APK versions come only from a validated published asset label. No tag, deployment, OTA sequence or publication is created by preparing these source labels. See the [Android guide](ANDROID_APK_VERSIONING.md), [November 6 candidate history](history/PWA_RELEASE_HISTORY.md#v0131-physical-qa-remediation-candidate-november-6-2026) and [test evidence](../testing/TESTING.md#november-6-2026). The [November 3 adoption and R03 record](history/PWA_RELEASE_HISTORY.md#v0130-settings-and-v510-adoption-candidate-november-3-2026) retains its original scope.
 
 ## Version labels and release rules
 

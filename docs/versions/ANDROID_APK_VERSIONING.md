@@ -1,28 +1,26 @@
 # MangoLeaf AI Android APK Versioning Guide
 
-**November 3 candidate:** app/web **0.13.0**, Production host **0.1.9/code 10**, Debug **0.1.9-dev**, host bounds **10-10**, bridge/schema **1/1**, adopted **Model V5.1.0**. The existing unpublished host-10 bump covers the native startup changes; it is newer than the published host-9 APK. No additional native bump is needed for this candidate.
+**November 6 unpublished candidate:** app/web **0.13.1**, native **0.1.10/code 11**, Debug **0.1.10-dev**, host bounds **11-11**, bridge/schema **1/1**, unchanged adopted **Model V5.1.0**. Native storage-full error preservation requires a rebuilt installer; web OTA cannot add this Java fix to host 10. No new dependency, schema or cloud setup is required.
 
-Settings owns language, private backup, diagnostics and Production App updates. Its Production update entry stays visible without claiming an unconfirmed latest version. Fresh class scores appear only in Android/testing Debug builds. Website scanning/private workers stay absent. Both APK variants keep existing SQLite/photos/credentials, receiving-backup ownership and deliberate pauses.
+The earlier November 6 Production artifact was **0.1.9/code 10 / web 0.13.0**. With the maintainer's explicit approval, it was updated in place to the signed local **0.1.10/code 11 / web 0.13.1** candidate, SHA-256 `6fe4ac73900477d555a3cb76f6d1d7f595a550704dd2f646c6ae3e1f0952dbc5`, original signer `1f6d17bf7e7dc573001c48b055ff0d4c224569b7cbec114a7de317627476661d`. Installed bytes, unchanged recovery code/Backup On and all three protected History thumbnails were verified. No uninstall or data clearing occurred. The installer/receipt remain under ignored `.tools/android-release/qa-remediation-20261106T144632Z/`. This does not publish the APK or promote the website; original 0.1.9 evidence remains separate. Candidate browser R03 also passed; [November 7 continuation](../testing/TESTING.md#november-7-2026) records its hashes and remaining physical scope.
 
-Model V5.1.0 is adopted in source; publication, signed Production testing and field accuracy are separate. Default Android bundles read the committed adopted model. Before its adoption commit exists, only explicit `--working-model` staging includes the uncommitted adoption; after commit, ordinary bundles include it. Preserve V4.5.0 as historical rollback evidence, not the default runtime. See [adoption](AI_MODEL_VERSIONING.md#current-adopted-model-v510-november-3-2026), [dated candidate](history/ANDROID_APK_HISTORY.md#apk-v019code-10-and-model-v510-candidate-november-3-2026), and [current testing](../testing/TESTING.md#november-3-2026).
+Settings owns language, private backup, diagnostics and Production App updates. Its Production update entry stays visible without claiming an unconfirmed latest version. Fresh class scores appear only in Android/testing Debug builds. Website scanning/private workers stay absent. Existing SQLite/photos/credentials, receiving-backup ownership and deliberate pauses remain preserved. Default Android bundles use the committed adopted V5.1.0 model; `--working-model` is only for an explicitly requested uncommitted model override. Preserve V4.5.0 historical rollback evidence.
 
-GitHub [v0.12.0](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.12.0), published October 26, is the verified published baseline. No new OTA sequence, signature, tag, upload or Vercel promotion is allocated by preparing these files. Recheck all published OTA sequences before selecting a higher unused sequence.
-
-**R03 verified November 3:** app 0.13.0 / Model V5.1.0 passed the local browser 30-minute mixed-use check with 554 actual predictions and matching input hashes. This completes browser R03 for the candidate, not physical/native/Production acceptance. See [the exact report](../testing/TESTING.md#november-3-2026). Candidate version numbers and the prepared Debug APK stay unchanged.
+No new OTA sequence, signature, tag, upload or Vercel promotion is allocated by preparing these files. Recheck all published sequences before selecting a higher unused one. See [current checks](../testing/TESTING.md#november-6-2026), [native candidate history](history/ANDROID_APK_HISTORY.md#apk-v0110code-11-qa-remediation-candidate-november-6-2026), and [model adoption](AI_MODEL_VERSIONING.md#current-adopted-model-v510-november-3-2026).
 
 ## Current native identity
 
 | Identity                      | Current source candidate | Source                                      |
 | ----------------------------- | ------------------------ | ------------------------------------------- |
-| Production APK                | `0.1.9`                  | `versionName` in `android/app/build.gradle` |
-| Debug APK                     | `0.1.9-dev`              | Native version plus Debug suffix            |
-| Android update number         | `10`                     | `versionCode` in `android/app/build.gradle` |
-| Default compatible host range | `10-10`                  | `tools/android-bundle.mjs`                  |
+| Production APK                | `0.1.10`                 | `versionName` in `android/app/build.gradle` |
+| Debug APK                     | `0.1.10-dev`             | Native version plus Debug suffix            |
+| Android update number         | `11`                     | `versionCode` in `android/app/build.gradle` |
+| Default compatible host range | `11-11`                  | `tools/android-bundle.mjs`                  |
 | Native bridge / SQLite schema | `1` / `1`                | Existing compatibility checks               |
-| Shared website / web bundle   | `0.13.0`                 | Root `package.json`                         |
-| Adopted bundled model         | `v5.1.0`                 | Committed model assets and constants        |
+| Shared website / web bundle   | `0.13.1`                 | Root `package.json`                         |
+| Adopted bundled model         | `v5.1.0`                 | Unchanged committed model assets/constants  |
 
-Published v0.12.0 remains APK 0.1.8/code 9 with Model V4.5.0; its exact tag and signed assets remain unchanged. The table identifies unpublished source, not a published installer or passed physical test. New default host-10-only assets require the new same-signer installer; old tags and signed metadata are not rewritten. APK footers read the installed host; About separately shows the web-bundle version. Repeat affected source, browser, Android and physical checks for the new candidate.
+The table identifies unpublished source, not a published installer or completed physical evaluation. Host-11-only assets require the matching same-signer installer. Existing tags, signed assets and historical receipts are never rewritten. APK footers read the installed host; About separately shows the web-bundle version. Repeat affected checks for this candidate before any release.
 
 ## Version rules
 

@@ -34,7 +34,7 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 
 ## Download and status
 
-Source prepares **app v0.13.0 / APK v0.1.9/code 10** (Debug **0.1.9-dev**, OTA bounds **10-10**) with adopted **Model V5.1.0**. Adoption preserves the reviewed model weights and confidence-only 70% rule; release remains pending. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md), [model adoption](docs/versions/AI_MODEL_VERSIONING.md#current-adopted-model-v510-november-3-2026) and [November 3 checks](docs/testing/TESTING.md#november-3-2026).
+Source prepares an **unpublished app v0.13.1 / APK v0.1.10/code 11** candidate (Debug **0.1.10-dev**, host bounds **11-11**) with unchanged adopted **Model V5.1.0** and its 70% confidence rule. It fixes website language continuity, Android camera permission guidance and native storage-full error handling. Earlier 0.1.9 observations retain their build identities. The maintainer later approved local installation of this signed candidate; its unchanged recovery code and three original reports were verified. Local installation is separate from publication. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md), [model adoption](docs/versions/AI_MODEL_VERSIONING.md#current-adopted-model-v510-november-3-2026) and [current checks](docs/testing/TESTING.md#november-7-2026).
 
 The [official download page](https://mangoleafai.vercel.app/download) provides published APKs; [v0.12.0 / APK 0.1.8](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.12.0) has its own retained release evidence. New source is unpublished. Debug/testing checks and current-input R03 passed; production-signed/staged checks, CI and release/promotion remain pending. See the [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
 
@@ -144,6 +144,8 @@ These are research records. **V5.0.0 remains experimental and is excluded from t
 - [October 3 performance review and recommended improvements](docs/PERFORMANCE.md#low-end-device-performance-review-october-3-2026)
 - [Android testing](docs/testing/ANDROID_TESTING.md)
 - [Testing and reliability guide](docs/testing/TESTING.md)
+- [Functional checklist](docs/testing/FUNCTIONAL_CHECKLIST.md)
+- [Functional checklist answer example (fictional)](docs/testing/FUNCTIONAL_CHECKLIST_SAMPLE.md)
 - [Physical reliability checklist](docs/testing/PHYSICAL_RELIABILITY_CHECKLIST.md)
 - [Physical checklist answer example (fictional)](docs/testing/PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md)
 - [Development progress](docs/PROGRESS.md)

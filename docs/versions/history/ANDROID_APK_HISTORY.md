@@ -1,3 +1,13 @@
+## APK 0.1.10 local installation follow-up (November 7, 2026)
+
+The maintainer explicitly approved local installation of the signed **APK 0.1.10/code 11 / web 0.13.1 / V5.1.0** candidate over 0.1.9. Exact installed SHA-256 `6fe4ac73900477d555a3cb76f6d1d7f595a550704dd2f646c6ae3e1f0952dbc5`, original signer, unchanged receiving code/Backup On and three protected History photos were verified. One new Production camera-test report was subsequently saved. The completed 0.13.1 R03 pass has 347 actual predictions and matching input hashes; fresh receiver/queued deletion evidence uses isolated testing fixtures. These results do not imply field accuracy, complete remaining QA, CI approval, publication, a tag or website promotion. [Exact evidence and limits](../../testing/TESTING.md#november-7-2026).
+
+## APK v0.1.10/code 11 QA remediation candidate (November 6, 2026)
+
+Unpublished candidate: **0.1.10/code 11**, Debug **0.1.10-dev**, shared web **0.13.1**, host bounds **11-11**, bridge/schema **1/1**, unchanged adopted **V5.1.0**. The native storage fix preserves SQLite-full failures instead of masking them during rollback. Save/import cleanup verifies committed photo references before removing newly created files. Existing SQLite records, private files, recovery credentials, ownership, pauses, signers and data formats remain preserved. This requires a rebuilt APK; a web OTA alone cannot supply it to host 10.
+
+Separate Debug/testing instrumentation reproduces storage pressure in a disposable page-limited database; it never fills the phone or clears Production. Keep the original failing reproduction alongside the fixed-candidate result. The physical Production **0.1.9/code 10 / web 0.13.0** remains installed; earlier evidence does not become a candidate pass. See [November 6 testing](../../testing/TESTING.md#november-6-2026) for exact artifacts and outstanding checks. No production signing/publication, sequence allocation, tag or deployment is implied.
+
 ### October 26 browser-free native APK updater candidate
 
 ## APK v0.1.9/code 10 and Model V5.1.0 candidate (November 3, 2026)

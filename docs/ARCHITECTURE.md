@@ -1,5 +1,13 @@
 # MangoLeaf AI Architecture
 
+## QA remediation candidate (November 6, 2026)
+
+Unpublished **app/web 0.13.1 / APK 0.1.10/code 11**, bounds **11-11**, retains bridge/schema **1/1**, adopted **V5.1.0** and all storage/backup ownership formats. The native change requires an installer; host-10 physical results remain evidence of that earlier artifact.
+
+Public Home and the download document share `useBrowserLanguage`, which reads the same language preference through `useSyncExternalStore`. Its fixed server snapshot preserves static-export hydration; the change does not mount browser scanning, report storage or private cloud workers. Camera permission feedback points to MangoLeaf AI's Android Settings in both languages; the camera capture pipeline is unchanged.
+
+Native SQLite transactions use a scoped resource so a rollback failure cannot replace an earlier storage-full failure. Save/import cleanup runs after transaction closure and removes newly created photo files only after confirming that no committed row references them. An unavailable verification read preserves the file. A disposable instrumentation database can be page-limited to reproduce an actual SQLite-full error without filling the phone or changing the application's real database. Both save and import must preserve earlier rows/photos and permit an idempotent retry. See [test evidence and limits](testing/TESTING.md#november-6-2026).
+
 ## V5.1.0 adoption and 0.13.0 release preparation (November 3, 2026)
 
 The maintainer selected **V5.1.0** as the repository model for **app/web 0.13.0 / APK 0.1.9/code 10**, bounds **10-10**, bridge/schema **1/1**. Model graph/shards and scientific settings stay byte-identical to the reviewed local candidate; adoption changes runtime metadata, the report label to `v5.1.0`, and the worker model cache to `mangoleaf-model-cache-v5-1-0`. New reports require exact-version duplicate reuse. Older candidate/V4.5.0 reports and all local/private cloud data remain intact.
@@ -401,6 +409,8 @@ mangoleaf-ai/
 |   |-- treatment-guidelines/       # Treatment-advice source reviews and bilingual drafts
 |   |-- testing/                    # Test instructions and physical-device checklists
 |   |   |-- TESTING.md              # Automated cases, reliability protocol, device checklist
+|   |   |-- FUNCTIONAL_CHECKLIST.md                 # Blank manual feature/result record
+|   |   |-- FUNCTIONAL_CHECKLIST_SAMPLE.md          # Fictional functional answer guide
 |   |   |-- PHYSICAL_RELIABILITY_CHECKLIST.md        # Fillable physical-device evidence
 |   |   `-- PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md # Fictional example; never evidence
 |   |-- model-training/             # Versioned model guides, evidence, and trial reports

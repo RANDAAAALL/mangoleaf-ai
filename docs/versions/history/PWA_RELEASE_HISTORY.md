@@ -1,3 +1,13 @@
+## App 0.13.1 local candidate and R03 follow-up (November 7, 2026)
+
+The maintainer explicitly approved local installation of the signed **APK 0.1.10/code 11 / web 0.13.1 / V5.1.0** candidate over 0.1.9. Exact installed SHA-256 `6fe4ac73900477d555a3cb76f6d1d7f595a550704dd2f646c6ae3e1f0952dbc5`, original signer, unchanged receiving code/Backup On and three protected History photos were verified. One new Production camera-test report was subsequently saved. The completed 0.13.1 R03 pass has 347 actual predictions and matching input hashes; fresh receiver/queued deletion evidence uses isolated testing fixtures. These results do not imply field accuracy, complete remaining QA, CI approval, publication, a tag or website promotion. [Exact evidence and limits](../../testing/TESTING.md#november-7-2026).
+
+## v0.13.1 physical QA remediation candidate (November 6, 2026)
+
+Prepared unpublished **app/web 0.13.1 / APK 0.1.10/code 11**, Debug **0.1.10-dev**, bounds **11-11**, bridge/schema **1/1**, unchanged adopted **V5.1.0**. Public Home/download now share the stored language, Android camera-denial feedback names Android Settings, and native save/import preserve the original SQLite-full exception and committed photo references during cleanup. No model, threshold, database schema or backend resource changes are made.
+
+The physically observed Production artifact remains **APK 0.1.9/code 10 / web 0.13.0**, SHA-256 `1f5f7b4269a10a1cb3e853853d3788a6a6ab614e634a177ff9d0a918c916f227`. Its prior results/times and protected History stay intact. Candidate tests do not change those failed/blocked statuses or certify a deployed fix. Exact new artifact identities and evidence limits belong in [November 6 testing](../../testing/TESTING.md#november-6-2026). No tag, signed Production publication, OTA allocation, CI approval or Vercel promotion is performed.
+
 ## v0.13.0 Settings and V5.1.0 adoption candidate (November 3, 2026)
 
 Prepared app **0.13.0**, APK **0.1.9/code 10** (Debug **0.1.9-dev**), host bounds **10-10**, bridge/schema **1/1**, adopted **Model V5.1.0**. Includes APK-only Settings screens for language/private backup/diagnostics/Production updates, startup and async lifetime fixes, required/wrong-code feedback, temporary Debug class scores, seven-condition Home text and Android-only website download actions. Native/cloud data formats and ownership remain unchanged.
