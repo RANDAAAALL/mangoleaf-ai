@@ -6,7 +6,7 @@
 
 Use this researcher-prepared sheet to record whether the app's required features work as expected. It supports the study's selected functional-suitability assessment; SUS, model accuracy and physical reliability use separate records. This is not an official ISO questionnaire or certification.
 
-Unpublished source reference on **November 6, 2026**: web **0.13.1**, APK **0.1.10/code 11** (Debug **0.1.10-dev**), unchanged model **V5.1.0**. Earlier Production observations use web **0.13.0 / APK 0.1.9/code 10** and retain their own evidence. Record actual installed/active values below; these reference labels do not prove publication or a completed test.
+Published reference observed on **November 7, 2026**: web **0.13.1**, APK **0.1.10/code 11** (Debug **0.1.10-dev**), unchanged model **V5.1.0**. See the [dated artifact and QA record](TESTING.md#november-7-2026-published-production-fresh-qa). Earlier candidate and Production observations retain their own evidence. Record actual installed/active values below; these reference labels do not prefill or complete a new test.
 
 The main research record should identify the exact Production APK. Use a separate testing-target copy for controlled backup changes. Website checks are separate because the website provides Home/About/language/Android installation, without scanning or private backup.
 
@@ -103,5 +103,6 @@ Do not turn this pass count into a SUS score, model accuracy or ISO certificatio
 
 ### November 6, 2026
 
+- The source reference at preparation was unpublished web **0.13.1 / APK 0.1.10/code 11**, with Debug **0.1.10-dev** and model **V5.1.0**. The later published observation in the current instructions does not relabel those earlier candidate tests.
 - Added a separate blank functional recording sheet and fictional sample using the existing application requirements/test guides. No physical test, model evaluation, cloud mutation, release approval or version change is implied.
 - Later the same day, simplified the manual front sheet to FC01–FC14, linked supporting technical evidence, removed App updates from this functional scope and made the same-file Upload Photo duplicate procedure explicit. Earlier FS01–FS30 records retain their original meaning. Release/physical update procedures remain separate. No application/model/version or completed-test result changed.

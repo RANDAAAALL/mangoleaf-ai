@@ -6,7 +6,7 @@
 
 Record how the APK behaves during repeated use, offline use and interruptions. This researcher-prepared form supports the study's selected reliability assessment. SUS, model accuracy and agricultural expert judgments use separate records; this form is not an ISO certification or release approval.
 
-Unpublished source reference on **November 6, 2026**: web **0.13.1**, APK **0.1.10/code 11** (Debug **0.1.10-dev**), unchanged model **V5.1.0**. Earlier Production observations use web **0.13.0 / APK 0.1.9/code 10** and retain their own evidence. Record actual installed/active identities below. Reference labels do not prove publication or a completed phone test.
+Published reference observed on **November 7, 2026**: web **0.13.1**, APK **0.1.10/code 11** (Debug **0.1.10-dev**), unchanged model **V5.1.0**. See the [dated artifact and QA record](TESTING.md#november-7-2026-published-production-fresh-qa). Earlier candidate and Production observations retain their own evidence. Record actual installed/active identities below; these reference labels do not complete a new phone test.
 
 Use the exact Production APK for the main research record and a separate testing-target copy for controlled backup/storage exercises. Production/development websites have no scanner, History or private backup; their installation/boundary checks are separate. A browser R03 report is supporting automated evidence, not a physical APK session.
 
@@ -247,6 +247,7 @@ These notes record checklist changes, oldest first. They do not supply completed
 
 ### November 6, 2026
 
+- The source reference at preparation was unpublished web **0.13.1 / APK 0.1.10/code 11**, with Debug **0.1.10-dev** and model **V5.1.0**. The later published observation in the current instructions does not relabel those earlier candidate tests.
 - Refreshed current instructions for APK-only scanning, native versus active web-bundle identity, Settings diagnostics/Production updates, Android permissions/portrait behavior and own-code/Pause-aware backup expectations. Added links to the functional sheet and current fictional sample. Original dated notes above remain unchanged. This is a protocol/documentation change; no phone test, cloud operation, model evaluation or release approval occurred.
 - Earlier v0.7.0 preparation did not include a full or shortened R03 run. Later browser R03 records keep their own input hashes/limits; they do not complete this physical record.
 
