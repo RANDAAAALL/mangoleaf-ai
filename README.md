@@ -4,7 +4,7 @@
 MangoLeaf AI
 </h1>
 
-MangoLeaf AI helps identify possible conditions affecting mango leaves and fruit from photos. Built for Android phones, it runs diagnosis on the device and keeps scan History available offline. Treatment guidance is available in English and Cebuano/Bisaya. The companion website explains the app and provides Android installation on phones and desktop.
+MangoLeaf AI helps identify possible conditions affecting mango leaves and fruit from photos. Built for Android phones, it runs diagnosis on the device and keeps scan History available offline. Treatment guidance is available in English and Cebuano/Bisaya. The companion website explains the app and provides Android installation on phones.
 
 ## Walkthrough (depricated)
 
@@ -34,9 +34,9 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 
 ## Download and status
 
-Source prepares an **unpublished app v0.13.1 / APK v0.1.10/code 11** candidate (Debug **0.1.10-dev**, host bounds **11-11**) with unchanged adopted **Model V5.1.0** and its 70% confidence rule. It fixes website language continuity, Android camera permission guidance and native storage-full error handling. Earlier 0.1.9 observations retain their build identities. The maintainer later approved local installation of this signed candidate; its unchanged recovery code and three original reports were verified. Local installation is separate from publication. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md), [model adoption](docs/versions/AI_MODEL_VERSIONING.md#current-adopted-model-v510-november-3-2026) and [current checks](docs/testing/TESTING.md#november-7-2026).
+Observed on **November 7, 2026**: the production website shows **app v0.13.1 / Model V5.1.0**, and published [v0.13.1](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.13.1) supplies **APK 0.1.10/code 11**. Its exact downloaded/installed bytes and original signer were verified. Host bounds are **11-11**, Debug remains **0.1.10-dev**, and the adopted model/70% rule are unchanged. See the [Android guide](docs/versions/ANDROID_APK_VERSIONING.md), [model guide](docs/versions/AI_MODEL_VERSIONING.md#current-adopted-model-v510-november-3-2026) and [fresh published-artifact evidence](docs/testing/TESTING.md#november-7-2026-published-production-fresh-qa).
 
-The [official download page](https://mangoleafai.vercel.app/download) provides published APKs; [v0.12.0 / APK 0.1.8](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.12.0) has its own retained release evidence. New source is unpublished. Debug/testing checks and current-input R03 passed; production-signed/staged checks, CI and release/promotion remain pending. See the [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
+The [official download page](https://mangoleafai.vercel.app/download) was exercised through a fresh phone download/install and installed-app handoff. Sixty fresh physical consistency runs and a 30-minute physical checkpoint completed with overlapping activity; source/own backup copies and read isolation were verified. Safe physical low-space recovery, confirmed mid-transfer interruption and controlled delayed Production replies remain unverified. Fresh-receiver coverage uses a separate native emulator. A recovered emulator startup failure is retained. Publication does not turn these gaps into passes or establish field accuracy. Earlier candidate/release evidence remains in the [release history](docs/versions/history/PWA_RELEASE_HISTORY.md).
 
 ## Technology
 

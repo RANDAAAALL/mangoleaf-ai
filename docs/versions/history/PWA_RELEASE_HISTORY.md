@@ -1,3 +1,13 @@
+<a id="published-v0131-november-7-2026"></a>
+
+## App 0.13.1 published artifact and fresh QA (November 7, 2026)
+
+The maintainer reported CI, website promotion and GitHub release completion. Live website **0.13.1 / V5.1.0** and published **v0.13.1 / APK 0.1.10/code 11** were observed. Real phone download/installed SHA-256 `23a85da3a06a0288dcb1e4431fe55cd13cd0124ae3a6d660b294dfc20bbbd9cc` matches its verified receipt (source `d8ce392ecdc7587e8e9251280aad1e3d833313ec`) and original signer. Version labels alone do not establish the exact Vercel deployment commit or all release gates.
+
+Fresh physical QA completed 60 actual consistency runs and a 30 min 35.495 s mixed-use checkpoint. The known unsupported knife false acceptance remained **Healthy Leaf, 71.1%** in all 30 repetitions. Native backup/error/privacy/restore checks retained six reports and the receiving code/Pause; current source/own cloud photos and owner read isolation passed read-only checks. Actual phone download/install/handoff, bilingual website navigation and offline/reconnection were checked; desktop and iPhone-UA scopes remain separately labeled. Low-space, confirmed mid-photo-transfer interruption and controlled delayed Production replies remain unverified. Fresh-receiver coverage uses the native emulator. The fresh emulator's original startup ANR is retained despite later recovery. [Results and scope](../../testing/TESTING.md#november-7-2026-published-production-fresh-qa).
+
+No app/model change, schema change, publication, tag or promotion was performed in this evidence pass. Earlier candidate bytes and dated results below are unchanged.
+
 ## App 0.13.1 local candidate and R03 follow-up (November 7, 2026)
 
 The maintainer explicitly approved local installation of the signed **APK 0.1.10/code 11 / web 0.13.1 / V5.1.0** candidate over 0.1.9. Exact installed SHA-256 `6fe4ac73900477d555a3cb76f6d1d7f595a550704dd2f646c6ae3e1f0952dbc5`, original signer, unchanged receiving code/Backup On and three protected History photos were verified. One new Production camera-test report was subsequently saved. The completed 0.13.1 R03 pass has 347 actual predictions and matching input hashes; fresh receiver/queued deletion evidence uses isolated testing fixtures. These results do not imply field accuracy, complete remaining QA, CI approval, publication, a tag or website promotion. [Exact evidence and limits](../../testing/TESTING.md#november-7-2026).

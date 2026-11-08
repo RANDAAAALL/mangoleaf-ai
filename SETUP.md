@@ -1,5 +1,11 @@
 # MangoLeaf AI Setup Guide
 
+## Published snapshot observed November 7, 2026
+
+The live website shows **app/web 0.13.1 / Model V5.1.0**. Published **APK 0.1.10/code 11** was downloaded through the phone website, verified against its receipt/public signer and installed after an explicitly approved fresh reset. Debug remains **0.1.10-dev**, host bounds **11-11**, bridge/schema **1/1**. No new dependency, environment variable, model configuration or cloud migration is required. Default Debug stays on testing.
+
+Use the [current Android guide](docs/versions/ANDROID_APK_VERSIONING.md) for the exact published APK identity and [fresh QA record](docs/testing/TESTING.md#november-7-2026-published-production-fresh-qa) for results and remaining fixture gaps. Ordinary upgrades preserve data; uninstalling is not an update prerequisite. The dated preparation sections below preserve their original candidate status. This documentation update creates no tag, OTA allocation, upload or deployment.
+
 ## Current remediation candidate (November 6, 2026)
 
 Current source prepares **unpublished app/web 0.13.1 / APK 0.1.10/code 11**, Debug **0.1.10-dev**, host bounds **11-11**, bridge/schema **1/1** and unchanged adopted **Model V5.1.0**. Native storage-full handling requires a rebuilt installer; web OTA cannot add it to host 10. No new dependency, environment variable, database schema or cloud resource is needed. Keep the same signing identity and install over the matching package without clearing data. Default Debug builds continue to use only the testing project.

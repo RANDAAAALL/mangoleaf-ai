@@ -1,26 +1,26 @@
 # MangoLeaf AI Android APK Versioning Guide
 
-**November 6 unpublished candidate:** app/web **0.13.1**, native **0.1.10/code 11**, Debug **0.1.10-dev**, host bounds **11-11**, bridge/schema **1/1**, unchanged adopted **Model V5.1.0**. Native storage-full error preservation requires a rebuilt installer; web OTA cannot add this Java fix to host 10. No new dependency, schema or cloud setup is required.
+**Observed November 7, 2026:** published **APK 0.1.10/code 11 / web 0.13.1 / Model V5.1.0**, host bounds **11-11**, bridge/schema **1/1**. Real phone website download, Android installation, installed bytes and original signer were verified. Published APK SHA-256 is `23a85da3a06a0288dcb1e4431fe55cd13cd0124ae3a6d660b294dfc20bbbd9cc`; its matching receipt records source `d8ce392ecdc7587e8e9251280aad1e3d833313ec`. Installer/receipt are retained under ignored `.tools/android-release/apk-2026-11-07T03-09-49-476-PHT/`.
 
-The earlier November 6 Production artifact was **0.1.9/code 10 / web 0.13.0**. With the maintainer's explicit approval, it was updated in place to the signed local **0.1.10/code 11 / web 0.13.1** candidate, SHA-256 `6fe4ac73900477d555a3cb76f6d1d7f595a550704dd2f646c6ae3e1f0952dbc5`, original signer `1f6d17bf7e7dc573001c48b055ff0d4c224569b7cbec114a7de317627476661d`. Installed bytes, unchanged recovery code/Backup On and all three protected History thumbnails were verified. No uninstall or data clearing occurred. The installer/receipt remain under ignored `.tools/android-release/qa-remediation-20261106T144632Z/`. This does not publish the APK or promote the website; original 0.1.9 evidence remains separate. Candidate browser R03 also passed; [November 7 continuation](../testing/TESTING.md#november-7-2026) records its hashes and remaining physical scope.
+The maintainer explicitly approved a fresh Production-only uninstall for this new session; no History deletion was used for that reset. Six new/restored local reports, a separate receiving code and Pause survived restart. Three original source cloud photos and three own-backup photos passed checksum/read-isolation checks. The earlier in-place candidate `6fe4ac73900477d555a3cb76f6d1d7f595a550704dd2f646c6ae3e1f0952dbc5` and its original preserved-data observations remain historical, rather than becoming published-byte evidence. [Fresh physical/website results](../testing/TESTING.md#november-7-2026-published-production-fresh-qa) identify remaining low-space, active-transfer and delayed-reply scopes. Fresh-receiver coverage uses the separate native emulator; its initial ANR and later recovery remain recorded.
 
-Settings owns language, private backup, diagnostics and Production App updates. Its Production update entry stays visible without claiming an unconfirmed latest version. Fresh class scores appear only in Android/testing Debug builds. Website scanning/private workers stay absent. Existing SQLite/photos/credentials, receiving-backup ownership and deliberate pauses remain preserved. Default Android bundles use the committed adopted V5.1.0 model; `--working-model` is only for an explicitly requested uncommitted model override. Preserve V4.5.0 historical rollback evidence.
+Settings retains separate language/backup/diagnostics/Production-update screens. Probability rows remain Android/testing Debug-only. Website scanning/private workers remain absent. V5.1.0 and its 70% rule are unchanged; preserve V4.5.0 rollback evidence. Native storage-full handling requires this rebuilt host; a web OTA cannot add it to host 10.
 
-No new OTA sequence, signature, tag, upload or Vercel promotion is allocated by preparing these files. Recheck all published sequences before selecting a higher unused one. See [current checks](../testing/TESTING.md#november-6-2026), [native candidate history](history/ANDROID_APK_HISTORY.md#apk-v0110code-11-qa-remediation-candidate-november-6-2026), and [model adoption](AI_MODEL_VERSIONING.md#current-adopted-model-v510-november-3-2026).
+No new signing operation, OTA sequence, tag, upload, promotion or release approval occurs in this QA/documentation pass. The maintainer reported prior CI/promotion/publication. Recheck actual published sequences before selecting a future sequence. See [published artifact history](history/ANDROID_APK_HISTORY.md#published-apk-v0110-november-7-2026) and [model adoption](AI_MODEL_VERSIONING.md#current-adopted-model-v510-november-3-2026).
 
 ## Current native identity
 
-| Identity                      | Current source candidate | Source                                      |
-| ----------------------------- | ------------------------ | ------------------------------------------- |
-| Production APK                | `0.1.10`                 | `versionName` in `android/app/build.gradle` |
-| Debug APK                     | `0.1.10-dev`             | Native version plus Debug suffix            |
-| Android update number         | `11`                     | `versionCode` in `android/app/build.gradle` |
-| Default compatible host range | `11-11`                  | `tools/android-bundle.mjs`                  |
-| Native bridge / SQLite schema | `1` / `1`                | Existing compatibility checks               |
-| Shared website / web bundle   | `0.13.1`                 | Root `package.json`                         |
-| Adopted bundled model         | `v5.1.0`                 | Unchanged committed model assets/constants  |
+| Identity                      | Current source / observed | Source                                      |
+| ----------------------------- | ------------------------- | ------------------------------------------- |
+| Production APK                | `0.1.10`                  | `versionName` in `android/app/build.gradle` |
+| Debug APK                     | `0.1.10-dev`              | Native version plus Debug suffix            |
+| Android update number         | `11`                      | `versionCode` in `android/app/build.gradle` |
+| Default compatible host range | `11-11`                   | `tools/android-bundle.mjs`                  |
+| Native bridge / SQLite schema | `1` / `1`                 | Existing compatibility checks               |
+| Shared website / web bundle   | `0.13.1`                  | Root `package.json`                         |
+| Adopted bundled model         | `v5.1.0`                  | Unchanged committed model assets/constants  |
 
-The table identifies unpublished source, not a published installer or completed physical evaluation. Host-11-only assets require the matching same-signer installer. Existing tags, signed assets and historical receipts are never rewritten. APK footers read the installed host; About separately shows the web-bundle version. Repeat affected checks for this candidate before any release.
+The table matches the observed published identities; exact receipts and test limits remain necessary. Host-11-only assets require the matching same-signer installer. Preserve existing tags, signed assets and historical receipts. APK footers read the installed host; About separately shows the web-bundle version. Publication does not prove all required tests passed. Repeat affected checks before distributing changed source or assets.
 
 ## Version rules
 

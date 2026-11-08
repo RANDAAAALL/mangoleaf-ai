@@ -2,22 +2,23 @@
 
 ## Current repository snapshot
 
-**November 6, 2026:** current source prepares unpublished **app/web 0.13.1**, **Android APK 0.1.10/code 11** (Debug **0.1.10-dev**), host bounds **11-11**, bridge/SQLite schema **1/1**, and unchanged adopted **Model V5.1.0**. This candidate fixes shared website language, Android camera permission wording and native storage-full error preservation. No model retraining, threshold change, schema migration or cloud resource change is required.
+**Observed November 7, 2026:** the production website displays **app/web 0.13.1 / Model V5.1.0**. Published **APK 0.1.10/code 11** was downloaded through real phone Chrome, installed through Android and verified byte-for-byte against the published asset and matching signed receipt. The maintainer reported CI/promotion/release completion; this session did not promote or publish anything and did not independently derive the Vercel deployment commit from version labels.
 
-| Item                      | Current source                                                                                     |
-| ------------------------- | -------------------------------------------------------------------------------------------------- |
-| App/web bundle            | `0.13.1`, root `package.json`                                                                      |
-| Adopted model             | `v5.1.0`, unchanged reviewed runtime bundle                                                        |
-| Android host              | `0.1.10` / code `11`; Debug `0.1.10-dev`                                                           |
-| Compatibility             | Bridge/schema `1`/`1`, host bounds `11-11`                                                         |
-| Observed Production phone | APK `0.1.10` / code `11`, web `0.13.1`, V5.1.0                                                     |
-| Pending                   | Exact-source release checks, signed Production/staged-site acceptance, CI and publication approval |
+| Item                      | Current source / observed artifact                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------------------- |
+| App/web bundle            | `0.13.1`, root `package.json`; live/About label observed                                          |
+| Adopted model             | `v5.1.0`, unchanged model and 70% rule                                                            |
+| Android host              | `0.1.10` / code `11`; Debug `0.1.10-dev`                                                          |
+| Compatibility             | Bridge/schema `1`/`1`, host bounds `11-11`                                                        |
+| Published APK SHA-256     | `23a85da3a06a0288dcb1e4431fe55cd13cd0124ae3a6d660b294dfc20bbbd9cc`                                |
+| APK receipt source commit | `d8ce392ecdc7587e8e9251280aad1e3d833313ec`                                                        |
+| Remaining physical scope  | Safe low-space recovery, confirmed mid-photo-transfer interruption and controlled delayed replies |
 
-The earlier November 6 Production artifact was APK 0.1.9/code 10, SHA-256 `1f5f7b4269a10a1cb3e853853d3788a6a6ab614e634a177ff9d0a918c916f227`. Later that day, the maintainer approved an in-place local update to the signed 0.1.10/code 11 candidate, SHA-256 `6fe4ac73900477d555a3cb76f6d1d7f595a550704dd2f646c6ae3e1f0952dbc5`. Its exact installed hash, web 0.13.1, unchanged recovery code/Backup On and three protected History photos were verified. This is local candidate testing, not publication or website promotion. Original 0.1.9 failures/blocked rows and timestamps remain historical.
+Fresh physical evidence includes 60 actual consistency runs, a **30 min 35.495 s** mixed-use checkpoint, six reports retained after restart, preserved receiving code/Pause, three-photo restore and zero-addition repeat. Separate authenticated readers verified three completed source and three own-backup photos/checksums plus denied cross-owner reads. A fresh native emulator receiver restored three but also had an earlier startup ANR; keep those environments/results distinct. [Fresh results and limits](../testing/TESTING.md#november-7-2026-published-production-fresh-qa).
 
-Current-candidate browser R03 passed before the interruption: 347 actual predictions, 1,801,124 ms in its mixed-use loop, 30.2-minute case and 30.7-minute complete run. All recorded app/model input hashes match current source. Native, emulator, mock and physical observations retain their distinct scopes. See [November 7 continuation](../testing/TESTING.md#november-7-2026).
+Earlier local candidate SHA-256 `6fe4ac73900477d555a3cb76f6d1d7f595a550704dd2f646c6ae3e1f0952dbc5`, its in-place data-preservation checks and the 347-prediction browser/mock R03 retain their original records. The latter's matching inputs do not make it a physical-phone run. See [published observation history](history/PWA_RELEASE_HISTORY.md#published-v0131-november-7-2026) and [November 6 preparation](history/PWA_RELEASE_HISTORY.md#v0131-physical-qa-remediation-candidate-november-6-2026).
 
-APK footers identify the installed host and active model; About also shows the web-bundle version. Available APK versions come only from a validated published asset label. No tag, deployment, OTA sequence or publication is created by preparing these source labels. See the [Android guide](ANDROID_APK_VERSIONING.md), [November 6 candidate history](history/PWA_RELEASE_HISTORY.md#v0131-physical-qa-remediation-candidate-november-6-2026) and [test evidence](../testing/TESTING.md#november-6-2026). The [November 3 adoption and R03 record](history/PWA_RELEASE_HISTORY.md#v0130-settings-and-v510-adoption-candidate-november-3-2026) retains its original scope.
+APK footers show installed host/model; About shows the independent web-bundle version. The download page may display a native APK version only from a validated published asset label. Observing publication does not close missing tests or authorize a future release. Follow the [Android guide](ANDROID_APK_VERSIONING.md) for native identity and remaining gates.
 
 ## Version labels and release rules
 

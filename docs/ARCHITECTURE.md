@@ -1,5 +1,11 @@
 # MangoLeaf AI Architecture
 
+## Published artifact follow-up (November 7, 2026)
+
+Observed Production identities are **app/web 0.13.1 / APK 0.1.10/code 11 / Model V5.1.0**, host bounds **11-11** and bridge/schema **1/1**. The published APK's downloaded and installed bytes matched its verified receipt. The website retains its Home/About/Android-installation boundary; scanning, SQLite/private photos and recovery-code backup remain in the Android application. No architecture, schema, ownership or model change was introduced by this evidence review.
+
+The [fresh physical and website record](testing/TESTING.md#november-7-2026-published-production-fresh-qa) distinguishes the physical phone from an additional native emulator receiver and retains unverified low-space, active-transfer and delayed-reply scenarios. The dated candidate descriptions below retain their original preparation status; their publication wording does not describe this later observation.
+
 ## QA remediation candidate (November 6, 2026)
 
 Unpublished **app/web 0.13.1 / APK 0.1.10/code 11**, bounds **11-11**, retains bridge/schema **1/1**, adopted **V5.1.0** and all storage/backup ownership formats. The native change requires an installer; host-10 physical results remain evidence of that earlier artifact.

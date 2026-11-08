@@ -2,6 +2,12 @@
 
 # AI model history and archived notes
 
+## V5.1.0 published application observation (November 7, 2026)
+
+Published **app/web 0.13.1 / APK 0.1.10/code 11** was observed with the adopted **V5.1.0** model and unchanged 70% confidence rule. The [Android artifact record](ANDROID_APK_HISTORY.md#published-apk-v0110-november-7-2026) identifies the verified published/downloaded/installed APK and matching receipt; the [fresh QA record](../../testing/TESTING.md#november-7-2026-published-production-fresh-qa) retains physical, emulator and website scopes separately. This does not change the November 3 adoption decision, model assets, training/evaluation collections or recorded classification metrics.
+
+The unsupported knife's repeated **Healthy Leaf, 71.1%** result remains a false acceptance, not evidence of correct classification. Numerical Keras/browser parity and independent field validation are not established by this application session. Original notebooks, artifacts, adoption receipt, rollback and earlier dated candidate records remain unchanged. No new model version or evaluation run was created by this documentation update.
+
 ## V5.1.0 repository adoption (November 3, 2026)
 
 The maintainer explicitly selected V5.1.0 for release preparation. Adopted runtime label **v5.1.0** / asset identity **model-v5.1.0** replaces the local candidate label without changing graph/shard bytes, preprocessing, class order, folded temperature or confidence >=0.70-only acceptance. Candidate caches are retired by `mangoleaf-model-cache-v5-1-0`; existing reports/photos remain untouched and exact-model duplicate reuse is retained.

@@ -1,5 +1,7 @@
 # MangoLeaf AI Model Versioning Guide
 
+**Observed November 7, 2026:** published **app/web 0.13.1 / APK 0.1.10/code 11** uses adopted **V5.1.0** with unchanged graph/shards, class mapping, preprocessing, folded calibration and 70% confidence rule. The [published-artifact record](history/AI_MODEL_HISTORY.md#v510-published-application-observation-november-7-2026) links the exact APK identity and physical evidence. Publication and repeatability do not establish numerical Keras/browser parity, new model accuracy or field validity. The dated preparation and adoption records below retain their original status and pending checks.
+
 **November 6 application follow-up:** unpublished app/web **0.13.1 / APK 0.1.10/code 11** retains the same adopted V5.1.0 graph, shards, class mapping, preprocessing, calibration and 70% rule. This application QA remediation does not create a new model version or change recorded model results. See the [current app/native labels](PWA_VERSIONING.md#current-repository-snapshot); the dated adoption description below retains its November 3 scope.
 
 ## Current adopted model: V5.1.0 (November 3, 2026)
