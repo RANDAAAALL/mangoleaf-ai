@@ -1,5 +1,13 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## Published physical mixed-use observations (November 7, 2026)
+
+Published **APK 0.1.10/code 11**, active **web 0.13.1 / V5.1.0**, was exercised on a Samsung SM-A356E with Android 16/API 36 and System WebView 157.0.8103.38. The recorded mixed-use interval lasted **1,835.495 seconds (30 min 35.495 s)** and included **31 fresh Gallery predictions and one camera prediction**. No physical crash, freeze or lost committed report was observed in that interval. These are stability observations, not measured inference latency, throughput, memory usage or a speedup comparison.
+
+The wider session included **60 fresh repeatability inferences**, 30 per unchanged original. This activity overlaps the timed interval and must not be added to its prediction count. Displayed outputs remained **Uncertain, 51.6%** for the mango input and **Healthy Leaf, 71.1%** for the unsupported knife. The latter is a false acceptance; repeated displayed values establish neither raw-probability tolerance nor classification accuracy.
+
+Evidence combines timestamped action records and segmented phone recordings with gaps, rather than continuous 30-minute video coverage. Warmth and overheating were not assessed. The separate native emulator's initial startup ANR remains recorded despite later recovery. [Exact artifacts, outcomes and remaining physical scopes](testing/TESTING.md#november-7-2026-published-production-fresh-qa) remain separate from earlier browser/mock R03 and startup measurements. This evidence update changes no implementation or model configuration.
+
 ## V5.1.0 adoption and cache identity (November 3, 2026)
 
 App 0.13.0 adopts V5.1.0 with the same graph/shard bytes as the reviewed local candidate. Runtime configuration metadata and report/cache identities change; preprocessing, folded temperature, 70% confidence-only acceptance and the forced-16-bit WebGL setting remain unchanged. Adoption retires the candidate/V4.5.0 model caches without clearing History, private photos or credentials. The [adoption receipt](model-training/non-experiment/v5.1.0/artifacts/adoption_20261103.json) records exact file bytes and hashes.
