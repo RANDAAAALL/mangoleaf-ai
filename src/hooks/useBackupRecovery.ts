@@ -29,8 +29,10 @@ export function useBackupRecovery(
   const [copying, setCopying] = useState(false);
   const [input, setInput] = useState("");
   const [codeRejected, setCodeRejected] = useState(false);
-  const [pending, setPending] = useState<"transfer" | "toggle" | null>(null);
-  const [message, setMessage] = useState("");
+  const [pending, setPending] = useState<"setup" | "restore" | "toggle" | null>(
+    null,
+  );
+  const [message, setMessage] = useState<string | { restored: number }>("");
   const [pendingNotice, setPendingNotice] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const mounted = useRef(false);
@@ -170,16 +172,16 @@ export function useBackupRecovery(
   }
 
   async function run(
-    action: () => Promise<string | void>,
-    mode: "transfer" | "toggle" = "transfer",
+    action: () => Promise<string | { restored: number } | void>,
+    operation: "setup" | "restore" | "toggle" = "setup",
   ) {
     if (!preferences.value || preferences.failed) return;
     if (mutation.current || copyPending.current) {
       setPendingNotice(true);
       return;
     }
-    mutation.current = mode;
-    setPending(mode);
+    mutation.current = operation === "toggle" ? "toggle" : "transfer";
+    setPending(operation);
     setPendingNotice(false);
     setMessage("");
     const view = viewRevision.current;
@@ -219,9 +221,7 @@ export function useBackupRecovery(
       try {
         const restored = await restoreCloudBackup(entered);
         if (mounted.current) setInput("");
-        return (
-          restored === 1 ? t.backupRestoredSingle : t.backupRestored
-        ).replace("{n}", String(restored));
+        return { restored };
       } catch (error) {
         if (!(error instanceof RecoveryCodeError)) throw error;
         if (current(view)) {
@@ -233,8 +233,19 @@ export function useBackupRecovery(
         if (!hadCode && current(view) && privacyRevision.current === revision)
           reveal((await savedRecoveryCode()) || "", revision, view);
       }
-    });
+    }, "restore");
   }
+
+  const restoredCount = typeof message === "string" ? null : message.restored;
+  const feedback =
+    typeof message === "string"
+      ? message
+      : message.restored === 0
+        ? t.backupRestoredNone
+        : (message.restored === 1
+            ? t.backupRestoredSingle
+            : t.backupRestored
+          ).replace("{n}", String(message.restored));
 
   return {
     preferences,
@@ -245,8 +256,10 @@ export function useBackupRecovery(
     codeRejected,
     inputRef,
     // Pending notices describe actual work, so they cannot survive its final status refresh.
-    message: pendingNotice && (pending || copying) ? t.backupBusy : message,
-    busy: pending === "transfer",
+    message: pendingNotice && (pending || copying) ? t.backupBusy : feedback,
+    restoredCount,
+    restoring: pending === "restore",
+    busy: pending === "setup" || pending === "restore",
     toggling: pending === "toggle",
     showOrHide,
     copyCode,

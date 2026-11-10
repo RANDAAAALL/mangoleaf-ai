@@ -180,8 +180,11 @@ export const translations = {
     backupCodeCopied: "Recovery code copied. Save it outside this phone.",
     backupCodeCopyFailed:
       "Could not copy. Tap Show and save the code carefully.",
-    backupRestored: "Restored {n} scans",
-    backupRestoredSingle: "Restored {n} scan",
+    backupRestoring: "Restoring saved scans…",
+    backupRestored: "Successfully restored {n} scans.",
+    backupRestoredSingle: "Successfully restored {n} scan.",
+    backupRestoredNone: "No new scans were added.",
+    backupRestoredHint: "View your restored scans in History.",
     androidApkUpdateAboutTitle: "Latest update available",
     androidApkUpdateAboutText:
       "Heads up! Android APK v{version} is available from the official website.",
@@ -760,8 +763,11 @@ export const translations = {
       "Nakopya ang recovery code. Tipigi kini gawas niining telepono.",
     backupCodeCopyFailed:
       "Wala makopya. I-tap ang Ipakita ug tipigi pag-ayo ang code.",
-    backupRestored: "Na-restore ang {n} ka scan",
-    backupRestoredSingle: "Na-restore ang {n} ka scan",
+    backupRestoring: "Gibalik ang natipig nga mga scan…",
+    backupRestored: "Malampusong nabalik ang {n} ka scan.",
+    backupRestoredSingle: "Malampusong nabalik ang {n} ka scan.",
+    backupRestoredNone: "Walay bag-ong scan nga nadugang.",
+    backupRestoredHint: "Tan-awa ang nabalik nga mga scan sa Dating Scan.",
     androidApkUpdateAboutTitle: "Adunay bag-ong update",
     androidApkUpdateAboutText:
       "Pahibalo! Adunay Android APK v{version} sa opisyal nga website.",

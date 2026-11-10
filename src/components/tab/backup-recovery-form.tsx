@@ -34,6 +34,7 @@ export function BackupRecoveryForm({
   return (
     <form
       className="flex flex-col gap-3"
+      aria-busy={busy || undefined}
       onSubmit={(event) => {
         event.preventDefault();
         if (busy) return;

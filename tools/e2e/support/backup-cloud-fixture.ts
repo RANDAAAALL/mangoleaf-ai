@@ -23,6 +23,7 @@ export interface BackupFixtureControls {
   finishToggle(): void;
   finishCodeRead(): void;
   finishPreferenceRead(): void;
+  finishRestore(): void;
   failPreferenceReads(count: number): void;
 }
 
@@ -48,6 +49,7 @@ let preferenceFailures = query.has("preferences-error") ? 1 : 0;
 const toggles: (() => void)[] = [];
 const codeReads: (() => void)[] = [];
 const preferenceReads: (() => void)[] = [];
+const restores: (() => void)[] = [];
 window.backupRestoreUi = {
   snapshot: () => ({
     ...state,
@@ -60,6 +62,7 @@ window.backupRestoreUi = {
   finishToggle: () => toggles.shift()?.(),
   finishCodeRead: () => codeReads.shift()?.(),
   finishPreferenceRead: () => preferenceReads.shift()?.(),
+  finishRestore: () => restores.shift()?.(),
   failPreferenceReads: (count) => {
     preferenceFailures = count;
   },
@@ -106,6 +109,8 @@ export async function setBackupEnabled(value: boolean) {
 
 export async function restoreCloudBackup(input?: string) {
   state.inputs.push(input ?? null);
+  if (query.has("hold-restore"))
+    await new Promise<void>((resolve) => restores.push(resolve));
   if (input !== undefined && input !== source && input !== own)
     throw new RecoveryCodeError("Controlled invalid source");
   if (query.has("connection-error"))

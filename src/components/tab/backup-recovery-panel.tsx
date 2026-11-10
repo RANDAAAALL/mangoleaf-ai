@@ -35,6 +35,8 @@ export function BackupRecoveryPanel({
     busy,
     toggling,
     message,
+    restoring,
+    restoredCount,
   } = recovery;
   const value = preferences.value;
   const disabled = busy || !value || preferences.failed;
@@ -42,11 +44,7 @@ export function BackupRecoveryPanel({
   if (!isAndroidBuild()) return null;
 
   return (
-    <section
-      aria-label={t.backupTitle}
-      aria-busy={busy}
-      className="w-full text-[#173a1d]"
-    >
+    <section aria-label={t.backupTitle} className="w-full text-[#173a1d]">
       {!embedded && <h2 className="text-xl font-bold mb-5">{t.backupTitle}</h2>}
       <BackupStatusNotice language={language} controller={preferences} />
       {!value ? (
@@ -190,13 +188,44 @@ export function BackupRecoveryPanel({
           </div>
         </>
       )}
-      <p
+      <div
         role="status"
         aria-live="polite"
+        aria-atomic="true"
         className="mt-3 min-h-6 text-sm leading-relaxed"
       >
-        {busy ? t.backupBusy : message}
-      </p>
+        {(busy || message) && (
+          <div
+            className={`flex items-start gap-3 rounded-2xl border p-4 ${!busy && restoredCount !== null && restoredCount > 0 ? "border-[#b9d9bd] bg-[#edf7ee] text-[#173a1d]" : "border-[#d9e6d5] bg-white text-[#35543b]"}`}
+          >
+            {busy ? (
+              <span
+                aria-hidden="true"
+                className="mt-0.5 h-5 w-5 shrink-0 rounded-full border-2 border-current border-t-transparent motion-safe:animate-spin"
+              />
+            ) : restoredCount !== null && restoredCount > 0 ? (
+              <Icon
+                name="check"
+                size={20}
+                aria-hidden="true"
+                className="mt-0.5 shrink-0"
+              />
+            ) : null}
+            <div className="min-w-0">
+              <p className="font-semibold">
+                {busy
+                  ? restoring
+                    ? t.backupRestoring
+                    : t.backupBusy
+                  : message}
+              </p>
+              {!busy && restoredCount !== null && restoredCount > 0 && (
+                <p className="mt-1">{t.backupRestoredHint}</p>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
       <details className="mt-5 border-t border-[#d9e6d5] py-3 text-sm text-[#35543b]">
         <summary className="min-h-11 flex items-center justify-between gap-3 cursor-pointer font-semibold">
           {t.backupHowWorks}

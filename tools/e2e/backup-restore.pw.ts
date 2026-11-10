@@ -30,7 +30,7 @@ test("B01: restoring copies keeps an existing receiving code and Pause choice in
     const t = translations[language];
     await openHarness(page, language, "paused");
     await restoreSource(page, language);
-    await expect(page.getByRole("status")).toHaveText(
+    await expect(page.getByRole("status")).toContainText(
       t.backupRestored.replace("{n}", "2"),
     );
     await expect(page.getByText(t.backupPaused, { exact: true })).toBeVisible();
@@ -69,7 +69,7 @@ test("B02: a fresh receiver reveals its newly created own code after Restore in 
       page.getByRole("button", { name: t.backupCreate, exact: true }),
     ).toBeVisible();
     await restoreSource(page, language);
-    await expect(page.getByRole("status")).toHaveText(
+    await expect(page.getByRole("status")).toContainText(
       t.backupRestored.replace("{n}", "2"),
     );
     const code = page.getByRole("textbox", {
@@ -102,6 +102,9 @@ test("B03: later photo failure still reveals the new receiving code and retains 
     await restoreSource(page, language);
     await expect(page.getByRole("status")).toHaveText(t.backupError);
     await expect(
+      page.getByText(t.backupRestoredHint, { exact: true }),
+    ).toHaveCount(0);
+    await expect(
       page.getByRole("textbox", { name: t.backupRecoveryLabel, exact: true }),
     ).toHaveText(receivingCode);
     await expect(
@@ -127,13 +130,11 @@ test("B04: successful first and duplicate restores use singular and zero-count t
     const t = translations[language];
     await openHarness(page, language, "count=1");
     await restoreSource(page, language);
-    await expect(page.getByRole("status")).toHaveText(
+    await expect(page.getByRole("status")).toContainText(
       t.backupRestoredSingle.replace("{n}", "1"),
     );
     await restoreSource(page, language);
-    await expect(page.getByRole("status")).toHaveText(
-      t.backupRestored.replace("{n}", "0"),
-    );
+    await expect(page.getByRole("status")).toContainText(t.backupRestoredNone);
     expect(
       await page.evaluate(() => window.backupRestoreUi.snapshot()),
     ).toMatchObject({
@@ -365,7 +366,7 @@ test("B10: empty and whitespace-only restore input requests a code without conta
       await input.fill(sourceCode);
       await expect(page.getByRole("alert")).toHaveCount(0);
       await restore.click();
-      await expect(page.getByRole("status")).toHaveText(
+      await expect(page.getByRole("status")).toContainText(
         t.backupRestored.replace("{n}", "2"),
       );
     }
@@ -521,7 +522,7 @@ test("B13: malformed and rejected codes get inline feedback without changing rec
       await page
         .getByRole("button", { name: t.backupRestore, exact: true })
         .click();
-      await expect(page.getByRole("status")).toHaveText(
+      await expect(page.getByRole("status")).toContainText(
         t.backupRestored.replace("{n}", "2"),
       );
     }
@@ -733,4 +734,83 @@ test("B18: failed backup toggle keeps its previous choice and never dims code ac
     inputs: [],
     created: 0,
   });
+});
+
+test("B32: restore feedback follows actual completion and distinguishes new scans from a zero-addition repeat", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  for (const language of ["en", "bis"] as const) {
+    for (const environment of ["testing", "production"] as const) {
+      const t = translations[language];
+      await page.emulateMedia({
+        reducedMotion: environment === "testing" ? "reduce" : "no-preference",
+      });
+      await openHarness(page, language, `${environment}&paused&hold-restore`);
+      const status = page.getByRole("status");
+      const input = page.getByLabel(t.backupRestoreCodeLabel, { exact: true });
+      const restore = page.getByRole("button", {
+        name: t.backupRestore,
+        exact: true,
+      });
+      for (const repeat of [false, true]) {
+        await restoreSource(page, language);
+        await expect(status).toHaveText(t.backupRestoring);
+        await expect(status).toHaveAttribute("aria-live", "polite");
+        await expect(status).toHaveAttribute("aria-atomic", "true");
+        await expect(input).toBeDisabled();
+        await expect(restore).toBeDisabled();
+        await expect(status.locator("span[aria-hidden='true']")).toBeVisible();
+        await expect(status.locator("span[aria-hidden='true']")).toHaveCSS(
+          "animation-name",
+          environment === "testing" ? "none" : "spin",
+        );
+        await expect(
+          page.getByText(t.backupRestoredHint, { exact: true }),
+        ).toHaveCount(0);
+        // This controlled service cannot finish until released, so success cannot be time-based.
+        await expect
+          .poll(() =>
+            page.evaluate(
+              () => window.backupRestoreUi.snapshot().inputs.length,
+            ),
+          )
+          .toBe(repeat ? 2 : 1);
+        await page.evaluate(() => window.backupRestoreUi.finishRestore());
+        await expect(input).toBeEnabled();
+        await expect(restore).toBeEnabled();
+        await expect(status.locator("span[aria-hidden='true']")).toHaveCount(0);
+        if (repeat) {
+          await expect(status).toHaveText(t.backupRestoredNone);
+          await expect(
+            page.getByText(t.backupRestoredHint, { exact: true }),
+          ).toHaveCount(0);
+          await expect(status.locator("svg")).toHaveCount(0);
+        } else {
+          await expect(
+            status.getByText(t.backupRestored.replace("{n}", "2"), {
+              exact: true,
+            }),
+          ).toBeVisible();
+          await expect(
+            status.getByText(t.backupRestoredHint, { exact: true }),
+          ).toBeVisible();
+          await expect(status.locator("svg[aria-hidden='true']")).toBeVisible();
+          expect(
+            await status.evaluate(
+              (element) => element.scrollWidth <= element.clientWidth,
+            ),
+          ).toBe(true);
+        }
+      }
+      expect(
+        await page.evaluate(() => window.backupRestoreUi.snapshot()),
+      ).toMatchObject({
+        code: receivingCode,
+        enabled: false,
+        restored: 2,
+        inputs: [sourceCode, sourceCode],
+      });
+    }
+  }
 });
