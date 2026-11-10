@@ -1,5 +1,13 @@
 # MangoLeaf AI Setup Guide
 
+## Unreleased Settings/download follow-up (November 10, 2026)
+
+**Prepared candidate:** app/web **0.13.2**, Production APK **0.1.11/code 12**, Debug **0.1.11-dev**, default host bounds **12-12**, bridge/SQLite schema **1/1**, unchanged adopted **Model V5.1.0**. This is unpublished source, not a built or installed APK. Functional and physical reliability checklist work is deferred; older results keep their original build identities.
+
+The current source changes Production to Settings-only update guidance through the fixed official browser download page. Keep the installed APK in place and confirm Android's Update action; uninstalling is not an update prerequisite. Debug/testing retains Diagnostics and has no App updates screen; Production has no Diagnostics screen. Public release discovery and signed web-update verification remain, with web restart controls inside App updates.
+
+No new dependency, environment variable, native Java/resource change, signing key, database migration or model setting is required. The retired web installer/dialog modules were removed; native updater methods remain for older compatible bundles. Candidate version fields are now prepared. Rebuild Debug/Production for the intended variant before installing; any existing 0.1.10 APK files remain older artifacts. A new matching APK/receipt and candidate validation are still required; preparing these source changes does not create a release or replace the previously published APK. Follow the current version guides before shipping.
+
 ## Published snapshot observed November 7, 2026
 
 The live website shows **app/web 0.13.1 / Model V5.1.0**. Published **APK 0.1.10/code 11** was downloaded through the phone website, verified against its receipt/public signer and installed after an explicitly approved fresh reset. Debug remains **0.1.10-dev**, host bounds **11-11**, bridge/schema **1/1**. No new dependency, environment variable, model configuration or cloud migration is required. Default Debug stays on testing.

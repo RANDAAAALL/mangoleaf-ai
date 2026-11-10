@@ -2,6 +2,8 @@
 
 ## Settings-only updates and browser guide (November 10, 2026; unreleased)
 
+Prepared source labels are **app/web 0.13.2 / APK 0.1.11/code 12**, Debug **0.1.11-dev**, default host bounds **12-12**, with unchanged bridge/schema **1/1** and **V5.1.0**. Existing host-11 artifacts/receipts and dated observations remain separate. No storage/API/ownership migration is introduced.
+
 `SettingsTab` exposes Diagnostics only on Debug/testing and App updates only on Production. Navigation rejects Production Diagnostics history, and the viewer itself refuses a Production mount. `Application` no longer owns update dialogs, APK installer state or transfer-related inert/backup guards. The new `AndroidUpdatePanel` checks fixed-repository release metadata only while its Settings screen is mounted and idle. It compares a valid `Android APK v<version>` asset label with the installed native host, independently of app/web tags; an absent or failed result remains unconfirmed. Manual browser guidance does not require the old native installer capability.
 
 A user-tapped fixed HTTPS link opens the official website through the existing external-browser handler. The app does not uninstall itself, download an installer or activate an update from this link. Existing signed web-OTA status/check/restart methods are retained with inline Settings controls; verified pending assets still require the existing safe activation rules. Native APK updater bridge methods remain for older bundles, while the unreferenced React dialogs, installer hook and JavaScript installer controller were removed.

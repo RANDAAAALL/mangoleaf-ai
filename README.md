@@ -6,6 +6,14 @@ MangoLeaf AI
 
 MangoLeaf AI helps identify possible conditions affecting mango leaves and fruit from photos. Built for Android phones, it runs diagnosis on the device and keeps scan History available offline. Treatment guidance is available in English and Cebuano/Bisaya. The companion website explains the app and provides Android installation on phones.
 
+## Settings and download changes in preparation (November 10, 2026)
+
+**Prepared candidate:** app/web **0.13.2**, Production APK **0.1.11/code 12**, Debug **0.1.11-dev**, default host bounds **12-12**, bridge/SQLite schema **1/1**, unchanged adopted **Model V5.1.0**. This is unpublished source, not a built or installed APK. Functional and physical reliability checklist work is deferred; older results keep their original build identities.
+
+Unreleased source now shows Diagnostic logs only in the testing Debug APK. Production keeps App updates in Settings, with a newer-version card and an official browser download link instead of automatic update dialogs or the in-app APK download controller. Install the same-signer APK over the existing app; uninstalling deletes local reports and credentials. Verified web updates also use inline restart controls on that screen.
+
+Unconfirmed website installations open the guide without simultaneously launching an app intent. Confirmed installations retain a direct Open app link. The download page avoids an intent back to itself and reuses validated public metadata for five minutes; unsuccessful checks back off for 30 seconds and offer Retry. These changes require a new reviewed application build before distribution. The published identities and November 7 evidence below describe the earlier artifact. Candidate version fields are now updated; no APK build, phone installation, release or deployment follows from that change.
+
 ## Walkthrough (depricated)
 
 https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536

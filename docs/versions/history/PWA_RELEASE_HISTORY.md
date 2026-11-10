@@ -1,3 +1,13 @@
+## v0.13.2 Settings and download candidate (November 10, 2026)
+
+**Prepared candidate:** app/web **0.13.2**, Production APK **0.1.11/code 12**, Debug **0.1.11-dev**, default host bounds **12-12**, bridge/SQLite schema **1/1**, unchanged adopted **Model V5.1.0**. This is unpublished source, not a built or installed APK. Functional and physical reliability checklist work is deferred; older results keep their original build identities.
+
+The candidate includes Debug-only Diagnostics, Production Settings update cards with an official browser link, inline signed web-update restart controls, and website guide/request-cache/Retry fixes. Removed obsolete web installer modules remain removed; native compatibility methods and signing/trust rules are preserved. This version preparation changes the shared label, Android version/code and default bundle bounds together. The model, preprocessing/calibration/70% rule, cloud target separation, local storage formats and bridge/schema remain unchanged.
+
+The November 10 restore-feedback follow-up belongs to this same unpublished candidate: English/Bisaya operation-specific busy text, a spinner, an actual-count success card with a History hint, and distinct zero-addition wording. It changes presentation only; existing restore verification, receiving identity and Pause behavior are preserved. No additional version bump or completed physical result is implied.
+
+No new APK/receipt, OTA metadata/signature/sequence, tag, push, publication or deployment is produced here. Earlier 0.13.1 / 0.1.10/code 11 receipts, physical sessions and release records remain unchanged. Previous local UI tests were performed before the version-label bump; current-input release checks, CI, candidate physical acceptance and approval remain separate. See [dated scope and validation](../../testing/TESTING.md#november-10-2026).
+
 <a id="published-v0131-november-7-2026"></a>
 
 ## App 0.13.1 published artifact and fresh QA (November 7, 2026)

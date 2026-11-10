@@ -1,5 +1,15 @@
 # MangoLeaf AI Android APK Versioning Guide
 
+## Unreleased Settings/download source (November 10, 2026)
+
+**Prepared candidate:** app/web **0.13.2**, Production APK **0.1.11/code 12**, Debug **0.1.11-dev**, default host bounds **12-12**, bridge/SQLite schema **1/1**, unchanged adopted **Model V5.1.0**. This is unpublished source, not a built or installed APK. Functional and physical reliability checklist work is deferred; older results keep their original build identities.
+
+Current working source replaces automatic APK/OTA update dialogs with Production Settings > App updates cards. A valid newer native asset label shows website installation guidance; otherwise the screen remains unconfirmed/offline. The user opens the fixed official browser download page and installs over the existing same-signer APK, preserving local data. Diagnostic logs are Debug/testing-only. Signed web updates retain inline safe-restart controls. Unreferenced React update dialogs and the JavaScript APK installer were removed; native compatibility methods remain unchanged for older bundles.
+
+Website guide taps no longer both mount an overlay and dispatch an intent. Unconfirmed download-page users have no self-fallback intent. Public metadata caching/backoff and Retry reduce repeated requests; no rate-limit diagnosis is inferred from the video alone. Availability still requires validated release metadata; native-version claims require the APK asset label, never the release tag.
+
+The app/native version fields and default host range now identify this new candidate. No model asset, Java behavior, dependency, signing key, bridge/schema, APK installer, OTA sequence, tag or deployment is created or changed by setting these labels. Build a new matching APK/receipt for code 12 before preparing its signed web bundle; do not reuse the host-11 installer or receipt as code-12 evidence. CI, current-input release validation, physical acceptance and publication remain pending. Previously recorded UI checks predate this version bump and do not establish complete acceptance of 0.13.2.
+
 **Observed November 7, 2026:** published **APK 0.1.10/code 11 / web 0.13.1 / Model V5.1.0**, host bounds **11-11**, bridge/schema **1/1**. Real phone website download, Android installation, installed bytes and original signer were verified. Published APK SHA-256 is `23a85da3a06a0288dcb1e4431fe55cd13cd0124ae3a6d660b294dfc20bbbd9cc`; its matching receipt records source `d8ce392ecdc7587e8e9251280aad1e3d833313ec`. Installer/receipt are retained under ignored `.tools/android-release/apk-2026-11-07T03-09-49-476-PHT/`.
 
 The maintainer explicitly approved a fresh Production-only uninstall for this new session; no History deletion was used for that reset. Six new/restored local reports, a separate receiving code and Pause survived restart. Three original source cloud photos and three own-backup photos passed checksum/read-isolation checks. The earlier in-place candidate `6fe4ac73900477d555a3cb76f6d1d7f595a550704dd2f646c6ae3e1f0952dbc5` and its original preserved-data observations remain historical, rather than becoming published-byte evidence. [Fresh physical/website results](../testing/TESTING.md#november-7-2026-published-production-fresh-qa) identify remaining low-space, active-transfer and delayed-reply scopes. Fresh-receiver coverage uses the separate native emulator; its initial ANR and later recovery remain recorded.
@@ -10,17 +20,17 @@ No new signing operation, OTA sequence, tag, upload, promotion or release approv
 
 ## Current native identity
 
-| Identity                      | Current source / observed | Source                                      |
-| ----------------------------- | ------------------------- | ------------------------------------------- |
-| Production APK                | `0.1.10`                  | `versionName` in `android/app/build.gradle` |
-| Debug APK                     | `0.1.10-dev`              | Native version plus Debug suffix            |
-| Android update number         | `11`                      | `versionCode` in `android/app/build.gradle` |
-| Default compatible host range | `11-11`                   | `tools/android-bundle.mjs`                  |
-| Native bridge / SQLite schema | `1` / `1`                 | Existing compatibility checks               |
-| Shared website / web bundle   | `0.13.1`                  | Root `package.json`                         |
-| Adopted bundled model         | `v5.1.0`                  | Unchanged committed model assets/constants  |
+| Identity                      | Unpublished source candidate | Source                                      |
+| ----------------------------- | ---------------------------- | ------------------------------------------- |
+| Production APK                | `0.1.11`                     | `versionName` in `android/app/build.gradle` |
+| Debug APK                     | `0.1.11-dev`                 | Native version plus Debug suffix            |
+| Android update number         | `12`                         | `versionCode` in `android/app/build.gradle` |
+| Default compatible host range | `12-12`                      | `tools/android-bundle.mjs`                  |
+| Native bridge / SQLite schema | `1` / `1`                    | Existing compatibility checks               |
+| Shared website / web bundle   | `0.13.2`                     | Root `package.json`                         |
+| Adopted bundled model         | `v5.1.0`                     | Unchanged committed model assets/constants  |
 
-The table matches the observed published identities; exact receipts and test limits remain necessary. Host-11-only assets require the matching same-signer installer. Preserve existing tags, signed assets and historical receipts. APK footers read the installed host; About separately shows the web-bundle version. Publication does not prove all required tests passed. Repeat affected checks before distributing changed source or assets.
+This table identifies source labels, not a new installer, published asset or completed phone evaluation. The previous published 0.1.10/code 11 artifact and its receipt retain their 11-11 bounds. The new default range deliberately targets host 12; do not distribute those bundles to host 11. Rebuild code 12 with the existing variant/signing identity and preserve SQLite/photos/code/Pause during an ordinary in-place update. APK footers read the installed host; About separately shows the active web-bundle version. [Candidate history](history/ANDROID_APK_HISTORY.md#apk-v0111code-12-settings-and-download-candidate-november-10-2026) records pending acceptance.
 
 ## Version rules
 
@@ -126,7 +136,7 @@ gh release upload <approved-tag> ".tools/android-release/apk-<timestamp>/mangole
 
 The required four release assets remain `mangoleaf-ai.apk`, `web-update.zip`, `update.json` and `update.sig`. On a web-only release, keep the reused APK's native label even when the GitHub/web version changes. Never label a Debug APK as production. See [GitHub's upload-label syntax](https://cli.github.com/manual/gh_release_upload).
 
-Android website actions attempt a fixed-package user-tapped intent with a same-origin `/download` guide fallback. A supported browser's positive exact-package result shows **Open app**; empty, failed, timed-out or unsupported results remain unknown. Confirmed installations make another APK download a deliberate reinstall/update choice. This hint is never Auth/bridge authorization or proof from a browser shortcut.
+Confirmed Android installations can use a fixed-package user-tapped intent with a same-origin `/download` fallback. Unknown installations open the guide with a primary download action and a separate explicit Open app link; never dispatch an intent and mount the guide in the same tap. The download document does not offer an unconfirmed self-fallback intent. A supported browser's positive exact-package result shows **Open app**; empty, failed, timed-out or unsupported results remain unknown. Confirmed installations make another APK download a deliberate reinstall/update choice. This hint is never Auth/bridge authorization or proof from a browser shortcut.
 
 Release `asset_statements` associates only `https://mangoleafai.vercel.app`; Debug has no production association. Development intents target Debug, published builds target Release. Detection needs the updated APK and matching HTTPS website manifest/origin; a web OTA alone cannot add this native association. Preserve fixed navigation and ignore incoming URI data/extras. Changing the associated public origin requires a rebuilt APK and repeat checks. The supported mobile product is Android only; desktop retains its website/QR guide.
 
@@ -140,7 +150,7 @@ bun run android:release:windows -Action ota -Apk ".tools/android-release/apk-<ti
 
 Replace placeholders and choose a sequence higher than **every published sequence**, including rollbacks. The wrapper checks the signed APK/receipt/public trust, committed model, host/bridge/schema compatibility and finished signed archive. Its local output remains unpublished. The detailed earlier low-level commands are preserved in [OTA history](history/ANDROID_APK_HISTORY.md#custom-ota-through-github-releases).
 
-The native updater uses Java/OkHttp, TLS, a pinned GitHub repository and RSA signature verification, then checks hashes, complete inventory and compatibility. There is no unsigned fallback. Downloads stage separately from SQLite/photos/credentials. A verified staged update offers **Restart now** / **Later** only while idle; camera/review/diagnosis/dialogs defer it. Explicit restart waits for native writes and rechecks the bundle before recreating the trusted Activity. Ordinary recreation does not activate it. Cold-start selection retains health acknowledgment and rollback. Debug disables production OTA.
+The native updater uses Java/OkHttp, TLS, a pinned GitHub repository and RSA signature verification, then checks hashes, complete inventory and compatibility. There is no unsigned fallback. Downloads stage separately from SQLite/photos/credentials. A verified staged update displays an inline **Restart now** action inside Production Settings > App updates while idle; camera/review/diagnosis/dialogs defer it. No automatic update dialog is mounted by current source. Explicit restart waits for native writes and rechecks the bundle before recreating the trusted Activity. Ordinary recreation does not activate it. Cold-start selection retains health acknowledgment and rollback. Debug disables production OTA.
 
 ### Website, APK and OTA in plain English
 

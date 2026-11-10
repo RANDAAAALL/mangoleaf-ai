@@ -1,10 +1,37 @@
 # MangoLeaf AI PWA Versioning Guide
 
+## Unreleased Settings/download source (November 10, 2026)
+
+**Prepared candidate:** app/web **0.13.2**, Production APK **0.1.11/code 12**, Debug **0.1.11-dev**, default host bounds **12-12**, bridge/SQLite schema **1/1**, unchanged adopted **Model V5.1.0**. This is unpublished source, not a built or installed APK. Functional and physical reliability checklist work is deferred; older results keep their original build identities.
+
+Current working source replaces automatic APK/OTA update dialogs with Production Settings > App updates cards. A valid newer native asset label shows website installation guidance; otherwise the screen remains unconfirmed/offline. The user opens the fixed official browser download page and installs over the existing same-signer APK, preserving local data. Diagnostic logs are Debug/testing-only. Signed web updates retain inline safe-restart controls. Unreferenced React update dialogs and the JavaScript APK installer were removed; native compatibility methods remain unchanged for older bundles.
+
+Website guide taps no longer both mount an overlay and dispatch an intent. Unconfirmed download-page users have no self-fallback intent. Public metadata caching/backoff and Retry reduce repeated requests; no rate-limit diagnosis is inferred from the video alone. Availability still requires validated release metadata; native-version claims require the APK asset label, never the release tag.
+
+The same candidate also improves APK restoration feedback in English and Bisaya: a named busy message and spinner, an actual-count success card with a History hint, and a separate zero-addition message. Backup behavior and model assets remain unchanged. Rebuild the candidate to include this follow-up; earlier APKs and browser-test inputs do not contain it.
+
+The app/native version fields and default host range now identify this new candidate. No model asset, Java behavior, dependency, signing key, bridge/schema, APK installer, OTA sequence, tag or deployment is created or changed by setting these labels. Build a new matching APK/receipt for code 12 before preparing its signed web bundle; do not reuse the host-11 installer or receipt as code-12 evidence. CI, current-input release validation, physical acceptance and publication remain pending. Earlier Settings/download UI checks predate the version bump. The later restore/Settings checks use the 0.13.2 source; their [dated scope](../testing/TESTING.md#november-10-2026) does not establish complete candidate acceptance.
+
 ## Current repository snapshot
+
+| Item                                         | Unpublished candidate                                                   |
+| -------------------------------------------- | ----------------------------------------------------------------------- |
+| App/web bundle                               | `0.13.2`, root `package.json`                                           |
+| Production / Debug APK                       | `0.1.11` / `0.1.11-dev`, code `12`                                      |
+| Default host bounds                          | `12-12`                                                                 |
+| Native bridge / SQLite schema                | `1` / `1`, unchanged                                                    |
+| Adopted model                                | `v5.1.0`, unchanged assets and 70% rule                                 |
+| APK / receipt / OTA assets                   | Not built for this candidate                                            |
+| Functional / physical reliability checklists | Deferred; no new filled results                                         |
+| Release status                               | Unpublished; release validation, CI approval, tag and promotion pending |
+
+See the [candidate history](history/PWA_RELEASE_HISTORY.md#v0132-settings-and-download-candidate-november-10-2026) and [Android candidate](history/ANDROID_APK_HISTORY.md#apk-v0111code-12-settings-and-download-candidate-november-10-2026). The following November 7 observations describe the earlier published artifact.
+
+### Published observation (November 7, 2026)
 
 **Observed November 7, 2026:** the production website displays **app/web 0.13.1 / Model V5.1.0**. Published **APK 0.1.10/code 11** was downloaded through real phone Chrome, installed through Android and verified byte-for-byte against the published asset and matching signed receipt. The maintainer reported CI/promotion/release completion; this session did not promote or publish anything and did not independently derive the Vercel deployment commit from version labels.
 
-| Item                      | Current source / observed artifact                                                                |
+| Item                      | Earlier published artifact                                                                        |
 | ------------------------- | ------------------------------------------------------------------------------------------------- |
 | App/web bundle            | `0.13.1`, root `package.json`; live/About label observed                                          |
 | Adopted model             | `v5.1.0`, unchanged model and 70% rule                                                            |
