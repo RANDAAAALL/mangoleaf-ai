@@ -207,20 +207,20 @@ export const InstallGuideOverlay = memo(function InstallGuideOverlay({
               <p className="mb-2 text-sm text-[#526856]">
                 {installed
                   ? t.androidInstalledConfirmed
-                  : t.androidAlreadyInstalled}
+                  : t.installGuideAndroidOpenDescription}
               </p>
               <a
-                href={appLink}
+                href={installed ? appLink : "/download"}
                 className="inline-flex min-h-11 items-center rounded-xl bg-[#277839] px-5 py-3 font-bold text-white"
               >
-                {installed ? t.androidOpenApp : t.androidOpenOrInstall}
+                {installed ? t.androidOpenApp : t.androidDownloadGuide}
               </a>
               {/* Use a fresh document for the download page and its availability policy. */}
               <a
-                href="/download"
+                href={installed ? "/download" : appLink}
                 className="mt-3 block text-sm font-semibold underline"
               >
-                {t.androidDownloadGuide}
+                {installed ? t.androidDownloadGuide : t.androidOpenApp}
               </a>
             </div>
           )}

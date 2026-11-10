@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { useAndroidAppLink } from "@/hooks/useAndroidAppLink";
 import { translations, type Language } from "@/lib/translations";
 
-/** Keep intent navigation in the original tap; never wait for detection or start a timed download. */
+/** Each tap has one destination: a confirmed app, or the installation guide. */
 export function AndroidInstallAction({
   language,
   onGuide,
@@ -32,10 +32,17 @@ export function AndroidInstallAction({
   if (href)
     return (
       <a
-        href={href}
+        href={installed ? href : "/download"}
         aria-label={label}
         className={className}
-        onClick={installed ? undefined : () => onGuide()}
+        onClick={
+          installed
+            ? undefined
+            : (event) => {
+                event.preventDefault();
+                onGuide();
+              }
+        }
       >
         {content}
       </a>

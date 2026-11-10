@@ -1,5 +1,9 @@
 # MangoLeaf AI Architecture
 
+## Website installation guide (November 10, 2026; unreleased)
+
+Website installation actions choose one destination: a positively confirmed app uses the fixed-package intent, otherwise a tap opens the guide. The guide's unconfirmed action navigates to `/download`; that page no longer sends unconfirmed users through an intent whose fallback is itself. `android-release-cache.ts` shares bounded public metadata requests and stores validated availability in memory/session storage (five-minute success, 30-second failure). It revalidates fixed repository/path/version/expiry, tolerates blocked storage and shares in-flight work independently of mounted readers. `useAndroidRelease` ignores late replies after unmount and retries on request or reconnection. No private Auth, report storage or scanner is mounted by the website.
+
 ## Published artifact follow-up (November 7, 2026)
 
 Observed Production identities are **app/web 0.13.1 / APK 0.1.10/code 11 / Model V5.1.0**, host bounds **11-11** and bridge/schema **1/1**. The published APK's downloaded and installed bytes matched its verified receipt. The website retains its Home/About/Android-installation boundary; scanning, SQLite/private photos and recovery-code backup remain in the Android application. No architecture, schema, ownership or model change was introduced by this evidence review.

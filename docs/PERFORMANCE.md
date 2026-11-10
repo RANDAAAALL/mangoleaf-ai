@@ -1,5 +1,11 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## Repeated installation-guide requests (November 10, 2026; unreleased)
+
+The supplied 49.27-second Brave recording shows guide re-entry and unavailable-download feedback. The earlier main link could mount a guide and dispatch an external intent in the same tap, while the download page's intent fell back to that same page. Every fresh download document fetched uncached GitHub metadata. These mechanisms explain overlapping UI transitions and repeated requests; the recording has no HTTP status/headers and cannot establish a GitHub rate-limit response or Brave-specific network blocking.
+
+Each installation action now has one destination. Download availability shares one bounded request, caches validated successful metadata for five minutes across document visits through session storage, and backs off failed checks for 30 seconds. Retry/reconnection rechecks after that cooldown. This reduces repeated API requests without advertising unvalidated fallback URLs. No phone timing improvement, complete absence of visual transients, live rate-limit recovery or physical Brave retest is claimed.
+
 ## Published physical mixed-use observations (November 7, 2026)
 
 Published **APK 0.1.10/code 11**, active **web 0.13.1 / V5.1.0**, was exercised on a Samsung SM-A356E with Android 16/API 36 and System WebView 157.0.8103.38. The recorded mixed-use interval lasted **1,835.495 seconds (30 min 35.495 s)** and included **31 fresh Gallery predictions and one camera prediction**. No physical crash, freeze or lost committed report was observed in that interval. These are stability observations, not measured inference latency, throughput, memory usage or a speedup comparison.

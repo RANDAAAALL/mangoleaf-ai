@@ -137,6 +137,7 @@ export const translations = {
     androidDownloadPending:
       "The Android APK download could not be confirmed. Check the official releases page or try again when connected.",
     androidDownloadChecking: "Checking Android APK availability...",
+    androidDownloadRetry: "Check download again",
     androidDownloadAvailable: "Android APK available from release {version}.",
     androidDownloadVersion: "Available Android APK v{version}",
     androidDownloadApk: "Download Android APK",
@@ -732,6 +733,7 @@ export const translations = {
     androidDownloadPending:
       "Wala mapamatud-i ang Android APK download. Tan-awa ang opisyal nga mga release o sulayi pag-usab kon konektado.",
     androidDownloadChecking: "Gisusi ang pagkaanaa sa Android APK...",
+    androidDownloadRetry: "Susihon pag-usab ang download",
     androidDownloadAvailable:
       "Anaa ang Android APK gikan sa release {version}.",
     androidDownloadVersion: "Anaa nga Android APK v{version}",

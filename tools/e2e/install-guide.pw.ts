@@ -365,7 +365,7 @@ test("I07: ordinary visits and unrelated install flag values do not open the gui
   }
 });
 
-test("I08: Android visitors can open the installed app with a safe download fallback in both languages", async ({
+test("I08: the guide offers separate download and explicit app-opening actions in both languages", async ({
   page,
 }) => {
   await installBrowser(page);
@@ -381,19 +381,15 @@ test("I08: Android visitors can open the installed app with a safe download fall
     await openDownload(page, language);
     const dialog = guide(page, language, page.viewportSize()!.width >= 768);
     const open = dialog.getByRole("link", {
-      name: t.androidOpenOrInstall,
+      name: t.androidDownloadGuide,
       exact: true,
     });
     await expect(open).toBeVisible();
-    const href = await open.getAttribute("href");
-    expect(href).toContain(
-      "intent://open#Intent;scheme=mangoleaf;package=com.mangoleaf.ai;",
-    );
-    expect(href).toContain(
-      `S.browser_fallback_url=${encodeURIComponent(new URL("/download", page.url()).href)};end`,
-    );
+    await expect(open).toHaveAttribute("href", "/download");
     await expect(
-      dialog.getByText(t.androidAlreadyInstalled, { exact: true }),
+      dialog
+        .getByText(t.installGuideAndroidOpenDescription, { exact: true })
+        .first(),
     ).toBeVisible();
     // Inspect the link without launching an external app or downloading/installing anything from automation.
     await dialog.getByRole("button", { name: t.closeBtn, exact: true }).click();
@@ -404,7 +400,7 @@ test("I08: Android visitors can open the installed app with a safe download fall
       name: translations.en.androidOpenOrInstall,
       exact: true,
     }),
-  ).toBeVisible();
+  ).toHaveCount(0);
 });
 
 test("I09: a published Android APK appears in both languages without downloading or installing", async ({
@@ -453,7 +449,7 @@ test("I09: a published Android APK appears in both languages without downloading
     ).toHaveAttribute("href", downloadUrl);
     await expect(
       page.getByRole("link", { name: t.androidOpenOrInstall, exact: true }),
-    ).toBeVisible();
+    ).toHaveCount(0);
     await expect(
       page.getByRole("link", {
         name: t.androidDownloadFallback,
@@ -498,6 +494,74 @@ test("I15: an unlabeled older APK stays downloadable without inventing its nativ
       exact: true,
     }),
   ).toHaveAttribute("href", downloadUrl);
+});
+
+test("I19: repeated guide visits reuse validated metadata; failures retry after cooldown without a self-intent", async ({
+  page,
+  runtimeErrors,
+}) => {
+  await installBrowser(page);
+  let requests = 0;
+  let available = false;
+  await page.route(androidReleaseApi, (route) => {
+    requests++;
+    return route.fulfill({
+      status: available ? 200 : 429,
+      contentType: "application/json",
+      headers: { "Access-Control-Allow-Origin": "*" },
+      json: available
+        ? {
+            draft: false,
+            prerelease: false,
+            published_at: "2026-10-22T00:00:00Z",
+            tag_name: "v9.8.7",
+            html_url: `${androidReleasePage}/tag/v9.8.7`,
+            assets: [
+              {
+                name: androidApkAsset,
+                state: "uploaded",
+                size: 100,
+                content_type: "application/octet-stream",
+                browser_download_url: `${androidReleasePage}/download/v9.8.7/${androidApkAsset}`,
+              },
+            ],
+          }
+        : { message: "Rate limit fixture" },
+    });
+  });
+  await page.clock.install();
+  await page.goto("/download");
+  const retry = page.getByRole("button", {
+    name: translations.en.androidDownloadRetry,
+    exact: true,
+  });
+  await expect(retry).toBeVisible();
+  for (let i = 0; i < 3; i++) {
+    await retry.click();
+    await expect(retry).toBeVisible();
+  }
+  expect(requests).toBe(1);
+  available = true;
+  await page.clock.runFor(31_000);
+  await retry.click();
+  const download = page.getByRole("link", {
+    name: translations.en.androidDownloadApk,
+    exact: true,
+  });
+  await expect(download).toBeVisible();
+  expect(requests).toBe(2);
+  await page.reload();
+  await expect(download).toBeVisible();
+  expect(requests).toBe(2);
+  await expect(page.locator('a[href^="intent:"]')).toHaveCount(0);
+  // Only this exact deliberately fulfilled 429 is expected; retain other errors/crashes.
+  for (let i = runtimeErrors.length - 1; i >= 0; i--) {
+    if (
+      runtimeErrors[i].includes("status of 429") &&
+      runtimeErrors[i].endsWith(`(${androidReleaseApi})`)
+    )
+      runtimeErrors.splice(i, 1);
+  }
 });
 
 test("I10: untrusted APK URLs keep the download unavailable and preserve official release navigation", async ({
@@ -563,7 +627,7 @@ for (const relatedApps of [
       .filter({ visible: true })
       .first();
     await expect(launch).toBeVisible();
-    await expect(launch).toHaveAttribute("href", /package=com\.mangoleaf\.ai;/);
+    await expect(launch).toHaveAttribute("href", "/download");
     await openDownload(page);
     await expect(guide(page)).toBeVisible();
     await guide(page)
@@ -578,7 +642,7 @@ for (const relatedApps of [
         name: translations.en.androidOpenOrInstall,
         exact: true,
       }),
-    ).toBeVisible();
+    ).toHaveCount(0);
     await expect(page.getByRole("status")).toHaveText(
       translations.en.androidDownloadPending,
     );

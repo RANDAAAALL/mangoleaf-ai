@@ -13,7 +13,8 @@ export default function DownloadPage() {
   const t = translations[language];
   const { href: appLink, installed, ready } = useAndroidAppLink();
   const canDownload = appLink !== null;
-  const { checking, release, downloadHref } = useAndroidRelease(canDownload);
+  const { checking, release, downloadHref, retry } =
+    useAndroidRelease(canDownload);
   return (
     <main className="mx-auto flex max-w-2xl flex-col gap-5 p-6 text-[#143519]">
       <button
@@ -27,7 +28,7 @@ export default function DownloadPage() {
       </button>
       <h1 className="text-3xl font-bold">{t.androidDownloadTitle}</h1>
       <p>{t.androidDownloadDescription}</p>
-      {appLink && (
+      {appLink && installed && (
         <div className="rounded-xl border border-[#b8d7b5] p-4">
           <p className="mb-3">
             {installed
@@ -42,7 +43,11 @@ export default function DownloadPage() {
           </a>
         </div>
       )}
-      <p role="status" className="rounded-xl bg-[#eaf6e5] p-4">
+      <p
+        id="apk-download"
+        role="status"
+        className="rounded-xl bg-[#eaf6e5] p-4"
+      >
         {!ready || checking
           ? t.androidDownloadChecking
           : !canDownload
@@ -51,6 +56,15 @@ export default function DownloadPage() {
               ? t.androidDownloadAvailable.replace("{version}", release.tag)
               : t.androidDownloadPending}
       </p>
+      {canDownload && !checking && !release && (
+        <button
+          type="button"
+          onClick={retry}
+          className="min-h-11 rounded-xl border border-[#277839] px-5 py-3 font-semibold"
+        >
+          {t.androidDownloadRetry}
+        </button>
+      )}
       {release?.apkVersion && (
         <p className="font-semibold" data-testid="available-apk-version">
           {t.androidDownloadVersion.replace("{version}", release.apkVersion)}
