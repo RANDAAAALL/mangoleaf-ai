@@ -317,7 +317,8 @@ test("R03: thirty-minute mixed-use session with fresh real predictions", async (
       await nav(page, "Home");
       if (cycles.length % 10 === 9) {
         await page.reload();
-        await expect(homeHeading(page)).toBeVisible();
+        // Reload starts a fresh model/GPU context, so use openApp's startup budget.
+        await expect(homeHeading(page)).toBeVisible({ timeout: 90_000 });
       }
       const heapBytes = await page.evaluate(
         () =>
