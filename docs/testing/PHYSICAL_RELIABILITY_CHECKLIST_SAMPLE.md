@@ -1,5 +1,7 @@
 # Physical reliability checklist answer example
 
+For the unreleased November 10 source, use the current blank sheet's variant-specific instructions: Diagnostics is Debug/testing-only; Production updates use Settings/browser guidance. The fictional earlier-version examples below remain unchanged and are not new test results.
+
 The fictional example below retains its illustrative 0.13.0 / 0.1.9 identities. The [published reference observed November 7, 2026](TESTING.md#november-7-2026-published-production-fresh-qa) is web 0.13.1 / APK 0.1.10/code 11 / Model V5.1.0. Enter the actual tested artifact without transferring these invented outcomes; this sample remains fictional.
 
 > **FICTIONAL EXAMPLE ONLY — NOT PHYSICAL-TEST EVIDENCE.** All devices, times, paths and outcomes below are invented. No phone session was run to write this file. The invented storage failure is not a reported app defect. Use the [blank reliability sheet](PHYSICAL_RELIABILITY_CHECKLIST.md) for real work.

@@ -42,7 +42,7 @@ function pageFromState(
   const page = state.mangoleafSettingsPage;
   if (
     page === "backup" ||
-    page === "diagnostics" ||
+    (page === "diagnostics" && !production) ||
     (page === "updates" && production)
   )
     return page;
@@ -130,7 +130,8 @@ export function useSettingsNavigation(enabled: boolean, production: boolean) {
     if (
       !enabled ||
       currentScreen.current ||
-      (next === "updates" && !production)
+      (next === "updates" && !production) ||
+      (next === "diagnostics" && production)
     )
       return;
     const revision = ++request.current;

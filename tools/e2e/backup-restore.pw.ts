@@ -616,7 +616,10 @@ test("B16: Production always has an Updates page; unconfirmed/offline state neve
         ),
       ).toBeVisible();
       await expect(
-        page.getByRole("button", { name: t.androidApkUpdateNow, exact: true }),
+        page.getByRole("link", {
+          name: t.androidApkWebsiteAction,
+          exact: true,
+        }),
       ).toHaveCount(0);
       if (offline)
         await expect(
@@ -625,18 +628,6 @@ test("B16: Production always has an Updates page; unconfirmed/offline state neve
       await page.goBack();
       await expect(entry).toBeFocused();
     }
-    await openHarness(page, language, "settings&production&offer");
-    await page
-      .getByRole("button", { name: new RegExp("^" + t.settingsUpdates) })
-      .click();
-    await page
-      .getByRole("button", { name: t.androidApkUpdateNow, exact: true })
-      .click();
-    expect(
-      await page.evaluate(
-        () => window.backupRestoreUi.snapshot().updateRequests,
-      ),
-    ).toBe(1);
   }
 });
 

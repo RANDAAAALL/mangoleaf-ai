@@ -15,7 +15,7 @@ export const translations = {
     settingsUpdatesSection: "Updates",
     settingsUpdates: "App updates",
     settingsUpdatesHint:
-      "Updates are checked while the app is open and online.",
+      "Updates are checked on this screen while connected to the internet.",
     settingsInstalledVersion: "Installed Android APK v{version}",
     settingsUpdateUnconfirmed: "No newer update has been confirmed yet.",
     settingsUpdateOffline:
@@ -117,7 +117,6 @@ export const translations = {
     androidUpdateManualRestart:
       "A verified update has downloaded. Fully close and reopen MangoLeaf AI to apply it. Your saved reports and photos stay on this phone.",
     androidUpdateRestart: "Restart now",
-    androidUpdateLater: "Later",
     androidUpdateRestarting: "Restarting MangoLeaf AI...",
     androidUpdateRestartError:
       "Restart could not finish. Fully close and reopen the app when ready.",
@@ -183,29 +182,12 @@ export const translations = {
       "Could not copy. Tap Show and save the code carefully.",
     backupRestored: "Restored {n} scans",
     backupRestoredSingle: "Restored {n} scan",
-    androidApkUpdateTitle: "New Android APK v{version} Update",
-    androidApkUpdateText:
-      "Download the update inside MangoLeaf AI, then confirm Update in Android. Your saved scans and photos stay on this phone.",
-    androidApkUpdateNow: "Update Now!",
-    androidApkUpdateLater: "Update Later!",
     androidApkUpdateAboutTitle: "Latest update available",
-    androidApkUpdateOffline: "Connect to the internet to download this update.",
     androidApkUpdateAboutText:
-      "Android APK v{version} is available. Tap Update Now to download it inside MangoLeaf AI, then confirm Update in Android. Internet is needed for the download. Your saved scans and photos stay on this phone.",
-    androidApkDownloadingTitle: "Downloading update...",
-    androidApkDownloadingText:
-      "Please wait while the update downloads. Closing cancels the download and keeps your current app version.",
-    androidApkConnecting: "Connecting...",
-    androidApkDownloadPercent: "{n}% downloaded",
-    androidApkVerifyingTitle: "Checking update...",
-    androidApkInstallingTitle: "Confirm installation in Android",
-    androidApkInstallingText:
-      "Follow Android's update prompt. Canceling keeps your current version. After installation, open MangoLeaf AI again.",
-    androidApkInstallFailedTitle: "Update stopped",
-    androidApkInstallFailedText:
-      "The update could not be completed. You can keep using your current version and try again later.",
-    androidApkInstallUnavailable:
-      "This installation cannot update inside the app. Install the latest official APK to enable in-app updates.",
+      "Heads up! Android APK v{version} is available from the official website.",
+    androidApkWebsiteInstructions:
+      "Connect to the internet, open mangoleafai.vercel.app in your browser, download the newest APK and open it. Confirm Update in Android to keep your saved scans and recovery code. Keep the existing app installed; uninstalling removes its local data.",
+    androidApkWebsiteAction: "Open official download page",
     backupUploaded: "Backed up {n} reports.",
     backupCloudDeleted:
       "Cloud backup deleted. Local reports remain on this device.",
@@ -608,7 +590,7 @@ export const translations = {
     settingsUpdatesSection: "Mga update",
     settingsUpdates: "Mga update sa app",
     settingsUpdatesHint:
-      "Susihon ang mga update samtang abli ug online ang app.",
+      "Susihon ang mga update niini nga screen samtang konektado sa internet.",
     settingsInstalledVersion: "Na-install nga Android APK v{version}",
     settingsUpdateUnconfirmed: "Wala pay napamatud-ang mas bag-ong update.",
     settingsUpdateOffline:
@@ -713,7 +695,6 @@ export const translations = {
     androidUpdateManualRestart:
       "Na-download na ang napamatud-ang update. Hingpit nga isira ug ablihi pag-usab ang MangoLeaf AI aron magamit kini. Magpabilin sa telepono ang imong mga report ug litrato.",
     androidUpdateRestart: "I-restart karon",
-    androidUpdateLater: "Unya na",
     androidUpdateRestarting: "Gisugdan pag-usab ang MangoLeaf AI...",
     androidUpdateRestartError:
       "Wala mahuman ang pag-restart. Hingpit nga isira ug ablihi pag-usab ang app kon andam na.",
@@ -781,30 +762,12 @@ export const translations = {
       "Wala makopya. I-tap ang Ipakita ug tipigi pag-ayo ang code.",
     backupRestored: "Na-restore ang {n} ka scan",
     backupRestoredSingle: "Na-restore ang {n} ka scan",
-    androidApkUpdateTitle: "Bag-ong Android APK v{version} nga update",
-    androidApkUpdateText:
-      "I-download ang update sulod sa MangoLeaf AI, dayon kumpirmaha ang Update sa Android. Magpabilin niini nga telepono ang imong natipig nga scan ug litrato.",
-    androidApkUpdateNow: "I-update karon!",
-    androidApkUpdateLater: "I-update unya!",
     androidApkUpdateAboutTitle: "Adunay bag-ong update",
-    androidApkUpdateOffline:
-      "Konektar sa internet aron ma-download kini nga update.",
     androidApkUpdateAboutText:
-      "Adunay Android APK v{version}. Pislita ang I-update karon aron i-download kini sulod sa MangoLeaf AI, dayon kumpirmaha ang Update sa Android. Kinahanglan ug internet sa pag-download. Magpabilin niini nga telepono ang imong natipig nga scan ug litrato.",
-    androidApkDownloadingTitle: "Gi-download ang update...",
-    androidApkDownloadingText:
-      "Palihog hulat samtang gi-download ang update. Ang pagsira mokansela sa pag-download ug magpabilin ang kasamtangang bersyon sa app.",
-    androidApkConnecting: "Nagkonektar...",
-    androidApkDownloadPercent: "{n}% na-download",
-    androidApkVerifyingTitle: "Gisusi ang update...",
-    androidApkInstallingTitle: "Kumpirmaha ang pag-install sa Android",
-    androidApkInstallingText:
-      "Sunda ang pangutana sa Android bahin sa update. Kon kanselahon, magpabilin ang kasamtangang bersyon. Human ma-install, ablihi pag-usab ang MangoLeaf AI.",
-    androidApkInstallFailedTitle: "Mihunong ang update",
-    androidApkInstallFailedText:
-      "Wala mahuman ang update. Mahimo nimong gamiton ang kasamtangang bersyon ug mosulay pag-usab unya.",
-    androidApkInstallUnavailable:
-      "Kini nga installation dili maka-update sulod sa app. I-install ang pinakabag-ong opisyal nga APK aron magamit ang in-app update.",
+      "Pahibalo! Adunay Android APK v{version} sa opisyal nga website.",
+    androidApkWebsiteInstructions:
+      "Konektar sa internet, ablihi ang mangoleafai.vercel.app sa browser, i-download ang pinakabag-ong APK ug ablihi kini. Kumpirmaha ang Update sa Android aron magpabilin ang imong natipig nga scan ug recovery code. Ayaw i-uninstall ang kasamtangang app kay mawala ang lokal nga datos niini.",
+    androidApkWebsiteAction: "Ablihi ang opisyal nga download page",
     backupUploaded: "Na-back up ang {n} ka report.",
     backupCloudDeleted:
       "Napapas ang cloud backup. Magpabilin sa device ang lokal nga mga report.",

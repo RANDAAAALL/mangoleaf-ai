@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { AndroidUpdateModal } from "@/components/modal/android-update-modal";
 import { BackupRecoveryPanel } from "@/components/tab/backup-recovery-panel";
 import { AboutTab } from "@/components/tab/about-tab";
 import { SettingsTab } from "@/components/tab/settings-tab";
-import { AndroidApkProgressModal } from "@/components/modal/android-apk-progress-modal";
-import { useAndroidApkInstall } from "@/hooks/useAndroidApkInstall";
-import type { AndroidApkOffer } from "@/lib/android-update";
 import { Footer } from "@/components/layout/footer";
 import type { Language } from "@/lib/translations";
 
@@ -14,19 +10,12 @@ import type { Language } from "@/lib/translations";
 const query = new URLSearchParams(location.search);
 const calls: string[] = [];
 let status = query.has("disabled") ? "disabled" : "checking";
-let installer = {
-  id: "",
-  version: "",
-  status: "cancelled",
-  downloaded: 0,
-  total: 1000,
-};
 const port: {
   onmessage?: (event: { data: string }) => void;
   postMessage(value: string): void;
 } = {
   postMessage(value) {
-    const { id, method, payload } = JSON.parse(value);
+    const { id, method } = JSON.parse(value);
     calls.push(method);
     queueMicrotask(() => {
       const result =
@@ -53,23 +42,9 @@ const port: {
             }
           : method === "ota.status"
             ? { status }
-            : method === "apkUpdate.start"
-              ? (installer = {
-                  id: payload.id,
-                  version: payload.version,
-                  status: "downloading",
-                  downloaded: 0,
-                  total: 1000,
-                })
-              : method === "apkUpdate.install"
-                ? (installer = { ...installer, status: "installing" })
-                : method === "apkUpdate.cancel"
-                  ? (installer = { ...installer, status: "cancelled" })
-                  : method === "apkUpdate.status"
-                    ? { ...installer }
-                    : method === "storage.settings.get"
-                      ? null
-                      : true;
+            : method === "storage.settings.get"
+              ? null
+              : true;
       const error = method === "ota.restart" ? { code: "BUSY" } : undefined;
       port.onmessage?.({ data: JSON.stringify({ id, result, error }) });
     });
@@ -81,17 +56,12 @@ function Harness() {
   const [blocked, setBlocked] = useState(true);
   const [about, setAbout] = useState(false);
   const [settings, setSettings] = useState(false);
-  const [apkOffer, setApkOffer] = useState<AndroidApkOffer | null>(null);
   const [language] = useState<Language>(query.has("bis") ? "bis" : "en");
-  const apkInstaller = useAndroidApkInstall(blocked);
   useEffect(() => {
     Object.assign(window, {
       updateTest: {
         calls,
         block: setBlocked,
-        installer(value: string, downloaded = installer.downloaded) {
-          installer = { ...installer, status: value, downloaded };
-        },
         online(value: boolean) {
           port.onmessage?.({
             data: JSON.stringify({
@@ -147,25 +117,10 @@ function Harness() {
         <SettingsTab
           language={language}
           onLanguageChange={() => {}}
-          updateOffer={apkOffer}
-          onUpdate={apkInstaller.start}
-          updateBusy={apkInstaller.busy}
+          updateBlocked={blocked}
         />
       )}
       <BackupRecoveryPanel language={language} />
-      <AndroidUpdateModal
-        language={language}
-        blocked={blocked || apkInstaller.busy}
-        onApkOffer={setApkOffer}
-        onUpdate={apkInstaller.start}
-        suppressApkReoffer={apkInstaller.isInstalling}
-      />
-      <AndroidApkProgressModal
-        language={language}
-        state={apkInstaller.state}
-        onCancel={apkInstaller.cancel}
-        onDismiss={apkInstaller.dismiss}
-      />
       <Footer language={language} />
     </>
   );

@@ -1297,6 +1297,7 @@ This file tracks the project work from the first committed implementation throug
 
 ### November 10, 2026
 
+- **Unreleased Settings/update UI:** Production Diagnostics is removed; Debug retains its viewer and omits App updates. Production update checks/cards and signed web restart controls now live inside Settings, with a fixed official browser download link and install-over-existing guidance. Retired React update dialogs, installer hook/controller and obsolete UI tests were removed; native compatibility methods remain.
 - **Website installation follow-up:** reviewed the supplied Brave recording, removed the competing overlay/intent action and unconfirmed download-page self-intent, added bounded validated public metadata caching/backoff plus Retry/reconnection handling. The recording alone does not prove rate limiting. Updated relevant setup, architecture, performance, release and testing guidance. This implementation step preceded version preparation; no model/schema change, device installation, publication or deployment was performed; validation and physical limits are recorded in the testing guide.
 
 ## Current Notebook Decision

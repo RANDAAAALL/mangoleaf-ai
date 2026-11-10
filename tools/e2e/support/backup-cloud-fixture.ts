@@ -1,5 +1,9 @@
 import { RecoveryCodeError } from "@/lib/cloud-backup-format";
 
+export function isCloudBackupRunning() {
+  return false;
+}
+
 export interface BackupFixtureState {
   code: string | null;
   enabled: boolean;

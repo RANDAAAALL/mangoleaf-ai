@@ -82,7 +82,6 @@ test("websites and Debug/testing never request a production installer", () => {
     "android=false",
     "process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT='testing'",
     "environment='testing'",
-    "supported=false",
     "version='0.1.8-dev'",
   ])
     run(
@@ -113,4 +112,11 @@ test("an already verified offer waits until the connection returns before presen
   run(`let settle;hold=new Promise(resolve=>settle=resolve);const stop=observe();await tick();assert.equal(requests,1);
     online=false;settle();await tick();assert.equal(offers.length,0);hold=undefined;await fire();assert.equal(offers.length,0);
     online=true;wake();await tick();assert.equal(offers.length,1);assert.equal(requests,1);stop();`);
+});
+
+// Website guidance works on older Production hosts without the native installer capability.
+test("Production manual-update discovery does not require the native installer", () => {
+  run(
+    `supported=false;const stop=observe();await tick();assert.equal(requests,1);assert.equal(offers.length,1);stop();`,
+  );
 });

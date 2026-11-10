@@ -10,7 +10,6 @@ import { useBackupPreferences } from "@/hooks/useBackupPreferences";
 import { useSettingsNavigation } from "@/hooks/useSettingsNavigation";
 import { backupStatusKey } from "@/lib/backup-status";
 import { BackupStatusNotice } from "@/components/tab/backup-status-notice";
-import type { AndroidApkOffer } from "@/lib/android-update";
 import { isAndroidBuild } from "@/lib/native-bridge";
 import { translations, type Language } from "@/lib/translations";
 
@@ -53,15 +52,11 @@ function SettingsEntry({
 export function SettingsTab({
   language,
   onLanguageChange,
-  updateOffer,
-  onUpdate,
-  updateBusy = false,
+  updateBlocked = false,
 }: {
   language: Language;
   onLanguageChange: (language: Language) => void;
-  updateOffer: AndroidApkOffer | null;
-  onUpdate: (offer: AndroidApkOffer) => void;
-  updateBusy?: boolean;
+  updateBlocked?: boolean;
 }) {
   const t = translations[language];
   const online = useConnectionStatus();
@@ -110,17 +105,11 @@ export function SettingsTab({
             preferencesController={preferences}
           />
         )}
-        {screen === "diagnostics" && (
+        {screen === "diagnostics" && !production && (
           <DiagnosticsPanel language={language} embedded />
         )}
         {screen === "updates" && production && (
-          <AndroidUpdatePanel
-            language={language}
-            offer={updateOffer}
-            onUpdate={onUpdate}
-            busy={updateBusy}
-            showEmpty
-          />
+          <AndroidUpdatePanel language={language} blocked={updateBlocked} />
         )}
       </div>
     );
@@ -167,16 +156,18 @@ export function SettingsTab({
           buttonRef={(el) => registerEntry("backup", el)}
         />
       </div>
-      <div>
-        <h2 className={sectionTitle}>{t.settingsDiagnosticsSection}</h2>
-        <SettingsEntry
-          label={t.settingsDiagnostics}
-          hint={t.settingsDiagnosticsHint}
-          icon="clipboard-check"
-          onOpen={() => open("diagnostics")}
-          buttonRef={(el) => registerEntry("diagnostics", el)}
-        />
-      </div>
+      {!production && (
+        <div>
+          <h2 className={sectionTitle}>{t.settingsDiagnosticsSection}</h2>
+          <SettingsEntry
+            label={t.settingsDiagnostics}
+            hint={t.settingsDiagnosticsHint}
+            icon="clipboard-check"
+            onOpen={() => open("diagnostics")}
+            buttonRef={(el) => registerEntry("diagnostics", el)}
+          />
+        </div>
+      )}
       {production && (
         <div>
           <h2 className={sectionTitle}>{t.settingsUpdatesSection}</h2>

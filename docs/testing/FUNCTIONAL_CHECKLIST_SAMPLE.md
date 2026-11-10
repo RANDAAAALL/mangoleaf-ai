@@ -1,5 +1,7 @@
 # Functional checklist answer example
 
+For the unreleased November 10 source, use the current blank sheet's variant-specific instructions: Diagnostics is Debug/testing-only; Production updates use Settings/browser guidance. The fictional earlier-version examples below remain unchanged and are not new test results.
+
 The fictional example below retains its illustrative 0.13.0 / 0.1.9 identities. The [published reference observed November 7, 2026](TESTING.md#november-7-2026-published-production-fresh-qa) is web 0.13.1 / APK 0.1.10/code 11 / Model V5.1.0. Enter the actual tested artifact without transferring these invented outcomes; this sample remains fictional.
 
 > **FICTIONAL EXAMPLE ONLY — NOT TEST EVIDENCE.** All people, devices, observations, outcomes and evidence paths below are invented. The example failure is not a reported app defect. Start real work from the [blank checklist](FUNCTIONAL_CHECKLIST.md); never submit this sample as research findings.

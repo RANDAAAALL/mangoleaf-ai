@@ -1,5 +1,9 @@
 # MangoLeaf AI physical reliability checklist
 
+## Unreleased source note (November 10, 2026)
+
+For the changed source, Diagnostic logs are Debug/testing-only and absent from Production. Production App updates uses inline Settings guidance and a fixed official browser link, with signed web-restart controls on the same screen; no automatic update dialog is expected. Verify Android installs a new same-signer APK over the existing app and preserves local scans/code/Pause. Do not uninstall or clear data for an update check. Keep these cases separate from the original November 7 artifact/evidence and record a new exact build before retesting. Earlier dated popup/native-downloader procedures describe older bundles.
+
 **Blank recording sheet. Fill a copy after testing; no observations are prefilled.** See the [fictional sample](PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md) and separate [functional checklist](FUNCTIONAL_CHECKLIST.md).
 
 ## Purpose and current scope

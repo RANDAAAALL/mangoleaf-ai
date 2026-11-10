@@ -10,13 +10,28 @@ import {
 import { translations, type Language } from "@/lib/translations";
 import { downloadDiagnosticLog } from "@/lib/diagnostics-export";
 
-/** One optional viewer for the recorder shared by the whole application. */
+/** Production never mounts the log viewer, including through stale navigation state. */
 export function DiagnosticsPanel({
   language,
   embedded = false,
 }: {
   language: Language;
   embedded?: boolean;
+}) {
+  if (
+    process.env.NEXT_PUBLIC_APP_TARGET === "android" &&
+    process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT !== "testing"
+  )
+    return null;
+  return <DiagnosticsViewer language={language} embedded={embedded} />;
+}
+
+function DiagnosticsViewer({
+  language,
+  embedded,
+}: {
+  language: Language;
+  embedded: boolean;
 }) {
   const t = translations[language];
   const snapshot = useDiagnostics();

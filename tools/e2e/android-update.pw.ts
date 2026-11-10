@@ -11,7 +11,6 @@ declare global {
       calls: string[];
       block(value: boolean): void;
       online(value: boolean): void;
-      installer(status: string, downloaded?: number): void;
       status(value: string): void;
     };
   }
@@ -19,6 +18,7 @@ declare global {
 
 const origin = "https://appassets.androidplatform.net";
 let script: Buffer;
+let debugScript: Buffer;
 let styles: Buffer;
 const clockPages = new WeakSet<Page>();
 
@@ -127,18 +127,23 @@ test.beforeAll(() => {
     [
       "-e",
       `
+    for (const environment of ['production', 'testing']) {
     const r=await Bun.build({entrypoints:['tools/e2e/support/android-update-harness.tsx'],target:'browser',
       define:{'process.env.NODE_ENV':'"production"','process.env.NEXT_PUBLIC_APP_TARGET':'"android"',
         'process.env.NEXT_PUBLIC_APP_VERSION':'"v9.8.7"',
-        'process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT':'"production"',
+        'process.env.NEXT_PUBLIC_CLOUD_ENVIRONMENT':JSON.stringify(environment),
         'process.env.NEXT_PUBLIC_SUPABASE_URL':'"https://uuvvvoznajjqknedxpdg.supabase.co"'}});
     if(!r.success)throw new Error(String(r.logs));
-    await Bun.write('.tools/android-update-harness.js',r.outputs[0]);
+    await Bun.write('.tools/android-update-harness-'+environment+'.js',r.outputs[0]);
+    }
   `,
     ],
     { cwd: process.cwd(), stdio: "pipe" },
   );
-  script = readFileSync(resolve(".tools/android-update-harness.js"));
+  script = readFileSync(resolve(".tools/android-update-harness-production.js"));
+  debugScript = readFileSync(
+    resolve(".tools/android-update-harness-testing.js"),
+  );
   const build = JSON.parse(readFileSync(".test-app/current.json", "utf8"));
   const css = resolve(build.directory, "out/_next/static/css");
   styles = Buffer.concat(
@@ -191,7 +196,10 @@ async function openHarness(page: Page, query = "") {
     if (url.origin !== origin)
       throw new Error("Native UI fixture attempted external traffic.");
     if (url.pathname === "/fixture.js") {
-      await route.fulfill({ contentType: "text/javascript", body: script });
+      await route.fulfill({
+        contentType: "text/javascript",
+        body: query.includes("debug") ? debugScript : script,
+      });
     } else if (url.pathname === "/fixture.css") {
       await route.fulfill({ contentType: "text/css", body: styles });
     } else {
@@ -205,576 +213,169 @@ async function openHarness(page: Page, query = "") {
   await expect(page.locator("#launcher")).toBeVisible();
 }
 
-test("A07: native APK notice has translated actions and a close button without external installer links", async ({
-  page,
-}) => {
-  for (const language of ["en", "bis"] as const) {
-    const t = translations[language];
-    await openHarness(page, `?apk-update&${language === "bis" ? "bis" : ""}`);
-    await page.evaluate(() => window.updateTest.block(false));
-    await page.clock.runFor(15_000);
-    const dialog = page.getByRole("dialog");
-    await expect(dialog).toBeVisible();
-    await expect(dialog.getByRole("heading")).toHaveText(
-      t.androidApkUpdateTitle.replace("{version}", "0.1.8"),
-    );
-    await expect(
-      dialog.getByRole("button", { name: t.androidApkUpdateNow, exact: true }),
-    ).toBeEnabled();
-    await expect(dialog.getByRole("link")).toHaveCount(0);
-    await expect(
-      dialog.getByRole("button", {
-        name: t.androidApkUpdateLater,
-        exact: true,
-      }),
-    ).toBeFocused();
-    await dialog.getByRole("button", { name: t.closeBtn, exact: true }).click();
-    await expect(dialog).toHaveCount(0);
-    // APK dismissal is foreground-scoped; independent staged web OTA is covered by A15.
-    await page.evaluate(() => window.updateTest.status("checking"));
-    await page.clock.runFor(20_000);
-    await expect(dialog).toHaveCount(0);
-    expect(
-      await page.evaluate(() =>
-        window.updateTest.calls.includes("ota.restart"),
-      ),
-    ).toBe(false);
-  }
-});
-
-test("A08: APK notice Later and Escape dismiss during this foreground visit; Debug excludes production offers", async ({
-  page,
-}) => {
-  await openHarness(page, "?apk-update");
-  await page.evaluate(() => window.updateTest.block(false));
-  await page.clock.runFor(15_000);
-  await expect(page.getByRole("dialog")).toBeVisible();
+async function openUpdates(page: Page, language: "en" | "bis" = "en") {
+  await page.locator("#settings").click();
   await page
     .getByRole("button", {
-      name: translations.en.androidApkUpdateLater,
-      exact: true,
+      name: new RegExp("^" + translations[language].settingsUpdates),
     })
     .click();
-  await page.clock.runFor(20_000);
-  await expect(page.getByRole("dialog")).toHaveCount(0);
-  await openHarness(page, "?apk-update");
   await page.evaluate(() => window.updateTest.block(false));
   await page.clock.runFor(15_000);
-  await expect(page.getByRole("dialog")).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog")).toHaveCount(0);
-  await openHarness(page, "?apk-update&debug&disabled");
-  await page.evaluate(() => window.updateTest.block(false));
-  await page.clock.runFor(20_000);
-  await expect(page.getByRole("dialog")).toHaveCount(0);
-  await openUpdates(page);
-  await expect(
-    page.getByRole("heading", {
-      name: translations.en.androidApkUpdateAboutTitle,
-      exact: true,
-    }),
-  ).toHaveCount(0);
-});
-
-async function openUpdates(page: Page) {
-  await page.locator("#settings").click();
-  const label = (await page.evaluate(() =>
-    new URLSearchParams(location.search).has("bis"),
-  ))
-    ? translations.bis.settingsUpdates
-    : translations.en.settingsUpdates;
-  const heading = page.getByRole("heading", {
-    name: label,
-    level: 1,
-    exact: true,
-  });
-  // Repeated opening may already be on this child page.
-  if (!(await heading.isVisible()))
-    await page.getByRole("button", { name: new RegExp("^" + label) }).click();
 }
 
-async function setVisibility(page: Page, value: "visible" | "hidden") {
-  // Controlled WebView lifecycle signal; physical Activity/background behavior needs phone evidence.
-  await page.evaluate((visibility) => {
-    Object.defineProperty(document, "visibilityState", {
-      configurable: true,
-      value: visibility,
-    });
-    document.dispatchEvent(new Event("visibilitychange"));
-  }, value);
-}
-
-test("A09: APK close/Later/Escape keep the Settings download and reoffer on the next online idle foreground visit", async ({
+test("A07: Production checks only inside Settings and shows website guidance without any popup or native installer", async ({
   page,
 }) => {
   for (const language of ["en", "bis"] as const) {
     const t = translations[language];
     await openHarness(page, `?apk-update&${language === "bis" ? "bis" : ""}`);
-    await page.evaluate(() => window.updateTest.block(false));
-    await page.clock.runFor(15_000);
-    const dialog = page.getByRole("dialog");
-    for (const action of ["close", "later", "escape"] as const) {
-      await expect(dialog).toBeVisible();
-      if (action === "escape") await page.keyboard.press("Escape");
-      else
-        await dialog
-          .getByRole("button", {
-            name: action === "close" ? t.closeBtn : t.androidApkUpdateLater,
-            exact: true,
-          })
-          .click();
-      await expect(dialog).toHaveCount(0);
-      await openUpdates(page);
-      const panel = page.getByRole("region", {
+    await page.clock.runFor(30_000);
+    expect(
+      await page.evaluate(() => window.updateTest.calls.includes("ota.status")),
+    ).toBe(false);
+    await openUpdates(page, language);
+    await expect(
+      page.getByRole("heading", {
         name: t.androidApkUpdateAboutTitle,
         exact: true,
-      });
-      await expect(panel).toBeVisible();
-      await expect(panel).toContainText(
-        t.androidApkUpdateAboutText.replace("{version}", "0.1.8"),
-      );
-      await expect(
-        panel.getByRole("button", { name: t.androidApkUpdateNow, exact: true }),
-      ).toBeEnabled();
-      await expect(panel.getByRole("link")).toHaveCount(0);
-      await page.locator("#launcher").click();
-      await openUpdates(page);
-      await page.clock.runFor(60_000);
-      await expect(dialog).toHaveCount(0);
-      await setVisibility(page, "hidden");
-      await page.evaluate(() => window.updateTest.block(true));
-      await setVisibility(page, "visible");
-      await page.clock.runFor(15_000);
-      await expect(dialog).toHaveCount(0);
-      await page.evaluate(() => window.updateTest.block(false));
-      await page.clock.runFor(15_000);
-    }
+      }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(t.androidApkWebsiteInstructions, { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: t.androidApkWebsiteAction, exact: true }),
+    ).toHaveAttribute("href", "https://mangoleafai.vercel.app/download");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
     expect(
       await page.evaluate(() =>
-        window.updateTest.calls.includes("ota.restart"),
+        window.updateTest.calls.some((v) => v.startsWith("apkUpdate.")),
       ),
     ).toBe(false);
   }
 });
 
-test("A10: an installed current APK has no popup or confirmed update card", async ({
+test("A08: a known newer APK stays visible offline without an actionable website link", async ({
   page,
 }) => {
-  await openHarness(page, "?apk-update&updated");
-  await page.evaluate(() => window.updateTest.block(false));
-  await page.clock.runFor(20_000);
+  const t = translations.en;
+  await openHarness(page, "?apk-update");
   await openUpdates(page);
-  await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(
     page.getByRole("heading", {
-      name: translations.en.androidApkUpdateAboutTitle,
-      exact: true,
-    }),
-  ).toHaveCount(0);
-});
-
-test("A11: known Settings update stays visible offline with a disabled action and no new popup until reconnection", async ({
-  page,
-}) => {
-  for (const language of ["en", "bis"] as const) {
-    const t = translations[language];
-    await openHarness(page, `?apk-update&${language === "bis" ? "bis" : ""}`);
-    await page.evaluate(() => window.updateTest.block(false));
-    await page.clock.runFor(15_000);
-    await page
-      .getByRole("dialog")
-      .getByRole("button", { name: t.androidApkUpdateLater, exact: true })
-      .click();
-    await openUpdates(page);
-    await page.evaluate(() => window.updateTest.online(false));
-    const panel = page.getByRole("region", {
       name: t.androidApkUpdateAboutTitle,
       exact: true,
-    });
-    await expect(
-      panel.getByRole("button", { name: t.androidApkUpdateNow, exact: true }),
-    ).toBeDisabled();
-    await expect(panel.getByRole("link")).toHaveCount(0);
-    await expect(panel.getByRole("status")).toHaveText(
-      t.androidApkUpdateOffline,
-    );
-    await setVisibility(page, "hidden");
-    await setVisibility(page, "visible");
-    await page.clock.runFor(20_000);
-    await expect(page.getByRole("dialog")).toHaveCount(0);
-    await page.evaluate(() => window.updateTest.online(true));
-    await expect(page.getByRole("dialog")).toBeVisible();
-    await page
-      .getByRole("dialog")
-      .getByRole("button", { name: t.closeBtn, exact: true })
-      .click();
-    await expect(
-      panel.getByRole("button", { name: t.androidApkUpdateNow, exact: true }),
-    ).toBeEnabled();
-    await expect(panel.getByRole("link")).toHaveCount(0);
-  }
-});
-
-test("A12: popup and Settings share native download progress and automatic Android handoff without a browser", async ({
-  page,
-  context,
-}) => {
-  for (const language of ["en", "bis"] as const) {
-    const t = translations[language];
-    for (const entry of ["popup", "settings"]) {
-      await openHarness(page, `?apk-update&${language === "bis" ? "bis" : ""}`);
-      await page.evaluate(() => window.updateTest.block(false));
-      await page.clock.runFor(15_000);
-      if (entry === "settings") {
-        await page
-          .getByRole("dialog")
-          .getByRole("button", { name: t.androidApkUpdateLater, exact: true })
-          .click();
-        await openUpdates(page);
-      }
-      await page
-        .getByRole("button", { name: t.androidApkUpdateNow, exact: true })
-        .click();
-      const progress = page.getByRole("dialog", {
-        name: t.androidApkDownloadingTitle,
-        exact: true,
-      });
-      await expect(progress).toBeVisible();
-      await page.evaluate(() =>
-        window.updateTest.installer("downloading", 400),
-      );
-      await page.clock.runFor(1_000);
-      await expect(progress.getByRole("progressbar")).toHaveAttribute(
-        "value",
-        "40",
-      );
-      await expect(progress.getByRole("status")).toHaveText(
-        t.androidApkDownloadPercent.replace("{n}", "40"),
-      );
-      await page.evaluate(() => window.updateTest.installer("verifying", 1000));
-      await page.clock.runFor(1_000);
-      await expect(
-        page.getByRole("dialog", {
-          name: t.androidApkVerifyingTitle,
-          exact: true,
-        }),
-      ).toBeVisible();
-      expect(
-        await page.evaluate(
-          () =>
-            window.updateTest.calls.filter(
-              (value) => value === "apkUpdate.install",
-            ).length,
-        ),
-      ).toBe(0);
-      await page.evaluate(() => window.updateTest.installer("ready", 1000));
-      await page.clock.runFor(1_000);
-      await expect(
-        page.getByRole("dialog", {
-          name: t.androidApkInstallingTitle,
-          exact: true,
-        }),
-      ).toBeVisible();
-      await expect(page.getByRole("dialog").getByRole("button")).toHaveCount(0);
-      expect(
-        await page.evaluate(
-          () =>
-            window.updateTest.calls.filter(
-              (value) => value === "apkUpdate.start",
-            ).length,
-        ),
-      ).toBe(1);
-      expect(
-        await page.evaluate(
-          () =>
-            window.updateTest.calls.filter(
-              (value) => value === "apkUpdate.install",
-            ).length,
-        ),
-      ).toBe(1);
-      expect(page.url()).toContain(origin);
-      expect(context.pages()).toHaveLength(1);
-      // A real APK replaces this process. The fixture supplies only the system-confirmed terminal result.
-      await page.evaluate(() => window.updateTest.installer("installed", 1000));
-      await page.clock.runFor(1_000);
-      await expect(page.getByRole("dialog")).toHaveCount(0);
-      expect(
-        await page.evaluate(() =>
-          window.updateTest.calls.includes("ota.restart"),
-        ),
-      ).toBe(false);
-    }
-  }
-});
-
-test("A13: progress X and Escape cancel the download; connection failure keeps the current app available", async ({
-  page,
-}) => {
-  for (const language of ["en", "bis"] as const) {
-    const t = translations[language];
-    for (const stop of ["close", "escape", "offline"]) {
-      await openHarness(page, `?apk-update&${language === "bis" ? "bis" : ""}`);
-      await page.evaluate(() => window.updateTest.block(false));
-      await page.clock.runFor(15_000);
-      await page
-        .getByRole("dialog")
-        .getByRole("button", { name: t.androidApkUpdateNow, exact: true })
-        .click();
-      const progress = page.getByRole("dialog", {
-        name: t.androidApkDownloadingTitle,
-        exact: true,
-      });
-      await expect(progress).toBeVisible();
-      if (stop === "offline") {
-        await page.evaluate(() => window.updateTest.online(false));
-        const failure = page.getByRole("dialog", {
-          name: t.androidApkInstallFailedTitle,
-          exact: true,
-        });
-        await expect(failure).toBeVisible();
-        await expect(failure).toContainText(t.androidApkInstallFailedText);
-        await failure
-          .getByRole("button", { name: t.closeBtn, exact: true })
-          .first()
-          .click();
-      } else if (stop === "escape") await page.keyboard.press("Escape");
-      else
-        await progress
-          .getByRole("button", { name: t.closeBtn, exact: true })
-          .click();
-      await expect(page.getByRole("dialog")).toHaveCount(0);
-      await page.clock.runFor(20_000);
-      expect(
-        await page.evaluate(
-          () =>
-            window.updateTest.calls.filter(
-              (value) => value === "apkUpdate.cancel",
-            ).length,
-        ),
-      ).toBe(1);
-      expect(
-        await page.evaluate(() =>
-          window.updateTest.calls.includes("apkUpdate.install"),
-        ),
-      ).toBe(false);
-      await expect(page.locator("#launcher")).toBeEnabled();
-      await expect(page.locator("footer")).toContainText("0.1.4");
-      expect(
-        await page.evaluate(() =>
-          window.updateTest.calls.includes("storage.settings.set"),
-        ),
-      ).toBe(false);
-    }
-  }
-});
-
-test("A14: returning from Android Cancel does not reoffer immediately; Settings permits an explicit retry", async ({
-  page,
-}) => {
-  const t = translations.en;
-  await openHarness(page, "?apk-update");
-  await page.evaluate(() => window.updateTest.block(false));
-  await page.clock.runFor(15_000);
-  await page
-    .getByRole("dialog")
-    .getByRole("button", { name: t.androidApkUpdateNow, exact: true })
-    .click();
-  await expect(
-    page.getByRole("dialog", {
-      name: t.androidApkDownloadingTitle,
-      exact: true,
     }),
   ).toBeVisible();
-  await page.evaluate(() => window.updateTest.installer("ready", 1000));
-  await page.clock.runFor(1_000);
+  await page.evaluate(() => window.updateTest.online(false));
   await expect(
-    page.getByRole("dialog", {
-      name: t.androidApkInstallingTitle,
-      exact: true,
-    }),
+    page.getByText(t.settingsUpdateOffline, { exact: true }),
   ).toBeVisible();
-  await setVisibility(page, "hidden");
-  await page.evaluate(() => window.updateTest.installer("cancelled", 1000));
-  await setVisibility(page, "visible");
-  await page.clock.runFor(20_000);
+  await expect(
+    page.getByRole("link", { name: t.androidApkWebsiteAction, exact: true }),
+  ).toHaveCount(0);
   await expect(page.getByRole("dialog")).toHaveCount(0);
-  expect(
-    await page.evaluate(
-      () =>
-        window.updateTest.calls.filter((value) => value === "apkUpdate.start")
-          .length,
-    ),
-  ).toBe(1);
-  await openUpdates(page);
-  await page
-    .getByRole("region", { name: t.androidApkUpdateAboutTitle, exact: true })
-    .getByRole("button", { name: t.androidApkUpdateNow, exact: true })
-    .click();
-  await expect(
-    page.getByRole("dialog", {
-      name: t.androidApkDownloadingTitle,
-      exact: true,
-    }),
-  ).toBeVisible();
-  expect(
-    await page.evaluate(
-      () =>
-        window.updateTest.calls.filter((value) => value === "apkUpdate.start")
-          .length,
-    ),
-  ).toBe(2);
-  expect(page.url()).toContain(origin);
 });
 
-test("A15: dismissing an earlier web OTA never suppresses native APK discovery or later foreground reminders", async ({
+test("A09: equal or unavailable release metadata never claims the installed APK is latest", async ({
   page,
 }) => {
-  const t = translations.en;
-  await openHarness(page, "?apk-update");
-  await page.evaluate(() => {
-    window.updateTest.block(false);
-    window.updateTest.status("staged");
-  });
-  await page.clock.runFor(5_000);
-  const ota = page.getByRole("dialog", {
-    name: t.androidUpdateReadyTitle,
-    exact: true,
-  });
-  await expect(ota).toBeVisible();
-  await ota
-    .getByRole("button", { name: t.androidUpdateLater, exact: true })
-    .click();
-  await page.clock.runFor(15_000);
-  const apk = page.getByRole("dialog", {
-    name: t.androidApkUpdateTitle.replace("{version}", "0.1.8"),
-    exact: true,
-  });
-  await expect(apk).toBeVisible();
-  await apk
-    .getByRole("button", { name: t.androidApkUpdateLater, exact: true })
-    .click();
-  await page.clock.runFor(20_000);
-  await expect(page.getByRole("dialog")).toHaveCount(0);
-  // Model a short real response delay, independent of the page's paused clock.
-  await page.route(
-    "https://api.github.com/repos/RANDAAAALL/mangoleaf-ai/releases/latest",
-    async (route) => {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      await route.fallback();
-    },
-  );
-  // Finish the real intercepted response before advancing a virtual clock past its 8s fetch deadline.
-  const releaseResponse = page.waitForResponse(
-    (response) =>
-      response.url() ===
-      "https://api.github.com/repos/RANDAAAALL/mangoleaf-ai/releases/latest",
-  );
-  await setVisibility(page, "hidden");
-  await setVisibility(page, "visible");
-  await (await releaseResponse).finished();
-  await expect(apk).toBeVisible();
-  await expect(ota).toHaveCount(0);
-});
-
-test("A01: verified update waits for idle; modal supports both languages, focus, retry and Later", async ({
-  page,
-}) => {
-  for (const language of ["en", "bis"] as const) {
-    await openHarness(page, language === "bis" ? "?bis" : "");
-    const t = translations[language];
+  for (const query of ["?apk-update&updated", "?unavailable"]) {
+    await openHarness(page, query);
+    await openUpdates(page);
     await expect(
-      page.getByRole("button", { name: t.backupCreate, exact: true }),
+      page.getByText(translations.en.settingsUpdateUnconfirmed, {
+        exact: true,
+      }),
     ).toBeVisible();
     await expect(
-      page.getByRole("button", { name: t.backupEnable, exact: true }),
+      page.getByRole("heading", {
+        name: translations.en.androidApkUpdateAboutTitle,
+        exact: true,
+      }),
     ).toHaveCount(0);
-    await page.evaluate(() => window.updateTest.status("staged"));
-    await page.clock.fastForward(16000);
-    await expect(page.getByRole("dialog")).toHaveCount(0);
-    await page.evaluate(() => window.updateTest.block(false));
-    await page.locator("#typing").focus();
-    await page.clock.fastForward(16000);
-    await expect(page.getByRole("dialog")).toHaveCount(0);
-    await page.locator("#launcher").focus();
-    await page.clock.fastForward(16000);
-    const dialog = page.getByRole("dialog", {
-      name: t.androidUpdateReadyTitle,
-      exact: true,
-    });
-    await expect(dialog).toBeVisible();
-    expect(
-      await dialog.evaluate(
-        (element) => element.getBoundingClientRect().width <= innerWidth,
-      ),
-    ).toBe(true);
-    await expect(
-      dialog.getByRole("button", { name: t.androidUpdateLater, exact: true }),
-    ).toBeFocused();
-    await page.keyboard.press("Tab");
-    await expect(
-      dialog.getByRole("button", { name: t.androidUpdateRestart, exact: true }),
-    ).toBeFocused();
-    // Native browser-toolbar tab stops differ; verify reverse movement inside the dialog.
-    await page.keyboard.press("Shift+Tab");
-    await expect(
-      dialog.getByRole("button", { name: t.androidUpdateLater, exact: true }),
-    ).toBeFocused();
-    await dialog
-      .getByRole("button", { name: t.androidUpdateRestart, exact: true })
-      .click();
-    await expect(dialog.getByRole("status")).toHaveText(
-      t.androidUpdateRestartError,
-    );
-    expect(
-      await page.evaluate(
-        () => window.updateTest.calls.filter((m) => m === "ota.restart").length,
-      ),
-    ).toBe(1);
-    await dialog
-      .getByRole("button", { name: t.androidUpdateLater, exact: true })
-      .click();
-    await expect(dialog).toHaveCount(0);
-    await expect(page.locator("#launcher")).toBeFocused();
-    await page.evaluate(() => window.updateTest.status("staged"));
-    await page.clock.fastForward(60000);
-    await expect(page.getByRole("dialog")).toHaveCount(0);
   }
 });
 
-test("A02: disabled Debug OTA never checks or offers production updates", async ({
+test("A10: Production rejects Diagnostics history while Debug keeps Diagnostics and omits App updates", async ({
   page,
 }) => {
-  await openHarness(page, "?disabled");
-  await page.evaluate(() => window.updateTest.block(false));
-  await page.clock.fastForward(60000);
-  await expect(page.getByRole("dialog")).toHaveCount(0);
-  expect(
-    await page.evaluate(() => window.updateTest.calls.includes("ota.check")),
-  ).toBe(false);
+  for (const debug of [false, true]) {
+    const t = translations.en;
+    await openHarness(page, debug ? "?debug&disabled" : "?release");
+    await page.locator("#settings").click();
+    const diagnostics = page.getByRole("button", {
+      name: new RegExp("^" + t.settingsDiagnostics),
+    });
+    const updates = page.getByRole("button", {
+      name: new RegExp("^" + t.settingsUpdates),
+    });
+    await expect(diagnostics).toHaveCount(debug ? 1 : 0);
+    await expect(updates).toHaveCount(debug ? 0 : 1);
+    if (debug) {
+      await diagnostics.click();
+      await expect(
+        page.getByRole("heading", { name: t.settingsDiagnostics, exact: true }),
+      ).toBeVisible();
+    } else {
+      await page.evaluate(() => {
+        history.replaceState(
+          {
+            mangoleafSettingsPage: "diagnostics",
+            mangoleafSettingsInstance: 1,
+          },
+          "",
+          "#settings-diagnostics",
+        );
+        window.dispatchEvent(
+          new PopStateEvent("popstate", { state: history.state }),
+        );
+      });
+      await expect(
+        page.getByRole("heading", { name: t.settingsDiagnostics, exact: true }),
+      ).toHaveCount(0);
+    }
+  }
 });
 
-test("A03: legacy host gets manual restart instructions without an unsupported native request", async ({
+test("A01: signed web updates use inline restart feedback in Settings", async ({
   page,
 }) => {
-  await openHarness(page, "?legacy");
-  await page.evaluate(() => {
-    window.updateTest.block(false);
-    window.updateTest.status("staged");
-  });
-  await page.clock.fastForward(16000);
   const t = translations.en;
-  const dialog = page.getByRole("dialog", {
-    name: t.androidUpdateReadyTitle,
-    exact: true,
-  });
-  await expect(dialog).toBeVisible();
-  await expect(dialog).toContainText(t.androidUpdateManualRestart);
+  await openHarness(page);
+  await openUpdates(page);
+  await page.evaluate(() => window.updateTest.status("staged"));
+  await page.clock.runFor(15_000);
   await expect(
-    dialog.getByRole("button", { name: t.androidUpdateRestart, exact: true }),
-  ).toHaveCount(0);
-  await page.keyboard.press("Escape");
-  await expect(dialog).toHaveCount(0);
+    page.getByRole("heading", { name: t.androidUpdateReadyTitle, exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page
+    .getByRole("button", { name: t.androidUpdateRestart, exact: true })
+    .click();
+  await expect(
+    page.getByText(t.androidUpdateRestartError, { exact: true }),
+  ).toBeVisible();
   expect(
-    await page.evaluate(() => window.updateTest.calls.includes("ota.restart")),
-  ).toBe(false);
+    await page.evaluate(
+      () => window.updateTest.calls.filter((v) => v === "ota.restart").length,
+    ),
+  ).toBe(1);
+});
+
+test("A03: an older host with no restart capability gets inline manual-close guidance", async ({
+  page,
+}) => {
+  const t = translations.en;
+  await openHarness(page, "?legacy");
+  await openUpdates(page);
+  await page.evaluate(() => window.updateTest.status("staged"));
+  await page.clock.runFor(15_000);
+  await expect(
+    page.getByText(t.androidUpdateManualRestart, { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: t.androidUpdateRestart, exact: true }),
+  ).toHaveCount(0);
 });

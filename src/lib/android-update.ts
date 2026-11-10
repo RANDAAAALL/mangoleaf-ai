@@ -46,7 +46,6 @@ export function watchAndroidApkUpdate(
       const info = await initializeNativeRuntime();
       if (
         info.cloudEnvironment !== "production" ||
-        info.apkUpdateSupported !== true ||
         !info.hostVersionName ||
         info.hostVersionName.endsWith("-dev")
       ) {

@@ -52,10 +52,6 @@ import { AboutTab } from "@/components/tab/about-tab";
 import { DiagnosticsPanel } from "@/components/tab/diagnostics-panel";
 import { SettingsTab } from "@/components/tab/settings-tab";
 import { LegalModal } from "@/components/modal/legal-modal";
-import { AndroidUpdateModal } from "@/components/modal/android-update-modal";
-import { AndroidApkProgressModal } from "@/components/modal/android-apk-progress-modal";
-import { useAndroidApkInstall } from "@/hooks/useAndroidApkInstall";
-import type { AndroidApkOffer } from "@/lib/android-update";
 import { StorageFullModal } from "@/components/modal/storage-full-modal";
 import { UnsavedScanNotice } from "@/components/scan/unsaved-scan-notice";
 import { ScanSheet } from "@/components/modal/scan-sheet";
@@ -99,7 +95,6 @@ export function Application() {
 
   // Which tab is showing
   const [activeTab, setActiveTab] = useState<AppTab>("home");
-  const [apkOffer, setApkOffer] = useState<AndroidApkOffer | null>(null);
   const prevTabRef = useRef<AppTab>("home");
 
   // The loaded model, and whether it is still arriving
@@ -308,14 +303,13 @@ export function Application() {
     isRetryingSave ||
     isInstallGuideOpen,
   );
-  const apkInstaller = useAndroidApkInstall(apkBlocked);
   useEffect(() => {
     if (!isAndroidBuild()) return;
     const busy = isScanning || isCameraOpen || isRetryingSave;
     // Pause new transfers for this foreground operation without changing the saved backup preference.
-    setCloudBackupBusy(busy || apkInstaller.busy);
+    setCloudBackupBusy(busy);
     void nativeRequest("app.busy", { busy }).catch(() => {});
-  }, [isScanning, isCameraOpen, isRetryingSave, apkInstaller.busy]);
+  }, [isScanning, isCameraOpen, isRetryingSave]);
 
   // Write the choice back to localStorage so it survives a restart
   const setLanguage = useCallback((newLang: Language) => {
@@ -930,7 +924,7 @@ export function Application() {
 
   return (
     <div className="min-h-screen bg-[#f6faf1] text-[#143519] font-sans flex flex-col justify-between">
-      <div inert={isInstallGuideOpen || apkInstaller.busy}>
+      <div inert={isInstallGuideOpen}>
         {/* Top Header: mobile = minimal logo, desktop = full nav */}
         <TopHeader
           language={language}
@@ -1014,9 +1008,7 @@ export function Application() {
               <SettingsTab
                 language={language}
                 onLanguageChange={setLanguage}
-                updateOffer={apkOffer}
-                onUpdate={apkInstaller.start}
-                updateBusy={apkInstaller.busy}
+                updateBlocked={apkBlocked}
               />
             )}
           </div>
@@ -1110,22 +1102,7 @@ export function Application() {
       />
 
       {/* Footer */}
-      {isAndroidBuild() && (
-        <AndroidUpdateModal
-          language={language}
-          onApkOffer={setApkOffer}
-          onUpdate={apkInstaller.start}
-          suppressApkReoffer={apkInstaller.isInstalling}
-          blocked={apkBlocked || apkInstaller.busy}
-        />
-      )}
-      <AndroidApkProgressModal
-        language={language}
-        state={apkInstaller.state}
-        onCancel={apkInstaller.cancel}
-        onDismiss={apkInstaller.dismiss}
-      />
-      <div inert={isInstallGuideOpen || apkInstaller.busy}>
+      <div inert={isInstallGuideOpen}>
         <Footer
           language={language}
           onOpenPrivacy={() => setLegalModalType("privacy")}

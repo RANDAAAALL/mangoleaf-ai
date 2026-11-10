@@ -1,5 +1,9 @@
 # MangoLeaf AI functional checklist
 
+## Unreleased source note (November 10, 2026)
+
+For the changed source, Diagnostic logs are Debug/testing-only and absent from Production. Production App updates uses inline Settings guidance and a fixed official browser link, with signed web-restart controls on the same screen; no automatic update dialog is expected. Verify Android installs a new same-signer APK over the existing app and preserves local scans/code/Pause. Do not uninstall or clear data for an update check. Keep these cases separate from the original November 7 artifact/evidence and record a new exact build before retesting. Earlier dated popup/native-downloader procedures describe older bundles.
+
 **Blank recording sheet. Fill a copy after testing; no results are prefilled.** See the [short fictional sample](FUNCTIONAL_CHECKLIST_SAMPLE.md).
 
 ## Purpose and current scope
@@ -59,7 +63,7 @@ The IDs `FC01–FC14` identify this simplified form. Older records using `FS01�
 | FC11 — Backup controls                   | On designated testing fixtures, check Create code, masked default, Show/Hide, Copy and On/Pause. Leaving/backgrounding conceals the code. Pause preserves local saving and existing cloud copies.                                                              |               |                       |                  |
 | FC12 — Restore feedback                  | Exercise empty/malformed input, a confirmed rejected code and a separate connection failure on testing. Expected: appropriate reminders/retry feedback, preserved receiver settings and no restore for empty input.                                            |               |                       |                  |
 | FC13 — Restore saved scans               | Using controlled testing fixtures, restore completed source reports into an established and a fresh receiver. Preserve existing reports/receiver settings; counts describe newly added reports, including zero on valid repeats. See ownership evidence below. |               |                       |                  |
-| FC14 — Diagnostic logs                   | In Settings > Diagnostic logs, enable recording, view/copy/export, disable and clear. Disabling retains logs; clearing logs preserves scan History. Record export failures without claiming success.                                                           |               |                       |                  |
+| FC14 — Diagnostic logs                   | On Debug/testing only, in Settings > Diagnostic logs, enable recording, view/copy/export, disable and clear. Disabling retains logs; clearing logs preserves scan History. Record export failures without claiming success.                                    |               |                       |                  |
 
 ### What “Upload the same saved photo again” means
 

@@ -17,7 +17,7 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 - Review the predicted condition, confidence percentage with up to one decimal, and treatment guidance. Uncertain results also show confidence.
 - Switch the interface and treatment guidance between English and Cebuano/Bisaya.
 - Keep reports and photos in local History for offline access. The APK requests portrait orientation on phones.
-- Browse recent scans and manage History in the APK. The website offers Home, About and Android installation on every screen size, including local development. Phone websites use a centered header and bottom navigation with Home, About, open/install and language controls; scanning and Diagnostics are APK features.
+- Browse recent scans and manage History in the APK. The website offers Home, About and Android installation on every screen size, including local development. Phone websites use a centered header and bottom navigation with Home, About, open/install and language controls; scanning is an APK feature; Diagnostics is available in Debug/testing only.
 - Search History, view condition-filter counts, select matching reports across pages, and confirm single or bulk deletion.
 - Read compact photo tips in the scan sheet while Cancel stays visible as the content scrolls.
 - Check exact-file duplicates before diagnosis; retake, cancel, or open a saved result. Reuse requires the saved report's model version to match the active model.
@@ -29,8 +29,8 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 - Keep APK scans/photos local until the user creates a recovery code or connects an existing one. Successful code creation enables automatic backup while the app is open and online, without an extra confirmation checkbox. Save the code outside the phone; restore and merge completed backups on another Android phone. Pause/Resume remains available after setup.
 - Queue deletion of a report's copies in its connected cloud backup, including offline retries. This does not delete copies already restored on another phone; see [backup and deletion behavior](docs/security/SECURITY-AND-SYNC.md).
 - Open an installed Android app from the website, or follow the APK installation guide. Supported browsers show **Open app** when they can confirm the installation.
-- Offer **Restart now** / **Later** when a compatible, signed web update is ready in the production APK. Debug does not install production OTA updates.
-- Enable optional diagnostics in the APK Settings screen, reproduce an issue, and copy or download recent local events without phone DevTools. Recording is off by default.
+- Show compatible signed web updates and **Restart now** inside Production Settings > App updates. Native APK updates link to the official browser download page. Debug has no App updates screen.
+- Enable optional diagnostics in the Debug APK Settings screen, reproduce an issue, and copy or download recent local events without phone DevTools. Recording is off by default.
 
 ## Download and status
 

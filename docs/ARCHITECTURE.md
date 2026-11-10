@@ -1,8 +1,14 @@
 # MangoLeaf AI Architecture
 
-## Website installation guide (November 10, 2026; unreleased)
+## Settings-only updates and browser guide (November 10, 2026; unreleased)
+
+`SettingsTab` exposes Diagnostics only on Debug/testing and App updates only on Production. Navigation rejects Production Diagnostics history, and the viewer itself refuses a Production mount. `Application` no longer owns update dialogs, APK installer state or transfer-related inert/backup guards. The new `AndroidUpdatePanel` checks fixed-repository release metadata only while its Settings screen is mounted and idle. It compares a valid `Android APK v<version>` asset label with the installed native host, independently of app/web tags; an absent or failed result remains unconfirmed. Manual browser guidance does not require the old native installer capability.
+
+A user-tapped fixed HTTPS link opens the official website through the existing external-browser handler. The app does not uninstall itself, download an installer or activate an update from this link. Existing signed web-OTA status/check/restart methods are retained with inline Settings controls; verified pending assets still require the existing safe activation rules. Native APK updater bridge methods remain for older bundles, while the unreferenced React dialogs, installer hook and JavaScript installer controller were removed.
 
 Website installation actions choose one destination: a positively confirmed app uses the fixed-package intent, otherwise a tap opens the guide. The guide's unconfirmed action navigates to `/download`; that page no longer sends unconfirmed users through an intent whose fallback is itself. `android-release-cache.ts` shares bounded public metadata requests and stores validated availability in memory/session storage (five-minute success, 30-second failure). It revalidates fixed repository/path/version/expiry, tolerates blocked storage and shares in-flight work independently of mounted readers. `useAndroidRelease` ignores late replies after unmount and retries on request or reconnection. No private Auth, report storage or scanner is mounted by the website.
+
+This supersedes the current UI behavior described in older dated entries; their original implementation and test evidence remain historical.
 
 ## Published artifact follow-up (November 7, 2026)
 
