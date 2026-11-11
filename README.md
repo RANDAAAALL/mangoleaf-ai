@@ -177,7 +177,7 @@ Dated implementation notes belong in the [Android history](docs/versions/history
 
 ## Commands
 
-See [application testing](docs/testing/TESTING.md) for browser installation and report interpretation. Use the [physical reliability checklist](docs/testing/PHYSICAL_RELIABILITY_CHECKLIST.md) to record real-device evidence. Long reliability runs are explicit commands; core E2E runs in CI on `master` pushes.
+See [application testing](docs/testing/TESTING.md) for browser installation and report interpretation. Use the [physical reliability checklist](docs/testing/PHYSICAL_RELIABILITY_CHECKLIST.md) to record real-device evidence. Long reliability runs are explicit commands. On `master` pushes, CI always scans secrets/history; Markdown-only pushes skip tooling/application tests. Any non-`.md` change runs the full CI checks, including core E2E.
 
 | Command                                         | Description                                                                                              |
 | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------- |

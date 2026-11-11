@@ -98,13 +98,14 @@ A new run replaces the previous results for that suite, including when using `--
 
 ## What runs where
 
-| Location                             | Checks                                                                    |
-| ------------------------------------ | ------------------------------------------------------------------------- |
-| Husky pre-commit                     | Existing staged-file formatting                                           |
-| Husky pre-push                       | Existing security, TypeScript, lint, and formatting checks                |
-| GitHub CI, push to `master` only     | Existing checks/build/export verification plus core E2E suite and reports |
-| Explicit reliability command         | R01 repeated actual inference and R03 extended use                        |
-| Development team on physical devices | RC01–RC04 manual checklist                                                |
+| Location                               | Checks                                                                        |
+| -------------------------------------- | ----------------------------------------------------------------------------- |
+| Husky pre-commit                       | Existing staged-file formatting                                               |
+| Husky pre-push                         | Existing security, TypeScript, lint, and formatting checks                    |
+| GitHub CI, Markdown-only `master` push | Secret scanner setup and tracked-path/full-history scan; no app/tooling tests |
+| GitHub CI, other `master` push         | Existing checks/build/export verification plus tooling/core E2E and reports   |
+| Explicit reliability command           | R01 repeated actual inference and R03 extended use                            |
+| Development team on physical devices   | RC01–RC04 manual checklist                                                    |
 
 Long reliability sessions do not run on every push. `bun run test:tooling` still runs tooling unit tests; `.pw.ts` files are selected by Playwright and are not Bun unit tests. The Python notebook verifiers remain separate commands.
 
@@ -112,10 +113,12 @@ Long reliability sessions do not run on every push. `bun run test:tooling` still
 
 Both CI jobs install Bun from root `package.json` through `oven-sh/setup-bun`'s `bun-version-file` input. The shared `packageManager` pin is `bun@1.4.4`; local `bun --version` should match. CI runs on pushes to `master`, including merges, and does not publish or deploy.
 
-- **Security job:** installs the checksum-verified scanner and frozen dependencies, runs `bun run test:tooling`, then scans tracked paths and full fetched Git history. Tooling cases cover runtime policy, redacted security checks, export validation, Android APK/OTA packaging and signatures, cloud ownership/recovery/deletion with mocks, native bridge/storage adapters, diagnostics and failure recovery. These JavaScript cases do not compile or run the Android host.
-- **Application job:** verifies the patched Node runtime, installs frozen dependencies, then runs TypeScript, ESLint, formatting, the webpack static build, export validation and `bun run test:e2e`. Browser cases cover navigation/EN/BIS/version labels, photo review/inference flows, guided-camera lifecycle, stalled-operation recovery, diagnostics, Android install/update/recovery UI, History/search/selection/deletion, legacy storage, storage-full handling, offline behavior and guideline synchronization.
+- **Security job:** checks every pushed commit with `tools/ci-change-scope.mjs`, then always installs the checksum-verified scanner and scans tracked paths/full fetched history. Only a nonempty verified range whose changed paths all end in `.md` skips dependency installation and `bun run test:tooling`; any other path, unavailable history, empty range, initial branch or force-push runs full checks. Reverted changes and both rename paths are included. Tooling cases cover runtime policy, redacted security checks, export validation, Android APK/OTA packaging and signatures, cloud ownership/recovery/deletion with mocks, native bridge/storage adapters, diagnostics and failure recovery. These JavaScript cases do not compile or run the Android host.
+- **Application job:** after security passes, runs for non-Markdown-only changes; verified Markdown-only pushes show this job as skipped. It verifies the patched Node runtime, installs frozen dependencies, then runs TypeScript, ESLint, formatting, the webpack static build, export validation and `bun run test:e2e`. Browser cases cover navigation/EN/BIS/version labels, photo review/inference flows, guided-camera lifecycle, stalled-operation recovery, diagnostics, Android install/update/recovery UI, History/search/selection/deletion, legacy storage, storage-full handling, offline behavior and guideline synchronization.
 - **Browser coverage:** Chromium desktop, Chromium mobile emulation and Firefox desktop, with configured/runtime skips for unsupported cases. Automation uses isolated local mocks; controlled native bridges do not prove real APK camera, SQLite or OTA behavior.
 - **Separate checks:** Android JVM/lint/assembly/instrumentation, hosted testing-project recovery, physical phones, notebook verifiers and explicit R01/R03 reliability sessions remain outside this workflow.
+
+Markdown-only means `.md` files anywhere in the repository, including root files and `docs/`; images, `.mdx`, YAML, lockfiles and tooling still trigger full CI. The workflow/helper's own first push therefore uses full CI. Checkout, pinned Bun and change classification remain necessary on the short path; the full-history security scan is not narrowed to Markdown. Husky's local pre-push checks are unchanged.
 
 The October 23 inventory collected **167 tooling cases** and **282 browser/project combinations across 13 files**. Collection is not execution: the earlier 11-case focused run does not establish a complete 282-case pass. Exact-source GitHub CI remains pending until the candidate is pushed.
 
@@ -1241,3 +1244,5 @@ Records are grouped by date, oldest first. Each topic retains its original build
 
 - **Current manual forms:** updated the existing functional checklist/sample for PAFC01-PAFC13, PWFC01-PWFC07 with PWFC04-A/B, and DFC01-DFC06; updated the physical checklist/sample for RC01-RC04. Added plain-English steps, distinct App Back/Phone Back/Phone Home instructions, original-video/date/evidence-basis fields and separately recorded website offline/reconnection observations. Samples remain fictional. The manual evidence file is now an overview linking the detailed forms.
 - **Preservation and scope:** kept the filenames, older procedures/bookmarks, historical results and automated R01-R04. Original tester and sampled-review observations remain distinct. This documentation task performs no new test, changes no product/model/version and grants no release approval.
+- **Markdown-only CI selection:** added a full-push Git-history classifier to the existing security job. Verified nonempty `.md`-only ranges keep scanner installation/history scanning and skip dependency/tooling/application steps. Mixed commits, reverted code, rename source/destination, initial or rewritten history and unavailable metadata retain full checks. The workflow itself continues on every `master` push. Local hooks and separate release-validation requirements remain unchanged; no app/model/native version changed.
+- **CI selector verification:** 14 focused classifier/security tests passed with 49 assertions, including multi-commit Markdown changes, earlier/reverted code, both rename paths, merges, missing/initial/rewritten ranges, CLI outputs and existing secret-history regressions. Workflow YAML/output wiring, formatting, tracked-path/full-history security scanning and ordered typecheck/lint/build passed locally. The first restricted typecheck could not read an installed Serwist package; the same check passed outside that runner. Restored only the service worker generated by this validation build because it was initially clean and application source did not change. No remote CI, browser suite or R03 session was run for this CI-only change.
