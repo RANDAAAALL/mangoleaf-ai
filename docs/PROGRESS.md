@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: November 7, 2026
+Last updated: November 12, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -1432,3 +1432,7 @@ These are not tasks to close. They apply to every future retraining cycle and ev
 - **Browser-free native APK updater candidate:** implemented shared popup/About native download actions, bounded progress/cancellation, independent native release/APK/signature validation, explicit Android permission/installation handoff and suppression of reminder loops after Android Cancel. Debug/websites exclude production installers. No custom success/reopen modal, private-cloud change or V4.5.0 adoption change. Source/native/UI checks and new artifact receipts are recorded in [testing evidence](testing/TESTING.md#october-26-2026).
 
 - **Native updater validation/artifact:** 235 tooling cases, 66 focused browser cases, ordered source/build/export/security checks and both native web targets passed. Final Debug passed 29 JVM cases, lint/assembly/assets and signer/model/permission inspection; two device tests compiled but were not executed without a device. Read-only helper review produced fixed late-reply polling and competing OTA/APK dismissal regressions. The requested transient candidate paragraph was removed from README; native guidance stays in `docs/versions/ANDROID_APK_VERSIONING.md`. Artifact/input hashes and earlier failed timing checks remain in [October 26 testing evidence](testing/TESTING.md#october-26-2026). Model V4.5.0, published assets, existing data and unrelated work remain preserved; physical installer checks, R03 and release gates remain pending.
+
+### November 12, 2026
+
+- **Manual checklist consolidation:** updated the existing functional form/sample for PAFC phone-app, PWFC phone-website (including primary/GitHub downloads) and DFC desktop-website cases, and the physical form/sample for RC01-RC04. Added plain-English button/background instructions, screen-recording steps, actual observations and evidence-basis fields; samples cover every current case and remain fictional. Kept the manual evidence file as a short linked overview. Preserved historical procedures/IDs and separate automated/native/release scope. This task changes documentation only and performs no new tests or application/model/version change.

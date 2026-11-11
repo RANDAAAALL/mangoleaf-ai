@@ -1,212 +1,154 @@
 # MangoLeaf AI physical reliability checklist
 
-## Unreleased source note (November 10, 2026)
-
-For the changed source, Diagnostic logs are Debug/testing-only and absent from Production. Production App updates uses inline Settings guidance and a fixed official browser link, with signed web-restart controls on the same screen; no automatic update dialog is expected. Verify Android installs a new same-signer APK over the existing app and preserves local scans/code/Pause. Do not uninstall or clear data for an update check. Keep these cases separate from the original November 7 artifact/evidence and record a new exact build before retesting. Earlier dated popup/native-downloader procedures describe older bundles.
-
-**Blank recording sheet. Fill a copy after testing; no observations are prefilled.** See the [fictional sample](PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md) and separate [functional checklist](FUNCTIONAL_CHECKLIST.md).
+**Blank recording sheet.** Fill a copy after testing. See the [fictional sample](PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md), [functional checklist](FUNCTIONAL_CHECKLIST.md) and [evidence overview](MANUAL_EVIDENCE_REVIEW_CHECKLIST.md).
 
 ## Purpose and current scope
 
-Record how the APK behaves during repeated use, offline use and interruptions. This researcher-prepared form supports the study's selected reliability assessment. SUS, model accuracy and agricultural expert judgments use separate records; this form is not an ISO certification or release approval.
+Use **RC01-RC04** for the current manual phone-app checks: repeated fresh predictions, offline use, reconnection and at least 30 minutes of mixed use. These researcher-prepared records support the selected reliability assessment. Classification accuracy, SUS and expert judgments are separate.
 
-Published reference observed on **November 7, 2026**: web **0.13.1**, APK **0.1.10/code 11** (Debug **0.1.10-dev**), unchanged model **V5.1.0**. See the [dated artifact and QA record](TESTING.md#november-7-2026-published-production-fresh-qa). Earlier candidate and Production observations retain their own evidence. Record actual installed/active identities below; these reference labels do not complete a new phone test.
-
-Use the exact Production APK for the main research record and a separate testing-target copy for controlled backup/storage exercises. Production/development websites have no scanner, History or private backup; their installation/boundary checks are separate. A browser R03 report is supporting automated evidence, not a physical APK session.
-
-## How to complete this record
-
-1. Copy this blank sheet into an approved evidence folder, such as ignored `.tools/manual-testing/<date>/<build>/<device>/`. Preserve existing personal History/credentials; keep real photos, identifiers and recovery codes out of Git.
-2. Record the build/device and required cases before testing. List justified exclusions and missing fixtures. Testing-target or simulated results do not become Production-backend or physical-phone passes.
-3. Perform the required actions, write actual observations and link the evidence. Use Pass only when all required actions meet expectations, Fail for observed incorrect behavior, or Blocked for missing required actions/evidence. If failure and blockage coexist, record Fail and explain both.
-4. Preserve the first failure and each later retest. Editing the form, opening a saved duplicate or completing a browser test does not complete these physical trials.
-
-<a id="candidate-and-tester-record"></a>
-<a id="release-and-tester-record"></a>
+Earlier manual R01-M01, R02-M01, R02-M02 and R03-M01 map to RC01, RC02, RC03 and RC04 respectively for new records only. Historical results and automated **R01-R04** keep their original IDs and scopes. The former manual R04 camera/layout rows, ST01, BK01 and UI01 are not required rows of this current sheet; separate native/release requirements remain in the linked guides. This does not erase old observations or mark additional checks passed.
 
 ## Build and tester record
 
-Fill once per exact build/device/session. Put full hashes, signer, source/input identity and technical version fields in the linked artifact receipt instead of repeating them in every row.
-
-- Tester and date/time/time zone:
+- Tester, date/time/time zone; reviewer and review date if applicable:
 - Phone / Android / System WebView version:
-- Installed APK filename, version and code:
-- Active web-bundle version shown in About:
-- Active model version:
-- Exact APK/active-bundle/model receipt and evidence folder:
-- Test target: Production APK / testing APK; cloud target:
-- Language/text size, network, starting backup state and own-code availability without writing the code:
-- Approved test-photo aliases/hashes:
+- Installed APK filename, native version/code and variant:
+- Active web-bundle version in About / model version:
+- Artifact receipt, exact source/input identity and hashes where available:
+- Approved photo aliases and original-file hashes where available:
+- Network and starting backup state (no own code / On / Paused):
+- Approved disposable reports and source/receiver aliases:
+- Required cases / cases outside scope with reasons:
+- Original video location and filenames:
 
-APK footer identifies installed native host/model; About identifies the independent web bundle. Use another copy when the artifact, active bundle/model, device or test date changes.
+Fill a separate record when the date, device, native build, active bundle or model changes. Never place recovery codes, personal scans or credentials in tracked files. Actual APK and website versions must be recorded separately.
 
 ## Before testing
 
-- [ ] Recorded APK/active bundle/model match the actual test artifact and device.
-- [ ] Dedicated test reports/photos and sufficient battery/storage are available; personal data is preserved.
-- [ ] Required cases/exclusions and safe testing fixtures are declared below.
+1. Use the exact declared APK and approved photos. Have sufficient battery/storage. Do not clear application data or uninstall to manufacture a fresh state or recover from an issue.
+2. Plan the repeatability cleanup before connecting backup. Prefer approved local-only disposable reports for RC01; deleting a connected report can also queue deletion in this phone's own backup. Keep original Gallery files unchanged and preserve unrelated reports.
+3. Screen recording can document the session without separate screenshots. Record visible steps, original filenames and video offsets; keep full videos on the phone when agreed. Pause around private code entry/display.
+4. In this sheet **Phone Home** means Android's Home button/gesture, which backgrounds the app. **Close and reopen** means swipe away only MangoLeaf AI in Android's recent-apps view, then reopen its icon. **App Back** is MangoLeaf AI's own arrow; **Phone Back** is Android's Back button/gesture. Never use those terms interchangeably.
+5. Record actual outcomes. Use Pass for completed expected outcomes, Fail for observed incorrect behavior, or Blocked for required untested/unestablished outcomes. A failure remains recorded even if reopening recovers the app. Identify tester-reported passes separately from independent video findings and preserve original observations and later clarifications.
 
-Required cases for this session:
+## RC01 - Repeated fresh predictions
 
-Cases outside this session's scope, with reason/follow-up; existing issues or fixture limitations (write None if there are none):
+Purpose: check whether the same unchanged photograph produces a consistent displayed result when processed again.
+
+1. Choose **two unchanged original Gallery files**, such as an approved mango photo and an approved unsupported photo. Plan **30 fresh predictions for each**, 60 total. Record their aliases and active model.
+2. Upload the first original and run diagnosis. Record its actual displayed label, accepted/uncertain result and confidence. A wrong classification still needs to be recorded; consistency is separate from correctness.
+3. Delete only that approved disposable test report and confirm it disappears from History. Reupload the exact same original, then run diagnosis again. A duplicate notice or reopened saved result is not a fresh prediction.
+4. Continue until 30 fresh predictions are documented for that original. Repeat with the second original. Keep a per-run continuation or video timestamps, including any interrupted attempt.
+
+Expected: the planned fresh runs are completed and displayed label/acceptance stays stable for each photo. Record actual confidence variation; visible rounded badges cannot establish automated R01's raw-score tolerance or tensor/memory checks.
+
+- Photo A alias / completed fresh runs / label-status / visible confidence range:
+- Photo B alias / completed fresh runs / label-status / visible confidence range:
+- Duplicate avoidance and cleanup used:
+- Per-run continuation / tester-confirmed details / evidence basis:
+
+| Photo / run | Actual label / accepted or uncertain | Visible confidence | Fresh processing / cleanup observation | Video offset / evidence basis |
+| ----------- | ------------------------------------ | ------------------ | -------------------------------------- | ----------------------------- |
+| A / 1       |                                      |                    |                                        |                               |
+| A / 2-30    | Record each run in continuation      |                    |                                        |                               |
+| B / 1       |                                      |                    |                                        |                               |
+| B / 2-30    | Record each run in continuation      |                    |                                        |                               |
+
+## RC02 - Offline use and reopening
+
+1. While online, open the APK and successfully save Photo A. Check its photograph and Details in History. Reserve a different previously unscanned Photo B.
+2. Enable airplane mode and explicitly turn Wi-Fi off. Check that the phone is offline; USB debugging itself does not provide a normal internet connection unless separately configured.
+3. Close and reopen the APK while offline. Open Photo A's saved photograph/Details and locally available guidance.
+4. Select Photo B, run a fresh diagnosis offline and save it. Close and reopen the app again, still offline, and inspect both reports/photos.
+5. Leave the phone offline for RC03's starting state. If RC03 will be performed later, record the continuation and any intervening change.
+
+Expected: saved reports and photos remain accessible; the packaged app/model performs and saves a new offline prediction; both entries survive reopening. Do not use website caching as proof of APK operation.
+
+- Photo A/B aliases, both offline reopens and fresh save:
+- Actual airplane/Wi-Fi state and video offsets:
+
+## RC03 - Reconnection after RC02
+
+1. Continue from RC02 and record the current report count and backup state. A separate recording is fine; identify which RC02 file it continues.
+2. Turn airplane mode off and restore the connection used before testing. Open the app and inspect the same reports/photos and local guidance.
+3. Inspect the branch actually configured: before own-code setup, scans stay local; with On and own setup, eligible scans may upload while open/online; with Pause, new uploads stay paused, while already queued own-backup deletions may retry. Record the actual observed transfer/retry result if it is included in the declared scope.
+4. Check that reports remain intact without unintended duplicates or deleted items returning. Leave the original network/backup settings as agreed.
+
+Expected: the app remains usable after reconnecting and preserves local reports/settings; backup behavior matches the declared branch. Public guidance refreshes independently of private backup. An On label does not prove all photos uploaded; backend/ownership or completion claims need their own evidence. Do not edit Production guidance or unrelated cloud data to force a visible refresh.
+
+- RC02 continuation / before-after count / settings branch:
+- Actual report, guidance and transfer observations / evidence:
+
+## RC04 - At least 30 minutes of mixed use
+
+1. Start the phone recording and note the real start time/time zone. Use the app for **at least 30 minutes**; a shorter run does not complete this case.
+2. Mix camera capture/Retake, Gallery uploads, fresh diagnoses, Details, History search/filter/pages and Settings. Use enough varied approved inputs or approved cleanup to avoid counting saved duplicates as fresh predictions.
+3. At suitable points, use **Phone Home** to background and return to the app; exercise offline use and reconnect. Record what was actually done and any interruption. A camera photograph of a laptop image must be described that way.
+4. Around the start, 10 minutes, 20 minutes and at/after 30 minutes, record activity and any crash, freeze, stuck processing or lost committed report. Record the final state and elapsed duration before ending.
+
+Expected: required mixed use lasts at least 30 minutes, with usable controls and no observed crash, permanent freeze or lost committed report. There is no fixed prediction-count target for this case. **Warmth/discomfort is not assessed** in this protocol; no overheating conclusion follows.
+
+- Start / end / time zone / elapsed duration:
+- Fresh prediction count, if measured; otherwise write Not counted:
+- Activities, interruptions, recoveries and final report state:
+
+| Checkpoint          | Actual actions and outcome | Crash / freeze / stuck scan / lost report | Video offset / basis |
+| ------------------- | -------------------------- | ----------------------------------------- | -------------------- |
+| Start               |                            |                                           |                      |
+| Around 10 minutes   |                            |                                           |                      |
+| Around 20 minutes   |                            |                                           |                      |
+| At/after 30 minutes |                            |                                           |                      |
+
+A recording may be split into segments; document actual boundaries, gaps and whether activity continued. Do not call separated clips a continuous video. Four checkpoint rows alone do not establish behavior between them. A tester may report their observations throughout; a sampled reviewer must state the review method and cannot claim uninterrupted independent verification.
 
 ## Actual results
 
-All required actions in a row need observations, either here or in its linked continuation. Required untested cases are Blocked, never automatic passes. Predeclared exclusions stay separate from pass counts. `ST01`, `BK01` and `UI01` are additional manual case IDs, not automated test names or manuscript-objective numbers; existing R01–R04 IDs keep their meanings.
+| Case | Actual observation in plain English | Pass / Fail / Blocked | Original video / timestamps / evidence basis |
+| ---- | ----------------------------------- | --------------------- | -------------------------------------------- |
+| RC01 |                                     |                       |                                              |
+| RC02 |                                     |                       |                                              |
+| RC03 |                                     |                       |                                              |
+| RC04 |                                     |                       |                                              |
 
-| Case / test                          | What to do / expected result                                                                                                                                                                                                                                                                        | Actual result | Pass / Fail / Blocked | Evidence / issue |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | --------------------- | ---------------- |
-| R01-M01 — Repeated predictions       | Complete 30 fresh inferences per planned unchanged gallery photo. Avoid saved-duplicate reuse; record each displayed label/acceptance and visible confidence. Labels/acceptance stay stable; record score variation.                                                                                |               |                       |                  |
-| R02-M01 — Offline use                | Initialize the packaged APK, save Photo A, enable airplane mode with Wi-Fi off and reopen. History/photo remain; a different previously unscanned Photo B receives a result, saves locally and survives another offline reopen.                                                                     |               |                       |                  |
-| R02-M02 — Reconnection               | Restore connectivity. Local reports/photos stay intact without duplicates or resurrected deleted reports; public guidance refreshes. Private upload/deletion expectations follow the declared own-code/Pause state below.                                                                           |               |                       |                  |
-| R03-M01 — 30-minute session          | Use the physical APK for at least 30 minutes with fresh camera/gallery scans, Details/History/Settings, background/reopen and network changes. No crash, lost committed report, permanent freeze or stuck scan. Record heat/battery/slowdown observations.                                          |               |                       |                  |
-| R04-M01 — Camera and interruption    | Exercise permission grant/denial, pending-permission cancellation, capture/Retake, Close and actual backgrounding. Camera/encoding stop after cancellation/backgrounding; no late preview appears. Square crop, requested phone portrait, keyboard/safe areas and bilingual controls remain usable. |               |                       |                  |
-| ST01 — Storage-full recovery         | Use a natural or approved testing-only storage-failure fixture. Existing reports/photos remain intact. Retry saves the completed result once without new inference; Discard releases only unsaved work. Record an unavailable fixture as Blocked.                                                   |               |                       |                  |
-| BK01 — Interrupted backup/restore    | With controlled testing backups, interrupt transfers by backgrounding or losing connectivity, then reopen/reconnect/retry. Preserve local reports and receiving own code/Pause; retry incomplete work without duplicate restored reports or writing the source backup.                              |               |                       |                  |
-| UI01 — Settings during interruptions | Switch Settings subpages/tabs and use Back while status/Copy/export work is settling, then reopen. No stale page/feedback or whole-panel flash; scanner remains usable. Hide/background conceals an available recovery code; no delayed reveal/copy after invalidation.                             |               |                       |                  |
+## Website offline and reconnection observations
 
-## Required detail records
+Record phone and desktop website behavior separately from APK RC01-RC04. These website checks have no new numbered case IDs in this protocol and do not imply browser scanning or private backup.
 
-These short records supply counts, duration and conditions that a single Pass checkbox cannot show. Use an attached continuation where needed.
+1. On the actual phone/computer browser, load the official Home/About and Android guide while online.
+2. Disconnect that device and reload or navigate. Record what stays readable and any unavailable/connection feedback; do not assume an uncached website page must open offline.
+3. Reconnect and verify that the website recovers, navigation works and online installation/download guidance becomes available again. Record download or handoff results under the matching functional cases.
 
-## R01-M01: repeated prediction consistency
-
-<a id="input-plan"></a>
-<a id="each-repetition"></a>
-
-- Planned photo(s), unchanged original bytes/hash and starting model:
-- Planned repetitions per photo: **30**.
-- Completed fresh inferences per photo:
-- Displayed label/acceptance and visible confidence range:
-- Full per-run record / evidence location:
-
-For each run, use a designated test report. Delete it and confirm it disappears from History before the next upload of the same original file; otherwise the app may reuse its current-model saved result. Prefer a dedicated no-code test profile, since deleting a cloud-backed report can queue cloud deletion. Do not delete personal reports to force inference.
-
-Record **every** run in a continuation with run number, displayed result/acceptance, visible confidence, duplicate-avoidance action, status and evidence. Two successful runs do not complete thirty. This manual method measures displayed label/acceptance stability; it does not prove the automated raw-confidence tolerance of 0.001. Debug probability rows and Settings diagnostics are not full raw-score evidence.
-
-## R02-M01: offline availability after initial load
-
-<a id="online-preparation"></a>
-<a id="airplane-mode-check"></a>
-
-Record Photo A/B aliases, airplane-mode/Wi-Fi state, both offline restarts and new local save. APK/model assets are packaged/verified; no website service-worker cache is required. Check local starter/refreshed guidance offline and use designated testing data for any guideline change; do not edit production treatment text.
-
-### R02-M02: reconnection check
-
-Record the branch actually tested:
-
-- **Before own-code setup:** ordinary startup/scanning/reconnection creates no private enrollment/upload. Support network/ownership claims with scoped testing evidence, not a screenshot alone.
-- **Own code and uploads enabled:** eligible reports may upload while foreground/online; local reports remain intact.
-- **Uploads paused:** new scans stay local; already queued own-backup deletions may retry online. Existing cloud copies remain unless an explicit scoped deletion completes.
-
-Branch, actual transfer/refresh outcome and evidence:
-
-## R03-M01: 30-minute mixed-use session
-
-- Start/end time and time zone:
-- Actual elapsed duration, at least **30 minutes**:
-- Fresh inference count or supporting run/action log:
-- Heat/battery/slowdown observations and remaining issues:
-
-| Time                | Actual actions / outcome | Crash, freeze, stuck scan or lost committed report? | Evidence |
-| ------------------- | ------------------------ | --------------------------------------------------- | -------- |
-| Start               |                          |                                                     |          |
-| Around 10 minutes   |                          |                                                     |          |
-| Around 20 minutes   |                          |                                                     |          |
-| At/after 30 minutes |                          |                                                     |          |
-
-Keep a continuation/video covering the intervening activity; four time entries alone do not prove a complete session. Mix real camera and gallery input, Retake, fresh inference, History/Details/Settings, orientation attempts, background/reopen, offline operation and reconnection. Use only designated reports when deleting to avoid duplicate reuse. An unexpected crash or lost committed report is Fail even if a later reopen works. Phone APKs request portrait; record the observed orientation rather than assuming a landscape pass.
-
-<a id="r04-m01-native-camera-gallery-and-layout"></a>
-
-## R04-M01: guided camera, gallery, and layout
-
-<a id="startup-and-settings"></a>
-<a id="camera-and-picker"></a>
-<a id="result-and-layout"></a>
-
-Record permission handoff separately from real backgrounding: granting permission must retain its originating request; real closure/backgrounding stops the camera/encoder and does not deliver a late preview. Denial leaves usable feedback/gallery selection. Retake/cancel creates no unintended report. Check centered-square preview/capture, short-screen scrolling, portrait request, English/Bisaya, text size and reachable controls.
-
-Also record cold/offline splash handoff without a smaller duplicate leaf/white gap, first-result Details/Settings entry without a whole-app splash, and repeated real capture timing. Distinguish OEM launcher/archive masking from an app defect. A synthetic camera or browser emulation does not complete phone observations. Production/reopened History omits Debug probability rows; prediction correctness remains separate from these UI checks.
-
-## Local storage-full recovery
-
-`ST01`: record natural versus injected failure, free-space/context, preserved History, retry/discard and whether the result was already committed. Do not fill a personal phone, clear application storage or uninstall to manufacture a failure. Required unavailable injection/access is Blocked. Caller timeout does not prove that an underlying operation stopped; verify settlement before claiming completion.
-
-## Diagnostics and stall evidence
-
-<a id="diagnostics-and-stall-evidence-v070"></a>
-
-Settings > Diagnostic logs is opt-in. Enable it before reproduction; disable retains entries, Clear preserves reports, and export failure must not interrupt scanning/deletion. Logs contain bounded technical fields, not photos, diagnosis scores, credentials, report identities, raw messages or URLs. Save prediction evidence separately when approved. Storage failure/crash can lose recent logs; missing completion does not prove an exact cause.
-
-### Record each reproduced stall
-
-```text
-Case / incident time and elapsed time:
-APK/active bundle/model, phone/WebView, network and background state:
-Steps and expected behavior:
-Actual visible stage, disabled/enabled controls and observed failure:
-Cancel/Close/retry/reopen attempted and result:
-History/photo state after recovery; pending or committed work:
-Pass / Fail / Blocked, evidence and retest reference:
-```
-
-Do not clear app storage/uninstall to recover personal data. Reopening is a recovery attempt, not a guaranteed fix. Use [existing phone-log guidance](TESTING.md#phone-log-collection-and-interpretation) for safe interpretation.
+| Environment / browser | Online preparation | Offline behavior | After reconnecting | Result / original video / basis |
+| --------------------- | ------------------ | ---------------- | ------------------ | ------------------------------- |
+| Phone website         |                    |                  |                    |                                 |
+| Desktop website       |                    |                  |                    |                                 |
 
 ## Supporting coverage and separate release checks
 
-Link exact-scope evidence once. Keep these requirements visible; the simpler front table does not mark them passed or remove release gates.
+Record additional requirements under the [Android verification plan](../versions/ANDROID_APK_VERSIONING.md#verification-and-remaining-evidence), [Android testing guide](ANDROID_TESTING.md) and [testing guide](TESTING.md#reliability-protocol). Native bridge/SQLite/photo preservation, controlled low-storage faults, interrupted cloud transfers, delayed native callbacks, Debug diagnostics, signed web-OTA and installer/data-preservation checks retain their separate technical scope. Their historical procedures below are not current RC rows or automatic passes.
 
-| Supporting area                                                                                                          | Evidence / target / remaining gap |
-| ------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
-| Automated core/R01/R03 input-matching reports; raw-score/tensor checks separate from phone observations                  |                                   |
-| Native bridge/SQLite/private-photo preservation and missing-file/race/failure checks                                     |                                   |
-| No-code/own-code/Pause, temporary source restore, fresh receiver setup, interrupted transfers and scoped queued deletion |                                   |
-| Settings late reads/copy/export, diagnostic failure/privacy and real keyboard/background observations                    |                                   |
-| Website boundary, actual APK installation, native updater and signed web-OTA/rollback scope below                        |                                   |
+Production update UI uses Settings > App updates with inline browser guidance and verified web-restart controls; Debug has Diagnostics instead. Keep actual installer/same-signer updates separate from web-bundle restart. Use current version guidance rather than historical popup procedures. Do not uninstall as an ordinary update step.
 
-## R04-M02: device and browser coverage
-
-Use a completed copy for each exact APK/device/Android/System WebView/test date. Record separate website/browser observations and linked result copies here. A single device or emulation does not establish all-device coverage.
-
-Tested environments / result copies / remaining coverage:
-
-## R04-M03: installation guide and installed launch
-
-Keep actual Android installation, retained-data launch and website guidance separate from scanner tests. Record verified APK/receipt/signer, installed native versus About web-bundle/model identities, actual Android installer outcome and same-signer data preservation. Website Home/About/language/Android guide, QR, validated download metadata and positive-only installed-app hints need their own observations. No browser PWA installation or manual report import/export is part of the current product.
-
-## Separate-backup restore and APK notice candidate
-
-`BK01` and release follow-up use [current Android cases](ANDROID_TESTING.md#qa-remediation-candidate-november-6-2026), [backup rules](../security/SECURITY-AND-SYNC.md) and [native verification](../versions/ANDROID_APK_VERSIONING.md#verification-and-remaining-evidence). All cloud-changing exercises use controlled testing fixtures, never copied production data. Restore must preserve receiving ownership/code/Pause and never upload/delete through the temporary source. Wrong credentials preserve settings; transport errors must not be mislabeled as wrong codes. Queued own deletions can retry while uploads are paused; this is not distributed deletion of other devices.
-
-Production APK updater observations remain separate: popup and Settings > App updates share the verified internal transfer, cancellation and Android approval flow; Debug/websites omit Production offers. Validate fixed repository, newer package/code, complete bytes and signer; expected permission/installer handoff is not ordinary background cancellation. Preserve data after cancellation/failure and do not claim success from download or approval. Record missing required Production evidence as Blocked, not a Debug-derived pass.
-
-<a id="recovery-code-first-backup-candidate"></a>
-
-## Earlier v0.11.0 recovery-code-first checks
-
-Original preparation instructions remain in [Protocol history](#protocol-history). They do not establish a pass for this build. Use the current receiving-code/Pause rules above.
-
-## Android audit follow-up
-
-Record compatible signed web-OTA activation/rollback, restart interruption, ordinary Activity recreation, canceled-worker cleanup, missing-photo History and deletion during status/ownership work under the native verification plan. Keep SQLite/photos/credentials intact. Web-OTA and APK installation are distinct; simplification does not remove their release requirements or authorize live cloud changes.
+Additional required technical/release evidence / target / remaining gaps:
 
 ## Retest record
 
-| Date | Case / original issue | Changed build/inputs, if any | New observation / status | Evidence |
-| ---- | --------------------- | ---------------------------- | ------------------------ | -------- |
-|      |                       |                              |                          |          |
+| Date | Case / original issue | Changed build/inputs | New observation / status | Evidence / basis |
+| ---- | --------------------- | -------------------- | ------------------------ | ---------------- |
+|      |                       |                      |                          |                  |
+
+Keep the first observation and later tests or tester clarifications separately; a clarification does not establish a new timed run.
 
 ## Final decision
 
-- Required cases / Passed / Failed / Blocked:
-- Excluded cases, technical/release evidence and remaining device coverage:
-- Issues needing correction and retest references:
-- Conclusion for this exact build/device/target and tested conditions:
-- Separate functional / model/expert / SUS records, if applicable:
-- Release decision under the separately approved gates; unresolved required failures/blocks:
+- Required RC cases / Passed / Failed / Blocked:
+- Website observations and their separate results:
+- Exclusions, unresolved issues and other environments not covered:
+- Conclusion limited to this build/device/conditions and stated evidence basis:
+- Separate functional / model / expert / SUS records:
+- Separate release-verification requirements, if applicable:
 
-Do not convert these results into model accuracy, all-device/field reliability or an ISO certification. Physical and automated records remain distinct. No release is approved by editing this template.
+This form is not ISO certification, a model-accuracy measure, proof for all devices/field conditions or release approval. A browser/mock test is not a physical-phone session.
 
 ## Protocol history
 
@@ -599,3 +541,226 @@ See [TESTING.md](TESTING.md) for automated scope and limitations. See [PWA versi
 </details>
 
 - Later the same day, simplified the current physical recording front to eight manual rows, retained the 30-fresh-inference and 30-minute requirements with continuation records, and linked specialist/install/update coverage separately. Earlier R01–R04 meanings and bookmarks remain. No test result, app/model/version, hosted resource or release approval changed.
+
+### November 12, 2026
+
+Updated the current manual forms to PAFC/PWFC/DFC and RC scopes, with separate evidence basis and fictional samples. Historical records and automated case IDs are unchanged; this documentation update performs no tests.
+
+<details>
+<summary>Earlier front sheet, retained as historical instructions</summary>
+
+The following is the previous form, not the current protocol. Its version references and excluded/supplemental cases retain their original scope.
+
+# MangoLeaf AI physical reliability checklist
+
+For the November 2026 researcher-recorded session, use the [manual evidence review checklist](MANUAL_EVIDENCE_REVIEW_CHECKLIST.md) for RC01–RC04. Earlier manual and automated R IDs below retain their original meanings.
+
+## Unreleased source note (November 10, 2026)
+
+For the changed source, Diagnostic logs are Debug/testing-only and absent from Production. Production App updates uses inline Settings guidance and a fixed official browser link, with signed web-restart controls on the same screen; no automatic update dialog is expected. Verify Android installs a new same-signer APK over the existing app and preserves local scans/code/Pause. Do not uninstall or clear data for an update check. Keep these cases separate from the original November 7 artifact/evidence and record a new exact build before retesting. Earlier dated popup/native-downloader procedures describe older bundles.
+
+**Blank recording sheet. Fill a copy after testing; no observations are prefilled.** See the [fictional sample](PHYSICAL_RELIABILITY_CHECKLIST_SAMPLE.md) and separate [functional checklist](FUNCTIONAL_CHECKLIST.md).
+
+## Purpose and current scope
+
+Record how the APK behaves during repeated use, offline use and interruptions. This researcher-prepared form supports the study's selected reliability assessment. SUS, model accuracy and agricultural expert judgments use separate records; this form is not an ISO certification or release approval.
+
+Published reference observed on **November 7, 2026**: web **0.13.1**, APK **0.1.10/code 11** (Debug **0.1.10-dev**), unchanged model **V5.1.0**. See the [dated artifact and QA record](TESTING.md#november-7-2026-published-production-fresh-qa). Earlier candidate and Production observations retain their own evidence. Record actual installed/active identities below; these reference labels do not complete a new phone test.
+
+Use the exact Production APK for the main research record and a separate testing-target copy for controlled backup/storage exercises. Production/development websites have no scanner, History or private backup; their installation/boundary checks are separate. A browser R03 report is supporting automated evidence, not a physical APK session.
+
+## How to complete this record
+
+1. Copy this blank sheet into an approved evidence folder, such as ignored `.tools/manual-testing/<date>/<build>/<device>/`. Preserve existing personal History/credentials; keep real photos, identifiers and recovery codes out of Git.
+2. Record the build/device and required cases before testing. List justified exclusions and missing fixtures. Testing-target or simulated results do not become Production-backend or physical-phone passes.
+3. Perform the required actions, write actual observations and link the evidence. Use Pass only when all required actions meet expectations, Fail for observed incorrect behavior, or Blocked for missing required actions/evidence. If failure and blockage coexist, record Fail and explain both.
+4. Preserve the first failure and each later retest. Editing the form, opening a saved duplicate or completing a browser test does not complete these physical trials.
+
+<a id="candidate-and-tester-record"></a>
+<a id="release-and-tester-record"></a>
+
+## Build and tester record
+
+Fill once per exact build/device/session. Put full hashes, signer, source/input identity and technical version fields in the linked artifact receipt instead of repeating them in every row.
+
+- Tester and date/time/time zone:
+- Phone / Android / System WebView version:
+- Installed APK filename, version and code:
+- Active web-bundle version shown in About:
+- Active model version:
+- Exact APK/active-bundle/model receipt and evidence folder:
+- Test target: Production APK / testing APK; cloud target:
+- Language/text size, network, starting backup state and own-code availability without writing the code:
+- Approved test-photo aliases/hashes:
+
+APK footer identifies installed native host/model; About identifies the independent web bundle. Use another copy when the artifact, active bundle/model, device or test date changes.
+
+## Before testing
+
+- [ ] Recorded APK/active bundle/model match the actual test artifact and device.
+- [ ] Dedicated test reports/photos and sufficient battery/storage are available; personal data is preserved.
+- [ ] Required cases/exclusions and safe testing fixtures are declared below.
+
+Required cases for this session:
+
+Cases outside this session's scope, with reason/follow-up; existing issues or fixture limitations (write None if there are none):
+
+## Actual results
+
+All required actions in a row need observations, either here or in its linked continuation. Required untested cases are Blocked, never automatic passes. Predeclared exclusions stay separate from pass counts. `ST01`, `BK01` and `UI01` are additional manual case IDs, not automated test names or manuscript-objective numbers; existing R01–R04 IDs keep their meanings.
+
+| Case / test                          | What to do / expected result                                                                                                                                                                                                                                                                        | Actual result | Pass / Fail / Blocked | Evidence / issue |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | --------------------- | ---------------- |
+| R01-M01 — Repeated predictions       | Complete 30 fresh inferences per planned unchanged gallery photo. Avoid saved-duplicate reuse; record each displayed label/acceptance and visible confidence. Labels/acceptance stay stable; record score variation.                                                                                |               |                       |                  |
+| R02-M01 — Offline use                | Initialize the packaged APK, save Photo A, enable airplane mode with Wi-Fi off and reopen. History/photo remain; a different previously unscanned Photo B receives a result, saves locally and survives another offline reopen.                                                                     |               |                       |                  |
+| R02-M02 — Reconnection               | Restore connectivity. Local reports/photos stay intact without duplicates or resurrected deleted reports; public guidance refreshes. Private upload/deletion expectations follow the declared own-code/Pause state below.                                                                           |               |                       |                  |
+| R03-M01 — 30-minute session          | Use the physical APK for at least 30 minutes with fresh camera/gallery scans, Details/History/Settings, background/reopen and network changes. No crash, lost committed report, permanent freeze or stuck scan. Record heat/battery/slowdown observations.                                          |               |                       |                  |
+| R04-M01 — Camera and interruption    | Exercise permission grant/denial, pending-permission cancellation, capture/Retake, Close and actual backgrounding. Camera/encoding stop after cancellation/backgrounding; no late preview appears. Square crop, requested phone portrait, keyboard/safe areas and bilingual controls remain usable. |               |                       |                  |
+| ST01 — Storage-full recovery         | Use a natural or approved testing-only storage-failure fixture. Existing reports/photos remain intact. Retry saves the completed result once without new inference; Discard releases only unsaved work. Record an unavailable fixture as Blocked.                                                   |               |                       |                  |
+| BK01 — Interrupted backup/restore    | With controlled testing backups, interrupt transfers by backgrounding or losing connectivity, then reopen/reconnect/retry. Preserve local reports and receiving own code/Pause; retry incomplete work without duplicate restored reports or writing the source backup.                              |               |                       |                  |
+| UI01 — Settings during interruptions | Switch Settings subpages/tabs and use Back while status/Copy/export work is settling, then reopen. No stale page/feedback or whole-panel flash; scanner remains usable. Hide/background conceals an available recovery code; no delayed reveal/copy after invalidation.                             |               |                       |                  |
+
+## Required detail records
+
+These short records supply counts, duration and conditions that a single Pass checkbox cannot show. Use an attached continuation where needed.
+
+## R01-M01: repeated prediction consistency
+
+<a id="input-plan"></a>
+<a id="each-repetition"></a>
+
+- Planned photo(s), unchanged original bytes/hash and starting model:
+- Planned repetitions per photo: **30**.
+- Completed fresh inferences per photo:
+- Displayed label/acceptance and visible confidence range:
+- Full per-run record / evidence location:
+
+For each run, use a designated test report. Delete it and confirm it disappears from History before the next upload of the same original file; otherwise the app may reuse its current-model saved result. Prefer a dedicated no-code test profile, since deleting a cloud-backed report can queue cloud deletion. Do not delete personal reports to force inference.
+
+Record **every** run in a continuation with run number, displayed result/acceptance, visible confidence, duplicate-avoidance action, status and evidence. Two successful runs do not complete thirty. This manual method measures displayed label/acceptance stability; it does not prove the automated raw-confidence tolerance of 0.001. Debug probability rows and Settings diagnostics are not full raw-score evidence.
+
+## R02-M01: offline availability after initial load
+
+<a id="online-preparation"></a>
+<a id="airplane-mode-check"></a>
+
+Record Photo A/B aliases, airplane-mode/Wi-Fi state, both offline restarts and new local save. APK/model assets are packaged/verified; no website service-worker cache is required. Check local starter/refreshed guidance offline and use designated testing data for any guideline change; do not edit production treatment text.
+
+### R02-M02: reconnection check
+
+Record the branch actually tested:
+
+- **Before own-code setup:** ordinary startup/scanning/reconnection creates no private enrollment/upload. Support network/ownership claims with scoped testing evidence, not a screenshot alone.
+- **Own code and uploads enabled:** eligible reports may upload while foreground/online; local reports remain intact.
+- **Uploads paused:** new scans stay local; already queued own-backup deletions may retry online. Existing cloud copies remain unless an explicit scoped deletion completes.
+
+Branch, actual transfer/refresh outcome and evidence:
+
+## R03-M01: 30-minute mixed-use session
+
+- Start/end time and time zone:
+- Actual elapsed duration, at least **30 minutes**:
+- Fresh inference count or supporting run/action log:
+- Heat/battery/slowdown observations and remaining issues:
+
+| Time                | Actual actions / outcome | Crash, freeze, stuck scan or lost committed report? | Evidence |
+| ------------------- | ------------------------ | --------------------------------------------------- | -------- |
+| Start               |                          |                                                     |          |
+| Around 10 minutes   |                          |                                                     |          |
+| Around 20 minutes   |                          |                                                     |          |
+| At/after 30 minutes |                          |                                                     |          |
+
+Keep a continuation/video covering the intervening activity; four time entries alone do not prove a complete session. Mix real camera and gallery input, Retake, fresh inference, History/Details/Settings, orientation attempts, background/reopen, offline operation and reconnection. Use only designated reports when deleting to avoid duplicate reuse. An unexpected crash or lost committed report is Fail even if a later reopen works. Phone APKs request portrait; record the observed orientation rather than assuming a landscape pass.
+
+<a id="r04-m01-native-camera-gallery-and-layout"></a>
+
+## R04-M01: guided camera, gallery, and layout
+
+<a id="startup-and-settings"></a>
+<a id="camera-and-picker"></a>
+<a id="result-and-layout"></a>
+
+Record permission handoff separately from real backgrounding: granting permission must retain its originating request; real closure/backgrounding stops the camera/encoder and does not deliver a late preview. Denial leaves usable feedback/gallery selection. Retake/cancel creates no unintended report. Check centered-square preview/capture, short-screen scrolling, portrait request, English/Bisaya, text size and reachable controls.
+
+Also record cold/offline splash handoff without a smaller duplicate leaf/white gap, first-result Details/Settings entry without a whole-app splash, and repeated real capture timing. Distinguish OEM launcher/archive masking from an app defect. A synthetic camera or browser emulation does not complete phone observations. Production/reopened History omits Debug probability rows; prediction correctness remains separate from these UI checks.
+
+## Local storage-full recovery
+
+`ST01`: record natural versus injected failure, free-space/context, preserved History, retry/discard and whether the result was already committed. Do not fill a personal phone, clear application storage or uninstall to manufacture a failure. Required unavailable injection/access is Blocked. Caller timeout does not prove that an underlying operation stopped; verify settlement before claiming completion.
+
+## Diagnostics and stall evidence
+
+<a id="diagnostics-and-stall-evidence-v070"></a>
+
+Settings > Diagnostic logs is opt-in. Enable it before reproduction; disable retains entries, Clear preserves reports, and export failure must not interrupt scanning/deletion. Logs contain bounded technical fields, not photos, diagnosis scores, credentials, report identities, raw messages or URLs. Save prediction evidence separately when approved. Storage failure/crash can lose recent logs; missing completion does not prove an exact cause.
+
+### Record each reproduced stall
+
+```text
+Case / incident time and elapsed time:
+APK/active bundle/model, phone/WebView, network and background state:
+Steps and expected behavior:
+Actual visible stage, disabled/enabled controls and observed failure:
+Cancel/Close/retry/reopen attempted and result:
+History/photo state after recovery; pending or committed work:
+Pass / Fail / Blocked, evidence and retest reference:
+```
+
+Do not clear app storage/uninstall to recover personal data. Reopening is a recovery attempt, not a guaranteed fix. Use [existing phone-log guidance](TESTING.md#phone-log-collection-and-interpretation) for safe interpretation.
+
+## Supporting coverage and separate release checks
+
+Link exact-scope evidence once. Keep these requirements visible; the simpler front table does not mark them passed or remove release gates.
+
+| Supporting area                                                                                                          | Evidence / target / remaining gap |
+| ------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
+| Automated core/R01/R03 input-matching reports; raw-score/tensor checks separate from phone observations                  |                                   |
+| Native bridge/SQLite/private-photo preservation and missing-file/race/failure checks                                     |                                   |
+| No-code/own-code/Pause, temporary source restore, fresh receiver setup, interrupted transfers and scoped queued deletion |                                   |
+| Settings late reads/copy/export, diagnostic failure/privacy and real keyboard/background observations                    |                                   |
+| Website boundary, actual APK installation, native updater and signed web-OTA/rollback scope below                        |                                   |
+
+## R04-M02: device and browser coverage
+
+Use a completed copy for each exact APK/device/Android/System WebView/test date. Record separate website/browser observations and linked result copies here. A single device or emulation does not establish all-device coverage.
+
+Tested environments / result copies / remaining coverage:
+
+## R04-M03: installation guide and installed launch
+
+Keep actual Android installation, retained-data launch and website guidance separate from scanner tests. Record verified APK/receipt/signer, installed native versus About web-bundle/model identities, actual Android installer outcome and same-signer data preservation. Website Home/About/language/Android guide, QR, validated download metadata and positive-only installed-app hints need their own observations. No browser PWA installation or manual report import/export is part of the current product.
+
+## Separate-backup restore and APK notice candidate
+
+`BK01` and release follow-up use [current Android cases](ANDROID_TESTING.md#qa-remediation-candidate-november-6-2026), [backup rules](../security/SECURITY-AND-SYNC.md) and [native verification](../versions/ANDROID_APK_VERSIONING.md#verification-and-remaining-evidence). All cloud-changing exercises use controlled testing fixtures, never copied production data. Restore must preserve receiving ownership/code/Pause and never upload/delete through the temporary source. Wrong credentials preserve settings; transport errors must not be mislabeled as wrong codes. Queued own deletions can retry while uploads are paused; this is not distributed deletion of other devices.
+
+Production APK updater observations remain separate: popup and Settings > App updates share the verified internal transfer, cancellation and Android approval flow; Debug/websites omit Production offers. Validate fixed repository, newer package/code, complete bytes and signer; expected permission/installer handoff is not ordinary background cancellation. Preserve data after cancellation/failure and do not claim success from download or approval. Record missing required Production evidence as Blocked, not a Debug-derived pass.
+
+<a id="recovery-code-first-backup-candidate"></a>
+
+## Earlier v0.11.0 recovery-code-first checks
+
+Original preparation instructions remain in [Protocol history](#protocol-history). They do not establish a pass for this build. Use the current receiving-code/Pause rules above.
+
+## Android audit follow-up
+
+Record compatible signed web-OTA activation/rollback, restart interruption, ordinary Activity recreation, canceled-worker cleanup, missing-photo History and deletion during status/ownership work under the native verification plan. Keep SQLite/photos/credentials intact. Web-OTA and APK installation are distinct; simplification does not remove their release requirements or authorize live cloud changes.
+
+## Retest record
+
+| Date | Case / original issue | Changed build/inputs, if any | New observation / status | Evidence |
+| ---- | --------------------- | ---------------------------- | ------------------------ | -------- |
+|      |                       |                              |                          |          |
+
+## Final decision
+
+- Required cases / Passed / Failed / Blocked:
+- Excluded cases, technical/release evidence and remaining device coverage:
+- Issues needing correction and retest references:
+- Conclusion for this exact build/device/target and tested conditions:
+- Separate functional / model/expert / SUS records, if applicable:
+- Release decision under the separately approved gates; unresolved required failures/blocks:
+
+Do not convert these results into model accuracy, all-device/field reliability or an ISO certification. Physical and automated records remain distinct. No release is approved by editing this template.
+
+</details>

@@ -1,153 +1,79 @@
 # Physical reliability checklist answer example
 
-For the unreleased November 10 source, use the current blank sheet's variant-specific instructions: Diagnostics is Debug/testing-only; Production updates use Settings/browser guidance. The fictional earlier-version examples below remain unchanged and are not new test results.
+> **FICTIONAL EXAMPLE ONLY - NOT TEST EVIDENCE.** All testers, devices, times, outcomes, versions and paths below are invented. No actual thirty-run or thirty-minute session was performed for this example. Use the [blank checklist](PHYSICAL_RELIABILITY_CHECKLIST.md) for real work.
 
-The fictional example below retains its illustrative 0.13.0 / 0.1.9 identities. The [published reference observed November 7, 2026](TESTING.md#november-7-2026-published-production-fresh-qa) is web 0.13.1 / APK 0.1.10/code 11 / Model V5.1.0. Enter the actual tested artifact without transferring these invented outcomes; this sample remains fictional.
+## Fictional build and tester record
 
-> **FICTIONAL EXAMPLE ONLY — NOT PHYSICAL-TEST EVIDENCE.** All devices, times, paths and outcomes below are invented. No phone session was run to write this file. The invented storage failure is not a reported app defect. Use the [blank reliability sheet](PHYSICAL_RELIABILITY_CHECKLIST.md) for real work.
-
-## How to answer each field
-
-Record the exact APK/active bundle/model, device and date once. Perform each required case, then record the actual outcome, status and evidence. Pass requires all required actions for the declared scope; Fail means observed wrong behavior; Blocked means a required action/evidence is unavailable. A checkmark or partial successful step is not a whole-case pass. Preserve failures when retesting.
-
-All `evidence/fictional/...` paths below are nonexistent placeholders. Real evidence links must exist. A browser R03 pass does not complete a physical session; two same-file scans do not complete thirty. No private production backend was contacted by this example.
-
-## Where tester gets each value
-
-- Native version/code: APK footer and Android app information; exact existing APK/verified receipt for full hashes and signer.
-- Active web bundle/model: About and the active packaged/verified OTA receipt; repository labels alone are insufficient.
-- Phone/Android/System WebView, network and backup state: the actual device and Settings. Never record a real recovery code or session token in the form.
-- Counts/duration: the completed per-run/action records and start/end times, not intended values.
-- Evidence: approved screenshots/video, safe diagnostics and technical reports for the same artifact/conditions. Logs exclude photos, diagnoses/scores and credentials; a screenshot cannot prove a raw score, no private Auth request or completed cloud deletion.
-
-### Minimal pre-test commands
-
-These read existing local inputs, not the installed device or a completed test:
-
-```powershell
-git rev-parse HEAD
-git status --short
-Get-ChildItem -LiteralPath public/model -File | Get-FileHash -Algorithm SHA256 | Format-List Path, Hash
-$testedApkPath = Read-Host 'Full path to the exact existing APK'
-Get-FileHash -LiteralPath $testedApkPath -Algorithm SHA256 | Format-List Path, Hash
-```
-
-Compare those values with actual artifact/active-bundle evidence. Automated commands and report preservation are in [TESTING.md](TESTING.md#install-and-run); no automated or physical test is executed by reading this sample.
-
-## Fictional abbreviated example
-
-### Candidate and tester record
-
-- Tester/date: Example Tester; 2026-11-06, Asia/Manila — fictional.
-- Device: Example Phone / Android EXAMPLE / System WebView EXAMPLE.
-- APK: `example-release.apk`, `0.1.9/code 10`; About web bundle/model `0.13.0 / V5.1.0` — illustrative, not observed installation.
-- Artifact/evidence: `evidence/fictional/artifact-receipt.json` and `evidence/fictional/physical-session/` — nonexistent.
-- Target: invented Production APK phone session; no live backend operations performed.
-- Starting state: English/Bisaya, portrait, Wi-Fi then airplane mode, backup not set up.
-- Scope: all eight main rows illustrated. No-code branches are declared for reconnection/Settings; own-code privacy/backup, detailed release/OTA and other environments need separate evidence. Required missing fixtures remain blocked.
-- Photos: unchanged Example Photo A for R01, distinct Photo B for offline testing and varied camera/gallery inputs for R03. Actual hashes/permissions would be required in real evidence.
-
-### Before testing
-
-Everything below is an invented answer example. There is no actual installer receipt, phone, test video or automated report behind it. A real record must complete artifact/precondition checks and provide the evidence described.
+- Tester: Example Tester; review: Example Reviewer, Example Day 2.
+- Phone / Android / System WebView: Example Phone / EXAMPLE / EXAMPLE.
+- APK / active bundle / model: EXAMPLE / EXAMPLE / EXAMPLE; artifact receipt: `evidence/fictional/receipt.json`.
+- Input aliases: Mango A and Unsupported B; exact unchanged originals in invented fixture manifest.
+- Starting conditions: Wi-Fi on, no own recovery code, designated local-only disposable reports.
+- Evidence: `evidence/fictional/` - nonexistent. Original filenames and offsets below are illustrative.
+- All RC01-RC04 required; phone/desktop website observations recorded separately. No thermal assessment.
 
 ## Fictional actual-results examples
 
-| Case / test                          | Expected result                                                                                                                                                           | Actual result                                                                                                                                                                                                                                                                                                     | Pass / Fail / Blocked | Evidence / issue                                                       |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ---------------------------------------------------------------------- |
-| R01-M01 — Repeated predictions       | Thirty fresh inferences per planned unchanged photo; stable displayed label/acceptance, recorded confidence variation and no duplicate reuse.                             | Only two of thirty same-file runs were illustrated. Both showed Healthy Leaf/Accepted, 94.2%, after designated record deletion. Runs 3–30 and their evidence are missing.                                                                                                                                         | Blocked               | `evidence/fictional/r01-partial.csv`                                   |
-| R02-M01 — Offline use                | Packaged APK, History/private photos and a different new scan work after airplane-mode reopening and a second restart.                                                    | With Wi-Fi off in airplane mode, reopened the fictional APK and Photo A's History/photo. New Photo B received a result, saved locally and remained after another offline restart; local advice stayed readable.                                                                                                   | Pass                  | `evidence/fictional/r02-offline.mp4`                                   |
-| R02-M02 — Reconnection               | Preserved local reports/photos, correct guidance refresh and backup behavior for the declared state.                                                                      | No-code branch: local reports remained without duplicates/resurrection; guidance refreshed. Invented scoped testing notes recorded no private enrollment/upload. No enabled/paused-backup conclusion is claimed.                                                                                                  | Pass                  | `evidence/fictional/r02-reconnect.mp4` and scoped request notes        |
-| R03-M01 — 30-minute session          | At least thirty physical minutes with fresh mixed-use actions, no crash/lost committed report/permanent stall, and timing/device observations.                            | Invented session ran 09:00–09:31, thirty-one minutes, with thirty-four fresh varied-image predictions. Camera/gallery, History/Details/Settings, background/reopen and network changes remained usable. No crash/lost report/stuck scan; phone felt warmer and battery moved from 80% to 76%.                     | Pass                  | `evidence/fictional/r03-video.mp4` and full action/inference log       |
-| R04-M01 — Camera and interruption    | Permission handoff, cancellation/background cleanup, square capture, portrait/safe areas, bilingual controls and startup/details behavior meet the recorded expectations. | Invented continuation records grant/denial/retry and pending-prompt cancellation, matching square crop, Retake, camera/encoding stop on real background/Close, and no late preview. Cold/offline launch and first-result/Settings entry had no duplicate splash; portrait/keyboard/EN/BIS controls stayed usable. | Pass                  | `evidence/fictional/r04-camera.mp4` and full continuation/timing notes |
-| ST01 — Storage-full recovery         | A storage failure preserves committed History; retry saves the completed result once, or discard releases only unsaved work.                                              | A fictional natural storage-full save preserved existing History. After space became available, Retry remained disabled and the completed result could not be saved. This invented incorrect behavior is Fail; discard completion was not observed.                                                               | Fail                  | `evidence/fictional/st01-storage-notes.md`; fictional issue EXAMPLE-01 |
-| BK01 — Interrupted backup/restore    | Controlled testing transfers retry incomplete work without duplicate reports or replacing receiving code/Pause/source ownership.                                          | No designated testing source/receiver backups were available. No interrupted upload/restore, receiver preservation or retry outcome was observed; no Production-backend pass claimed.                                                                                                                             | Blocked               | `evidence/fictional/bk01-fixture-block.md`                             |
-| UI01 — Settings during interruptions | Back/tab changes while pending work settles keep the correct screen/feedback and usable scanner; available codes remain protected.                                        | Predeclared no-code branch: rapidly left/reopened Settings while status and diagnostic Copy/export settled. No stale page/feedback/flash appeared; returning to Scan worked. Own-code privacy was not exercised and remains a separate gap.                                                                       | Pass                  | `evidence/fictional/ui01-settings.mp4` and no-code continuation        |
+| Case | Actual observation                                                                                                                                                                                                                                                                  | Result                 | Evidence / basis                                                                                                  |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| RC01 | Tester reported 30 fresh predictions for each of two unchanged originals, with approved local report cleanup between runs. Mango A remained Healthy Leaf/Accepted at displayed 94.2%; Unsupported B remained Uncertain at displayed 52.3%. The reviewer sampled selected runs only. | Pass (tester reported) | `RC01.mp4`; fictional tester's full-run continuation and declaration; no claim that sampled review counted all 60 |
+| RC02 | Saved Photo A online, then enabled airplane mode with Wi-Fi off. After offline reopening, its photo/Details opened. A different unscanned Photo B was diagnosed/saved offline; both remained after a second offline reopening.                                                      | Pass                   | `RC02.mp4`, 00:00-01:40; fictional direct tester/video record                                                     |
+| RC03 | A separate clip continued RC02. After reconnection, both local reports remained without duplicates, and local guidance was readable. No-code branch stayed Not set up; invented scoped testing request notes showed no private enrollment/upload.                                   | Pass                   | `RC03.mp4`, 00:00-00:50; no enabled-backup or completed-upload claim                                              |
+| RC04 | Invented physical session ran 09:00-09:31, 31 minutes, with varied camera/Gallery scans, History/Settings, background/return, offline use and reconnection. Tester reported no crash, stuck processing or lost committed report throughout; reviewer sampled checkpoints.           | Pass (tester reported) | `RC04.mp4`, 00:00-31:00; fictional tester action log; continuous independent video review not claimed             |
 
-A real abbreviated answer needs the full linked continuation for every required substep. Do not assume a recording exists or mark a whole case passed from these summaries.
+These invented confidence values describe displayed stability, not classification accuracy or automated R01 raw-score tolerance. No full raw scores or tensor measurements are supplied.
 
-## Where tester types `Pass`, `Fail`, or `Blocked`
+## Fictional RC01 continuation format
 
-Use the main row's status cell, then carry its result into the final summary. A failure takes precedence over a block. For example, ST01 remains Fail even though its discard observation is missing. A missing required Production artifact, safe fixture, report or complete run record is Blocked, not an inferred pass.
+| Photo / run          | Label / acceptance      | Visible confidence | Fresh processing / cleanup                                           | Video offset / basis                   |
+| -------------------- | ----------------------- | ------------------ | -------------------------------------------------------------------- | -------------------------------------- |
+| Mango A / 1          | Healthy Leaf / Accepted | 94.2%              | Processing observed; only designated local test report removed       | 00:20; fictional tester/video          |
+| Mango A / 2-30       | Healthy Leaf / Accepted | 94.2%              | Each remaining run is described in the invented per-run continuation | `fictional-rc01-runs.csv`; nonexistent |
+| Unsupported B / 1    | Uncertain               | 52.3%              | Fresh processing; no duplicate dialog                                | 08:00; fictional tester/video          |
+| Unsupported B / 2-30 | Uncertain               | 52.3%              | Each remaining run is described in the invented continuation         | `fictional-rc01-runs.csv`; nonexistent |
 
-### Diagnostics and stall evidence
+In a real record, supply every run or accurately attribute the complete-run observation to the tester. These grouped example rows alone do not establish sixty predictions. Do not count a saved duplicate as a prediction or invent per-run measurements.
 
-Settings > Diagnostic logs is enabled before reproduction and exported promptly where storage allows. Record app/driver errors safely and keep any approved prediction evidence separately. An absent completion narrows unfinished work but does not prove an exact root cause. Do not clear app data or uninstall personal History to troubleshoot; reopening is only a recovery attempt.
+## Fictional RC04 timing record
 
-### R01-M01: repeated prediction consistency
+Start 09:00; end 09:31; elapsed 31 minutes, Asia/Manila. All entries and the purported action log are invented. Warmth/discomfort: **Not assessed**.
 
-| Run  | Displayed label / acceptance | Visible confidence | Duplicate avoided?                                  | Status / notes                |
-| ---- | ---------------------------- | ------------------ | --------------------------------------------------- | ----------------------------- |
-| 1    | Healthy Leaf / Accepted      | 94.2%              | Yes; designated test report removed before next run | Pass — fictional substep only |
-| 2    | Healthy Leaf / Accepted      | 94.2%              | Yes; unchanged original gallery bytes               | Pass — fictional substep only |
-| 3–30 | Not performed                |                    |                                                     | Blocked                       |
+| Checkpoint | Actual actions / outcome                                             | Crash / freeze / lost report          | Video offset / basis |
+| ---------- | -------------------------------------------------------------------- | ------------------------------------- | -------------------- |
+| 09:00      | Open app; camera capture/Retake; fresh result and Details            | None reported in invented observation | 00:00; tester log    |
+| 09:10      | New Gallery predictions, History/filter/pages, Settings              | None reported                         | 10:00; tester log    |
+| 09:20      | Phone Home, return, airplane mode with Wi-Fi off, fresh offline scan | None reported                         | 20:00; tester log    |
+| 09:31      | Reconnect; inspect saved reports; finish                             | None reported                         | 31:00; tester log    |
 
-Overall R01 is **Blocked**. This partial record does not establish thirty-run repeatability or the automated raw-confidence tolerance. The varied R03 inputs do not replace the missing same-file R01 repetitions.
+Four checkpoints illustrate wording; the tester's statement and full action record describe the intervening period. Sampled video review is identified separately. No real timed session follows from this sample.
 
-### R02-M01: offline availability after initial load
+## Fictional website observations
 
-The fictional continuation covers both offline reopens, Photo A/B, local saving and public guidance. APK assets are packaged, not dependent on a website service worker. R02-M02 is scoped to **no own code**: ordinary use creates no private enrollment/upload. A phone with its own enabled backup may upload eligible reports online; a paused phone can still retry queued own-backup deletions. Those branches need their own actual evidence.
+| Environment                       | Online preparation              | Offline behavior                                                                  | After reconnecting                          | Result / evidence                                                                             |
+| --------------------------------- | ------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Phone website / Example Browser   | Home/About/Android guide loaded | Previously loaded content stayed readable; download unavailable feedback appeared | Guide and online download metadata returned | Pass for recorded branch; `phone-web-offline.mp4`, fictional                                  |
+| Desktop website / Example Browser | Home and About loaded           | Reload showed browser connection error                                            | Website loaded again and navigation worked  | Recorded behavior; offline availability not established; `desktop-web-offline.mp4`, fictional |
 
-### Local storage-full recovery
+Website observations do not demonstrate APK inference, private backup or all-browser coverage. If declared offline requirements are not met, report the actual failure instead of redefining success afterward.
 
-The invented ST01 failure is deliberately not a product claim. A real tester must identify natural versus approved injected failure, actual free-space/context, committed versus unsaved work, retry/discard and follow-up. Never fill a personal phone or delete real reports merely to force this scenario.
+## Fictional retest or clarification
 
-### R03-M01: 30-minute mixed-use session
+| Date          | Case / original issue                   | Changed inputs              | New observation / status                                          | Evidence / basis                                     |
+| ------------- | --------------------------------------- | --------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------- |
+| Example Day 2 | RC01 / reviewer did not count every run | No new build or run claimed | Tester reported completing required fresh runs and their outcomes | Tester declaration; original sampled review retained |
 
-**All times and observations below are fictional.** Start 09:00; end 09:31; elapsed 31 minutes, Asia/Manila. Full intervening activity would be in the actual continuation/video, not proven by four rows alone.
+## Fictional summary and alternate wording
 
-| Time  | Actual actions / outcome                                                                      | Failure/loss/stall      | Evidence                 |
-| ----- | --------------------------------------------------------------------------------------------- | ----------------------- | ------------------------ |
-| 09:00 | Open APK; camera capture, Retake, fresh diagnosis, Details/History                            | None in invented record | Fictional full video/log |
-| 09:10 | Gallery scans, designated-report deletion to avoid reuse, Settings/language, portrait attempt | None in invented record | Fictional full video/log |
-| 09:20 | Background/reopen; airplane mode with Wi-Fi off; new offline scans and History                | None in invented record | Fictional full video/log |
-| 09:31 | Reconnect, inspect preserved reports, record warmth/battery and end time                      | None in invented record | Fictional full video/log |
+- Four illustrative RC passes, including two tester-reported; no actual tests performed.
+- No claim about overheating, full raw-score tolerance, enabled-backup transfer completion or unseen devices.
+- Additional native/release checks remain separate; this is not release approval.
 
-The thirty-four varied-image predictions are an invented observed count, not a required R03 target. Duration must still be at least thirty minutes. No real session is established by this example.
+Examples for other real outcomes, if actually observed:
 
-<a id="r04-m01-native-camera-gallery-and-layout"></a>
+- **Fail:** "The app closed unexpectedly at minute 18. Reopening restored History, but the interruption remains recorded as a failure."
+- **Blocked:** "Only 12 minutes were completed because the phone became unavailable. No complete RC04 run is established."
 
-### R04-M01: guided camera, gallery, and layout
-
-The invented passing row assumes its complete fictional continuation covers every required camera/startup/layout substep. A real record must distinguish the Android permission handoff from actual backgrounding and inspect cancellation/late-preview behavior. If a permission or encoding case cannot be exercised, record that required gap as Blocked. Phone APKs request portrait; browser emulation or landscape screenshots alone do not complete these phone observations.
-
-### R04-M02: device and browser coverage
-
-Only the invented Example Phone is represented. No real APK, other phone/OS/WebView, website browser or all-device coverage is established.
-
-### R04-M03: installation guide and installed launch
-
-No actual website metadata/download, APK installation or same-signer update took place. Required installation/release scope remains Blocked until separately recorded. Website information/Android guidance and an installed APK's native-versus-web-bundle labels are distinct checks.
-
-### Separate backup and update follow-up
-
-BK01 is Blocked. Own-code privacy, receiving-owner/Pause preservation, fresh receiver setup and scoped queued deletion need controlled testing-target records. Production updater/Android approval/cancellation and signed web-OTA/rollback evidence remain separate and unverified; no Debug or browser pass is substituted. Do not include real codes or modify private production resources to complete this example.
-
-## Fictional retest
-
-| Date          | Case / original issue | Changed build/inputs         | New observation / status | Evidence                           |
-| ------------- | --------------------- | ---------------------------- | ------------------------ | ---------------------------------- |
-| Not performed | ST01 / EXAMPLE-01     | No later artifact identified | No retest pass claimed   | Future exact-build record required |
-
-### Final decision
-
-- Main rows: **8**; invented results: **5 Pass, 1 Fail, 2 Blocked**.
-- R01 still lacks the full thirty-run record; ST01 has an invented failure; BK01 lacks fixtures/evidence.
-- Separate technical, with-code privacy, Production-backend, install/OTA and other-device coverage remains unverified.
-- Conclusion: no real reliability result established; no release approval. For an actual equivalent outcome, unresolved required failures/blocks prevent acceptance.
-- Functional, SUS, agricultural expert and model-accuracy findings remain separate.
-
-## Fictional blocked-answer example
-
-```text
-Case: BK01
-Status: Blocked
-Observed: Local History remained readable.
-Not observed: Interrupted testing upload/restore and receiving-code/Pause preservation.
-Reason: Controlled source/receiver fixtures unavailable.
-Evidence: evidence/fictional/bk01-fixture-block.md (nonexistent sample path)
-Follow-up: Arrange approved testing fixtures; record the actual target and repeat the case.
-```
+Do not reuse these invented incidents or outcomes as real findings.
 
 ## November 6, 2026
 
@@ -391,3 +317,163 @@ Final decision: Candidate blocked from release until required camera observation
 </details>
 
 Later the same day, simplified the current sample to match all eight main reliability rows, with five invented passes, one invented failure and two blocked cases. Added explicit thirty-run and thirty-minute example records without performing a test. Earlier dated examples remain historical.
+
+## November 12, 2026
+
+Updated the current fictional example to the current manual cases. All example outcomes remain invented; no completed evidence was changed.
+
+<details>
+<summary>Earlier fictional front sheet, retained for historical comparison</summary>
+
+# Physical reliability checklist answer example
+
+For the unreleased November 10 source, use the current blank sheet's variant-specific instructions: Diagnostics is Debug/testing-only; Production updates use Settings/browser guidance. The fictional earlier-version examples below remain unchanged and are not new test results.
+
+The fictional example below retains its illustrative 0.13.0 / 0.1.9 identities. The [published reference observed November 7, 2026](TESTING.md#november-7-2026-published-production-fresh-qa) is web 0.13.1 / APK 0.1.10/code 11 / Model V5.1.0. Enter the actual tested artifact without transferring these invented outcomes; this sample remains fictional.
+
+> **FICTIONAL EXAMPLE ONLY — NOT PHYSICAL-TEST EVIDENCE.** All devices, times, paths and outcomes below are invented. No phone session was run to write this file. The invented storage failure is not a reported app defect. Use the [blank reliability sheet](PHYSICAL_RELIABILITY_CHECKLIST.md) for real work.
+
+## How to answer each field
+
+Record the exact APK/active bundle/model, device and date once. Perform each required case, then record the actual outcome, status and evidence. Pass requires all required actions for the declared scope; Fail means observed wrong behavior; Blocked means a required action/evidence is unavailable. A checkmark or partial successful step is not a whole-case pass. Preserve failures when retesting.
+
+All `evidence/fictional/...` paths below are nonexistent placeholders. Real evidence links must exist. A browser R03 pass does not complete a physical session; two same-file scans do not complete thirty. No private production backend was contacted by this example.
+
+## Where tester gets each value
+
+- Native version/code: APK footer and Android app information; exact existing APK/verified receipt for full hashes and signer.
+- Active web bundle/model: About and the active packaged/verified OTA receipt; repository labels alone are insufficient.
+- Phone/Android/System WebView, network and backup state: the actual device and Settings. Never record a real recovery code or session token in the form.
+- Counts/duration: the completed per-run/action records and start/end times, not intended values.
+- Evidence: approved screenshots/video, safe diagnostics and technical reports for the same artifact/conditions. Logs exclude photos, diagnoses/scores and credentials; a screenshot cannot prove a raw score, no private Auth request or completed cloud deletion.
+
+### Minimal pre-test commands
+
+These read existing local inputs, not the installed device or a completed test:
+
+```powershell
+git rev-parse HEAD
+git status --short
+Get-ChildItem -LiteralPath public/model -File | Get-FileHash -Algorithm SHA256 | Format-List Path, Hash
+$testedApkPath = Read-Host 'Full path to the exact existing APK'
+Get-FileHash -LiteralPath $testedApkPath -Algorithm SHA256 | Format-List Path, Hash
+```
+
+Compare those values with actual artifact/active-bundle evidence. Automated commands and report preservation are in [TESTING.md](TESTING.md#install-and-run); no automated or physical test is executed by reading this sample.
+
+## Fictional abbreviated example
+
+### Candidate and tester record
+
+- Tester/date: Example Tester; 2026-11-06, Asia/Manila — fictional.
+- Device: Example Phone / Android EXAMPLE / System WebView EXAMPLE.
+- APK: `example-release.apk`, `0.1.9/code 10`; About web bundle/model `0.13.0 / V5.1.0` — illustrative, not observed installation.
+- Artifact/evidence: `evidence/fictional/artifact-receipt.json` and `evidence/fictional/physical-session/` — nonexistent.
+- Target: invented Production APK phone session; no live backend operations performed.
+- Starting state: English/Bisaya, portrait, Wi-Fi then airplane mode, backup not set up.
+- Scope: all eight main rows illustrated. No-code branches are declared for reconnection/Settings; own-code privacy/backup, detailed release/OTA and other environments need separate evidence. Required missing fixtures remain blocked.
+- Photos: unchanged Example Photo A for R01, distinct Photo B for offline testing and varied camera/gallery inputs for R03. Actual hashes/permissions would be required in real evidence.
+
+### Before testing
+
+Everything below is an invented answer example. There is no actual installer receipt, phone, test video or automated report behind it. A real record must complete artifact/precondition checks and provide the evidence described.
+
+## Fictional actual-results examples
+
+| Case / test                          | Expected result                                                                                                                                                           | Actual result                                                                                                                                                                                                                                                                                                     | Pass / Fail / Blocked | Evidence / issue                                                       |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ---------------------------------------------------------------------- |
+| R01-M01 — Repeated predictions       | Thirty fresh inferences per planned unchanged photo; stable displayed label/acceptance, recorded confidence variation and no duplicate reuse.                             | Only two of thirty same-file runs were illustrated. Both showed Healthy Leaf/Accepted, 94.2%, after designated record deletion. Runs 3–30 and their evidence are missing.                                                                                                                                         | Blocked               | `evidence/fictional/r01-partial.csv`                                   |
+| R02-M01 — Offline use                | Packaged APK, History/private photos and a different new scan work after airplane-mode reopening and a second restart.                                                    | With Wi-Fi off in airplane mode, reopened the fictional APK and Photo A's History/photo. New Photo B received a result, saved locally and remained after another offline restart; local advice stayed readable.                                                                                                   | Pass                  | `evidence/fictional/r02-offline.mp4`                                   |
+| R02-M02 — Reconnection               | Preserved local reports/photos, correct guidance refresh and backup behavior for the declared state.                                                                      | No-code branch: local reports remained without duplicates/resurrection; guidance refreshed. Invented scoped testing notes recorded no private enrollment/upload. No enabled/paused-backup conclusion is claimed.                                                                                                  | Pass                  | `evidence/fictional/r02-reconnect.mp4` and scoped request notes        |
+| R03-M01 — 30-minute session          | At least thirty physical minutes with fresh mixed-use actions, no crash/lost committed report/permanent stall, and timing/device observations.                            | Invented session ran 09:00–09:31, thirty-one minutes, with thirty-four fresh varied-image predictions. Camera/gallery, History/Details/Settings, background/reopen and network changes remained usable. No crash/lost report/stuck scan; phone felt warmer and battery moved from 80% to 76%.                     | Pass                  | `evidence/fictional/r03-video.mp4` and full action/inference log       |
+| R04-M01 — Camera and interruption    | Permission handoff, cancellation/background cleanup, square capture, portrait/safe areas, bilingual controls and startup/details behavior meet the recorded expectations. | Invented continuation records grant/denial/retry and pending-prompt cancellation, matching square crop, Retake, camera/encoding stop on real background/Close, and no late preview. Cold/offline launch and first-result/Settings entry had no duplicate splash; portrait/keyboard/EN/BIS controls stayed usable. | Pass                  | `evidence/fictional/r04-camera.mp4` and full continuation/timing notes |
+| ST01 — Storage-full recovery         | A storage failure preserves committed History; retry saves the completed result once, or discard releases only unsaved work.                                              | A fictional natural storage-full save preserved existing History. After space became available, Retry remained disabled and the completed result could not be saved. This invented incorrect behavior is Fail; discard completion was not observed.                                                               | Fail                  | `evidence/fictional/st01-storage-notes.md`; fictional issue EXAMPLE-01 |
+| BK01 — Interrupted backup/restore    | Controlled testing transfers retry incomplete work without duplicate reports or replacing receiving code/Pause/source ownership.                                          | No designated testing source/receiver backups were available. No interrupted upload/restore, receiver preservation or retry outcome was observed; no Production-backend pass claimed.                                                                                                                             | Blocked               | `evidence/fictional/bk01-fixture-block.md`                             |
+| UI01 — Settings during interruptions | Back/tab changes while pending work settles keep the correct screen/feedback and usable scanner; available codes remain protected.                                        | Predeclared no-code branch: rapidly left/reopened Settings while status and diagnostic Copy/export settled. No stale page/feedback/flash appeared; returning to Scan worked. Own-code privacy was not exercised and remains a separate gap.                                                                       | Pass                  | `evidence/fictional/ui01-settings.mp4` and no-code continuation        |
+
+A real abbreviated answer needs the full linked continuation for every required substep. Do not assume a recording exists or mark a whole case passed from these summaries.
+
+## Where tester types `Pass`, `Fail`, or `Blocked`
+
+Use the main row's status cell, then carry its result into the final summary. A failure takes precedence over a block. For example, ST01 remains Fail even though its discard observation is missing. A missing required Production artifact, safe fixture, report or complete run record is Blocked, not an inferred pass.
+
+### Diagnostics and stall evidence
+
+Settings > Diagnostic logs is enabled before reproduction and exported promptly where storage allows. Record app/driver errors safely and keep any approved prediction evidence separately. An absent completion narrows unfinished work but does not prove an exact root cause. Do not clear app data or uninstall personal History to troubleshoot; reopening is only a recovery attempt.
+
+### R01-M01: repeated prediction consistency
+
+| Run  | Displayed label / acceptance | Visible confidence | Duplicate avoided?                                  | Status / notes                |
+| ---- | ---------------------------- | ------------------ | --------------------------------------------------- | ----------------------------- |
+| 1    | Healthy Leaf / Accepted      | 94.2%              | Yes; designated test report removed before next run | Pass — fictional substep only |
+| 2    | Healthy Leaf / Accepted      | 94.2%              | Yes; unchanged original gallery bytes               | Pass — fictional substep only |
+| 3–30 | Not performed                |                    |                                                     | Blocked                       |
+
+Overall R01 is **Blocked**. This partial record does not establish thirty-run repeatability or the automated raw-confidence tolerance. The varied R03 inputs do not replace the missing same-file R01 repetitions.
+
+### R02-M01: offline availability after initial load
+
+The fictional continuation covers both offline reopens, Photo A/B, local saving and public guidance. APK assets are packaged, not dependent on a website service worker. R02-M02 is scoped to **no own code**: ordinary use creates no private enrollment/upload. A phone with its own enabled backup may upload eligible reports online; a paused phone can still retry queued own-backup deletions. Those branches need their own actual evidence.
+
+### Local storage-full recovery
+
+The invented ST01 failure is deliberately not a product claim. A real tester must identify natural versus approved injected failure, actual free-space/context, committed versus unsaved work, retry/discard and follow-up. Never fill a personal phone or delete real reports merely to force this scenario.
+
+### R03-M01: 30-minute mixed-use session
+
+**All times and observations below are fictional.** Start 09:00; end 09:31; elapsed 31 minutes, Asia/Manila. Full intervening activity would be in the actual continuation/video, not proven by four rows alone.
+
+| Time  | Actual actions / outcome                                                                      | Failure/loss/stall      | Evidence                 |
+| ----- | --------------------------------------------------------------------------------------------- | ----------------------- | ------------------------ |
+| 09:00 | Open APK; camera capture, Retake, fresh diagnosis, Details/History                            | None in invented record | Fictional full video/log |
+| 09:10 | Gallery scans, designated-report deletion to avoid reuse, Settings/language, portrait attempt | None in invented record | Fictional full video/log |
+| 09:20 | Background/reopen; airplane mode with Wi-Fi off; new offline scans and History                | None in invented record | Fictional full video/log |
+| 09:31 | Reconnect, inspect preserved reports, record warmth/battery and end time                      | None in invented record | Fictional full video/log |
+
+The thirty-four varied-image predictions are an invented observed count, not a required R03 target. Duration must still be at least thirty minutes. No real session is established by this example.
+
+<a id="r04-m01-native-camera-gallery-and-layout"></a>
+
+### R04-M01: guided camera, gallery, and layout
+
+The invented passing row assumes its complete fictional continuation covers every required camera/startup/layout substep. A real record must distinguish the Android permission handoff from actual backgrounding and inspect cancellation/late-preview behavior. If a permission or encoding case cannot be exercised, record that required gap as Blocked. Phone APKs request portrait; browser emulation or landscape screenshots alone do not complete these phone observations.
+
+### R04-M02: device and browser coverage
+
+Only the invented Example Phone is represented. No real APK, other phone/OS/WebView, website browser or all-device coverage is established.
+
+### R04-M03: installation guide and installed launch
+
+No actual website metadata/download, APK installation or same-signer update took place. Required installation/release scope remains Blocked until separately recorded. Website information/Android guidance and an installed APK's native-versus-web-bundle labels are distinct checks.
+
+### Separate backup and update follow-up
+
+BK01 is Blocked. Own-code privacy, receiving-owner/Pause preservation, fresh receiver setup and scoped queued deletion need controlled testing-target records. Production updater/Android approval/cancellation and signed web-OTA/rollback evidence remain separate and unverified; no Debug or browser pass is substituted. Do not include real codes or modify private production resources to complete this example.
+
+## Fictional retest
+
+| Date          | Case / original issue | Changed build/inputs         | New observation / status | Evidence                           |
+| ------------- | --------------------- | ---------------------------- | ------------------------ | ---------------------------------- |
+| Not performed | ST01 / EXAMPLE-01     | No later artifact identified | No retest pass claimed   | Future exact-build record required |
+
+### Final decision
+
+- Main rows: **8**; invented results: **5 Pass, 1 Fail, 2 Blocked**.
+- R01 still lacks the full thirty-run record; ST01 has an invented failure; BK01 lacks fixtures/evidence.
+- Separate technical, with-code privacy, Production-backend, install/OTA and other-device coverage remains unverified.
+- Conclusion: no real reliability result established; no release approval. For an actual equivalent outcome, unresolved required failures/blocks prevent acceptance.
+- Functional, SUS, agricultural expert and model-accuracy findings remain separate.
+
+## Fictional blocked-answer example
+
+```text
+Case: BK01
+Status: Blocked
+Observed: Local History remained readable.
+Not observed: Interrupted testing upload/restore and receiving-code/Pause preservation.
+Reason: Controlled source/receiver fixtures unavailable.
+Evidence: evidence/fictional/bk01-fixture-block.md (nonexistent sample path)
+Follow-up: Arrange approved testing fixtures; record the actual target and repeat the case.
+```
+
+</details>

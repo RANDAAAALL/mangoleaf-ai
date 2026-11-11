@@ -427,6 +427,7 @@ mangoleaf-ai/
 |   |-- treatment-guidelines/       # Treatment-advice source reviews and bilingual drafts
 |   |-- testing/                    # Test instructions and physical-device checklists
 |   |   |-- TESTING.md              # Automated cases, reliability protocol, device checklist
+|   |   |-- MANUAL_EVIDENCE_REVIEW_CHECKLIST.md     # Manual forms and evidence overview
 |   |   |-- FUNCTIONAL_CHECKLIST.md                 # Blank manual feature/result record
 |   |   |-- FUNCTIONAL_CHECKLIST_SAMPLE.md          # Fictional functional answer guide
 |   |   |-- PHYSICAL_RELIABILITY_CHECKLIST.md        # Fillable physical-device evidence

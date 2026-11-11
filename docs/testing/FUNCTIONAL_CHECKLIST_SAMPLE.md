@@ -1,5 +1,96 @@
 # Functional checklist answer example
 
+> **FICTIONAL EXAMPLE ONLY - NOT TEST EVIDENCE.** All observations, people, dates, versions, outcomes and evidence paths below are invented. The example failure is not a reported product defect. Start actual testing from the [blank checklist](FUNCTIONAL_CHECKLIST.md).
+
+## How to use the example
+
+Match the current PAFC, PWFC and DFC rows. Describe the result in plain English, then give status and original video name/timestamps. Record later filming dates and separate environments. A tester-reported outcome is attributed to the tester; it is not presented as independently verified by sampled video review.
+
+## Fictional build and tester record
+
+- Tester: Example Tester; date/time: Example Day 1, 09:00, Asia/Manila.
+- Reviewer: Example Reviewer; review date: Example Day 3.
+- Phone: Example Phone / Android EXAMPLE / System WebView EXAMPLE.
+- APK: `example-release.apk`, version/code EXAMPLE; Production example.
+- Active web bundle / model: EXAMPLE / EXAMPLE; receipt: `evidence/fictional/receipt.json`.
+- Phone browser: Example Mobile Browser; desktop: Example Desktop OS / Browser.
+- Website: the official URL in the real checklist; no live requests were made for this sample.
+- Conditions: English/Bisaya, standard text size; network/backup states recorded per case.
+- Photos: approved example mango A and unsupported B; all report deletions use disposable fixtures.
+- Backup fixtures: Example Source, Established Receiver and Fresh Emulator, in a designated testing project. No Production backup was changed.
+- Video location: `evidence/fictional/` - nonexistent. Later PWFC04-B and PWFC07 were filmed on Example Day 2; they are separate dated checks.
+
+## Fictional actual-results examples
+
+Every current functional row appears below. Unless otherwise stated, evidence is an invented tester observation and video on Example Day 1. Times are illustrative offsets within separate clips, not a single continuous session. There are no real videos at these paths.
+
+| Case     | Actual observation                                                                                                                                                                                    | Result                 | Evidence / basis                                                                                                                 |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| PAFC01   | Opened all five tabs. App Back and Phone Back returned the Settings subpage to Settings. Closing/reopening left navigation usable.                                                                    | Pass                   | `PAFC01.mp4`, 00:00-01:10; fictional direct tester/video observation                                                             |
+| PAFC02   | English and Bisaya labels appeared. Bisaya remained selected after reopening.                                                                                                                         | Pass                   | `PAFC02.mp4`, 00:00-00:50                                                                                                        |
+| PAFC03   | Denial showed feedback; allowing permission opened the camera. A screen photograph matched Review. Retake worked, cancellation saved nothing, and live camera use stopped after Phone Home and Close. | Pass                   | `PAFC03.mp4`, 00:00-02:00; screen photograph, not a field specimen                                                               |
+| PAFC04   | Gallery selection opened the matching Review. Retake reopened selection; Phone Back and Review Close saved no reports.                                                                                | Pass                   | `PAFC04.mp4`, 00:00-00:45                                                                                                        |
+| PAFC05   | Two fresh diagnoses displayed their photos, labels/confidence and Details. Production showed no Debug probability table. Outputs were logged separately for model evaluation.                         | Pass                   | `PAFC05.mp4`, 00:00-01:20; no accuracy claim                                                                                     |
+| PAFC06   | Both saved reports and their photos/Details remained after closing and reopening.                                                                                                                     | Pass                   | `PAFC06.mp4`, 00:00-00:45                                                                                                        |
+| PAFC07   | Matching search, no-match search, clearing and filters worked. Page 2 and return to page 1 worked; selected Details matched its report.                                                               | Pass                   | `PAFC07.mp4`, 00:00-01:30                                                                                                        |
+| PAFC08   | Selected the same unchanged current-model original. The duplicate notice opened its saved result; no new processing or History entry appeared.                                                        | Pass                   | `PAFC08.mp4`, 00:00-00:35; original fixture identity in fictional notes; visible workflow only                                   |
+| PAFC09   | Cancel preserved single/multiple selections. Confirm removed only approved selected reports; unselected reports and valid pages remained.                                                             | Pass                   | `PAFC09.mp4`, 00:00-01:30                                                                                                        |
+| PAFC10   | Available English/Bisaya healthy guidance stayed readable with airplane mode on and Wi-Fi off.                                                                                                        | Pass                   | `PAFC10.mp4`, 00:00-00:50; only the stated guidance checked                                                                      |
+| PAFC11   | Tester reported explicit setup, masked default, Show/Hide, matching Copy/Paste, On/Pause and code concealment. Own code/Pause survived reopening. Private code checks were not recorded.              | Pass (tester reported) | `PAFC11.mp4`, 00:00-01:15; fictional tester clarification on Example Day 3; code values omitted                                  |
+| PAFC12   | Empty/malformed/rejected inputs and a separate offline attempt gave suitable feedback. Tester checked that receiver code, Pause and reports stayed unchanged.                                         | Pass (tester reported) | `PAFC12.mp4`, 00:00-02:00; fictional private comparison and tester report                                                        |
+| PAFC13   | Established testing receiver added two approved reports; repeat added zero and preserved receiver state. Separate fresh testing emulator added two and received its own distinct code.                | Pass                   | `PAFC13-phone.mp4`, 00:00-01:20; `PAFC13-emulator.mp4`, 00:00-01:10; fictional controlled fixture notes; not Production evidence |
+| PWFC01   | Phone website Home/About opened and scrolled.                                                                                                                                                         | Pass                   | `PWFC01.mp4`, 00:00-00:30                                                                                                        |
+| PWFC02   | Both language choices worked; Bisaya remained after browser reload.                                                                                                                                   | Pass                   | `PWFC02.mp4`, 00:00-00:35                                                                                                        |
+| PWFC03   | Android guide opened, scrolled, closed and reopened.                                                                                                                                                  | Pass                   | `PWFC03.mp4`, 00:00-00:30                                                                                                        |
+| PWFC04-A | Main website action downloaded the official APK; Downloads showed completion.                                                                                                                         | Pass                   | `PWFC04-A.mp4`, 00:00-00:50; exact invented filename in fixture notes                                                            |
+| PWFC04-B | Official GitHub release opened and its APK asset finished downloading.                                                                                                                                | Pass                   | `PWFC04-B.mp4`, 00:00-01:00; Example Day 2, separately recorded                                                                  |
+| PWFC05   | Android reported App installed and the app opened. Recorded EXAMPLE native/bundle/model identities; this was an update over a same-signer test installation.                                          | Pass                   | `PWFC05.mp4`, 00:00-01:00; fictional update path, not a fresh-install claim                                                      |
+| PWFC06   | Website's offered Open app button opened the installed APK.                                                                                                                                           | Pass                   | `PWFC06.mp4`, 00:00-00:25                                                                                                        |
+| PWFC07   | Privacy Policy and Terms of Service opened, scrolled and closed in English and Bisaya.                                                                                                                | Pass                   | `PWFC07.mp4`, 00:00-01:00; Example Day 2                                                                                         |
+| DFC01    | Desktop Home/About content opened and scrolled.                                                                                                                                                       | Pass                   | `DFC01.mp4`, 00:00-00:30                                                                                                         |
+| DFC02    | English/Bisaya selection worked and persisted after reload.                                                                                                                                           | Pass                   | `DFC02.mp4`, 00:00-00:35                                                                                                         |
+| DFC03    | X closed the guide. Keyboard Esc left it open, although Esc should close it.                                                                                                                          | Fail                   | `DFC03.mp4`, 00:00-00:30; invented defect EXAMPLE-01                                                                             |
+| DFC04    | Desktop showed Android instructions and QR. No approved phone was available to check its destination, although that step was required in this example.                                                | Blocked                | `DFC04.mp4`, 00:00-00:20; QR destination untested                                                                                |
+| DFC05    | Both legal dialogs opened, scrolled and closed in English and Bisaya.                                                                                                                                 | Pass                   | `DFC05.mp4`, 00:00-00:50                                                                                                         |
+| DFC06    | At the recorded example widths, Home/About and dialogs had readable controls with no observed clipping or overlap. Responsive emulation was recorded separately.                                      | Pass                   | `DFC06.mp4`, 00:00-01:00; fictional width notes                                                                                  |
+
+## Fictional supporting technical evidence
+
+- Backup entries describe designated testing fixtures, not a Production backend or independent ownership audit.
+- A visible duplicate notice supports the user flow; exact file hashes and internal inference instrumentation require separate technical records if claimed.
+- Private code values and raw credentials are absent. No cloud rows or photographs were accessed for this sample.
+
+## Fictional retest or clarification
+
+| Date          | Case / original issue                    | Changed inputs               | New observation / status                  | Evidence / basis                                       |
+| ------------- | ---------------------------------------- | ---------------------------- | ----------------------------------------- | ------------------------------------------------------ |
+| Example Day 3 | PAFC11 / private steps outside recording | No new build or test claimed | Tester reported successful private checks | Tester statement; preserve initial sampled-review note |
+| Not performed | DFC03 / EXAMPLE-01                       | None                         | Original Fail remains                     | Future retest needed                                   |
+
+## Fictional summary
+
+- Required case rows: 27; illustrative results: 25 Pass (including two tester-reported), one Fail and one Blocked.
+- DFC03 needs a correction/retest; DFC04 still needs its required QR-destination observation.
+- Later dates and testing/Production/emulator environments stay distinct.
+- No actual test result, classification accuracy, SUS finding, certification or release approval is established.
+
+## November 6, 2026
+
+Created this fictional answer guide with the blank functional sheet. It contains no measured outcome, real photograph, recovery code or test credential.
+
+Later the same day, shortened the example to match FC01–FC14 and added an explicit Upload Photo duplicate example. App-update checks were removed from this functional form only. No device, automated application, model or cloud test occurred.
+
+Later the same day, expanded the answer table to show every FC01–FC14 row, with ten invented passes, one invented failure and three blocked backup/restore cases. The blank checklist remains unchanged. No device, automated application, model or cloud test occurred.
+
+## November 12, 2026
+
+Updated the current fictional example to the current manual cases. All example outcomes remain invented; no completed evidence was changed.
+
+<details>
+<summary>Earlier fictional front sheet, retained for historical comparison</summary>
+
+# Functional checklist answer example
+
 For the unreleased November 10 source, use the current blank sheet's variant-specific instructions: Diagnostics is Debug/testing-only; Production updates use Settings/browser guidance. The fictional earlier-version examples below remain unchanged and are not new test results.
 
 The fictional example below retains its illustrative 0.13.0 / 0.1.9 identities. The [published reference observed November 7, 2026](TESTING.md#november-7-2026-published-production-fresh-qa) is web 0.13.1 / APK 0.1.10/code 11 / Model V5.1.0. Enter the actual tested artifact without transferring these invented outcomes; this sample remains fictional.
@@ -74,10 +165,4 @@ No code, password, personal report, real photo or genuine backend response is in
 - Conclusion: functional acceptance is not established; no release approval.
 - Reliability, model/expert evaluation and SUS: not performed by this example.
 
-## November 6, 2026
-
-Created this fictional answer guide with the blank functional sheet. It contains no measured outcome, real photograph, recovery code or test credential.
-
-Later the same day, shortened the example to match FC01–FC14 and added an explicit Upload Photo duplicate example. App-update checks were removed from this functional form only. No device, automated application, model or cloud test occurred.
-
-Later the same day, expanded the answer table to show every FC01–FC14 row, with ten invented passes, one invented failure and three blocked backup/restore cases. The blank checklist remains unchanged. No device, automated application, model or cloud test occurred.
+</details>
