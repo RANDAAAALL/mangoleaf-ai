@@ -6,13 +6,13 @@ MangoLeaf AI
 
 MangoLeaf AI helps identify possible conditions affecting mango leaves and fruit from photos. Built for Android phones, it runs diagnosis on the device and keeps scan History available offline. Treatment guidance is available in English and Cebuano/Bisaya. The companion website explains the app and provides Android installation on phones.
 
-## Settings and download changes in preparation (November 10, 2026)
+## App updates removal candidate (November 17, 2026)
 
-**Prepared candidate:** app/web **0.13.2**, Production APK **0.1.11/code 12**, Debug **0.1.11-dev**, default host bounds **12-12**, bridge/SQLite schema **1/1**, unchanged adopted **Model V5.1.0**. This is unpublished source, not a built or installed APK. Functional and physical reliability checklist work is deferred; older results keep their original build identities.
+**Prepared candidate:** app/web **0.13.3**, Production APK **0.1.12/code 13**, Debug **0.1.12-dev**, default host bounds **13-13**, unchanged **Model V5.1.0** and bridge/SQLite schema **1/1**. No candidate APK/receipt or OTA assets have been built in this task. Physical checks, full release approval, tags and deployment remain pending.
 
-Unreleased source now shows Diagnostic logs only in the testing Debug APK. Production keeps App updates in Settings, with a newer-version card and an official browser download link instead of automatic update dialogs or the in-app APK download controller. Install the same-signer APK over the existing app; uninstalling deletes local reports and credentials. Verified web updates also use inline restart controls on that screen.
+Production Settings now contains language selection and private backup. Debug/testing additionally retains Diagnostic logs. App updates, both update cards and the web-update Restart now control are removed. Old `#settings-updates` history cannot reopen the retired screen. The screen component, its JavaScript update observers and unused translations are removed; website release metadata/downloads and native APK/OTA compatibility methods remain.
 
-Unconfirmed website installations open the guide without simultaneously launching an app intent. Confirmed installations retain a direct Open app link. The download page avoids an intent back to itself and reuses validated public metadata for five minutes; unsuccessful checks back off for 30 seconds and offer Retry. These changes require a new reviewed application build before distribution. The published identities and November 7 evidence below describe the earlier artifact. Candidate version fields are now updated; no APK build, phone installation, release or deployment follows from that change.
+Use the official website to obtain a newer same-signer APK and install it over the existing app. Native compatibility checks and cold-start web-update activation remain. Earlier preparation records are in the [version history](docs/versions/history/PWA_RELEASE_HISTORY.md).
 
 ## Walkthrough (depricated)
 
@@ -37,7 +37,7 @@ https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 - Keep APK scans/photos local until the user creates a recovery code or connects an existing one. Successful code creation enables automatic backup while the app is open and online, without an extra confirmation checkbox. Save the code outside the phone; restore and merge completed backups on another Android phone. Pause/Resume remains available after setup.
 - Queue deletion of a report's copies in its connected cloud backup, including offline retries. This does not delete copies already restored on another phone; see [backup and deletion behavior](docs/security/SECURITY-AND-SYNC.md).
 - Open an installed Android app from the website, or follow the APK installation guide. Supported browsers show **Open app** when they can confirm the installation.
-- Show compatible signed web updates and **Restart now** inside Production Settings > App updates. Native APK updates link to the official browser download page. Debug has no App updates screen.
+- Keep Settings focused on language and private backup, with Diagnostic logs in Debug/testing only. Obtain new APKs through the official website; current APK bundles have no App updates screen or restart card.
 - Enable optional diagnostics in the Debug APK Settings screen, reproduce an issue, and copy or download recent local events without phone DevTools. Recording is off by default.
 
 ## Download and status

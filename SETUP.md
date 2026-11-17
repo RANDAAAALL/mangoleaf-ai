@@ -1,12 +1,12 @@
 # MangoLeaf AI Setup Guide
 
-## Unreleased Settings/download follow-up (November 10, 2026)
+## App updates removal candidate (November 17, 2026)
 
-**Prepared candidate:** app/web **0.13.2**, Production APK **0.1.11/code 12**, Debug **0.1.11-dev**, default host bounds **12-12**, bridge/SQLite schema **1/1**, unchanged adopted **Model V5.1.0**. This is unpublished source, not a built or installed APK. Functional and physical reliability checklist work is deferred; older results keep their original build identities.
+**Prepared candidate:** app/web **0.13.3**, Production APK **0.1.12/code 13**, Debug **0.1.12-dev**, default host bounds **13-13**, unchanged **Model V5.1.0** and bridge/SQLite schema **1/1**. No candidate APK/receipt or OTA assets have been built in this task. Physical checks, full release approval, tags and deployment remain pending.
 
-The current source changes Production to Settings-only update guidance through the fixed official browser download page. Keep the installed APK in place and confirm Android's Update action; uninstalling is not an update prerequisite. Debug/testing retains Diagnostics and has no App updates screen; Production has no Diagnostics screen. Public release discovery and signed web-update verification remain, with web restart controls inside App updates.
+Production Settings now contains language selection and private backup. Debug/testing additionally retains Diagnostic logs. App updates, both update cards and the web-update Restart now control are removed. Old `#settings-updates` history cannot reopen the retired screen. The screen component, its JavaScript update observers and unused translations are removed; website release metadata/downloads and native APK/OTA compatibility methods remain.
 
-No new dependency, environment variable, native Java/resource change, signing key, database migration or model setting is required. The retired web installer/dialog modules were removed; native updater methods remain for older compatible bundles. Candidate version fields are now prepared. Rebuild Debug/Production for the intended variant before installing; any existing 0.1.10 APK files remain older artifacts. A new matching APK/receipt and candidate validation are still required; preparing these source changes does not create a release or replace the previously published APK. Follow the current version guides before shipping.
+No new dependency, environment variable, native Java/resource change, signing key, database migration or model setting is required. Build the intended APK variant again before installing this source. Download newer APKs from the official website and install over the existing same-signer app; keep local data intact. Follow the [PWA](docs/versions/PWA_VERSIONING.md) and [Android](docs/versions/ANDROID_APK_VERSIONING.md) guides for required validation and exact-artifact release steps. Dated entries below describe earlier source states.
 
 ## Published snapshot observed November 7, 2026
 

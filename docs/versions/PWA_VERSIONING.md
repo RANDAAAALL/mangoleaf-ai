@@ -1,51 +1,31 @@
 # MangoLeaf AI PWA Versioning Guide
 
-## Unreleased Settings/download source (November 10, 2026)
+## App updates removal candidate (November 17, 2026)
 
-**Prepared candidate:** app/web **0.13.2**, Production APK **0.1.11/code 12**, Debug **0.1.11-dev**, default host bounds **12-12**, bridge/SQLite schema **1/1**, unchanged adopted **Model V5.1.0**. This is unpublished source, not a built or installed APK. Functional and physical reliability checklist work is deferred; older results keep their original build identities.
+**Prepared candidate:** app/web **0.13.3**, Production APK **0.1.12/code 13**, Debug **0.1.12-dev**, default host bounds **13-13**, unchanged **Model V5.1.0** and bridge/SQLite schema **1/1**. No candidate APK/receipt or OTA assets have been built in this task. Physical checks, full release approval, tags and deployment remain pending.
 
-Current working source replaces automatic APK/OTA update dialogs with Production Settings > App updates cards. A valid newer native asset label shows website installation guidance; otherwise the screen remains unconfirmed/offline. The user opens the fixed official browser download page and installs over the existing same-signer APK, preserving local data. Diagnostic logs are Debug/testing-only. Signed web updates retain inline safe-restart controls. Unreferenced React update dialogs and the JavaScript APK installer were removed; native compatibility methods remain unchanged for older bundles.
+Production Settings now contains language selection and private backup. Debug/testing additionally retains Diagnostic logs. App updates, both update cards and the web-update Restart now control are removed. Old `#settings-updates` history cannot reopen the retired screen. The screen component, its JavaScript update observers and unused translations are removed; website release metadata/downloads and native APK/OTA compatibility methods remain.
 
-Website guide taps no longer both mount an overlay and dispatch an intent. Unconfirmed download-page users have no self-fallback intent. Public metadata caching/backoff and Retry reduce repeated requests; no rate-limit diagnosis is inferred from the video alone. Availability still requires validated release metadata; native-version claims require the APK asset label, never the release tag.
+Users obtain a newer APK from the official website and install it over the same-signer application. Do not uninstall or clear data for an ordinary update. Native startup/reconnection checks and verified cold-start activation/rollback remain; the current web interface no longer initiates update checks or restart requests.
 
-The same candidate also improves APK restoration feedback in English and Bisaya: a named busy message and spinner, an actual-count success card with a History hint, and a separate zero-addition message. Backup behavior and model assets remain unchanged. Rebuild the candidate to include this follow-up; earlier APKs and browser-test inputs do not contain it.
+**Previous release observed November 17, 2026:** GitHub lists [v0.13.2](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.13.2), published November 10, with APK and OTA assets. Its release notes identify APK 0.1.11/code 12 and Model V5.1.0. This is a metadata observation, not verification of its installed bytes, Vercel deployment, or completion of this new candidate's gates.
 
-The app/native version fields and default host range now identify this new candidate. No model asset, Java behavior, dependency, signing key, bridge/schema, APK installer, OTA sequence, tag or deployment is created or changed by setting these labels. Build a new matching APK/receipt for code 12 before preparing its signed web bundle; do not reuse the host-11 installer or receipt as code-12 evidence. CI, current-input release validation, physical acceptance and publication remain pending. Earlier Settings/download UI checks predate the version bump. The later restore/Settings checks use the 0.13.2 source; their [dated scope](../testing/TESTING.md#november-10-2026) does not establish complete candidate acceptance.
+<a id="unreleased-settingsdownload-source-november-10-2026"></a>
+<a id="published-observation-november-7-2026"></a>
+
+The original November 10 preparation and earlier observations are preserved in the [release history](history/PWA_RELEASE_HISTORY.md). No earlier result approves this candidate.
 
 ## Current repository snapshot
 
-| Item                                         | Unpublished candidate                                                   |
-| -------------------------------------------- | ----------------------------------------------------------------------- |
-| App/web bundle                               | `0.13.2`, root `package.json`                                           |
-| Production / Debug APK                       | `0.1.11` / `0.1.11-dev`, code `12`                                      |
-| Default host bounds                          | `12-12`                                                                 |
-| Native bridge / SQLite schema                | `1` / `1`, unchanged                                                    |
-| Adopted model                                | `v5.1.0`, unchanged assets and 70% rule                                 |
-| APK / receipt / OTA assets                   | Not built for this candidate                                            |
-| Functional / physical reliability checklists | Deferred; no new filled results                                         |
-| Release status                               | Unpublished; release validation, CI approval, tag and promotion pending |
-
-See the [candidate history](history/PWA_RELEASE_HISTORY.md#v0132-settings-and-download-candidate-november-10-2026) and [Android candidate](history/ANDROID_APK_HISTORY.md#apk-v0111code-12-settings-and-download-candidate-november-10-2026). The following November 7 observations describe the earlier published artifact.
-
-### Published observation (November 7, 2026)
-
-**Observed November 7, 2026:** the production website displays **app/web 0.13.1 / Model V5.1.0**. Published **APK 0.1.10/code 11** was downloaded through real phone Chrome, installed through Android and verified byte-for-byte against the published asset and matching signed receipt. The maintainer reported CI/promotion/release completion; this session did not promote or publish anything and did not independently derive the Vercel deployment commit from version labels.
-
-| Item                      | Earlier published artifact                                                                        |
-| ------------------------- | ------------------------------------------------------------------------------------------------- |
-| App/web bundle            | `0.13.1`, root `package.json`; live/About label observed                                          |
-| Adopted model             | `v5.1.0`, unchanged model and 70% rule                                                            |
-| Android host              | `0.1.10` / code `11`; Debug `0.1.10-dev`                                                          |
-| Compatibility             | Bridge/schema `1`/`1`, host bounds `11-11`                                                        |
-| Published APK SHA-256     | `23a85da3a06a0288dcb1e4431fe55cd13cd0124ae3a6d660b294dfc20bbbd9cc`                                |
-| APK receipt source commit | `d8ce392ecdc7587e8e9251280aad1e3d833313ec`                                                        |
-| Remaining physical scope  | Safe low-space recovery, confirmed mid-photo-transfer interruption and controlled delayed replies |
-
-Fresh physical evidence includes 60 actual consistency runs, a **30 min 35.495 s** mixed-use checkpoint, six reports retained after restart, preserved receiving code/Pause, three-photo restore and zero-addition repeat. Separate authenticated readers verified three completed source and three own-backup photos/checksums plus denied cross-owner reads. A fresh native emulator receiver restored three but also had an earlier startup ANR; keep those environments/results distinct. [Fresh results and limits](../testing/TESTING.md#november-7-2026-published-production-fresh-qa).
-
-Earlier local candidate SHA-256 `6fe4ac73900477d555a3cb76f6d1d7f595a550704dd2f646c6ae3e1f0952dbc5`, its in-place data-preservation checks and the 347-prediction browser/mock R03 retain their original records. The latter's matching inputs do not make it a physical-phone run. See [published observation history](history/PWA_RELEASE_HISTORY.md#published-v0131-november-7-2026) and [November 6 preparation](history/PWA_RELEASE_HISTORY.md#v0131-physical-qa-remediation-candidate-november-6-2026).
-
-APK footers show installed host/model; About shows the independent web-bundle version. The download page may display a native APK version only from a validated published asset label. Observing publication does not close missing tests or authorize a future release. Follow the [Android guide](ANDROID_APK_VERSIONING.md) for native identity and remaining gates.
+| Item                          | Unpublished candidate                   |
+| ----------------------------- | --------------------------------------- |
+| App/web bundle                | `0.13.3`, root `package.json`           |
+| Production / Debug APK        | `0.1.12` / `0.1.12-dev`, code `13`      |
+| Default host bounds           | `13-13`                                 |
+| Native bridge / SQLite schema | `1` / `1`, unchanged                    |
+| Adopted model                 | `v5.1.0`, unchanged assets and 70% rule |
+| APK / receipt / OTA assets    | Not built for this candidate            |
+| Physical / release approval   | Pending for these exact inputs          |
 
 ## Version labels and release rules
 

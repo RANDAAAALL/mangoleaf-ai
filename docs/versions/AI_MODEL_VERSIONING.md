@@ -1,5 +1,7 @@
 # MangoLeaf AI Model Versioning Guide
 
+**November 17 application candidate:** app/web **0.13.3 / APK 0.1.12/code 13** removes the Settings update screen and retains adopted **V5.1.0** without changing model assets, classes, preprocessing, folded calibration or the 70% rule. This is not a model release. See the [current app/native candidate](PWA_VERSIONING.md#current-repository-snapshot); prior dated observations remain historical.
+
 **November 10 application candidate:** unpublished **app/web 0.13.2 / APK 0.1.11/code 12** retains adopted **V5.1.0** without changing model assets, class order, preprocessing, folded calibration or the 70% rule. This is an application/native version-label update, not model retraining or a new model version. See the [current app/native candidate](PWA_VERSIONING.md#current-repository-snapshot); earlier model metrics and adoption receipts retain their original context.
 
 **Observed November 7, 2026:** published **app/web 0.13.1 / APK 0.1.10/code 11** uses adopted **V5.1.0** with unchanged graph/shards, class mapping, preprocessing, folded calibration and 70% confidence rule. The [published-artifact record](history/AI_MODEL_HISTORY.md#v510-published-application-observation-november-7-2026) links the exact APK identity and physical evidence. Publication and repeatability do not establish numerical Keras/browser parity, new model accuracy or field validity. The dated preparation and adoption records below retain their original status and pending checks.
