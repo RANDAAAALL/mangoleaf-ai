@@ -48,7 +48,7 @@ The [official download page](https://mangoleafai.vercel.app/download) was exerci
 
 ## Technology
 
-- Next.js **16.4.1** App Router, static export, and React **19.2.4**
+- Next.js **16.4.6** App Router, static export, and React **19.2.4**
 - Bun **1.4.4**, TypeScript, and Tailwind CSS **4**
 - TensorFlow.js for on-device inference
 - Java Android host and WebView; each phone keeps its scan reports in its own SQLite database and photos in private app files by default

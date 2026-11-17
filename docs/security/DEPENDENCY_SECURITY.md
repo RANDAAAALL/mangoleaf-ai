@@ -1,5 +1,25 @@
 # Dependency security
 
+## November 18, 2026: Next.js 16.4.6 security upgrade
+
+The source dependency and matching ESLint configuration are pinned to **16.4.6**, replacing **16.4.1**, in a separate upgrade worktree. The exact Bun 1.4.4 package policy, React 19.2.4, application 0.13.3, APK 0.1.12/code 13, Model V5.1.0 and inference rules remain unchanged. The Next.js configuration explicitly sets `experimental.agentUpgrade: "security"` and preserves `mcpServer: false` and the existing static-export settings.
+
+The maintainer advisory [GHSA-rhh4-g77r-r9qj](https://github.com/vercel/next.js/security/advisories/GHSA-rhh4-g77r-r9qj) affects versions through 16.4.4 and identifies 16.4.5 as patched; the requested 16.4.6 target is outside that affected range. This dependency remediation is not an exploit reproduction or a claim that all dependencies are free of findings. The original October and November observations below remain historical evidence. The current baseline audit also reports [GHSA-mfr8-8qww-v76h](https://github.com/vercel/next.js/security/advisories/GHSA-mfr8-8qww-v76h), concerning root-parameter isolation when `use cache` is called through `unstable_cache()`; its affected range ends at 16.4.4 and its first patched version is 16.4.5.
+
+Both `bun audit --prod --json` and `bun audit --json` still exit 1 for the three unchanged package families below; the upgraded results contain no Next.js finding. The old 16.4.1 production lockfile audit reports those same three families plus the Next.js root-parameter advisory. The lockfile diff changes only the Next.js dependency family and matching ESLint packages. These other findings are retained for separate compatibility review, not suppressed or represented as fixed:
+
+| Package   | Recorded selection | Advisory                                                                 | Known dependency path                                   |
+| --------- | ------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------- |
+| Glob      | 13.0.6             | [GHSA-3g3m-2fjr-6pw4](https://github.com/advisories/GHSA-3g3m-2fjr-6pw4) | Serwist build dependencies                              |
+| Zod       | 4.4.1 / 4.4.3      | [GHSA-mrhx-c7xc-m3w5](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5) | Serwist build dependencies and React Hooks lint tooling |
+| Minimatch | 10.2.5             | [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) | Glob and TypeScript ESLint tooling                      |
+
+These are lockfile/build-tool observations. This task does not establish exploitability or dismiss the findings based on the application's static export.
+
+The handoff named `.android-web/c8f7573b6c4a64d17f315cefdc40adef13d0d2b37d59c7ca536d8794a33aca6a`, which is a generated build, not a separately tracked application. Upgrade the root install/configuration inputs and regenerate Android assets with a new input fingerprint. Do not manually patch or ship the old generated folder. Before approval, retain verification for these exact upgraded inputs and rebuild any affected release artifacts. Reverting the upgrade commit and reinstalling its frozen lockfile restores the previous dependency/configuration inputs, including their known advisory; it does not alter stored scans or cloud resources.
+
+Verification passed with the exact installed Next.js 16.4.6: frozen Bun installation, ordered typecheck/lint/static build, 10-asset export verification, regenerated testing Android web assets, 226 tooling tests/833 assertions, full-history secret scanning, and 431 browser passes with seven pre-existing Firefox skips and no failures. The initial five tooling failures were missing-scanner prerequisites in the new worktree and passed after the pinned scanner was installed. Model asset bytes are unchanged. See the [dated test record](../testing/TESTING.md#november-18-2026) for fingerprints and limits. No new physical-device session, R03 endurance result, signed APK, release approval or deployment is claimed.
+
 ## November 17, 2026: dependency notice during Settings removal
 
 The app/web 0.13.3 candidate's first normal build compiled application/service-worker assets, then exited with Next.js `SecurityFatalError` recommending an upgrade from the existing 16.4.1 pin. The installed upgrade-notice implementation permits a short-lived normal retry; a successful retry does not patch the dependency or clear an advisory. No security-check configuration, dependency pin or lockfile was changed to suppress the notice.

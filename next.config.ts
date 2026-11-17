@@ -47,6 +47,7 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   allowedDevOrigins: ["*.trycloudflare.com"],
   experimental: {
+    agentUpgrade: "security",
     // Public development tunnels do not need the DevTools MCP endpoint.
     mcpServer: false,
   },

@@ -1,5 +1,9 @@
 # MangoLeaf AI PWA Versioning Guide
 
+## Security dependency follow-up (November 18, 2026)
+
+The isolated upgrade candidate pins Next.js and `eslint-config-next` to 16.4.6 and selects `experimental.agentUpgrade: "security"`. Existing app 0.13.3 / APK 0.1.12/code 13 / Model V5.1.0 labels are preserved. Earlier build, browser and R03 results do not verify these changed dependency inputs. Rebuild affected browser/Android exports and release artifacts; no existing APK, OTA package, tag or deployed release is changed by this source upgrade. See the [security review](../security/DEPENDENCY_SECURITY.md#november-18-2026-nextjs-1646-security-upgrade) for scope and verification.
+
 ## App updates removal candidate (November 17, 2026)
 
 **Prepared candidate:** app/web **0.13.3**, Production APK **0.1.12/code 13**, Debug **0.1.12-dev**, default host bounds **13-13**, unchanged **Model V5.1.0** and bridge/SQLite schema **1/1**. No candidate APK/receipt or OTA assets have been built in this task. Physical checks, full release approval, tags and deployment remain pending.

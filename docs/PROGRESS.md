@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: November 17, 2026
+Last updated: November 18, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -1444,3 +1444,11 @@ These are not tasks to close. They apply to every future retraining cycle and ev
 - **Candidate and shipping preparation:** app/web 0.13.3, APK 0.1.12/code 13, Debug 0.1.12-dev and host bounds 13-13; unchanged V5.1.0 and bridge/schema 1/1. Updated current guides, protocol instructions and the ignored shipping/tag guide. GitHub v0.13.2 publication was observed read-only; no new APK/receipt/OTA, tag, publication, promotion or physical result is claimed.
 
 - **Verification:** current-source typecheck/lint/build retry/export/security checks passed; 226 tooling cases passed with a longer local harness timeout and all 63 focused Chromium-mobile browser cases passed. Six CI-selector cases and the hosted full run were inspected. The existing Next.js security notice remains documented for release review; no dependency upgrade or completed physical/long reliability evaluation is claimed.
+
+### November 18, 2026
+
+- **Isolated framework security upgrade:** prepared a separate `fix/next-16.4.6-security` worktree from `424dda0`, upgrading Next.js and matching ESLint packages from 16.4.1 to exactly 16.4.6. Kept Bun 1.4.4, React, Serwist, model assets, inference configuration and existing app/APK labels unchanged. Set `experimental.agentUpgrade: "security"` while preserving the disabled development MCP endpoint and all other export settings.
+- **Generated Android boundary:** the handoff referred to an ignored `.android-web` snapshot. Updated its root source/install inputs and rebuilt testing Android web assets with a new fingerprint instead of manually editing the old generated folder. This produces no signed APK, publication, tag or change to installed devices.
+- **Security scope:** current audits no longer report Next.js, but retain existing Glob, Zod and Minimatch findings also present in the baseline lockfile. Preserved dated audit history and documented these remaining findings in the [dependency review](security/DEPENDENCY_SECURITY.md#november-18-2026-nextjs-1646-security-upgrade). Full release approval and physical/reliability evaluation remain separate.
+
+- **Upgrade verification:** frozen install and exact-version checks, ordered typecheck/lint/static build, testing Android bundle, export verification, formatting and secret scanning passed. Tooling retest passed 226 tests/833 assertions after installing the missing scanner. Full browser verification passed 431 cases with seven pre-existing Firefox skips and zero failures in 34.0 minutes. Input identities and scope limits are retained in the [dated test record](testing/TESTING.md#november-18-2026); this is not a fresh physical or R03 evaluation.

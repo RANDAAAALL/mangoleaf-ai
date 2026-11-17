@@ -1,3 +1,7 @@
+## v0.13.3 security dependency follow-up (November 18, 2026)
+
+The isolated security candidate upgrades Next.js and matching lint packages from 16.4.1 to 16.4.6 and sets `experimental.agentUpgrade: "security"`. It keeps the prepared app 0.13.3 / APK 0.1.12/code 13 / Model V5.1.0 identities. Browser and Android web exports are regenerated from the upgraded root inputs; no signed APK, OTA publication, release tag or deployment is produced. Older candidate receipts and results retain their original dependencies and do not approve this export. See the [dependency review](../../security/DEPENDENCY_SECURITY.md#november-18-2026-nextjs-1646-security-upgrade) and [dated verification](../../testing/TESTING.md#november-18-2026).
+
 ## v0.13.3 App updates removal candidate (November 17, 2026)
 
 **Prepared candidate:** app/web **0.13.3**, Production APK **0.1.12/code 13**, Debug **0.1.12-dev**, default host bounds **13-13**, unchanged **Model V5.1.0** and bridge/SQLite schema **1/1**. No candidate APK/receipt or OTA assets have been built in this task. Physical checks, full release approval, tags and deployment remain pending.

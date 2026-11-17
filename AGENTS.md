@@ -2,7 +2,7 @@
 
 ## Next.js 16 source of truth
 
-This repository uses Next.js 16.4.1. APIs, conventions, and file structure may differ from older Next.js versions. Before changing Next.js code or configuration, read the relevant installed guide under `node_modules/next/dist/docs/` and follow current deprecation notices.
+This repository uses Next.js 16.4.6. APIs, conventions, and file structure may differ from older Next.js versions. Before changing Next.js code or configuration, read the relevant installed guide under `node_modules/next/dist/docs/` and follow current deprecation notices.
 
 ## Project context
 
