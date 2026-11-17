@@ -9,7 +9,6 @@ declare global {
   interface Window {
     updateTest: {
       calls: string[];
-      block(value: boolean): void;
       online(value: boolean): void;
       status(value: string): void;
     };
@@ -213,92 +212,113 @@ async function openHarness(page: Page, query = "") {
   await expect(page.locator("#launcher")).toBeVisible();
 }
 
-async function openUpdates(page: Page, language: "en" | "bis" = "en") {
-  await page.locator("#settings").click();
-  await page
-    .getByRole("button", {
-      name: new RegExp("^" + translations[language].settingsUpdates),
-    })
-    .click();
-  await page.evaluate(() => window.updateTest.block(false));
-  await page.clock.runFor(15_000);
-}
+// Retired labels stay in the fixture so removed product translations cannot weaken these checks.
+const retiredUpdates =
+  /App updates|Mga update sa app|Restart now|I-restart karon/;
 
-test("A07: Production checks only inside Settings and shows website guidance without any popup or native installer", async ({
+test("A07: APK Home, About and Settings never mount update UI or start update discovery", async ({
   page,
 }) => {
   for (const language of ["en", "bis"] as const) {
-    const t = translations[language];
-    await openHarness(page, `?apk-update&${language === "bis" ? "bis" : ""}`);
-    await page.clock.runFor(30_000);
-    expect(
-      await page.evaluate(() => window.updateTest.calls.includes("ota.status")),
-    ).toBe(false);
-    await openUpdates(page, language);
-    await expect(
-      page.getByRole("heading", {
-        name: t.androidApkUpdateAboutTitle,
-        exact: true,
-      }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(t.androidApkWebsiteInstructions, { exact: true }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: t.androidApkWebsiteAction, exact: true }),
-    ).toHaveAttribute("href", "https://mangoleafai.vercel.app/download");
-    await expect(page.getByRole("dialog")).toHaveCount(0);
-    expect(
-      await page.evaluate(() =>
-        window.updateTest.calls.some((v) => v.startsWith("apkUpdate.")),
-      ),
-    ).toBe(false);
+    for (const debug of [false, true]) {
+      let releaseRequests = 0;
+      const countRelease = (request: { url(): string }) => {
+        if (request.url().startsWith("https://api.github.com/"))
+          releaseRequests++;
+      };
+      page.on("request", countRelease);
+      await openHarness(
+        page,
+        `?apk-update&${debug ? "debug&" : ""}${language === "bis" ? "bis" : ""}`,
+      );
+      // A staged native update or reconnect must not resurrect the retired web controls.
+      await page.evaluate(() => window.updateTest.status("staged"));
+      for (const tab of ["launcher", "about", "settings"]) {
+        await page.locator("#" + tab).click();
+        for (const online of [false, true]) {
+          await page.evaluate(
+            (value) => window.updateTest.online(value),
+            online,
+          );
+          await page.clock.runFor(30_000);
+          await expect(
+            page.getByRole("button", { name: retiredUpdates }),
+          ).toHaveCount(0);
+          await expect(
+            page.getByRole("heading", { name: retiredUpdates }),
+          ).toHaveCount(0);
+          await expect(
+            page.getByRole("link", {
+              name: /Open official download page|Ablihi ang opisyal nga download page/,
+            }),
+          ).toHaveCount(0);
+          await expect(page.getByRole("dialog")).toHaveCount(0);
+        }
+      }
+      expect(releaseRequests).toBe(0);
+      expect(
+        await page.evaluate(() =>
+          window.updateTest.calls.filter(
+            (method) =>
+              method.startsWith("ota.") || method.startsWith("apkUpdate."),
+          ),
+        ),
+      ).toEqual([]);
+      page.off("request", countRelease);
+    }
   }
 });
 
-test("A08: a known newer APK stays visible offline without an actionable website link", async ({
+test("A08: stale update-screen history returns to Settings and preserves backup Back navigation", async ({
   page,
 }) => {
-  const t = translations.en;
-  await openHarness(page, "?apk-update");
-  await openUpdates(page);
-  await expect(
-    page.getByRole("heading", {
-      name: t.androidApkUpdateAboutTitle,
-      exact: true,
-    }),
-  ).toBeVisible();
-  await page.evaluate(() => window.updateTest.online(false));
-  await expect(
-    page.getByText(t.settingsUpdateOffline, { exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: t.androidApkWebsiteAction, exact: true }),
-  ).toHaveCount(0);
-  await expect(page.getByRole("dialog")).toHaveCount(0);
-});
-
-test("A09: equal or unavailable release metadata never claims the installed APK is latest", async ({
-  page,
-}) => {
-  for (const query of ["?apk-update&updated", "?unavailable"]) {
-    await openHarness(page, query);
-    await openUpdates(page);
-    await expect(
-      page.getByText(translations.en.settingsUpdateUnconfirmed, {
-        exact: true,
-      }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("heading", {
-        name: translations.en.androidApkUpdateAboutTitle,
-        exact: true,
-      }),
-    ).toHaveCount(0);
+  for (const language of ["en", "bis"] as const) {
+    for (const debug of [false, true]) {
+      const t = translations[language];
+      await openHarness(
+        page,
+        `?${debug ? "debug&" : ""}${language === "bis" ? "bis" : ""}`,
+      );
+      await page.locator("#settings").click();
+      const backup = page.getByRole("button", {
+        name: new RegExp("^" + t.backupTitle),
+      });
+      await backup.click();
+      await expect(
+        page.getByRole("heading", { name: t.backupTitle, level: 1 }),
+      ).toBeVisible();
+      await page.evaluate(() => {
+        // Preserve the real Settings instance so this exercises rejection, not an unrelated entry.
+        history.replaceState(
+          { ...history.state, mangoleafSettingsPage: "updates" },
+          "",
+          "#settings-updates",
+        );
+        window.dispatchEvent(
+          new PopStateEvent("popstate", { state: history.state }),
+        );
+      });
+      await expect(
+        page.getByRole("heading", { name: t.navSettings, level: 1 }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: retiredUpdates }),
+      ).toHaveCount(0);
+      await backup.click();
+      await page
+        .getByRole("button", { name: t.settingsBack, exact: true })
+        .click();
+      await expect(backup).toBeFocused();
+      await backup.click();
+      await page.goBack();
+      await expect(
+        page.getByRole("heading", { name: t.navSettings, level: 1 }),
+      ).toBeVisible();
+    }
   }
 });
 
-test("A10: Production rejects Diagnostics history while Debug keeps Diagnostics and omits App updates", async ({
+test("A10: Production rejects Diagnostics history while Debug retains its Diagnostics screen", async ({
   page,
 }) => {
   for (const debug of [false, true]) {
@@ -308,16 +328,14 @@ test("A10: Production rejects Diagnostics history while Debug keeps Diagnostics 
     const diagnostics = page.getByRole("button", {
       name: new RegExp("^" + t.settingsDiagnostics),
     });
-    const updates = page.getByRole("button", {
-      name: new RegExp("^" + t.settingsUpdates),
-    });
     await expect(diagnostics).toHaveCount(debug ? 1 : 0);
-    await expect(updates).toHaveCount(debug ? 0 : 1);
     if (debug) {
       await diagnostics.click();
       await expect(
         page.getByRole("heading", { name: t.settingsDiagnostics, exact: true }),
       ).toBeVisible();
+      await page.goBack();
+      await expect(diagnostics).toBeFocused();
     } else {
       await page.evaluate(() => {
         history.replaceState(
@@ -335,47 +353,9 @@ test("A10: Production rejects Diagnostics history while Debug keeps Diagnostics 
       await expect(
         page.getByRole("heading", { name: t.settingsDiagnostics, exact: true }),
       ).toHaveCount(0);
+      await expect(
+        page.getByRole("heading", { name: t.navSettings, level: 1 }),
+      ).toBeVisible();
     }
   }
-});
-
-test("A01: signed web updates use inline restart feedback in Settings", async ({
-  page,
-}) => {
-  const t = translations.en;
-  await openHarness(page);
-  await openUpdates(page);
-  await page.evaluate(() => window.updateTest.status("staged"));
-  await page.clock.runFor(15_000);
-  await expect(
-    page.getByRole("heading", { name: t.androidUpdateReadyTitle, exact: true }),
-  ).toBeVisible();
-  await expect(page.getByRole("dialog")).toHaveCount(0);
-  await page
-    .getByRole("button", { name: t.androidUpdateRestart, exact: true })
-    .click();
-  await expect(
-    page.getByText(t.androidUpdateRestartError, { exact: true }),
-  ).toBeVisible();
-  expect(
-    await page.evaluate(
-      () => window.updateTest.calls.filter((v) => v === "ota.restart").length,
-    ),
-  ).toBe(1);
-});
-
-test("A03: an older host with no restart capability gets inline manual-close guidance", async ({
-  page,
-}) => {
-  const t = translations.en;
-  await openHarness(page, "?legacy");
-  await openUpdates(page);
-  await page.evaluate(() => window.updateTest.status("staged"));
-  await page.clock.runFor(15_000);
-  await expect(
-    page.getByText(t.androidUpdateManualRestart, { exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: t.androidUpdateRestart, exact: true }),
-  ).toHaveCount(0);
 });

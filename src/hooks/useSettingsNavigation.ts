@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export type SettingsScreen = "backup" | "diagnostics" | "updates";
+export type SettingsScreen = "backup" | "diagnostics";
 let instanceSequence = 0;
 let retiringEntry: Promise<void> | null = null;
 
@@ -40,12 +40,7 @@ function pageFromState(
   )
     return null;
   const page = state.mangoleafSettingsPage;
-  if (
-    page === "backup" ||
-    (page === "diagnostics" && !production) ||
-    (page === "updates" && production)
-  )
-    return page;
+  if (page === "backup" || (page === "diagnostics" && !production)) return page;
   return null;
 }
 
@@ -130,7 +125,6 @@ export function useSettingsNavigation(enabled: boolean, production: boolean) {
     if (
       !enabled ||
       currentScreen.current ||
-      (next === "updates" && !production) ||
       (next === "diagnostics" && production)
     )
       return;

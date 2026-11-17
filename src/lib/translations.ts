@@ -12,14 +12,6 @@ export const translations = {
     settingsDiagnosticsSection: "Diagnostics",
     settingsDiagnostics: "Diagnostic logs",
     settingsDiagnosticsHint: "Optional logs for troubleshooting.",
-    settingsUpdatesSection: "Updates",
-    settingsUpdates: "App updates",
-    settingsUpdatesHint:
-      "Updates are checked on this screen while connected to the internet.",
-    settingsInstalledVersion: "Installed Android APK v{version}",
-    settingsUpdateUnconfirmed: "No newer update has been confirmed yet.",
-    settingsUpdateOffline:
-      "Connect to the internet so MangoLeaf AI can check for updates.",
     backupToggle: "Back up my scans",
     backupUploadHint: "Photos upload while the app is open and online.",
     backupNotSetUp: "Not set up",
@@ -111,15 +103,6 @@ export const translations = {
       "Update Android System WebView to open MangoLeaf AI.",
     nativeStartupError:
       "MangoLeaf AI could not start. Close and reopen the app. Your saved data has not been deleted.",
-    androidUpdateReadyTitle: "Update ready",
-    androidUpdateReadyText:
-      "A verified update has downloaded. Restart MangoLeaf AI now to apply it. Your saved reports and photos stay on this phone.",
-    androidUpdateManualRestart:
-      "A verified update has downloaded. Fully close and reopen MangoLeaf AI to apply it. Your saved reports and photos stay on this phone.",
-    androidUpdateRestart: "Restart now",
-    androidUpdateRestarting: "Restarting MangoLeaf AI...",
-    androidUpdateRestartError:
-      "Restart could not finish. Fully close and reopen the app when ready.",
     androidDownloadTitle: "MangoLeaf AI for Android",
     androidAlreadyInstalled:
       "Already installed? Open the app without downloading the APK again.",
@@ -185,12 +168,6 @@ export const translations = {
     backupRestoredSingle: "Successfully restored {n} scan.",
     backupRestoredNone: "No new scans were added.",
     backupRestoredHint: "View your restored scans in History.",
-    androidApkUpdateAboutTitle: "Latest update available",
-    androidApkUpdateAboutText:
-      "Heads up! Android APK v{version} is available from the official website.",
-    androidApkWebsiteInstructions:
-      "Connect to the internet, open mangoleafai.vercel.app in your browser, download the newest APK and open it. Confirm Update in Android to keep your saved scans and recovery code. Keep the existing app installed; uninstalling removes its local data.",
-    androidApkWebsiteAction: "Open official download page",
     backupUploaded: "Backed up {n} reports.",
     backupCloudDeleted:
       "Cloud backup deleted. Local reports remain on this device.",
@@ -590,14 +567,6 @@ export const translations = {
     settingsDiagnostics: "Mga diagnostic log",
     settingsDiagnosticsHint:
       "Opsyonal nga mga log alang sa pagsusi sa problema.",
-    settingsUpdatesSection: "Mga update",
-    settingsUpdates: "Mga update sa app",
-    settingsUpdatesHint:
-      "Susihon ang mga update niini nga screen samtang konektado sa internet.",
-    settingsInstalledVersion: "Na-install nga Android APK v{version}",
-    settingsUpdateUnconfirmed: "Wala pay napamatud-ang mas bag-ong update.",
-    settingsUpdateOffline:
-      "Konektaha sa internet aron masusi sa MangoLeaf AI ang mga update.",
     backupToggle: "I-back up ang akong mga scan",
     backupUploadHint:
       "Ma-upload ang mga litrato samtang abli ug online ang app.",
@@ -692,15 +661,6 @@ export const translations = {
       "I-update ang Android System WebView aron maablihan ang MangoLeaf AI.",
     nativeStartupError:
       "Wala makasugod ang MangoLeaf AI. Isira ug ablihi pag-usab ang app. Wala mapapas ang imong natipig nga datos.",
-    androidUpdateReadyTitle: "Andam na ang update",
-    androidUpdateReadyText:
-      "Na-download na ang napamatud-ang update. I-restart ang MangoLeaf AI karon aron magamit kini. Magpabilin sa telepono ang imong natipig nga mga report ug litrato.",
-    androidUpdateManualRestart:
-      "Na-download na ang napamatud-ang update. Hingpit nga isira ug ablihi pag-usab ang MangoLeaf AI aron magamit kini. Magpabilin sa telepono ang imong mga report ug litrato.",
-    androidUpdateRestart: "I-restart karon",
-    androidUpdateRestarting: "Gisugdan pag-usab ang MangoLeaf AI...",
-    androidUpdateRestartError:
-      "Wala mahuman ang pag-restart. Hingpit nga isira ug ablihi pag-usab ang app kon andam na.",
     androidDownloadTitle: "MangoLeaf AI alang sa Android",
     androidAlreadyInstalled:
       "Na-install na? Ablihi ang app nga dili na mag-download pag-usab sa APK.",
@@ -768,12 +728,6 @@ export const translations = {
     backupRestoredSingle: "Malampusong nabalik ang {n} ka scan.",
     backupRestoredNone: "Walay bag-ong scan nga nadugang.",
     backupRestoredHint: "Tan-awa ang nabalik nga mga scan sa Dating Scan.",
-    androidApkUpdateAboutTitle: "Adunay bag-ong update",
-    androidApkUpdateAboutText:
-      "Pahibalo! Adunay Android APK v{version} sa opisyal nga website.",
-    androidApkWebsiteInstructions:
-      "Konektar sa internet, ablihi ang mangoleafai.vercel.app sa browser, i-download ang pinakabag-ong APK ug ablihi kini. Kumpirmaha ang Update sa Android aron magpabilin ang imong natipig nga scan ug recovery code. Ayaw i-uninstall ang kasamtangang app kay mawala ang lokal nga datos niini.",
-    androidApkWebsiteAction: "Ablihi ang opisyal nga download page",
     backupUploaded: "Na-back up ang {n} ka report.",
     backupCloudDeleted:
       "Napapas ang cloud backup. Magpabilin sa device ang lokal nga mga report.",

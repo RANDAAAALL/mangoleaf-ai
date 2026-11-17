@@ -290,19 +290,6 @@ export function Application() {
     return saved === "en" || saved === "bis" ? saved : "bis";
   });
 
-  const apkBlocked = Boolean(
-    isModelLoading ||
-    previewUrl ||
-    selectedScan ||
-    legalModalType ||
-    isCameraOpen ||
-    isScanSheetOpen ||
-    isStorageFullOpen ||
-    unsavedScan ||
-    isScanning ||
-    isRetryingSave ||
-    isInstallGuideOpen,
-  );
   useEffect(() => {
     if (!isAndroidBuild()) return;
     const busy = isScanning || isCameraOpen || isRetryingSave;
@@ -1005,11 +992,7 @@ export function Application() {
               </AboutTab>
             )}
             {activeTab === "settings" && isAndroidBuild() && (
-              <SettingsTab
-                language={language}
-                onLanguageChange={setLanguage}
-                updateBlocked={apkBlocked}
-              />
+              <SettingsTab language={language} onLanguageChange={setLanguage} />
             )}
           </div>
         </main>

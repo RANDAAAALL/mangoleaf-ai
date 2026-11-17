@@ -35,11 +35,7 @@ function BackupHarness() {
       />
       <main className="px-5 py-6 pb-28">
         {tab === "settings" && (
-          <SettingsTab
-            language={language}
-            onLanguageChange={setLanguage}
-            updateBlocked
-          />
+          <SettingsTab language={language} onLanguageChange={setLanguage} />
         )}
       </main>
       <BottomNav

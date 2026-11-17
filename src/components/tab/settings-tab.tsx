@@ -4,7 +4,6 @@ import { type RefCallback } from "react";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { BackupRecoveryPanel } from "@/components/tab/backup-recovery-panel";
 import { DiagnosticsPanel } from "@/components/tab/diagnostics-panel";
-import { AndroidUpdatePanel } from "@/components/tab/android-update-panel";
 import { useConnectionStatus } from "@/hooks/useConnectionStatus";
 import { useBackupPreferences } from "@/hooks/useBackupPreferences";
 import { useSettingsNavigation } from "@/hooks/useSettingsNavigation";
@@ -52,11 +51,9 @@ function SettingsEntry({
 export function SettingsTab({
   language,
   onLanguageChange,
-  updateBlocked = false,
 }: {
   language: Language;
   onLanguageChange: (language: Language) => void;
-  updateBlocked?: boolean;
 }) {
   const t = translations[language];
   const online = useConnectionStatus();
@@ -69,12 +66,7 @@ export function SettingsTab({
   if (!isAndroidBuild()) return null;
   const status =
     t[backupStatusKey(preferences.value, preferences.failed, online)];
-  const title =
-    screen === "backup"
-      ? t.backupTitle
-      : screen === "diagnostics"
-        ? t.settingsDiagnostics
-        : t.settingsUpdates;
+  const title = screen === "backup" ? t.backupTitle : t.settingsDiagnostics;
   const sectionTitle =
     "mb-2 text-xs uppercase tracking-wider font-bold text-[#526d58]";
 
@@ -107,9 +99,6 @@ export function SettingsTab({
         )}
         {screen === "diagnostics" && !production && (
           <DiagnosticsPanel language={language} embedded />
-        )}
-        {screen === "updates" && production && (
-          <AndroidUpdatePanel language={language} blocked={updateBlocked} />
         )}
       </div>
     );
@@ -165,18 +154,6 @@ export function SettingsTab({
             icon="clipboard-check"
             onOpen={() => open("diagnostics")}
             buttonRef={(el) => registerEntry("diagnostics", el)}
-          />
-        </div>
-      )}
-      {production && (
-        <div>
-          <h2 className={sectionTitle}>{t.settingsUpdatesSection}</h2>
-          <SettingsEntry
-            label={t.settingsUpdates}
-            hint={t.settingsUpdatesHint}
-            icon="install"
-            onOpen={() => open("updates")}
-            buttonRef={(el) => registerEntry("updates", el)}
           />
         </div>
       )}

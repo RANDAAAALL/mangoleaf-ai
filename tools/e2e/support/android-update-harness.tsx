@@ -53,7 +53,6 @@ const port: {
 Object.assign(window, { MangoLeafNative: port });
 
 function Harness() {
-  const [blocked, setBlocked] = useState(true);
   const [about, setAbout] = useState(false);
   const [settings, setSettings] = useState(false);
   const [language] = useState<Language>(query.has("bis") ? "bis" : "en");
@@ -61,7 +60,6 @@ function Harness() {
     Object.assign(window, {
       updateTest: {
         calls,
-        block: setBlocked,
         online(value: boolean) {
           port.onmessage?.({
             data: JSON.stringify({
@@ -114,11 +112,7 @@ function Harness() {
       <input id="typing" aria-label="Test text input" />
       {about && <AboutTab language={language} onScanPress={() => {}} />}
       {settings && (
-        <SettingsTab
-          language={language}
-          onLanguageChange={() => {}}
-          updateBlocked={blocked}
-        />
+        <SettingsTab language={language} onLanguageChange={() => {}} />
       )}
       <BackupRecoveryPanel language={language} />
       <Footer language={language} />

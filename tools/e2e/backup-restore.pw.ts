@@ -583,14 +583,14 @@ test("B15: APK diagnostics open under Settings and keep recording choice/logs af
     page.getByRole("heading", { name: t.navSettings, level: 1 }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: new RegExp("^" + t.settingsUpdates) }),
+    page.getByRole("button", { name: /App updates|Mga update sa app/ }),
   ).toHaveCount(0);
   expect(
     await page.evaluate(() => window.backupRestoreUi.snapshot()),
   ).toMatchObject({ created: 0, inputs: [] });
 });
 
-test("B16: Production always has an Updates page; unconfirmed/offline state never claims latest", async ({
+test("B16: Production Settings omits updates online and offline while backup navigation remains usable", async ({
   page,
 }) => {
   for (const language of ["en", "bis"] as const) {
@@ -601,33 +601,29 @@ test("B16: Production always has an Updates page; unconfirmed/offline state neve
         language,
         "settings&production" + (offline ? "&offline" : ""),
       );
+      await expect(
+        page.getByRole("heading", { name: t.navSettings, level: 1 }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: /App updates|Mga update sa app/ }),
+      ).toHaveCount(0);
+      await expect(
+        page.locator('a[href="https://mangoleafai.vercel.app/download"]'),
+      ).toHaveCount(0);
       const entry = page.getByRole("button", {
-        name: new RegExp("^" + t.settingsUpdates),
+        name: new RegExp("^" + t.backupTitle),
       });
       await entry.click();
       await expect(
-        page.getByRole("heading", { name: t.settingsUpdates, level: 1 }),
+        page.getByRole("heading", { name: t.backupTitle, level: 1 }),
       ).toBeVisible();
-      await expect(
-        page.getByText(t.settingsUpdateUnconfirmed, { exact: true }),
-      ).toBeVisible();
-      await expect(
-        page.getByText(
-          t.settingsInstalledVersion.replace("{version}", "0.1.9"),
-        ),
-      ).toBeVisible();
-      await expect(
-        page.getByRole("link", {
-          name: t.androidApkWebsiteAction,
-          exact: true,
-        }),
-      ).toHaveCount(0);
-      if (offline)
-        await expect(
-          page.getByText(t.settingsUpdateOffline, { exact: true }),
-        ).toBeVisible();
-      await page.goBack();
+      await page
+        .getByRole("button", { name: t.settingsBack, exact: true })
+        .click();
       await expect(entry).toBeFocused();
+      expect(
+        await page.evaluate(() => window.backupRestoreUi.snapshot()),
+      ).toMatchObject({ created: 0, inputs: [] });
     }
   }
 });
