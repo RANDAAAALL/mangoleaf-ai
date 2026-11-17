@@ -1,5 +1,13 @@
 # Dependency security
 
+## November 17, 2026: dependency notice during Settings removal
+
+The app/web 0.13.3 candidate's first normal build compiled application/service-worker assets, then exited with Next.js `SecurityFatalError` recommending an upgrade from the existing 16.4.1 pin. The installed upgrade-notice implementation permits a short-lived normal retry; a successful retry does not patch the dependency or clear an advisory. No security-check configuration, dependency pin or lockfile was changed to suppress the notice.
+
+The maintainer advisory [GHSA-rhh4-g77r-r9qj](https://github.com/vercel/next.js/security/advisories/GHSA-rhh4-g77r-r9qj) lists Next.js 16.4.1 within its affected range and 16.4.5 as patched. Its stated condition concerns App Router `use cache` calls with binary arguments. This task did not reproduce exploitation or complete a dependency-wide reachability assessment. Static export alone is not recorded as proof of non-exposure, particularly for development servers.
+
+Review and validate a security dependency update before approving production shipment. The UI-removal task preserves the existing framework policy and records the finding rather than marking it fixed. Earlier dated clean-audit observations below apply only to their original review dates.
+
 ## October 23, 2026 public-release security review
 
 The read-only GitHub snapshot contains **83 open alerts**: **12 critical, 47 high, and 24 medium**, representing **43 distinct advisories**. Three affect root `next`; the other 80 are duplicate advisory records across two completed V4.4.0 Python environment receipts: 78 for Pillow 12.3.0 and two for certifi 2026.7.22. The [complete 83-row inventory](DEPENDABOT_ALERTS_2026-10-23.csv) retains alert numbers, original manifests, affected/fixed-version metadata, classifications, and treatment. Historical records below retain their original dates and counts.
