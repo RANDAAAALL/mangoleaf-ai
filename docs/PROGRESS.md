@@ -1,6 +1,6 @@
 # MangoLeaf AI Development Progress
 
-Last updated: November 12, 2026
+Last updated: November 17, 2026
 
 This file tracks the project work from the first committed implementation through the current local documentation pass. It is based on the repository history from July 18, 2026 onward, plus the current local working tree.
 
@@ -1437,3 +1437,10 @@ These are not tasks to close. They apply to every future retraining cycle and ev
 
 - **Manual checklist consolidation:** updated the existing functional form/sample for PAFC phone-app, PWFC phone-website (including primary/GitHub downloads) and DFC desktop-website cases, and the physical form/sample for RC01-RC04. Added plain-English button/background instructions, screen-recording steps, actual observations and evidence-basis fields; samples cover every current case and remain fictional. Kept the manual evidence file as a short linked overview. Preserved historical procedures/IDs and separate automated/native/release scope. This task changes documentation only and performs no new tests or application/model/version change.
 - **Markdown-only CI path:** the security job now inspects every pushed commit and always retains verified scanner setup plus the tracked-path/full-history scan. Only verified `.md`-only pushes skip dependency/tooling/application jobs; mixed, reverted-code, rename and unavailable/rewritten ranges keep full CI. Updated setup/testing/architecture and agent guidance. Local pre-push checks, product/model versions and release approval requirements remain unchanged.
+
+### November 17, 2026
+
+- **Settings update feature removal:** removed the App updates entry, APK/web-update cards, restart control, screen observers and unused translations. Retired history cannot reopen the screen. Production retains language/backup; Debug adds Diagnostics. Website downloads and native compatibility/update verification remain.
+- **Candidate and shipping preparation:** app/web 0.13.3, APK 0.1.12/code 13, Debug 0.1.12-dev and host bounds 13-13; unchanged V5.1.0 and bridge/schema 1/1. Updated current guides, protocol instructions and the ignored shipping/tag guide. GitHub v0.13.2 publication was observed read-only; no new APK/receipt/OTA, tag, publication, promotion or physical result is claimed.
+
+- **Verification:** current-source typecheck/lint/build retry/export/security checks passed; 226 tooling cases passed with a longer local harness timeout and all 63 focused Chromium-mobile browser cases passed. Six CI-selector cases and the hosted full run were inspected. The existing Next.js security notice remains documented for release review; no dependency upgrade or completed physical/long reliability evaluation is claimed.

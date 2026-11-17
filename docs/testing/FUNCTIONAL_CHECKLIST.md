@@ -6,7 +6,7 @@
 
 Record whether the required functions work on the tested phone app, phone website and desktop website. These are researcher-prepared functional-suitability checks. Model classification performance, perceived usability through SUS, expert assessment and [physical reliability](PHYSICAL_RELIABILITY_CHECKLIST.md) have separate records.
 
-The current manual IDs are **PAFC01-PAFC13**, **PWFC01-PWFC07** (including separate PWFC04-A and PWFC04-B), and **DFC01-DFC06**. Keep older FC, FS, F/A/M and completed test records under their original IDs. Diagnostic logs and app-update behavior are outside this manual form; Diagnostics is Debug/testing-only, while Production has Settings > App updates. Separate [Android verification](../versions/ANDROID_APK_VERSIONING.md#verification-and-remaining-evidence) still applies where required for release.
+The current manual IDs are **PAFC01-PAFC13**, **PWFC01-PWFC07** (including separate PWFC04-A and PWFC04-B), and **DFC01-DFC06**. Keep older FC, FS, F/A/M and completed test records under their original IDs. Diagnostic logs and native update/installer behavior are outside this manual form. Diagnostics remains Debug/testing-only; App updates and its subpage are removed from current APK variants. Separate [Android verification](../versions/ANDROID_APK_VERSIONING.md#verification-and-remaining-evidence) still applies where required for release.
 
 ## Build and tester record
 

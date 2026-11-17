@@ -127,7 +127,7 @@ Record phone and desktop website behavior separately from APK RC01-RC04. These w
 
 Record additional requirements under the [Android verification plan](../versions/ANDROID_APK_VERSIONING.md#verification-and-remaining-evidence), [Android testing guide](ANDROID_TESTING.md) and [testing guide](TESTING.md#reliability-protocol). Native bridge/SQLite/photo preservation, controlled low-storage faults, interrupted cloud transfers, delayed native callbacks, Debug diagnostics, signed web-OTA and installer/data-preservation checks retain their separate technical scope. Their historical procedures below are not current RC rows or automatic passes.
 
-Production update UI uses Settings > App updates with inline browser guidance and verified web-restart controls; Debug has Diagnostics instead. Keep actual installer/same-signer updates separate from web-bundle restart. Use current version guidance rather than historical popup procedures. Do not uninstall as an ordinary update step.
+Current APK variants have no App updates screen or web-restart button; Debug/testing retains Diagnostics. Obtain an approved newer APK from the official website and record same-signer installation/data preservation separately from native signed web-update behavior. Native checks and cold-start activation remain; the current web UI no longer initiates checks or restart. Use current version guidance rather than historical popup/Settings procedures. Do not uninstall as an ordinary update step.
 
 Additional required technical/release evidence / target / remaining gaps:
 

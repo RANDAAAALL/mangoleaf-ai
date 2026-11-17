@@ -1,5 +1,15 @@
 # MangoLeaf AI Architecture
 
+## App updates removal (November 17, 2026; unreleased)
+
+**Prepared candidate:** app/web **0.13.3**, Production APK **0.1.12/code 13**, Debug **0.1.12-dev**, default host bounds **13-13**, unchanged **Model V5.1.0** and bridge/SQLite schema **1/1**. No candidate APK/receipt or OTA assets have been built in this task. Physical checks, full release approval, tags and deployment remain pending.
+
+Production Settings now contains language selection and private backup. Debug/testing additionally retains Diagnostic logs. App updates, both update cards and the web-update Restart now control are removed. Old `#settings-updates` history cannot reopen the retired screen. The screen component, its JavaScript update observers and unused translations are removed; website release metadata/downloads and native APK/OTA compatibility methods remain.
+
+`SettingsTab` now eagerly mounts only Backup or Debug Diagnostics subpages. `useSettingsNavigation` accepts only those supported states and rejects retired updates history. `Application` no longer passes an update-blocking prop; its existing native busy/backup guards remain. `android-update-panel.tsx` and `android-update.ts` were removed after confirming their only product consumer was this screen. Shared website release lookup and native compatibility methods remain. Native startup/reconnection checks and verified cold-start selection, health acknowledgment and rollback are unchanged; current web code sends no `ota.status`, `ota.check` or `ota.restart` requests.
+
+All subsequent dated architecture entries describe their original versions; their update-screen descriptions are historical.
+
 ## Settings-only updates and browser guide (November 10, 2026; unreleased)
 
 Prepared source labels are **app/web 0.13.2 / APK 0.1.11/code 12**, Debug **0.1.11-dev**, default host bounds **12-12**, with unchanged bridge/schema **1/1** and **V5.1.0**. Existing host-11 artifacts/receipts and dated observations remain separate. No storage/API/ownership migration is introduced.

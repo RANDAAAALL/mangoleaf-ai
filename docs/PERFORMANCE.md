@@ -1,5 +1,9 @@
 # MangoLeaf AI: System Performance & Optimization Specifications
 
+## Settings update observers removed (November 17, 2026)
+
+App/web 0.13.3 / APK 0.1.12/code 13 removes the Settings-only APK metadata/OTA polling observers and their cards. Current web components no longer schedule these observers or request update status/check/restart; native automatic signed-update behavior and website metadata caching remain unchanged. This records removed work, not a measured startup, battery, memory or inference-speed improvement. Model V5.1.0 and scientific settings are unchanged. Validation is recorded in [the dated testing entry](testing/TESTING.md#november-17-2026).
+
 ## Repeated installation-guide requests (November 10, 2026; unreleased)
 
 The supplied 49.27-second Brave recording shows guide re-entry and unavailable-download feedback. The earlier main link could mount a guide and dispatch an external intent in the same tap, while the download page's intent fell back to that same page. Every fresh download document fetched uncached GitHub metadata. These mechanisms explain overlapping UI transitions and repeated requests; the recording has no HTTP status/headers and cannot establish a GitHub rate-limit response or Brave-specific network blocking.
