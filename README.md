@@ -16,7 +16,7 @@ Use the official website to obtain a newer same-signer APK and install it over t
 
 ## Walkthrough
 
-https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
+https://github.com/user-attachments/assets/c79df9e4-a3f0-4b98-a762-3474157bf3e9
 
 ## Features
 
