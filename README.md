@@ -14,7 +14,7 @@ Production Settings now contains language selection and private backup. Debug/te
 
 Use the official website to obtain a newer same-signer APK and install it over the existing app. Native compatibility checks and cold-start web-update activation remain. Earlier preparation records are in the [version history](docs/versions/history/PWA_RELEASE_HISTORY.md).
 
-## Walkthrough (depricated)
+## Walkthrough
 
 https://github.com/user-attachments/assets/71f91a97-ebe4-4ed2-86fe-6a4aeee69536
 

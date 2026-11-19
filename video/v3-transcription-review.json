@@ -1,0 +1,183 @@
+[
+  {
+    "id": "overview",
+    "expected": "Field-ready mango health diagnostic. Built on a progressive web app foundation, MangoLeaf AI helps smallholder mango farmers classify photos of mango leaves and green fruits offline through an Android app. It provides treatment guidance in English and Bisaya. Its companion website offers project information and Android installation guidance.",
+    "recognized": "Field-ready Mango Health Diagnostic. Built on a progressive web app foundation, Mango Leaf AI helps smallholder mango farmers classify photos of mango leaves and green fruits offline through an Android app. It provides treatment guidance in English and by SIA. Its companion website offers project information and Android installation guidance.",
+    "similarity": 0.99
+  },
+  {
+    "id": "feature-login",
+    "expected": "No login or registration is needed to use the app.",
+    "recognized": "No login or registration is needed to use the app.",
+    "similarity": 1.0
+  },
+  {
+    "id": "feature-offline",
+    "expected": "Scanning works offline.",
+    "recognized": "Scanning works offline.",
+    "similarity": 1.0
+  },
+  {
+    "id": "feature-device",
+    "expected": "The AI diagnosis runs on your device.",
+    "recognized": "The AI diagnosis runs on your device.",
+    "similarity": 1.0
+  },
+  {
+    "id": "feature-language",
+    "expected": "Treatment guidance is available in English and Bisaya.",
+    "recognized": "Treatment guidance is available in English and Visaya.",
+    "similarity": 0.981
+  },
+  {
+    "id": "feature-history",
+    "expected": "Scan History keeps your saved results on your phone.",
+    "recognized": "Scan history keeps your saved results on your phone.",
+    "similarity": 1.0
+  },
+  {
+    "id": "feature-backup",
+    "expected": "Optional backup and restoration use a private recovery code and an internet connection.",
+    "recognized": "Actional backup and restoration use a private recovery code and an internet connection.",
+    "similarity": 0.977
+  },
+  {
+    "id": "stack",
+    "expected": "Android Web View, Java, sequel lite, and private photo storage. The website uses Next J S and React. Tensor Flow J S runs the model. Supabase supports backup. The model is version five point one point zero.",
+    "recognized": "Android WebView, Java, SQLite, and private photo storage. The website uses Next.js and React. TensorFlow.js runs the model. Superbase supports backup. The model is version 5.1.0. You",
+    "similarity": 0.887,
+    "source": "final video mix, 70.04?90.18 seconds"
+  },
+  {
+    "id": "flow-download",
+    "expected": "Download the Android app.",
+    "recognized": "Download the Android app.",
+    "similarity": 1.0
+  },
+  {
+    "id": "flow-scan",
+    "expected": "Scan a mango leaf or green fruit.",
+    "recognized": "Scan a mango leaf or green fruit.",
+    "similarity": 1.0
+  },
+  {
+    "id": "flow-result",
+    "expected": "View the predicted result.",
+    "recognized": "View the predicted result.",
+    "similarity": 1.0
+  },
+  {
+    "id": "flow-history",
+    "expected": "Open Scan History.",
+    "recognized": "OpenScan History.",
+    "similarity": 0.97
+  },
+  {
+    "id": "flow-details",
+    "expected": "Review your scan details.",
+    "recognized": "Review your scan details.",
+    "similarity": 1.0
+  },
+  {
+    "id": "flow-backup",
+    "expected": "Set up backup or restore saved scans when needed.",
+    "recognized": "set up backup or restore saved scans when needed.",
+    "similarity": 1.0
+  },
+  {
+    "id": "install",
+    "expected": "To get the Android app, scan the QR code or visit the website and follow the Android installation guide.",
+    "recognized": "To get the Android app, scan the QR code or visit the website and follow the Android installation guide.",
+    "similarity": 1.0
+  },
+  {
+    "id": "home",
+    "expected": "Open MangoLeaf AI on your Android phone. Tap Scan to begin.",
+    "recognized": "Open Mango Leaf AI on your Android phone. Tap Scan to begin.",
+    "similarity": 0.991
+  },
+  {
+    "id": "options",
+    "expected": "Read the Photo Tips, then use Take Photo for this simple demo. Keep one whole Mango Leaf or Mango Green Fruit in even light.",
+    "recognized": "Read the photo tips, then use Take Photo for this simple demo. Keep one whole mango leaf or mango green fruit in even light.",
+    "similarity": 1.0
+  },
+  {
+    "id": "camera",
+    "expected": "Keep one whole mango leaf or green fruit inside the guide, with even lighting. Tap Capture Photo.",
+    "recognized": "Keep one whole mango leaf or green fruit inside the guide with even lighting. Tap Capture Photo.",
+    "similarity": 1.0
+  },
+  {
+    "id": "review",
+    "expected": "Review your photo. Make sure one whole Mango Leaf or Mango Green Fruit is visible. After that, tap Run AI Diagnosis to start the on-device check.",
+    "recognized": "Review your photo. Make sure one whole mango leaf or mango green fruit is visible. After that, tap Run AI Diagnosis to start the on-device check.",
+    "similarity": 1.0
+  },
+  {
+    "id": "processing",
+    "expected": "Please wait a moment while the on-device model checks your photo. After that, review the result.",
+    "recognized": "Please wait a moment while the On-Device model checks your photo. After that, review the result.",
+    "similarity": 1.0
+  },
+  {
+    "id": "result-en",
+    "expected": "See the predicted condition, Confidence Score, and treatment guidance in English.",
+    "recognized": "See the predicted condition, confidence score, and treatment guidance in English.",
+    "similarity": 1.0
+  },
+  {
+    "id": "result-bis",
+    "expected": "Switch language with One tap so Mango Farmers can understand immediate treatment steps.",
+    "recognized": "Switch language with one tap, so mango farmers can understand immediate treatment steps.",
+    "similarity": 1.0
+  },
+  {
+    "id": "history",
+    "expected": "Your Scan History keeps earlier results close at hand for a quick review.",
+    "recognized": "Your scan history keeps earlier results close at hand for a quick review.",
+    "similarity": 1.0
+  },
+  {
+    "id": "details-en",
+    "expected": "The saved photo, prediction, confidence score, and guidance appear together.",
+    "recognized": "The saved photo, prediction, confidence score, and guidance appear together.",
+    "similarity": 1.0
+  },
+  {
+    "id": "details-bis",
+    "expected": "English and Bisaya treatment guidance are available from the scan details.",
+    "recognized": "English and BISIA treatment guidance are available from the scan details.",
+    "similarity": 0.979
+  },
+  {
+    "id": "backup",
+    "expected": "In Settings, open Private Cloud Backup to set up this phone's recovery code. Keep your code private. Backup needs an internet connection.",
+    "recognized": "In Settings, open Private Cloud Backup to set up this phone's recovery code. Keep your code private. Backup needs an internet connection.",
+    "similarity": 1.0
+  },
+  {
+    "id": "restore",
+    "expected": "On another phone, enter the source recovery code and restore the saved scans. The receiving phone uses its own separate recovery code for its own backup.",
+    "recognized": "On another phone, enter the source recovery code and restore the saved scans. The receiving phone uses its own separate recovery code for its own backup.",
+    "similarity": 1.0
+  },
+  {
+    "id": "finale",
+    "expected": "MangoLeaf AI brings offline diagnosis, Scan History, and Bisaya guidance together.",
+    "recognized": "Mangleleaf AI brings offline diagnosis, scan history, and BSI guidance together.",
+    "similarity": 0.949
+  },
+  {
+    "id": "title",
+    "expected": "What is MangoLeaf AI?",
+    "recognized": "What is Mango Leaf AI?",
+    "similarity": 0.976
+  },
+  {
+    "id": "classes",
+    "expected": "Support 7 classes. Leaf Diseases include Anthracnose, Sooty Mold, and Bacterial Canker. Fruit Diseases include Mango Scab and Bacterial Black Spot. Healthy results are Healthy Leaf and Healthy Fruit.",
+    "recognized": "Support 7 classes. Leaf diseases include anthracnose, pseudimold, and bacterial canker. Fruit diseases include mango scab and bacterial black spot. Healthy results are healthy leaf and healthy fruit.",
+    "similarity": 0.974
+  }
+]

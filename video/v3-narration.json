@@ -1,0 +1,114 @@
+[
+  {
+    "id": "overview",
+    "text": "Field-ready mango health diagnostic. Built on a progressive web app foundation, MangoLeaf AI helps smallholder mango farmers classify photos of mango leaves and green fruits offline through an Android app. It provides treatment guidance in English and Bisaya. Its companion website offers project information and Android installation guidance."
+  },
+  {
+    "id": "feature-login",
+    "text": "No login or registration is needed to use the app."
+  },
+  {
+    "id": "feature-offline",
+    "text": "Scanning works offline."
+  },
+  {
+    "id": "feature-device",
+    "text": "The AI diagnosis runs on your device."
+  },
+  {
+    "id": "feature-language",
+    "text": "Treatment guidance is available in English and Bisaya."
+  },
+  {
+    "id": "feature-history",
+    "text": "Scan History keeps your saved results on your phone."
+  },
+  {
+    "id": "feature-backup",
+    "text": "Optional backup and restoration use a private recovery code and an internet connection."
+  },
+  {
+    "id": "stack",
+    "text": "Android Web View, Java, sequel lite, and private photo storage. The website uses Next J S and React. Tensor Flow J S runs the model. Supabase supports backup. The model is version five point one point zero."
+  },
+  {
+    "id": "flow-download",
+    "text": "Download the Android app."
+  },
+  {
+    "id": "flow-scan",
+    "text": "Scan a mango leaf or green fruit."
+  },
+  {
+    "id": "flow-result",
+    "text": "View the predicted result."
+  },
+  {
+    "id": "flow-history",
+    "text": "Open Scan History."
+  },
+  {
+    "id": "flow-details",
+    "text": "Review your scan details."
+  },
+  {
+    "id": "flow-backup",
+    "text": "Set up backup or restore saved scans when needed."
+  },
+  {
+    "id": "install",
+    "text": "To get the Android app, scan the QR code or visit the website and follow the Android installation guide."
+  },
+  {
+    "id": "home",
+    "text": "Open MangoLeaf AI on your Android phone. Tap Scan to begin."
+  },
+  {
+    "id": "options",
+    "text": "Read the Photo Tips, then use Take Photo for this simple demo. Keep one whole Mango Leaf or Mango Green Fruit in even light."
+  },
+  {
+    "id": "camera",
+    "text": "Keep one whole mango leaf or green fruit inside the guide, with even lighting. Tap Capture Photo."
+  },
+  {
+    "id": "review",
+    "text": "Review your photo. Make sure one whole Mango Leaf or Mango Green Fruit is visible. After that, tap Run AI Diagnosis to start the on-device check."
+  },
+  {
+    "id": "processing",
+    "text": "Please wait a moment while the on-device model checks your photo. After that, review the result."
+  },
+  {
+    "id": "result-en",
+    "text": "See the predicted condition, Confidence Score, and treatment guidance in English."
+  },
+  {
+    "id": "result-bis",
+    "text": "Switch language with One tap so Mango Farmers can understand immediate treatment steps."
+  },
+  {
+    "id": "history",
+    "text": "Your Scan History keeps earlier results close at hand for a quick review."
+  },
+  {
+    "id": "details-en",
+    "text": "The saved photo, prediction, confidence score, and guidance appear together."
+  },
+  {
+    "id": "details-bis",
+    "text": "English and Bisaya treatment guidance are available from the scan details."
+  },
+  {
+    "id": "backup",
+    "text": "In Settings, open Private Cloud Backup to set up this phone's recovery code. Keep your code private. Backup needs an internet connection."
+  },
+  {
+    "id": "restore",
+    "text": "On another phone, enter the source recovery code and restore the saved scans. The receiving phone uses its own separate recovery code for its own backup."
+  },
+  {
+    "id": "finale",
+    "text": "MangoLeaf AI brings offline diagnosis, Scan History, and Bisaya guidance together."
+  }
+]

@@ -1,0 +1,288 @@
+{
+  "duration": 260.0599999999998,
+  "scenes": [
+    {
+      "scene": 2,
+      "start": 4.0,
+      "end": 6.95
+    },
+    {
+      "scene": 3,
+      "start": 6.95,
+      "end": 55.32
+    },
+    {
+      "scene": 4,
+      "start": 55.32,
+      "end": 69.79
+    },
+    {
+      "scene": 5,
+      "start": 69.79,
+      "end": 91.41
+    },
+    {
+      "scene": 6,
+      "start": 91.41,
+      "end": 117.23
+    },
+    {
+      "scene": 7,
+      "start": 117.23,
+      "end": 131.23
+    },
+    {
+      "scene": 8,
+      "start": 131.23,
+      "end": 137.49
+    },
+    {
+      "scene": 9,
+      "start": 137.49,
+      "end": 147.39
+    },
+    {
+      "scene": 10,
+      "start": 147.39,
+      "end": 156.33
+    },
+    {
+      "scene": 11,
+      "start": 156.33,
+      "end": 170.03
+    },
+    {
+      "scene": 12,
+      "start": 170.03,
+      "end": 177.2
+    },
+    {
+      "scene": 13,
+      "start": 177.2,
+      "end": 192.39
+    },
+    {
+      "scene": 14,
+      "start": 192.39,
+      "end": 194.09
+    },
+    {
+      "scene": 15,
+      "start": 194.09,
+      "end": 200.43
+    },
+    {
+      "scene": 16,
+      "start": 200.43,
+      "end": 213.7
+    },
+    {
+      "scene": 17,
+      "start": 213.7,
+      "end": 252.31
+    },
+    {
+      "scene": 18,
+      "start": 252.31,
+      "end": 259.86
+    }
+  ],
+  "voice": [
+    {
+      "id": "title",
+      "source": "assets/voice/v2kitten-current-info-01-title.wav",
+      "start": 4.0,
+      "duration": 2.5
+    },
+    {
+      "id": "overview",
+      "source": "assets/voice/v3/overview.wav",
+      "start": 7.3,
+      "duration": 20.9
+    },
+    {
+      "id": "feature-login",
+      "source": "assets/voice/v3/feature-login.wav",
+      "start": 28.75,
+      "duration": 3.82
+    },
+    {
+      "id": "feature-offline",
+      "source": "assets/voice/v3/feature-offline.wav",
+      "start": 33.07,
+      "duration": 1.74
+    },
+    {
+      "id": "feature-device",
+      "source": "assets/voice/v3/feature-device.wav",
+      "start": 35.31,
+      "duration": 3.86
+    },
+    {
+      "id": "feature-language",
+      "source": "assets/voice/v3/feature-language.wav",
+      "start": 39.67,
+      "duration": 3.98
+    },
+    {
+      "id": "feature-history",
+      "source": "assets/voice/v3/feature-history.wav",
+      "start": 44.15,
+      "duration": 4.02
+    },
+    {
+      "id": "feature-backup",
+      "source": "assets/voice/v3/feature-backup.wav",
+      "start": 48.67,
+      "duration": 6.1
+    },
+    {
+      "id": "classes",
+      "source": "assets/voice/v2kitten-current-info-03-classes.wav",
+      "start": 55.57,
+      "duration": 13.82
+    },
+    {
+      "id": "stack",
+      "source": "assets/voice/v4/stack.wav",
+      "start": 70.04,
+      "duration": 20.97
+    },
+    {
+      "id": "flow-title",
+      "source": "assets/voice/v4/flow-title.wav",
+      "start": 91.66,
+      "duration": 2.78
+    },
+    {
+      "id": "flow-download",
+      "source": "assets/voice/v3/flow-download.wav",
+      "start": 94.99,
+      "duration": 1.86
+    },
+    {
+      "id": "flow-scan",
+      "source": "assets/voice/v3/flow-scan.wav",
+      "start": 97.65,
+      "duration": 3.58
+    },
+    {
+      "id": "flow-result",
+      "source": "assets/voice/v3/flow-result.wav",
+      "start": 102.03,
+      "duration": 2.1
+    },
+    {
+      "id": "flow-history",
+      "source": "assets/voice/v3/flow-history.wav",
+      "start": 104.93,
+      "duration": 2.74
+    },
+    {
+      "id": "flow-details",
+      "source": "assets/voice/v3/flow-details.wav",
+      "start": 108.47,
+      "duration": 2.34
+    },
+    {
+      "id": "flow-backup",
+      "source": "assets/voice/v3/flow-backup.wav",
+      "start": 111.61,
+      "duration": 5.02
+    },
+    {
+      "id": "install",
+      "source": "assets/voice/v3/install.wav",
+      "start": 117.58,
+      "duration": 7.1
+    },
+    {
+      "id": "home",
+      "source": "assets/voice/v3/home.wav",
+      "start": 131.58,
+      "duration": 5.06
+    },
+    {
+      "id": "options",
+      "source": "assets/voice/v3/options.wav",
+      "start": 137.84,
+      "duration": 8.7
+    },
+    {
+      "id": "camera",
+      "source": "assets/voice/v3/camera.wav",
+      "start": 147.74,
+      "duration": 7.74
+    },
+    {
+      "id": "review",
+      "source": "assets/voice/v3/review.wav",
+      "start": 156.68,
+      "duration": 12.5
+    },
+    {
+      "id": "processing",
+      "source": "assets/voice/v3/processing.wav",
+      "start": 170.38,
+      "duration": 6.22
+    },
+    {
+      "id": "result-en",
+      "source": "assets/voice/v3/result-en.wav",
+      "start": 177.55,
+      "duration": 6.42
+    },
+    {
+      "id": "result-bis",
+      "source": "assets/voice/v3/result-bis.wav",
+      "start": 184.42,
+      "duration": 5.9
+    },
+    {
+      "id": "history",
+      "source": "assets/voice/v3/history.wav",
+      "start": 194.44,
+      "duration": 5.14
+    },
+    {
+      "id": "details-en",
+      "source": "assets/voice/v3/details-en.wav",
+      "start": 200.78,
+      "duration": 5.94
+    },
+    {
+      "id": "details-bis",
+      "source": "assets/voice/v3/details-bis.wav",
+      "start": 207.17,
+      "duration": 4.46
+    },
+    {
+      "id": "backup",
+      "source": "assets/voice/v3/backup.wav",
+      "start": 214.05,
+      "duration": 10.66
+    },
+    {
+      "id": "restore",
+      "source": "assets/voice/v3/restore.wav",
+      "start": 225.46,
+      "duration": 9.74
+    },
+    {
+      "id": "finale",
+      "source": "assets/voice/v3/finale.wav",
+      "start": 252.66,
+      "duration": 5.9
+    }
+  ],
+  "clicks": [
+    136.88999999999996,
+    146.78999999999994,
+    155.72999999999993,
+    169.42999999999992,
+    190.76999999999987,
+    193.58999999999986,
+    199.82999999999984,
+    212.0799999999998
+  ]
+}
