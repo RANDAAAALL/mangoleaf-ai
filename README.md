@@ -8,7 +8,7 @@ MangoLeaf AI helps identify possible conditions affecting mango leaves and fruit
 
 ## Walkthrough
 
-https://github.com/user-attachments/assets/c79df9e4-a3f0-4b98-a762-3474157bf3e9
+https://github.com/user-attachments/assets/725cc328-fce5-46dd-80a3-61efb8c146e9
 
 ## Features
 
