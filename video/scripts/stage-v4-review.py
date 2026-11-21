@@ -5,7 +5,7 @@ import shutil
 import sys
 from pathlib import Path
 
-base=Path(__file__).resolve().parent
+base=Path(__file__).resolve().parent.parent
 source=base/('v4-draft.html' if '--draft' in sys.argv else 'v4.html')
 stage=base/'.work/v4-review'
 stage.mkdir(parents=True,exist_ok=True)

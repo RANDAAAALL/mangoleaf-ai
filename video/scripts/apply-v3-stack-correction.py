@@ -6,7 +6,7 @@ import subprocess
 import wave
 from pathlib import Path
 
-base = Path(__file__).resolve().parent
+base = Path(__file__).resolve().parent.parent
 manifest_path = base / 'v3-narration.json'
 timing = json.loads((base/'v3-timing.json').read_text(encoding='utf-8'))
 entry = next(item for item in timing['voice'] if item['id'] == 'stack')

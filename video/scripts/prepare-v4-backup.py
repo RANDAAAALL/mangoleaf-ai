@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess
 
 source = Path(r'C:\Users\My Pc\Desktop\workspace\capstone\cap-102\demo-videos\v2')
-target = Path(__file__).resolve().parent/'.work/v4-private'
+target = Path(__file__).resolve().parent.parent/'.work/v4-private'
 target.mkdir(parents=True,exist_ok=True)
 for name, original in [
     ('backup.mp4','mangoleafai-create-recovery-code-first-phone.mp4'),

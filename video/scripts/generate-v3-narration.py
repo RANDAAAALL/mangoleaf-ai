@@ -7,7 +7,7 @@ import soundfile as sf
 from kittenml import KittenTTS
 
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
-base = Path(__file__).resolve().parent
+base = Path(__file__).resolve().parent.parent
 snapshot = Path.home() / ".cache/huggingface/hub/models--KittenML--kitten-tts-2/snapshots/f2eee74f4467855ad58fe16f1fb7b7df473263fd"
 model = KittenTTS(str(snapshot), weights="emb4")
 reference = str(base / "assets/voice/v2-01-overview.wav")

@@ -3,7 +3,7 @@ from pathlib import Path
 import soundfile as sf
 from kittenml import KittenTTS
 
-base = Path(__file__).resolve().parent
+base = Path(__file__).resolve().parent.parent
 model_path = Path.home() / '.cache/huggingface/hub/models--KittenML--kitten-tts-2/snapshots/f2eee74f4467855ad58fe16f1fb7b7df473263fd'
 model = KittenTTS(str(model_path), weights='emb4')
 text = ('Android Web View, Java, sequel lite, and private photo storage. '

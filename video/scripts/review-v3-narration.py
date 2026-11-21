@@ -9,7 +9,7 @@ import soundfile as sf
 from scipy.signal import resample_poly
 from math import gcd
 
-base = Path(__file__).resolve().parent
+base = Path(__file__).resolve().parent.parent
 model_path = Path.home() / '.cache/huggingface/hub/models--Systran--faster-whisper-small.en/snapshots/d1d751a5f8271d482d14ca55d9e2deeebbae577f'
 model = WhisperModel(str(model_path), device='cpu', compute_type='int8', cpu_threads=2, local_files_only=True)
 lines = json.loads((base / 'v3-narration.json').read_text(encoding='utf-8'))

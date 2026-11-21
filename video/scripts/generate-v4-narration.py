@@ -4,7 +4,7 @@ import json
 import soundfile as sf
 from kittenml import KittenTTS
 
-base = Path(__file__).resolve().parent
+base = Path(__file__).resolve().parent.parent
 repo = Path.home()/'.cache/huggingface/hub/models--KittenML--kitten-tts-2/snapshots/f2eee74f4467855ad58fe16f1fb7b7df473263fd'
 out = base/'assets/voice/v4'
 out.mkdir(parents=True, exist_ok=True)

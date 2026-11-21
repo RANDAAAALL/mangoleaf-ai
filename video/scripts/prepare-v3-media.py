@@ -4,7 +4,7 @@ import shutil
 import subprocess
 
 source = Path(r"C:\Users\My Pc\Desktop\workspace\capstone\cap-102\demo-videos\v2")
-target = Path(__file__).resolve().parent / "assets/demo-v3"
+target = Path(__file__).resolve().parent.parent / "assets/demo-v3"
 target.mkdir(parents=True, exist_ok=True)
 stills = {
     "home.jpg": "1 - mangoleafai-landing-page-mobile-ui.jpg",

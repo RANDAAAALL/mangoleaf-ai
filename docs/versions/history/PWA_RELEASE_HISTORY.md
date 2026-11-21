@@ -8,6 +8,8 @@ The isolated security candidate upgrades Next.js and matching lint packages from
 
 Production Settings now contains language selection and private backup. Debug/testing additionally retains Diagnostic logs. App updates, both update cards and the web-update Restart now control are removed. Old `#settings-updates` history cannot reopen the retired screen. The screen component, its JavaScript update observers and unused translations are removed; website release metadata/downloads and native APK/OTA compatibility methods remain.
 
+Use the official website to obtain a newer same-signer APK and install it over the existing app. Native compatibility checks and cold-start web-update activation remain.
+
 **Previous release observed November 17, 2026:** GitHub lists [v0.13.2](https://github.com/RANDAAAALL/mangoleaf-ai/releases/tag/v0.13.2), published November 10, with APK and OTA assets. Its release notes identify APK 0.1.11/code 12 and Model V5.1.0. This is a metadata observation, not verification of its installed bytes, Vercel deployment, or completion of this new candidate's gates.
 
 No model, Java runtime, signing/trust, storage, cloud ownership or data format changes are included. This task prepares source and documentation; it does not build/install/publish a new APK or allocate a release sequence. Older tests and receipts keep their original identities.

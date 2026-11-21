@@ -1,0 +1,9 @@
+{
+  "overview": "Field ready mango health diagnostic. Built on a progressive web app foundation, MangoLeaf AI helps smallholder mango farmers classify photos of mango leeves and green fruits offline through an Android app. It provides treatment guidance in English and beesaya. Its companion website offers project information and Android installation guidance.",
+  "feature-language": "Treatment guidance is available in English and beesaya.",
+  "details-bis": "English and beesaya treatment guidance are available from the scan details.",
+  "stack": "MangoLeaf AI offline first tech stack. Android Web View, Bun, Java, sequel lite, Next J S, React, TypeScript, Tailwind C S S, Tensor Flow J S, Supabase, and model MobileNet V three large.",
+  "install-download": "Then tap Download Android A P K.",
+  "restore-success": "The app confirms one scan was restored successfully.",
+  "restore-history": "The restored scan appears in Scan History. Review its details to confirm the recovery."
+}
